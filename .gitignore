@@ -20,7 +20,6 @@
 00-DOCUMENTATION/
 00-RELEASES/
 01-DEV/
-01-DEV_RTOS/
 
 .gitattributes
 delete_unused_files.bat
