@@ -1,6 +1,6 @@
 /**	
  * |----------------------------------------------------------------------
- * | Copyright (c) 2016 Tilen Majerle
+ * | Copyright (c) 2017 Tilen Majerle
  * |  
  * | Permission is hereby granted, free of charge, to any person
  * | obtaining a copy of this software and associated documentation
@@ -35,10 +35,15 @@
 /******************************************************************************/
 /***                           Private definitions                           **/
 /******************************************************************************/
-/******************************************************************************/
-#define __TOUCH_BUFFER_SIZE     (10 * sizeof(GUI_TouchData_t))
-BUFFER_t Buffer;
-GUI_Byte_t BufferData[__TOUCH_BUFFER_SIZE + 1];
+/******************************************************************************/    
+#if GUI_USE_TOUCH
+static BUFFER_t TSBuffer;
+static GUI_Byte_t TSBufferData[TOUCH_BUFFER_SIZE * sizeof(GUI_TouchData_t) + 1];
+#endif /* GUI_USE_TOUCH */
+#if GUI_USE_KEYBOARD
+static BUFFER_t KBBuffer;
+static GUI_Byte_t KBBufferData[TOUCH_BUFFER_SIZE * sizeof(GUI_KeyboardData_t) + 1];
+#endif /* GUI_USE_KEYBOARD */
 
 /******************************************************************************/
 /******************************************************************************/
@@ -57,17 +62,38 @@ GUI_Byte_t BufferData[__TOUCH_BUFFER_SIZE + 1];
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
+#if GUI_USE_TOUCH
 void GUI_INPUT_AddTouch(const GUI_TouchData_t* Data) {
-    BUFFER_Write(&Buffer, Data, sizeof(GUI_TouchData_t));   /* Write data to buffer */
-}
-
-void __GUI_INPUT_Init(void) {
-    BUFFER_Init(&Buffer, sizeof(BufferData), BufferData);
+    BUFFER_Write(&TSBuffer, Data, sizeof(*Data));  /* Write data to buffer */
 }
 
 GUI_Byte_t __GUI_INPUT_ReadTouch(GUI_TouchData_t* Data) {
-    if (BUFFER_GetFull(&Buffer) >= sizeof(GUI_TouchData_t)) {
-        return (GUI_Byte_t)BUFFER_Read(&Buffer, Data, sizeof(GUI_TouchData_t)); /* Read data fro mbuffer */
+    if (BUFFER_GetFull(&TSBuffer) >= sizeof(*Data)) {
+        return (GUI_Byte_t)BUFFER_Read(&TSBuffer, Data, sizeof(*Data)); /* Read data fro mbuffer */
     }
     return 0;
+}
+#endif /* GUI_USE_TOUCH */
+
+
+#if GUI_USE_KEYBOARD
+void GUI_INPUT_AddKey(const GUI_KeyboardData_t* Data) {
+    BUFFER_Write(&KBBuffer, Data, sizeof(*Data));   /* Write data to buffer */
+}
+
+GUI_Byte_t __GUI_INPUT_ReadKey(GUI_KeyboardData_t* Data) {
+    if (BUFFER_GetFull(&KBBuffer) >= sizeof(*Data)) {
+        return (GUI_Byte_t)BUFFER_Read(&KBBuffer, Data, sizeof(*Data)); /* Read data fro mbuffer */
+    }
+    return 0;
+}
+#endif /* GUI_USE_KEYBOARD */
+
+void __GUI_INPUT_Init(void) {
+#if GUI_USE_TOUCH
+    BUFFER_Init(&TSBuffer, sizeof(TSBufferData), TSBufferData);
+#endif /* GUI_USE_TOUCH */
+#if GUI_USE_KEYBOARD
+    BUFFER_Init(&KBBuffer, sizeof(KBBufferData), KBBufferData);
+#endif /* GUI_USE_KEYBOARD */
 }

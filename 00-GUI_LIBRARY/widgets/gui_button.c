@@ -25,8 +25,6 @@
  */
 #include "gui_button.h"
 
-#if GUI_USE_WIDGET_BUTTON
-
 /******************************************************************************/
 /******************************************************************************/
 /***                           Private structures                            **/
@@ -40,10 +38,14 @@
 /******************************************************************************/
 #define __GB(x)             ((GUI_BUTTON_t *)(x))
 
-static void __Draw(GUI_Display_t* disp, void* ptr);
-static __GUI_TouchStatus_t __TouchDown(void* ptr, GUI_TouchData_t* ts, __GUI_TouchStatus_t status);
-static __GUI_TouchStatus_t __TouchUp(void* ptr, GUI_TouchData_t* ts, __GUI_TouchStatus_t status);
-static __GUI_TouchStatus_t __TouchMove(void* ptr, GUI_TouchData_t* ts, __GUI_TouchStatus_t status);
+static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp);
+static uint8_t __Control(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* param, void* result);
+
+#if GUI_USE_TOUCH  
+static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts);
+static __GUI_TouchStatus_t __TouchUp(GUI_HANDLE_t h, GUI_TouchData_t* ts);
+static __GUI_TouchStatus_t __TouchMove(GUI_HANDLE_t h, GUI_TouchData_t* ts);
+#endif /* GUI_USE_TOUCH */
 
 /******************************************************************************/
 /******************************************************************************/
@@ -56,12 +58,20 @@ const static GUI_WIDGET_t Widget = {
         sizeof(GUI_BUTTON_t),                       /*!< Size of widget for memory allocation */
         0,                                          /*!< Allow children objects on widget */
     },
+    __Control,                                      /*!< Control function */
     __Draw,                                         /*!< Widget draw function */
+#if GUI_USE_TOUCH
     {
         __TouchDown,                                /*!< Touch down callback function */
         __TouchUp,                                  /*!< Touch up callback function */
         __TouchMove                                 /*!< Touch move callback function */
+    },
+#endif /* GUI_USE_TOUCH */
+#if GUI_USE_KEYBOARD
+    {
+        0,                                          /*!< Keyboard key pressed callback function */
     }
+#endif /* GUI_USE_KEYBOARD */
 };
 
 /******************************************************************************/
@@ -69,15 +79,21 @@ const static GUI_WIDGET_t Widget = {
 /***                            Private functions                            **/
 /******************************************************************************/
 /******************************************************************************/
-/* Draw button */
-#define h          ((GUI_HANDLE_t)ptr)
-#define b          ((GUI_BUTTON_t *)ptr)
-static void __Draw(GUI_Display_t* disp, void* ptr) {
+static uint8_t __Control(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* param, void* result) {
+    __GUI_UNUSED3(h, param, result);
+    switch (ctrl) {                                 /* Handle control function if required */
+        default:                                    /* Handle default option */
+            return 0;                               /* Command was not processed */
+    }
+}
+
+#define b          ((GUI_BUTTON_t *)h)
+static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp) {
     GUI_Color_t c1, c2;
     GUI_Dim_t x, y;
     
-    x = __GUI_WIDGET_GetAbsoluteX(ptr);             /* Get absolute X coordinate */
-    y = __GUI_WIDGET_GetAbsoluteY(ptr);             /* Get absolute Y coordinate */
+    x = __GUI_WIDGET_GetAbsoluteX(h);               /* Get absolute X coordinate */
+    y = __GUI_WIDGET_GetAbsoluteY(h);               /* Get absolute Y coordinate */
     
     if (h->Flags & GUI_FLAG_ACTIVE) {               /* Set colors for button */
         c1 = b->Color[GUI_BUTTON_COLOR_FG];
@@ -97,7 +113,7 @@ static void __Draw(GUI_Display_t* disp, void* ptr) {
     }
     
     /* Draw text if possible */
-    if (h->Text && h->Font && strlen(h->Text)) {
+    if (__GUI_WIDGET_IsFontAndTextSet(h)) {
         GUI_DRAW_FONT_t f;
         memset((void *)&f, 0x00, sizeof(f));        /* Reset structure */
         
@@ -112,35 +128,33 @@ static void __Draw(GUI_Display_t* disp, void* ptr) {
     }
 }
 
+#if GUI_USE_TOUCH  
 static GUI_iDim_t tX, tY;
 
 /* Process touch check */
-static __GUI_TouchStatus_t __TouchDown(void* ptr, GUI_TouchData_t* ts, __GUI_TouchStatus_t status) {
+static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts) {
     /* Get X and Y positions relative on widget */
-    tX = ts->X - __GUI_WIDGET_GetAbsoluteX(ptr);
-    tY = ts->Y - __GUI_WIDGET_GetAbsoluteY(ptr);
+    tX = ts->X - __GUI_WIDGET_GetAbsoluteX(h);
+    tY = ts->Y - __GUI_WIDGET_GetAbsoluteY(h);
     
     return touchHANDLED;
 }
 
 /* Process touch check */
-static __GUI_TouchStatus_t __TouchMove(void* ptr, GUI_TouchData_t* ts, __GUI_TouchStatus_t status) {
-    GUI_iDim_t x, y;
-    
-    x = __GUI_WIDGET_GetAbsoluteX(h->Parent);
-    y = __GUI_WIDGET_GetAbsoluteY(h->Parent);
-    
-    __GUI_WIDGET_SetXY(h, ts->X - x - tX, ts->Y - y - tY);
+static __GUI_TouchStatus_t __TouchMove(GUI_HANDLE_t h, GUI_TouchData_t* ts) {
+    __GUI_WIDGET_SetXY(h, ts->X - __GUI_WIDGET_GetAbsoluteX(h->Parent) - tX, ts->Y - __GUI_WIDGET_GetAbsoluteY(h->Parent) - tY);
     
     return touchHANDLED;
 }
 
 /* Process touch check */
-static __GUI_TouchStatus_t __TouchUp(void* ptr, GUI_TouchData_t* ts, __GUI_TouchStatus_t status) {
+static __GUI_TouchStatus_t __TouchUp(GUI_HANDLE_t h, GUI_TouchData_t* ts) {
+    __GUI_UNUSED2(h, ts);
     return touchHANDLED;
 }
-#undef h
-#undef g
+#endif /* GUI_USE_TOUCH */
+
+#undef b
 
 /******************************************************************************/
 /******************************************************************************/
@@ -215,19 +229,6 @@ GUI_HANDLE_t GUI_BUTTON_SetSize(GUI_HANDLE_t h, GUI_Dim_t width, GUI_Dim_t heigh
     return h;
 }
 
-GUI_HANDLE_t GUI_BUTTON_SetBorderRadius(GUI_HANDLE_t h, GUI_Dim_t size) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    if (__GB(h)->BorderRadius != size) {            /* Any dimensions changed */
-        __GB(h)->BorderRadius = size;               /* Set parameter */
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Redraw object */
-    }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
-}
-
 GUI_HANDLE_t GUI_BUTTON_SetXY(GUI_HANDLE_t h, GUI_iDim_t x, GUI_iDim_t y) {
     __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
@@ -238,13 +239,36 @@ GUI_HANDLE_t GUI_BUTTON_SetXY(GUI_HANDLE_t h, GUI_iDim_t x, GUI_iDim_t y) {
     return h;
 }
 
-GUI_HANDLE_t GUI_BUTTON_SetColor(GUI_HANDLE_t h, uint8_t index, GUI_Color_t color) {
+GUI_HANDLE_t GUI_BUTTON_SetFont(GUI_HANDLE_t h, GUI_Const GUI_FONT_t* font) {
+    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */ 
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    __GUI_WIDGET_SetFont(h, font);                  /* Set widget font */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return h;
+}
+
+GUI_HANDLE_t GUI_BUTTON_SetColor(GUI_HANDLE_t h, GUI_BUTTON_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GB(h)->Color[index] != color) {         /* Any parameter changed */
         __GB(h)->Color[index] = color;            /* Set parameter */
         __GUI_WIDGET_Invalidate(h);                 /* Redraw object */
+    }
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return h;
+}
+
+GUI_HANDLE_t GUI_BUTTON_SetBorderRadius(GUI_HANDLE_t h, GUI_Dim_t size) {
+    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    if (__GB(h)->BorderRadius != size) {            /* Any dimensions changed */
+        __GB(h)->BorderRadius = size;               /* Set parameter */
+        __GUI_WIDGET_InvalidateWithParent(h);       /* Redraw object */
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
@@ -276,15 +300,3 @@ GUI_HANDLE_t GUI_BUTTON_SetRadius(GUI_HANDLE_t h, GUI_Dim_t rad) {
     __GUI_LEAVE();                                  /* Leave GUI */
     return h;
 }
-
-GUI_HANDLE_t GUI_BUTTON_SetFont(GUI_HANDLE_t h, GUI_Const GUI_FONT_t* font) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */ 
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    __GUI_WIDGET_SetFont(h, font);                  /* Set widget font */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
-}
-
-#endif /* GUI_USE_WIDGET_BUTTON */

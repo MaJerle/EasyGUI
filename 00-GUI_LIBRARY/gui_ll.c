@@ -1,6 +1,6 @@
 /**	
  * |----------------------------------------------------------------------
- * | Copyright (c) 2016 Tilen Majerle
+ * | Copyright (c) 2017 Tilen Majerle
  * |  
  * | Permission is hereby granted, free of charge, to any person
  * | obtaining a copy of this software and associated documentation
@@ -76,43 +76,43 @@ static GUI_Layer_t Layers[GUI_LAYERS];
 /******************************************************************************/
 /******************************************************************************/
 void _LCD_InitLCD(void) {
-	RCC_PeriphCLKInitTypeDef  periph_clk_init_struct;
-	LTDC_LayerCfgTypeDef layer_cfg;
-    
+    RCC_PeriphCLKInitTypeDef  periph_clk_init_struct;
+    LTDC_LayerCfgTypeDef layer_cfg;
+
     /**********************************/
     /* Set up GPIO pins for LCD drive */
     /**********************************/
-	/* Init GPIO pins for LTDC */
-	TM_GPIO_InitAlternate(GPIOE, GPIO_PIN_4, TM_GPIO_OType_PP, TM_GPIO_PuPd_NOPULL, TM_GPIO_Speed_Fast, GPIO_AF14_LTDC);
-	TM_GPIO_InitAlternate(GPIOG, GPIO_PIN_12, TM_GPIO_OType_PP, TM_GPIO_PuPd_NOPULL, TM_GPIO_Speed_Fast, GPIO_AF14_LTDC);
-	TM_GPIO_InitAlternate(GPIOI, GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, TM_GPIO_OType_PP, TM_GPIO_PuPd_NOPULL, TM_GPIO_Speed_Fast, GPIO_AF14_LTDC);
-	TM_GPIO_InitAlternate(GPIOJ, GPIO_PIN_All & ~(GPIO_PIN_12), TM_GPIO_OType_PP, TM_GPIO_PuPd_NOPULL, TM_GPIO_Speed_Fast, GPIO_AF14_LTDC);
-	TM_GPIO_InitAlternate(GPIOK, 0x00FF & ~(GPIO_PIN_3), TM_GPIO_OType_PP, TM_GPIO_PuPd_NOPULL, TM_GPIO_Speed_Fast, GPIO_AF14_LTDC);
-	
-	/* Init pins for LCD control */
-	/* Display enable */
-	TM_GPIO_Init(GPIOI, GPIO_PIN_12, TM_GPIO_Mode_OUT, TM_GPIO_OType_PP, TM_GPIO_PuPd_DOWN, TM_GPIO_Speed_Low);
-	/* Backlight control */
-	TM_GPIO_Init(GPIOK, GPIO_PIN_3, TM_GPIO_Mode_OUT, TM_GPIO_OType_PP, TM_GPIO_PuPd_DOWN, TM_GPIO_Speed_Low);
-    
+    /* Init GPIO pins for LTDC */
+    TM_GPIO_InitAlternate(GPIOE, GPIO_PIN_4, TM_GPIO_OType_PP, TM_GPIO_PuPd_NOPULL, TM_GPIO_Speed_Fast, GPIO_AF14_LTDC);
+    TM_GPIO_InitAlternate(GPIOG, GPIO_PIN_12, TM_GPIO_OType_PP, TM_GPIO_PuPd_NOPULL, TM_GPIO_Speed_Fast, GPIO_AF14_LTDC);
+    TM_GPIO_InitAlternate(GPIOI, GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, TM_GPIO_OType_PP, TM_GPIO_PuPd_NOPULL, TM_GPIO_Speed_Fast, GPIO_AF14_LTDC);
+    TM_GPIO_InitAlternate(GPIOJ, GPIO_PIN_All & ~(GPIO_PIN_12), TM_GPIO_OType_PP, TM_GPIO_PuPd_NOPULL, TM_GPIO_Speed_Fast, GPIO_AF14_LTDC);
+    TM_GPIO_InitAlternate(GPIOK, 0x00FF & ~(GPIO_PIN_3), TM_GPIO_OType_PP, TM_GPIO_PuPd_NOPULL, TM_GPIO_Speed_Fast, GPIO_AF14_LTDC);
+
+    /* Init pins for LCD control */
+    /* Display enable */
+    TM_GPIO_Init(GPIOI, GPIO_PIN_12, TM_GPIO_Mode_OUT, TM_GPIO_OType_PP, TM_GPIO_PuPd_DOWN, TM_GPIO_Speed_Low);
+    /* Backlight control */
+    TM_GPIO_Init(GPIOK, GPIO_PIN_3, TM_GPIO_Mode_OUT, TM_GPIO_OType_PP, TM_GPIO_PuPd_DOWN, TM_GPIO_Speed_Low);
+
     /* Display ON */
     TM_GPIO_SetPinHigh(GPIOI, GPIO_PIN_12);	
     TM_GPIO_SetPinHigh(GPIOK, GPIO_PIN_3);
-    
+
     /**********************************/
     /*  Set up LTDC driver            */
     /**********************************/
-	
-	/* Enable LTDC and DMA2D clocks */
-	__HAL_RCC_DMA2D_CLK_ENABLE();
-	__HAL_RCC_LTDC_CLK_ENABLE();
-	
+
+    /* Enable LTDC and DMA2D clocks */
+    __HAL_RCC_DMA2D_CLK_ENABLE();
+    __HAL_RCC_LTDC_CLK_ENABLE();
+
     /* Set LTDC instance */
-	LTDCHandle.Instance = LTDC;
+    LTDCHandle.Instance = LTDC;
     DMA2DHandle.Instance = DMA2D;
-    
-	/* Disable LTDC */
-	LTDC->GCR &= ~LTDC_GCR_LTDCEN;
+
+    /* Disable LTDC */
+    LTDC->GCR &= ~LTDC_GCR_LTDCEN;
 
     /* Timing configuration */     
     LTDCHandle.Init.HorizontalSync = LCD_HSYNC - 1;
@@ -130,80 +130,80 @@ void _LCD_InitLCD(void) {
     /* PLLSAI_VCO Output = PLLSAI_VCO Input * PLLSAI_N = 192 Mhz */
     /* PLLLCDCLK = PLLSAI_VCO Output/PLLSAI_R = 192/2 = 96 Mhz */
     /* LTDC clock frequency = PLLLCDCLK / RCC_PLLSAIDivR = 96/4 = 24 Mhz */
-	periph_clk_init_struct.PeriphClockSelection = RCC_PERIPHCLK_LTDC;
-	periph_clk_init_struct.PLLSAI.PLLSAIN = 192;
-	periph_clk_init_struct.PLLSAI.PLLSAIR = LCD_FREQUENCY_DIV;
-	periph_clk_init_struct.PLLSAIDivR = RCC_PLLSAIDIVR_4;
-	HAL_RCCEx_PeriphCLKConfig(&periph_clk_init_struct);
+    periph_clk_init_struct.PeriphClockSelection = RCC_PERIPHCLK_LTDC;
+    periph_clk_init_struct.PLLSAI.PLLSAIN = 192;
+    periph_clk_init_struct.PLLSAI.PLLSAIR = LCD_FREQUENCY_DIV;
+    periph_clk_init_struct.PLLSAIDivR = RCC_PLLSAIDIVR_4;
+    HAL_RCCEx_PeriphCLKConfig(&periph_clk_init_struct);
 
-	/* Initialize the LCD pixel width and pixel height */
-	LTDCHandle.LayerCfg->ImageWidth  = LCD_WIDTH;
-	LTDCHandle.LayerCfg->ImageHeight = LCD_HEIGHT;
+    /* Initialize the LCD pixel width and pixel height */
+    LTDCHandle.LayerCfg->ImageWidth  = LCD_WIDTH;
+    LTDCHandle.LayerCfg->ImageHeight = LCD_HEIGHT;
 
-	/* Background value */
-	LTDCHandle.Init.Backcolor.Blue = 0;
-	LTDCHandle.Init.Backcolor.Green = 0;
-	LTDCHandle.Init.Backcolor.Red = 0;
+    /* Background value */
+    LTDCHandle.Init.Backcolor.Blue = 0;
+    LTDCHandle.Init.Backcolor.Green = 0;
+    LTDCHandle.Init.Backcolor.Red = 0;
 
-	/* Polarity */
-	LTDCHandle.Init.HSPolarity = LTDC_HSPOLARITY_AL;
-	LTDCHandle.Init.VSPolarity = LTDC_VSPOLARITY_AL; 
-	LTDCHandle.Init.DEPolarity = LTDC_DEPOLARITY_AL;  
-	LTDCHandle.Init.PCPolarity = LTDC_PCPOLARITY_IPC;
+    /* Polarity */
+    LTDCHandle.Init.HSPolarity = LTDC_HSPOLARITY_AL;
+    LTDCHandle.Init.VSPolarity = LTDC_VSPOLARITY_AL; 
+    LTDCHandle.Init.DEPolarity = LTDC_DEPOLARITY_AL;  
+    LTDCHandle.Init.PCPolarity = LTDC_PCPOLARITY_IPC;
 
-	/* Init LTDC */
-	HAL_LTDC_Init(&LTDCHandle);
-	
+    /* Init LTDC */
+    HAL_LTDC_Init(&LTDCHandle);
+
     /**********************************/
     /*  Set up LTDC layers            */
     /**********************************/
-	/* Layer Init */
-	layer_cfg.WindowX0 = 0;
-	layer_cfg.WindowX1 = LCD_WIDTH;
-	layer_cfg.WindowY0 = 0;
-	layer_cfg.WindowY1 = LCD_HEIGHT; 
+    /* Layer Init */
+    layer_cfg.WindowX0 = 0;
+    layer_cfg.WindowX1 = LCD_WIDTH;
+    layer_cfg.WindowY0 = 0;
+    layer_cfg.WindowY1 = LCD_HEIGHT; 
 #if LCD_PIXEL_SIZE == 2
-	layer_cfg.PixelFormat = LTDC_PIXEL_FORMAT_RGB565;
+    layer_cfg.PixelFormat = LTDC_PIXEL_FORMAT_RGB565;
 #else
-	layer_cfg.PixelFormat = LTDC_PIXEL_FORMAT_ARGB8888;
+    layer_cfg.PixelFormat = LTDC_PIXEL_FORMAT_ARGB8888;
 #endif
-	layer_cfg.Alpha0 = 0;
-	layer_cfg.Backcolor.Blue = 0;
-	layer_cfg.Backcolor.Green = 0;
-	layer_cfg.Backcolor.Red = 0;
-	layer_cfg.BlendingFactor1 = LTDC_BLENDING_FACTOR1_PAxCA;
-	layer_cfg.BlendingFactor2 = LTDC_BLENDING_FACTOR2_PAxCA;
-	layer_cfg.ImageWidth = LCD_WIDTH;
-	layer_cfg.ImageHeight = LCD_HEIGHT;
-    
+    layer_cfg.Alpha0 = 0;
+    layer_cfg.Backcolor.Blue = 0;
+    layer_cfg.Backcolor.Green = 0;
+    layer_cfg.Backcolor.Red = 0;
+    layer_cfg.BlendingFactor1 = LTDC_BLENDING_FACTOR1_PAxCA;
+    layer_cfg.BlendingFactor2 = LTDC_BLENDING_FACTOR2_PAxCA;
+    layer_cfg.ImageWidth = LCD_WIDTH;
+    layer_cfg.ImageHeight = LCD_HEIGHT;
+
     /* Config layer 1 */
-	layer_cfg.Alpha = 255;
-	layer_cfg.FBStartAdress = LCD_FRAME_BUFFER;
-	HAL_LTDC_ConfigLayer(&LTDCHandle, &layer_cfg, 0);
-	
-	/* Config layer 2 */
-	layer_cfg.Alpha = 0;
-	layer_cfg.FBStartAdress = LCD_FRAME_BUFFER + LCD_FRAME_BUFFER_SIZE;
-	HAL_LTDC_ConfigLayer(&LTDCHandle, &layer_cfg, 1);
-    
+    layer_cfg.Alpha = 255;
+    layer_cfg.FBStartAdress = LCD_FRAME_BUFFER;
+    HAL_LTDC_ConfigLayer(&LTDCHandle, &layer_cfg, 0);
+
+    /* Config layer 2 */
+    layer_cfg.Alpha = 0;
+    layer_cfg.FBStartAdress = LCD_FRAME_BUFFER + LCD_FRAME_BUFFER_SIZE;
+    HAL_LTDC_ConfigLayer(&LTDCHandle, &layer_cfg, 1);
+
     /* Init line event interrupt */
     HAL_LTDC_ProgramLineEvent(&LTDCHandle, 0); 
     HAL_NVIC_SetPriority(LTDC_IRQn, 0xE, 0);
     HAL_NVIC_EnableIRQ(LTDC_IRQn);
-    
+
     HAL_LTDC_SetAlpha(&LTDCHandle, 255, 0);
     HAL_LTDC_SetAlpha(&LTDCHandle, 0, 1);
 }
 
 void LCD_Init(GUI_LCD_t* LCD) {
     TM_SDRAM_Init();                /* Init SDRAM */
-    
+
     _LCD_InitLCD();                 /* Init LCD */
 }
 
 void LCD_SetPixel(GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Color_t color) {
     uint32_t addr = LCD_FRAME_BUFFER + (layer * LCD_FRAME_BUFFER_SIZE) + LCD_PIXEL_SIZE * (LCD_WIDTH * y + x);
-    *(volatile uint32_t *)(addr) = color | 0xFF000000UL;
+    *(volatile uint32_t *)(addr) = color;
 }
 
 GUI_Color_t LCD_GetPixel(GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t x, GUI_Dim_t y) {
@@ -212,34 +212,34 @@ GUI_Color_t LCD_GetPixel(GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t x, GUI_Dim_t y
 
 void LCD_Fill(GUI_LCD_t* LCD, uint8_t layer, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t OffLine, GUI_Color_t color) { 
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait previous operation to finish */
-    
+
     DMA2D->CR = 0x00030000UL;                       /* Register to memory and TCIE */
-    DMA2D->OCOLR = 0xFF000000UL | color;            /* Color to be used */
+    DMA2D->OCOLR = color;                           /* Color to be used */
     DMA2D->OMAR = (uint32_t)dst;                    /* Destination address */
     DMA2D->OOR = OffLine;                           /* Destination line offset */
     DMA2D->OPFCCR = LTDC_PIXEL_FORMAT_ARGB8888;     /* Defines the number of pixels to be transfered */
     DMA2D->NLR = (uint32_t)(xSize << 16) | (uint16_t)ySize; /* Size configuration of area to be transfered */
-	DMA2D->CR |= DMA2D_CR_START;                    /* Start actual transfer */
+    DMA2D->CR |= DMA2D_CR_START;                    /* Start actual transfer */
 }
 
 void LCD_Copy(GUI_LCD_t* LCD, uint8_t layer, void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
     DMA2D->CR = 0x00000000;             /* Memory to memory transfer mode */
-    
-	/* Set up pointers */
-	DMA2D->FGMAR = (uint32_t)src;                       
-	DMA2D->OMAR = (uint32_t)dst;                       
-	DMA2D->FGOR = offLineSrc;                      
-	DMA2D->OOR = offLineDst; 
 
-	/* Set up pixel format */  
-	DMA2D->FGPFCCR = LTDC_PIXEL_FORMAT_ARGB8888;
+    /* Set up pointers */
+    DMA2D->FGMAR = (uint32_t)src;                       
+    DMA2D->OMAR = (uint32_t)dst;                       
+    DMA2D->FGOR = offLineSrc;                      
+    DMA2D->OOR = offLineDst; 
 
-	/* Set up size */
-	DMA2D->NLR = (uint32_t)(xSize << 16) | (uint16_t)ySize; 
+    /* Set up pixel format */  
+    DMA2D->FGPFCCR = LTDC_PIXEL_FORMAT_ARGB8888;
 
-	/* Start DMA2D */
-	DMA2D->CR |= DMA2D_CR_START; 
-    
+    /* Set up size */
+    DMA2D->NLR = (uint32_t)(xSize << 16) | (uint16_t)ySize; 
+
+    /* Start DMA2D */
+    DMA2D->CR |= DMA2D_CR_START; 
+
     while (DMA2D->CR & DMA2D_CR_START);
 }
 

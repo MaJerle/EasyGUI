@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    stm32f7xx_hal_cec.h
   * @author  MCD Application Team
-  * @version V1.1.2
-  * @date    23-September-2016 
+  * @version V1.0.1
+  * @date    25-June-2015
   * @brief   Header file of CEC HAL module.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2016 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -42,8 +42,6 @@
 #ifdef __cplusplus
  extern "C" {
 #endif
-
-#if defined (CEC) 
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f7xx_hal_def.h"
@@ -109,6 +107,8 @@ typedef struct
   uint32_t SignalFreeTimeOption;         /*!< Set SFTOP bit @ref CEC_SFT_Option : specifies when SFT timer starts.
                                               CEC_SFT_START_ON_TXSOM SFT:    timer starts when TXSOM is set by software.
                                               CEC_SFT_START_ON_TX_RX_END:  SFT timer starts automatically at the end of message transmission/reception. */
+
+  uint32_t OwnAddress;                   /*!< Set OAR field, specifies CEC device address within a 15-bit long field */
   
   uint32_t ListenMode;                   /*!< Set LSTN bit @ref CEC_Listening_Mode : specifies device listening mode. It can take two values:
   
@@ -120,68 +120,23 @@ typedef struct
                                                 address (OAR) with positive acknowledge. Messages addressed to different destination 
                                                 are received, but without interfering with the CEC bus: no acknowledge sent.  */
 
-  uint16_t  OwnAddress;                 /*!< Own addresses configuration
-                                             This parameter can be a value of @ref CEC_OWN_ADDRESS */
-  
-  uint8_t  *RxBuffer;                    /*!< CEC Rx buffer pointeur */
-  
+  uint8_t  InitiatorAddress;             /* Initiator address (source logical address, sent in each header) */
 
 }CEC_InitTypeDef;
 
 /** 
-  * @brief HAL CEC State structures definition 
-  * @note  HAL CEC State value is a combination of 2 different substates: gState and RxState.
-  *        - gState contains CEC state information related to global Handle management 
-  *          and also information related to Tx operations.
-  *          gState value coding follow below described bitmap :
-  *          b7 (not used)
-  *             x  : Should be set to 0
-  *          b6  Error information 
-  *             0  : No Error
-  *             1  : Error
-  *          b5     IP initilisation status
-  *             0  : Reset (IP not initialized)
-  *             1  : Init done (IP initialized. HAL CEC Init function already called)
-  *          b4-b3  (not used)
-  *             xx : Should be set to 00
-  *          b2     Intrinsic process state
-  *             0  : Ready
-  *             1  : Busy (IP busy with some configuration or internal operations)
-  *          b1     (not used)
-  *             x  : Should be set to 0
-  *          b0     Tx state
-  *             0  : Ready (no Tx operation ongoing)
-  *             1  : Busy (Tx operation ongoing)
-  *        - RxState contains information related to Rx operations.
-  *          RxState value coding follow below described bitmap :
-  *          b7-b6  (not used)
-  *             xx : Should be set to 00
-  *          b5     IP initilisation status
-  *             0  : Reset (IP not initialized)
-  *             1  : Init done (IP initialized)
-  *          b4-b2  (not used)
-  *            xxx : Should be set to 000
-  *          b1     Rx state
-  *             0  : Ready (no Rx operation ongoing)
-  *             1  : Busy (Rx operation ongoing)
-  *          b0     (not used)
-  *             x  : Should be set to 0.  
+  * @brief HAL CEC State structures definition  
   */ 
 typedef enum
 {
-  HAL_CEC_STATE_RESET             = 0x00U,    /*!< Peripheral is not yet Initialized 
-                                                   Value is allowed for gState and RxState             */
-  HAL_CEC_STATE_READY             = 0x20U,    /*!< Peripheral Initialized and ready for use
-                                                   Value is allowed for gState and RxState             */
-  HAL_CEC_STATE_BUSY              = 0x24U,    /*!< an internal process is ongoing
-                                                   Value is allowed for gState only                    */
-  HAL_CEC_STATE_BUSY_RX           = 0x22U,    /*!< Data Reception process is ongoing
-                                                   Value is allowed for RxState only                   */
-  HAL_CEC_STATE_BUSY_TX           = 0x21U,    /*!< Data Transmission process is ongoing 
-                                                   Value is allowed for gState only                    */                                                  
-  HAL_CEC_STATE_BUSY_RX_TX        = 0x23U,    /*!< an internal process is ongoing
-                                                   Value is allowed for gState only                    */
-  HAL_CEC_STATE_ERROR             = 0x60U     /*!< Error Value is allowed for gState only              */
+  HAL_CEC_STATE_RESET             = 0x00,    /*!< Peripheral Reset state                              */
+  HAL_CEC_STATE_READY             = 0x01,    /*!< Peripheral Initialized and ready for use            */
+  HAL_CEC_STATE_BUSY              = 0x02,    /*!< an internal process is ongoing                      */
+  HAL_CEC_STATE_BUSY_TX           = 0x03,    /*!< Data Transmission process is ongoing                */
+  HAL_CEC_STATE_BUSY_RX           = 0x04,    /*!< Data Reception process is ongoing                   */
+  HAL_CEC_STATE_STANDBY_RX        = 0x05,    /*!< IP ready to receive, doesn't prevent IP to transmit */
+  HAL_CEC_STATE_TIMEOUT           = 0x06,    /*!< Timeout state                                       */
+  HAL_CEC_STATE_ERROR             = 0x07     /*!< State Error                                         */
 }HAL_CEC_StateTypeDef;
 
 /** 
@@ -189,27 +144,25 @@ typedef enum
   */  
 typedef struct
 {
-  CEC_TypeDef             *Instance;      /*!< CEC registers base address */
+  CEC_TypeDef             *Instance;      /* CEC registers base address */
   
-  CEC_InitTypeDef         Init;           /*!< CEC communication parameters */
+  CEC_InitTypeDef         Init;           /* CEC communication parameters */
   
-  uint8_t                 *pTxBuffPtr;    /*!< Pointer to CEC Tx transfer Buffer */
+  uint8_t                 *pTxBuffPtr;    /* Pointer to CEC Tx transfer Buffer */
   
-  uint16_t                TxXferCount;    /*!< CEC Tx Transfer Counter */
+  uint16_t                TxXferCount;    /* CEC Tx Transfer Counter */
   
-  uint16_t                RxXferSize;     /*!< CEC Rx Transfer size, 0: header received only */
+  uint8_t                 *pRxBuffPtr;    /* Pointer to CEC Rx transfer Buffer */
   
-  HAL_LockTypeDef         Lock;           /*!< Locking object */
-
-  HAL_CEC_StateTypeDef    gState;         /*!< CEC state information related to global Handle management 
-                                               and also related to Tx operations.
-                                               This parameter can be a value of @ref HAL_CEC_StateTypeDef */
+  uint16_t                RxXferSize;     /* CEC Rx Transfer size, 0: header received only */
   
-  HAL_CEC_StateTypeDef    RxState;        /*!< CEC state information related to Rx operations.
-                                               This parameter can be a value of @ref HAL_CEC_StateTypeDef */
+  uint32_t                ErrorCode;      /* For errors handling purposes, copy of ISR register 
+                                            in case error is reported */
   
-  uint32_t                ErrorCode;      /*!< For errors handling purposes, copy of ISR register 
-                                               in case error is reported */    
+  HAL_LockTypeDef         Lock;           /* Locking object */
+  
+  HAL_CEC_StateTypeDef    State;          /* CEC communication state */
+    
 }CEC_HandleTypeDef;
 /**
   * @}
@@ -223,7 +176,7 @@ typedef struct
 /** @defgroup CEC_Error_Code CEC Error Code
   * @{
   */ 
-#define HAL_CEC_ERROR_NONE    (uint32_t) 0x0000U     /*!< no error                      */
+#define HAL_CEC_ERROR_NONE    (uint32_t) 0x0         /*!< no error                      */
 #define HAL_CEC_ERROR_RXOVR   CEC_ISR_RXOVR          /*!< CEC Rx-Overrun                */
 #define HAL_CEC_ERROR_BRE     CEC_ISR_BRE            /*!< CEC Rx Bit Rising Error       */
 #define HAL_CEC_ERROR_SBPE    CEC_ISR_SBPE           /*!< CEC Rx Short Bit period Error */
@@ -240,14 +193,14 @@ typedef struct
 /** @defgroup CEC_Signal_Free_Time  CEC Signal Free Time setting parameter
   * @{
   */
-#define CEC_DEFAULT_SFT                    ((uint32_t)0x00000000U)
-#define CEC_0_5_BITPERIOD_SFT              ((uint32_t)0x00000001U)
-#define CEC_1_5_BITPERIOD_SFT              ((uint32_t)0x00000002U)
-#define CEC_2_5_BITPERIOD_SFT              ((uint32_t)0x00000003U)
-#define CEC_3_5_BITPERIOD_SFT              ((uint32_t)0x00000004U)
-#define CEC_4_5_BITPERIOD_SFT              ((uint32_t)0x00000005U)
-#define CEC_5_5_BITPERIOD_SFT              ((uint32_t)0x00000006U)
-#define CEC_6_5_BITPERIOD_SFT              ((uint32_t)0x00000007U)
+#define CEC_DEFAULT_SFT                    ((uint32_t)0x00000000)
+#define CEC_0_5_BITPERIOD_SFT              ((uint32_t)0x00000001)
+#define CEC_1_5_BITPERIOD_SFT              ((uint32_t)0x00000002)
+#define CEC_2_5_BITPERIOD_SFT              ((uint32_t)0x00000003)
+#define CEC_3_5_BITPERIOD_SFT              ((uint32_t)0x00000004)
+#define CEC_4_5_BITPERIOD_SFT              ((uint32_t)0x00000005)
+#define CEC_5_5_BITPERIOD_SFT              ((uint32_t)0x00000006)
+#define CEC_6_5_BITPERIOD_SFT              ((uint32_t)0x00000007)
 /**
   * @}
   */
@@ -255,7 +208,7 @@ typedef struct
 /** @defgroup CEC_Tolerance CEC Receiver Tolerance
   * @{
   */
-#define CEC_STANDARD_TOLERANCE             ((uint32_t)0x00000000U)
+#define CEC_STANDARD_TOLERANCE             ((uint32_t)0x00000000)
 #define CEC_EXTENDED_TOLERANCE             ((uint32_t)CEC_CFGR_RXTOL)
 /**
   * @}
@@ -264,7 +217,7 @@ typedef struct
 /** @defgroup CEC_BRERxStop CEC Reception Stop on Error
   * @{
   */
-#define CEC_NO_RX_STOP_ON_BRE             ((uint32_t)0x00000000U)
+#define CEC_NO_RX_STOP_ON_BRE             ((uint32_t)0x00000000)
 #define CEC_RX_STOP_ON_BRE                ((uint32_t)CEC_CFGR_BRESTP)
 /**
   * @}
@@ -273,7 +226,7 @@ typedef struct
 /** @defgroup CEC_BREErrorBitGen  CEC Error Bit Generation if Bit Rise Error reported
   * @{
   */ 
-#define CEC_BRE_ERRORBIT_NO_GENERATION     ((uint32_t)0x00000000U)
+#define CEC_BRE_ERRORBIT_NO_GENERATION     ((uint32_t)0x00000000)
 #define CEC_BRE_ERRORBIT_GENERATION        ((uint32_t)CEC_CFGR_BREGEN)
 /**
   * @}
@@ -282,7 +235,7 @@ typedef struct
 /** @defgroup CEC_LBPEErrorBitGen  CEC Error Bit Generation if Long Bit Period Error reported
   * @{
   */ 
-#define CEC_LBPE_ERRORBIT_NO_GENERATION     ((uint32_t)0x00000000U)
+#define CEC_LBPE_ERRORBIT_NO_GENERATION     ((uint32_t)0x00000000)
 #define CEC_LBPE_ERRORBIT_GENERATION        ((uint32_t)CEC_CFGR_LBPEGEN)
 /**
   * @}
@@ -291,7 +244,7 @@ typedef struct
 /** @defgroup CEC_BroadCastMsgErrorBitGen  CEC Error Bit Generation on Broadcast message
   * @{
   */ 
-#define CEC_BROADCASTERROR_ERRORBIT_GENERATION     ((uint32_t)0x00000000U)
+#define CEC_BROADCASTERROR_ERRORBIT_GENERATION     ((uint32_t)0x00000000)
 #define CEC_BROADCASTERROR_NO_ERRORBIT_GENERATION  ((uint32_t)CEC_CFGR_BRDNOGEN)
 /**
   * @}
@@ -300,7 +253,7 @@ typedef struct
 /** @defgroup CEC_SFT_Option     CEC Signal Free Time start option
   * @{
   */ 
-#define CEC_SFT_START_ON_TXSOM           ((uint32_t)0x00000000U)
+#define CEC_SFT_START_ON_TXSOM           ((uint32_t)0x00000000)
 #define CEC_SFT_START_ON_TX_RX_END       ((uint32_t)CEC_CFGR_SFTOPT)
 /**
   * @}
@@ -309,7 +262,7 @@ typedef struct
 /** @defgroup CEC_Listening_Mode    CEC Listening mode option
   * @{
   */ 
-#define CEC_REDUCED_LISTENING_MODE          ((uint32_t)0x00000000U)
+#define CEC_REDUCED_LISTENING_MODE          ((uint32_t)0x00000000)
 #define CEC_FULL_LISTENING_MODE             ((uint32_t)CEC_CFGR_LSTN)
 /**
   * @}
@@ -318,7 +271,7 @@ typedef struct
 /** @defgroup CEC_OAR_Position   CEC Device Own Address position in CEC CFGR register     
   * @{
   */
-#define CEC_CFGR_OAR_LSB_POS            ((uint32_t) 16U)
+#define CEC_CFGR_OAR_LSB_POS            ((uint32_t) 16)
 /**
   * @}
   */
@@ -326,34 +279,11 @@ typedef struct
 /** @defgroup CEC_Initiator_Position   CEC Initiator logical address position in message header     
   * @{
   */
-#define CEC_INITIATOR_LSB_POS           ((uint32_t) 4U)
+#define CEC_INITIATOR_LSB_POS           ((uint32_t) 4)
 /**
   * @}
   */
-
-/** @defgroup CEC_OWN_ADDRESS   CEC Own Address    
-  * @{
-  */
-#define CEC_OWN_ADDRESS_NONE           ((uint16_t) 0x0000U)   /* Reset value */
-#define CEC_OWN_ADDRESS_0              ((uint16_t) 0x0001U)   /* Logical Address 0 */
-#define CEC_OWN_ADDRESS_1              ((uint16_t) 0x0002U)   /* Logical Address 1 */
-#define CEC_OWN_ADDRESS_2              ((uint16_t) 0x0004U)   /* Logical Address 2 */
-#define CEC_OWN_ADDRESS_3              ((uint16_t) 0x0008U)   /* Logical Address 3 */
-#define CEC_OWN_ADDRESS_4              ((uint16_t) 0x0010U)   /* Logical Address 4 */
-#define CEC_OWN_ADDRESS_5              ((uint16_t) 0x0020U)   /* Logical Address 5 */
-#define CEC_OWN_ADDRESS_6              ((uint16_t) 0x0040U)   /* Logical Address 6 */
-#define CEC_OWN_ADDRESS_7              ((uint16_t) 0x0080U)   /* Logical Address 7 */
-#define CEC_OWN_ADDRESS_8              ((uint16_t) 0x0100U)   /* Logical Address 9 */
-#define CEC_OWN_ADDRESS_9              ((uint16_t) 0x0200U)   /* Logical Address 10 */
-#define CEC_OWN_ADDRESS_10             ((uint16_t) 0x0400U)   /* Logical Address 11 */
-#define CEC_OWN_ADDRESS_11             ((uint16_t) 0x0800U)   /* Logical Address 12 */
-#define CEC_OWN_ADDRESS_12             ((uint16_t) 0x1000U)   /* Logical Address 13 */
-#define CEC_OWN_ADDRESS_13             ((uint16_t) 0x2000U)   /* Logical Address 14 */
-#define CEC_OWN_ADDRESS_14             ((uint16_t) 0x4000U)   /* Logical Address 15 */
-/**
-  * @}
-  */
-    
+  
 /** @defgroup CEC_Interrupts_Definitions  CEC Interrupts definition
   * @{
   */
@@ -428,14 +358,11 @@ typedef struct
   * @{
   */
 
-/** @brief  Reset CEC handle gstate & RxState
+/** @brief  Reset CEC handle state
   * @param  __HANDLE__: CEC handle.
   * @retval None
   */
-#define __HAL_CEC_RESET_HANDLE_STATE(__HANDLE__) do{                                                   \
-                                                       (__HANDLE__)->gState = HAL_CEC_STATE_RESET;     \
-                                                       (__HANDLE__)->RxState = HAL_CEC_STATE_RESET;    \
-                                                     } while(0)
+#define __HAL_CEC_RESET_HANDLE_STATE(__HANDLE__) ((__HANDLE__)->State = HAL_CEC_STATE_RESET)
 
 /** @brief  Checks whether or not the specified CEC interrupt flag is set.
   * @param  __HANDLE__: specifies the CEC Handle.
@@ -607,7 +534,6 @@ typedef struct
 /* Initialization and de-initialization functions  ****************************/
 HAL_StatusTypeDef HAL_CEC_Init(CEC_HandleTypeDef *hcec);
 HAL_StatusTypeDef HAL_CEC_DeInit(CEC_HandleTypeDef *hcec);
-HAL_StatusTypeDef HAL_CEC_SetDeviceAddress(CEC_HandleTypeDef *hcec, uint16_t CEC_OwnAddress);
 void HAL_CEC_MspInit(CEC_HandleTypeDef *hcec);
 void HAL_CEC_MspDeInit(CEC_HandleTypeDef *hcec);
 /**
@@ -618,12 +544,14 @@ void HAL_CEC_MspDeInit(CEC_HandleTypeDef *hcec);
   * @{
   */
 /* I/O operation functions  ***************************************************/
-HAL_StatusTypeDef HAL_CEC_Transmit_IT(CEC_HandleTypeDef *hcec, uint8_t InitiatorAddress,uint8_t DestinationAddress, uint8_t *pData, uint32_t Size);
-uint32_t HAL_CEC_GetLastReceivedFrameSize(CEC_HandleTypeDef *hcec);
-void HAL_CEC_ChangeRxBuffer(CEC_HandleTypeDef *hcec, uint8_t* Rxbuffer);
+HAL_StatusTypeDef HAL_CEC_Transmit(CEC_HandleTypeDef *hcec, uint8_t DestinationAddress, uint8_t *pData, uint32_t Size, uint32_t Timeout);
+HAL_StatusTypeDef HAL_CEC_Receive(CEC_HandleTypeDef *hcec, uint8_t *pData, uint32_t Timeout);
+HAL_StatusTypeDef HAL_CEC_Transmit_IT(CEC_HandleTypeDef *hcec, uint8_t DestinationAddress, uint8_t *pData, uint32_t Size);
+HAL_StatusTypeDef HAL_CEC_Receive_IT(CEC_HandleTypeDef *hcec, uint8_t *pData);
+uint32_t HAL_CEC_GetReceivedFrameSize(CEC_HandleTypeDef *hcec);
 void HAL_CEC_IRQHandler(CEC_HandleTypeDef *hcec);
 void HAL_CEC_TxCpltCallback(CEC_HandleTypeDef *hcec);
-void HAL_CEC_RxCpltCallback(CEC_HandleTypeDef *hcec, uint32_t RxFrameSize);
+void HAL_CEC_RxCpltCallback(CEC_HandleTypeDef *hcec);
 void HAL_CEC_ErrorCallback(CEC_HandleTypeDef *hcec);
 /**
   * @}
@@ -697,6 +625,20 @@ uint32_t HAL_CEC_GetError(CEC_HandleTypeDef *hcec);
                                           
 #define IS_CEC_LISTENING_MODE(__MODE__)     (((__MODE__) == CEC_REDUCED_LISTENING_MODE) || \
                                              ((__MODE__) == CEC_FULL_LISTENING_MODE))
+                                             
+/** @brief Check CEC device Own Address Register (OAR) setting.
+  *        OAR address is written in a 15-bit field within CEC_CFGR register. 
+  * @param  __ADDRESS__: CEC own address.               
+  * @retval Test result (TRUE or FALSE).
+  */
+#define IS_CEC_OAR_ADDRESS(__ADDRESS__) ((__ADDRESS__) <= 0x07FFF)  
+
+/** @brief Check CEC initiator or destination logical address setting.
+  *        Initiator and destination addresses are coded over 4 bits. 
+  * @param  __ADDRESS__: CEC initiator or logical address.               
+  * @retval Test result (TRUE or FALSE).
+  */
+#define IS_CEC_ADDRESS(__ADDRESS__) ((__ADDRESS__) <= 0xF)    
 
 /** @brief Check CEC message size.
   *       The message size is the payload size: without counting the header, 
@@ -705,24 +647,12 @@ uint32_t HAL_CEC_GetError(CEC_HandleTypeDef *hcec);
   * @param  __SIZE__: CEC message size.               
   * @retval Test result (TRUE or FALSE).
   */
-#define IS_CEC_MSGSIZE(__SIZE__) ((__SIZE__) <= 0x10)  
-                                                 
-/** @brief Check CEC device Own Address Register (OAR) setting.
-  *        OAR address is written in a 15-bit field within CEC_CFGR register. 
-  * @param  __ADDRESS__: CEC own address.               
-  * @retval Test result (TRUE or FALSE).
-  */
-#define IS_CEC_OWN_ADDRESS(__ADDRESS__) ((__ADDRESS__) <= 0x7FFF)
-
-/** @brief Check CEC initiator or destination logical address setting.
-  *        Initiator and destination addresses are coded over 4 bits. 
-  * @param  __ADDRESS__: CEC initiator or logical address.               
-  * @retval Test result (TRUE or FALSE).
-  */
-#define IS_CEC_ADDRESS(__ADDRESS__) ((__ADDRESS__) <= 0xF) 
+#define IS_CEC_MSGSIZE(__SIZE__) ((__SIZE__) <= 0xF)  
+                                                
 /**
   * @}
-  */
+  */ 
+
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup CEC_Private_Functions CEC Private Functions
   * @{
@@ -739,9 +669,7 @@ uint32_t HAL_CEC_GetError(CEC_HandleTypeDef *hcec);
 /**
   * @}
   */ 
-
-#endif /* CEC */
-
+  
 #ifdef __cplusplus
 }
 #endif

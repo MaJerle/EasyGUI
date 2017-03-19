@@ -5,7 +5,7 @@
  *	
 \verbatim
    ----------------------------------------------------------------------
-    Copyright (c) 2016 Tilen Majerle
+    Copyright (c) 2017 Tilen Majerle
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -49,23 +49,11 @@ extern "C" {
  * \{
  */
 
-/**
- * \defgroup        GUI_BUTTON_Macros
- * \{
- */
-
-#define GUI_BUTTON_COLOR_FG             0   /*!< Foreground color index in array */
-#define GUI_BUTTON_COLOR_BG             1   /*!< Background color index in array */
-#define GUI_BUTTON_COLOR_BORDER         2   /*!< Border color index in array */
-
-/**
- * \} GUI_BUTTON_Macros
- */
-    
-/**
- * \defgroup        GUI_BUTTON_Typedefs
- * \{
- */
+typedef enum GUI_BUTTON_COLOR_t {
+    GUI_BUTTON_COLOR_FG = 0x00,             /*!< Foreground color index in array */
+    GUI_BUTTON_COLOR_BG = 0x01,             /*!< Background color index in array */
+    GUI_BUTTON_COLOR_BORDER = 0x02          /*!< Border color index in array */
+} GUI_BUTTON_COLOR_t;
 
 /**
  * \brief           GUI button structure
@@ -83,37 +71,23 @@ typedef struct GUI_BUTTON_t {
 } GUI_BUTTON_t;
 
 /**
- * \} GUI_BUTTON_Typedefs
- */
-    
-/**
- * \defgroup        GUI_BUTTON_Functions
- * \brief           Library Functions
- * \{
- */
-
-/**
  * \brief           Initializes button widget
  * \note            This function should not be called by user
  */
 GUI_HANDLE_t GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height);
 void GUI_BUTTON_Remove(GUI_HANDLE_t* ptr);
-GUI_HANDLE_t GUI_BUTTON_Invalidate(GUI_HANDLE_t ptr);
-GUI_HANDLE_t GUI_BUTTON_SetText(GUI_HANDLE_t ptr, const char* text);
-GUI_HANDLE_t GUI_BUTTON_SetSize(GUI_HANDLE_t ptr, GUI_Dim_t width, GUI_Dim_t height);
-GUI_HANDLE_t GUI_BUTTON_SetXY(GUI_HANDLE_t ptr, GUI_iDim_t x, GUI_iDim_t y);
-GUI_HANDLE_t GUI_BUTTON_SetColor(GUI_HANDLE_t ptr, uint8_t index, GUI_Color_t color);
-GUI_HANDLE_t GUI_BUTTON_SetBorderWidth(GUI_HANDLE_t ptr, GUI_Dim_t width);
-GUI_HANDLE_t GUI_BUTTON_SetBorderRadius(GUI_HANDLE_t ptr, GUI_Dim_t size);
-GUI_HANDLE_t GUI_BUTTON_SetFont(GUI_HANDLE_t ptr, GUI_Const GUI_FONT_t* font);
+GUI_HANDLE_t GUI_BUTTON_Invalidate(GUI_HANDLE_t h);
+GUI_HANDLE_t GUI_BUTTON_SetText(GUI_HANDLE_t h, const char* text);
+GUI_HANDLE_t GUI_BUTTON_SetSize(GUI_HANDLE_t h, GUI_Dim_t width, GUI_Dim_t height);
+GUI_HANDLE_t GUI_BUTTON_SetXY(GUI_HANDLE_t h, GUI_iDim_t x, GUI_iDim_t y);
+GUI_HANDLE_t GUI_BUTTON_SetColor(GUI_HANDLE_t h, GUI_BUTTON_COLOR_t index, GUI_Color_t color);
+GUI_HANDLE_t GUI_BUTTON_SetBorderWidth(GUI_HANDLE_t h, GUI_Dim_t width);
+GUI_HANDLE_t GUI_BUTTON_SetBorderRadius(GUI_HANDLE_t h, GUI_Dim_t size);
+GUI_HANDLE_t GUI_BUTTON_SetFont(GUI_HANDLE_t h, GUI_Const GUI_FONT_t* font);
 
 //Returns number of bytes allocated
-uint32_t GUI_BUTTON_AllocTextMemory(GUI_HANDLE_t ptr, uint8_t size);
-GUI_HANDLE_t GUI_BUTTON_FreeTextMemory(GUI_HANDLE_t ptr);
-    
-/**
- * \} GUI_BUTTON_Functions
- */
+uint32_t GUI_BUTTON_AllocTextMemory(GUI_HANDLE_t h, uint8_t size);
+GUI_HANDLE_t GUI_BUTTON_FreeTextMemory(GUI_HANDLE_t h);
     
 /**
  * \} GUI_BUTTON

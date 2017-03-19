@@ -1,6 +1,6 @@
 /**	
  * |----------------------------------------------------------------------
- * | Copyright (c) 2016 Tilen Majerle
+ * | Copyright (c) 2017 Tilen Majerle
  * |  
  * | Permission is hereby granted, free of charge, to any person
  * | obtaining a copy of this software and associated documentation
@@ -31,13 +31,11 @@
 /******************************************************************************/
 /******************************************************************************/
 
-
 /******************************************************************************/
 /******************************************************************************/
 /***                           Private definitions                           **/
 /******************************************************************************/
 /******************************************************************************/
-#define GUI_USE_CLIPPING        1
 
 /******************************************************************************/
 /******************************************************************************/
@@ -45,22 +43,37 @@
 /******************************************************************************/
 /******************************************************************************/
 
-
 /******************************************************************************/
 /******************************************************************************/
 /***                            Private functions                            **/
 /******************************************************************************/
 /******************************************************************************/
+void __StringGetCharSize(GUI_Const GUI_FONT_t* font, const char ch, GUI_Dim_t* width, GUI_Dim_t* height) {
+    const GUI_FONT_CharInfo_t* c;
+    
+    if (ch >= font->StartChar && ch <= font->EndChar) {
+        c = &font->Data[(ch) - font->StartChar];
+    } else if ('?' >= font->StartChar && '?' <= font->EndChar ) {
+        c = &font->Data['?' - font->StartChar];
+    }
+    if (c) {
+        *width = c->xSize + c->xMargin;
+        *height = c->ySize;
+    } else {
+        *width = 0;
+        *height = 0;
+    }
+}
+
 //Get string width
-GUI_Dim_t __StringWidth(GUI_Const GUI_FONT_t* font, const char* str) {
-    GUI_Dim_t out = 0;
+void __StringRectangle(GUI_Const GUI_FONT_t* font, const char* str, GUI_Dim_t* width, GUI_Dim_t* height) {
+    GUI_Dim_t w, h;
+    *width = 0;
     while (*str) {
-        out += font->Data[(*str) - font->StartChar].xSize;
-        out += font->Data[(*str) - font->StartChar].xMargin;
+        __StringGetCharSize(font, *str, &w, &h);
+        *width += w;
         str++;
     }
-    
-    return out;
 }
 
 /* Draw character to screen */
@@ -83,38 +96,36 @@ void __DRAW_Char(GUI_Display_t* disp, GUI_Const GUI_FONT_t* font, GUI_DRAW_FONT_
         }   
         
         for (i = 0; i < columns * c->ySize; i++) {  /* Go through all data bytes */
-            if (y < disp->Y1 || y > disp->Y2) {     /* Do not draw when we are outside clipping are */
-                goto draw_char_handle_y_aa;
+            if (y >= disp->Y1 && y <= disp->Y2) {   /* Do not draw when we are outside clipping are */            
+                b = c->Data[i];                     /* Get character byte */
+                for (k = 0; k < 4; k++) {           /* Scan each bit in byte */
+                    GUI_Color_t baseColor;
+                    x1 = x + (i % columns) * 4 + k; /* Get new X value for pixel draw */
+                    if (x1 < disp->X1 || x1 > disp->X2) {
+                        continue;
+                    }
+                    if (x1 < (draw->X + draw->Color1Width)) {
+                        baseColor = draw->Color1;
+                    } else {
+                        baseColor = draw->Color2;
+                    }
+                    tmp = (b >> (6 - 2 * k)) & 0x03;/* Get temporary bits on bottom */
+                    if (tmp == 0x03) {              /* Draw solid color if both bits are enabled */
+                        GUI_DRAW_SetPixel(disp, x1, y, baseColor);
+                    } else if (tmp) {               /* Calculate new color */
+                        float t = (float)tmp / 3.0f;
+                        color = GUI_DRAW_GetPixel(disp, x1, y); /* Read current color */
+                        
+                        /* Calculate new values for pixel */
+                        r1 = (float)t * (float)((color >> 16) & 0xFF) + (float)(1.0f - (float)t) * (float)((baseColor >> 16) & 0xFF);
+                        g1 = (float)t * (float)((color >>  8) & 0xFF) + (float)(1.0f - (float)t) * (float)((baseColor >>  8) & 0xFF);
+                        b1 = (float)t * (float)((color >>  0) & 0xFF) + (float)(1.0f - (float)t) * (float)((baseColor >>  0) & 0xFF);
+                        
+                        /* Draw actual pixel to screen */
+                        GUI_DRAW_SetPixel(disp, x1, y, (color & 0xFF000000UL) | r1 << 16 | g1 << 8 | b1);
+                    }
+                }
             }
-            b = c->Data[i];                         /* Get character byte */
-            for (k = 0; k < 4; k++) {               /* Scan each bit in byte */
-                GUI_Color_t baseColor;
-                x1 = x + (i % columns) * 4 + k;     /* Get new X value for pixel draw */
-                if (x1 < disp->X1 || x1 > disp->X2) {
-                    continue;
-                }
-                if (x1 < (draw->X + draw->Color1Width)) {
-                    baseColor = draw->Color1;
-                } else {
-                    baseColor = draw->Color2;
-                }
-                tmp = (b >> (6 - 2 * k)) & 0x03;    /* Get temporary bits on bottom */
-                if (tmp == 0x03) {                  /* Draw solid color if both bits are enabled */
-                    GUI_DRAW_SetPixel(disp, x1, y, baseColor);
-                } else if (tmp) {                   /* Calculate new color */
-                    float t = (float)tmp / 3.0f;
-                    color = GUI_DRAW_GetPixel(disp, x1, y); /* Read current color */
-                    
-                    /* Calculate new values for pixel */
-                    r1 = (float)t * (float)((color >> 16) & 0xFF) + (float)(1.0f - (float)t) * (float)((baseColor >> 16) & 0xFF);
-                    g1 = (float)t * (float)((color >>  8) & 0xFF) + (float)(1.0f - (float)t) * (float)((baseColor >>  8) & 0xFF);
-                    b1 = (float)t * (float)((color >>  0) & 0xFF) + (float)(1.0f - (float)t) * (float)((baseColor >>  0) & 0xFF);
-                    
-                    /* Draw actual pixel to screen */
-                    GUI_DRAW_SetPixel(disp, x1, y, r1 << 16 | g1 << 8 | b1);
-                }
-            }
-draw_char_handle_y_aa:
             if ((i % columns) == (columns - 1)) {   /* Check for next line */
                 y++;
             }
@@ -125,29 +136,48 @@ draw_char_handle_y_aa:
             columns++;
         }
         for (i = 0; i < columns * c->ySize; i++) {  /* Go through all data bytes */
-            if (y < disp->Y1 || y > disp->Y2) {     /* Do not draw when we are outside clipping are */
-                goto draw_char_handle_y;
-            }
-            b = c->Data[i];                         /* Get character byte */
-            for (k = 0; k < 8; k++) {               /* Scan each bit in byte */
-                if (b & (1 << (7 - k))) {           /* If bit is set, draw pixel */
-                    x1 = x + (i % columns) * 8 + k; /* Get new X value for pixel draw */
-                    if (x1 < disp->X1 || x1 > disp->X2) {
-                        continue;
-                    }
-                    if (x1 <= (draw->X + draw->Color1Width)) {
-                        GUI_DRAW_SetPixel(disp, x1, y, draw->Color1);
-                    } else {
-                        GUI_DRAW_SetPixel(disp, x1, y, draw->Color2);
+            if (y >= disp->Y1 && y <= disp->Y2) {   /* Do not draw when we are outside clipping are */
+                b = c->Data[i];                     /* Get character byte */
+                for (k = 0; k < 8; k++) {           /* Scan each bit in byte */
+                    if (b & (1 << (7 - k))) {       /* If bit is set, draw pixel */
+                        x1 = x + (i % columns) * 8 + k; /* Get new X value for pixel draw */
+                        if (x1 < disp->X1 || x1 > disp->X2) {
+                            continue;
+                        }
+                        if (x1 <= (draw->X + draw->Color1Width)) {
+                            GUI_DRAW_SetPixel(disp, x1, y, draw->Color1);
+                        } else {
+                            GUI_DRAW_SetPixel(disp, x1, y, draw->Color2);
+                        }
                     }
                 }
             }
-draw_char_handle_y:
             if ((i % columns) == (columns - 1)) {   /* Check for next line */
                 y++;
             }
         }
     }
+}
+
+const char* __StringGetPointerForWidth(GUI_Const GUI_FONT_t* font, const char* str, GUI_DRAW_FONT_t* draw) {
+    const char* tmp = str;
+    GUI_Dim_t tot = 0, w, h;
+    
+    while (*tmp) {                                  /* Go to the end of string */
+        tmp++;
+    }
+    tmp--;                                          /* Go to the last character */
+    while (str <= tmp) {
+        __StringGetCharSize(font, *tmp, &w, &h);
+        if ((tot + w) < draw->Width) {
+            tot += w;
+            tmp--;
+        } else {
+            draw->X += draw->Width - tot;           /* Add X position to align right */
+            break;
+        }
+    }
+    return tmp + 1;
 }
 
 /******************************************************************************/
@@ -174,10 +204,10 @@ void GUI_DRAW_FillScreen(GUI_Display_t* disp, GUI_Color_t color) {
 void GUI_DRAW_Fill(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_Color_t color) {
 #if GUI_USE_CLIPPING
     if (                                            /* Check if redraw is inside area */
+        x >= disp->X2 ||                            /* Too right */
+        y >= disp->Y2 ||                            /* Too bottom */
         (x + width) < disp->X1 ||                   /* Too left */
-        (y + height) < disp->Y1 ||                  /* Too top */
-        x > disp->X2 ||                             /* Too right */
-        y > disp->Y2                                /* Too bottom */
+        (y + height) < disp->Y1                     /* Too top */
         ) {
         return;
     }
@@ -205,7 +235,7 @@ void GUI_DRAW_Fill(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t widt
 
 void GUI_DRAW_SetPixel(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Color_t color) {
 #if GUI_USE_CLIPPING
-    if (y < disp->Y1 || y > disp->Y2 || x < disp->X1 || x > disp->X2) {
+    if (y < disp->Y1 || y >= disp->Y2 || x < disp->X1 || x >= disp->X2) {
         return;
     }
 #endif
@@ -218,7 +248,7 @@ GUI_Color_t GUI_DRAW_GetPixel(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y) {
 
 void GUI_DRAW_VLine(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t length, GUI_Color_t color) {
 #if GUI_USE_CLIPPING
-    if (x > disp->X2 || x < disp->X1 || y > disp->Y2 || (y + length) < disp->Y1) {
+    if (x >= disp->X2 || x < disp->X1 || y > disp->Y2 || (y + length) < disp->Y1) {
         return;
     }
     if (y < disp->Y1) {
@@ -234,7 +264,7 @@ void GUI_DRAW_VLine(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t len
 
 void GUI_DRAW_HLine(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t length, GUI_Color_t color) {
 #if GUI_USE_CLIPPING
-    if (y > disp->Y2 || y < disp->Y1 || x > disp->X2 || (x + length) < disp->X1) {
+    if (y >= disp->Y2 || y < disp->Y1 || x > disp->X2 || (x + length) < disp->X1) {
         return;
     }
     if (x < disp->X1) {
@@ -254,12 +284,22 @@ void GUI_DRAW_HLine(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t len
 /******************************************************************************/
 /******************************************************************************/
 void GUI_DRAW_Line(GUI_Display_t* disp, GUI_Dim_t x1, GUI_Dim_t y1, GUI_Dim_t x2, GUI_Dim_t y2, GUI_Color_t color) {
-	int16_t deltax = 0, deltay = 0, x = 0, y = 0, xinc1 = 0, xinc2 = 0, 
+	GUI_iDim_t deltax = 0, deltay = 0, x = 0, y = 0, xinc1 = 0, xinc2 = 0, 
 	yinc1 = 0, yinc2 = 0, den = 0, num = 0, numadd = 0, numpixels = 0, 
 	curpixel = 0;
 
 	deltax = __GUI_ABS(x2 - x1);
 	deltay = __GUI_ABS(y2 - y1);
+    
+//    if (deltax == 0) {
+//        GUI_DRAW_VLine(disp, x1, y1, deltay, color);
+//        return;
+//    }
+//    if (deltay == 0) {
+//        GUI_DRAW_HLine(disp, x1, y1, deltax, color);
+//        return;
+//    }
+    
 	x = x1;
 	y = y1;
 	
@@ -296,7 +336,13 @@ void GUI_DRAW_Line(GUI_Display_t* disp, GUI_Dim_t x1, GUI_Dim_t y1, GUI_Dim_t x2
 	}
 
 	for (curpixel = 0; curpixel <= numpixels; curpixel++) {
-		GUI_DRAW_SetPixel(disp, x, y, color);
+#if GUI_USE_CLIPPING
+		if (x >= GUI.Display.X1 && x <= GUI.Display.X2) {
+            GUI_DRAW_SetPixel(disp, x, y, color);
+        }
+#else
+        GUI_DRAW_SetPixel(disp, x, y, color);
+#endif
 		num += numadd;
 		if (num >= den) {
 			num -= den;
@@ -346,7 +392,7 @@ void GUI_DRAW_Rectangle3D(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim
 
 void GUI_DRAW_RoundedRectangle(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_Dim_t r, GUI_Color_t color) {
     if (r >= (height / 2)) {
-        r = height / 2;
+        r = height / 2 - 1;
     }
     if (r) {
         GUI_DRAW_HLine(disp, x + r,         y,              width - 2 * r,  color);
@@ -396,11 +442,65 @@ void GUI_DRAW_FilledCircle(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Di
 }
 
 void GUI_DRAW_Triangle(GUI_Display_t* disp, GUI_Dim_t x1, GUI_Dim_t y1,  GUI_Dim_t x2, GUI_Dim_t y2, GUI_Dim_t x3, GUI_Dim_t y3, GUI_Color_t color) {
-
+    GUI_DRAW_Line(disp, x1, y1, x2, y2, color);
+    GUI_DRAW_Line(disp, x1, y1, x3, y3, color);
+    GUI_DRAW_Line(disp, x2, y2, x3, y3, color);
 }
 
 void GUI_DRAW_FilledTriangle(GUI_Display_t* disp, GUI_Dim_t x1, GUI_Dim_t y1, GUI_Dim_t x2, GUI_Dim_t y2, GUI_Dim_t x3, GUI_Dim_t y3, GUI_Color_t color) {
+	GUI_iDim_t deltax = 0, deltay = 0, x = 0, y = 0, xinc1 = 0, xinc2 = 0, 
+	yinc1 = 0, yinc2 = 0, den = 0, num = 0, numadd = 0, numpixels = 0, 
+	curpixel = 0;
 
+	deltax = __GUI_ABS(x2 - x1);
+	deltay = __GUI_ABS(y2 - y1);
+	x = x1;
+	y = y1;
+
+	if (x2 >= x1) {
+		xinc1 = 1;
+		xinc2 = 1;
+	} else {
+		xinc1 = -1;
+		xinc2 = -1;
+	}
+
+	if (y2 >= y1) {
+		yinc1 = 1;
+		yinc2 = 1;
+	} else {
+		yinc1 = -1;
+		yinc2 = -1;
+	}
+
+	if (deltax >= deltay){
+		xinc1 = 0;
+		yinc2 = 0;
+		den = deltax;
+		num = deltax / 2;
+		numadd = deltay;
+		numpixels = deltax;
+	} else {
+		xinc2 = 0;
+		yinc1 = 0;
+		den = deltay;
+		num = deltay / 2;
+		numadd = deltax;
+		numpixels = deltay;
+	}
+
+	for (curpixel = 0; curpixel <= numpixels; curpixel++) {
+		GUI_DRAW_Line(disp, x, y, x3, y3, color);
+
+		num += numadd;
+		if (num >= den) {
+			num -= den;
+			x += xinc1;
+			y += yinc1;
+		}
+		x += xinc2;
+		y += yinc2;
+	}
 }
 
 void GUI_DRAW_CircleCorner(GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t y0, GUI_iDim_t r, GUI_Byte_t c, GUI_Color_t color) {
@@ -519,13 +619,16 @@ void GUI_DRAW_Poly(GUI_Display_t* disp, GUI_DRAW_Poly_t* points, GUI_Byte len, G
 }
 
 void GUI_DRAW_WriteText(GUI_Display_t* disp, GUI_Const GUI_FONT_t* font, const char* str, GUI_DRAW_FONT_t* draw) {
-    GUI_Dim_t w, x, y;
+    GUI_Dim_t w, h, x, y;
     const GUI_FONT_CharInfo_t* c;
     
-    w = __StringWidth(font, str);                   /* Get string width for this box */
-    
-    if (w > draw->Width) {                          /* If string is wider than available */
-        w = draw->Width;                            /* Strip text width to available */
+    __StringRectangle(font, str, &w, &h);           /* Get string width for this box */
+    if (w > draw->Width) {                          /* If string is wider than available rectangle */
+        if (draw->Flags & GUI_FLAG_FONT_RIGHTALIGN) {   /* Check right align text */
+            str = __StringGetPointerForWidth(font, str, draw);
+        } else {
+            w = draw->Width;                        /* Strip text width to available */
+        }
     }
     
     x = draw->X;                                    /* Get start X position */
@@ -544,7 +647,14 @@ void GUI_DRAW_WriteText(GUI_Display_t* disp, GUI_Const GUI_FONT_t* font, const c
     }
     
     while (*str) {                                  /* Go through entire string */
-        c = &font->Data[(*str) - font->StartChar];  /* Get char informations */
+        if (*str >= font->StartChar && *str <= font->EndChar) { /* Check if char is in table */
+            c = &font->Data[(*str) - font->StartChar];  /* Get char from table */
+        } else if ('?' >= font->StartChar && '?' <= font->EndChar ) {   /* For invalid character, check ? character */
+            c = &font->Data['?' - font->StartChar];
+        } else {                                    /* Ignore character */
+            str++;
+            continue;
+        }
         
         if (w < (c->xSize + c->xMargin)) {          /* Check available width */
             break;                                  /* Stop execution right now */

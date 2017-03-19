@@ -5,7 +5,7 @@
  *	
 \verbatim
    ----------------------------------------------------------------------
-    Copyright (c) 2016 Tilen Majerle
+    Copyright (c) 2017 Tilen Majerle
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -38,50 +38,22 @@ extern "C" {
 #endif
 
 /**
- * \addtogroup  GUI
+ * \defgroup        GUI_INPUT
  * \brief       
  * \{
  */
-#include "..\gui.h"
-
-/**
- * @defgroup      GUI_INPUT_Macros
- * @brief         Library defines
- * @{
- */
-
-/**
- * \}
- */
- 
-/**
- * \defgroup      GUI_INPUT_Typedefs
- * \brief         Library Typedefs
- * \{
- */
-
-/**
- * @}
- */
-
-/**
- * \defgroup      GUI_INPUT_Functions
- * \brief         Library Functions
- * \{
- */
+#include "../gui.h"
 
 void GUI_INPUT_AddTouch(const GUI_TouchData_t* Data);
+void GUI_INPUT_AddKey(const GUI_KeyboardData_t* Data);
 
 //Internal purpose only
 void __GUI_INPUT_Init(void);
 GUI_Byte_t __GUI_INPUT_ReadTouch(GUI_TouchData_t* Data);
+GUI_Byte_t __GUI_INPUT_ReadKey(GUI_KeyboardData_t* Data);
 
 /**
- * \}
- */
- 
-/**
- * \}
+ * \} GUI_INPUT
  */
 
 /* C++ detection */

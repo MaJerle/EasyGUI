@@ -8,7 +8,7 @@
  *	
 \verbatim
    ----------------------------------------------------------------------
-    Copyright (c) 2016 Tilen Majerle
+    Copyright (c) 2017 Tilen Majerle
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -92,16 +92,6 @@ extern "C" {
 #define __GUI_MEMFREE(p)            free(p)
 
 /**
- * \brief           Allocate memory for widget in heap memory
- */
-#define __GUI_MEMWIDALLOC(p, size)          do {    \
-    (p) = (GUI_HANDLE_t)malloc(size);               \
-    if ((p)) {                                      \
-        memset((p), 0x00, sizeof(size));            \
-    }                                               \
-} while (0)
-
-/**
  * \brief           Free memory for widget which was just deleted
  */
 #define __GUI_MEMWIDFREE(p)         do {            \
@@ -155,13 +145,15 @@ extern "C" {
     )
 
 /**
- * \} GUI_Internal
+ * \brief           Macro for unused variables to prevent compiler warnings
  */
+#define __GUI_UNUSED(x)             (void)(x)
+#define __GUI_UNUSED2(x, y)         { __GUI_UNUSED(x); __GUI_UNUSED(y); }
+#define __GUI_UNUSED3(x, y, z)      { __GUI_UNUSED(x); __GUI_UNUSED(y); __GUI_UNUSED(z); }
+#define __GUI_UNUSED4(x, y, z, k)   { __GUI_UNUSED(x); __GUI_UNUSED(y); __GUI_UNUSED(z); __GUI_UNUSED(k); }
 
 /**
- * \defgroup        GUI_Typedefs
- * \brief           
- * \{
+ * \} GUI_Internal
  */
 
 /**
@@ -178,30 +170,12 @@ typedef struct GUI_t {
     GUI_HANDLE_t ActiveWidget;              /*!< Pointer to widget currently active by mouse or touch press */
     
     GUI_LinkedListRoot_t Root;              /*!< Root linked list widget */
-    
-    union {
-        struct {
-            uint8_t Window:1;               /*!< Flag indicating at least one window should be updated */
-            uint8_t Button:1;               /*!< Flag indicating at least one button should be updated */
-        } F;
-        uint32_t Value;
-    } Redraw;                               /*!< Flags indicating widgets to update */
 } GUI_t;
 extern GUI_t GUI;
 
 /* Include widget structure */
 #include "widgets/gui_widget.h"
 #include "input/gui_input.h"
-
-/**
- * \}
- */
-
-/**
- * \defgroup        GUI_Functions
- * \brief           Library Functions
- * \{
- */
 
 /**
  * \brief           Initializes GUI stack.
@@ -223,11 +197,7 @@ int32_t GUI_Process(void);
 void GUI_LCD_ConfirmActiveLayer(GUI_Byte layer_num);
  
 /**
- * \}
- */
- 
-/**
- * \}
+ * \} GUI
  */
 
 /* C++ detection */

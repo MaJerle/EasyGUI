@@ -46,6 +46,7 @@ extern "C" {
 
 /**
  * \defgroup        GUI_TEMPLATE
+ * \{
  */
 
 /**

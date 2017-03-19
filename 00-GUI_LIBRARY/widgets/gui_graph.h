@@ -5,7 +5,7 @@
  *  
 \verbatim
    ----------------------------------------------------------------------
-    Copyright (c) 2016 Tilen Majerle
+    Copyright (c) 2017 Tilen Majerle
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -46,23 +46,6 @@ extern "C" {
 
 /**
  * \defgroup        GUI_GRAPH
- */
-
-/**
- * \defgroup        GUI_GRAPH_Macros
- * \brief           Library defines
- * \{
- */
-    
-
-
-/**
- * \} GUI_GRAPH_Macros
- */
- 
-/**
- * \defgroup        GUI_GRAPH_Typedefs
- * \brief           Library Typedefs
  * \{
  */
 
@@ -86,6 +69,7 @@ typedef enum GUI_GRAPH_TYPE_t {
 
 typedef struct GUI_GRAPH_DATA_t {
     GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
+    GUI_HANDLE_t Graph;                     /*!< Pointer to graph object */
     uint16_t* Data;                         /*!< Pointer to actual data object */
     uint16_t Length;                        /*!< Size of data array */
     GUI_Color_t Color;                      /*!< Curve color */
@@ -94,32 +78,26 @@ typedef struct GUI_GRAPH_DATA_t {
 
 typedef struct GUI_GRAPH_t {
     GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
+    GUI_LinkedListRoot_t Root;              /*!< Linked list root object for data objects */
     
     GUI_Color_t Color[4];                   /*!< List of colors for widget */
     GUI_Dim_t Border[4];                    /*!< Borders for widgets */
-    uint8_t Rows;                           /*!< Number of vertical lines for plot */
-    uint8_t Columns;                        /*!< Number of vertical lines for plot */
+    uint8_t Rows;                           /*!< Number of rows in plot represented with lines */
+    uint8_t Columns;                        /*!< Number of columns in plot represented with lines */
+    int16_t MinX;                           /*!< Minimal X value for plot */
+    int16_t MaxX;                           /*!< Maximal X value for plot */
+    int16_t MinY;                           /*!< Minimal Y value for plot */
+    int16_t MaxY;                           /*!< Maximal Y value for plot */
 } GUI_GRAPH_t;
-
-/**
- * \} GUI_GRAPH_Typedefs
- */
-
-/**
- * \defgroup        GUI_GRAPH_Functions
- * \brief           Library Functions
- * \{
- */
 
 GUI_HANDLE_t GUI_GRAPH_Create(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height);
 void GUI_GRAPH_Remove(GUI_HANDLE_t* h);
+GUI_HANDLE_t GUI_GRAPH_SetColor(GUI_HANDLE_t h, GUI_GRAPH_COLOR_t index, GUI_Color_t color);
+GUI_HANDLE_t GUI_GRAPH_AttachData(GUI_HANDLE_t h, GUI_HANDLE_t hd);
 
 GUI_HANDLE_t GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_t type, uint16_t Length);
 void GUI_GRAPH_DATA_Remove(GUI_HANDLE_t* h);
-
-/**
- * \} GUI_GRAPH_Functions
- */
+GUI_HANDLE_t GUI_GRAPH_DATA_AddValue(GUI_HANDLE_t h, uint16_t val);
  
 /**
  * \} GUI_GRAPH

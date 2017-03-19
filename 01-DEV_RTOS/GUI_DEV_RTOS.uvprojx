@@ -1282,14 +1282,14 @@
           <GroupName>GUI WIDGETS</GroupName>
           <Files>
             <File>
-              <FileName>gui_button.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\widgets\gui_button.c</FilePath>
-            </File>
-            <File>
               <FileName>gui_widget.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_widget.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_button.c</FilePath>
             </File>
             <File>
               <FileName>gui_window.c</FileName>
@@ -1310,6 +1310,11 @@
               <FileName>gui_graph.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_graph.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_edittext.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_edittext.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2635,14 +2640,14 @@
           <GroupName>GUI WIDGETS</GroupName>
           <Files>
             <File>
-              <FileName>gui_button.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\widgets\gui_button.c</FilePath>
-            </File>
-            <File>
               <FileName>gui_widget.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_widget.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_button.c</FilePath>
             </File>
             <File>
               <FileName>gui_window.c</FileName>
@@ -2663,6 +2668,11 @@
               <FileName>gui_graph.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_graph.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_edittext.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_edittext.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3989,14 +3999,14 @@
           <GroupName>GUI WIDGETS</GroupName>
           <Files>
             <File>
-              <FileName>gui_button.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\widgets\gui_button.c</FilePath>
-            </File>
-            <File>
               <FileName>gui_widget.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_widget.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_button.c</FilePath>
             </File>
             <File>
               <FileName>gui_window.c</FileName>
@@ -4017,6 +4027,11 @@
               <FileName>gui_graph.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_graph.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_edittext.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_edittext.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5077,14 +5092,14 @@
           <GroupName>GUI WIDGETS</GroupName>
           <Files>
             <File>
-              <FileName>gui_button.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\widgets\gui_button.c</FilePath>
-            </File>
-            <File>
               <FileName>gui_widget.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_widget.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_button.c</FilePath>
             </File>
             <File>
               <FileName>gui_window.c</FileName>
@@ -5105,6 +5120,11 @@
               <FileName>gui_graph.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_graph.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_edittext.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_edittext.c</FilePath>
             </File>
           </Files>
         </Group>

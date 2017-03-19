@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f7xx_hal_cryp.c
   * @author  MCD Application Team
-  * @version V1.1.2
-  * @date    23-September-2016 
+  * @version V1.0.1
+  * @date    25-June-2015
   * @brief   CRYP HAL module driver.
   *          This file provides firmware functions to manage the following 
   *          functionalities of the Cryptography (CRYP) peripheral:
@@ -70,7 +70,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2016 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -100,17 +100,17 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f7xx_hal.h"
 
-#ifdef HAL_CRYP_MODULE_ENABLED
-
-#if defined (CRYP)
-
 /** @addtogroup STM32F7xx_HAL_Driver
   * @{
   */
+#if defined(STM32F756xx)
 /** @defgroup CRYP CRYP
   * @brief CRYP HAL module driver.
   * @{
   */
+
+
+#ifdef HAL_CRYP_MODULE_ENABLED
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -691,9 +691,6 @@ HAL_StatusTypeDef HAL_CRYP_DeInit(CRYP_HandleTypeDef *hcryp)
   */
 __weak void HAL_CRYP_MspInit(CRYP_HandleTypeDef *hcryp)
 {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hcryp);
- 
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_CRYP_MspInit could be implemented in the user file
    */
@@ -707,9 +704,6 @@ __weak void HAL_CRYP_MspInit(CRYP_HandleTypeDef *hcryp)
   */
 __weak void HAL_CRYP_MspDeInit(CRYP_HandleTypeDef *hcryp)
 {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hcryp);
- 
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_CRYP_MspDeInit could be implemented in the user file
    */
@@ -2291,13 +2285,13 @@ HAL_StatusTypeDef HAL_CRYP_DESECB_Encrypt(CRYP_HandleTypeDef *hcryp, uint8_t *pP
   * @brief  Initializes the CRYP peripheral in DES ECB decryption mode.
   * @param  hcryp: pointer to a CRYP_HandleTypeDef structure that contains
   *         the configuration information for CRYP module
-  * @param  pCypherData: Pointer to the cyphertext buffer
-  * @param  Size: Length of the plaintext buffer, must be a multiple of 8
   * @param  pPlainData: Pointer to the plaintext buffer
+  * @param  Size: Length of the plaintext buffer, must be a multiple of 8
+  * @param  pCypherData: Pointer to the cyphertext buffer
   * @param  Timeout: Specify Timeout value  
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_CRYP_DESECB_Decrypt(CRYP_HandleTypeDef *hcryp, uint8_t *pCypherData, uint16_t Size, uint8_t *pPlainData, uint32_t Timeout)
+HAL_StatusTypeDef HAL_CRYP_DESECB_Decrypt(CRYP_HandleTypeDef *hcryp, uint8_t *pPlainData, uint16_t Size, uint8_t *pCypherData, uint32_t Timeout)
 {
   /* Process Locked */
   __HAL_LOCK(hcryp);
@@ -2312,7 +2306,7 @@ HAL_StatusTypeDef HAL_CRYP_DESECB_Decrypt(CRYP_HandleTypeDef *hcryp, uint8_t *pC
   __HAL_CRYP_ENABLE(hcryp);
   
   /* Write Plain Data and Get Cypher Data */
-  if(CRYP_ProcessData2Words(hcryp, pCypherData, Size, pPlainData, Timeout) != HAL_OK)
+  if(CRYP_ProcessData2Words(hcryp, pPlainData, Size, pCypherData, Timeout) != HAL_OK)
   {
     return HAL_TIMEOUT;
   }
@@ -2371,13 +2365,13 @@ HAL_StatusTypeDef HAL_CRYP_DESCBC_Encrypt(CRYP_HandleTypeDef *hcryp, uint8_t *pP
   * @brief  Initializes the CRYP peripheral in DES ECB decryption mode.
   * @param  hcryp: pointer to a CRYP_HandleTypeDef structure that contains
   *         the configuration information for CRYP module
-  * @param  pCypherData: Pointer to the cyphertext buffer
-  * @param  Size: Length of the plaintext buffer, must be a multiple of 8
   * @param  pPlainData: Pointer to the plaintext buffer
+  * @param  Size: Length of the plaintext buffer, must be a multiple of 8
+  * @param  pCypherData: Pointer to the cyphertext buffer
   * @param  Timeout: Specify Timeout value  
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_CRYP_DESCBC_Decrypt(CRYP_HandleTypeDef *hcryp, uint8_t *pCypherData, uint16_t Size, uint8_t *pPlainData, uint32_t Timeout)
+HAL_StatusTypeDef HAL_CRYP_DESCBC_Decrypt(CRYP_HandleTypeDef *hcryp, uint8_t *pPlainData, uint16_t Size, uint8_t *pCypherData, uint32_t Timeout)
 {
   /* Process Locked */
   __HAL_LOCK(hcryp);
@@ -2392,7 +2386,7 @@ HAL_StatusTypeDef HAL_CRYP_DESCBC_Decrypt(CRYP_HandleTypeDef *hcryp, uint8_t *pC
   __HAL_CRYP_ENABLE(hcryp);
   
   /* Write Plain Data and Get Cypher Data */
-  if(CRYP_ProcessData2Words(hcryp, pCypherData, Size, pPlainData, Timeout) != HAL_OK)
+  if(CRYP_ProcessData2Words(hcryp, pPlainData, Size, pCypherData, Timeout) != HAL_OK)
   {
     return HAL_TIMEOUT;
   }
@@ -3644,9 +3638,6 @@ HAL_StatusTypeDef HAL_CRYP_TDESCBC_Decrypt_DMA(CRYP_HandleTypeDef *hcryp, uint8_
   */
 __weak void HAL_CRYP_InCpltCallback(CRYP_HandleTypeDef *hcryp)
 {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hcryp);
- 
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_CRYP_InCpltCallback could be implemented in the user file
    */ 
@@ -3660,9 +3651,6 @@ __weak void HAL_CRYP_InCpltCallback(CRYP_HandleTypeDef *hcryp)
   */
 __weak void HAL_CRYP_OutCpltCallback(CRYP_HandleTypeDef *hcryp)
 {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hcryp);
- 
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_CRYP_OutCpltCallback could be implemented in the user file
    */
@@ -3676,9 +3664,6 @@ __weak void HAL_CRYP_OutCpltCallback(CRYP_HandleTypeDef *hcryp)
   */
  __weak void HAL_CRYP_ErrorCallback(CRYP_HandleTypeDef *hcryp)
 {
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hcryp);
- 
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_CRYP_ErrorCallback could be implemented in the user file
    */ 
@@ -3808,14 +3793,16 @@ HAL_CRYP_STATETypeDef HAL_CRYP_GetState(CRYP_HandleTypeDef *hcryp)
 /**
   * @}
   */
-/**
-  * @}
-  */
-/**
-  * @}
-  */
-#endif /* CRYP */
 
 #endif /* HAL_CRYP_MODULE_ENABLED */
+
+
+/**
+  * @}
+  */
+#endif /* STM32F756xx */
+/**
+  * @}
+  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

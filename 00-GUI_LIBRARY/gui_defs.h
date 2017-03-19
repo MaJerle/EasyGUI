@@ -5,7 +5,7 @@
  *	
 \verbatim
    ----------------------------------------------------------------------
-    Copyright (c) 2016 Tilen Majerle
+    Copyright (c) 2017 Tilen Majerle
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -49,60 +49,112 @@ extern "C" {
  */
     
 /**
+ * \defgroup        GUI_Config
+ * \brief           List of default GUI colors
+ * \{
+ */
+
+/**
+ * \brief           Enables (1) or disables (0) clipping regions for redraw operations
+ */
+#define GUI_USE_CLIPPING            1
+
+/**
+ * \brief           Enables (1) or disables (0) touch support
+ */
+#define GUI_USE_TOUCH               1
+
+/**
+ * \brief           Enables (1) or disables (0) keyboard support
+ */
+#define GUI_USE_KEYBOARD            1
+
+
+#define TOUCH_BUFFER_SIZE           10
+#define KEYBOARD_BUFFER_SIZE        10
+
+/**
+ * \} GUI_Config
+ */
+    
+/**
  * \defgroup        GUI_Colors
  * \brief           List of default GUI colors
  * \{
  */
 
-#define GUI_COLOR_BLUE              0x000000FF
-#define GUI_COLOR_GREEN             0x0000FF00
-#define GUI_COLOR_RED               0x00FF0000
-#define GUI_COLOR_CYAN              0x0000FFFF
-#define GUI_COLOR_MAGENTA           0x00FF00FF
-#define GUI_COLOR_YELLOW            0x00FFFF00
-#define GUI_COLOR_LIGHTBLUE         0x008080FF
-#define GUI_COLOR_LIGHTGREEN        0x0080FF80
-#define GUI_COLOR_LIGHTRED          0x00FF8080
-#define GUI_COLOR_LIGHTCYAN         0x0080FFFF
-#define GUI_COLOR_LIGHTMAGENTA      0x00FF80FF
-#define GUI_COLOR_LIGHTYELLOW       0x00FFFF80
-#define GUI_COLOR_DARKBLUE          0x00000080
-#define GUI_COLOR_DARKGREEN         0x00008000
-#define GUI_COLOR_DARKRED           0x00800000
-#define GUI_COLOR_DARKCYAN          0x00008080
-#define GUI_COLOR_DARKMAGENTA       0x00800080
-#define GUI_COLOR_DARKYELLOW        0x00808000
-#define GUI_COLOR_WHITE             0x00FFFFFF
-#define GUI_COLOR_LIGHTGRAY         0x00D3D3D3
-#define GUI_COLOR_GRAY              0x00808080
-#define GUI_COLOR_DARKGRAY          0x00404040
-#define GUI_COLOR_BLACK             0x00000000
-#define GUI_COLOR_BROWN             0x00A52A2A
-#define GUI_COLOR_ORANGE            0x00FFA500
+#define GUI_COLOR_BLUE              0xFF0000FF
+#define GUI_COLOR_GREEN             0xFF00FF00
+#define GUI_COLOR_RED               0xFFFF0000
+#define GUI_COLOR_CYAN              0xFF00FFFF
+#define GUI_COLOR_MAGENTA           0xFFFF00FF
+#define GUI_COLOR_YELLOW            0xFFFFFF00
+#define GUI_COLOR_LIGHTBLUE         0xFF8080FF
+#define GUI_COLOR_LIGHTGREEN        0xFF80FF80
+#define GUI_COLOR_LIGHTRED          0xFFFF8080
+#define GUI_COLOR_LIGHTCYAN         0xFF80FFFF
+#define GUI_COLOR_LIGHTMAGENTA      0xFFFF80FF
+#define GUI_COLOR_LIGHTYELLOW       0xFFFFFF80
+#define GUI_COLOR_DARKBLUE          0xFF000080
+#define GUI_COLOR_DARKGREEN         0xFF008000
+#define GUI_COLOR_DARKRED           0xFF800000
+#define GUI_COLOR_DARKCYAN          0xFF008080
+#define GUI_COLOR_DARKMAGENTA       0xFF800080
+#define GUI_COLOR_DARKYELLOW        0xFF808000
+#define GUI_COLOR_WHITE             0xFFFFFFFF
+#define GUI_COLOR_LIGHTGRAY         0xFFD3D3D3
+#define GUI_COLOR_GRAY              0xFF808080
+#define GUI_COLOR_DARKGRAY          0xFF404040
+#define GUI_COLOR_BLACK             0xFF000000
+#define GUI_COLOR_BROWN             0xFFA52A2A
+#define GUI_COLOR_ORANGE            0xFFFFA500
 #define GUI_COLOR_TRANSPARENT       0xFF000000
 
-#define GUI_COLOR_TRANSPARENT_0     0x00000000
-#define GUI_COLOR_TRANSPARENT_5     0x0C000000
-#define GUI_COLOR_TRANSPARENT_10    0x19000000
-#define GUI_COLOR_TRANSPARENT_15    0x26000000
-#define GUI_COLOR_TRANSPARENT_20    0x33000000
-#define GUI_COLOR_TRANSPARENT_25    0x3F000000
-#define GUI_COLOR_TRANSPARENT_30    0x4C000000
-#define GUI_COLOR_TRANSPARENT_35    0x59000000
-#define GUI_COLOR_TRANSPARENT_40    0x66000000
-#define GUI_COLOR_TRANSPARENT_45    0x72000000
-#define GUI_COLOR_TRANSPARENT_50    0x7F000000
-#define GUI_COLOR_TRANSPARENT_55    0x7C000000
-#define GUI_COLOR_TRANSPARENT_60    0x99000000
-#define GUI_COLOR_TRANSPARENT_65    0xA5000000
-#define GUI_COLOR_TRANSPARENT_70    0xB2000000
-#define GUI_COLOR_TRANSPARENT_75    0xBF000000
-#define GUI_COLOR_TRANSPARENT_80    0xCC000000
-#define GUI_COLOR_TRANSPARENT_85    0xD8000000
-#define GUI_COLOR_TRANSPARENT_90    0xE5000000
-#define GUI_COLOR_TRANSPARENT_95    0xF2000000
-#define GUI_COLOR_TRANSPARENT_100   0xFF000000
+#define GUI_COLOR_ALPHA_0           0x00000000
+#define GUI_COLOR_ALPHA_5           0x0C000000
+#define GUI_COLOR_ALPHA_10          0x19000000
+#define GUI_COLOR_ALPHA_15          0x26000000
+#define GUI_COLOR_ALPHA_20          0x33000000
+#define GUI_COLOR_ALPHA_25          0x3F000000
+#define GUI_COLOR_ALPHA_30          0x4C000000
+#define GUI_COLOR_ALPHA_35          0x59000000
+#define GUI_COLOR_ALPHA_40          0x66000000
+#define GUI_COLOR_ALPHA_45          0x72000000
+#define GUI_COLOR_ALPHA_50          0x7F000000
+#define GUI_COLOR_ALPHA_55          0x7C000000
+#define GUI_COLOR_ALPHA_60          0x99000000
+#define GUI_COLOR_ALPHA_65          0xA5000000
+#define GUI_COLOR_ALPHA_70          0xB2000000
+#define GUI_COLOR_ALPHA_75          0xBF000000
+#define GUI_COLOR_ALPHA_80          0xCC000000
+#define GUI_COLOR_ALPHA_85          0xD8000000
+#define GUI_COLOR_ALPHA_90          0xE5000000
+#define GUI_COLOR_ALPHA_95          0xF2000000
+#define GUI_COLOR_ALPHA_100         0xFF000000
+
+#define GUI_COLOR_ALPHA(c, a)       (((c) & 0x00FFFFFFUL) | (a))
     
+/**
+ * \}
+ */
+
+/**
+ * \addtogroup      GUI_Flags
+ * \brief           List of all flags in GUI library
+ * \{
+ */
+
+#define GUI_FLAG_REDRAW                 ((uint32_t)(1UL << 0UL))    /*!< Indicates widget should be redrawn */
+#define GUI_FLAG_CHILD                  ((uint32_t)(1UL << 1UL))    /*!< Indicates widget is child (window) */
+#define GUI_FLAG_DYNAMICTEXTALLOC       ((uint32_t)(1UL << 2UL))    /*!< Indicates memory for text has been dynamically allocated */
+#define GUI_FLAG_ACTIVE                 ((uint32_t)(1UL << 3UL))    /*!< Indicates widget is active by mouser or touch */
+#define GUI_FLAG_FOCUS                  ((uint32_t)(1UL << 4UL))    /*!< Indicates widget is currently in focus */
+#define GUI_FLAG_VISIBLE                ((uint32_t)(1UL << 5UL))    /*!< Indicates widget is visible */
+#define GUI_FLAG_DISABLED               ((uint32_t)(1UL << 6UL))    /*!< Indicates widget is disabled */
+#define GUI_FLAG_3D                     ((uint32_t)(1UL << 7UL))    /*!< Indicates widget has enabled 3D style */
+
+#define GUI_FLAG_LCD_WAIT_LAYER_CONFIRM ((uint32_t)(1UL << 0UL))    /*!< Indicates waiting for layer change confirmation */
+
 /**
  * \}
  */
@@ -192,6 +244,22 @@ typedef enum __GUI_TouchStatus_t {
 } __GUI_TouchStatus_t;
 
 /**
+ * \brief           Single key data structure
+ */
+typedef struct GUI_KeyboardData_t {
+    uint16_t Key;                           /*!< Key pressed */
+    uint8_t Flags;                          /*!< Flags for special keys */
+} GUI_KeyboardData_t;
+
+/**
+ * \brief           Keyboard internal processing enumeration
+ */
+typedef enum __GUI_KeyboardStatus_t {
+    keyHANDLED = 0x00,                      /*!< Key has been handled */
+    keyCONTINUE                             /*!< Key has not been handled and further checking can be done */
+} __GUI_KeyboardStatus_t;
+
+/**
  * \brief           LCD layer structure
  */
 typedef struct GUI_Layer_t {
@@ -206,9 +274,9 @@ typedef struct GUI_Layer_t {
 typedef struct GUI_LCD_t {
     GUI_Dim_t Width;                        /*!< LCD width in units of pixels */
     GUI_Dim_t Height;                       /*!< LCD height in units of pixels */
-    uint8_t ActiveLayer;                    /*!< Active layer number currently shown to LCD */
-    uint8_t DrawingLayer;                   /*!< Currently active drawing layer */
-    uint8_t LayersCount;                    /*!< Number of layers used for LCD and drawings */
+    GUI_Byte ActiveLayer;                   /*!< Active layer number currently shown to LCD */
+    GUI_Byte DrawingLayer;                  /*!< Currently active drawing layer */
+    GUI_Byte LayersCount;                   /*!< Number of layers used for LCD and drawings */
     GUI_Layer_t* Layers;                    /*!< Pointer to layers */
     uint32_t Flags;                         /*!< List of flags */
 } GUI_LCD_t;
@@ -274,7 +342,8 @@ typedef struct {
     GUI_Const GUI_FONT_CharInfo_t* Data;    /*!< Pointer to first character */
 } GUI_FONT_t;
 
-#define GUI_FLAG_FONT_AA                0x01
+#define GUI_FLAG_FONT_AA                0x01/*!< Indicates anti-alliasing on font */
+#define GUI_FLAG_FONT_RIGHTALIGN        0x02/*!< Indicates right align text if string length is too wide for text */
 
 #define ________                        0x00
 #define _______X                        0x01
@@ -542,12 +611,22 @@ typedef struct {
  */
 
 /**
- * \defgroup        GUI_WIDGETS
+ * \addtogroup      GUI_WIDGETS
  * \{
  */
 
-#define GUI_TYPE_WINDOW                 0x01
-#define GUI_TYPE_BUTTON                 0x02
+/**
+ * \brief           Control parameters for widget
+ * \note            Must always start with number 1
+ */
+typedef enum GUI_WidgetControl_t {
+    GUI_WidgetControl_ExcludeLinkedList = 0x01, /*!< Add widget to linked list after widget creation [param = NONE, result = NONE] */
+} GUI_WidgetControl_t;
+
+/**
+ * \brief           Structure declaration
+ */
+struct GUI_HANDLE;
 
 /**
  * \brief           Structure for each widget type
@@ -558,12 +637,20 @@ typedef struct GUI_WIDGET_t {
         uint16_t WidgetSize;                /*!< Bytes required for widget memory allocation */
         GUI_Byte AllowChildren;             /*!< Set to 1 if widget allows children widgets */
     } MetaData;                             /*!< Meta data structure for widget */
-    void (*WidgetDraw)  (GUI_Display_t *,void *);   /*!< Pointer to widget drawing operation */
+    GUI_Byte (*Control)     (struct GUI_HANDLE *, GUI_WidgetControl_t, void *, void *);  /*!< Pointer to control function, returns 1 if command handled or 0 if not */
+    void (*Draw)            (struct GUI_HANDLE *, GUI_Display_t *);  /*!< Pointer to widget drawing operation */
+#if GUI_USE_TOUCH
     struct {
-        __GUI_TouchStatus_t (*TouchDown)    (void *, GUI_TouchData_t *, __GUI_TouchStatus_t);
-        __GUI_TouchStatus_t (*TouchUp)      (void *, GUI_TouchData_t *, __GUI_TouchStatus_t);
-        __GUI_TouchStatus_t (*TouchMove)    (void *, GUI_TouchData_t *, __GUI_TouchStatus_t);
+        __GUI_TouchStatus_t (*TouchDown)    (struct GUI_HANDLE *, GUI_TouchData_t *);
+        __GUI_TouchStatus_t (*TouchUp)      (struct GUI_HANDLE *, GUI_TouchData_t *);
+        __GUI_TouchStatus_t (*TouchMove)    (struct GUI_HANDLE *, GUI_TouchData_t *);
     } TouchEvents;
+#endif /* GUI_USE_TOUCH */
+#if GUI_USE_KEYBOARD
+    struct {
+        __GUI_KeyboardStatus_t (*KeyPress)  (struct GUI_HANDLE *, GUI_KeyboardData_t *);  
+    } KeyboardEvents;
+#endif /* GUI_USE_KEYBOARD */
 } GUI_WIDGET_t;
 
 /**
@@ -574,15 +661,15 @@ typedef struct GUI_HANDLE {
     GUI_ID_t Id;                            /*!< Widget ID number */
     const GUI_WIDGET_t* Widget;             /*!< Widget parameters with callback functions */
     struct GUI_HANDLE* Parent;              /*!< Pointer to parent window object */
-    uint8_t ParentType;                     /*!< Type of parent element */
     GUI_Dim_t X;                            /*!< Object X position relative to parent window in units of pixels */
     GUI_Dim_t Y;                            /*!< Object Y position relative to parent window in units of pixels */
     GUI_Dim_t Width;                        /*!< Object width in units of pixels */
     GUI_Dim_t Height;                       /*!< Object height in units of pixels */
     uint32_t Flags;                         /*!< All possible flags for specific widget */
+    GUI_Const GUI_FONT_t* Font;             /*!< Font used for widget drawings */
     char* Text;                             /*!< Pointer to widget text if exists */
     uint16_t TextMemSize;                   /*!< Number of bytes for text when dynamically allocated */
-    GUI_Const GUI_FONT_t* Font;             /*!< Font used for widget drawings */
+    uint16_t TextCursor;                    /*!< Text cursor position */
 } GUI_HANDLE;
 
 /**
@@ -597,20 +684,6 @@ typedef struct GUI_HANDLE_ROOT {
  * \brief           Handle object for GUI widget
  */
 typedef GUI_HANDLE* GUI_HANDLE_t;
-
-/**
- * \brief           Flags management
- */
-#define GUI_FLAG_REDRAW                 ((uint32_t)(1UL << 0UL))    /*!< Indicates widget should be redrawn */
-#define GUI_FLAG_CHILD                  ((uint32_t)(1UL << 1UL))    /*!< Indicates widget is child (window) */
-#define GUI_FLAG_DYNAMICTEXTALLOC       ((uint32_t)(1UL << 2UL))    /*!< Indicates memory for text has been dynamically allocated */
-#define GUI_FLAG_ACTIVE                 ((uint32_t)(1UL << 3UL))    /*!< Indicates widget is active by mouser or touch */
-#define GUI_FLAG_FOCUS                  ((uint32_t)(1UL << 4UL))    /*!< Indicates widget is currently in focus */
-#define GUI_FLAG_VISIBLE                ((uint32_t)(1UL << 5UL))    /*!< Indicates widget is visible */
-#define GUI_FLAG_DISABLED               ((uint32_t)(1UL << 6UL))    /*!< Indicates widget is disabled */
-#define GUI_FLAG_3D                     ((uint32_t)(1UL << 7UL))    /*!< Indicates widget has enabled 3D style */
-
-#define GUI_FLAG_LCD_WAIT_LAYER_CONFIRM ((uint32_t)(1UL << 0UL))    /*!< Indicates waiting for layer change confirmation */
 
 /**
  * \} GUI_WIDGETS

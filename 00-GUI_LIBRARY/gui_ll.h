@@ -5,7 +5,7 @@
  *	
 \verbatim
    ----------------------------------------------------------------------
-    Copyright (c) 2016 Tilen Majerle
+    Copyright (c) 2017 Tilen Majerle
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -38,47 +38,17 @@ extern "C" {
 #endif
 
 /**
- * \addtogroup  GUI
+ * \defgroup        GUI_LL
  * \brief       
  * \{
  */
 #include "gui.h"
 
-/**
- * @defgroup      GUI_LL_Macros
- * @brief         Library defines
- * @{
- */
-
-/**
- * \}
- */
- 
-/**
- * \defgroup      GUI_LL_Typedefs
- * \brief         Library Typedefs
- * \{
- */
- 
-/**
- * @}
- */
-
-/**
- * \defgroup      GUI_LL_Functions
- * \brief         Library Functions
- * \{
- */
-
 uint8_t GUI_LL_Init(GUI_LCD_t* LCD, GUI_LL_t* LL);
 uint8_t GUI_LL_Control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* data);
-
-/**
- * \}
- */
  
 /**
- * \}
+ * \} GUI_LL
  */
 
 /* C++ detection */

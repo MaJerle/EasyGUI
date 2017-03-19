@@ -1,6 +1,6 @@
 /**	
  * |----------------------------------------------------------------------
- * | Copyright (c) 2016 Tilen Majerle
+ * | Copyright (c) 2017 Tilen Majerle
  * |  
  * | Permission is hereby granted, free of charge, to any person
  * | obtaining a copy of this software and associated documentation
@@ -166,6 +166,28 @@ uint8_t __GUI_LINKEDLIST_MOVEUP_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t
     }
     
     return 1;                                   /* Move was successful */
+}
+
+void* __GUI_LINKEDLIST_GETNEXT(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
+    if (!element) { 
+        if (root) {
+            return (GUI_HANDLE_t)root->First;
+        } else {
+            return 0;
+        }
+    }
+    return element->Next;                       /* Get next widget of current in linked list */
+}
+
+void* __GUI_LINKEDLIST_GETPREV(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
+    if (!element) { 
+        if (root) {
+            return (GUI_HANDLE_t)root->Last;
+        } else {
+            return 0;
+        }
+    }
+    return element->Prev;                       /* Get next widget of current in linked list */
 }
 
 //Add widget to linked list

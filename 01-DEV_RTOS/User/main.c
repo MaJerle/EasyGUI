@@ -59,6 +59,9 @@ CTS         PA3                 RTS from ST to CTS from GSM
 #include "gui_led.h"
 #include "gui_progbar.h"
 #include "gui_graph.h"
+#include "gui_edittext.h"
+
+#include "math.h"
 
 TM_TOUCH_t TS;
 
@@ -66,6 +69,9 @@ GUI_HANDLE_t btn1, btn2, btn3, btn4, btn5, btn6;
 GUI_HANDLE_t led[8][2];
 GUI_HANDLE_t win1, win2, win3;
 GUI_HANDLE_t prog1, prog2, prog3, prog4;
+GUI_HANDLE_t graph1;
+GUI_HANDLE_t graphdata1, graphdata2, graphdata3, graphdata4, graphdata5;
+GUI_HANDLE_t edit1;
 
 char str[100];
 
@@ -76,8 +82,8 @@ extern GUI_Const GUI_FONT_t GUI_Font_Arial_Bold_18;
 uint32_t time;
 
 int main(void) {
-    uint8_t i, state;
-    GUI_Color_t col;
+    GUI_KeyboardData_t key;
+    uint32_t state;
     TM_RCC_InitSystem();                                    /* Init system */
     HAL_Init();                                             /* Init HAL layer */
     TM_DISCO_LedInit();                                     /* Init leds */
@@ -91,50 +97,45 @@ int main(void) {
     TM_GENERAL_DWTCounterEnable();
     
     GUI_Init();
+
+//    graph1 = GUI_GRAPH_Create(1, 10, 10, 460, 200);
+//    GUI_GRAPH_SetColor(graph1, GUI_GRAPH_COLOR_GRID, 0xFF003000);
+//    graphdata1 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_YT, 100);
+//    GUI_GRAPH_AttachData(graph1, graphdata1);
+//    
+//    prog1 = GUI_PROGBAR_Create(1, 10, 100, 460, 40);
+//    GUI_PROGBAR_EnablePercentages(prog1);
+//    GUI_PROGBAR_SetFont(prog1, &GUI_Font_Arial_Bold_18);
+
+//    for (state = 0; state < 100; state++) {
+//        GUI_GRAPH_DATA_AddValue(graphdata1, 50 + 50 * sin(2.0f * 10.0f * 3.14159265359f * (float)state / 100.0f));
+//    }
     
-    //2 buttons on main
-    win1 = GUI_WINDOW_CreateChild(1, 0, 0, GUI.LCD.Width, 30);
-    GUI_WINDOW_SetColor(win1, GUI_WINDOW_COLOR_BG, GUI_COLOR_DARKGRAY);
-    //btn1 = GUI_BUTTON_Create(3, 10, 10, 100, 25);
-    
-    for (i = 0; i < 8; i++) {
-        led[i][0] = GUI_LED_Create(i, win1->Width - (8 - i) * 14, 2, 12, 12);
-        GUI_LED_SetType(led[i][0], GUI_LED_TYPE_CIRCLE);
-    }
-    
-    //2 buttons on second window
-    GUI.WindowActive = GUI.Root.First;      /* First widget is main window */
-    win2 = GUI_WINDOW_CreateChild(1, 0, win1->Height, GUI.LCD.Width, GUI.LCD.Height - win1->Height);
-    
-    btn1 = GUI_BUTTON_Create(3, 50, 10, 150, 50);
-    btn2 = GUI_BUTTON_Create(3, 80, 10, 200, 80);
-    btn3 = GUI_BUTTON_Create(3, 210, 10, 150, 50);
-    GUI_BUTTON_Create(3, 300, 40, 150, 50);
-    
-    GUI_BUTTON_Create(3, 10, 40, 50, 50);
-    GUI_BUTTON_Create(3, 10, 200, 150, 50);
-    GUI_BUTTON_Create(3, 200, 250, 150, 50);
-    
-    GUI_BUTTON_SetFont(btn2, &GUI_Font_Arial_Bold_18);
-    GUI_BUTTON_SetText(btn2, "Some regular");
-    
-    GUI_GRAPH_Create(1, 10, 10, 460, 240);
-    
-    prog1 = GUI_PROGBAR_Create(1, 90, 50, 100, 80);
-    GUI_PROGBAR_SetFont(prog1, &GUI_Font_Arial_Bold_18);
-    GUI_PROGBAR_SetText(prog1, "Test1");
+    edit1 = GUI_EDITTEXT_Create(1, 10, 10, 460, 50);
+    GUI_EDITTEXT_SetFont(edit1, &GUI_Font_Arial_Bold_18);
+    GUI_EDITTEXT_AllocTextMemory(edit1, 255);
+    GUI_EDITTEXT_SetText(edit1, "Text test ABCDEFGHIJKLMNOPRSTUV ABCDEFGHIJKLMNOPRSTUV");
 
     TM_EXTI_Attach(GPIOI, GPIO_PIN_13, TM_EXTI_Trigger_Rising);
     TS.Orientation = 1;
     TM_TOUCH_Init(NULL, &TS);
   
 //    time = TM_DELAY_Time();
-    state = 40;
+    state = 0;
 	while (1) {
         GUI_Process();
-        if ((TM_DELAY_Time() - time) > 1000) {
+        if ((TM_DELAY_Time() - time) >= 2) {
             time = TM_DELAY_Time();
-            GUI_BUTTON_SetSize(btn3, 100, 100);
+            
+            //GUI_GRAPH_DATA_AddValue(graphdata1, 50 + 50 * sin(2.0f * 3.0f * 3.14159265359f * (float)state / 100.0f));
+            //GUI_PROGBAR_SetValue(prog1, (state % 100) + 1);
+            state++;
+        }
+        
+        while (!TM_USART_BufferEmpty(DISCO_USART)) {
+            key.Key = TM_USART_Getc(DISCO_USART);
+            __GUI_DEBUG("ch: %c\r\n", key.Key);
+            GUI_INPUT_AddKey(&key);
         }
 	}
 }

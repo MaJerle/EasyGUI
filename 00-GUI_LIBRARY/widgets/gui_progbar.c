@@ -1,6 +1,6 @@
 /**	
  * |----------------------------------------------------------------------
- * | Copyright (c) 2016 Tilen Majerle
+ * | Copyright (c) 2017 Tilen Majerle
  * |  
  * | Permission is hereby granted, free of charge, to any person
  * | obtaining a copy of this software and associated documentation
@@ -40,8 +40,12 @@
 
 #define __GP(x)             ((GUI_PROGBAR_t *)(x))
 
-static void __Draw(GUI_Display_t* disp, void* ptr);
-static __GUI_TouchStatus_t __TouchDown(void* widget, GUI_TouchData_t* ts, __GUI_TouchStatus_t status);
+static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp);
+static uint8_t __Control(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* param, void* result);
+
+#if GUI_USE_TOUCH  
+static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts);
+#endif /* GUI_USE_TOUCH */
 
 /******************************************************************************/
 /******************************************************************************/
@@ -54,12 +58,20 @@ const static GUI_WIDGET_t Widget = {
         sizeof(GUI_PROGBAR_t),                      /*!< Size of widget for memory allocation */
         0,                                          /*!< Allow children objects on widget */
     },
+    __Control,                                      /*!< Control function */
     __Draw,                                         /*!< Widget draw function */
+#if GUI_USE_TOUCH
     {
         __TouchDown,                                /*!< Touch down callback function */
         0,                                          /*!< Touch up callback function */
         0                                           /*!< Touch move callback function */
+    },
+#endif /* GUI_USE_TOUCH */
+#if GUI_USE_KEYBOARD
+    {
+        0,                                          /*!< Keyboard key pressed callback function */
     }
+#endif /* GUI_USE_KEYBOARD */
 };
 
 /******************************************************************************/
@@ -67,28 +79,39 @@ const static GUI_WIDGET_t Widget = {
 /***                            Private functions                            **/
 /******************************************************************************/
 /******************************************************************************/
-static void __Draw(GUI_Display_t* disp, void* ptr) {
+#define p           ((GUI_PROGBAR_t *)h)
+static uint8_t __Control(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* param, void* result) {
+    __GUI_UNUSED(h);
+    __GUI_UNUSED(param);
+    __GUI_UNUSED(result);
+    switch (ctrl) {                                 /* Handle control function if required */
+        default:                                    /* Handle default option */
+            return 0;                               /* Command was not processed */
+    }
+}
+
+static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp) {
     GUI_Dim_t x, y, w;
     
-    x = __GUI_WIDGET_GetAbsoluteX(ptr);             /* Get absolute position on screen */
-    y = __GUI_WIDGET_GetAbsoluteY(ptr);             /* Get absolute position on screen */
+    x = __GUI_WIDGET_GetAbsoluteX(h);               /* Get absolute position on screen */
+    y = __GUI_WIDGET_GetAbsoluteY(h);               /* Get absolute position on screen */
    
-    w = ((__GH(ptr)->Width - 2) * (__GP(ptr)->Value - __GP(ptr)->Min)) / (__GP(ptr)->Max - __GP(ptr)->Min);   /* Get width for active part */
+    w = ((h->Width - 2) * (p->Value - p->Min)) / (p->Max - p->Min);   /* Get width for active part */
     
-    GUI_DRAW_FilledRectangle(disp, x + w + 1, y, __GH(ptr)->Width - w - 2, __GH(ptr)->Height, __GP(ptr)->Color[GUI_PROGBAR_COLOR_BG]);
-    GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, w, __GH(ptr)->Height - 2, __GP(ptr)->Color[GUI_PROGBAR_COLOR_FG]);
-    GUI_DRAW_Rectangle(disp, x, y, __GH(ptr)->Width, __GH(ptr)->Height, __GP(ptr)->Color[GUI_PROGBAR_COLOR_BORDER]);
+    GUI_DRAW_FilledRectangle(disp, x + w + 1, y, h->Width - w - 2, h->Height, p->Color[GUI_PROGBAR_COLOR_BG]);
+    GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, w, h->Height - 2, p->Color[GUI_PROGBAR_COLOR_FG]);
+    GUI_DRAW_Rectangle(disp, x, y, h->Width, h->Height, p->Color[GUI_PROGBAR_COLOR_BORDER]);
     
     /* Draw text if possible */
-    if (__GH(ptr)->Font) {
+    if (h->Font) {
         const char* text = NULL;
         char buff[5];
         
-        if (__GP(ptr)->Flags & GUI_PROGBAR_FLAG_PERCENT) {
-            sprintf(buff, "%d%%", ((__GP(ptr)->Value - __GP(ptr)->Min) * 100) / (__GP(ptr)->Max - __GP(ptr)->Min));
+        if (p->Flags & GUI_PROGBAR_FLAG_PERCENT) {
+            sprintf(buff, "%d%%", ((p->Value - p->Min) * 100) / (p->Max - p->Min));
             text = buff;
-        } else if (__GH(ptr)->Text && strlen(__GH(ptr)->Text)) {
-            text = __GH(ptr)->Text;
+        } else if (h->Text && strlen(h->Text)) {
+            text = h->Text;
         }
         
         if (text) {                                 /* If text is valid, print it */
@@ -97,20 +120,23 @@ static void __Draw(GUI_Display_t* disp, void* ptr) {
             
             f.X = x + 1;
             f.Y = y + 1;
-            f.Width = __GH(ptr)->Width;
-            f.Height = __GH(ptr)->Height - 2;
+            f.Width = h->Width;
+            f.Height = h->Height - 2;
             f.Align = GUI_HALIGN_CENTER | GUI_VALIGN_CENTER;
             f.Color1Width = w ? w - 1 : 0;
-            f.Color1 = __GP(ptr)->Color[GUI_PROGBAR_COLOR_BG];
-            f.Color2 = __GP(ptr)->Color[GUI_PROGBAR_COLOR_FG];
-            GUI_DRAW_WriteText(disp, __GH(ptr)->Font, text, &f);
+            f.Color1 = p->Color[GUI_PROGBAR_COLOR_BG];
+            f.Color2 = p->Color[GUI_PROGBAR_COLOR_FG];
+            GUI_DRAW_WriteText(disp, h->Font, text, &f);
         }
     }
 }
 
-static __GUI_TouchStatus_t __TouchDown(void* widget, GUI_TouchData_t* ts, __GUI_TouchStatus_t status) {
+#if GUI_USE_TOUCH
+static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts) {
+    __GUI_UNUSED2(h, ts);
     return touchHANDLEDNOFOCUS;                     /* Handle widget touch but ignore focus */
 }
+#endif /* GUI_USE_TOUCH */
 
 /******************************************************************************/
 /******************************************************************************/

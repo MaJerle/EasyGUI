@@ -5,7 +5,7 @@
  *	
 \verbatim
    ----------------------------------------------------------------------
-    Copyright (c) 2016 Tilen Majerle
+    Copyright (c) 2017 Tilen Majerle
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -38,21 +38,12 @@ extern "C" {
 #endif
 
 /**
- * \addtogroup      GUI
+ * \defgroup        GUI_WIDGETS
  * \brief       
  * \{
  */
 #include "gui.h"
 #include "gui_draw.h"
-
-/**
- * \defgroup        GUI_WIDGET_Macros
- * \brief           Library defines
- * \{
- */
-
-#define GUI_WIDGET_GetParentWidth(ptr)              (__GH(ptr)->Parent ? __GH(ptr)->Parent->Width : GUI.LCD.Width)
-#define GUI_WIDGET_GetParentHeight(ptr)             (__GH(ptr)->Parent ? __GH(ptr)->Parent->Height : GUI.LCD.Height)
 
  /**
  * \defgroup        GUI_WIDGET_ID_Values
@@ -88,54 +79,50 @@ extern "C" {
  */
 
 /**
- * \} GUI_WIDGET_Macros
+ * \brief           Returns width of parent element. If parent does not exists, it returns LCD width
+ * \param[in]       h: Pointer to \ref GUI_HANDLE_t structure
+ * \retval          Parent width in units of pixels
  */
- 
-/**
- * \defgroup        GUI_WIDGET_Typedefs
- * \brief           Library Typedefs
- * \{
- */
+#define GUI_WIDGET_GetParentWidth(h)                (__GH(h)->Parent ? __GH(h)->Parent->Width : GUI.LCD.Width)
 
 /**
- * \} GUI_WIDGET_Typedefs
+ * \brief           Returns height of parent element. If parent does not exists, it returns LCD height
+ * \param[in]       h: Pointer to \ref GUI_HANDLE_t structure
+ * \retval          Parent height in units of pixels
  */
+#define GUI_WIDGET_GetParentHeight(h)               (__GH(h)->Parent ? __GH(h)->Parent->Height : GUI.LCD.Height)
 
-/**
- * \defgroup        GUI_WIDGET_Functions
- * \brief           Library Functions
- * \{
- */
+#define __GUI_WIDGET_IsFocused(h)                   (__GH(h) == GUI.FocusedWidget)
+
 
 void __GUI_WIDGET_Init(void);
-GUI_Dim_t __GUI_WIDGET_GetAbsoluteX(void* ptr);
-GUI_Dim_t __GUI_WIDGET_GetAbsoluteY(void* ptr);
-uint8_t __GUI_WIDGET_Invalidate(void* ptr);
-uint8_t __GUI_WIDGET_InvalidateWithParent(void* ptr);
+GUI_Dim_t __GUI_WIDGET_GetAbsoluteX(GUI_HANDLE_t h);
+GUI_Dim_t __GUI_WIDGET_GetAbsoluteY(GUI_HANDLE_t h);
+uint8_t __GUI_WIDGET_Invalidate(GUI_HANDLE_t h);
+uint8_t __GUI_WIDGET_InvalidateWithParent(GUI_HANDLE_t h);
 
-uint8_t __GUI_WIDGET_SetXY(void* ptr, GUI_iDim_t x, GUI_iDim_t y);
-uint8_t __GUI_WIDGET_SetSize(void* ptr, GUI_Dim_t width, GUI_Dim_t height);
+uint8_t __GUI_WIDGET_SetXY(GUI_HANDLE_t h, GUI_iDim_t x, GUI_iDim_t y);
+uint8_t __GUI_WIDGET_SetSize(GUI_HANDLE_t h, GUI_Dim_t width, GUI_Dim_t height);
 
-uint8_t __GUI_WIDGET_Enable3DStyle(void* ptr);
-uint8_t __GUI_WIDGET_Disable3DStyle(void* ptr);
+uint8_t __GUI_WIDGET_Enable3DStyle(GUI_HANDLE_t h);
+uint8_t __GUI_WIDGET_Disable3DStyle(GUI_HANDLE_t h);
 
-uint8_t __GUI_WIDGET_SetFont(void* ptr, GUI_Const GUI_FONT_t* font);
-uint8_t __GUI_WIDGET_SetText(void* ptr, const char* text);
-uint8_t __GUI_WIDGET_AllocateTextMemory(void* ptr, uint16_t size);
-uint8_t __GUI_WIDGET_FreeTextMemory(void* ptr);
+uint8_t __GUI_WIDGET_SetFont(GUI_HANDLE_t h, GUI_Const GUI_FONT_t* font);
+uint8_t __GUI_WIDGET_SetText(GUI_HANDLE_t h, const char* text);
+uint8_t __GUI_WIDGET_AllocateTextMemory(GUI_HANDLE_t h, uint16_t size);
+uint8_t __GUI_WIDGET_FreeTextMemory(GUI_HANDLE_t h);
 
 GUI_HANDLE_t __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height);
 uint8_t __GUI_WIDGET_Remove(GUI_HANDLE_t* h);
 
-void __GUI_WIDGET_SetClippingRegion(void* ptr);
-uint8_t __GUI_WIDGET_IsInsideClippingRegion(void* ptr);
+void __GUI_WIDGET_SetClippingRegion(GUI_HANDLE_t h);
+uint8_t __GUI_WIDGET_IsInsideClippingRegion(GUI_HANDLE_t h);
 
-/**
- * \} GUI_WIDGET_Functions
- */
+uint8_t __GUI_WIDGET_IsFontAndTextSet(GUI_HANDLE_t h);
+uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_t h, GUI_KeyboardData_t* key);
  
 /**
- * \}
+ * \} GUI_WIDGETS
  */
 
 /* C++ detection */

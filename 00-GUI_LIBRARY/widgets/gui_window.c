@@ -1,6 +1,6 @@
 /**	
  * |----------------------------------------------------------------------
- * | Copyright (c) 2016 Tilen Majerle
+ * | Copyright (c) 2017 Tilen Majerle
  * |  
  * | Permission is hereby granted, free of charge, to any person
  * | obtaining a copy of this software and associated documentation
@@ -38,8 +38,12 @@
 /******************************************************************************/
 #define __GW(x)             ((GUI_WINDOW_t *)(x))
 
-static void __Draw(GUI_Display_t* disp, void* ptr);
-static __GUI_TouchStatus_t __TouchDown(void* widget, GUI_TouchData_t* ts, __GUI_TouchStatus_t status);
+static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp);
+static uint8_t __Control(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* param, void* result);
+
+#if GUI_USE_TOUCH  
+static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts);
+#endif /* GUI_USE_TOUCH */
 
 /******************************************************************************/
 /******************************************************************************/
@@ -52,12 +56,20 @@ const static GUI_WIDGET_t Widget = {
         sizeof(GUI_WINDOW_t),                       /*!< Size of widget for memory allocation */
         1,                                          /*!< Allow children objects on widget */
     },
+    __Control,                                      /*!< Control function */
     __Draw,                                         /*!< Widget draw function */
+#if GUI_USE_TOUCH
     {
         __TouchDown,                                /*!< Touch down callback function */
         0,                                          /*!< Touch up callback function */
         0                                           /*!< Touch move callback function */
+    },
+#endif /* GUI_USE_TOUCH */
+#if GUI_USE_KEYBOARD
+    {
+        0,                                          /*!< Keyboard key pressed callback function */
     }
+#endif /* GUI_USE_KEYBOARD */
 };
 
 /******************************************************************************/
@@ -65,13 +77,26 @@ const static GUI_WIDGET_t Widget = {
 /***                            Private functions                            **/
 /******************************************************************************/
 /******************************************************************************/
-static void __Draw(GUI_Display_t* disp, void* ptr) {
-    GUI_DRAW_FilledRectangle(disp, __GUI_WIDGET_GetAbsoluteX(ptr), __GUI_WIDGET_GetAbsoluteY(ptr), __GH(ptr)->Width, __GH(ptr)->Height, __GW(ptr)->Color[GUI_WINDOW_COLOR_BG]);
+#define w          ((GUI_WINDOW_t *)h)
+static uint8_t __Control(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* param, void* result) {
+    __GUI_UNUSED3(h, param, result);
+    switch (ctrl) {                                 /* Handle control function if required */
+        default:                                    /* Handle default option */
+            return 0;                               /* Command was not processed */
+    }
 }
 
-static __GUI_TouchStatus_t __TouchDown(void* widget, GUI_TouchData_t* ts, __GUI_TouchStatus_t status) {
+static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp) {
+    GUI_DRAW_FilledRectangle(disp, __GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h), h->Width, h->Height, w->Color[GUI_WINDOW_COLOR_BG]);
+}
+
+#if GUI_USE_TOUCH  
+static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts) {
+    __GUI_UNUSED2(h, ts);
     return touchHANDLEDNOFOCUS;                     /* Notify that touch has been pressed */
 }
+#endif /* GUI_USE_TOUCH */
+#undef w
 
 /******************************************************************************/
 /******************************************************************************/

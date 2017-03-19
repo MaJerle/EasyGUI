@@ -5,7 +5,7 @@
  *	
 \verbatim
    ----------------------------------------------------------------------
-    Copyright (c) 2016 Tilen Majerle
+    Copyright (c) 2017 Tilen Majerle
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -75,6 +75,8 @@ void __GUI_LINKEDLIST_ADD_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* elem
 void __GUI_LINKEDLIST_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 uint8_t __GUI_LINKEDLIST_MOVEDOWN_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 uint8_t __GUI_LINKEDLIST_MOVEUP_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
+void* __GUI_LINKEDLIST_GETNEXT(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
+void* __GUI_LINKEDLIST_GETPREV(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 
 /* Linked list functions designed for work with handles */
 void __GUI_LINKEDLIST_ADD(GUI_HANDLE_ROOT_t* parent, void* ptr);

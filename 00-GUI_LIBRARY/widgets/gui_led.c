@@ -1,6 +1,6 @@
 /**	
  * |----------------------------------------------------------------------
- * | Copyright (c) 2016 Tilen Majerle
+ * | Copyright (c) 2017 Tilen Majerle
  * |  
  * | Permission is hereby granted, free of charge, to any person
  * | obtaining a copy of this software and associated documentation
@@ -38,8 +38,12 @@
 /******************************************************************************/
 #define __GL(x)             ((GUI_LED_t *)(x))
 
-static void __Draw(GUI_Display_t* disp, void* ptr);
-static __GUI_TouchStatus_t __TouchDown(void* widget, GUI_TouchData_t* ts, __GUI_TouchStatus_t status);
+static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp);
+static uint8_t __Control(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* param, void* result);
+
+#if GUI_USE_TOUCH  
+static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts);
+#endif /* GUI_USE_TOUCH */
 
 /******************************************************************************/
 /******************************************************************************/
@@ -52,11 +56,19 @@ const static GUI_WIDGET_t Widget = {
         sizeof(GUI_LED_t),                          /*!< Size of widget for memory allocation */
         0,                                          /*!< Allow children objects on widget */
     },
+    __Control,                                      /*!< Control function */
     __Draw,                                         /*!< Widget draw function */
+#if GUI_USE_TOUCH
     {
         __TouchDown,                                /*!< Touch down callback function */
         0, 0
+    },
+#endif /* GUI_USE_TOUCH */
+#if GUI_USE_KEYBOARD
+    {
+        0,                                          /*!< Keyboard key pressed callback function */
     }
+#endif /* GUI_USE_KEYBOARD */
 };
 
 /******************************************************************************/
@@ -64,34 +76,47 @@ const static GUI_WIDGET_t Widget = {
 /***                            Private functions                            **/
 /******************************************************************************/
 /******************************************************************************/
-static void __Draw(GUI_Display_t* disp, void* ptr) {
-    GUI_Color_t c1, c2;
-    GUI_Dim_t x, y;
-    
-    x = __GUI_WIDGET_GetAbsoluteX(ptr);             /* Get absolute position on screen */
-    y = __GUI_WIDGET_GetAbsoluteY(ptr);             /* Get absolute position on screen */
-    
-    /* Get drawing colors */
-    if (__GL(ptr)->Flags & GUI_LED_FLAG_ON) {       /* If LED is on */
-        c1 = __GL(ptr)->Color[GUI_LED_COLOR_ON];
-        c2 = __GL(ptr)->Color[GUI_LED_COLOR_ON_BORDER];
-    } else {
-        c1 = __GL(ptr)->Color[GUI_LED_COLOR_OFF];
-        c2 = __GL(ptr)->Color[GUI_LED_COLOR_OFF_BORDER];
-    }
-    
-    if (__GL(ptr)->Type == GUI_LED_TYPE_RECT) {     /* When led has rectangle shape */
-        GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, __GH(ptr)->Width - 2, __GH(ptr)->Height - 2, c1);
-        GUI_DRAW_Rectangle(disp, x, y, __GH(ptr)->Width, __GH(ptr)->Height, c2);
-    } else {
-        GUI_DRAW_FilledCircle(disp, x + __GH(ptr)->Width / 2, y + __GH(ptr)->Height / 2, __GH(ptr)->Width / 2, c1);
-        GUI_DRAW_Circle(disp, x + __GH(ptr)->Width / 2, y + __GH(ptr)->Height / 2, __GH(ptr)->Width / 2, c2);
+#define l           ((GUI_LED_t *)h)
+static uint8_t __Control(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* param, void* result) {
+    __GUI_UNUSED3(h, param, result);
+    switch (ctrl) {                                 /* Handle control function if required */
+        default:                                    /* Handle default option */
+            return 0;                               /* Command was not processed */
     }
 }
 
-static __GUI_TouchStatus_t __TouchDown(void* widget, GUI_TouchData_t* ts, __GUI_TouchStatus_t status) {
+static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp) {
+    GUI_Color_t c1, c2;
+    GUI_Dim_t x, y;
+    
+    x = __GUI_WIDGET_GetAbsoluteX(h);               /* Get absolute position on screen */
+    y = __GUI_WIDGET_GetAbsoluteY(h);               /* Get absolute position on screen */
+    
+    /* Get drawing colors */
+    if (l->Flags & GUI_LED_FLAG_ON) {               /* If LED is on */
+        c1 = l->Color[GUI_LED_COLOR_ON];
+        c2 = l->Color[GUI_LED_COLOR_ON_BORDER];
+    } else {
+        c1 = l->Color[GUI_LED_COLOR_OFF];
+        c2 = l->Color[GUI_LED_COLOR_OFF_BORDER];
+    }
+    
+    if (l->Type == GUI_LED_TYPE_RECT) {             /* When led has rectangle shape */
+        GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, h->Width - 2, h->Height - 2, c1);
+        GUI_DRAW_Rectangle(disp, x, y, h->Width, h->Height, c2);
+    } else {
+        GUI_DRAW_FilledCircle(disp, x + h->Width / 2, y + h->Height / 2, h->Width / 2, c1);
+        GUI_DRAW_Circle(disp, x + h->Width / 2, y + h->Height / 2, h->Width / 2, c2);
+    }
+}
+
+#if GUI_USE_TOUCH
+static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts) {
+    __GUI_UNUSED2(h, ts);
     return touchHANDLEDNOFOCUS;                     /* Handle touch press on LED but don't do anything */
 }
+#endif /* GUI_USE_TOUCH */
+#undef l
 
 /******************************************************************************/
 /******************************************************************************/
@@ -99,22 +124,22 @@ static __GUI_TouchStatus_t __TouchDown(void* widget, GUI_TouchData_t* ts, __GUI_
 /******************************************************************************/
 /******************************************************************************/
 GUI_HANDLE_t GUI_LED_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height) {
-    GUI_LED_t* ptr;
+    GUI_LED_t* h;
     
     __GUI_ASSERTACTIVEWIN();                        /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_LED_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height);   /* Allocate memory for basic widget */
-    if (ptr) {        
+    h = (GUI_LED_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height); /* Allocate memory for basic widget */
+    if (h) {        
         /* Color setup */
-        ptr->Color[GUI_LED_COLOR_ON] = GUI_COLOR_LIGHTBLUE;     /* Set color when led is on */
-        ptr->Color[GUI_LED_COLOR_OFF] = GUI_COLOR_DARKBLUE;     /* Set color when led is off */
-        ptr->Color[GUI_LED_COLOR_ON_BORDER] = GUI_COLOR_GRAY;   /* Set border color when led is on */
-        ptr->Color[GUI_LED_COLOR_OFF_BORDER] = GUI_COLOR_BLACK; /* Set border color when led is off */
+        h->Color[GUI_LED_COLOR_ON] = GUI_COLOR_LIGHTBLUE;       /* Set color when led is on */
+        h->Color[GUI_LED_COLOR_OFF] = GUI_COLOR_DARKBLUE;       /* Set color when led is off */
+        h->Color[GUI_LED_COLOR_ON_BORDER] = GUI_COLOR_GRAY;     /* Set border color when led is on */
+        h->Color[GUI_LED_COLOR_OFF_BORDER] = GUI_COLOR_BLACK;   /* Set border color when led is off */
     }
     __GUI_LEAVE();                                  /* Leave GUI */
     
-    return (GUI_HANDLE_t)ptr;
+    return (GUI_HANDLE_t)h;
 }
 
 void GUI_LED_Remove(GUI_HANDLE_t* h) {
