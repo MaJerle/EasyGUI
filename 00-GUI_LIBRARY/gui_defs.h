@@ -69,8 +69,21 @@ extern "C" {
  */
 #define GUI_USE_KEYBOARD            1
 
+/**
+ * \brief           Enables (1) or disabled (0) unicode strings
+ *
+ * \note            UTF-8 encoding can be used for unicode characters
+ */
+#define GUI_USE_UNICODE             1
 
+/**
+ * \brief           Maximal number of touch entries in buffer
+ */
 #define TOUCH_BUFFER_SIZE           10
+
+/**
+ * \brief           Maximal number of keyboard entries in buffer
+ */
 #define KEYBOARD_BUFFER_SIZE        10
 
 /**

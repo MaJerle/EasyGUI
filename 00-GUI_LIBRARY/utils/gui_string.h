@@ -49,10 +49,22 @@ extern "C" {
  * \{
  */
 
+#if GUI_USE_UNICODE
+size_t __GUI_STRING_Length(const GUI_Char* src);
+GUI_Char* __GUI_STRING_Copy(GUI_Char* dst, const GUI_Char* src);
+GUI_Char* __GUI_STRING_CopyN(GUI_Char* dst, const GUI_Char* src, size_t len);
+GUI_Char* __GUI_STRING_Compare(const GUI_Char* s1, const GUI_Char* s2);
+#else
 #define __GUI_STRING_Length         strlen
 #define __GUI_STRING_Copy           strcpy
 #define __GUI_STRING_CopyN          strncpy
 #define __GUI_STRING_Compare        strcmp
+#endif /* GUI_USE_UNICODE */
+
+/* Total string length of bytes in string, no matter of unicode */
+#define __GUI_STRING_LengthTotal    strlen
+
+uint8_t __GUI_STRING_GetCh(const GUI_Char** str, uint32_t* out, uint8_t* len);
     
 /**
  * \} GUI_STRING

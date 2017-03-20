@@ -105,17 +105,17 @@ int main(void) {
     edit1 = GUI_EDITTEXT_Create(1, 10, 10, 460, 50);
     GUI_EDITTEXT_SetFont(edit1, &GUI_Font_FontAwesome_Regular_30);
     GUI_EDITTEXT_AllocTextMemory(edit1, 255);
-    GUI_EDITTEXT_SetText(edit1, _T("Text test ABCDEFGHIJKLMNOPRSTUV ABCDEFGHIJKLMNOPRSTUV"));
+    GUI_EDITTEXT_SetText(edit1, _T("\xEF\x81\xB6 \xEF\x83\x94 \xEF\x83\x93 \xEF\x83\x92 \xEF\x83\x91 \xEF\x83\x89 \xEF\x83\x88 \xEF\x83\x87 \xEF\x83\x86 \xEF\x83\x85 \xEF\x83\x84 \xEF\x83\x83 \xEF\x83\x82 \xEF\x83\x81 \xEF\x83\x80"));
     
-    edit2 = GUI_EDITTEXT_Create(1, 10, 70, 460, 50);
-    GUI_EDITTEXT_SetFont(edit2, &GUI_Font_FontAwesome_Regular_30);
-    GUI_EDITTEXT_AllocTextMemory(edit2, 255);
-    GUI_EDITTEXT_SetText(edit2, _T("Text test ABCDEFGHIJKLMNOPRSTUV ABCDEFGHIJKLMNOPRSTUV"));
-    
-    edit3 = GUI_EDITTEXT_Create(1, 10, 130, 460, 50);
-    GUI_EDITTEXT_SetFont(edit3, &GUI_Font_Arial_Bold_18);
-    GUI_EDITTEXT_AllocTextMemory(edit3, 255);
-    GUI_EDITTEXT_SetText(edit3, _T("Text test ABCDEFGHIJKLMNOPRSTUV ABCDEFGHIJKLMNOPRSTUV"));
+//    edit2 = GUI_EDITTEXT_Create(1, 10, 70, 460, 50);
+//    GUI_EDITTEXT_SetFont(edit2, &GUI_Font_FontAwesome_Regular_30);
+//    GUI_EDITTEXT_AllocTextMemory(edit2, 255);
+//    GUI_EDITTEXT_SetText(edit2, _T("Text test ABCDEFGHIJKLMNOPRSTUV ABCDEFGHIJKLMNOPRSTUV"));
+//    
+//    edit3 = GUI_EDITTEXT_Create(1, 10, 130, 460, 50);
+//    GUI_EDITTEXT_SetFont(edit3, &GUI_Font_Arial_Bold_18);
+//    GUI_EDITTEXT_AllocTextMemory(edit3, 255);
+//    GUI_EDITTEXT_SetText(edit3, _T("Text test ABCDEFGHIJKLMNOPRSTUV ABCDEFGHIJKLMNOPRSTUV"));
 
     TM_EXTI_Attach(GPIOI, GPIO_PIN_13, TM_EXTI_Trigger_Rising);
     TS.Orientation = 1;
@@ -136,10 +136,8 @@ int main(void) {
         while (!TM_USART_BufferEmpty(DISCO_USART)) {
             key.Key = TM_USART_Getc(DISCO_USART);
             __GUI_DEBUG("ch: %c (%3d)\r\n", key.Key, key.Key);
-            if (utf8_decode(key.Key, &result)) {
                 key.Key = result;
                 GUI_INPUT_AddKey(&key);
-            }
         }
 	}
 }
@@ -175,45 +173,4 @@ void TM_EXTI_Handler(uint16_t GPIO_Pin) {
             memcpy(&p, &t, sizeof(p));
         }
     }
-}
-
-uint8_t utf8_decode(const uint8_t c, uint32_t* result) {
-    static uint8_t remainingBytes = 0;
-    static uint32_t res = 0;
-    
-    if (!remainingBytes) {                  /* First byte received */
-        if (c < 0x80) {                     /* One byte only in UTF-8 representation */
-            *result = c;                    /* Just return result */
-            res = 0;
-            return 1;
-        }
-        if ((c & 0xE0) == 0xC0) {           /* 1 additional byte in a row = 110x xxxx */   
-            res = c & 0x1F;                 /* 5 lower bits from first byte as valid data */      
-            remainingBytes = 1;
-        } else if ((c & 0xF0) == 0xE0) {    /* 2 additional bytes in a row = 1110 xxxx */
-            res = c & 0x0F;                 /* 4 lower bits from first byte as valid data*/
-            remainingBytes = 2;
-        } else if ((c & 0xF8) == 0xF0) {    /* 3 additional bytes in a row = 1111 0xxx */
-            res = c & 0x07;                 /* 3 lower bits from first byte as valid data*/   
-            remainingBytes = 3;    
-        } else {                            /* Invalid UTF-8 byte */
-            return 0;
-        }
-    } else {                                /* Remaining bytes */
-        if ((c & 0xC0) == 0x80) {           /* Valid UTF-8 sequence */
-            remainingBytes--;               /* Decrease remaining bytes of data */
-            res = (res << 6) | (c & 0x3F);  /* Set new value for data */
-        } else {
-            res = 0;
-            remainingBytes = 0;             /* Invalid character */
-            return 0;
-        }
-    }
-    
-    if (!remainingBytes) {                  /* We reached the end */
-        *result = res;
-        res = 0;
-        return 1;
-    }
-    return 0;
 }

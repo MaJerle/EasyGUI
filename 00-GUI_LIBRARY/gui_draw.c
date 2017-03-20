@@ -48,14 +48,19 @@
 /***                            Private functions                            **/
 /******************************************************************************/
 /******************************************************************************/
-void __StringGetCharSize(GUI_Const GUI_FONT_t* font, const char ch, GUI_Dim_t* width, GUI_Dim_t* height) {
-    const GUI_FONT_CharInfo_t* c;
-    
-    if (ch >= font->StartChar && ch <= font->EndChar) {
-        c = &font->Data[(ch) - font->StartChar];
-    } else if ('?' >= font->StartChar && '?' <= font->EndChar ) {
-        c = &font->Data['?' - font->StartChar];
+const GUI_FONT_CharInfo_t* __StringGetCharPtr(GUI_Const GUI_FONT_t* font, uint32_t ch) {
+    if (ch >= font->StartChar && ch <= font->EndChar) { /* Character is in font structure */
+        return &font->Data[(ch) - font->StartChar]; /* Return character pointer from font */
+    } else if ('?' >= font->StartChar && '?' <= font->EndChar) {    /* Try to return ? character */
+        return &font->Data['?' - font->StartChar];  /* Get pointer of ? character */
     }
+    return 0;                                       /* No character in font */
+}
+
+void __StringGetCharSize(GUI_Const GUI_FONT_t* font, uint32_t ch, GUI_Dim_t* width, GUI_Dim_t* height) {
+    const GUI_FONT_CharInfo_t* c = 0;
+    
+    c = __StringGetCharPtr(font, ch);
     if (c) {
         *width = c->xSize + c->xMargin;
         *height = c->ySize;
@@ -68,11 +73,20 @@ void __StringGetCharSize(GUI_Const GUI_FONT_t* font, const char ch, GUI_Dim_t* w
 //Get string width
 void __StringRectangle(GUI_Const GUI_FONT_t* font, const GUI_Char* str, GUI_Dim_t* width, GUI_Dim_t* height) {
     GUI_Dim_t w, h;
+    uint32_t ch;
+    uint8_t i;
+    const GUI_Char* s = str;
+    
     *width = 0;
-    while (*str) {
-        __StringGetCharSize(font, *str, &w, &h);
-        *width += w;
-        str++;
+    *height = 0;
+    while (*s) {                                    /* Process entire string */
+        if (__GUI_STRING_GetCh(&s, &ch, &i)) {      /* Get next character from string */
+            __GUI_DEBUG("ch: %4X\r\n", ch);
+            __StringGetCharSize(font, ch, &w, &h);  /* Get character width and height */
+            *width += w;                            /* Increase width */
+        } else {
+            break;                                  /* Invalid character, stop execution */
+        }
     }
 }
 
@@ -96,7 +110,7 @@ void __DRAW_Char(GUI_Display_t* disp, GUI_Const GUI_FONT_t* font, GUI_DRAW_FONT_
         }   
         
         for (i = 0; i < columns * c->ySize; i++) {  /* Go through all data bytes */
-            if (y >= disp->Y1 && y <= disp->Y2) {   /* Do not draw when we are outside clipping are */            
+            if (y >= disp->Y1 && y <= disp->Y2 && y < (draw->Y + draw->Height)) {   /* Do not draw when we are outside clipping are */            
                 b = c->Data[i];                     /* Get character byte */
                 for (k = 0; k < 4; k++) {           /* Scan each bit in byte */
                     GUI_Color_t baseColor;
@@ -136,7 +150,7 @@ void __DRAW_Char(GUI_Display_t* disp, GUI_Const GUI_FONT_t* font, GUI_DRAW_FONT_
             columns++;
         }
         for (i = 0; i < columns * c->ySize; i++) {  /* Go through all data bytes */
-            if (y >= disp->Y1 && y <= disp->Y2) {   /* Do not draw when we are outside clipping are */
+            if (y >= disp->Y1 && y <= disp->Y2 && y < (draw->Y + draw->Height)) {   /* Do not draw when we are outside clipping are */
                 b = c->Data[i];                     /* Get character byte */
                 for (k = 0; k < 8; k++) {           /* Scan each bit in byte */
                     if (b & (1 << (7 - k))) {       /* If bit is set, draw pixel */
@@ -163,6 +177,7 @@ const GUI_Char* __StringGetPointerForWidth(GUI_Const GUI_FONT_t* font, const GUI
     const GUI_Char* tmp = str;
     GUI_Dim_t tot = 0, w, h;
     
+    //TODO: UTF-8 support!
     while (*tmp) {                                  /* Go to the end of string */
         tmp++;
     }
@@ -620,6 +635,8 @@ void GUI_DRAW_Poly(GUI_Display_t* disp, GUI_DRAW_Poly_t* points, GUI_Byte len, G
 
 void GUI_DRAW_WriteText(GUI_Display_t* disp, GUI_Const GUI_FONT_t* font, const GUI_Char* str, GUI_DRAW_FONT_t* draw) {
     GUI_Dim_t w, h, x, y;
+    uint32_t ch;
+    uint8_t i;
     const GUI_FONT_CharInfo_t* c;
     
     __StringRectangle(font, str, &w, &h);           /* Get string width for this box */
@@ -647,12 +664,10 @@ void GUI_DRAW_WriteText(GUI_Display_t* disp, GUI_Const GUI_FONT_t* font, const G
     }
     
     while (*str) {                                  /* Go through entire string */
-        if (*str >= font->StartChar && *str <= font->EndChar) { /* Check if char is in table */
-            c = &font->Data[(*str) - font->StartChar];  /* Get char from table */
-        } else if ('?' >= font->StartChar && '?' <= font->EndChar ) {   /* For invalid character, check ? character */
-            c = &font->Data['?' - font->StartChar];
-        } else {                                    /* Ignore character */
-            str++;
+        if (!__GUI_STRING_GetCh(&str, &ch, &i)) {   /* Get next character from string */
+            break;                                  /* Stop execution on fault character */
+        }
+        if ((c = __StringGetCharPtr(font, ch)) == 0) {  /* Get character pointer */
             continue;
         }
         
