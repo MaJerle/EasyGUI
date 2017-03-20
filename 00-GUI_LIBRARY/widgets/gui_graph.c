@@ -56,7 +56,7 @@ static uint8_t __ControlData(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* par
 /******************************************************************************/
 const static GUI_WIDGET_t Widget = {
     {
-        "Graph",                                    /*!< Widget name */
+        _T("Graph"),                                /*!< Widget name */
         sizeof(GUI_GRAPH_t),                        /*!< Size of widget for memory allocation */
         0,                                          /*!< Allow children objects on widget */
     },
@@ -72,7 +72,7 @@ const static GUI_WIDGET_t Widget = {
 };
 const static GUI_WIDGET_t WidgetData = {
     {
-        "GraphData",                                /*!< Widget name */
+        _T("GraphData"),                            /*!< Widget name */
         sizeof(GUI_GRAPH_DATA_t),                   /*!< Size of widget for memory allocation */
         0,                                          /*!< Allow children objects on widget */
     },

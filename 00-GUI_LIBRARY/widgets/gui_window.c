@@ -52,7 +52,7 @@ static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts);
 /******************************************************************************/
 const static GUI_WIDGET_t Widget = {
     {
-        "Window",                                   /*!< Widget name */
+        _T("Window"),                               /*!< Widget name */
         sizeof(GUI_WINDOW_t),                       /*!< Size of widget for memory allocation */
         1,                                          /*!< Allow children objects on widget */
     },

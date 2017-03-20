@@ -105,7 +105,7 @@ typedef struct GUI_PROGBAR_t {
 GUI_HANDLE_t GUI_PROGBAR_Create(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height);
 void GUI_PROGBAR_Remove(GUI_HANDLE_t* h);
 GUI_HANDLE_t GUI_PROGBAR_SetColor(GUI_HANDLE_t h, GUI_PROGBAR_COLOR_t index, GUI_Color_t color);
-GUI_HANDLE_t GUI_PROGBAR_SetText(GUI_HANDLE_t h, GUI_Const char* text);
+GUI_HANDLE_t GUI_PROGBAR_SetText(GUI_HANDLE_t h, GUI_Const GUI_Char* text);
 GUI_HANDLE_t GUI_PROGBAR_SetFont(GUI_HANDLE_t h, GUI_Const GUI_FONT_t* font);
 GUI_HANDLE_t GUI_PROGBAR_SetMin(GUI_HANDLE_t h, int32_t val);
 GUI_HANDLE_t GUI_PROGBAR_SetMax(GUI_HANDLE_t h, int32_t val);

@@ -77,7 +77,7 @@ typedef struct GUI_BUTTON_t {
 GUI_HANDLE_t GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height);
 void GUI_BUTTON_Remove(GUI_HANDLE_t* ptr);
 GUI_HANDLE_t GUI_BUTTON_Invalidate(GUI_HANDLE_t h);
-GUI_HANDLE_t GUI_BUTTON_SetText(GUI_HANDLE_t h, const char* text);
+GUI_HANDLE_t GUI_BUTTON_SetText(GUI_HANDLE_t h, const GUI_Char* text);
 GUI_HANDLE_t GUI_BUTTON_SetSize(GUI_HANDLE_t h, GUI_Dim_t width, GUI_Dim_t height);
 GUI_HANDLE_t GUI_BUTTON_SetXY(GUI_HANDLE_t h, GUI_iDim_t x, GUI_iDim_t y);
 GUI_HANDLE_t GUI_BUTTON_SetColor(GUI_HANDLE_t h, GUI_BUTTON_COLOR_t index, GUI_Color_t color);

@@ -66,7 +66,7 @@ void __StringGetCharSize(GUI_Const GUI_FONT_t* font, const char ch, GUI_Dim_t* w
 }
 
 //Get string width
-void __StringRectangle(GUI_Const GUI_FONT_t* font, const char* str, GUI_Dim_t* width, GUI_Dim_t* height) {
+void __StringRectangle(GUI_Const GUI_FONT_t* font, const GUI_Char* str, GUI_Dim_t* width, GUI_Dim_t* height) {
     GUI_Dim_t w, h;
     *width = 0;
     while (*str) {
@@ -159,8 +159,8 @@ void __DRAW_Char(GUI_Display_t* disp, GUI_Const GUI_FONT_t* font, GUI_DRAW_FONT_
     }
 }
 
-const char* __StringGetPointerForWidth(GUI_Const GUI_FONT_t* font, const char* str, GUI_DRAW_FONT_t* draw) {
-    const char* tmp = str;
+const GUI_Char* __StringGetPointerForWidth(GUI_Const GUI_FONT_t* font, const GUI_Char* str, GUI_DRAW_FONT_t* draw) {
+    const GUI_Char* tmp = str;
     GUI_Dim_t tot = 0, w, h;
     
     while (*tmp) {                                  /* Go to the end of string */
@@ -618,7 +618,7 @@ void GUI_DRAW_Poly(GUI_Display_t* disp, GUI_DRAW_Poly_t* points, GUI_Byte len, G
     }
 }
 
-void GUI_DRAW_WriteText(GUI_Display_t* disp, GUI_Const GUI_FONT_t* font, const char* str, GUI_DRAW_FONT_t* draw) {
+void GUI_DRAW_WriteText(GUI_Display_t* disp, GUI_Const GUI_FONT_t* font, const GUI_Char* str, GUI_DRAW_FONT_t* draw) {
     GUI_Dim_t w, h, x, y;
     const GUI_FONT_CharInfo_t* c;
     

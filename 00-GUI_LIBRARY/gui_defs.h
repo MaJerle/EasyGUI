@@ -160,6 +160,20 @@ extern "C" {
  */
 
 /**
+ * \defgroup        GUI_Keys
+ * \brief           List of used special keys for keyboard emulation
+ * \{
+ */
+
+#define GUI_KEY_TAB                     ((uint16_t)0x0009)
+#define GUI_KEY_LF                      ((uint16_t)0x000A)
+#define GUI_KEY_CR                      ((uint16_t)0x000D)
+
+/**
+ * \}
+ */
+
+/**
  * \addtogroup      GUI_Typedefs
  * \{
  */
@@ -206,6 +220,10 @@ typedef uint16_t GUI_Dim_t;
 typedef int16_t  GUI_iDim_t;
 typedef uint8_t  GUI_Byte_t, GUI_Byte;
 typedef int8_t   GUI_iByte_t, GUI_iByte;
+typedef char     GUI_Char;
+
+//#define _T(x)       L ## x
+#define _T(x)       x
 
 #define GUI_Const     const
 
@@ -334,7 +352,7 @@ typedef struct GUI_FONT_CharInfo_t {
  * \brief           FONT structure for writing usage
  */
 typedef struct {
-    GUI_Const char* Name;                   /*!< Pointer to font name */
+    GUI_Const GUI_Char* Name;               /*!< Pointer to font name */
     GUI_Byte Size;                          /*!< Font size in units of pixels */
     uint16_t StartChar;                     /*!< Start character number in list */
     uint16_t EndChar;                       /*!< End character number in list */
@@ -343,7 +361,7 @@ typedef struct {
 } GUI_FONT_t;
 
 #define GUI_FLAG_FONT_AA                0x01/*!< Indicates anti-alliasing on font */
-#define GUI_FLAG_FONT_RIGHTALIGN        0x02/*!< Indicates right align text if string length is too wide for text */
+#define GUI_FLAG_FONT_RIGHTALIGN        0x02/*!< Indicates right align text if string length is too wide for rectangle */
 
 #define ________                        0x00
 #define _______X                        0x01
@@ -633,7 +651,7 @@ struct GUI_HANDLE;
  */
 typedef struct GUI_WIDGET_t {
     struct {
-        const char* Name;                   /*!< Widget name for display purpose */
+        const GUI_Char* Name;               /*!< Widget name for display purpose */
         uint16_t WidgetSize;                /*!< Bytes required for widget memory allocation */
         GUI_Byte AllowChildren;             /*!< Set to 1 if widget allows children widgets */
     } MetaData;                             /*!< Meta data structure for widget */
@@ -667,7 +685,7 @@ typedef struct GUI_HANDLE {
     GUI_Dim_t Height;                       /*!< Object height in units of pixels */
     uint32_t Flags;                         /*!< All possible flags for specific widget */
     GUI_Const GUI_FONT_t* Font;             /*!< Font used for widget drawings */
-    char* Text;                             /*!< Pointer to widget text if exists */
+    GUI_Char* Text;                         /*!< Pointer to widget text if exists */
     uint16_t TextMemSize;                   /*!< Number of bytes for text when dynamically allocated */
     uint16_t TextCursor;                    /*!< Text cursor position */
 } GUI_HANDLE;

@@ -281,7 +281,6 @@ void __GUI_LINKEDLIST_PrintList(GUI_HANDLE_ROOT_t* root) {
         list = &GUI.Root;
     }
     for (h = (GUI_HANDLE_ROOT_t *)list->Last; h; h = h->Handle.List.Prev) {
-        __GUI_DEBUG("%*d: Text: %s\n", depth, depth, h->Handle.Text ? h->Handle.Text : "");
         if (h->Handle.Widget->MetaData.AllowChildren) {
             __GUI_LINKEDLIST_PrintList(h);
         }

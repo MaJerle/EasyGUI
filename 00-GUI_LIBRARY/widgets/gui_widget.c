@@ -229,29 +229,29 @@ uint8_t __GUI_WIDGET_SetFont(GUI_HANDLE_t h, GUI_Const GUI_FONT_t* font) {
     return 1;
 }
 
-uint8_t __GUI_WIDGET_SetText(GUI_HANDLE_t h, const char* text) {
+uint8_t __GUI_WIDGET_SetText(GUI_HANDLE_t h, const GUI_Char* text) {
    if (h->Flags & GUI_FLAG_DYNAMICTEXTALLOC) {      /* Memory for text is dynamically allocated */
         if (h->TextMemSize) {
-            if (strlen(text) > (h->TextMemSize - 1)) {  /* Check string length */
-                strncpy(h->Text, text, h->TextMemSize - 1); /* Do not copy all bytes because of memory overflow */
+            if (__GUI_STRING_Length(text) > (h->TextMemSize - 1)) { /* Check string length */
+                __GUI_STRING_CopyN(h->Text, text, h->TextMemSize - 1);  /* Do not copy all bytes because of memory overflow */
             } else {
-                strcpy(h->Text, text);              /* Copy entire string */
+                __GUI_STRING_Copy(h->Text, text);   /* Copy entire string */
             }
             __GUI_WIDGET_Invalidate(h);             /* Redraw object */
         }
     } else {                                        /* Memory allocated by user */
         if (h->Text && h->Text == text) {           /* In case the same pointer is passed to button */
-            if (strcmp(h->Text, text)) {            /* If strings does not match, source string updated? */
+            if (__GUI_STRING_Compare(h->Text, text)) {  /* If strings does not match, source string updated? */
                 __GUI_WIDGET_Invalidate(h);         /* Redraw object */
             }
         }
         
         if (h->Text != text) {                      /* Check if pointer do not match */
-            h->Text = (char *)text;                 /* Set parameter */
+            h->Text = (GUI_Char *)text;             /* Set parameter */
             __GUI_WIDGET_Invalidate(h);             /* Redraw object */
         }
     }
-    h->TextCursor = strlen(h->Text);
+    h->TextCursor = __GUI_STRING_Length(h->Text);   /* Set cursor to the end of string */
     return 1;
 }
 
@@ -262,8 +262,8 @@ uint8_t __GUI_WIDGET_AllocateTextMemory(GUI_HANDLE_t h, uint16_t size) {
     }
     h->Text = 0;                                    /* Reset pointer */
     
-    h->TextMemSize = size * sizeof(char);           /* Allocate text memory */
-    h->Text = (char *)__GUI_MEMALLOC(h->TextMemSize);   /* Allocate memory for text */
+    h->TextMemSize = size * sizeof(GUI_Char);       /* Allocate text memory */
+    h->Text = (GUI_Char *)__GUI_MEMALLOC(h->TextMemSize);   /* Allocate memory for text */
     if (h->Text) {                                  /* Check if allocated */
         h->Flags |= GUI_FLAG_DYNAMICTEXTALLOC;      /* Dynamically allocated */
     } else {
@@ -286,7 +286,7 @@ uint8_t __GUI_WIDGET_FreeTextMemory(GUI_HANDLE_t h) {
 }
 
 uint8_t __GUI_WIDGET_IsFontAndTextSet(GUI_HANDLE_t h) {
-    return h->Text && h->Font && strlen(h->Text);   /* Check if conditions for drawing string match */
+    return h->Text && h->Font && __GUI_STRING_Length(h->Text);  /* Check if conditions for drawing string match */
 }
 
 uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_t h, GUI_KeyboardData_t* kb) {
@@ -294,7 +294,7 @@ uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_t h, GUI_KeyboardData_t* kb) {
     if (!(h->Flags & GUI_FLAG_DYNAMICTEXTALLOC)) {  /* Must be dynamically allocated memory */
         return 0;
     }
-    len = strlen(h->Text);                          /* Get length of string */
+    len = __GUI_STRING_Length(h->Text);             /* Get length of string */
     if (kb->Key >= 32 && kb->Key < 127) {           /* Printable character */
         if (len < (h->TextMemSize - 1)) {           /* Memory still available for new character */
             uint16_t pos;
@@ -373,7 +373,7 @@ GUI_HANDLE_t __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iD
         }
         __GUI_WIDGET_Invalidate(h);                 /* Invalidate object */
     } else {
-        __GUI_DEBUG("Alloc failed for widget %s with %d bytes\r\n", widget->MetaData.Name, widget->MetaData.WidgetSize);
+        __GUI_DEBUG("Alloc failed for widget %s with %d bytes\r\n", (char *)widget->MetaData.Name, widget->MetaData.WidgetSize);
     }
     
     return h;

@@ -54,7 +54,7 @@ static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts);
 /******************************************************************************/
 const static GUI_WIDGET_t Widget = {
     {
-        "Progbar",                                  /*!< Widget name */
+        _T("Progbar"),                              /*!< Widget name */
         sizeof(GUI_PROGBAR_t),                      /*!< Size of widget for memory allocation */
         0,                                          /*!< Allow children objects on widget */
     },
@@ -104,13 +104,13 @@ static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp) {
     
     /* Draw text if possible */
     if (h->Font) {
-        const char* text = NULL;
-        char buff[5];
+        const GUI_Char* text = NULL;
+        GUI_Char buff[5];
         
         if (p->Flags & GUI_PROGBAR_FLAG_PERCENT) {
-            sprintf(buff, "%d%%", ((p->Value - p->Min) * 100) / (p->Max - p->Min));
+            sprintf((char *)buff, "%d%%", ((p->Value - p->Min) * 100) / (p->Max - p->Min));
             text = buff;
-        } else if (h->Text && strlen(h->Text)) {
+        } else if (h->Text && __GUI_STRING_Length(h->Text)) {
             text = h->Text;
         }
         
@@ -241,7 +241,7 @@ GUI_HANDLE_t GUI_PROGBAR_SetMax(GUI_HANDLE_t h, int32_t val) {
     return h;
 }
 
-GUI_HANDLE_t GUI_PROGBAR_SetText(GUI_HANDLE_t h, GUI_Const char* text) {
+GUI_HANDLE_t GUI_PROGBAR_SetText(GUI_HANDLE_t h, const GUI_Char* text) {
     __GUI_ASSERTPARAMS(h);                          /* Check parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 

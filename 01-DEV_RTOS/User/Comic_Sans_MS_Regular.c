@@ -1818,7 +1818,7 @@ GUI_Const GUI_FONT_CharInfo_t CharTable[] = {
 };
 
 GUI_Const GUI_FONT_t GUI_Font_Comic_Sans_MS_Regular_22 = {
-    "Comic Sans MS Regular",
+    _T("Comic Sans MS Regular"),
     22,
     0x20,
     0x7f,

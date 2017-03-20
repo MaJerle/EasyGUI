@@ -57,6 +57,7 @@ extern "C" {
 /* Include utilities */
 #include "utils/buffer.h"
 #include "utils/gui_linkedlist.h"
+#include "utils/gui_string.h"
 
 /* GUI Low-Level drivers */
 #include "gui_ll.h"

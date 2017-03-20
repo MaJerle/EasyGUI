@@ -1,7 +1,7 @@
 /**
  * \author  Tilen Majerle
  * \email   tilen@majerle.eu
- * \brief   GUI template
+ * \brief   GUI string functions
  *  
 \verbatim
    ----------------------------------------------------------------------
@@ -29,8 +29,8 @@
    ----------------------------------------------------------------------
 \endverbatim
  */
-#ifndef GUI_EDITTEXT_H
-#define GUI_EDITTEXT_H
+#ifndef GUI_STRING_H
+#define GUI_STRING_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -38,48 +38,28 @@ extern "C" {
 #endif
 
 /**
- * \addtogroup      GUI_WIDGETS
+ * \addtogroup      GUI_UTILS
  * \brief       
  * \{
  */
-#include "gui_widget.h"
+#include "../gui.h"
 
 /**
- * \defgroup        GUI_EDITTEXT
+ * \defgroup        GUI_STRING
  * \{
  */
 
-typedef enum GUI_EDITTEXT_COLOR_t {
-    GUI_EDITTEXT_COLOR_BG = 0x00,
-    GUI_EDITTEXT_COLOR_BORDER = 0x01,
-    GUI_EDITTEXT_COLOR_TEXT = 0x02
-} GUI_EDITTEXT_COLOR_t;
+#define __GUI_STRING_Length         strlen
+#define __GUI_STRING_Copy           strcpy
+#define __GUI_STRING_CopyN          strncpy
+#define __GUI_STRING_Compare        strcmp
     
 /**
- * \brief           GUI EDIT TEXT widget structure
- */
-typedef struct GUI_EDITTEXT_t {
-    GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
-    
-    GUI_Color_t Color[3];                   /*!< List of colors */
-} GUI_EDITTEXT_t;
-
-GUI_HANDLE_t GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height);
-void GUI_EDITTEXT_Remove(GUI_HANDLE_t* h);
-uint32_t GUI_EDITTEXT_AllocTextMemory(GUI_HANDLE_t h, uint16_t size);
-GUI_HANDLE_t GUI_EDITTEXT_FreeTextMemory(GUI_HANDLE_t h);
-GUI_HANDLE_t GUI_EDITTEXT_SetText(GUI_HANDLE_t h, const GUI_Char* text);
-GUI_HANDLE_t GUI_EDITTEXT_SetSize(GUI_HANDLE_t h, GUI_Dim_t width, GUI_Dim_t height);
-GUI_HANDLE_t GUI_EDITTEXT_SetXY(GUI_HANDLE_t h, GUI_iDim_t x, GUI_iDim_t y);
-GUI_HANDLE_t GUI_EDITTEXT_SetColor(GUI_HANDLE_t h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color);
-GUI_HANDLE_t GUI_EDITTEXT_SetFont(GUI_HANDLE_t h, GUI_Const GUI_FONT_t* font);
-
-/**
- * \} GUI_EDITTEXT
+ * \} GUI_STRING
  */
 
 /**
- * \} GUI_WIDGETS
+ * \} GUI_UTILS
  */
 
 /* C++ detection */

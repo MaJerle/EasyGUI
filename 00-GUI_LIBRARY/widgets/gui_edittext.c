@@ -55,7 +55,7 @@ static __GUI_KeyboardStatus_t __KeyPress(GUI_HANDLE_t h, GUI_KeyboardData_t* kb)
 /******************************************************************************/
 const static GUI_WIDGET_t Widget = {
     {
-        "EDITTEXT",                                 /*!< Widget name */
+        _T("EDITTEXT"),                             /*!< Widget name */
         sizeof(GUI_EDITTEXT_t),                     /*!< Size of widget for memory allocation */
         0,                                          /*!< Allow children objects on widget */
     },
@@ -189,7 +189,7 @@ GUI_HANDLE_t GUI_EDITTEXT_FreeTextMemory(GUI_HANDLE_t h) {
     return h;
 }
 
-GUI_HANDLE_t GUI_EDITTEXT_SetText(GUI_HANDLE_t h, const char* text) {
+GUI_HANDLE_t GUI_EDITTEXT_SetText(GUI_HANDLE_t h, const GUI_Char* text) {
     __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     

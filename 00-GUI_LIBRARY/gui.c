@@ -138,6 +138,7 @@ __GUI_TouchStatus_t __ProcessTouch(GUI_TouchData_t* touch, GUI_TouchData_t* touc
                             GUI.FocusedWidget = GUI.ActiveWidget;   /* Set new focused widget */
                             __GUI_LINKEDLIST_MoveDown_Widget(h);    /* Move widget to end of list to be redrawn on top of everything and touch move detected first and fastest */
                             h->Flags |= GUI_FLAG_ACTIVE;    /* Set touch active flag */
+                            h->Flags |= GUI_FLAG_FOCUS; /* Set focus flag */
                             __GUI_WIDGET_Invalidate(h); /* Invalidate widget and its parent */
                         } else {                    /* Touch handled with no focus */
                             if (GUI.FocusedWidget) {
@@ -259,10 +260,25 @@ int32_t GUI_Process(void) {
 #endif /* GUI_USE_TOUCH */
     
 #if GUI_USE_KEYBOARD
-    while (__GUI_INPUT_ReadKey(&key)) {
-        if (GUI.FocusedWidget) {
-            if (GUI.FocusedWidget->Widget->KeyboardEvents.KeyPress) {
-                GUI.FocusedWidget->Widget->KeyboardEvents.KeyPress(GUI.FocusedWidget, &key);
+    while (__GUI_INPUT_ReadKey(&key)) {             /* Read all keyboard entires */
+        if (GUI.FocusedWidget) {                    /* Check if any widget is in focus already */
+            if (key.Key == GUI_KEY_TAB) {           /* Tab key pressed, set next widget as focused */
+                GUI_HANDLE_t h = __GUI_LINKEDLIST_GetNextWidget(NULL, GUI.FocusedWidget);   /* Get next widget if possible */
+                if (!h) {                           /* There is no next widget */
+                    h = __GUI_LINKEDLIST_GetNextWidget((GUI_HANDLE_ROOT_t *)GUI.FocusedWidget->Parent, NULL);   /* Get first widget from children elements of parent in linked list */
+                }
+                if (h) {                            /* We have next widget */
+                    GUI.FocusedWidget->Flags &= ~GUI_FLAG_FOCUS;    /* Clear this widget */
+                    __GUI_WIDGET_Invalidate(GUI.FocusedWidget); /* Invalidate widget */
+                    
+                    GUI.FocusedWidget = h;          /* Set next focused widget */
+                    GUI.FocusedWidget->Flags |= GUI_FLAG_FOCUS; /* Set focused widget flag */
+                    __GUI_WIDGET_Invalidate(GUI.FocusedWidget); /* Invalidate widget */
+                }
+            } else {                                /* Other key */
+                if (GUI.FocusedWidget->Widget->KeyboardEvents.KeyPress) {
+                    GUI.FocusedWidget->Widget->KeyboardEvents.KeyPress(GUI.FocusedWidget, &key);
+                }
             }
         }
     }

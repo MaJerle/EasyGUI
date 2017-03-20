@@ -54,7 +54,7 @@ static __GUI_TouchStatus_t __TouchMove(GUI_HANDLE_t h, GUI_TouchData_t* ts);
 /******************************************************************************/
 const static GUI_WIDGET_t Widget = {
     {
-        "Button",                                   /*!< Widget name */
+        _T("Button"),                               /*!< Widget name */
         sizeof(GUI_BUTTON_t),                       /*!< Size of widget for memory allocation */
         0,                                          /*!< Allow children objects on widget */
     },
@@ -209,7 +209,7 @@ GUI_HANDLE_t GUI_BUTTON_FreeTextMemory(GUI_HANDLE_t h) {
     return h;
 }
 
-GUI_HANDLE_t GUI_BUTTON_SetText(GUI_HANDLE_t h, const char* text) {
+GUI_HANDLE_t GUI_BUTTON_SetText(GUI_HANDLE_t h, const GUI_Char* text) {
     __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     

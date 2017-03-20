@@ -71,17 +71,21 @@ GUI_HANDLE_t win1, win2, win3;
 GUI_HANDLE_t prog1, prog2, prog3, prog4;
 GUI_HANDLE_t graph1;
 GUI_HANDLE_t graphdata1, graphdata2, graphdata3, graphdata4, graphdata5;
-GUI_HANDLE_t edit1;
+GUI_HANDLE_t edit1, edit2, edit3;
 
 char str[100];
 
 extern GUI_Const GUI_FONT_t GUI_Font_Comic_Sans_MS_Regular_22;
 extern GUI_Const GUI_FONT_t GUI_Font_Calibri_Bold_8;
 extern GUI_Const GUI_FONT_t GUI_Font_Arial_Bold_18;
+extern GUI_Const GUI_FONT_t GUI_Font_FontAwesome_Regular_30;
 
 uint32_t time;
 
+uint8_t utf8_decode(const uint8_t c, uint32_t* result);
+
 int main(void) {
+    uint32_t result;
     GUI_KeyboardData_t key;
     uint32_t state;
     TM_RCC_InitSystem();                                    /* Init system */
@@ -97,24 +101,21 @@ int main(void) {
     TM_GENERAL_DWTCounterEnable();
     
     GUI_Init();
-
-//    graph1 = GUI_GRAPH_Create(1, 10, 10, 460, 200);
-//    GUI_GRAPH_SetColor(graph1, GUI_GRAPH_COLOR_GRID, 0xFF003000);
-//    graphdata1 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_YT, 100);
-//    GUI_GRAPH_AttachData(graph1, graphdata1);
-//    
-//    prog1 = GUI_PROGBAR_Create(1, 10, 100, 460, 40);
-//    GUI_PROGBAR_EnablePercentages(prog1);
-//    GUI_PROGBAR_SetFont(prog1, &GUI_Font_Arial_Bold_18);
-
-//    for (state = 0; state < 100; state++) {
-//        GUI_GRAPH_DATA_AddValue(graphdata1, 50 + 50 * sin(2.0f * 10.0f * 3.14159265359f * (float)state / 100.0f));
-//    }
     
     edit1 = GUI_EDITTEXT_Create(1, 10, 10, 460, 50);
-    GUI_EDITTEXT_SetFont(edit1, &GUI_Font_Arial_Bold_18);
+    GUI_EDITTEXT_SetFont(edit1, &GUI_Font_FontAwesome_Regular_30);
     GUI_EDITTEXT_AllocTextMemory(edit1, 255);
-    GUI_EDITTEXT_SetText(edit1, "Text test ABCDEFGHIJKLMNOPRSTUV ABCDEFGHIJKLMNOPRSTUV");
+    GUI_EDITTEXT_SetText(edit1, _T("Text test ABCDEFGHIJKLMNOPRSTUV ABCDEFGHIJKLMNOPRSTUV"));
+    
+    edit2 = GUI_EDITTEXT_Create(1, 10, 70, 460, 50);
+    GUI_EDITTEXT_SetFont(edit2, &GUI_Font_FontAwesome_Regular_30);
+    GUI_EDITTEXT_AllocTextMemory(edit2, 255);
+    GUI_EDITTEXT_SetText(edit2, _T("Text test ABCDEFGHIJKLMNOPRSTUV ABCDEFGHIJKLMNOPRSTUV"));
+    
+    edit3 = GUI_EDITTEXT_Create(1, 10, 130, 460, 50);
+    GUI_EDITTEXT_SetFont(edit3, &GUI_Font_Arial_Bold_18);
+    GUI_EDITTEXT_AllocTextMemory(edit3, 255);
+    GUI_EDITTEXT_SetText(edit3, _T("Text test ABCDEFGHIJKLMNOPRSTUV ABCDEFGHIJKLMNOPRSTUV"));
 
     TM_EXTI_Attach(GPIOI, GPIO_PIN_13, TM_EXTI_Trigger_Rising);
     TS.Orientation = 1;
@@ -134,8 +135,11 @@ int main(void) {
         
         while (!TM_USART_BufferEmpty(DISCO_USART)) {
             key.Key = TM_USART_Getc(DISCO_USART);
-            __GUI_DEBUG("ch: %c\r\n", key.Key);
-            GUI_INPUT_AddKey(&key);
+            __GUI_DEBUG("ch: %c (%3d)\r\n", key.Key, key.Key);
+            if (utf8_decode(key.Key, &result)) {
+                key.Key = result;
+                GUI_INPUT_AddKey(&key);
+            }
         }
 	}
 }
@@ -151,6 +155,9 @@ int fputc(int ch, FILE* fil) {
     return ch;
 }
 
+/**
+ * Handle EXTI interrupt routine
+ */
 void TM_EXTI_Handler(uint16_t GPIO_Pin) {
     static GUI_TouchData_t p;
     if (GPIO_Pin == GPIO_PIN_13) {
@@ -168,4 +175,45 @@ void TM_EXTI_Handler(uint16_t GPIO_Pin) {
             memcpy(&p, &t, sizeof(p));
         }
     }
+}
+
+uint8_t utf8_decode(const uint8_t c, uint32_t* result) {
+    static uint8_t remainingBytes = 0;
+    static uint32_t res = 0;
+    
+    if (!remainingBytes) {                  /* First byte received */
+        if (c < 0x80) {                     /* One byte only in UTF-8 representation */
+            *result = c;                    /* Just return result */
+            res = 0;
+            return 1;
+        }
+        if ((c & 0xE0) == 0xC0) {           /* 1 additional byte in a row = 110x xxxx */   
+            res = c & 0x1F;                 /* 5 lower bits from first byte as valid data */      
+            remainingBytes = 1;
+        } else if ((c & 0xF0) == 0xE0) {    /* 2 additional bytes in a row = 1110 xxxx */
+            res = c & 0x0F;                 /* 4 lower bits from first byte as valid data*/
+            remainingBytes = 2;
+        } else if ((c & 0xF8) == 0xF0) {    /* 3 additional bytes in a row = 1111 0xxx */
+            res = c & 0x07;                 /* 3 lower bits from first byte as valid data*/   
+            remainingBytes = 3;    
+        } else {                            /* Invalid UTF-8 byte */
+            return 0;
+        }
+    } else {                                /* Remaining bytes */
+        if ((c & 0xC0) == 0x80) {           /* Valid UTF-8 sequence */
+            remainingBytes--;               /* Decrease remaining bytes of data */
+            res = (res << 6) | (c & 0x3F);  /* Set new value for data */
+        } else {
+            res = 0;
+            remainingBytes = 0;             /* Invalid character */
+            return 0;
+        }
+    }
+    
+    if (!remainingBytes) {                  /* We reached the end */
+        *result = res;
+        res = 0;
+        return 1;
+    }
+    return 0;
 }

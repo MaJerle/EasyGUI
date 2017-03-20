@@ -108,7 +108,7 @@ uint8_t __GUI_WIDGET_Enable3DStyle(GUI_HANDLE_t h);
 uint8_t __GUI_WIDGET_Disable3DStyle(GUI_HANDLE_t h);
 
 uint8_t __GUI_WIDGET_SetFont(GUI_HANDLE_t h, GUI_Const GUI_FONT_t* font);
-uint8_t __GUI_WIDGET_SetText(GUI_HANDLE_t h, const char* text);
+uint8_t __GUI_WIDGET_SetText(GUI_HANDLE_t h, const GUI_Char* text);
 uint8_t __GUI_WIDGET_AllocateTextMemory(GUI_HANDLE_t h, uint16_t size);
 uint8_t __GUI_WIDGET_FreeTextMemory(GUI_HANDLE_t h);
 
