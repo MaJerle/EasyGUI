@@ -1,11 +1,10 @@
 /**
  * \author  Tilen Majerle
- * \email   tilen@majerle.eu
- * \brief   GUI template
+ * \brief   GUI edit text widget
  *  
 \verbatim
    ----------------------------------------------------------------------
-    Copyright (c) 2016 Tilen Majerle
+    Copyright (c) 2017 Tilen Majerle
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -49,6 +48,9 @@ extern "C" {
  * \{
  */
 
+/**
+ * \brief           Edit text color list enumeration
+ */
 typedef enum GUI_EDITTEXT_COLOR_t {
     GUI_EDITTEXT_COLOR_BG = 0x00,
     GUI_EDITTEXT_COLOR_BORDER = 0x01,
@@ -63,6 +65,7 @@ typedef struct GUI_EDITTEXT_t {
     
     GUI_Color_t Color[3];                   /*!< List of colors */
 } GUI_EDITTEXT_t;
+
 
 GUI_HANDLE_t GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height);
 void GUI_EDITTEXT_Remove(GUI_HANDLE_t* h);

@@ -1,11 +1,10 @@
 /**
  * \author  Tilen Majerle
- * \email   tilen@majerle.eu
  * \brief   GUI string functions
  *  
 \verbatim
    ----------------------------------------------------------------------
-    Copyright (c) 2016 Tilen Majerle
+    Copyright (c) 2017 Tilen Majerle
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -46,25 +45,78 @@ extern "C" {
 
 /**
  * \defgroup        GUI_STRING
+ * \brief           String functions with UNICODE support
  * \{
  */
 
-#if GUI_USE_UNICODE
-size_t __GUI_STRING_Length(const GUI_Char* src);
-GUI_Char* __GUI_STRING_Copy(GUI_Char* dst, const GUI_Char* src);
-GUI_Char* __GUI_STRING_CopyN(GUI_Char* dst, const GUI_Char* src, size_t len);
-GUI_Char* __GUI_STRING_Compare(const GUI_Char* s1, const GUI_Char* s2);
-#else
-#define __GUI_STRING_Length         strlen
-#define __GUI_STRING_Copy           strcpy
-#define __GUI_STRING_CopyN          strncpy
-#define __GUI_STRING_Compare        strcmp
-#endif /* GUI_USE_UNICODE */
+/**
+ * \defgroup        GUI_STRING_UNICODE
+ * \brief           Unicode processing with UTF-8 character encoding
+ *
+ * Core functions capable of encoding and decoding UTF-8 UNICODE format.
+ *
+ * https://en.wikipedia.org/wiki/UTF-8
+ * \{
+ */
+    
+/**
+ * \brief           UNICODE processing information structure
+ */
+typedef struct GUI_STRING_UNICODE_t {
+    uint8_t t;                                      /*!< Total number of bytes in UTF-8 sequence */
+    uint8_t r;                                      /*!< Remaining bytes in UTF-8 sequnce before we get valid data */
+    uint32_t res;                                   /*!< Current result in UTF8 sequence */
+} GUI_STRING_UNICODE_t;
 
-/* Total string length of bytes in string, no matter of unicode */
-#define __GUI_STRING_LengthTotal    strlen
+/**
+ * \brief           UNICODE processing result information
+ */
+typedef enum GUI_STRING_UNICODE_Result_t {
+    UNICODE_OK = 0x00,                              /*!< Indicates function successfully decode unicode sequence of 1-4 bytes */
+    UNICODE_ERROR,                                  /*!< Indicates function got an error with input data from 2nd to 4th byte in UTF-8 encoding */
+    UNICODE_PROGRESS,                               /*!< Indicates function decoding is still in progress and it waits for new character */
+} GUI_STRING_UNICODE_Result_t;
 
-uint8_t __GUI_STRING_GetCh(const GUI_Char** str, uint32_t* out, uint8_t* len);
+/**
+ * \brief           Initialize unicode processing structure
+ * \param[in]       *s: Pointer to \ref GUI_STRING_UNICODE_t to initialize to default values
+ * \retval          None
+ * \sa              GUI_STRING_UNICODE_Decode()
+ * \sa              GUI_STRING_UNICODE_Encode()
+ */
+void GUI_STRING_UNICODE_Init(GUI_STRING_UNICODE_t* s);
+
+/**
+ * \brief           Decodes single input byte of unicode formatted text
+ * \param[in,out]   *s: Pointer to working \ref GUI_STRING_UNICODE_t structure for processing
+ * \param[in]       c: Character to be used for encoding
+ * \retval          Member of \ref GUI_STRING_UNICODE_Result_t indicating decoding status
+ * \sa              GUI_STRING_UNICODE_Encode()
+ */
+GUI_STRING_UNICODE_Result_t GUI_STRING_UNICODE_Decode(GUI_STRING_UNICODE_t* s, const GUI_Char c);
+
+/**
+ * \brief           Encodes input character to UNICODE sequence of 1-4 bytes
+ * \param[in]       c: Character to encode to UNICODE sequence
+ * \param[out]      *out: Pointer to 4-bytes long array to store UNICODE information to
+ * \retval          Number of bytes required for character encoding
+ * \sa              GUI_STRING_UNICODE_Decode()
+ */
+uint8_t GUI_STRING_UNICODE_Encode(const uint32_t c, GUI_Char* out);
+
+/**
+ * \} GUI_STRING_UNICODE
+ */
+    
+size_t GUI_STRING_Length(const GUI_Char* src);
+size_t GUI_STRING_LengthTotal(const GUI_Char* src);
+GUI_Char* GUI_STRING_Copy(GUI_Char* dst, const GUI_Char* src);
+GUI_Char* GUI_STRING_CopyN(GUI_Char* dst, const GUI_Char* src, size_t len);
+int GUI_STRING_Compare(const GUI_Char* s1, const GUI_Char* s2);
+uint8_t GUI_STRING_IsPrintable(uint32_t ch);
+
+uint8_t GUI_STRING_GetCh(const GUI_Char** str, uint32_t* out, uint8_t* len);
+uint8_t GUI_STRING_GetChReverse(const GUI_Char** str, uint32_t* out, uint8_t* len);
     
 /**
  * \} GUI_STRING

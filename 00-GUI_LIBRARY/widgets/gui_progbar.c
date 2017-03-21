@@ -110,7 +110,7 @@ static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp) {
         if (p->Flags & GUI_PROGBAR_FLAG_PERCENT) {
             sprintf((char *)buff, "%d%%", ((p->Value - p->Min) * 100) / (p->Max - p->Min));
             text = buff;
-        } else if (h->Text && __GUI_STRING_Length(h->Text)) {
+        } else if (h->Text && GUI_STRING_Length(h->Text)) {
             text = h->Text;
         }
         

@@ -1,7 +1,7 @@
 /**
  * \author  Tilen Majerle
  * \email   tilen@majerle.eu
- * \brief   GUI window object manager
+ * \brief   GUI linked list functions
  *	
 \verbatim
    ----------------------------------------------------------------------
@@ -38,35 +38,16 @@ extern "C" {
 #endif
 
 /**
- * \addtogroup  GUI
+ * \addtogroup      GUI_UTILS
  * \brief       
  * \{
  */
 #include "gui.h"
 
+#if !defined(DOXYGEN)
 /**
- * @defgroup      GUI_LINKEDLIST_Macros
- * @brief         Library defines
- * @{
- */
-    
-/**
- * \}
- */
- 
-/**
- * \defgroup      GUI_LINKEDLIST_Typedefs
- * \brief         Library Typedefs
- * \{
- */
-
-/**
- * @}
- */
-
-/**
- * \defgroup      GUI_LINKEDLIST_Functions
- * \brief         Library Functions
+ * \defgroup        GUI_LINKEDLIST
+ * \brief           Linked list core functions and widget implementations
  * \{
  */
 
@@ -78,7 +59,7 @@ uint8_t __GUI_LINKEDLIST_MOVEUP_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t
 void* __GUI_LINKEDLIST_GETNEXT(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 void* __GUI_LINKEDLIST_GETPREV(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 
-/* Linked list functions designed for work with handles */
+/* Linked list functions designed to work with widget handles */
 void __GUI_LINKEDLIST_ADD(GUI_HANDLE_ROOT_t* parent, void* ptr);
 void __GUI_LINKEDLIST_REMOVE(void* ptr);
 GUI_Byte __GUI_LINKEDLIST_MOVEUP(GUI_HANDLE_t h);
@@ -93,11 +74,12 @@ GUI_Byte __GUI_LINKEDLIST_MoveUp_Widget(GUI_HANDLE_t h);
 void __GUI_LINKEDLIST_PrintList(GUI_HANDLE_ROOT_t* root);
 
 /**
- * \}
+ * \} GUI_LINKEDLIST
  */
+#endif /* !defined(DOXYGEN) */
  
 /**
- * \}
+ * \} GUI
  */
 
 /* C++ detection */

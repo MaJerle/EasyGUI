@@ -23,13 +23,13 @@
  * | OTHER DEALINGS IN THE SOFTWARE.
  * |----------------------------------------------------------------------
  */
-#include "buffer.h"
+#include "gui_buffer.h"
 
-uint8_t BUFFER_Init(BUFFER_t* Buffer, uint32_t Size, void* BufferPtr) {
+uint8_t GUI_BUFFER_Init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr) {
 	if (Buffer == NULL) {									/* Check buffer structure */
 		return 1;
 	}
-	memset(Buffer, 0, sizeof(BUFFER_t));        			/* Set buffer values to all zeros */
+	memset(Buffer, 0, sizeof(GUI_BUFFER_t));        			/* Set buffer values to all zeros */
     
 	Buffer->Size = Size;                        			/* Set default values */
 	Buffer->Buffer = BufferPtr;
@@ -41,30 +41,30 @@ uint8_t BUFFER_Init(BUFFER_t* Buffer, uint32_t Size, void* BufferPtr) {
 			Buffer->Size = 0;                   			/* Reset size */
 			return 1;                           			/* Return error */
 		} else {
-			Buffer->Flags |= BUFFER_MALLOC;     			/* Set flag for malloc */
+			Buffer->Flags |= GUI_BUFFER_MALLOC;     			/* Set flag for malloc */
 		}
 	}
-	Buffer->Flags |= BUFFER_INITIALIZED;					/* We are initialized */
+	Buffer->Flags |= GUI_BUFFER_INITIALIZED;					/* We are initialized */
 	
 	return 0;												/* Initialized OK */
 }
 
-void BUFFER_Free(BUFFER_t* Buffer) {
+void GUI_BUFFER_Free(GUI_BUFFER_t* Buffer) {
 	if (Buffer == NULL) {									/* Check buffer structure */
 		return;
 	}
-	if (Buffer->Flags & BUFFER_MALLOC) {					/* If malloc was used for allocation */
+	if (Buffer->Flags & GUI_BUFFER_MALLOC) {					/* If malloc was used for allocation */
 		LIB_FREE_FUNC(Buffer->Buffer);						/* Free memory */
 	}
 	Buffer->Flags = 0;
 	Buffer->Size = 0;
 }
 
-uint32_t BUFFER_Write(BUFFER_t* Buffer, const void* Data, uint32_t count) {
+uint32_t GUI_BUFFER_Write(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count) {
 	uint32_t i = 0;
 	uint32_t free;
     const uint8_t* d = (const uint8_t *)Data;
-#if BUFFER_FAST
+#if GUI_BUFFER_FAST
 	uint32_t tocopy;
 #endif
 
@@ -74,7 +74,7 @@ uint32_t BUFFER_Write(BUFFER_t* Buffer, const void* Data, uint32_t count) {
 	if (Buffer->In >= Buffer->Size) {						/* Check input pointer */
 		Buffer->In = 0;
 	}
-	free = BUFFER_GetFree(Buffer);							/* Get free memory */
+	free = GUI_BUFFER_GetFree(Buffer);							/* Get free memory */
 	if (free < count) {										/* Check available memory */	
 		if (free == 0) {									/* If no memory, stop execution */
 			return 0;
@@ -83,7 +83,7 @@ uint32_t BUFFER_Write(BUFFER_t* Buffer, const void* Data, uint32_t count) {
 	}
 
 	/* We have calculated memory for write */
-#if BUFFER_FAST
+#if GUI_BUFFER_FAST
 	tocopy = Buffer->Size - Buffer->In;						/* Calculate number of elements we can put at the end of buffer */
 	if (tocopy > count) {									/* Check for copy count */
 		tocopy = count;
@@ -112,7 +112,7 @@ uint32_t BUFFER_Write(BUFFER_t* Buffer, const void* Data, uint32_t count) {
 #endif
 }
 
-uint32_t BUFFER_WriteToTop(BUFFER_t* Buffer, const void* Data, uint32_t count) {
+uint32_t GUI_BUFFER_WriteToTop(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count) {
 	uint32_t i = 0;
 	uint32_t free;
     uint8_t *d = (uint8_t *)Data;
@@ -126,7 +126,7 @@ uint32_t BUFFER_WriteToTop(BUFFER_t* Buffer, const void* Data, uint32_t count) {
 	if (Buffer->Out >= Buffer->Size) {						/* Check output pointer */
 		Buffer->Out = 0;
 	}
-	free = BUFFER_GetFree(Buffer);							/* Get free memory */
+	free = GUI_BUFFER_GetFree(Buffer);							/* Get free memory */
 	if (free < count) {										/* Check available memory */
 		if (free == 0) {									/* If no memory, stop execution */
 			return 0;
@@ -146,10 +146,10 @@ uint32_t BUFFER_WriteToTop(BUFFER_t* Buffer, const void* Data, uint32_t count) {
 	return i;												/* Return number of elements written */
 }
 
-uint32_t BUFFER_Read(BUFFER_t* Buffer, void* Data, uint32_t count) {
+uint32_t GUI_BUFFER_Read(GUI_BUFFER_t* Buffer, void* Data, uint32_t count) {
 	uint32_t i = 0, full;
     uint8_t *d = (uint8_t *)Data;
-#if BUFFER_FAST
+#if GUI_BUFFER_FAST
 	uint32_t tocopy;
 #endif
 	
@@ -159,14 +159,14 @@ uint32_t BUFFER_Read(BUFFER_t* Buffer, void* Data, uint32_t count) {
 	if (Buffer->Out >= Buffer->Size) {						/* Check output pointer */
 		Buffer->Out = 0;
 	}
-	full = BUFFER_GetFull(Buffer);							/* Get free memory */
+	full = GUI_BUFFER_GetFull(Buffer);							/* Get free memory */
 	if (full < count) {										/* Check available memory */
 		if (full == 0) {									/* If no memory, stop execution */
 			return 0;
 		}
 		count = full;										/* Set values for write */
 	}
-#if BUFFER_FAST
+#if GUI_BUFFER_FAST
 	tocopy = Buffer->Size - Buffer->Out;					/* Calculate number of elements we can read from end of buffer */
 	if (tocopy > count) {									/* Check for copy count */
 		tocopy = count;
@@ -195,7 +195,7 @@ uint32_t BUFFER_Read(BUFFER_t* Buffer, void* Data, uint32_t count) {
 #endif
 }
 
-uint32_t BUFFER_GetFree(BUFFER_t* Buffer) {
+uint32_t GUI_BUFFER_GetFree(GUI_BUFFER_t* Buffer) {
 	uint32_t size = 0, in, out;
 	
 	if (Buffer == NULL) {									/* Check buffer structure */
@@ -215,7 +215,7 @@ uint32_t BUFFER_GetFree(BUFFER_t* Buffer) {
 	return size - 1;										/* Return free memory */
 }
 
-uint32_t BUFFER_GetFull(BUFFER_t* Buffer) {
+uint32_t GUI_BUFFER_GetFull(GUI_BUFFER_t* Buffer) {
 	uint32_t in, out, size;
 	
 	if (Buffer == NULL) {									/* Check buffer structure */
@@ -235,7 +235,7 @@ uint32_t BUFFER_GetFull(BUFFER_t* Buffer) {
 	return size;											/* Return number of elements in buffer */
 }
 
-uint32_t BUFFER_GetFullFast(BUFFER_t* Buffer) {
+uint32_t GUI_BUFFER_GetFullFast(GUI_BUFFER_t* Buffer) {
 	uint32_t in, out;
 	
 	if (Buffer == NULL) {									/* Check buffer structure */
@@ -246,7 +246,7 @@ uint32_t BUFFER_GetFullFast(BUFFER_t* Buffer) {
 	return (Buffer->Size + in - out) % Buffer->Size;
 }
 
-void BUFFER_Reset(BUFFER_t* Buffer) {
+void GUI_BUFFER_Reset(GUI_BUFFER_t* Buffer) {
 	if (Buffer == NULL) {									/* Check buffer structure */
 		return;
 	}
@@ -254,14 +254,14 @@ void BUFFER_Reset(BUFFER_t* Buffer) {
 	Buffer->Out = 0;
 }
 
-int32_t BUFFER_FindElement(BUFFER_t* Buffer, uint8_t Element) {
+int32_t GUI_BUFFER_FindElement(GUI_BUFFER_t* Buffer, uint8_t Element) {
 	uint32_t Num, Out, retval = 0;
 	
 	if (Buffer == NULL) {									/* Check buffer structure */
 		return -1;
 	}
 	
-	Num = BUFFER_GetFull(Buffer);							/* Create temporary variables */
+	Num = GUI_BUFFER_GetFull(Buffer);							/* Create temporary variables */
 	Out = Buffer->Out;
 	while (Num > 0) {										/* Go through input elements */
 		if (Out >= Buffer->Size) {							/* Check output overflow */
@@ -277,12 +277,12 @@ int32_t BUFFER_FindElement(BUFFER_t* Buffer, uint8_t Element) {
 	return -1;												/* Element is not in buffer */
 }
 
-int32_t BUFFER_Find(BUFFER_t* Buffer, const void* Data, uint32_t Size) {
+int32_t GUI_BUFFER_Find(GUI_BUFFER_t* Buffer, const void* Data, uint32_t Size) {
 	uint32_t Num, Out, i, retval = 0;
 	uint8_t found = 0;
     uint8_t* d = (uint8_t *)Data;
 
-	if (Buffer == NULL || (Num = BUFFER_GetFull(Buffer)) < Size) {	/* Check buffer structure and number of elements in buffer */
+	if (Buffer == NULL || (Num = GUI_BUFFER_GetFull(Buffer)) < Size) {	/* Check buffer structure and number of elements in buffer */
 		return -1;
 	}
 	Out = Buffer->Out;										/* Create temporary variables */
@@ -319,23 +319,23 @@ int32_t BUFFER_Find(BUFFER_t* Buffer, const void* Data, uint32_t Size) {
 	return -1;												/* Data sequence is not in buffer */
 }
 
-uint32_t BUFFER_WriteString(BUFFER_t* Buffer, const char* buff) {
-	return BUFFER_Write(Buffer, (uint8_t *)buff, strlen(buff));	/* Write string to buffer */
+uint32_t GUI_BUFFER_WriteString(GUI_BUFFER_t* Buffer, const char* buff) {
+	return GUI_BUFFER_Write(Buffer, (uint8_t *)buff, strlen(buff));	/* Write string to buffer */
 }
 
-uint32_t BUFFER_ReadString(BUFFER_t* Buffer, char* buff, uint32_t buffsize) {
+uint32_t GUI_BUFFER_ReadString(GUI_BUFFER_t* Buffer, char* buff, uint32_t buffsize) {
 	uint32_t i = 0, freeMem, fullMem;
 	uint8_t ch;
 	if (Buffer == NULL) {
 		return 0;											/* Check value buffer */
 	}
 	
-	freeMem = BUFFER_GetFree(Buffer);						/* Get free memory */
-	fullMem = BUFFER_GetFull(Buffer);						/* Get full memory */
+	freeMem = GUI_BUFFER_GetFree(Buffer);					/* Get free memory */
+	fullMem = GUI_BUFFER_GetFull(Buffer);				    /* Get full memory */
 	if (													/* Check for any data in buffer */
 		fullMem == 0 ||                                 	/* Buffer empty */
 		(
-			BUFFER_FindElement(Buffer, Buffer->StringDelimiter) < 0 && 	/* String delimiter is not in buffer */
+			GUI_BUFFER_FindElement(Buffer, Buffer->StringDelimiter) < 0 && 	/* String delimiter is not in buffer */
 			freeMem != 0 &&                                 /* Buffer is not full */
 			fullMem < buffsize                              /* User buffer size is larger than number of elements in buffer */
 		)
@@ -343,7 +343,7 @@ uint32_t BUFFER_ReadString(BUFFER_t* Buffer, char* buff, uint32_t buffsize) {
 		return 0;											/* Return with no elements read */
 	}
 	while (i < (buffsize - 1)) {							/* If available buffer size is more than 0 characters */
-		BUFFER_Read(Buffer, &ch, 1);						/* We have available data */
+		GUI_BUFFER_Read(Buffer, &ch, 1);						/* We have available data */
 		buff[i] = (char)ch;									/* Save character */
 		if ((char)buff[i] == (char)Buffer->StringDelimiter) {	/* Check for end of string */
 			break;											/* Done */
@@ -358,7 +358,7 @@ uint32_t BUFFER_ReadString(BUFFER_t* Buffer, char* buff, uint32_t buffsize) {
 	return i;												/* Return number of characters in buffer */
 }
 
-int8_t BUFFER_CheckElement(BUFFER_t* Buffer, uint32_t pos, uint8_t* element) {
+int8_t GUI_BUFFER_CheckElement(GUI_BUFFER_t* Buffer, uint32_t pos, uint8_t* element) {
 	uint32_t In, Out, i = 0;
 	if (Buffer == NULL) {									/* Check value buffer */
 		return 0;

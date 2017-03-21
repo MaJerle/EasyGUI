@@ -1332,11 +1332,6 @@
           <GroupName>GUI UTILS</GroupName>
           <Files>
             <File>
-              <FileName>buffer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\utils\buffer.c</FilePath>
-            </File>
-            <File>
               <FileName>gui_linkedlist.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_linkedlist.c</FilePath>
@@ -1345,6 +1340,11 @@
               <FileName>gui_string.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_string.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_buffer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_buffer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1370,6 +1370,11 @@
               <FileName>FontAwesome_Regular.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\FontAwesome_Regular.c</FilePath>
+            </File>
+            <File>
+              <FileName>Arial_Narrow_Italic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Arial_Narrow_Italic.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2700,11 +2705,6 @@
           <GroupName>GUI UTILS</GroupName>
           <Files>
             <File>
-              <FileName>buffer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\utils\buffer.c</FilePath>
-            </File>
-            <File>
               <FileName>gui_linkedlist.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_linkedlist.c</FilePath>
@@ -2713,6 +2713,11 @@
               <FileName>gui_string.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_string.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_buffer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_buffer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2738,6 +2743,11 @@
               <FileName>FontAwesome_Regular.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\FontAwesome_Regular.c</FilePath>
+            </File>
+            <File>
+              <FileName>Arial_Narrow_Italic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Arial_Narrow_Italic.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4069,11 +4079,6 @@
           <GroupName>GUI UTILS</GroupName>
           <Files>
             <File>
-              <FileName>buffer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\utils\buffer.c</FilePath>
-            </File>
-            <File>
               <FileName>gui_linkedlist.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_linkedlist.c</FilePath>
@@ -4082,6 +4087,11 @@
               <FileName>gui_string.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_string.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_buffer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_buffer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4107,6 +4117,11 @@
               <FileName>FontAwesome_Regular.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\FontAwesome_Regular.c</FilePath>
+            </File>
+            <File>
+              <FileName>Arial_Narrow_Italic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Arial_Narrow_Italic.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5172,11 +5187,6 @@
           <GroupName>GUI UTILS</GroupName>
           <Files>
             <File>
-              <FileName>buffer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\utils\buffer.c</FilePath>
-            </File>
-            <File>
               <FileName>gui_linkedlist.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_linkedlist.c</FilePath>
@@ -5185,6 +5195,11 @@
               <FileName>gui_string.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_string.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_buffer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_buffer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5210,6 +5225,11 @@
               <FileName>FontAwesome_Regular.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\FontAwesome_Regular.c</FilePath>
+            </File>
+            <File>
+              <FileName>Arial_Narrow_Italic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Arial_Narrow_Italic.c</FilePath>
             </File>
           </Files>
         </Group>

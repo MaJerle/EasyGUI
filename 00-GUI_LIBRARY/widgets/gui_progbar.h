@@ -1,6 +1,5 @@
 /**
  * \author  Tilen Majerle
- * \email   tilen@majerle.eu
  * \brief   GUI progress bar widget
  *  
 \verbatim
@@ -49,28 +48,12 @@ extern "C" {
  * \{
  */
 
-/**
- * \defgroup        GUI_PROGBAR_Macros
- * \brief           Library defines
- * \{
- */
-
 #define GUI_PROGBAR_GetMin(h)           (((GUI_PROGBAR_t *)h)->Min)
 #define GUI_PROGBAR_GetMax(h)           (((GUI_PROGBAR_t *)h)->Max)
 #define GUI_PROGBAR_GetValue(h)         (((GUI_PROGBAR_t *)h)->Value)
 
 /**
- * \} GUI_PROGBAR_Macros
- */
- 
-/**
- * \defgroup        GUI_PROGBAR_Typedefs
- * \brief           Library Typedefs
- * \{
- */
-
-/**
- * \brief           Colors list for progress bar widget
+ * \brief           Progress bar color list enumeration
  */
 typedef enum GUI_PROGBAR_COLOR_t {
     GUI_PROGBAR_COLOR_BG = 0x00,            /*!< Background color index */
@@ -92,16 +75,6 @@ typedef struct GUI_PROGBAR_t {
     uint8_t Flags;                          /*!< Flags variable */
 } GUI_PROGBAR_t;
 
-/**
- * \} GUI_PROGBAR_Typedefs
- */
-
-/**
- * \defgroup        GUI_PROGBAR_Functions
- * \brief           Library Functions
- * \{
- */
-
 GUI_HANDLE_t GUI_PROGBAR_Create(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height);
 void GUI_PROGBAR_Remove(GUI_HANDLE_t* h);
 GUI_HANDLE_t GUI_PROGBAR_SetColor(GUI_HANDLE_t h, GUI_PROGBAR_COLOR_t index, GUI_Color_t color);
@@ -114,10 +87,6 @@ GUI_HANDLE_t GUI_PROGBAR_EnablePercentages(GUI_HANDLE_t h);
 GUI_HANDLE_t GUI_PROGBAR_DisablePercentages(GUI_HANDLE_t h);
 GUI_HANDLE_t GUI_PROGBAR_SetSize(GUI_HANDLE_t h, GUI_Dim_t width, GUI_Dim_t height);
 
-/**
- * \} GUI_PROGBAR_Functions
- */
- 
 /**
  * \} GUI_PROGBAR
  */

@@ -80,8 +80,7 @@ void __StringRectangle(GUI_Const GUI_FONT_t* font, const GUI_Char* str, GUI_Dim_
     *width = 0;
     *height = 0;
     while (*s) {                                    /* Process entire string */
-        if (__GUI_STRING_GetCh(&s, &ch, &i)) {      /* Get next character from string */
-            __GUI_DEBUG("ch: %4X\r\n", ch);
+        if (GUI_STRING_GetCh(&s, &ch, &i)) {        /* Get next character from string */
             __StringGetCharSize(font, ch, &w, &h);  /* Get character width and height */
             *width += w;                            /* Increase width */
         } else {
@@ -176,6 +175,8 @@ void __DRAW_Char(GUI_Display_t* disp, GUI_Const GUI_FONT_t* font, GUI_DRAW_FONT_
 const GUI_Char* __StringGetPointerForWidth(GUI_Const GUI_FONT_t* font, const GUI_Char* str, GUI_DRAW_FONT_t* draw) {
     const GUI_Char* tmp = str;
     GUI_Dim_t tot = 0, w, h;
+    uint8_t i;
+    uint32_t ch;
     
     //TODO: UTF-8 support!
     while (*tmp) {                                  /* Go to the end of string */
@@ -183,16 +184,18 @@ const GUI_Char* __StringGetPointerForWidth(GUI_Const GUI_FONT_t* font, const GUI
     }
     tmp--;                                          /* Go to the last character */
     while (str <= tmp) {
-        __StringGetCharSize(font, *tmp, &w, &h);
+        if (!GUI_STRING_GetChReverse(&tmp, &ch, &i)) {  /* Get character in reverse order */
+            break;
+        }
+        __StringGetCharSize(font, ch, &w, &h);
         if ((tot + w) < draw->Width) {
             tot += w;
-            tmp--;
         } else {
             draw->X += draw->Width - tot;           /* Add X position to align right */
             break;
         }
     }
-    return tmp + 1;
+    return tmp + i + 1;
 }
 
 /******************************************************************************/
@@ -206,6 +209,9 @@ const GUI_Char* __StringGetPointerForWidth(GUI_Const GUI_FONT_t* font, const GUI
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
+void GUI_DRAW_FONT_Init(GUI_DRAW_FONT_t* f) {
+    memset((void *)f, 0x00, sizeof(*f));            /* Reset structure */
+}
 
 /******************************************************************************/
 /******************************************************************************/
@@ -306,14 +312,14 @@ void GUI_DRAW_Line(GUI_Display_t* disp, GUI_Dim_t x1, GUI_Dim_t y1, GUI_Dim_t x2
 	deltax = __GUI_ABS(x2 - x1);
 	deltay = __GUI_ABS(y2 - y1);
     
-//    if (deltax == 0) {
-//        GUI_DRAW_VLine(disp, x1, y1, deltay, color);
-//        return;
-//    }
-//    if (deltay == 0) {
-//        GUI_DRAW_HLine(disp, x1, y1, deltax, color);
-//        return;
-//    }
+    if (deltax == 0) {
+        GUI_DRAW_VLine(disp, x1, y1, deltay, color);
+        return;
+    }
+    if (deltay == 0) {
+        GUI_DRAW_HLine(disp, x1, y1, deltax, color);
+        return;
+    }
     
 	x = x1;
 	y = y1;
@@ -664,11 +670,11 @@ void GUI_DRAW_WriteText(GUI_Display_t* disp, GUI_Const GUI_FONT_t* font, const G
     }
     
     while (*str) {                                  /* Go through entire string */
-        if (!__GUI_STRING_GetCh(&str, &ch, &i)) {   /* Get next character from string */
+        if (!GUI_STRING_GetCh(&str, &ch, &i)) {     /* Get next character from string */
             break;                                  /* Stop execution on fault character */
         }
         if ((c = __StringGetCharPtr(font, ch)) == 0) {  /* Get character pointer */
-            continue;
+            continue;                               /* Character is not known */
         }
         
         if (w < (c->xSize + c->xMargin)) {          /* Check available width */
@@ -679,6 +685,5 @@ void GUI_DRAW_WriteText(GUI_Display_t* disp, GUI_Const GUI_FONT_t* font, const G
         
         x += c->xSize + c->xMargin;                 /* Increase X position */
         w -= c->xSize + c->xMargin;                 /* Decrease available width for char */
-        str++;
     } 
 }

@@ -57,34 +57,34 @@ extern "C" {
 /**
  * \brief           Enables (1) or disables (0) clipping regions for redraw operations
  */
-#define GUI_USE_CLIPPING            1
+#define GUI_USE_CLIPPING                1
 
 /**
  * \brief           Enables (1) or disables (0) touch support
  */
-#define GUI_USE_TOUCH               1
+#define GUI_USE_TOUCH                   1
 
 /**
  * \brief           Enables (1) or disables (0) keyboard support
  */
-#define GUI_USE_KEYBOARD            1
+#define GUI_USE_KEYBOARD                1
 
 /**
  * \brief           Enables (1) or disabled (0) unicode strings
  *
  * \note            UTF-8 encoding can be used for unicode characters
  */
-#define GUI_USE_UNICODE             1
+#define GUI_USE_UNICODE                 1
 
 /**
  * \brief           Maximal number of touch entries in buffer
  */
-#define TOUCH_BUFFER_SIZE           10
+#define TOUCH_BUFFER_SIZE               10
 
 /**
  * \brief           Maximal number of keyboard entries in buffer
  */
-#define KEYBOARD_BUFFER_SIZE        10
+#define KEYBOARD_BUFFER_SIZE            10
 
 /**
  * \} GUI_Config
@@ -96,56 +96,56 @@ extern "C" {
  * \{
  */
 
-#define GUI_COLOR_BLUE              0xFF0000FF
-#define GUI_COLOR_GREEN             0xFF00FF00
-#define GUI_COLOR_RED               0xFFFF0000
-#define GUI_COLOR_CYAN              0xFF00FFFF
-#define GUI_COLOR_MAGENTA           0xFFFF00FF
-#define GUI_COLOR_YELLOW            0xFFFFFF00
-#define GUI_COLOR_LIGHTBLUE         0xFF8080FF
-#define GUI_COLOR_LIGHTGREEN        0xFF80FF80
-#define GUI_COLOR_LIGHTRED          0xFFFF8080
-#define GUI_COLOR_LIGHTCYAN         0xFF80FFFF
-#define GUI_COLOR_LIGHTMAGENTA      0xFFFF80FF
-#define GUI_COLOR_LIGHTYELLOW       0xFFFFFF80
-#define GUI_COLOR_DARKBLUE          0xFF000080
-#define GUI_COLOR_DARKGREEN         0xFF008000
-#define GUI_COLOR_DARKRED           0xFF800000
-#define GUI_COLOR_DARKCYAN          0xFF008080
-#define GUI_COLOR_DARKMAGENTA       0xFF800080
-#define GUI_COLOR_DARKYELLOW        0xFF808000
-#define GUI_COLOR_WHITE             0xFFFFFFFF
-#define GUI_COLOR_LIGHTGRAY         0xFFD3D3D3
-#define GUI_COLOR_GRAY              0xFF808080
-#define GUI_COLOR_DARKGRAY          0xFF404040
-#define GUI_COLOR_BLACK             0xFF000000
-#define GUI_COLOR_BROWN             0xFFA52A2A
-#define GUI_COLOR_ORANGE            0xFFFFA500
-#define GUI_COLOR_TRANSPARENT       0xFF000000
+#define GUI_COLOR_BLUE                  0xFF0000FF
+#define GUI_COLOR_GREEN                 0xFF00FF00
+#define GUI_COLOR_RED                   0xFFFF0000
+#define GUI_COLOR_CYAN                  0xFF00FFFF
+#define GUI_COLOR_MAGENTA               0xFFFF00FF
+#define GUI_COLOR_YELLOW                0xFFFFFF00
+#define GUI_COLOR_LIGHTBLUE             0xFF8080FF
+#define GUI_COLOR_LIGHTGREEN            0xFF80FF80
+#define GUI_COLOR_LIGHTRED              0xFFFF8080
+#define GUI_COLOR_LIGHTCYAN             0xFF80FFFF
+#define GUI_COLOR_LIGHTMAGENTA          0xFFFF80FF
+#define GUI_COLOR_LIGHTYELLOW           0xFFFFFF80
+#define GUI_COLOR_DARKBLUE              0xFF000080
+#define GUI_COLOR_DARKGREEN             0xFF008000
+#define GUI_COLOR_DARKRED               0xFF800000
+#define GUI_COLOR_DARKCYAN              0xFF008080
+#define GUI_COLOR_DARKMAGENTA           0xFF800080
+#define GUI_COLOR_DARKYELLOW            0xFF808000
+#define GUI_COLOR_WHITE                 0xFFFFFFFF
+#define GUI_COLOR_LIGHTGRAY             0xFFD3D3D3
+#define GUI_COLOR_GRAY                  0xFF808080
+#define GUI_COLOR_DARKGRAY              0xFF404040
+#define GUI_COLOR_BLACK                 0xFF000000
+#define GUI_COLOR_BROWN                 0xFFA52A2A
+#define GUI_COLOR_ORANGE                0xFFFFA500
+#define GUI_COLOR_TRANSPARENT           0xFF000000
 
-#define GUI_COLOR_ALPHA_0           0x00000000
-#define GUI_COLOR_ALPHA_5           0x0C000000
-#define GUI_COLOR_ALPHA_10          0x19000000
-#define GUI_COLOR_ALPHA_15          0x26000000
-#define GUI_COLOR_ALPHA_20          0x33000000
-#define GUI_COLOR_ALPHA_25          0x3F000000
-#define GUI_COLOR_ALPHA_30          0x4C000000
-#define GUI_COLOR_ALPHA_35          0x59000000
-#define GUI_COLOR_ALPHA_40          0x66000000
-#define GUI_COLOR_ALPHA_45          0x72000000
-#define GUI_COLOR_ALPHA_50          0x7F000000
-#define GUI_COLOR_ALPHA_55          0x7C000000
-#define GUI_COLOR_ALPHA_60          0x99000000
-#define GUI_COLOR_ALPHA_65          0xA5000000
-#define GUI_COLOR_ALPHA_70          0xB2000000
-#define GUI_COLOR_ALPHA_75          0xBF000000
-#define GUI_COLOR_ALPHA_80          0xCC000000
-#define GUI_COLOR_ALPHA_85          0xD8000000
-#define GUI_COLOR_ALPHA_90          0xE5000000
-#define GUI_COLOR_ALPHA_95          0xF2000000
-#define GUI_COLOR_ALPHA_100         0xFF000000
+#define GUI_COLOR_ALPHA_0               0x00000000
+#define GUI_COLOR_ALPHA_5               0x0C000000
+#define GUI_COLOR_ALPHA_10              0x19000000
+#define GUI_COLOR_ALPHA_15              0x26000000
+#define GUI_COLOR_ALPHA_20              0x33000000
+#define GUI_COLOR_ALPHA_25              0x3F000000
+#define GUI_COLOR_ALPHA_30              0x4C000000
+#define GUI_COLOR_ALPHA_35              0x59000000
+#define GUI_COLOR_ALPHA_40              0x66000000
+#define GUI_COLOR_ALPHA_45              0x72000000
+#define GUI_COLOR_ALPHA_50              0x7F000000
+#define GUI_COLOR_ALPHA_55              0x7C000000
+#define GUI_COLOR_ALPHA_60              0x99000000
+#define GUI_COLOR_ALPHA_65              0xA5000000
+#define GUI_COLOR_ALPHA_70              0xB2000000
+#define GUI_COLOR_ALPHA_75              0xBF000000
+#define GUI_COLOR_ALPHA_80              0xCC000000
+#define GUI_COLOR_ALPHA_85              0xD8000000
+#define GUI_COLOR_ALPHA_90              0xE5000000
+#define GUI_COLOR_ALPHA_95              0xF2000000
+#define GUI_COLOR_ALPHA_100             0xFF000000
 
-#define GUI_COLOR_ALPHA(c, a)       (((c) & 0x00FFFFFFUL) | (a))
+#define GUI_COLOR_ALPHA(c, a)           (((c) & 0x00FFFFFFUL) | (a))
     
 /**
  * \}
@@ -176,14 +176,24 @@ extern "C" {
  * \defgroup        GUI_Keys
  * \brief           List of used special keys for keyboard emulation
  * \{
+ *
+ * Most of them have virtual assigned number, except some which are the same as in ASCII number.
  */
 
-#define GUI_KEY_TAB                     ((uint16_t)0x0009)
-#define GUI_KEY_LF                      ((uint16_t)0x000A)
-#define GUI_KEY_CR                      ((uint16_t)0x000D)
+#define GUI_KEY_UP                      ((uint32_t)0x0001)  /*!< Keyboard up button */
+#define GUI_KEY_DOWN                    ((uint32_t)0x0002)  /*!< Keyboard down button */
+#define GUI_KEY_LEFT                    ((uint32_t)0x0003)  /*!< Keyboard left button */
+#define GUI_KEY_RIGHT                   ((uint32_t)0x0004)  /*!< Keyboard right button */
+#define GUI_KEY_TAB                     ((uint16_t)0x0005)  /*!< Keyboard TAB button */
+#define GUI_KEY_ESC                     ((uint16_t)0x0006)  /*!< Keyboard ESC (Escape) button */
+#define GUI_KEY_PG_UP                   ((uint16_t)0x0007)  /*!< Keyboard page up button */
+#define GUI_KEY_BCKSPACE                ((uint16_t)0x0008)  /*!< Keyboard backspace button = ASCII 0x08 */
+#define GUI_KEY_PG_DOWN                 ((uint16_t)0x0007)  /*!< Keyboard page down button */
+#define GUI_KEY_LF                      ((uint16_t)0x000A)  /*!< Keyboard line feed = ASCII 0x0A */
+#define GUI_KEY_CR                      ((uint16_t)0x000D)  /*!< Keyboard carriage return = ASCII 0x0D */
 
 /**
- * \}
+ * \} GUI_Keys
  */
 
 /**
@@ -195,8 +205,8 @@ extern "C" {
  * \brief           Results enumeration
  */
 typedef enum GUI_Result_t {
-    guiOK = 0x00,
-    guiERROR = 0x01
+    guiOK = 0x00,                           /*!< GUI status is OK */
+    guiERROR = 0x01                         /*!< There was an error in processing */
 } GUI_Result_t;
 
 /**
@@ -219,26 +229,47 @@ typedef struct GUI_LinkedListRoot_t {
 /**
  * \brief           GUI object ID
  */
-typedef uint32_t GUI_ID_t;
+typedef uint32_t    GUI_ID_t;
 
 /**
  * \brief           Color definition
  */
-typedef uint32_t GUI_Color_t;
+typedef uint32_t    GUI_Color_t;
 
 /**
  * \brief           GUI dimensions in units of pixels
  */
-typedef uint16_t GUI_Dim_t;
-typedef int16_t  GUI_iDim_t;
-typedef uint8_t  GUI_Byte_t, GUI_Byte;
-typedef int8_t   GUI_iByte_t, GUI_iByte;
-typedef char     GUI_Char;
+typedef uint16_t    GUI_Dim_t;
 
-//#define _T(x)       L ## x
-#define _T(x)       x
+/**
+ * \brief           GUI signed dimensions in units of pixels 
+ */
+typedef int16_t     GUI_iDim_t;
 
-#define GUI_Const     const
+/**
+ * \brief           GUI byte data type
+ */
+typedef uint8_t     GUI_Byte_t, GUI_Byte;
+
+/**
+ * \brief           GUI signed byte data type
+ */
+typedef int8_t      GUI_iByte_t, GUI_iByte;
+
+/**
+ * \brief           GUI char data type for all string operations
+ */
+typedef uint8_t     GUI_Char;
+
+/**
+ * \brief           Macro to force strings to right format for processing
+ */
+#define _T(x)       (GUI_Char *)(x)
+
+/**
+ * \brief           Macro for constant keyword
+ */
+#define GUI_Const   const
 
 /**
  * \brief           Color gradient definition
@@ -257,15 +288,6 @@ typedef enum GUI_TouchState_t {
 } GUI_TouchState_t;
 
 /**
- * \brief           Single touch data structure
- */
-typedef struct GUI_TouchData_t {
-    GUI_Dim_t X;                            /*!< Touch X coordinate */
-    GUI_Dim_t Y;                            /*!< Touch Y coordinate */
-    GUI_TouchState_t Status;                /*!< Touch status, pressed or released */
-} GUI_TouchData_t;
-
-/**
  * \brief           Touch internal processing enumeration
  */
 typedef enum __GUI_TouchStatus_t {
@@ -275,10 +297,23 @@ typedef enum __GUI_TouchStatus_t {
 } __GUI_TouchStatus_t;
 
 /**
+ * \brief           Single touch data structure
+ */
+typedef struct GUI_TouchData_t {
+    GUI_Dim_t X;                            /*!< Touch X coordinate */
+    GUI_Dim_t Y;                            /*!< Touch Y coordinate */
+    GUI_TouchState_t Status;                /*!< Touch status, pressed or released */
+} GUI_TouchData_t;
+
+/**
  * \brief           Single key data structure
  */
 typedef struct GUI_KeyboardData_t {
-    uint16_t Key;                           /*!< Key pressed */
+#if GUI_USE_UNICODE
+    GUI_Char Keys[4];                       /*!< Key pressed, plain UTF-8 bytes, up to 4 bytes */
+#else
+    GUI_Char Keys[1];                       /*!< Key pressed */
+#endif
     uint8_t Flags;                          /*!< Flags for special keys */
 } GUI_KeyboardData_t;
 
@@ -318,7 +353,7 @@ typedef struct GUI_LCD_t {
 typedef struct GUI_Display_t {
     GUI_Dim_t X1;                           /*!< Clipping area start X */
     GUI_Dim_t Y1;                           /*!< Clipping area start Y */
-    GUI_Dim_t X2;                           /*!< Clipping area end Y */
+    GUI_Dim_t X2;                           /*!< Clipping area end X */
     GUI_Dim_t Y2;                           /*!< Clipping area end Y */
 } GUI_Display_t;
 
@@ -333,16 +368,15 @@ typedef enum GUI_LL_Command_t {
  * \brief           GUI Low-Level structure for drawing operations
  */
 typedef struct GUI_LL_t {
-    void            (*Init)         (GUI_LCD_t* LCD);
-    void            (*SetPixel)     (GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);
-    GUI_Color_t     (*GetPixel)     (GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t, GUI_Dim_t);
-    void            (*Fill)         (GUI_LCD_t* LCD, uint8_t layer, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);
-    void            (*Copy)         (GUI_LCD_t* LCD, uint8_t layer, void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t);
-    void            (*DrawHLine)    (GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);
-    void            (*DrawVLine)    (GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);
-    void            (*FillRect)     (GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);
+    void            (*Init)         (GUI_LCD_t* LCD);                                                                           /*!< Pointer to LCD initialization function */
+    void            (*SetPixel)     (GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);                         /*!< Pointer to LCD set pixel function */
+    GUI_Color_t     (*GetPixel)     (GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t, GUI_Dim_t);                                      /*!< Pointer to read pixel from LCD */
+    void            (*Fill)         (GUI_LCD_t* LCD, uint8_t layer, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);      /*!< Pointer to LCD fill screen or rectangle function */
+    void            (*Copy)         (GUI_LCD_t* LCD, uint8_t layer, void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t);/*!< Pointer to LCD copy data from source to destination */
+    void            (*DrawHLine)    (GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);              /*!< Pointer to horizontal line drawing. Set to 0 if you do not have optimized version */
+    void            (*DrawVLine)    (GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);              /*!< Pointer to vertical line drawing. Set to 0 if you do not have optimized version */
+    void            (*FillRect)     (GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);   /*!< Pointer to function for filling rectangle on LCD */
 } GUI_LL_t;
-
 
 /**
  * \defgroup        GUI_FONT
@@ -376,6 +410,7 @@ typedef struct {
 #define GUI_FLAG_FONT_AA                0x01/*!< Indicates anti-alliasing on font */
 #define GUI_FLAG_FONT_RIGHTALIGN        0x02/*!< Indicates right align text if string length is too wide for rectangle */
 
+#if !defined(DOXYGEN)
 #define ________                        0x00
 #define _______X                        0x01
 #define ______X_                        0x02
@@ -632,6 +667,7 @@ typedef struct {
 #define XXXXXX_X                        0xfd
 #define XXXXXXX_                        0xfe
 #define XXXXXXXX                        0xff
+#endif /* !defined(DOXYGEN) */
 
 /**
  * \} GUI_FONT
@@ -672,15 +708,15 @@ typedef struct GUI_WIDGET_t {
     void (*Draw)            (struct GUI_HANDLE *, GUI_Display_t *);  /*!< Pointer to widget drawing operation */
 #if GUI_USE_TOUCH
     struct {
-        __GUI_TouchStatus_t (*TouchDown)    (struct GUI_HANDLE *, GUI_TouchData_t *);
-        __GUI_TouchStatus_t (*TouchUp)      (struct GUI_HANDLE *, GUI_TouchData_t *);
-        __GUI_TouchStatus_t (*TouchMove)    (struct GUI_HANDLE *, GUI_TouchData_t *);
-    } TouchEvents;
+        __GUI_TouchStatus_t (*TouchDown)    (struct GUI_HANDLE *, GUI_TouchData_t *);   /* Pointer to touch down event function callback */
+        __GUI_TouchStatus_t (*TouchUp)      (struct GUI_HANDLE *, GUI_TouchData_t *);   /* Pointer to touch move event function callback */
+        __GUI_TouchStatus_t (*TouchMove)    (struct GUI_HANDLE *, GUI_TouchData_t *);   /* Pointer to touch up event function callback */
+    } TouchEvents;                          /*!< Group for touch events for widget */
 #endif /* GUI_USE_TOUCH */
 #if GUI_USE_KEYBOARD
     struct {
-        __GUI_KeyboardStatus_t (*KeyPress)  (struct GUI_HANDLE *, GUI_KeyboardData_t *);  
-    } KeyboardEvents;
+        __GUI_KeyboardStatus_t (*KeyPress)  (struct GUI_HANDLE *, GUI_KeyboardData_t *);    /* Pointer to key press event function callback */
+    } KeyboardEvents;                       /*!< Group for keyboard events for widget */
 #endif /* GUI_USE_KEYBOARD */
 } GUI_WIDGET_t;
 

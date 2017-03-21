@@ -1,9 +1,6 @@
 /**
  * \author  Tilen Majerle
- * \email   tilen@majerle.eu
- * \website https://majerle.eu
- * \license MIT
- * \brief   Generic cyclic buffer library
+ * \brief   GUI generic cyclic buffer library
  *	
 \verbatim
    ----------------------------------------------------------------------
@@ -31,8 +28,8 @@
    ----------------------------------------------------------------------
 \endverbatim
  */
-#ifndef BUFFER_H
-#define BUFFER_H 110
+#ifndef GUI_BUFFER_H
+#define GUI_BUFFER_H 110
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -40,8 +37,13 @@ extern "C" {
 #endif
 
 /**
- * \defgroup BUFFER
- * \brief    Generic cyclic buffer library
+ * \addtogroup      GUI_UTILS
+ * \{
+ */
+    
+/**
+ * \defgroup        GUI_BUFFER
+ * \brief           Generic cyclic buffer library
  * \{
  *
  * This buffer does not only feature basic read/write operations for cyclic buffers, it also has feature to read strings from buffer if needed.
@@ -64,75 +66,43 @@ extern "C" {
 - In all other cases, if there is no string delimiter in buffer, buffer will not return anything and will check for it first.
 \endverbatim
  *
- * \par Dependencies
- *
-\verbatim
- - stdlib.h
- - string.h
- - stdint.h
-\endverbatim
  */
 #include "stdlib.h"
 #include "string.h"
 #include "stdint.h"
 
-/**
- * \defgroup BUFFER_Macros
- * \brief    Library defines
- * \{
- */
 
-#define BUFFER_INITIALIZED     0x01 /*!< Buffer initialized flag */
-#define BUFFER_MALLOC          0x02 /*!< Buffer uses malloc for memory */
+#define GUI_BUFFER_INITIALIZED      0x01    /*!< Buffer initialized flag */
+#define GUI_BUFFER_MALLOC           0x02    /*!< Buffer uses malloc for memory */
 
 /* Custom allocation and free functions if needed */
 #ifndef LIB_ALLOC_FUNC
-#define LIB_ALLOC_FUNC         malloc
+#define LIB_ALLOC_FUNC              malloc
 #endif
 #ifndef LIB_FREE_FUNC
-#define LIB_FREE_FUNC          free
+#define LIB_FREE_FUNC               free
 #endif
 
-#ifndef BUFFER_FAST
-#define BUFFER_FAST            1
+#ifndef GUI_BUFFER_FAST
+#define GUI_BUFFER_FAST             1
 #endif
-
-/**
- * \}
- */
- 
-/**
- * \defgroup BUFFER_Typedefs
- * \brief    Library Typedefs
- * \{
- */
 
 /**
  * \brief  Buffer structure
  */
-typedef struct _BUFFER_t {
-	uint32_t Size;           /*!< Size of buffer in units of bytes, DO NOT MOVE OFFSET, 0 */
-	uint32_t In;             /*!< Input pointer to save next value, DO NOT MOVE OFFSET, 1 */
-	uint32_t Out;            /*!< Output pointer to read next value, DO NOT MOVE OFFSET, 2 */
-	uint8_t* Buffer;         /*!< Pointer to buffer data array, DO NOT MOVE OFFSET, 3 */
-	uint8_t Flags;           /*!< Flags for buffer, DO NOT MOVE OFFSET, 4 */
-	uint8_t StringDelimiter; /*!< Character for string delimiter when reading from buffer as string, DO NOT MOVE OFFSET, 5 */
-	void* UserParameters;    /*!< Pointer to user value if needed */
-} BUFFER_t;
-
-/**
- * \}
- */
-
-/**
- * \defgroup BUFFER_Functions
- * \brief    Library Functions
- * \{
- */
+typedef struct _GUI_BUFFER_t {
+	uint32_t Size;                  /*!< Size of buffer in units of bytes, DO NOT MOVE OFFSET, 0 */
+	uint32_t In;                    /*!< Input pointer to save next value, DO NOT MOVE OFFSET, 1 */
+	uint32_t Out;                   /*!< Output pointer to read next value, DO NOT MOVE OFFSET, 2 */
+	uint8_t* Buffer;                /*!< Pointer to buffer data array, DO NOT MOVE OFFSET, 3 */
+	uint8_t Flags;                  /*!< Flags for buffer, DO NOT MOVE OFFSET, 4 */
+	uint8_t StringDelimiter;        /*!< Character for string delimiter when reading from buffer as string, DO NOT MOVE OFFSET, 5 */
+	void* UserParameters;           /*!< Pointer to user value if needed */
+} GUI_BUFFER_t;
 
 /**
  * \brief  Initializes buffer structure for work
- * \param  *Buffer: Pointer to \ref BUFFER_t structure to initialize
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure to initialize
  * \param  Size: Size of buffer in units of bytes
  * \param  *BufferPtr: Pointer to array for buffer storage. Its length should be equal to \param Size parameter.
  *           If NULL is passed as parameter, \ref malloc will be used to allocate memory on heap.
@@ -140,130 +110,130 @@ typedef struct _BUFFER_t {
  *            - 0: Buffer initialized OK
  *            - > 0: Buffer initialization error. Malloc has failed with allocation
  */
-uint8_t BUFFER_Init(BUFFER_t* Buffer, uint32_t Size, void* BufferPtr);
+uint8_t GUI_BUFFER_Init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr);
 
 /**
  * \brief  Free memory for buffer allocated using \ref malloc
  * \note   This function has sense only if malloc was used for dynamic allocation
- * \param  *Buffer: Pointer to \ref BUFFER_t structure
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \retval None
  */
-void BUFFER_Free(BUFFER_t* Buffer);
+void GUI_BUFFER_Free(GUI_BUFFER_t* Buffer);
 
 /**
  * \brief  Writes data to buffer
- * \param  *Buffer: Pointer to \ref BUFFER_t structure
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \param  *Data: Pointer to data to be written
  * \param  count: Number of elements of type unsigned char to write
  * \retval Number of elements written in buffer 
  */
-uint32_t BUFFER_Write(BUFFER_t* Buffer, const void* Data, uint32_t count);
+uint32_t GUI_BUFFER_Write(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count);
 
 /**
  * \brief  Writes data to buffer to top of buffer in reversed order
  * \note   This function is not thread safe so make sure you don't have read operations when you try to use this function.
- * \param  *Buffer: Pointer to \ref BUFFER_t structure
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \param  *Data: Pointer to data to be written
  * \param  count: Number of elements of type unsigned char to write
  * \retval Number of elements written in buffer on top in reverse order
  */
-uint32_t BUFFER_WriteToTop(BUFFER_t* Buffer, const void* Data, uint32_t count);
+uint32_t GUI_BUFFER_WriteToTop(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count);
 
 /**
  * \brief  Reads data from buffer
- * \param  *Buffer: Pointer to \ref BUFFER_t structure
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \param  *Data: Pointer to data where read values will be stored
  * \param  count: Number of elements of type unsigned char to read
  * \retval Number of elements read from buffer 
  */
-uint32_t BUFFER_Read(BUFFER_t* Buffer, void* Data, uint32_t count);
+uint32_t GUI_BUFFER_Read(GUI_BUFFER_t* Buffer, void* Data, uint32_t count);
 
 /**
  * \brief  Gets number of free elements in buffer 
- * \param  *Buffer: Pointer to \ref BUFFER_t structure
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \retval Number of free elements in buffer
  */
-uint32_t BUFFER_GetFree(BUFFER_t* Buffer);
+uint32_t GUI_BUFFER_GetFree(GUI_BUFFER_t* Buffer);
 
 /**
  * \brief  Gets number of elements in buffer 
- * \param  *Buffer: Pointer to \ref BUFFER_t structure
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \retval Number of elements in buffer
  */
-uint32_t BUFFER_GetFull(BUFFER_t* Buffer);
-uint32_t BUFFER_GetFullFast(BUFFER_t* Buffer);
+uint32_t GUI_BUFFER_GetFull(GUI_BUFFER_t* Buffer);
+uint32_t GUI_BUFFER_GetFullFast(GUI_BUFFER_t* Buffer);
 
 /**
  * \brief  Resets (clears) buffer pointers
- * \param  *Buffer: Pointer to \ref BUFFER_t structure
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \retval None
  */
-void BUFFER_Reset(BUFFER_t* Buffer);
+void GUI_BUFFER_Reset(GUI_BUFFER_t* Buffer);
 
 /**
  * \brief  Checks if specific element value is stored in buffer
- * \param  *Buffer: Pointer to \ref BUFFER_t structure
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \param  Element: Element to check
  * \retval Status of element:
  *            -  < 0: Element was not found
  *            - >= 0: Element found, location in buffer is returned
  *                   Ex: If value 1 is returned, it means 1 read from buffer and your element will be returned
  */
-int32_t BUFFER_FindElement(BUFFER_t* Buffer, uint8_t Element);
+int32_t GUI_BUFFER_FindElement(GUI_BUFFER_t* Buffer, uint8_t Element);
 
 /**
  * \brief  Checks if specific data sequence are stored in buffer
- * \param  *Buffer: Pointer to \ref BUFFER_t structure
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \param  *Data: Array with data sequence
  * \param  Size: Data size in units of bytes
  * \retval Status of sequence:
  *            -  < 0: Sequence was not found
  *            - >= 0: Sequence found, start sequence location in buffer is returned
  */
-int32_t BUFFER_Find(BUFFER_t* Buffer, const void* Data, uint32_t Size);
+int32_t GUI_BUFFER_Find(GUI_BUFFER_t* Buffer, const void* Data, uint32_t Size);
 
 /**
  * \brief  Sets string delimiter character when reading from buffer as string
- * \param  Buffer: Pointer to \ref BUFFER_t structure
+ * \param  Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \param  StrDel: Character as string delimiter
  * \retval None
  */
-#define BUFFER_SetStringDelimiter(Buffer, StrDel)  ((Buffer)->StringDelimiter = (StrDel))
+#define GUI_BUFFER_SetStringDelimiter(Buffer, StrDel)  ((Buffer)->StringDelimiter = (StrDel))
 
 /**
  * \brief  Writes string formatted data to buffer
- * \param  *Buffer: Pointer to \ref BUFFER_t structure
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \param  *buff: Pointer to string to write 
  * \retval Number of characters written
  */
-uint32_t BUFFER_WriteString(BUFFER_t* Buffer, const char* buff);
+uint32_t GUI_BUFFER_WriteString(GUI_BUFFER_t* Buffer, const char* buff);
 
 /**
  * \brief  Reads from buffer as string
- * \param  *Buffer: Pointer to \ref BUFFER_t structure
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \param  *buff: Pointer to buffer where string will be stored
  * \param  buffsize: Buffer size in units of bytes
  * \retval Number of characters in string
  */
-uint32_t BUFFER_ReadString(BUFFER_t* Buffer, char* buff, uint32_t buffsize);
+uint32_t GUI_BUFFER_ReadString(GUI_BUFFER_t* Buffer, char* buff, uint32_t buffsize);
 
 /**
  * \brief  Checks if character exists in location in buffer
- * \param  *Buffer: Pointer to \ref BUFFER_t structure
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \param  pos: Position in buffer, starting from 0
  * \param  *element: Pointer to save value at desired position to be stored into
  * \retval Check status:
  *            - 0: Buffer is not so long as position desired
  *            - > 0: Position to check was inside buffer data size
  */
-int8_t BUFFER_CheckElement(BUFFER_t* Buffer, uint32_t pos, uint8_t* element);
+int8_t GUI_BUFFER_CheckElement(GUI_BUFFER_t* Buffer, uint32_t pos, uint8_t* element);
 
 /**
- * \}
+ * \} GUI_BUFFER
  */
  
 /**
- * \}
+ * \} GUI_UTILS
  */
 
 /* C++ detection */

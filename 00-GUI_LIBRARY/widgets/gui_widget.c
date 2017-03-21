@@ -232,16 +232,16 @@ uint8_t __GUI_WIDGET_SetFont(GUI_HANDLE_t h, GUI_Const GUI_FONT_t* font) {
 uint8_t __GUI_WIDGET_SetText(GUI_HANDLE_t h, const GUI_Char* text) {
    if (h->Flags & GUI_FLAG_DYNAMICTEXTALLOC) {      /* Memory for text is dynamically allocated */
         if (h->TextMemSize) {
-            if (__GUI_STRING_Length(text) > (h->TextMemSize - 1)) { /* Check string length */
-                __GUI_STRING_CopyN(h->Text, text, h->TextMemSize - 1);  /* Do not copy all bytes because of memory overflow */
+            if (GUI_STRING_Length(text) > (h->TextMemSize - 1)) { /* Check string length */
+                GUI_STRING_CopyN(h->Text, text, h->TextMemSize - 1);  /* Do not copy all bytes because of memory overflow */
             } else {
-                __GUI_STRING_Copy(h->Text, text);   /* Copy entire string */
+                GUI_STRING_Copy(h->Text, text);     /* Copy entire string */
             }
             __GUI_WIDGET_Invalidate(h);             /* Redraw object */
         }
     } else {                                        /* Memory allocated by user */
         if (h->Text && h->Text == text) {           /* In case the same pointer is passed to button */
-            if (__GUI_STRING_Compare(h->Text, text)) {  /* If strings does not match, source string updated? */
+            if (GUI_STRING_Compare(h->Text, text)) {/* If strings does not match, source string updated? */
                 __GUI_WIDGET_Invalidate(h);         /* Redraw object */
             }
         }
@@ -251,7 +251,7 @@ uint8_t __GUI_WIDGET_SetText(GUI_HANDLE_t h, const GUI_Char* text) {
             __GUI_WIDGET_Invalidate(h);             /* Redraw object */
         }
     }
-    h->TextCursor = __GUI_STRING_Length(h->Text);   /* Set cursor to the end of string */
+    h->TextCursor = GUI_STRING_LengthTotal(h->Text);/* Set cursor to the end of string */
     return 1;
 }
 
@@ -286,38 +286,54 @@ uint8_t __GUI_WIDGET_FreeTextMemory(GUI_HANDLE_t h) {
 }
 
 uint8_t __GUI_WIDGET_IsFontAndTextSet(GUI_HANDLE_t h) {
-    return h->Text && h->Font && __GUI_STRING_Length(h->Text);  /* Check if conditions for drawing string match */
+    return h->Text && h->Font && GUI_STRING_Length(h->Text);    /* Check if conditions for drawing string match */
 }
 
 uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_t h, GUI_KeyboardData_t* kb) {
-    uint16_t len;
+    uint16_t len, tlen;
+    uint32_t ch;
+    uint8_t l;
+    const GUI_Char* str = kb->Keys;
+    
     if (!(h->Flags & GUI_FLAG_DYNAMICTEXTALLOC)) {  /* Must be dynamically allocated memory */
         return 0;
     }
-    len = __GUI_STRING_Length(h->Text);             /* Get length of string */
-    if (kb->Key >= 32 && kb->Key < 127) {           /* Printable character */
-        if (len < (h->TextMemSize - 1)) {           /* Memory still available for new character */
+    
+    if (!GUI_STRING_GetCh(&str, &ch, &l)) {         /* Get key from input data */
+        return 0;                                   /* Invalid input key */
+    }
+    
+    tlen = GUI_STRING_LengthTotal(h->Text);         /* Get total length of string */
+    len = GUI_STRING_Length(h->Text);               /* Get string length */
+    if (ch >= 32 && ch != 127) {                    /* Printable character */
+        if (len < (h->TextMemSize - l)) {           /* Memory still available for new character */
             uint16_t pos;
-            for (pos = len; pos > h->TextCursor; pos--) {
-                h->Text[pos] = h->Text[pos - 1];
+            for (pos = tlen + l - 1; pos > h->TextCursor; pos--) {  /* Shift characters down */
+                h->Text[pos] = h->Text[pos - l];
             }
-            h->Text[h->TextCursor] = kb->Key;
-            h->TextCursor++;
-            h->Text[len + 1] = 0;
+            for (pos = 0; pos < l; pos++) {         /* Fill new characters to empty memory */
+                h->Text[h->TextCursor++] = kb->Keys[pos];
+            }
+            h->Text[tlen + l] = 0;                  /* Add 0 to the end */
             
             __GUI_WIDGET_Invalidate(h);
             return 1;
         }
-    } else if (kb->Key == 8 || kb->Key == 127) {    /* Backspace character */
-        if (len && h->TextCursor) {
+    } else if (ch == 8 || ch == 127) {              /* Backspace character */
+        if (tlen && h->TextCursor) {
+            const GUI_Char* end = (GUI_Char *)((uint32_t)h->Text + h->TextCursor - 1);  /* End of string pointer */
             uint16_t pos;
-            for (pos = h->TextCursor - 1; pos < (len - 1); pos++) {
-                h->Text[pos] = h->Text[pos + 1];
-            }
-            h->TextCursor--;
-            h->Text[len - 1] = 0;
             
-            __GUI_WIDGET_Invalidate(h);
+            if (!GUI_STRING_GetChReverse(&end, &ch, &l)) {  /* Get last character */
+                return 0;                           
+            }
+            for (pos = h->TextCursor - l; pos < (tlen - l); pos++) {    /* Shift characters up */
+                h->Text[pos] = h->Text[pos + l];
+            }
+            h->TextCursor -= l;                     /* Decrease text cursor by number of bytes for character deleted */
+            h->Text[tlen - l] = 0;                  /* Set 0 to the end of string */
+            
+            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
             return 1;
         }
     }

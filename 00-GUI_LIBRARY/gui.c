@@ -134,12 +134,15 @@ __GUI_TouchStatus_t __ProcessTouch(GUI_TouchData_t* touch, GUI_TouchData_t* touc
                                 __GUI_WIDGET_Invalidate(GUI.FocusedWidget); /* Invalidate widget for redraw */
                             }
                             
-                            GUI.ActiveWidget = h;       /* Save active touch element */
-                            GUI.FocusedWidget = GUI.ActiveWidget;   /* Set new focused widget */
-                            __GUI_LINKEDLIST_MoveDown_Widget(h);    /* Move widget to end of list to be redrawn on top of everything and touch move detected first and fastest */
+                            GUI.ActiveWidget = h;   /* Save active touch element */
                             h->Flags |= GUI_FLAG_ACTIVE;    /* Set touch active flag */
-                            h->Flags |= GUI_FLAG_FOCUS; /* Set focus flag */
-                            __GUI_WIDGET_Invalidate(h); /* Invalidate widget and its parent */
+                            __GUI_LINKEDLIST_MoveDown_Widget(h);    /* Move widget to end of list to be redrawn on top of everything and touch move detected first and fastest */
+                            
+                            if (h != GUI.FocusedWidget) {   /* Widget is already in focus */
+                                GUI.FocusedWidget = h;  /* Set new focused widget */
+                                h->Flags |= GUI_FLAG_FOCUS; /* Set focus flag */
+                                __GUI_WIDGET_Invalidate(h); /* Invalidate widget and its parent */
+                            }
                         } else {                    /* Touch handled with no focus */
                             if (GUI.FocusedWidget) {
                                 GUI.FocusedWidget->Flags &= ~GUI_FLAG_FOCUS;    /* Clear focus flag */
@@ -150,7 +153,7 @@ __GUI_TouchStatus_t __ProcessTouch(GUI_TouchData_t* touch, GUI_TouchData_t* touc
                                 GUI.FocusedWidget->Flags &= ~GUI_FLAG_ACTIVE;   /* Clear focus flag */
                                 __GUI_WIDGET_Invalidate(GUI.FocusedWidget); /* Invalidate widget for redraw */
                             }
-                            GUI.ActiveWidget = NULL;    /* No active widget anymore */
+                            GUI.ActiveWidget = NULL;/* No active widget anymore */
                         }
                         return tStat;
                     }
@@ -262,7 +265,7 @@ int32_t GUI_Process(void) {
 #if GUI_USE_KEYBOARD
     while (__GUI_INPUT_ReadKey(&key)) {             /* Read all keyboard entires */
         if (GUI.FocusedWidget) {                    /* Check if any widget is in focus already */
-            if (key.Key == GUI_KEY_TAB) {           /* Tab key pressed, set next widget as focused */
+            if (key.Keys[0] == GUI_KEY_TAB) {       /* Tab key pressed, set next widget as focused */
                 GUI_HANDLE_t h = __GUI_LINKEDLIST_GetNextWidget(NULL, GUI.FocusedWidget);   /* Get next widget if possible */
                 if (!h) {                           /* There is no next widget */
                     h = __GUI_LINKEDLIST_GetNextWidget((GUI_HANDLE_ROOT_t *)GUI.FocusedWidget->Parent, NULL);   /* Get first widget from children elements of parent in linked list */

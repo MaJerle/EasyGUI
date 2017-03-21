@@ -1,6 +1,6 @@
 /**	
  * |----------------------------------------------------------------------
- * | Copyright (c) 2016 Tilen Majerle
+ * | Copyright (c) 2017 Tilen Majerle
  * |  
  * | Permission is hereby granted, free of charge, to any person
  * | obtaining a copy of this software and associated documentation
@@ -90,7 +90,6 @@ static uint8_t __Control(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* param, 
 
 #define e          ((GUI_EDITTEXT_t *)h)
 static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp) {
-    GUI_Color_t c1, c2;
     GUI_Dim_t x, y;
     
     x = __GUI_WIDGET_GetAbsoluteX(h);               /* Get absolute X coordinate */
@@ -99,13 +98,13 @@ static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp) {
     GUI_DRAW_FilledRectangle(disp, x, y, h->Width, h->Height, __GE(h)->Color[GUI_EDITTEXT_COLOR_BG]);
     GUI_DRAW_Rectangle(disp, x, y, h->Width, h->Height, __GE(h)->Color[GUI_EDITTEXT_COLOR_BORDER]);
     
-    if (__GUI_WIDGET_IsFocused(h)) {
+    if (GUI_WIDGET_IsFocused(h)) {                  /* Check if widget is in focus */
         GUI_DRAW_Rectangle(disp, x + 2, y + 2, h->Width - 4, h->Height - 4, __GE(h)->Color[GUI_EDITTEXT_COLOR_BORDER]);
     }
     
     if (__GUI_WIDGET_IsFontAndTextSet(h)) {         /* Ready to write string */
         GUI_DRAW_FONT_t f;
-        memset((void *)&f, 0x00, sizeof(f));        /* Reset structure */
+        GUI_DRAW_FONT_Init(&f);                     /* Init font drawing */
         
         f.X = x + 5;
         f.Y = y + 5;
@@ -128,7 +127,6 @@ static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts) {
 
 #if GUI_USE_KEYBOARD
 static __GUI_KeyboardStatus_t __KeyPress(GUI_HANDLE_t h, GUI_KeyboardData_t* kb) {
-    __GUI_DEBUG("K: %c (%3d)", kb->Key, kb->Key);
     __GUI_WIDGET_ProcessTextKey(h, kb);
     
     return keyHANDLED;

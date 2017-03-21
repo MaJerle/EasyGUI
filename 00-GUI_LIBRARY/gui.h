@@ -1,7 +1,6 @@
 /**
  * \author  Tilen Majerle
- * \email   tilen@majerle.eu
- * \website 
+ * \website http://majerle.eu
  * \license MIT
  * \version 0.1.0
  * \brief   GUI Library
@@ -55,7 +54,7 @@ extern "C" {
 #include "gui_config.h"
     
 /* Include utilities */
-#include "utils/buffer.h"
+#include "utils/gui_buffer.h"
 #include "utils/gui_linkedlist.h"
 #include "utils/gui_string.h"
 
@@ -63,6 +62,7 @@ extern "C" {
 #include "gui_ll.h"
 #include "tm_stm32_general.h"
 
+#if !defined(DOXYGEN)
 /**
  * \defgroup        GUI_Internal   
  * \{
@@ -147,15 +147,32 @@ extern "C" {
 
 /**
  * \brief           Macro for unused variables to prevent compiler warnings
+ * \note            It uses 1 parameter
  */
 #define __GUI_UNUSED(x)             (void)(x)
+
+/**
+ * \brief           Macro for unused variables to prevent compiler warnings
+ * \note            It uses 2 parameters
+ */
 #define __GUI_UNUSED2(x, y)         { __GUI_UNUSED(x); __GUI_UNUSED(y); }
+
+/**
+ * \brief           Macro for unused variables to prevent compiler warnings
+ * \note            It uses 3 parameters
+ */
 #define __GUI_UNUSED3(x, y, z)      { __GUI_UNUSED(x); __GUI_UNUSED(y); __GUI_UNUSED(z); }
+
+/**
+ * \brief           Macro for unused variables to prevent compiler warnings
+ * \note            It uses 4 parameters
+ */
 #define __GUI_UNUSED4(x, y, z, k)   { __GUI_UNUSED(x); __GUI_UNUSED(y); __GUI_UNUSED(z); __GUI_UNUSED(k); }
 
 /**
  * \} GUI_Internal
  */
+#endif /* !defined(DOXYGEN) */
 
 /**
  * \brief           GUI main object structure
@@ -182,14 +199,12 @@ extern GUI_t GUI;
  * \brief           Initializes GUI stack.
  *                    In additions, it prepares memory for work with widgets on later usage and
  *                    calls low-layer functions to initialize LCD or custom driver for LCD
- * \param           None
  * \retval          Member of \ref GUI_Result_t enumeration
  */
 GUI_Result_t GUI_Init(void);
 
 /**
  * \brief           Processes all drawing operations for GUI
- * \param           None
  * \retval          Number of jobs done in current call
  */
 int32_t GUI_Process(void);

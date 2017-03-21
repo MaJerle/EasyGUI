@@ -79,12 +79,13 @@ extern GUI_Const GUI_FONT_t GUI_Font_Comic_Sans_MS_Regular_22;
 extern GUI_Const GUI_FONT_t GUI_Font_Calibri_Bold_8;
 extern GUI_Const GUI_FONT_t GUI_Font_Arial_Bold_18;
 extern GUI_Const GUI_FONT_t GUI_Font_FontAwesome_Regular_30;
+extern GUI_Const GUI_FONT_t GUI_Font_Arial_Narrow_Italic_22;
 
 uint32_t time;
 
-uint8_t utf8_decode(const uint8_t c, uint32_t* result);
-
 int main(void) {
+    GUI_STRING_UNICODE_t s;
+    
     uint32_t result;
     GUI_KeyboardData_t key;
     uint32_t state;
@@ -102,24 +103,27 @@ int main(void) {
     
     GUI_Init();
     
-    edit1 = GUI_EDITTEXT_Create(1, 10, 10, 460, 50);
-    GUI_EDITTEXT_SetFont(edit1, &GUI_Font_FontAwesome_Regular_30);
-    GUI_EDITTEXT_AllocTextMemory(edit1, 255);
-    GUI_EDITTEXT_SetText(edit1, _T("\xEF\x81\xB6 \xEF\x83\x94 \xEF\x83\x93 \xEF\x83\x92 \xEF\x83\x91 \xEF\x83\x89 \xEF\x83\x88 \xEF\x83\x87 \xEF\x83\x86 \xEF\x83\x85 \xEF\x83\x84 \xEF\x83\x83 \xEF\x83\x82 \xEF\x83\x81 \xEF\x83\x80"));
-    
+//    edit1 = GUI_EDITTEXT_Create(1, 10, 10, 460, 50);
+//    GUI_EDITTEXT_SetFont(edit1, &GUI_Font_FontAwesome_Regular_30);
+//    GUI_EDITTEXT_AllocTextMemory(edit1, 255);
+//    GUI_EDITTEXT_SetText(edit1, _T("\xEF\x83\x86\xEF\x81\xB6\xEF\x83\x94\xEF\x83\x93\xEF\x83\x92\xEF\x83\x91\xEF\x83\x89\xEF\x83\x88\xEF\x83\x87\xEF\x83\x86\xEF\x83\x89\xEF\x83\x88\xEF\x83\x87\xEF\x83\x86\xEF\x83\x89\xEF\x83\x88\xEF\x83\x87\xEF\x83\x86\xEF\x83\x89\xEF\x83\x88\xEF\x83\x87\xEF\x83\x86"));
+//    
 //    edit2 = GUI_EDITTEXT_Create(1, 10, 70, 460, 50);
 //    GUI_EDITTEXT_SetFont(edit2, &GUI_Font_FontAwesome_Regular_30);
 //    GUI_EDITTEXT_AllocTextMemory(edit2, 255);
 //    GUI_EDITTEXT_SetText(edit2, _T("Text test ABCDEFGHIJKLMNOPRSTUV ABCDEFGHIJKLMNOPRSTUV"));
 //    
-//    edit3 = GUI_EDITTEXT_Create(1, 10, 130, 460, 50);
-//    GUI_EDITTEXT_SetFont(edit3, &GUI_Font_Arial_Bold_18);
-//    GUI_EDITTEXT_AllocTextMemory(edit3, 255);
-//    GUI_EDITTEXT_SetText(edit3, _T("Text test ABCDEFGHIJKLMNOPRSTUV ABCDEFGHIJKLMNOPRSTUV"));
+    edit3 = GUI_EDITTEXT_Create(1, 10, 130, 460, 50);
+    GUI_EDITTEXT_SetFont(edit3, &GUI_Font_Arial_Narrow_Italic_22);
+    GUI_EDITTEXT_AllocTextMemory(edit3, 255);
+    GUI_EDITTEXT_SetText(edit3, _T("Tex\xDF\x8F\xDF\x8F"));
+    edit3->TextCursor = 3;
 
     TM_EXTI_Attach(GPIOI, GPIO_PIN_13, TM_EXTI_Trigger_Rising);
     TS.Orientation = 1;
     TM_TOUCH_Init(NULL, &TS);
+    
+    GUI_STRING_UNICODE_Init(&s);
   
 //    time = TM_DELAY_Time();
     state = 0;
@@ -134,10 +138,17 @@ int main(void) {
         }
         
         while (!TM_USART_BufferEmpty(DISCO_USART)) {
-            key.Key = TM_USART_Getc(DISCO_USART);
-            __GUI_DEBUG("ch: %c (%3d)\r\n", key.Key, key.Key);
-                key.Key = result;
-                GUI_INPUT_AddKey(&key);
+            GUI_Char ch = TM_USART_Getc(DISCO_USART);
+            switch (GUI_STRING_UNICODE_Decode(&s, ch)) {
+                case UNICODE_OK:
+                    key.Keys[s.t - 1] = ch;
+                    GUI_INPUT_AddKey(&key);
+                    break;
+                case UNICODE_PROGRESS:
+                    key.Keys[s.t - s.r - 1] = ch;
+                default:
+                    break;
+            }
         }
 	}
 }

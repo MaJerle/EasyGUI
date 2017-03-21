@@ -37,11 +37,11 @@
 /******************************************************************************/
 /******************************************************************************/    
 #if GUI_USE_TOUCH
-static BUFFER_t TSBuffer;
+static GUI_BUFFER_t TSBuffer;
 static GUI_Byte_t TSBufferData[TOUCH_BUFFER_SIZE * sizeof(GUI_TouchData_t) + 1];
 #endif /* GUI_USE_TOUCH */
 #if GUI_USE_KEYBOARD
-static BUFFER_t KBBuffer;
+static GUI_BUFFER_t KBBuffer;
 static GUI_Byte_t KBBufferData[TOUCH_BUFFER_SIZE * sizeof(GUI_KeyboardData_t) + 1];
 #endif /* GUI_USE_KEYBOARD */
 
@@ -63,13 +63,13 @@ static GUI_Byte_t KBBufferData[TOUCH_BUFFER_SIZE * sizeof(GUI_KeyboardData_t) + 
 /******************************************************************************/
 /******************************************************************************/
 #if GUI_USE_TOUCH
-void GUI_INPUT_AddTouch(const GUI_TouchData_t* Data) {
-    BUFFER_Write(&TSBuffer, Data, sizeof(*Data));  /* Write data to buffer */
+uint8_t GUI_INPUT_AddTouch(const GUI_TouchData_t* Data) {
+    return GUI_BUFFER_Write(&TSBuffer, Data, sizeof(*Data)) ? 1 : 0;    /* Write data to buffer */
 }
 
 GUI_Byte_t __GUI_INPUT_ReadTouch(GUI_TouchData_t* Data) {
-    if (BUFFER_GetFull(&TSBuffer) >= sizeof(*Data)) {
-        return (GUI_Byte_t)BUFFER_Read(&TSBuffer, Data, sizeof(*Data)); /* Read data fro mbuffer */
+    if (GUI_BUFFER_GetFull(&TSBuffer) >= sizeof(*Data)) {
+        return (GUI_Byte_t)GUI_BUFFER_Read(&TSBuffer, Data, sizeof(*Data)); /* Read data fro mbuffer */
     }
     return 0;
 }
@@ -77,13 +77,13 @@ GUI_Byte_t __GUI_INPUT_ReadTouch(GUI_TouchData_t* Data) {
 
 
 #if GUI_USE_KEYBOARD
-void GUI_INPUT_AddKey(const GUI_KeyboardData_t* Data) {
-    BUFFER_Write(&KBBuffer, Data, sizeof(*Data));   /* Write data to buffer */
+uint8_t GUI_INPUT_AddKey(const GUI_KeyboardData_t* Data) {
+    return GUI_BUFFER_Write(&KBBuffer, Data, sizeof(*Data)) ? 1 : 0;    /* Write data to buffer */
 }
 
 GUI_Byte_t __GUI_INPUT_ReadKey(GUI_KeyboardData_t* Data) {
-    if (BUFFER_GetFull(&KBBuffer) >= sizeof(*Data)) {
-        return (GUI_Byte_t)BUFFER_Read(&KBBuffer, Data, sizeof(*Data)); /* Read data fro mbuffer */
+    if (GUI_BUFFER_GetFull(&KBBuffer) >= sizeof(*Data)) {
+        return (GUI_Byte_t)GUI_BUFFER_Read(&KBBuffer, Data, sizeof(*Data)); /* Read data fro mbuffer */
     }
     return 0;
 }
@@ -91,9 +91,9 @@ GUI_Byte_t __GUI_INPUT_ReadKey(GUI_KeyboardData_t* Data) {
 
 void __GUI_INPUT_Init(void) {
 #if GUI_USE_TOUCH
-    BUFFER_Init(&TSBuffer, sizeof(TSBufferData), TSBufferData);
+    GUI_BUFFER_Init(&TSBuffer, sizeof(TSBufferData), TSBufferData);
 #endif /* GUI_USE_TOUCH */
 #if GUI_USE_KEYBOARD
-    BUFFER_Init(&KBBuffer, sizeof(KBBufferData), KBBufferData);
+    GUI_BUFFER_Init(&KBBuffer, sizeof(KBBufferData), KBBufferData);
 #endif /* GUI_USE_KEYBOARD */
 }

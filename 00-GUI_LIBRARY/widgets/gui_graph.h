@@ -1,6 +1,5 @@
 /**
  * \author  Tilen Majerle
- * \email   tilen@majerle.eu
  * \brief   GUI graph widget
  *  
 \verbatim
@@ -48,7 +47,10 @@ extern "C" {
  * \defgroup        GUI_GRAPH
  * \{
  */
-
+    
+/**
+ * \brief           Graph color list enumeration
+ */
 typedef enum GUI_GRAPH_COLOR_t {
     GUI_GRAPH_COLOR_BG = 0x00,
     GUI_GRAPH_COLOR_FG = 0x01,
@@ -56,6 +58,9 @@ typedef enum GUI_GRAPH_COLOR_t {
     GUI_GRAPH_COLOR_GRID = 0x03
 } GUI_GRAPH_COLOR_t;
 
+/**
+ * \brief           Graph border list enumeration
+ */
 typedef enum GUI_GRAPH_BORDER_t {
     GUI_GRAPH_BORDER_TOP = 0x00,
     GUI_GRAPH_BORDER_RIGHT = 0x01,
@@ -63,10 +68,16 @@ typedef enum GUI_GRAPH_BORDER_t {
     GUI_GRAPH_BORDER_LEFT = 0x03
 } GUI_GRAPH_BORDER_t;
 
+/**
+ * \brief           Graph type enumeration
+ */
 typedef enum GUI_GRAPH_TYPE_t {
     GUI_GRAPH_TYPE_YT = 0x00,               /*!< Data type is Y value version time */
 } GUI_GRAPH_TYPE_t;
 
+/**
+ * \brief           Graph data widget structure
+ */
 typedef struct GUI_GRAPH_DATA_t {
     GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
     GUI_HANDLE_t Graph;                     /*!< Pointer to graph object */
@@ -76,6 +87,9 @@ typedef struct GUI_GRAPH_DATA_t {
     GUI_GRAPH_TYPE_t Type;                  /*!< Plot data type */
 } GUI_GRAPH_DATA_t;
 
+/**
+ * \brief           Graph widget structure
+ */
 typedef struct GUI_GRAPH_t {
     GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
     GUI_LinkedListRoot_t Root;              /*!< Linked list root object for data objects */

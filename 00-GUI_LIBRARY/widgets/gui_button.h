@@ -1,6 +1,5 @@
 /**
  * \author  Tilen Majerle
- * \email   tilen@majerle.eu
  * \brief   GUI button widget
  *	
 \verbatim
@@ -49,6 +48,9 @@ extern "C" {
  * \{
  */
 
+/**
+ * \brief           Button color list enumeration
+ */
 typedef enum GUI_BUTTON_COLOR_t {
     GUI_BUTTON_COLOR_FG = 0x00,             /*!< Foreground color index in array */
     GUI_BUTTON_COLOR_BG = 0x01,             /*!< Background color index in array */
@@ -66,14 +68,8 @@ typedef struct GUI_BUTTON_t {
     
     GUI_Dim_t BorderWidth;                  /*!< Border width */
     GUI_Dim_t BorderRadius;                 /*!< Border radius */
-    
-    void (*Callback)(struct GUI_BUTTON_t *, uint16_t);  /* Widget callback function */
 } GUI_BUTTON_t;
 
-/**
- * \brief           Initializes button widget
- * \note            This function should not be called by user
- */
 GUI_HANDLE_t GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height);
 void GUI_BUTTON_Remove(GUI_HANDLE_t* ptr);
 GUI_HANDLE_t GUI_BUTTON_Invalidate(GUI_HANDLE_t h);

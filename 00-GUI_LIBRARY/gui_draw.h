@@ -1,10 +1,6 @@
 /**
  * \author  Tilen Majerle
- * \email   tilen@majerle.eu
- * \website 
- * \license MIT
- * \version 0.1.0
- * \brief   GUI Library
+ * \brief   GUI DRAW
  *	
 \verbatim
    ----------------------------------------------------------------------
@@ -46,14 +42,7 @@ extern "C" {
  * \{
  */
 
-/*!< Important GUI definitions */
 #include "gui.h"
-
-/**
- * \defgroup        GUI_DRAW_Macros
- * \brief           Macros for drawing operations
- * \{
- */
 
 #define GUI_DRAW_CIRCLE_TL              0x01/*!< Draw top left part of circle */
 #define GUI_DRAW_CIRCLE_TR              0x02/*!< Draw top right part of circle */
@@ -65,17 +54,7 @@ extern "C" {
 #define GUI_HALIGN_RIGHT                0x04/*!< Horizontal align is right */
 #define GUI_VALIGN_TOP                  0x08/*!< Vertical align is top */
 #define GUI_VALIGN_CENTER               0x10/*!< Vertical align is center */
-#define GUI_VALIGN_BOTTOM               0x20/*!< Vertical align is bottom */
-
-/**
- * \} GUI_DRAW_Macros
- */
-
-/**
- * \defgroup        GUI_DRAW_Typedefs
- * \brief           
- * \{
- */           
+#define GUI_VALIGN_BOTTOM               0x20/*!< Vertical align is bottom */         
 
 /**
  * \brief           Structure for drawing strings on widgets
@@ -92,20 +71,16 @@ typedef struct GUI_DRAW_FONT_t {
     GUI_Color_t Color2;                     /*!< Color 2 */
 } GUI_DRAW_FONT_t;
 
+/**
+ * \brief           3D states enumeration
+ */
 typedef enum GUI_DRAW_3D_State_t {
     GUI_DRAW_3D_State_Raised = 0x00,        /*!< Raised 3D style */
     GUI_DRAW_3D_State_Lowered = 0x01        /*!< Lowered 3D style */
 } GUI_DRAW_3D_State_t;
 
-/**
- * \}
- */
 
-/**
- * \defgroup        GUI_DRAW_Functions
- * \brief           Library Functions
- * \{
- */
+void GUI_DRAW_FONT_Init(GUI_DRAW_FONT_t* f);
 
 void GUI_DRAW_FillScreen(GUI_Display_t* disp, GUI_Color_t color);
 
@@ -132,11 +107,7 @@ void GUI_DRAW_Rectangle3D(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim
 void GUI_DRAW_WriteText(GUI_Display_t* disp, GUI_Const GUI_FONT_t* font, const GUI_Char* str, GUI_DRAW_FONT_t* draw);
 
 /**
- * \}
- */
- 
-/**
- * \}
+ * \} GUI_DRAW
  */
 
 /* C++ detection */

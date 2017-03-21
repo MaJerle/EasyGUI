@@ -1,6 +1,5 @@
 /**
  * \author  Tilen Majerle
- * \email   tilen@majerle.eu
  * \brief   GUI window object manager
  *	
 \verbatim
@@ -48,12 +47,6 @@ extern "C" {
  * \{
  */
     
-/** 
- * \defgroup        GUI_WINDOW_Macros
- * \brief           Library defines
- * \{
- */
-    
 /**
  * \brief           Set active window for redraw operations
  */
@@ -72,15 +65,8 @@ extern "C" {
 #define GUI_WINDOW_IsChild(p)       (((GUI_HANDLE_t)(p))->Flags & GUI_FLAG_CHILD)
     
 /**
- * \} GUI_WINDOW_Macros
+ * \brief           Window color list enumeration
  */
- 
-/**
- * \defgroup        GUI_WINDOW_Typedefs
- * \brief           Library Typedefs
- * \{
- */
-
 typedef enum GUI_WINDOW_COLOR_t {
     GUI_WINDOW_COLOR_BG = 0x00,             /*!< Background color index */
 } GUI_WINDOW_COLOR_t;
@@ -99,16 +85,6 @@ typedef struct GUI_WINDOW_t {
     GUI_Dim_t BorderWidth;                  /*!< Border width */
 } GUI_WINDOW_t;
 
-/**
- * \} GUI_WINDOW_Typedefs
- */
-
-/**
- * \defgroup        GUI_WINDOW_Functions
- * \brief           Library Functions
- * \{
- */
-
 GUI_HANDLE_t GUI_WINDOW_Create(GUI_ID_t id);
 GUI_HANDLE_t GUI_WINDOW_CreateChild(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height);
 GUI_HANDLE_t GUI_WINDOW_SetColor(GUI_HANDLE_t h, GUI_WINDOW_COLOR_t index, GUI_Color_t color);
@@ -116,17 +92,13 @@ GUI_HANDLE_t GUI_WINDOW_SetBorderWidth(GUI_HANDLE_t h, GUI_Dim_t color);
 GUI_HANDLE_t GUI_WINDOW_SetBorderRadius(GUI_HANDLE_t h, GUI_Dim_t radius);
 GUI_HANDLE_t GUI_WINDOW_SetXY(GUI_HANDLE_t h, GUI_Dim_t x, GUI_Dim_t y);
 GUI_HANDLE_t GUI_WINDOW_SetSize(GUI_HANDLE_t h, GUI_Dim_t width, GUI_Dim_t height);
-
-/**
- * \} GUI_WINDOW_Functions
- */
  
 /**
  * \} GUI_WINDOW
  */
  
 /**
- * \} GUI
+ * \} GUI_WIDGETS
  */
 
 /* C++ detection */

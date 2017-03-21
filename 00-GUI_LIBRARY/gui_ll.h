@@ -1,7 +1,6 @@
 /**
  * \author  Tilen Majerle
- * \email   tilen@majerle.eu
- * \brief   GUI window object manager
+ * \brief   GUI low-level implementation
  *	
 \verbatim
    ----------------------------------------------------------------------

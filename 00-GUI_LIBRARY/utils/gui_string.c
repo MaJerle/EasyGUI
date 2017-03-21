@@ -1,6 +1,6 @@
 /**	
  * |----------------------------------------------------------------------
- * | Copyright (c) 2016 Tilen Majerle
+ * | Copyright (c) 2017 Tilen Majerle
  * |  
  * | Permission is hereby granted, free of charge, to any person
  * | obtaining a copy of this software and associated documentation
@@ -30,10 +30,6 @@
 /***                           Private structures                            **/
 /******************************************************************************/
 /******************************************************************************/
-typedef struct _utf8_t {
-    uint8_t r, t;                           /*!< Remaining and total bytes for read procedure */
-    uint32_t res;                           /*!< Current result in UTF8 sequence */
-} _utf8_t;
 
 /******************************************************************************/
 /******************************************************************************/
@@ -52,17 +48,24 @@ typedef struct _utf8_t {
 /***                            Private functions                            **/
 /******************************************************************************/
 /******************************************************************************/
-#if GUI_USE_UNICODE
-void utf8_init(_utf8_t* s) {
+
+/******************************************************************************/
+/******************************************************************************/
+/***                                Public API                               **/
+/******************************************************************************/
+/******************************************************************************/
+void GUI_STRING_UNICODE_Init(GUI_STRING_UNICODE_t* s) {
     memset(s, 0x00, sizeof(*s));            /* Reset structure */
 }
 
-uint8_t utf8_decode(_utf8_t* s, const uint8_t c) {    
+GUI_STRING_UNICODE_Result_t GUI_STRING_UNICODE_Decode(GUI_STRING_UNICODE_t* s, const GUI_Char c) {    
     if (!s->r) {                            /* First byte received */
         s->t = 0;
         if (c < 0x80) {                     /* One byte only in UTF-8 representation */
             s->res = c;                     /* Just return result */
             s->r = 0;                       /* Remaining bytes */
+            s->t = 1;
+            return UNICODE_OK;              /* Return OK */
         }
         if ((c & 0xE0) == 0xC0) {           /* 1 additional byte in a row = 110x xxxx */   
             s->res = c & 0x1F;              /* 5 lower bits from first byte as valid data */      
@@ -73,26 +76,29 @@ uint8_t utf8_decode(_utf8_t* s, const uint8_t c) {
         } else if ((c & 0xF8) == 0xF0) {    /* 3 additional bytes in a row = 1111 0xxx */
             s->res = c & 0x07;              /* 3 lower bits from first byte as valid data*/   
             s->r = 3;    
+        } else {
+            return UNICODE_ERROR;           /* Error parsing unicode byte */
         }
         s->t = s->r + 1;                    /* Number of bytes is 1 byte more than remaining in sequence */
+        return UNICODE_PROGRESS;            /* We are in progress */
     } else {                                /* Remaining bytes */
         if ((c & 0xC0) == 0x80) {           /* Valid UTF-8 sequence */
             s->r--;                         /* Decrease remaining bytes of data */
             s->res = (s->res << 6) | (c & 0x3F);    /* Set new value for data */
-        } else {
+            if (!s->r) {                    /* All bytes parsed? */
+                return UNICODE_OK;          /* Return OK */
+            } else {
+                return UNICODE_PROGRESS;    /* Parsing is still in progress */
+            }
+        } else {                            /* Invalid byte sequence */
             s->res = 0;                     /* Reset remaining bytes */
             s->r = 0;                       /* Invalid character */
-            return 0;
+            return UNICODE_ERROR;           /* Return error */
         }
     }
-    
-    if (!s->r) {                            /* We reached the end of UTF-8 sequence */
-        return 1;
-    }
-    return 0;
 }
 
-uint8_t utf8_encode(const uint16_t c, uint8_t* out) {
+uint8_t GUI_STRING_UNICODE_Encode(const uint32_t c, GUI_Char* out) {
     if (c < 0x0080) {                       /* Normal ASCII character */
         *out++ = (uint8_t)c;                /* 1-byte sequence */
         return 1;
@@ -109,66 +115,49 @@ uint8_t utf8_encode(const uint16_t c, uint8_t* out) {
         }
     }
 }
-#endif /* GUI_USE_UNICODE */
 
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
+size_t GUI_STRING_Length(const GUI_Char* src) {
 #if GUI_USE_UNICODE
-size_t __GUI_STRING_Length(const GUI_Char* src) {
     size_t out = 0;
     const GUI_Char* tmp = src;
-    _utf8_t s;
+    GUI_STRING_UNICODE_t s;
     
-    utf8_init(&s);                          /* Init UTF-8 */
+    GUI_STRING_UNICODE_Init(&s);            /* Init unicode */
     while (*tmp) {                          /* Process string */
-        if (utf8_decode(&s, *tmp)) {        /* character processed */
+        if (GUI_STRING_UNICODE_Decode(&s, *tmp++) == UNICODE_OK) {  /* Process character */
             out++;                          /* Increase number of characters */
         }
-        tmp++;                              /* Increase source data */
     }
-    __GUI_DEBUG("len: %3d; %3d\r\n", tmp - src, out);
     return out;
-}
-
-GUI_Char* __GUI_STRING_Copy(GUI_Char* dst, const GUI_Char* src) {
-    GUI_Char* ret = dst;
-    while (*src) {
-        *dst++ = *src++;
-    }
-    *dst = 0;
-    return ret;
-}
-
-GUI_Char* __GUI_STRING_CopyN(GUI_Char* dst, const GUI_Char* src, size_t len) {
-    GUI_Char* ret = dst;
-    while (*src && len) {
-        *dst++ = *src++;
-        len--;
-    }
-    *dst = 0;
-    return ret;
-}
-
-GUI_Char* __GUI_STRING_Compare(const GUI_Char* s1, const GUI_Char* s2) {
-    while (*s1++ == *s2++ && *s1 && *s2);
-    if (!*s1 && !*s2) {
-        return 0;
-    }
-    return (GUI_Char *)s1;
-}
+#else
+    return strlen((const char *)src);
 #endif /* GUI_USE_UNICODE */
+}
 
-uint8_t __GUI_STRING_GetCh(const GUI_Char** str, uint32_t* out, uint8_t* len) {
+size_t GUI_STRING_LengthTotal(const GUI_Char* src) {
+    return strlen((const char *)src);       /* Get string length */
+}
+
+GUI_Char* GUI_STRING_Copy(GUI_Char* dst, const GUI_Char* src) {
+    return (GUI_Char *)strcpy((char *)dst, (const char *)src);  /* Copy source string to destination */
+}
+
+GUI_Char* GUI_STRING_CopyN(GUI_Char* dst, const GUI_Char* src, size_t len) {
+    return (GUI_Char *)strncpy((char *)dst, (const char *)src, len);    /* Copy source string to destination */
+}
+
+int GUI_STRING_Compare(const GUI_Char* s1, const GUI_Char* s2) {
+    return strcmp((const char *)s1, (const char *)s2);
+}
+
+uint8_t GUI_STRING_GetCh(const GUI_Char** str, uint32_t* out, uint8_t* len) {
     const GUI_Char* ch = *str;              /* Save character pointer */
 #if GUI_USE_UNICODE
-    _utf8_t s;
+    GUI_STRING_UNICODE_t s;
     
-    utf8_init(&s);                          /* Init UTF-8 */
+    GUI_STRING_UNICODE_Init(&s);            /* Init UTF-8 */
     while (*ch) {
-        if (utf8_decode(&s, *ch++)) {       /* Decode next character */
+        if (GUI_STRING_UNICODE_Decode(&s, *ch++) == UNICODE_OK) {   /* Decode next character */
             break;
         }
     }
@@ -186,4 +175,53 @@ uint8_t __GUI_STRING_GetCh(const GUI_Char** str, uint32_t* out, uint8_t* len) {
     }
     return 1;                               /* Return valid character sign */
 #endif /* GUI_USE_UNICODE */  
+}
+
+uint8_t GUI_STRING_GetChReverse(const GUI_Char** str, uint32_t* out, uint8_t* len) {
+#if GUI_USE_UNICODE
+    const GUI_Char* ch = (*str) - 3;        /* Save character pointer, start 3 bytes before current active character */
+    if (ch[3] < 0x80) {                     /* Normal ASCII character */
+        *out = (uint32_t)ch[3];
+        *str -= 1;
+        if (len) {
+            *len = 1;
+        }
+    } else {                                /* UTF-8 sequence */
+        if ((ch[2] & 0xE0) == 0xC0 && (ch[3] & 0xC0) == 0x80) {
+            *out = (uint32_t)(((ch[2] & 0x1F) << 6) | ((ch[3] & 0x3F) << 0));
+            *str -= 2;
+            if (len) {
+                *len = 2;
+            }
+        } else if ((ch[1] & 0xF0) == 0xE0 && (ch[2] & 0xC0) == 0x80 && (ch[3] & 0xC0) == 0x80) {
+            *out = (uint32_t)(((ch[1] & 0x0F) << 12) | ((ch[2] & 0x3F) << 6) | ((ch[3] & 0x3F) << 0));
+            *str -= 3;
+            if (len) {
+                *len = 3;
+            }
+        } else if ((ch[0] & 0xF8) == 0xF0 && (ch[1] & 0xC0) == 0x80 && (ch[2] & 0xC0) == 0x80 && (ch[3] & 0xC0) == 0x80) {
+            *out = (uint32_t)(((ch[0] & 0x07) << 18) | ((ch[1] & 0x3F) << 12) | ((ch[2] & 0x3F) << 6) | ((ch[3] & 0x3F) << 0));
+            *str -= 4;
+            if (len) {
+                *len = 4;
+            }
+        } else {
+            *out = 0;
+            return 0;
+        }
+    }
+    return 1;                               /* Return valid character sign */
+#else
+    const GUI_Char* ch = *str;              /* Save character pointer */
+    *str--;                                 /* Decrease input pointer where it points to */
+    *out = (uint32_t)*ch;                   /* Save character for output */
+    if (len) {                              /* Save number of bytes in this character */
+        *len = 1;                           /* 1-byte only */
+    }
+    return 1;                               /* Return valid character sign */
+#endif /* GUI_USE_UNICODE */  
+}
+
+uint8_t GUI_STRING_IsPrintable(uint32_t ch) {
+    return (ch >= 32 && ch != 127) || (ch == '\r') || (ch == '\n');
 }
