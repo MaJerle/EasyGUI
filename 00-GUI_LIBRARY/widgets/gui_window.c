@@ -112,7 +112,7 @@ GUI_HANDLE_t GUI_WINDOW_Create(GUI_ID_t id) {
     if (ptr) {
         ptr->Color[GUI_WINDOW_COLOR_BG] = GUI_COLOR_LIGHTGRAY;  /* Set default color */
         
-        __GUI_WINDOW_SETACTIVE(ptr);                /* Set active window */
+        GUI_WINDOW_SetActive(ptr);                  /* Set active window */
     }
     __GUI_LEAVE();                                  /* Leave GUI */
     return __GH(ptr);
@@ -130,7 +130,7 @@ GUI_HANDLE_t GUI_WINDOW_CreateChild(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_D
         /* Control setup */
         __GH(ptr)->Flags |= GUI_FLAG_CHILD;         /* This window is child window */
         
-        __GUI_WINDOW_SETACTIVE(ptr);                /* Set active window */
+        GUI_WINDOW_SetActive(ptr);                  /* Set active window */
     }
     __GUI_LEAVE();                                  /* Leave GUI */
     return __GH(ptr);

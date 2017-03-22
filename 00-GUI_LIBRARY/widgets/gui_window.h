@@ -49,19 +49,28 @@ extern "C" {
  */
     
 /**
- * \brief           Set active window for redraw operations
+ * \brief           Get desktop window
+ * \hideinitializer
  */
-#define __GUI_WINDOW_SETACTIVE(p)   do {    \
-    GUI.WindowActive = __GH(ptr);           \
+#define GUI_WINDOW_GetDesktop()     (GUI_HANDLE_t)GUI.Root.First
+    
+/**
+ * \brief           Set active window for future widgets and for current top window
+ * \hideinitializer
+ */
+#define GUI_WINDOW_SetActive(p)   do {      \
+    GUI.WindowActive = __GH(p);             \
 } while (0)
 
 /**
  * \brief           Get parent window object
+ * \hideinitializer
  */
 #define GUI_WINDOW_GetParent(p)     ((GUI_HANDLE_t)(p))->Parent
 
 /**
  * \brief           Check if window is child
+ * \hideinitializer
  */
 #define GUI_WINDOW_IsChild(p)       (((GUI_HANDLE_t)(p))->Flags & GUI_FLAG_CHILD)
     
