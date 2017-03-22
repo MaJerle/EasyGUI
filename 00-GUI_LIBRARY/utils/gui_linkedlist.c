@@ -240,12 +240,19 @@ GUI_HANDLE_t __GUI_LINKEDLIST_GetPrevWidget(GUI_HANDLE_ROOT_t* parent, GUI_HANDL
 }
 
 GUI_Byte __GUI_LINKEDLIST_MoveDown_Widget(GUI_HANDLE_t h) {
+    if (!h->List.Next) {
+        return 0;
+    }
     while (h->List.Next) {                      /* While device has next element */
         if (h->Widget->MetaData.AllowChildren) {/* Widget supports children widgets, go to the end of the list if necessary */
-            __GUI_LINKEDLIST_MOVEDOWN(h);
+            if (!__GUI_LINKEDLIST_MOVEDOWN(h)) {/* Move down */
+                return 0;
+            }
         } else {                                /* Our widget does not allow sub widgets */
             if (!__GH(h->List.Next)->Widget->MetaData.AllowChildren) {  /* Allow moving dows only if next widget does not allow sub widgets */
-                __GUI_LINKEDLIST_MOVEDOWN(h);   /* Move down */
+                if (!__GUI_LINKEDLIST_MOVEDOWN(h)) {    /* Move down */
+                    return 0;
+                }
             } else {
                 break;
             }
@@ -255,15 +262,22 @@ GUI_Byte __GUI_LINKEDLIST_MoveDown_Widget(GUI_HANDLE_t h) {
 }
 
 GUI_Byte __GUI_LINKEDLIST_MoveUp_Widget(GUI_HANDLE_t h) {
+    if (!h->List.Prev) {
+        return 0;
+    }
     while (h->List.Prev) {                      /* While device has previous element */
         if (h->Widget->MetaData.AllowChildren) {/* If moving widget allows children elements */
             if (__GH(h->List.Prev)->Widget->MetaData.AllowChildren) {   /* If previous widget allows children too */
-                __GUI_LINKEDLIST_MOVEUP(h);     /* Move up widget */
+                if (!__GUI_LINKEDLIST_MOVEUP(h)) {  /* Move up widget */
+                    return 0;
+                }
             } else {
                 break;                          /* Stop execution */
             }
         } else {
-            __GUI_LINKEDLIST_MOVEUP(h);         /* Move widget up to the end if necessary */
+            if (!__GUI_LINKEDLIST_MOVEUP(h)) {  /* Move up widget */
+                return 0;
+            }
         }
     }
     return 1;
@@ -280,7 +294,8 @@ void __GUI_LINKEDLIST_PrintList(GUI_HANDLE_ROOT_t* root) {
     } else {
         list = &GUI.Root;
     }
-    for (h = (GUI_HANDLE_ROOT_t *)list->Last; h; h = h->Handle.List.Prev) {
+    for (h = (GUI_HANDLE_ROOT_t *)list->First; h; h = h->Handle.List.Next) {
+        __GUI_DEBUG("%*d: Widget: %s; Redraw: %d\r\n", depth, depth, h->Handle.Widget->MetaData.Name, h->Handle.Flags & GUI_FLAG_REDRAW);
         if (h->Handle.Widget->MetaData.AllowChildren) {
             __GUI_LINKEDLIST_PrintList(h);
         }
