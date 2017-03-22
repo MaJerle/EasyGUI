@@ -42,7 +42,7 @@ extern "C" {
  */
     
 /**
- * \defgroup        GUI_BUFFER
+ * \defgroup        GUI_BUFFER Ring buffer
  * \brief           Generic cyclic buffer library
  * \{
  *
@@ -67,10 +67,10 @@ extern "C" {
 \endverbatim
  *
  */
+#include "gui_utils.h"
 #include "stdlib.h"
 #include "string.h"
 #include "stdint.h"
-
 
 #define GUI_BUFFER_INITIALIZED      0x01    /*!< Buffer initialized flag */
 #define GUI_BUFFER_MALLOC           0x02    /*!< Buffer uses malloc for memory */

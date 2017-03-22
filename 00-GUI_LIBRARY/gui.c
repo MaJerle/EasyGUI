@@ -289,7 +289,6 @@ int32_t GUI_Process(void) {
     
     /* Check if anything new to redraw */
     if (!(GUI.LCD.Flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM) && __GetNumberOfPendingWidgets(NULL)) {  /* Check if anything to draw first */
-        uint32_t time;
         GUI_Byte active = GUI.LCD.ActiveLayer;
         GUI_Byte drawing = GUI.LCD.DrawingLayer;
         
@@ -297,9 +296,7 @@ int32_t GUI_Process(void) {
         GUI.LL.Copy(&GUI.LCD, drawing, (void *)GUI.LCD.Layers[active].StartAddress, (void *)GUI.LCD.Layers[drawing].StartAddress, GUI.LCD.Width, GUI.LCD.Height, 0, 0);
             
         /* Actually draw new screen based on setup */
-        time = TM_GENERAL_DWTCounterGetValue();
         cnt = __RedrawWidgets(NULL);                /* Redraw all widgets now */
-        __GUI_DEBUG("Time: %u\r\n", TM_GENERAL_DWTCounterGetValue() - time);
         
         /* Invalid clipping region */
         GUI.Display.X1 = 0xFFFF;

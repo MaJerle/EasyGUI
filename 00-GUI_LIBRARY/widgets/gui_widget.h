@@ -1,6 +1,6 @@
 /**
  * \author  Tilen Majerle
- * \brief   GUI WIDGET object manager
+ * \brief   GUI Widget handle manager
  *	
 \verbatim
    ----------------------------------------------------------------------
@@ -37,15 +37,24 @@ extern "C" {
 #endif
 
 /**
- * \defgroup        GUI_WIDGETS
- * \brief       
+ * \defgroup        GUI_WIDGETS Widgets
+ * \brief           Group for visible widgets on screen
+ * \{
+ */
+    
+/**
+ * \defgroup        GUI_WIDGETS_CORE Core widget functions
+ * \brief           Core functions for all widgets
+ *
+ * Use can use all function which do not start with <b>__GUI</b> which indicate private functions.
+ *
  * \{
  */
 #include "gui.h"
 #include "gui_draw.h"
 
 /**
- * \defgroup        GUI_WIDGET_ID_Values
+ * \defgroup        GUI_WIDGET_ID_Values Predefined ID values
  * \brief           Macros for fast ID setup
  * \{
  */  
@@ -75,7 +84,7 @@ extern "C" {
 #define GUI_ID_BUTTON_10            ((uint16_t)(GUI_ID_BUTTON_BASE + 0x000A))   /*!< Button object ID 10 */
     
 /**
- * \} GUI_WIDGET_ID_Values
+ * \}
  */
 
 /**
@@ -88,19 +97,94 @@ extern "C" {
 
 /**
  * \brief           Returns height of parent element. If parent does not exists, it returns LCD height
- * \param[in]       h: Pointer to \ref GUI_HANDLE_t structure
+ * \param[in,out]   h: Widget handle
  * \retval          Parent height in units of pixels
  * \hideinitializer
  */
 #define GUI_WIDGET_GetParentHeight(h)               (__GH(h)->Parent ? __GH(h)->Parent->Height : GUI.LCD.Height)
 
 /**
- * \brief           Checks if widget object is currently in focus
- * \param[in]       h: \ref GUI_HANDLE_t widget
+ * \brief           Checks if Widget handle is currently in focus
+ * \param[in,out]   h: \ref GUI_HANDLE_t widget
  * \retval          Status whether widget is in focus or not
  * \hideinitializer
  */
 #define GUI_WIDGET_IsFocused(h)                     (__GH(h) == GUI.FocusedWidget)
+
+/**
+ * \brief           Remove widget from memory
+ * \note            If widget has child widgets, they will be removed too
+ * \param[in,out]   *h: Pointer to widget handle. If removed, pointer will be invalidated and set to NULL
+ * \retval          1: Widget deleted
+ * \retval          0: Delete failed
+ */
+uint8_t GUI_WIDGET_Remove(GUI_HANDLE_t* h);
+
+/**
+ * \brief           Allocate memory for text operations if text will be dynamic
+ * \note            When unicode feature is enabled, memory should be 4x required characters because unicode can store up to 4 bytes for single character
+ * \param[in,out]   h: Widget handle
+ * \param[in]       size: Number of bytes to allocate
+ * \retval          Number of bytes allocated
+ * \sa              GUI_WIDGET_FreeTextMemory()
+ */
+uint32_t GUI_WIDGET_AllocTextMemory(GUI_HANDLE_t h, uint32_t size);
+
+/**
+ * \brief           Frees memory previously allocated for text
+ * \param[in,out]   h: Widget handle to free memory on
+ * \retval          Widget handle
+ * \sa              GUI_WIDGET_AllocTextMemory()
+ */
+GUI_HANDLE_t GUI_WIDGET_FreeTextMemory(GUI_HANDLE_t h);
+
+/**
+ * \brief           Set text to widget
+ * \note            If dynamic memory allocation was used then content will be copied to allocated memory
+ *                     otherwise only pointer to input text will be used 
+ *                     and each further change of input pointer text will affect to output
+ * \param[in,out]   h: Widget handle
+ * \retval          Widget handle
+ * \sa              GUI_WIDGET_AllocTextMemory()
+ * \sa              GUI_WIDGET_SetFont()
+ */
+GUI_HANDLE_t GUI_WIDGET_SetText(GUI_HANDLE_t h, const GUI_Char* text);
+
+/**
+ * \brief           Set widget font for drawing operations
+ * \param[in,out]   h: Widget handle
+ * \param[in]       *font: Pointer to \ref GUI_FONT_t object for font
+ * \retval          Widget handle
+ * \sa              GUI_WIDGET_SetText()
+ */
+GUI_HANDLE_t GUI_WIDGET_SetFont(GUI_HANDLE_t h, GUI_Const GUI_FONT_t* font);
+
+/**
+ * \brief           Set widget size in units of pixels
+ * \param[in,out]   h: Widget handle
+ * \param[in]       width: Height in units of pixels
+ * \param[in]       height: Width in units of pixels
+ * \retval          Widget handle
+ * \sa              GUI_WIDGET_SetXY()
+ */
+GUI_HANDLE_t GUI_WIDGET_SetSize(GUI_HANDLE_t h, GUI_Dim_t width, GUI_Dim_t height);
+
+/**
+ * \brief           Set widget position relative to parent object in units of pixels
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: X position relative to parent object
+ * \param[in]       y: Y position relative to parent object
+ * \retval          Widget handle
+ * \sa              GUI_WIDGET_SetSize()
+ */
+GUI_HANDLE_t GUI_WIDGET_SetXY(GUI_HANDLE_t h, GUI_iDim_t x, GUI_iDim_t y);
+
+/**
+ * \brief           Invalidate widget object and prepare to new redraw
+ * \param[in,out]   h: Widget handle
+ * \retval          Widget handle
+ */
+GUI_HANDLE_t GUI_WIDGET_Invalidate(GUI_HANDLE_t h);
 
 #if !defined(DOXYGEN)
 void __GUI_WIDGET_Init(void);
@@ -114,7 +198,7 @@ uint8_t __GUI_WIDGET_Enable3DStyle(GUI_HANDLE_t h);
 uint8_t __GUI_WIDGET_Disable3DStyle(GUI_HANDLE_t h);
 uint8_t __GUI_WIDGET_SetFont(GUI_HANDLE_t h, GUI_Const GUI_FONT_t* font);
 uint8_t __GUI_WIDGET_SetText(GUI_HANDLE_t h, const GUI_Char* text);
-uint8_t __GUI_WIDGET_AllocateTextMemory(GUI_HANDLE_t h, uint16_t size);
+uint8_t __GUI_WIDGET_AllocateTextMemory(GUI_HANDLE_t h, uint32_t size);
 uint8_t __GUI_WIDGET_FreeTextMemory(GUI_HANDLE_t h);
 GUI_HANDLE_t __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height);
 uint8_t __GUI_WIDGET_Remove(GUI_HANDLE_t* h);
@@ -123,9 +207,13 @@ uint8_t __GUI_WIDGET_IsInsideClippingRegion(GUI_HANDLE_t h);
 uint8_t __GUI_WIDGET_IsFontAndTextSet(GUI_HANDLE_t h);
 uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_t h, GUI_KeyboardData_t* key);
 #endif /* !defined(DOXYGEN) */
+
+/**
+ * \}
+ */
  
 /**
- * \} GUI_WIDGETS
+ * \}
  */
 
 /* C++ detection */

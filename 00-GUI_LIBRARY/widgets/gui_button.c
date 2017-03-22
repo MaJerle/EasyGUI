@@ -115,7 +115,7 @@ static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp) {
     /* Draw text if possible */
     if (__GUI_WIDGET_IsFontAndTextSet(h)) {
         GUI_DRAW_FONT_t f;
-        memset((void *)&f, 0x00, sizeof(f));        /* Reset structure */
+            GUI_DRAW_FONT_Init(&f);                 /* Init structure */
         
         f.X = x + 1;
         f.Y = y + 1;
@@ -177,76 +177,6 @@ GUI_HANDLE_t GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
     __GUI_LEAVE();                                  /* Leave GUI */
     
     return (GUI_HANDLE_t)ptr;
-}
-
-void GUI_BUTTON_Remove(GUI_HANDLE_t* h) {
-    __GUI_ASSERTPARAMSVOID(h && *h);                /* Check parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-
-    __GUI_WIDGET_Remove(h);                         /* Remove widget */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-}
-
-uint32_t GUI_BUTTON_AllocTextMemory(GUI_HANDLE_t h, uint8_t size) {
-    __GUI_ASSERTPARAMS(h && size > 1);              /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    __GUI_WIDGET_AllocateTextMemory(h, size);       /* Allocate memory for text */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    
-    return h->TextMemSize;                          /* Return number of bytes allocated */
-}
-
-GUI_HANDLE_t GUI_BUTTON_FreeTextMemory(GUI_HANDLE_t h) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    __GUI_WIDGET_FreeTextMemory(h);                 /* Free memory for text */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
-}
-
-GUI_HANDLE_t GUI_BUTTON_SetText(GUI_HANDLE_t h, const GUI_Char* text) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    __GUI_WIDGET_SetText(h, text);                  /* Set text for widget */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
-}
-
-GUI_HANDLE_t GUI_BUTTON_SetSize(GUI_HANDLE_t h, GUI_Dim_t width, GUI_Dim_t height) {
-    __GUI_ASSERTPARAMS(h);                        /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    __GUI_WIDGET_SetSize(h, width, height);         /* Set actual size to object */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
-}
-
-GUI_HANDLE_t GUI_BUTTON_SetXY(GUI_HANDLE_t h, GUI_iDim_t x, GUI_iDim_t y) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    __GUI_WIDGET_SetXY(h, x, y);                    /* Set X and Y position */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
-}
-
-GUI_HANDLE_t GUI_BUTTON_SetFont(GUI_HANDLE_t h, GUI_Const GUI_FONT_t* font) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */ 
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    __GUI_WIDGET_SetFont(h, font);                  /* Set widget font */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
 }
 
 GUI_HANDLE_t GUI_BUTTON_SetColor(GUI_HANDLE_t h, GUI_BUTTON_COLOR_t index, GUI_Color_t color) {

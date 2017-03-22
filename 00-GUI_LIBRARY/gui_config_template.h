@@ -61,7 +61,7 @@
  *
  * \note            UTF-8 encoding can be used for unicode characters
  */
-#define GUI_USE_UNICODE                 1
+#define GUI_USE_UNICODE                 0
 
 /**
  * \brief           Maximal number of touch entries in buffer

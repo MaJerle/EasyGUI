@@ -74,11 +74,6 @@ uint8_t __GUI_WIDGET_IsInsideClippingRegion(GUI_HANDLE_t h) {
     return __GUI_RECT_MATCH(__GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h), h->Width, h->Height, GUI.Display.X1, GUI.Display.Y1, GUI.Display.X2 - GUI.Display.X1, GUI.Display.Y2 - GUI.Display.Y1);
 }
 
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
 void __GUI_WIDGET_Init(void) {
     GUI_WINDOW_Create(GUI_ID_WINDOW_BASE);          /* Create base window object */
 }
@@ -240,7 +235,7 @@ uint8_t __GUI_WIDGET_SetText(GUI_HANDLE_t h, const GUI_Char* text) {
             __GUI_WIDGET_Invalidate(h);             /* Redraw object */
         }
     } else {                                        /* Memory allocated by user */
-        if (h->Text && h->Text == text) {           /* In case the same pointer is passed to button */
+        if (h->Text && h->Text == text) {           /* In case the same pointer is passed to WIDGET */
             if (GUI_STRING_Compare(h->Text, text)) {/* If strings does not match, source string updated? */
                 __GUI_WIDGET_Invalidate(h);         /* Redraw object */
             }
@@ -255,7 +250,7 @@ uint8_t __GUI_WIDGET_SetText(GUI_HANDLE_t h, const GUI_Char* text) {
     return 1;
 }
 
-uint8_t __GUI_WIDGET_AllocateTextMemory(GUI_HANDLE_t h, uint16_t size) {
+uint8_t __GUI_WIDGET_AllocateTextMemory(GUI_HANDLE_t h, uint32_t size) {
     if ((h->Flags & GUI_FLAG_DYNAMICTEXTALLOC) && h->Text) {    /* Check if already allocated */
         __GUI_MEMFREE(h->Text);                     /* Free memory first */
         h->TextMemSize = 0;                         /* Reset memory size */
@@ -394,7 +389,6 @@ GUI_HANDLE_t __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iD
     
     return h;
 }
-
 uint8_t __GUI_WIDGET_Remove(GUI_HANDLE_t* h) {
     if ((*h)->Flags & GUI_FLAG_DYNAMICTEXTALLOC) {  /* Check memory for text */
         __GUI_MEMFREE((*h)->Text);                  /* Free text memory */
@@ -408,4 +402,91 @@ uint8_t __GUI_WIDGET_Remove(GUI_HANDLE_t* h) {
     }
     __GUI_MEMWIDFREE(h);                            /* Free memory for widget */
     return 1;
+}
+
+
+/******************************************************************************/
+/******************************************************************************/
+/***               Public API, can be used by user for any widget            **/
+/******************************************************************************/
+/******************************************************************************/
+uint8_t GUI_WIDGET_Remove(GUI_HANDLE_t* h) {
+    __GUI_ASSERTPARAMS(h && *h);                    /* Check parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+
+    __GUI_WIDGET_Remove(h);                         /* Remove widget */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;                                       /* Removev successfully */
+}
+
+uint32_t GUI_WIDGET_AllocTextMemory(GUI_HANDLE_t h, uint32_t size) {
+    __GUI_ASSERTPARAMS(h && size > 1);              /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    __GUI_WIDGET_AllocateTextMemory(h, size);       /* Allocate memory for text */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    
+    return h->TextMemSize;                          /* Return number of bytes allocated */
+}
+
+GUI_HANDLE_t GUI_WIDGET_FreeTextMemory(GUI_HANDLE_t h) {
+    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    __GUI_WIDGET_FreeTextMemory(h);                 /* Free memory for text */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return h;
+}
+
+GUI_HANDLE_t GUI_WIDGET_SetText(GUI_HANDLE_t h, const GUI_Char* text) {
+    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    __GUI_WIDGET_SetText(h, text);                  /* Set text for widget */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return h;
+}
+
+GUI_HANDLE_t GUI_WIDGET_SetSize(GUI_HANDLE_t h, GUI_Dim_t width, GUI_Dim_t height) {
+    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    __GUI_WIDGET_SetSize(h, width, height);         /* Set actual size to object */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return h;
+}
+
+GUI_HANDLE_t GUI_WIDGET_SetXY(GUI_HANDLE_t h, GUI_iDim_t x, GUI_iDim_t y) {
+    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    __GUI_WIDGET_SetXY(h, x, y);                    /* Set X and Y position */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return h;
+}
+
+GUI_HANDLE_t GUI_WIDGET_SetFont(GUI_HANDLE_t h, GUI_Const GUI_FONT_t* font) {
+    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */ 
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    __GUI_WIDGET_SetFont(h, font);                  /* Set widget font */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return h;
+}
+
+GUI_HANDLE_t GUI_WIDGET_Invalidate(GUI_HANDLE_t h) {
+    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */ 
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    __GUI_WIDGET_Invalidate(h);                     /* Invalidate widget */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return h;
 }

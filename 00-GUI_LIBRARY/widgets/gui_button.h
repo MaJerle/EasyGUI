@@ -44,7 +44,8 @@ extern "C" {
 #include "gui_widget.h"
 
 /**
- * \defgroup        GUI_BUTTON
+ * \defgroup        GUI_BUTTON Button
+ * \brief           Button which can be pressed
  * \{
  */
 
@@ -70,27 +71,35 @@ typedef struct GUI_BUTTON_t {
     GUI_Dim_t BorderRadius;                 /*!< Border radius */
 } GUI_BUTTON_t;
 
+/**
+ * \brief           Create new button widget
+ * \param[in]       id: Widget unique ID to use for identity for callback processing
+ * \param[in]       x: Widget X position relative to parent widget
+ * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       width: Widget width in units of pixels
+ * \param[in]       height: Widget height in uints of pixels
+ * \retval          > 0: \ref GUI_HANDLE_t object of created widget
+ * \retval          0: Widget creation failed
+ */
 GUI_HANDLE_t GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height);
-void GUI_BUTTON_Remove(GUI_HANDLE_t* ptr);
-GUI_HANDLE_t GUI_BUTTON_Invalidate(GUI_HANDLE_t h);
-GUI_HANDLE_t GUI_BUTTON_SetText(GUI_HANDLE_t h, const GUI_Char* text);
-GUI_HANDLE_t GUI_BUTTON_SetSize(GUI_HANDLE_t h, GUI_Dim_t width, GUI_Dim_t height);
-GUI_HANDLE_t GUI_BUTTON_SetXY(GUI_HANDLE_t h, GUI_iDim_t x, GUI_iDim_t y);
+
+/**
+ * \brief           Set color to specific part of widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Color index. This parameter can be a value of \ref GUI_BUTTON_COLOR_t enumeration
+ * \param[in]       color: Color value
+ * \retval          Widget handle
+ */
 GUI_HANDLE_t GUI_BUTTON_SetColor(GUI_HANDLE_t h, GUI_BUTTON_COLOR_t index, GUI_Color_t color);
 GUI_HANDLE_t GUI_BUTTON_SetBorderWidth(GUI_HANDLE_t h, GUI_Dim_t width);
 GUI_HANDLE_t GUI_BUTTON_SetBorderRadius(GUI_HANDLE_t h, GUI_Dim_t size);
-GUI_HANDLE_t GUI_BUTTON_SetFont(GUI_HANDLE_t h, GUI_Const GUI_FONT_t* font);
-
-//Returns number of bytes allocated
-uint32_t GUI_BUTTON_AllocTextMemory(GUI_HANDLE_t h, uint8_t size);
-GUI_HANDLE_t GUI_BUTTON_FreeTextMemory(GUI_HANDLE_t h);
     
 /**
- * \} GUI_BUTTON
+ * \}
  */
  
 /**
- * \} GUI_WIDGETS
+ * \}
  */
 
 /* C++ detection */

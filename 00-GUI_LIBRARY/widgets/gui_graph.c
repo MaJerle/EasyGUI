@@ -231,18 +231,9 @@ GUI_HANDLE_t GUI_GRAPH_Create(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t w
     return (GUI_HANDLE_t)ptr;
 }
 
-void GUI_GRAPH_Remove(GUI_HANDLE_t* h) {
-    __GUI_ASSERTPARAMSVOID(h && *h);                /* Check parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-
-    __GUI_WIDGET_Remove(h);                         /* Remove widget */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-}
-
 GUI_HANDLE_t GUI_GRAPH_AttachData(GUI_HANDLE_t h, GUI_HANDLE_t hd) {
     GUI_Color_t col;
-    __GUI_ASSERTPARAMS(h && hd);
+    __GUI_ASSERTPARAMS(h && hd && !hd->Parent);
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GG(h)->Root.First) {
@@ -250,6 +241,7 @@ GUI_HANDLE_t GUI_GRAPH_AttachData(GUI_HANDLE_t h, GUI_HANDLE_t hd) {
     } else {
         col = GUI_COLOR_RED;
     }
+    hd->Parent = h;                                 /* Set parent widget */
     __GD(hd)->Graph = h;                            /* Set graph */
     __GD(hd)->Color = col;                          /* Set graph */
     __GUI_LINKEDLIST_ADD_GEN(&__GG(h)->Root, &__GH(hd)->List);
@@ -316,8 +308,4 @@ GUI_HANDLE_t GUI_GRAPH_DATA_AddValue(GUI_HANDLE_t h, uint16_t val) {
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return h;
-}
-
-void GUI_GRAPH_DATA_Remove(GUI_HANDLE_t* h) {
-
 }

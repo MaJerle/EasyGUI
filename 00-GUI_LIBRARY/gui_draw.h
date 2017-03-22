@@ -37,13 +37,83 @@ extern "C" {
 #endif
 
 /**
- * \defgroup        GUI_DRAW
+ * \defgroup        GUI_DRAW Drawing process
  * \brief           LCD Drawing operations
  * \{
  */
 
 #include "gui.h"
 
+/**
+ * \defgroup        GUI_COLORS Colors
+ * \brief           List of default GUI colors
+ *
+ * There are only predefined GUI colors which are most used.
+ * For other colors, user can simply use any other RGB combination for any colors of 16M possible values
+ * \{
+ */
+
+#define GUI_COLOR_BLUE                  0xFF0000FF  /*!< ARGB8888 red color with 100% alpha channel */
+#define GUI_COLOR_GREEN                 0xFF00FF00  /*!< ARGB8888 green color with 100% alpha channel */
+#define GUI_COLOR_RED                   0xFFFF0000  /*!< ARGB8888 red color with 100% alpha channel */
+#define GUI_COLOR_CYAN                  0xFF00FFFF  /*!< ARGB8888 cyan color with 100% alpha channel */
+#define GUI_COLOR_MAGENTA               0xFFFF00FF  /*!< ARGB8888 magenta color with 100% alpha channel */
+#define GUI_COLOR_YELLOW                0xFFFFFF00  /*!< ARGB8888 yellow color with 100% alpha channel */
+#define GUI_COLOR_LIGHTBLUE             0xFF8080FF  /*!< ARGB8888 light blue color with 100% alpha channel */
+#define GUI_COLOR_LIGHTGREEN            0xFF80FF80  /*!< ARGB8888 light green color with 100% alpha channel */
+#define GUI_COLOR_LIGHTRED              0xFFFF8080  /*!< ARGB8888 light red color with 100% alpha channel */
+#define GUI_COLOR_LIGHTCYAN             0xFF80FFFF  /*!< ARGB8888 light cyan color with 100% alpha channel */
+#define GUI_COLOR_LIGHTMAGENTA          0xFFFF80FF  /*!< ARGB8888 light magenta color with 100% alpha channel */
+#define GUI_COLOR_LIGHTYELLOW           0xFFFFFF80  /*!< ARGB8888 light yellow color with 100% alpha channel */
+#define GUI_COLOR_DARKBLUE              0xFF000080  /*!< ARGB8888 dark blue color with 100% alpha channel */
+#define GUI_COLOR_DARKGREEN             0xFF008000  /*!< ARGB8888 dark green color with 100% alpha channel */
+#define GUI_COLOR_DARKRED               0xFF800000  /*!< ARGB8888 dark red color with 100% alpha channel */
+#define GUI_COLOR_DARKCYAN              0xFF008080  /*!< ARGB8888 dark cyan color with 100% alpha channel */
+#define GUI_COLOR_DARKMAGENTA           0xFF800080  /*!< ARGB8888 dark magenta color with 100% alpha channel */
+#define GUI_COLOR_DARKYELLOW            0xFF808000  /*!< ARGB8888 dark yellow color with 100% alpha channel */
+#define GUI_COLOR_WHITE                 0xFFFFFFFF  /*!< ARGB8888 white color with 100% alpha channel */
+#define GUI_COLOR_LIGHTGRAY             0xFFD3D3D3  /*!< ARGB8888 light gray color with 100% alpha channel */
+#define GUI_COLOR_GRAY                  0xFF808080  /*!< ARGB8888 gray color with 100% alpha channel */
+#define GUI_COLOR_DARKGRAY              0xFF404040  /*!< ARGB8888 dark gray color with 100% alpha channel */
+#define GUI_COLOR_BLACK                 0xFF000000  /*!< ARGB8888 black color with 100% alpha channel */
+#define GUI_COLOR_BROWN                 0xFFA52A2A  /*!< ARGB8888 brown color with 100% alpha channel */
+#define GUI_COLOR_ORANGE                0xFFFFA500  /*!< ARGB8888 orange color with 100% alpha channel */
+
+#define GUI_COLOR_ALPHA_0               0x00000000  /*!< 0% alpha. Color is transparent */
+#define GUI_COLOR_ALPHA_5               0x0C000000  /*!< 5% alpha of selected color */
+#define GUI_COLOR_ALPHA_10              0x19000000  /*!< 10% alpha of selected color */
+#define GUI_COLOR_ALPHA_15              0x26000000  /*!< 15% alpha of selected color */
+#define GUI_COLOR_ALPHA_20              0x33000000  /*!< 20% alpha of selected color */
+#define GUI_COLOR_ALPHA_25              0x3F000000  /*!< 25% alpha of selected color */
+#define GUI_COLOR_ALPHA_30              0x4C000000  /*!< 30% alpha of selected color */
+#define GUI_COLOR_ALPHA_35              0x59000000  /*!< 35% alpha of selected color */
+#define GUI_COLOR_ALPHA_40              0x66000000  /*!< 40% alpha of selected color */
+#define GUI_COLOR_ALPHA_45              0x72000000  /*!< 45% alpha of selected color */
+#define GUI_COLOR_ALPHA_50              0x7F000000  /*!< 50% alpha of selected color */
+#define GUI_COLOR_ALPHA_55              0x7C000000  /*!< 55% alpha of selected color */
+#define GUI_COLOR_ALPHA_60              0x99000000  /*!< 60% alpha of selected color */
+#define GUI_COLOR_ALPHA_65              0xA5000000  /*!< 65% alpha of selected color */
+#define GUI_COLOR_ALPHA_70              0xB2000000  /*!< 70% alpha of selected color */
+#define GUI_COLOR_ALPHA_75              0xBF000000  /*!< 75% alpha of selected color */
+#define GUI_COLOR_ALPHA_80              0xCC000000  /*!< 80% alpha of selected color */
+#define GUI_COLOR_ALPHA_85              0xD8000000  /*!< 85% alpha of selected color */
+#define GUI_COLOR_ALPHA_90              0xE5000000  /*!< 90% alpha of selected color */
+#define GUI_COLOR_ALPHA_95              0xF2000000  /*!< 95% alpha of selected color */
+#define GUI_COLOR_ALPHA_100             0xFF000000  /*!< 100% alpha of selected color */
+
+/**
+ * \brief           Macro for combining default color with transparent value
+ * \param[in]       c: Colors in ARGB 8888 format
+ * \param[in]       a: Alpha between 0 and 255. Use prefedined alpha macros
+ * \retval          ARGB8888 color with mixed alpha channel
+ * \hideinitializer
+ */
+#define GUI_COLOR_ALPHA(c, a)           (((c) & 0x00FFFFFFUL) | (a))
+    
+/**
+ * \} GUI_COLORS
+ */
+    
 #define GUI_DRAW_CIRCLE_TL              0x01/*!< Draw top left part of circle */
 #define GUI_DRAW_CIRCLE_TR              0x02/*!< Draw top right part of circle */
 #define GUI_DRAW_CIRCLE_BR              0x04/*!< Draw bottom left part of circle */
@@ -58,6 +128,7 @@ extern "C" {
 
 /**
  * \brief           Structure for drawing strings on widgets
+ * \sa              GUI_DRAW_FONT_Init
  */
 typedef struct GUI_DRAW_FONT_t {
     GUI_Dim_t X;                            /*!< Top left X position for rectangle */
@@ -73,38 +144,277 @@ typedef struct GUI_DRAW_FONT_t {
 
 /**
  * \brief           3D states enumeration
+ * \sa              GUI_DRAW_Rectangle3D
  */
 typedef enum GUI_DRAW_3D_State_t {
     GUI_DRAW_3D_State_Raised = 0x00,        /*!< Raised 3D style */
     GUI_DRAW_3D_State_Lowered = 0x01        /*!< Lowered 3D style */
 } GUI_DRAW_3D_State_t;
 
+/**
+ * \brief           Poly line object coordinates
+ * \sa              GUI_DRAW_Poly
+ */
+typedef struct GUI_DRAW_Poly_t {
+    GUI_iDim_t X;                           /*!< Poly point X location */
+    GUI_iDim_t Y;                           /*!< Poly point Y location */
+} GUI_DRAW_Poly_t;
 
+/**
+ * \brief           Initialize \ref GUI_DRAW_FONT_t structure for further usage
+ * \param[in,out]   *f: Pointer to empty \ref GUI_DRAW_FONT_t structure
+ * \retval          None
+ */
 void GUI_DRAW_FONT_Init(GUI_DRAW_FONT_t* f);
 
+/**
+ * \brief           Fill screen with color
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       color: Color to use for filling screen
+ * \retval          None
+ */
 void GUI_DRAW_FillScreen(GUI_Display_t* disp, GUI_Color_t color);
 
+/**
+ * \brief           Set single pixel at X and Y location
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: X position on LCD
+ * \param[in]       y: Y position on LCD
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              GUI_DRAW_GetPixel
+ */
 void GUI_DRAW_SetPixel(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Color_t color);
+
+/**
+ * \brief           Get pixel color at X and Y location
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: X position on LCD
+ * \param[in]       y: Y position on LCD
+ * \retval          Pixel color at desired position
+ * \sa              GUI_DRAW_SetPixel
+ */
 GUI_Color_t GUI_DRAW_GetPixel(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y);
+
+/**
+ * \brief           Draw vertical line to LCD
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: Line top X position
+ * \param[in]       y: Line top Y position
+ * \param[in]       length: Length of vertical line
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              GUI_DRAW_HLine
+ * \sa              GUI_DRAW_Line
+ */
 void GUI_DRAW_VLine(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t length, GUI_Color_t color);
+
+/**
+ * \brief           Draw horizontal line to LCD
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: Line left X position
+ * \param[in]       y: Line left Y position
+ * \param[in]       length: Length of horizontal line
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              GUI_DRAW_VLine
+ * \sa              GUI_DRAW_Line
+ */
 void GUI_DRAW_HLine(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t length, GUI_Color_t color);
+
+/**
+ * \brief           Draw line from point 1 to point 2
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x1: Line start X position
+ * \param[in]       y1: Line start Y position
+ * \param[in]       x2: Line end X position
+ * \param[in]       y2: Line end Y position
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              GUI_DRAW_VLine
+ * \sa              GUI_DRAW_HLine
+ */
 void GUI_DRAW_Line(GUI_Display_t* disp, GUI_Dim_t x1, GUI_Dim_t y1, GUI_Dim_t x2, GUI_Dim_t y2, GUI_Color_t color);
+
+/**
+ * \brief           Draw rectangle
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: Top left X position
+ * \param[in]       y: Top left Y position
+ * \param[in]       width: Rectangle width
+ * \param[in]       height: Rectangle height
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              GUI_DRAW_FilledRectangle
+ * \sa              GUI_DRAW_RoundedRectangle
+ * \sa              GUI_DRAW_FilledRoundedRectangle
+ */
 void GUI_DRAW_Rectangle(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_Color_t color);
+
+/**
+ * \brief           Draw filled rectangle
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: Top left X position
+ * \param[in]       y: Top left Y position
+ * \param[in]       width: Rectangle width
+ * \param[in]       height: Rectangle height
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              GUI_DRAW_Rectangle
+ * \sa              GUI_DRAW_RoundedRectangle
+ * \sa              GUI_DRAW_FilledRoundedRectangle
+ */
 void GUI_DRAW_FilledRectangle(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_Color_t color);
+
+/**
+ * \brief           Draw rectangle with rounded corners
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: Top left X position
+ * \param[in]       y: Top left Y position
+ * \param[in]       width: Rectangle width
+ * \param[in]       height: Rectangle height
+ * \param[in]       r: Corner radius, max value can be r = MIN(width, height) / 2
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              GUI_DRAW_Rectangle
+ * \sa              GUI_DRAW_FilledRectangle
+ * \sa              GUI_DRAW_FilledRoundedRectangle
+ */
 void GUI_DRAW_RoundedRectangle(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_Dim_t r, GUI_Color_t color);
+
+/**
+ * \brief           Draw filled rectangle with rounded corners
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: Top left X position
+ * \param[in]       y: Top left Y position
+ * \param[in]       width: Rectangle width
+ * \param[in]       height: Rectangle height
+ * \param[in]       r: Corner radius, max value can be r = MIN(width, height) / 2
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              GUI_DRAW_Rectangle
+ * \sa              GUI_DRAW_FilledRectangle
+ * \sa              GUI_DRAW_RoundedRectangle
+ */
 void GUI_DRAW_FilledRoundedRectangle(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_Dim_t r, GUI_Color_t color);
+
+/**
+ * \brief           Draw circle
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x0: X position of circle center
+ * \param[in]       y0: X position of circle center
+ * \param[in]       r: Circle radius
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              GUI_DRAW_FilledCircle
+ * \sa              GUI_DRAW_CircleCorner
+ * \sa              GUI_DRAW_FilledCircleCorner
+ */
 void GUI_DRAW_Circle(GUI_Display_t* disp, GUI_Dim_t x0, GUI_Dim_t y0, GUI_Dim_t r, GUI_Color_t color);
+
+/**
+ * \brief           Draw filled circle
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x0: X position of circle center
+ * \param[in]       y0: X position of circle center
+ * \param[in]       r: Circle radius
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              GUI_DRAW_Circle
+ * \sa              GUI_DRAW_CircleCorner
+ * \sa              GUI_DRAW_FilledCircleCorner
+ */
 void GUI_DRAW_FilledCircle(GUI_Display_t* disp, GUI_Dim_t x0, GUI_Dim_t y0, GUI_Dim_t r, GUI_Color_t color);
-void GUI_DRAW_Triangle(GUI_Display_t* disp, GUI_Dim_t x1, GUI_Dim_t y1,  GUI_Dim_t x2, GUI_Dim_t y2, GUI_Dim_t x3, GUI_Dim_t y3, GUI_Color_t color);
-void GUI_DRAW_FilledTriangle(GUI_Display_t* disp, GUI_Dim_t x1, GUI_Dim_t y1, GUI_Dim_t x2, GUI_Dim_t y2, GUI_Dim_t x3, GUI_Dim_t y3, GUI_Color_t color);
+
+/**
+ * \brief           Draw circle corner, selected with parameter
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x0: X position of corner origin
+ * \param[in]       y0: Y position of corner origin
+ * \param[in]       r: Circle radius
+ * \param[in]       c: List of corners to draw. Use BITWISE OR with these values to specify corner:
+ *                     - \ref GUI_DRAW_CIRCLE_TL
+ *                     - \ref GUI_DRAW_CIRCLE_TR
+ *                     - \ref GUI_DRAW_CIRCLE_BL
+ *                     - \ref GUI_DRAW_CIRCLE_BR
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              GUI_DRAW_Circle
+ * \sa              GUI_DRAW_FilledCircle
+ * \sa              GUI_DRAW_FilledCircleCorner
+ */
 void GUI_DRAW_CircleCorner(GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t y0, GUI_iDim_t r, GUI_Byte_t c, GUI_Color_t color);
+
+/**
+ * \brief           Draw filled circle corner, selected with parameter
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x0: X position of corner origin
+ * \param[in]       y0: Y position of corner origin
+ * \param[in]       r: Circle radius
+ * \param[in]       c: List of corners to draw. Use BITWISE OR with these values to specify corner:
+ *                     - \ref GUI_DRAW_CIRCLE_TL
+ *                     - \ref GUI_DRAW_CIRCLE_TR
+ *                     - \ref GUI_DRAW_CIRCLE_BL
+ *                     - \ref GUI_DRAW_CIRCLE_BR
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              GUI_DRAW_Circle
+ * \sa              GUI_DRAW_FilledCircle
+ * \sa              GUI_DRAW_CircleCorner
+ */
 void GUI_DRAW_FilledCircleCorner(GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t y0, GUI_iDim_t r, GUI_Byte_t c, uint32_t color);
 
-//3D shapes
-void GUI_DRAW_Rectangle3D(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_DRAW_3D_State_t state);
+/**
+ * \brief           Draw triangle
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x1: Triangle point 1 X position
+ * \param[in]       y1: Triangle point 1 Y position
+ * \param[in]       x2: Triangle point 2 X position
+ * \param[in]       y2: Triangle point 2 Y position
+ * \param[in]       x3: Triangle point 3 X position
+ * \param[in]       y3: Triangle point 3 Y position
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              GUI_DRAW_FilledTriangle
+ */
+void GUI_DRAW_Triangle(GUI_Display_t* disp, GUI_Dim_t x1, GUI_Dim_t y1,  GUI_Dim_t x2, GUI_Dim_t y2, GUI_Dim_t x3, GUI_Dim_t y3, GUI_Color_t color);
 
-//Draw text in box with custom alignment
+/**
+ * \brief           Draw filled triangle
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x1: Triangle point 1 X position
+ * \param[in]       y1: Triangle point 1 Y position
+ * \param[in]       x2: Triangle point 2 X position
+ * \param[in]       y2: Triangle point 2 Y position
+ * \param[in]       x3: Triangle point 3 X position
+ * \param[in]       y3: Triangle point 3 Y position
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              GUI_DRAW_Triangle
+ */
+void GUI_DRAW_FilledTriangle(GUI_Display_t* disp, GUI_Dim_t x1, GUI_Dim_t y1, GUI_Dim_t x2, GUI_Dim_t y2, GUI_Dim_t x3, GUI_Dim_t y3, GUI_Color_t color);
+
+/**
+ * \brief           Write text to screen
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       *font: Pointer to \ref GUI_FONT_t with font to use
+ * \param[in]       *str: Pointer to string to draw
+ * \param[in]       *draw: Pointer to \ref GUI_DRAW_FONT_t with specifications about drawing style
+ * \retval          None
+ */
 void GUI_DRAW_WriteText(GUI_Display_t* disp, GUI_Const GUI_FONT_t* font, const GUI_Char* str, GUI_DRAW_FONT_t* draw);
+
+/**
+ * \brief           Draw rectangle with 3D view
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: Top left X position
+ * \param[in]       y: Top left Y position
+ * \param[in]       width: Rectangle width
+ * \param[in]       height: Rectangle height
+ * \param[in]       state: 3D state. This parameter can be a value of \ref GUI_DRAW_3D_State_t enumeration
+ * \retval          None
+ */
+void GUI_DRAW_Rectangle3D(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_DRAW_3D_State_t state);
 
 /**
  * \} GUI_DRAW

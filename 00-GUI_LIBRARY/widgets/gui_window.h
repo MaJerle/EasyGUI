@@ -43,7 +43,8 @@ extern "C" {
 #include "gui_widget.h"
 
 /**
- * \defgroup        GUI_WINDOW
+ * \defgroup        GUI_WINDOW Window
+ * \brief           Basic widget and core parent to all other widgets
  * \{
  */
     
@@ -85,20 +86,47 @@ typedef struct GUI_WINDOW_t {
     GUI_Dim_t BorderWidth;                  /*!< Border width */
 } GUI_WINDOW_t;
 
+/**
+ * \brief           Create new window widget
+ * \param[in]       id: Widget unique ID to use for identity for callback processing
+ * \param[in]       x: Widget X position relative to parent widget
+ * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       width: Widget width in units of pixels
+ * \param[in]       height: Widget height in uints of pixels
+ * \retval          > 0: \ref GUI_HANDLE_t object of created widget
+ * \retval          0: Widget creation failed
+ */
 GUI_HANDLE_t GUI_WINDOW_Create(GUI_ID_t id);
+
+/**
+ * \brief           Create new child window widget
+ * \param[in]       id: Widget unique ID to use for identity for callback processing
+ * \param[in]       x: Widget X position relative to parent widget
+ * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       width: Widget width in units of pixels
+ * \param[in]       height: Widget height in uints of pixels
+ * \retval          > 0: \ref GUI_HANDLE_t object of created widget
+ * \retval          0: Widget creation failed
+ */
 GUI_HANDLE_t GUI_WINDOW_CreateChild(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height);
+
+/**
+ * \brief           Set color to specific part of widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Color index. This parameter can be a value of \ref GUI_WINDOW_COLOR_t enumeration
+ * \param[in]       color: Color value
+ * \retval          Widget handle
+ */
 GUI_HANDLE_t GUI_WINDOW_SetColor(GUI_HANDLE_t h, GUI_WINDOW_COLOR_t index, GUI_Color_t color);
 GUI_HANDLE_t GUI_WINDOW_SetBorderWidth(GUI_HANDLE_t h, GUI_Dim_t color);
 GUI_HANDLE_t GUI_WINDOW_SetBorderRadius(GUI_HANDLE_t h, GUI_Dim_t radius);
-GUI_HANDLE_t GUI_WINDOW_SetXY(GUI_HANDLE_t h, GUI_Dim_t x, GUI_Dim_t y);
-GUI_HANDLE_t GUI_WINDOW_SetSize(GUI_HANDLE_t h, GUI_Dim_t width, GUI_Dim_t height);
  
 /**
- * \} GUI_WINDOW
+ * \}
  */
  
 /**
- * \} GUI_WIDGETS
+ * \}
  */
 
 /* C++ detection */

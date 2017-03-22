@@ -142,15 +142,6 @@ GUI_HANDLE_t GUI_LED_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t w
     return (GUI_HANDLE_t)h;
 }
 
-void GUI_LED_Remove(GUI_HANDLE_t* h) {
-    __GUI_ASSERTPARAMSVOID(h && *h);                /* Check parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-
-    __GUI_WIDGET_Remove(h);                         /* Remove widget */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-}
-
 GUI_HANDLE_t GUI_LED_SetColor(GUI_HANDLE_t h, GUI_LED_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */

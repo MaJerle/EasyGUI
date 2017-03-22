@@ -38,18 +38,35 @@ extern "C" {
 
 /**
  * \addtogroup      GUI_WIDGETS
- * \brief       
  * \{
  */
 #include "gui_widget.h"
 
 /**
- * \defgroup        GUI_PROGBAR
+ * \defgroup        GUI_PROGBAR Progress bar
+ * \brief           Progress bar for progress visualization
  * \{
  */
 
+/**
+ * \brief           Get progress bar minimum value
+ * \param[in]       h: Progress bar handle
+ * \retval          Minimal value
+ */
 #define GUI_PROGBAR_GetMin(h)           (((GUI_PROGBAR_t *)h)->Min)
+
+/**
+ * \brief           Get progress bar maximal value
+ * \param[in]       h: Progress bar handle
+ * \retval          Minimal value
+ */
 #define GUI_PROGBAR_GetMax(h)           (((GUI_PROGBAR_t *)h)->Max)
+
+/**
+ * \brief           Get progress bar current value
+ * \param[in]       h: Progress bar handle
+ * \retval          Current value
+ */
 #define GUI_PROGBAR_GetValue(h)         (((GUI_PROGBAR_t *)h)->Value)
 
 /**
@@ -58,7 +75,7 @@ extern "C" {
 typedef enum GUI_PROGBAR_COLOR_t {
     GUI_PROGBAR_COLOR_BG = 0x00,            /*!< Background color index */
     GUI_PROGBAR_COLOR_FG = 0x01,            /*!< Foreground (active part) color index */
-    GUI_PROGBAR_COLOR_BORDER = 0x02         /*!< Border color */
+    GUI_PROGBAR_COLOR_BORDER = 0x02         /*!< Border color index */
 } GUI_PROGBAR_COLOR_t;
 
 /**
@@ -75,24 +92,38 @@ typedef struct GUI_PROGBAR_t {
     uint8_t Flags;                          /*!< Flags variable */
 } GUI_PROGBAR_t;
 
+/**
+ * \brief           Create new progress bar widget
+ * \param[in]       id: Widget unique ID to use for identity for callback processing
+ * \param[in]       x: Widget X position relative to parent widget
+ * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       width: Widget width in units of pixels
+ * \param[in]       height: Widget height in uints of pixels
+ * \retval          > 0: \ref GUI_HANDLE_t object of created widget
+ * \retval          0: Widget creation failed
+ */
 GUI_HANDLE_t GUI_PROGBAR_Create(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height);
-void GUI_PROGBAR_Remove(GUI_HANDLE_t* h);
+
+/**
+ * \brief           Set color to specific part of widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Color index. This parameter can be a value of \ref GUI_PROGBAR_COLOR_t enumeration
+ * \param[in]       color: Color value
+ * \retval          Widget handle
+ */
 GUI_HANDLE_t GUI_PROGBAR_SetColor(GUI_HANDLE_t h, GUI_PROGBAR_COLOR_t index, GUI_Color_t color);
-GUI_HANDLE_t GUI_PROGBAR_SetText(GUI_HANDLE_t h, GUI_Const GUI_Char* text);
-GUI_HANDLE_t GUI_PROGBAR_SetFont(GUI_HANDLE_t h, GUI_Const GUI_FONT_t* font);
 GUI_HANDLE_t GUI_PROGBAR_SetMin(GUI_HANDLE_t h, int32_t val);
 GUI_HANDLE_t GUI_PROGBAR_SetMax(GUI_HANDLE_t h, int32_t val);
 GUI_HANDLE_t GUI_PROGBAR_SetValue(GUI_HANDLE_t h, int32_t val);
 GUI_HANDLE_t GUI_PROGBAR_EnablePercentages(GUI_HANDLE_t h);
 GUI_HANDLE_t GUI_PROGBAR_DisablePercentages(GUI_HANDLE_t h);
-GUI_HANDLE_t GUI_PROGBAR_SetSize(GUI_HANDLE_t h, GUI_Dim_t width, GUI_Dim_t height);
 
 /**
- * \} GUI_PROGBAR
+ * \}
  */
 
 /**
- * \} GUI_WIDGETS
+ * \}
  */
 
 /* C++ detection */

@@ -1,6 +1,5 @@
 /**
  * \author  Tilen Majerle
- * \email   tilen@majerle.eu
  * \brief   GUI led widget
  *	
 \verbatim
@@ -44,27 +43,12 @@ extern "C" {
 #include "gui_widget.h"
 
 /**
- * \defgroup        GUI_LED
- * \{
- */
-
-/**
- * \defgroup        GUI_LED_Macros
- * \brief           Library defines
+ * \defgroup        GUI_LED LED
+ * \brief           Simple LED to indicate active or disabled status
  * \{
  */
 
 #define GUI_LED_FLAG_ON             0x01    /*!< Indicates LED is on */
-
-/**
- * \} GUI_LED_Macros
- */
- 
-/**
- * \defgroup        GUI_LED_Typedefs
- * \brief           Library Typedefs
- * \{
- */
 
 /**
  * \brief           List of available colors for LED
@@ -80,7 +64,7 @@ typedef enum GUI_LED_COLOR_t {
  * \brief           List of available LED types
  */
 typedef enum GUI_LED_TYPE_t {
-    GUI_LED_TYPE_RECT = 0x00,               /*!< Led is rectangular*/
+    GUI_LED_TYPE_RECT = 0x00,               /*!< Led is rectangular */
     GUI_LED_TYPE_CIRCLE = 0x01              /*!< Led is circle */
 } GUI_LED_TYPE_t;
 
@@ -95,17 +79,24 @@ typedef struct GUI_LED_t {
 } GUI_LED_t;
 
 /**
- * \} GUI_LED_Typedefs
+ * \brief           Create new led widget
+ * \param[in]       id: Widget unique ID to use for identity for callback processing
+ * \param[in]       x: Widget X position relative to parent widget
+ * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       width: Widget width in units of pixels
+ * \param[in]       height: Widget height in uints of pixels
+ * \retval          > 0: \ref GUI_HANDLE_t object of created widget
+ * \retval          0: Widget creation failed
  */
+GUI_HANDLE_t GUI_LED_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height);
 
 /**
- * \defgroup        GUI_LED_Functions
- * \brief           Library Functions
- * \{
+ * \brief           Set color to specific part of widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Color index. This parameter can be a value of \ref GUI_LED_COLOR_t enumeration
+ * \param[in]       color: Color value
+ * \retval          Widget handle
  */
-
-GUI_HANDLE_t GUI_LED_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height);
-void GUI_LED_Remove(GUI_HANDLE_t* h);
 GUI_HANDLE_t GUI_LED_SetColor(GUI_HANDLE_t h, GUI_LED_COLOR_t index, GUI_Color_t color);
 GUI_HANDLE_t GUI_LED_SetType(GUI_HANDLE_t h, GUI_LED_TYPE_t index);
 
@@ -115,15 +106,11 @@ GUI_HANDLE_t GUI_LED_Toggle(GUI_HANDLE_t h);
 GUI_HANDLE_t GUI_LED_Set(GUI_HANDLE_t h, GUI_Byte state);
 
 /**
- * \} GUI_LED_Functions
+ * \}
  */
  
 /**
- * \} GUI_LED
- */
-
-/**
- * \} GUI
+ * \}
  */
 
 /* C++ detection */

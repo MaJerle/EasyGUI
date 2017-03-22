@@ -154,22 +154,34 @@ uint8_t GUI_STRING_GetCh(const GUI_Char** str, uint32_t* out, uint8_t* len) {
     const GUI_Char* ch = *str;              /* Save character pointer */
 #if GUI_USE_UNICODE
     GUI_STRING_UNICODE_t s;
+    GUI_STRING_UNICODE_Result_t r;
+    
+    if (!*ch) {                             /* End of string check */
+        return 0;
+    }
     
     GUI_STRING_UNICODE_Init(&s);            /* Init UTF-8 */
     while (*ch) {
-        if (GUI_STRING_UNICODE_Decode(&s, *ch++) == UNICODE_OK) {   /* Decode next character */
+        if (!*ch) {                         /* End of string check */
+            return 0;
+        }
+        r = GUI_STRING_UNICODE_Decode(&s, *ch++);   /* Try to decode */
+        *str += 1;                          /* Increase string pointer */
+        if (r == UNICODE_OK) {              /* Decode next character */
             break;
         }
     }
-    *str += s.t;                            /* Increase pointer by number of bytes in UTF-8 sequence */
     *out = s.res;                           /* Save character for output */
     if (len) {                              /* Save number of bytes in this character */
         *len = s.t;                         /* Number of bytes according to UTF-8 encoding */
     }
     return 1;                               /* Return valid character sign */
 #else
-    *str++;                                 /* Increase input pointer where it points to */
+    *str += 1;                              /* Increase input pointer where it points to */
     *out = (uint32_t)*ch;                   /* Save character for output */
+    if (!*out) {                            /* End of string check */
+        return 0;                           /* Invalid character */
+    }
     if (len) {                              /* Save number of bytes in this character */
         *len = 1;                           /* 1-byte only */
     }
@@ -213,8 +225,11 @@ uint8_t GUI_STRING_GetChReverse(const GUI_Char** str, uint32_t* out, uint8_t* le
     return 1;                               /* Return valid character sign */
 #else
     const GUI_Char* ch = *str;              /* Save character pointer */
-    *str--;                                 /* Decrease input pointer where it points to */
+    *str -= 1;                              /* Decrease input pointer where it points to */
     *out = (uint32_t)*ch;                   /* Save character for output */
+    if (!*out) {                            /* Check if valid character */
+        return 0;
+    }
     if (len) {                              /* Save number of bytes in this character */
         *len = 1;                           /* 1-byte only */
     }

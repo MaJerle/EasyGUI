@@ -116,7 +116,7 @@ static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp) {
         
         if (text) {                                 /* If text is valid, print it */
             GUI_DRAW_FONT_t f;
-            memset((void *)&f, 0x00, sizeof(f));    /* Reset structure */
+            GUI_DRAW_FONT_Init(&f);                 /* Init structure */
             
             f.X = x + 1;
             f.Y = y + 1;
@@ -164,15 +164,6 @@ GUI_HANDLE_t GUI_PROGBAR_Create(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t
     return (GUI_HANDLE_t)ptr;
 }
 
-void GUI_PROGBAR_Remove(GUI_HANDLE_t* h) {
-    __GUI_ASSERTPARAMSVOID(h && *h);                /* Check parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-
-    __GUI_WIDGET_Remove(h);                         /* Remove widget */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-}
-
 GUI_HANDLE_t GUI_PROGBAR_SetColor(GUI_HANDLE_t h, GUI_PROGBAR_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h);                          /* Check parameters */
     __GUI_ENTER();                                  /* Enter GUI */
@@ -181,16 +172,6 @@ GUI_HANDLE_t GUI_PROGBAR_SetColor(GUI_HANDLE_t h, GUI_PROGBAR_COLOR_t index, GUI
         __GP(h)->Color[index] = color;
         __GUI_WIDGET_Invalidate(h);                 /* Redraw widget */
     }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
-}
-
-GUI_HANDLE_t GUI_PROGBAR_SetSize(GUI_HANDLE_t h, GUI_Dim_t width, GUI_Dim_t height) {
-    __GUI_ASSERTPARAMS(h);                          /* Check parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-
-    __GUI_WIDGET_SetSize(h, width, height);         /* Set widget size */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return h;
@@ -236,26 +217,6 @@ GUI_HANDLE_t GUI_PROGBAR_SetMax(GUI_HANDLE_t h, int32_t val) {
         }
         __GUI_WIDGET_Invalidate(h);                 /* Redraw widget */
     }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
-}
-
-GUI_HANDLE_t GUI_PROGBAR_SetText(GUI_HANDLE_t h, const GUI_Char* text) {
-    __GUI_ASSERTPARAMS(h);                          /* Check parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-
-    __GUI_WIDGET_SetText(h, text);                  /* Set text to widget */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
-}
-
-GUI_HANDLE_t GUI_PROGBAR_SetFont(GUI_HANDLE_t h, GUI_Const GUI_FONT_t* font) {
-    __GUI_ASSERTPARAMS(h);                          /* Check parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-
-    __GUI_WIDGET_SetFont(h, font);                  /* Set font */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return h;

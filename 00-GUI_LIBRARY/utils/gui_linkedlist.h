@@ -1,6 +1,5 @@
 /**
  * \author  Tilen Majerle
- * \email   tilen@majerle.eu
  * \brief   GUI linked list functions
  *	
 \verbatim
@@ -42,11 +41,11 @@ extern "C" {
  * \brief       
  * \{
  */
-#include "gui.h"
+#include "gui_utils.h"
 
 #if !defined(DOXYGEN)
 /**
- * \defgroup        GUI_LINKEDLIST
+ * \defgroup        GUI_LINKEDLIST Linked list
  * \brief           Linked list core functions and widget implementations
  * \{
  */

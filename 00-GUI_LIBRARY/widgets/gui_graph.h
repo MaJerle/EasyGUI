@@ -44,28 +44,30 @@ extern "C" {
 #include "gui_widget.h"
 
 /**
- * \defgroup        GUI_GRAPH
+ * \defgroup        GUI_GRAPH Graph
+ * \brief           Graph which can display plots
  * \{
  */
     
 /**
  * \brief           Graph color list enumeration
+ * \sa              GUI_GRAPH_SetColor
  */
 typedef enum GUI_GRAPH_COLOR_t {
-    GUI_GRAPH_COLOR_BG = 0x00,
-    GUI_GRAPH_COLOR_FG = 0x01,
-    GUI_GRAPH_COLOR_BORDER = 0x02,
-    GUI_GRAPH_COLOR_GRID = 0x03
+    GUI_GRAPH_COLOR_BG = 0x00,              /*!< Background color index */
+    GUI_GRAPH_COLOR_FG = 0x01,              /*!< Foreground color index (background of plotting area) */
+    GUI_GRAPH_COLOR_BORDER = 0x02,          /*!< Border color index */
+    GUI_GRAPH_COLOR_GRID = 0x03             /*!< Grid color index */
 } GUI_GRAPH_COLOR_t;
 
 /**
  * \brief           Graph border list enumeration
  */
 typedef enum GUI_GRAPH_BORDER_t {
-    GUI_GRAPH_BORDER_TOP = 0x00,
-    GUI_GRAPH_BORDER_RIGHT = 0x01,
-    GUI_GRAPH_BORDER_BOTTOM = 0x02,
-    GUI_GRAPH_BORDER_LEFT = 0x03
+    GUI_GRAPH_BORDER_TOP = 0x00,            /*!< Border top index */
+    GUI_GRAPH_BORDER_RIGHT = 0x01,          /*!< Border right index */
+    GUI_GRAPH_BORDER_BOTTOM = 0x02,         /*!< Border bottom index */
+    GUI_GRAPH_BORDER_LEFT = 0x03            /*!< Border left index */
 } GUI_GRAPH_BORDER_t;
 
 /**
@@ -104,21 +106,38 @@ typedef struct GUI_GRAPH_t {
     int16_t MaxY;                           /*!< Maximal Y value for plot */
 } GUI_GRAPH_t;
 
+
+/**
+ * \brief           Create new graph widget
+ * \param[in]       id: Widget unique ID to use for identity for callback processing
+ * \param[in]       x: Widget X position relative to parent widget
+ * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       width: Widget width in units of pixels
+ * \param[in]       height: Widget height in uints of pixels
+ * \retval          > 0: \ref GUI_HANDLE_t object of created widget
+ * \retval          0: Widget creation failed
+ */
 GUI_HANDLE_t GUI_GRAPH_Create(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height);
-void GUI_GRAPH_Remove(GUI_HANDLE_t* h);
+
+/**
+ * \brief           Set color to specific part of widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Color index. This parameter can be a value of \ref GUI_GRAPH_COLOR_t enumeration
+ * \param[in]       color: Color value
+ * \retval          Widget handle
+ */
 GUI_HANDLE_t GUI_GRAPH_SetColor(GUI_HANDLE_t h, GUI_GRAPH_COLOR_t index, GUI_Color_t color);
 GUI_HANDLE_t GUI_GRAPH_AttachData(GUI_HANDLE_t h, GUI_HANDLE_t hd);
 
 GUI_HANDLE_t GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_t type, uint16_t Length);
-void GUI_GRAPH_DATA_Remove(GUI_HANDLE_t* h);
 GUI_HANDLE_t GUI_GRAPH_DATA_AddValue(GUI_HANDLE_t h, uint16_t val);
  
 /**
- * \} GUI_GRAPH
+ * \}
  */
 
 /**
- * \} GUI_WIDGETS
+ * \}
  */
 
 /* C++ detection */

@@ -44,7 +44,8 @@ extern "C" {
 #include "gui_widget.h"
 
 /**
- * \defgroup        GUI_EDITTEXT
+ * \defgroup        GUI_EDITTEXT Edit text
+ * \brief           Single-line edit text widget
  * \{
  */
 
@@ -52,9 +53,9 @@ extern "C" {
  * \brief           Edit text color list enumeration
  */
 typedef enum GUI_EDITTEXT_COLOR_t {
-    GUI_EDITTEXT_COLOR_BG = 0x00,
-    GUI_EDITTEXT_COLOR_BORDER = 0x01,
-    GUI_EDITTEXT_COLOR_TEXT = 0x02
+    GUI_EDITTEXT_COLOR_BG = 0x00,           /*!< Background color index */
+    GUI_EDITTEXT_COLOR_BORDER = 0x01,       /*!< Border color index */
+    GUI_EDITTEXT_COLOR_TEXT = 0x02          /*!< Text color index */
 } GUI_EDITTEXT_COLOR_t;
     
 /**
@@ -66,23 +67,33 @@ typedef struct GUI_EDITTEXT_t {
     GUI_Color_t Color[3];                   /*!< List of colors */
 } GUI_EDITTEXT_t;
 
-
+/**
+ * \brief           Create new edit text widget
+ * \param[in]       id: Widget unique ID to use for identity for callback processing
+ * \param[in]       x: Widget X position relative to parent widget
+ * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       width: Widget width in units of pixels
+ * \param[in]       height: Widget height in uints of pixels
+ * \retval          > 0: \ref GUI_HANDLE_t object of created widget
+ * \retval          0: Widget creation failed
+ */
 GUI_HANDLE_t GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height);
-void GUI_EDITTEXT_Remove(GUI_HANDLE_t* h);
-uint32_t GUI_EDITTEXT_AllocTextMemory(GUI_HANDLE_t h, uint16_t size);
-GUI_HANDLE_t GUI_EDITTEXT_FreeTextMemory(GUI_HANDLE_t h);
-GUI_HANDLE_t GUI_EDITTEXT_SetText(GUI_HANDLE_t h, const GUI_Char* text);
-GUI_HANDLE_t GUI_EDITTEXT_SetSize(GUI_HANDLE_t h, GUI_Dim_t width, GUI_Dim_t height);
-GUI_HANDLE_t GUI_EDITTEXT_SetXY(GUI_HANDLE_t h, GUI_iDim_t x, GUI_iDim_t y);
-GUI_HANDLE_t GUI_EDITTEXT_SetColor(GUI_HANDLE_t h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color);
-GUI_HANDLE_t GUI_EDITTEXT_SetFont(GUI_HANDLE_t h, GUI_Const GUI_FONT_t* font);
 
 /**
- * \} GUI_EDITTEXT
+ * \brief           Set color to specific part of widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Color index. This parameter can be a value of \ref GUI_EDITTEXT_COLOR_t enumeration
+ * \param[in]       color: Color value
+ * \retval          Widget handle
+ */
+GUI_HANDLE_t GUI_EDITTEXT_SetColor(GUI_HANDLE_t h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color);
+
+/**
+ * \}
  */
 
 /**
- * \} GUI_WIDGETS
+ * \}
  */
 
 /* C++ detection */

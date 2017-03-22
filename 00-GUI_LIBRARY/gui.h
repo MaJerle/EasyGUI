@@ -40,18 +40,19 @@ extern "C" {
 #endif
 
 /**
- * \defgroup        GUI
- * \brief           Platform independent, written in ANSII C, GUI AT parser library for SIMcom modules   
+ * \defgroup        GUI EasyGUI
+ * \brief           EasyGUI Graphical User Interface for embedded systems
  * \{
  */
 
+/* GUI configuration */
+#include "gui_config.h"
+    
 /* Important GUI definitions */
 #include "gui_defs.h"
     
 /* Proto threads */
 #include "pt/pt.h"
-/* GUI configuration */
-#include "gui_config.h"
     
 /* Include utilities */
 #include "utils/gui_buffer.h"
@@ -60,7 +61,6 @@ extern "C" {
 
 /* GUI Low-Level drivers */
 #include "gui_ll.h"
-#include "tm_stm32_general.h"
 
 #if !defined(DOXYGEN)
 /**

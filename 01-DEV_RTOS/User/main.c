@@ -86,7 +86,6 @@ uint32_t time;
 int main(void) {
     GUI_STRING_UNICODE_t s;
     
-    uint32_t result;
     GUI_KeyboardData_t key;
     uint32_t state;
     TM_RCC_InitSystem();                                    /* Init system */
@@ -104,9 +103,9 @@ int main(void) {
     GUI_Init();
     
     edit1 = GUI_EDITTEXT_Create(1, 10, 10, 460, 50);
-    GUI_EDITTEXT_SetFont(edit1, &GUI_Font_FontAwesome_Regular_30);
-    GUI_EDITTEXT_AllocTextMemory(edit1, 255);
-    GUI_EDITTEXT_SetText(edit1, _T("\xEF\x83\x86\xEF\x81\xB6\xEF\x83\x94\xEF\x83\x93\xEF\x83\x92\xEF\x83\x91\xEF\x83\x89\xEF\x83\x88\xEF\x83\x87\xEF\x83\x86\xEF\x83\x89\xEF\x83\x88\xEF\x83\x87\xEF\x83\x86\xEF\x83\x89\xEF\x83\x88\xEF\x83\x87\xEF\x83\x86\xEF\x83\x89\xEF\x83\x88\xEF\x83\x87\xEF\x83\x86"));
+    GUI_WIDGET_SetFont(edit1, &GUI_Font_FontAwesome_Regular_30);
+    GUI_WIDGET_AllocTextMemory(edit1, 255);
+    GUI_WIDGET_SetText(edit1, _T("\xEF\x83\x86\xEF\x81\xB6\xEF\x83\x94\xEF\x83\x93\xEF\x83\x92\xEF\x83\x91\xEF\x83\x89\xEF\x83\x88\xEF\x83\x87\xEF\x83\x86\xEF\x83\x89\xEF\x83\x88\xEF\x83\x87\xEF\x83\x86\xEF\x83\x89\xEF\x83\x88\xEF\x83\x87\xEF\x83\x86\xEF\x83\x89\xEF\x83\x88\xEF\x83\x87\xEF\x83\x86"));
     
 //    edit2 = GUI_EDITTEXT_Create(1, 10, 70, 460, 50);
 //    GUI_EDITTEXT_SetFont(edit2, &GUI_Font_FontAwesome_Regular_30);
@@ -114,9 +113,9 @@ int main(void) {
 //    GUI_EDITTEXT_SetText(edit2, _T("Text test ABCDEFGHIJKLMNOPRSTUV ABCDEFGHIJKLMNOPRSTUV"));
 //    
     edit3 = GUI_EDITTEXT_Create(1, 10, 130, 460, 50);
-    GUI_EDITTEXT_SetFont(edit3, &GUI_Font_Arial_Narrow_Italic_22);
-    GUI_EDITTEXT_AllocTextMemory(edit3, 255);
-    GUI_EDITTEXT_SetText(edit3, _T("Tex\xDF\x8F\xDF\x8F"));
+    GUI_WIDGET_SetFont(edit3, &GUI_Font_Arial_Narrow_Italic_22);
+    GUI_WIDGET_AllocTextMemory(edit3, 255);
+    GUI_WIDGET_SetText(edit3, _T("Tex\xDF\x8F\xDF\x8F"));
     edit3->TextCursor = 3;
 
     TM_EXTI_Attach(GPIOI, GPIO_PIN_13, TM_EXTI_Trigger_Rising);
@@ -139,6 +138,7 @@ int main(void) {
         
         while (!TM_USART_BufferEmpty(DISCO_USART)) {
             GUI_Char ch = TM_USART_Getc(DISCO_USART);
+            __GUI_DEBUG("Key: %c (%2X)\r\n", ch, ch);
             switch (GUI_STRING_UNICODE_Decode(&s, ch)) {
                 case UNICODE_OK:
                     key.Keys[s.t - 1] = ch;

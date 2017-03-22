@@ -79,13 +79,9 @@ void __StringRectangle(GUI_Const GUI_FONT_t* font, const GUI_Char* str, GUI_Dim_
     
     *width = 0;
     *height = 0;
-    while (*s) {                                    /* Process entire string */
-        if (GUI_STRING_GetCh(&s, &ch, &i)) {        /* Get next character from string */
-            __StringGetCharSize(font, ch, &w, &h);  /* Get character width and height */
-            *width += w;                            /* Increase width */
-        } else {
-            break;                                  /* Invalid character, stop execution */
-        }
+    while (GUI_STRING_GetCh(&s, &ch, &i)) {         /* Get next character from string */
+        __StringGetCharSize(font, ch, &w, &h);      /* Get character width and height */
+        *width += w;                                /* Increase width */
     }
 }
 
@@ -415,6 +411,9 @@ void GUI_DRAW_RoundedRectangle(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GU
     if (r >= (height / 2)) {
         r = height / 2 - 1;
     }
+    if (r >= (width / 2)) {
+        r = width / 2 - 1;
+    }
     if (r) {
         GUI_DRAW_HLine(disp, x + r,         y,              width - 2 * r,  color);
         GUI_DRAW_VLine(disp, x + width - 1, y + r,          height - 2 * r, color);
@@ -433,6 +432,9 @@ void GUI_DRAW_RoundedRectangle(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GU
 void GUI_DRAW_FilledRoundedRectangle(GUI_Display_t* disp, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_Dim_t r, GUI_Color_t color) {
     if (r >= (height / 2)) {
         r = height / 2 - 1;
+    }
+    if (r >= (width / 2)) {
+        r = width / 2 - 1;
     }
     if (r) {
         GUI_DRAW_FilledRectangle(disp, x + r,         y,     width - 2 * r, height,         color);
@@ -617,11 +619,6 @@ void GUI_DRAW_FilledCircleCorner(GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t 
     }
 }
 
-typedef struct GUI_DRAW_Poly_t {
-    GUI_iDim_t X;
-    GUI_iDim_t Y;
-} GUI_DRAW_Poly_t;
-
 void GUI_DRAW_Poly(GUI_Display_t* disp, GUI_DRAW_Poly_t* points, GUI_Byte len, GUI_Color_t color) {
     GUI_iDim_t x = 0, y = 0;
 
@@ -669,10 +666,7 @@ void GUI_DRAW_WriteText(GUI_Display_t* disp, GUI_Const GUI_FONT_t* font, const G
         x += draw->Width - w;                       /* Align right of drawing area */
     }
     
-    while (*str) {                                  /* Go through entire string */
-        if (!GUI_STRING_GetCh(&str, &ch, &i)) {     /* Get next character from string */
-            break;                                  /* Stop execution on fault character */
-        }
+    while (GUI_STRING_GetCh(&str, &ch, &i)) {       /* Go through entire string */
         if ((c = __StringGetCharPtr(font, ch)) == 0) {  /* Get character pointer */
             continue;                               /* Character is not known */
         }

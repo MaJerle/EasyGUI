@@ -174,27 +174,3 @@ GUI_HANDLE_t GUI_WINDOW_SetBorderWidth(GUI_HANDLE_t h, GUI_Dim_t width) {
     __GUI_LEAVE();                                  /* Leave GUI */
     return h;                                       /* Return widget pointer */
 }
-
-GUI_HANDLE_t GUI_WINDOW_SetXY(GUI_HANDLE_t h, GUI_Dim_t x, GUI_Dim_t y) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    if (GUI_WINDOW_IsChild(h)) {
-        __GUI_WIDGET_SetXY(h, x, y);                /* Set coordinates */
-    }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return h;                                       /* Return widget pointer */
-}
-
-GUI_HANDLE_t GUI_WINDOW_SetSize(GUI_HANDLE_t h, GUI_Dim_t width, GUI_Dim_t height) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    if (GUI_WINDOW_IsChild(h)) {
-        __GUI_WIDGET_SetSize(h, width, height);     /* Set property */
-    }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return h;                                       /* Return widget pointer */
-}

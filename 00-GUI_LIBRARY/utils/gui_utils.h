@@ -1,7 +1,7 @@
 /**
  * \author  Tilen Majerle
- * \brief   GUI INPUT
- *	
+ * \brief   GUI utilities
+ *  
 \verbatim
    ----------------------------------------------------------------------
     Copyright (c) 2017 Tilen Majerle
@@ -28,8 +28,8 @@
    ----------------------------------------------------------------------
 \endverbatim
  */
-#ifndef GUI_INPUT_H
-#define GUI_INPUT_H
+#ifndef GUI_UTILS_H
+#define GUI_UTILS_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -37,54 +37,14 @@ extern "C" {
 #endif
 
 /**
- * \defgroup        GUI_INPUT Input methods
- * \brief           Input methods to communicate with user
+ * \defgroup        GUI_UTILS Utilities
+ * \brief       
  * \{
  */
 #include "../gui.h"
 
 /**
- * \brief           Adds new touch data to internal buffer for further processing
- * \param[in]       *Data: Pointer to \ref GUI_TouchData_t touch data
- * \retval          1: Success
- * \retval          0: Failure
- */
-uint8_t GUI_INPUT_AddTouch(const GUI_TouchData_t* Data);
-
-/**
- * \brief           Adds new key data to internal buffer for further processing
- * \param[in]       *Data: Pointer to \ref GUI_KeyboardData_t key data
- * \retval          1: Success
- * \retval          0: Failure
- * \sa              GUI_Keys
- */
-uint8_t GUI_INPUT_AddKey(const GUI_KeyboardData_t* Data);
-
-#if !defined(DOXYGEN)
-/**
- * \brief           Initializes input functionality
- * \param           None
- * \retval          None
- */
-void __GUI_INPUT_Init(void);
-
-/**
- * \brief           Initializes input functionality
- * \param[out]      *Data: Pointer to \ref GUI_TouchData_t to save touch data
- * \retval          Number of bytes read from internal buffer
- */
-GUI_Byte_t __GUI_INPUT_ReadTouch(GUI_TouchData_t* Data);
-
-/**
- * \brief           Initializes input functionality
- * \param[out]      *Data: Pointer to \ref GUI_TouchData_t to save keyboard data
- * \retval          Number of bytes read from internal buffer
- */
-GUI_Byte_t __GUI_INPUT_ReadKey(GUI_KeyboardData_t* Data);
-#endif
-
-/**
- * \} GUI_INPUT
+ * \} GUI_UTILS
  */
 
 /* C++ detection */
