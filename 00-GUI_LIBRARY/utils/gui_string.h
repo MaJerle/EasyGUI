@@ -27,6 +27,7 @@
     OTHER DEALINGS IN THE SOFTWARE.
    ----------------------------------------------------------------------
 \endverbatim
+ *
  */
 #ifndef GUI_STRING_H
 #define GUI_STRING_H
@@ -44,14 +45,14 @@ extern "C" {
 #include "gui_utils.h"
 
 /**
- * \defgroup        GUI_STRING
+ * \defgroup        GUI_STRING String functions
  * \brief           String functions with UNICODE support
  * \{
  */
 
 /**
- * \defgroup        GUI_STRING_UNICODE
- * \brief           Unicode processing with UTF-8 character encoding
+ * \defgroup        GUI_STRING_UNICODE Unicode
+ * \brief           Unicode processing functions with UTF-8 character encoding
  *
  * Core functions capable of encoding and decoding UTF-8 UNICODE format.
  *
