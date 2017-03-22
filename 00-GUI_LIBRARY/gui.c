@@ -129,20 +129,50 @@ __GUI_TouchStatus_t __ProcessTouch(GUI_TouchData_t* touch, GUI_TouchData_t* touc
                     tStat = h->Widget->TouchEvents.TouchDown(h, touch); /* Check for touch */
                     if (tStat != touchCONTINUE) {   /* If check was handled */
                         if (tStat == touchHANDLED) {    /* Touch handled for widget completelly */
+                            /**
+                             * Already focused&active windows should be invalidated first
+                             */
                             if (GUI.FocusedWidget) {
                                 GUI.FocusedWidget->Flags &= ~GUI_FLAG_FOCUS;    /* Clear focus flag */
                                 __GUI_WIDGET_Invalidate(GUI.FocusedWidget); /* Invalidate widget for redraw */
                             }
-                            
-                            GUI.ActiveWidget = h;   /* Save active touch element */
-                            h->Flags |= GUI_FLAG_ACTIVE;    /* Set touch active flag */
-                            __GUI_LINKEDLIST_MoveDown_Widget(h);    /* Move widget to end of list to be redrawn on top of everything and touch move detected first and fastest */
-                            
-                            if (h != GUI.FocusedWidget) {   /* Widget is already in focus */
-                                GUI.FocusedWidget = h;  /* Set new focused widget */
-                                h->Flags |= GUI_FLAG_FOCUS; /* Set focus flag */
-                                __GUI_WIDGET_Invalidate(h); /* Invalidate widget and its parent */
+                            if (GUI.ActiveWidget) {
+                                GUI.ActiveWidget->Flags &= ~GUI_FLAG_ACTIVE;    /* Clear active flag */
+                                __GUI_WIDGET_Invalidate(GUI.ActiveWidget);  /* Invalidate widget for redraw */
                             }
+                            
+                            /**
+                             * Set active widget and set flag for it
+                             */
+                            GUI.ActiveWidget = h;   /* Save active touch element */
+                            GUI.FocusedWidget = h;  /* Set focus widget */
+                            h->Flags |= GUI_FLAG_ACTIVE | GUI_FLAG_FOCUS;   /* Set touch active flag and focus widget */
+                            
+                            /**
+                             * Move widget to the end of parent linked list
+                             * This will allow widget to be first checked next time for touch detection
+                             * and will be drawn on top of al widgets as expected except if there is widget which allows children (new window or similar)
+                             */
+                            __GUI_LINKEDLIST_MoveDown_Widget(h);
+                            
+                            /**
+                             * Since linked list is threaded, we should move our widget to the end of parent list.
+                             * The same should be in the parent as it should also be on the end of its parent and so on.
+                             * With parent recursion this can be achieved
+                             */
+                            if (h->Parent) {            /* Move its parent to the bottom of parent linked list */
+                                GUI_HANDLE_t parent = h->Parent;
+                                for (; parent; parent = parent->Parent) {
+                                    if (__GUI_LINKEDLIST_MoveDown_Widget(parent)) { /* If move down was successful */
+                                        __GUI_WIDGET_Invalidate(parent); /* Invalidate parent of widget */
+                                    }
+                                }
+                            }
+                            
+                            /**
+                             * Invalidate actual handle object
+                             */
+                            __GUI_WIDGET_Invalidate(h);
                         } else {                    /* Touch handled with no focus */
                             if (GUI.FocusedWidget) {
                                 GUI.FocusedWidget->Flags &= ~GUI_FLAG_FOCUS;    /* Clear focus flag */
