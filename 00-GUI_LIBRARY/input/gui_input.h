@@ -60,7 +60,7 @@ uint8_t GUI_INPUT_AddTouch(const GUI_TouchData_t* Data);
  */
 uint8_t GUI_INPUT_AddKey(const GUI_KeyboardData_t* Data);
 
-#if !defined(DOXYGEN)
+#if !defined(DOXYGEN) && defined(GUI_INTERNAL)
 /**
  * \brief           Initializes input functionality
  * \param           None
@@ -81,7 +81,8 @@ GUI_Byte_t __GUI_INPUT_ReadTouch(GUI_TouchData_t* Data);
  * \retval          Number of bytes read from internal buffer
  */
 GUI_Byte_t __GUI_INPUT_ReadKey(GUI_KeyboardData_t* Data);
-#endif
+
+#endif /* !defined(DOXYGEN) && defined(GUI_INTERNAL) */
 
 /**
  * \} GUI_INPUT

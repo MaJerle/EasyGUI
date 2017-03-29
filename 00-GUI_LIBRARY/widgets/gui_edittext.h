@@ -38,7 +38,6 @@ extern "C" {
 
 /**
  * \addtogroup      GUI_WIDGETS
- * \brief       
  * \{
  */
 #include "gui_widget.h"
@@ -74,10 +73,10 @@ typedef struct GUI_EDITTEXT_t {
  * \param[in]       y: Widget Y position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
- * \retval          > 0: \ref GUI_HANDLE_t object of created widget
+ * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_t GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height);
+GUI_HANDLE_p GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height);
 
 /**
  * \brief           Set color to specific part of widget
@@ -86,7 +85,9 @@ GUI_HANDLE_t GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Di
  * \param[in]       color: Color value
  * \retval          Widget handle
  */
-GUI_HANDLE_t GUI_EDITTEXT_SetColor(GUI_HANDLE_t h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color);
+GUI_HANDLE_p GUI_EDITTEXT_SetColor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color);
+
+uint8_t GUI_EDITTEXT_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /**
  * \}

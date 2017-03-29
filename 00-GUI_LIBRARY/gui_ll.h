@@ -37,17 +37,37 @@ extern "C" {
 #endif
 
 /**
- * \defgroup        GUI_LL
+ * \defgroup        GUI_LL Low-level layer
  * \brief       
  * \{
  */
 #include "gui.h"
 
+/**
+ * \brief           Initialize LCD low-level display driver
+ *
+ *                  - Set up width and height
+ *                  - Set up number of layers for drawing
+ *                  - Set up drawing functions
+ * \param[in,out]   *LCD: Pointer to \ref GUI_LCD_t structure for LCD properties
+ * \param[in,out]   *LL: Pointer to \ref GUI_LL_t structure with drawing functions
+ * \retval          0: Initialization successful
+ * \retval          1: Initialization failed
+ */
 uint8_t GUI_LL_Init(GUI_LCD_t* LCD, GUI_LL_t* LL);
+
+/**
+ * \brief           Send command to for LCD from GUI
+ * \param[in,out]   *LCD: Pointer to \ref GUI_LCD_t structure with LCD properties
+ * \param[in]       cmd: Command to be executed
+ * \param[in]       *data: Optional data included in command
+ * \retval          0: Command has been processed
+ * \retval          1: Command has not been processed
+ */
 uint8_t GUI_LL_Control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* data);
  
 /**
- * \} GUI_LL
+ * \}
  */
 
 /* C++ detection */

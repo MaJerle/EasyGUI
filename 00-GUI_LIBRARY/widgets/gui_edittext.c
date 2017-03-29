@@ -23,6 +23,7 @@
  * | OTHER DEALINGS IN THE SOFTWARE.
  * |----------------------------------------------------------------------
  */
+#define GUI_INTERNAL
 #include "gui_edittext.h"
 
 /******************************************************************************/
@@ -37,16 +38,6 @@
 /******************************************************************************/
 /******************************************************************************/
 #define __GE(x)             ((GUI_EDITTEXT_t *)(x))
-
-static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp);
-static uint8_t __Control(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* param, void* result);
-
-#if GUI_USE_TOUCH  
-static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts);
-#endif /* GUI_USE_TOUCH */
-#if GUI_USE_KEYBOARD
-static __GUI_KeyboardStatus_t __KeyPress(GUI_HANDLE_t h, GUI_KeyboardData_t* kb);
-#endif /* GUI_USE_KEYBOARD */
     
 /******************************************************************************/
 /******************************************************************************/
@@ -57,22 +48,9 @@ const static GUI_WIDGET_t Widget = {
     {
         _T("EDITTEXT"),                             /*!< Widget name */
         sizeof(GUI_EDITTEXT_t),                     /*!< Size of widget for memory allocation */
-        0,                                          /*!< Allow children objects on widget */
+        0,                                          /*!< List of widget flags */
     },
-    __Control,                                      /*!< Control function */
-    __Draw,                                         /*!< Widget draw function */
-#if GUI_USE_TOUCH
-    {
-        __TouchDown,                                /*!< Touch down callback function */
-        0,                                          /*!< Touch up callback function */
-        0                                           /*!< Touch move callback function */
-    },
-#endif /* GUI_USE_TOUCH */
-#if GUI_USE_KEYBOARD
-    {
-        __KeyPress,                                 /*!< Keyboard key pressed callback function */
-    }
-#endif /* GUI_USE_KEYBOARD */
+    GUI_EDITTEXT_Callback,                          /*!< Control function */
 };
 
 /******************************************************************************/
@@ -80,58 +58,77 @@ const static GUI_WIDGET_t Widget = {
 /***                            Private functions                            **/
 /******************************************************************************/
 /******************************************************************************/
-static uint8_t __Control(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* param, void* result) {
-    __GUI_UNUSED3(h, param, result);
-    switch (ctrl) {                                 /* Handle control function if required */
-        default:                                    /* Handle default option */
-            return 0;                               /* Command was not processed */
-    }
+static void TimerCallback(GUI_TIMER_t* timer) {
+    GUI_EDITTEXT_t* edit = __GE(__GUI_TIMER_GetParams(timer));  /* Get parameters from timer */
+    
+    /* Set new color */
+    edit->Color[GUI_EDITTEXT_COLOR_BG] = (edit->Color[GUI_EDITTEXT_COLOR_BG] + 1) * ((edit->Color[GUI_EDITTEXT_COLOR_BG] >> 4) + 3);
+    
+    __GUI_WIDGET_Invalidate(__GH(edit));            /* Invalidate widget */
 }
 
 #define e          ((GUI_EDITTEXT_t *)h)
-static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp) {
-    GUI_Dim_t x, y;
+uint8_t GUI_EDITTEXT_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+    switch (ctrl) {                                 /* Handle control function if required */
+        case GUI_WC_Draw: {
+            GUI_Dim_t x, y, width, height;
+            GUI_Display_t* disp = (GUI_Display_t *)param;
     
-    x = __GUI_WIDGET_GetAbsoluteX(h);               /* Get absolute X coordinate */
-    y = __GUI_WIDGET_GetAbsoluteY(h);               /* Get absolute Y coordinate */
-    
-    GUI_DRAW_FilledRectangle(disp, x, y, h->Width, h->Height, __GE(h)->Color[GUI_EDITTEXT_COLOR_BG]);
-    GUI_DRAW_Rectangle(disp, x, y, h->Width, h->Height, __GE(h)->Color[GUI_EDITTEXT_COLOR_BORDER]);
-    
-    if (GUI_WIDGET_IsFocused(h)) {                  /* Check if widget is in focus */
-        GUI_DRAW_Rectangle(disp, x + 2, y + 2, h->Width - 4, h->Height - 4, __GE(h)->Color[GUI_EDITTEXT_COLOR_BORDER]);
-    }
-    
-    if (__GUI_WIDGET_IsFontAndTextSet(h)) {         /* Ready to write string */
-        GUI_DRAW_FONT_t f;
-        GUI_DRAW_FONT_Init(&f);                     /* Init font drawing */
-        
-        f.X = x + 5;
-        f.Y = y + 5;
-        f.Width = h->Width - 10;
-        f.Height = h->Height - 10;
-        f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
-        f.Color1Width = f.Width;
-        f.Color1 = __GE(h)->Color[GUI_EDITTEXT_COLOR_TEXT];
-        f.Flags |= GUI_FLAG_FONT_RIGHTALIGN;
-        GUI_DRAW_WriteText(disp, h->Font, h->Text, &f);
-    }
-}
-
+            x = __GUI_WIDGET_GetAbsoluteX(h);       /* Get absolute X coordinate */
+            y = __GUI_WIDGET_GetAbsoluteY(h);       /* Get absolute Y coordinate */
+            width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
+            height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
+            
+            GUI_DRAW_FilledRectangle(disp, x, y, width, height, __GE(h)->Color[GUI_EDITTEXT_COLOR_BG]);
+            GUI_DRAW_Rectangle(disp, x, y, width, height, __GE(h)->Color[GUI_EDITTEXT_COLOR_BORDER]);
+            
+            if (GUI_WIDGET_IsFocused(h)) {                  /* Check if widget is in focus */
+                GUI_DRAW_Rectangle(disp, x + 2, y + 2, width - 4, height - 4, __GE(h)->Color[GUI_EDITTEXT_COLOR_BORDER]);
+            }
+            
+            if (__GUI_WIDGET_IsFontAndTextSet(h)) { /* Ready to write string */
+                GUI_DRAW_FONT_t f;
+                GUI_DRAW_FONT_Init(&f);             /* Init font drawing */
+                
+                f.X = x + 5;
+                f.Y = y + 5;
+                f.Width = width - 10;
+                f.Height = height - 10;
+                f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
+                f.Color1Width = f.Width;
+                f.Color1 = __GE(h)->Color[GUI_EDITTEXT_COLOR_TEXT];
+                f.Flags |= GUI_FLAG_FONT_RIGHTALIGN;
+                GUI_DRAW_WriteText(disp, h->Font, h->Text, &f);
+            }
+            return 1;
+        }
+        case GUI_WC_FocusIn:
+            if (!__GH(h)->Timer) {                  /* Create timer if it does not exists */
+                __GH(h)->Timer = __GUI_TIMER_Create(100, TimerCallback, h, GUI_FLAG_TIMER_PERIODIC);
+            }
+            __GUI_TIMER_Start(__GH(h)->Timer);      /* Start software timer */
+            return 1;
+        case GUI_WC_FocusOut:
+            __GUI_TIMER_Stop(__GH(h)->Timer);       /* Start software timer */
+            return 1;
 #if GUI_USE_TOUCH
-/* Process touch check */
-static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts) {
-    return touchHANDLED;
-}
+        case GUI_WC_TouchStart: {
+            *(__GUI_TouchStatus_t *)result = touchHANDLED;
+            return 1;
+        }
 #endif /* GUI_USE_TOUCH */
-
 #if GUI_USE_KEYBOARD
-static __GUI_KeyboardStatus_t __KeyPress(GUI_HANDLE_t h, GUI_KeyboardData_t* kb) {
-    __GUI_WIDGET_ProcessTextKey(h, kb);
-    
-    return keyHANDLED;
-}
+        case GUI_WC_KeyPress: {
+            __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;
+            __GUI_WIDGET_ProcessTextKey(h, kb);
+            return 1;
+        }
 #endif /* GUI_USE_KEYBOARD */
+        default:                                    /* Handle default option */
+            __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
+            return 0;                               /* Command was not processed */
+    }
+}
 
 #undef e
 
@@ -140,12 +137,12 @@ static __GUI_KeyboardStatus_t __KeyPress(GUI_HANDLE_t h, GUI_KeyboardData_t* kb)
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_t GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height) {
+GUI_HANDLE_p GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height) {
     GUI_EDITTEXT_t* ptr;
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_EDITTEXT_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height);    /* Allocate memory for basic widget */
+    ptr = (GUI_EDITTEXT_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, 0);   /* Allocate memory for basic widget */
     if (ptr) {        
         /* Color setup */
         ptr->Color[GUI_EDITTEXT_COLOR_BG] = GUI_COLOR_WHITE;    /* Set background color */
@@ -154,10 +151,10 @@ GUI_HANDLE_t GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Di
     }
     __GUI_LEAVE();                                  /* Leave GUI */
     
-    return (GUI_HANDLE_t)ptr;
+    return (GUI_HANDLE_p)ptr;
 }
 
-GUI_HANDLE_t GUI_EDITTEXT_SetColor(GUI_HANDLE_t h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color) {
+GUI_HANDLE_p GUI_EDITTEXT_SetColor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     

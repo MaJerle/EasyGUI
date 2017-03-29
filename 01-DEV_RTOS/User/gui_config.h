@@ -37,7 +37,7 @@
 
 /**
  * \defgroup        GUI_CONF Configuration
- * \brief           List of default GUI colors
+ * \brief           GUI configuration setup
  * \{
  */
 
@@ -66,12 +66,28 @@
 /**
  * \brief           Maximal number of touch entries in buffer
  */
-#define TOUCH_BUFFER_SIZE               10
+#define GUI_TOUCH_BUFFER_SIZE           10
+
+/**
+ * \brief           Number of touch presses available at a time
+ *                  
+ *                  Specifies how many fingers can be detected by touch
+ */
+#define GUI_TOUCH_MAX_PRESSES           2
 
 /**
  * \brief           Maximal number of keyboard entries in buffer
  */
-#define KEYBOARD_BUFFER_SIZE            10
+#define GUI_KEYBOARD_BUFFER_SIZE        10
+
+/**
+ * \brief           Enables (1) or disables (0) automatic invalidation of graph widgets
+ *                    when graph dataset changes
+ *
+ * \note            It requires additional memory because each grpah data saves reference
+ *                    to parent graph widget for invalidation
+ */
+#define GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE       1
 
 /**
  * \}

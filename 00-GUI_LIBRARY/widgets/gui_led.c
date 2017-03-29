@@ -23,6 +23,7 @@
  * | OTHER DEALINGS IN THE SOFTWARE.
  * |----------------------------------------------------------------------
  */
+#define GUI_INTERNAL
 #include "gui_led.h"
 
 /******************************************************************************/
@@ -38,13 +39,6 @@
 /******************************************************************************/
 #define __GL(x)             ((GUI_LED_t *)(x))
 
-static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp);
-static uint8_t __Control(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* param, void* result);
-
-#if GUI_USE_TOUCH  
-static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts);
-#endif /* GUI_USE_TOUCH */
-
 /******************************************************************************/
 /******************************************************************************/
 /***                            Private variables                            **/
@@ -54,21 +48,9 @@ const static GUI_WIDGET_t Widget = {
     {
         _T("LED"),                                  /*!< Widget name */
         sizeof(GUI_LED_t),                          /*!< Size of widget for memory allocation */
-        0,                                          /*!< Allow children objects on widget */
+        0,                                          /*!< List of widget flags */
     },
-    __Control,                                      /*!< Control function */
-    __Draw,                                         /*!< Widget draw function */
-#if GUI_USE_TOUCH
-    {
-        __TouchDown,                                /*!< Touch down callback function */
-        0, 0
-    },
-#endif /* GUI_USE_TOUCH */
-#if GUI_USE_KEYBOARD
-    {
-        0,                                          /*!< Keyboard key pressed callback function */
-    }
-#endif /* GUI_USE_KEYBOARD */
+    GUI_LED_Callback,                               /*!< Control function */
 };
 
 /******************************************************************************/
@@ -77,45 +59,47 @@ const static GUI_WIDGET_t Widget = {
 /******************************************************************************/
 /******************************************************************************/
 #define l           ((GUI_LED_t *)h)
-static uint8_t __Control(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* param, void* result) {
-    __GUI_UNUSED3(h, param, result);
+uint8_t GUI_LED_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {    
     switch (ctrl) {                                 /* Handle control function if required */
+        case GUI_WC_Draw: {
+            GUI_Display_t* disp = (GUI_Display_t *)param;
+            GUI_Color_t c1, c2;
+            GUI_Dim_t x, y, width, height;
+            
+            x = __GUI_WIDGET_GetAbsoluteX(h);       /* Get absolute position on screen */
+            y = __GUI_WIDGET_GetAbsoluteY(h);       /* Get absolute position on screen */
+            width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
+            height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
+            
+            
+            /* Get drawing colors */
+            if (l->Flags & GUI_LED_FLAG_ON) {       /* If LED is on */
+                c1 = l->Color[GUI_LED_COLOR_ON];
+                c2 = l->Color[GUI_LED_COLOR_ON_BORDER];
+            } else {
+                c1 = l->Color[GUI_LED_COLOR_OFF];
+                c2 = l->Color[GUI_LED_COLOR_OFF_BORDER];
+            }
+            
+            if (l->Type == GUI_LED_TYPE_RECT) {     /* When led has rectangle shape */
+                GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, width - 2, height - 2, c1);
+                GUI_DRAW_Rectangle(disp, x, y, width, height, c2);
+            } else {
+                GUI_DRAW_FilledCircle(disp, x + width / 2, y + height / 2, width / 2, c1);
+                GUI_DRAW_Circle(disp, x + width / 2, y + height / 2, width / 2, c2);
+            }
+        }
+#if GUI_USE_TOUCH
+        case GUI_WC_TouchStart: {
+            *(__GUI_TouchStatus_t *)result = touchHANDLEDNOFOCUS;
+            return 1;
+        }
+#endif /* GUI_USE_TOUCH */
         default:                                    /* Handle default option */
+            __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
     }
 }
-
-static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp) {
-    GUI_Color_t c1, c2;
-    GUI_Dim_t x, y;
-    
-    x = __GUI_WIDGET_GetAbsoluteX(h);               /* Get absolute position on screen */
-    y = __GUI_WIDGET_GetAbsoluteY(h);               /* Get absolute position on screen */
-    
-    /* Get drawing colors */
-    if (l->Flags & GUI_LED_FLAG_ON) {               /* If LED is on */
-        c1 = l->Color[GUI_LED_COLOR_ON];
-        c2 = l->Color[GUI_LED_COLOR_ON_BORDER];
-    } else {
-        c1 = l->Color[GUI_LED_COLOR_OFF];
-        c2 = l->Color[GUI_LED_COLOR_OFF_BORDER];
-    }
-    
-    if (l->Type == GUI_LED_TYPE_RECT) {             /* When led has rectangle shape */
-        GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, h->Width - 2, h->Height - 2, c1);
-        GUI_DRAW_Rectangle(disp, x, y, h->Width, h->Height, c2);
-    } else {
-        GUI_DRAW_FilledCircle(disp, x + h->Width / 2, y + h->Height / 2, h->Width / 2, c1);
-        GUI_DRAW_Circle(disp, x + h->Width / 2, y + h->Height / 2, h->Width / 2, c2);
-    }
-}
-
-#if GUI_USE_TOUCH
-static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts) {
-    __GUI_UNUSED2(h, ts);
-    return touchHANDLEDNOFOCUS;                     /* Handle touch press on LED but don't do anything */
-}
-#endif /* GUI_USE_TOUCH */
 #undef l
 
 /******************************************************************************/
@@ -123,13 +107,13 @@ static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts) {
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_t GUI_LED_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height) {
+GUI_HANDLE_p GUI_LED_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height) {
     GUI_LED_t* h;
     
     __GUI_ASSERTACTIVEWIN();                        /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    h = (GUI_LED_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height); /* Allocate memory for basic widget */
+    h = (GUI_LED_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, 0);  /* Allocate memory for basic widget */
     if (h) {        
         /* Color setup */
         h->Color[GUI_LED_COLOR_ON] = GUI_COLOR_LIGHTBLUE;       /* Set color when led is on */
@@ -139,10 +123,10 @@ GUI_HANDLE_t GUI_LED_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t w
     }
     __GUI_LEAVE();                                  /* Leave GUI */
     
-    return (GUI_HANDLE_t)h;
+    return (GUI_HANDLE_p)h;
 }
 
-GUI_HANDLE_t GUI_LED_SetColor(GUI_HANDLE_t h, GUI_LED_COLOR_t index, GUI_Color_t color) {
+GUI_HANDLE_p GUI_LED_SetColor(GUI_HANDLE_p h, GUI_LED_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -155,7 +139,7 @@ GUI_HANDLE_t GUI_LED_SetColor(GUI_HANDLE_t h, GUI_LED_COLOR_t index, GUI_Color_t
     return h;
 }
 
-GUI_HANDLE_t GUI_LED_SetType(GUI_HANDLE_t h, GUI_LED_TYPE_t type) {
+GUI_HANDLE_p GUI_LED_SetType(GUI_HANDLE_p h, GUI_LED_TYPE_t type) {
     __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -168,7 +152,7 @@ GUI_HANDLE_t GUI_LED_SetType(GUI_HANDLE_t h, GUI_LED_TYPE_t type) {
     return h;
 }
 
-GUI_HANDLE_t GUI_LED_Off(GUI_HANDLE_t h) {
+GUI_HANDLE_p GUI_LED_Off(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -181,7 +165,7 @@ GUI_HANDLE_t GUI_LED_Off(GUI_HANDLE_t h) {
     return h;
 }
 
-GUI_HANDLE_t GUI_LED_On(GUI_HANDLE_t h) {
+GUI_HANDLE_p GUI_LED_On(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -194,7 +178,7 @@ GUI_HANDLE_t GUI_LED_On(GUI_HANDLE_t h) {
     return h;
 }
 
-GUI_HANDLE_t GUI_LED_Toggle(GUI_HANDLE_t h) {
+GUI_HANDLE_p GUI_LED_Toggle(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -205,7 +189,7 @@ GUI_HANDLE_t GUI_LED_Toggle(GUI_HANDLE_t h) {
     return h;
 }
 
-GUI_HANDLE_t GUI_LED_Set(GUI_HANDLE_t h, GUI_Byte state) {
+GUI_HANDLE_p GUI_LED_Set(GUI_HANDLE_p h, GUI_Byte state) {
     __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     

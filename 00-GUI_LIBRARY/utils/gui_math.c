@@ -1,6 +1,6 @@
 /**	
  * |----------------------------------------------------------------------
- * | Copyright (c) 2017 Tilen Majerle
+ * | Copyright (c) 2016 Tilen Majerle
  * |  
  * | Permission is hereby granted, free of charge, to any person
  * | obtaining a copy of this software and associated documentation
@@ -24,7 +24,7 @@
  * |----------------------------------------------------------------------
  */
 #define GUI_INTERNAL
-#include "gui_input.h"
+#include "gui_math.h"
 
 /******************************************************************************/
 /******************************************************************************/
@@ -36,15 +36,7 @@
 /******************************************************************************/
 /***                           Private definitions                           **/
 /******************************************************************************/
-/******************************************************************************/    
-#if GUI_USE_TOUCH
-static GUI_BUFFER_t TSBuffer;
-static GUI_Byte_t TSBufferData[GUI_TOUCH_BUFFER_SIZE * sizeof(GUI_TouchData_t) + 1];
-#endif /* GUI_USE_TOUCH */
-#if GUI_USE_KEYBOARD
-static GUI_BUFFER_t KBBuffer;
-static GUI_Byte_t KBBufferData[GUI_TOUCH_BUFFER_SIZE * sizeof(GUI_KeyboardData_t) + 1];
-#endif /* GUI_USE_KEYBOARD */
+/******************************************************************************/
 
 /******************************************************************************/
 /******************************************************************************/
@@ -63,38 +55,39 @@ static GUI_Byte_t KBBufferData[GUI_TOUCH_BUFFER_SIZE * sizeof(GUI_KeyboardData_t
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-#if GUI_USE_TOUCH
-uint8_t GUI_INPUT_AddTouch(const GUI_TouchData_t* Data) {
-    return GUI_BUFFER_Write(&TSBuffer, Data, sizeof(*Data)) ? 1 : 0;    /* Write data to buffer */
-}
-
-GUI_Byte_t __GUI_INPUT_ReadTouch(GUI_TouchData_t* Data) {
-    if (GUI_BUFFER_GetFull(&TSBuffer) >= sizeof(*Data)) {
-        return (GUI_Byte_t)GUI_BUFFER_Read(&TSBuffer, Data, sizeof(*Data)); /* Read data fro mbuffer */
+uint8_t GUI_MATH_Sqrt(float x, float* result) {
+    if (x > 0) {                                    /* Check valid input */
+        *result = sqrt(x);                          /* Calculate on positive number */
+        return 1;
     }
     return 0;
 }
-#endif /* GUI_USE_TOUCH */
 
+uint8_t GUI_MATH_RSqrt(float x, float* result) {
+    int32_t i;
+	float x2, y;
+	const float th = 1.5f;
 
-#if GUI_USE_KEYBOARD
-uint8_t GUI_INPUT_AddKey(const GUI_KeyboardData_t* Data) {
-    return GUI_BUFFER_Write(&KBBuffer, Data, sizeof(*Data)) ? 1 : 0;    /* Write data to buffer */
+	x2 = x * 0.5f;
+	y = x;
+	i = *(int32_t *)&y;                             /* Read float number memory representation as long integer */
+	i = 0x5f3759df - (i >> 1);                      /* Subtract integer number divided by 2 from magic number */
+	y = *(float *)&i;                               /* Read new integer value as float again */
+	y = y * (th - (x2 * y * y));                    /* Calculate using iterations */
+	y = y * (th - (x2 * y * y));                    /* Calculate using iterations */
+
+    *result = y;                                    /* Save number */
+    
+    return 1;                                       /* Return status */
 }
 
-GUI_Byte_t __GUI_INPUT_ReadKey(GUI_KeyboardData_t* Data) {
-    if (GUI_BUFFER_GetFull(&KBBuffer) >= sizeof(*Data)) {
-        return (GUI_Byte_t)GUI_BUFFER_Read(&KBBuffer, Data, sizeof(*Data)); /* Read data fro mbuffer */
-    }
-    return 0;
+uint8_t GUI_MATH_DistanceBetweenXY(float x1, float y1, float x2, float y2, float* result) {
+    return GUI_MATH_Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2), result);    /* Calculate distance between 2 points with X and Y value */
 }
-#endif /* GUI_USE_KEYBOARD */
 
-void __GUI_INPUT_Init(void) {
-#if GUI_USE_TOUCH
-    GUI_BUFFER_Init(&TSBuffer, sizeof(TSBufferData), TSBufferData);
-#endif /* GUI_USE_TOUCH */
-#if GUI_USE_KEYBOARD
-    GUI_BUFFER_Init(&KBBuffer, sizeof(KBBufferData), KBBufferData);
-#endif /* GUI_USE_KEYBOARD */
+uint8_t GUI_MATH_CenterOfXY(float x1, float y1, float x2, float y2, float* resultX, float* resultY) {
+    *resultX = (x1 + x2) / 2;                       /* Calculate middle point for X position */
+    *resultX = (y1 + y2) / 2;                       /* Calculate middle point for Y position */
+    
+    return 1;
 }

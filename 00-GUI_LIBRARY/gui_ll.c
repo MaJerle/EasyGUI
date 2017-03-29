@@ -23,6 +23,7 @@
  * | OTHER DEALINGS IN THE SOFTWARE.
  * |----------------------------------------------------------------------
  */
+#define GUI_INTERNAL
 #include "gui_ll.h"
 
 #include "tm_stm32_sdram.h"
@@ -317,7 +318,7 @@ uint8_t GUI_LL_Init(GUI_LCD_t* LCD, GUI_LL_t* LL) {
     LL->Fill = &LCD_Fill;                       /* Set fill screen routine */
     LL->FillRect = &LCD_FillRect;               /* Set fill rectangle routine */
     
-    return 0;
+    return 0;                                   /* Initialization successful */
 }
 
 uint8_t GUI_LL_Control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* data) {

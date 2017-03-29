@@ -1287,14 +1287,24 @@
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_widget.c</FilePath>
             </File>
             <File>
+              <FileName>gui_window.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_window.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_graph.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_graph.c</FilePath>
+            </File>
+            <File>
               <FileName>gui_button.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_button.c</FilePath>
             </File>
             <File>
-              <FileName>gui_window.c</FileName>
+              <FileName>gui_edittext.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\widgets\gui_window.c</FilePath>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_edittext.c</FilePath>
             </File>
             <File>
               <FileName>gui_led.c</FileName>
@@ -1305,16 +1315,6 @@
               <FileName>gui_progbar.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_progbar.c</FilePath>
-            </File>
-            <File>
-              <FileName>gui_graph.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\widgets\gui_graph.c</FilePath>
-            </File>
-            <File>
-              <FileName>gui_edittext.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\widgets\gui_edittext.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1345,6 +1345,16 @@
               <FileName>gui_buffer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_buffer.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_math.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_math.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2660,14 +2670,24 @@
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_widget.c</FilePath>
             </File>
             <File>
+              <FileName>gui_window.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_window.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_graph.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_graph.c</FilePath>
+            </File>
+            <File>
               <FileName>gui_button.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_button.c</FilePath>
             </File>
             <File>
-              <FileName>gui_window.c</FileName>
+              <FileName>gui_edittext.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\widgets\gui_window.c</FilePath>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_edittext.c</FilePath>
             </File>
             <File>
               <FileName>gui_led.c</FileName>
@@ -2678,16 +2698,6 @@
               <FileName>gui_progbar.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_progbar.c</FilePath>
-            </File>
-            <File>
-              <FileName>gui_graph.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\widgets\gui_graph.c</FilePath>
-            </File>
-            <File>
-              <FileName>gui_edittext.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\widgets\gui_edittext.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2718,6 +2728,16 @@
               <FileName>gui_buffer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_buffer.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_math.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_math.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4034,14 +4054,24 @@
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_widget.c</FilePath>
             </File>
             <File>
+              <FileName>gui_window.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_window.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_graph.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_graph.c</FilePath>
+            </File>
+            <File>
               <FileName>gui_button.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_button.c</FilePath>
             </File>
             <File>
-              <FileName>gui_window.c</FileName>
+              <FileName>gui_edittext.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\widgets\gui_window.c</FilePath>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_edittext.c</FilePath>
             </File>
             <File>
               <FileName>gui_led.c</FileName>
@@ -4052,16 +4082,6 @@
               <FileName>gui_progbar.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_progbar.c</FilePath>
-            </File>
-            <File>
-              <FileName>gui_graph.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\widgets\gui_graph.c</FilePath>
-            </File>
-            <File>
-              <FileName>gui_edittext.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\widgets\gui_edittext.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4092,6 +4112,16 @@
               <FileName>gui_buffer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_buffer.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_math.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_math.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4434,7 +4464,7 @@
             <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
-            <OneElfS>0</OneElfS>
+            <OneElfS>1</OneElfS>
             <Strict>0</Strict>
             <EnumInt>0</EnumInt>
             <PlainCh>0</PlainCh>
@@ -5142,14 +5172,24 @@
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_widget.c</FilePath>
             </File>
             <File>
+              <FileName>gui_window.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_window.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_graph.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_graph.c</FilePath>
+            </File>
+            <File>
               <FileName>gui_button.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_button.c</FilePath>
             </File>
             <File>
-              <FileName>gui_window.c</FileName>
+              <FileName>gui_edittext.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\widgets\gui_window.c</FilePath>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_edittext.c</FilePath>
             </File>
             <File>
               <FileName>gui_led.c</FileName>
@@ -5160,16 +5200,6 @@
               <FileName>gui_progbar.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_progbar.c</FilePath>
-            </File>
-            <File>
-              <FileName>gui_graph.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\widgets\gui_graph.c</FilePath>
-            </File>
-            <File>
-              <FileName>gui_edittext.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\widgets\gui_edittext.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5200,6 +5230,16 @@
               <FileName>gui_buffer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_buffer.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_math.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_math.c</FilePath>
             </File>
           </Files>
         </Group>

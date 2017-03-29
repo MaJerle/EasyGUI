@@ -23,6 +23,7 @@
  * | OTHER DEALINGS IN THE SOFTWARE.
  * |----------------------------------------------------------------------
  */
+#define GUI_INTERNAL
 #include "gui_progbar.h"
 
 /******************************************************************************/
@@ -40,13 +41,6 @@
 
 #define __GP(x)             ((GUI_PROGBAR_t *)(x))
 
-static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp);
-static uint8_t __Control(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* param, void* result);
-
-#if GUI_USE_TOUCH  
-static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts);
-#endif /* GUI_USE_TOUCH */
-
 /******************************************************************************/
 /******************************************************************************/
 /***                            Private variables                            **/
@@ -54,24 +48,11 @@ static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts);
 /******************************************************************************/
 const static GUI_WIDGET_t Widget = {
     {
-        _T("Progbar"),                              /*!< Widget name */
+        _T("PROGBAR"),                              /*!< Widget name */
         sizeof(GUI_PROGBAR_t),                      /*!< Size of widget for memory allocation */
-        0,                                          /*!< Allow children objects on widget */
+        0,                                          /*!< List of widget flags */
     },
-    __Control,                                      /*!< Control function */
-    __Draw,                                         /*!< Widget draw function */
-#if GUI_USE_TOUCH
-    {
-        __TouchDown,                                /*!< Touch down callback function */
-        0,                                          /*!< Touch up callback function */
-        0                                           /*!< Touch move callback function */
-    },
-#endif /* GUI_USE_TOUCH */
-#if GUI_USE_KEYBOARD
-    {
-        0,                                          /*!< Keyboard key pressed callback function */
-    }
-#endif /* GUI_USE_KEYBOARD */
+    GUI_PROGBAR_Callback,                           /*!< Callback function */
 };
 
 /******************************************************************************/
@@ -80,75 +61,74 @@ const static GUI_WIDGET_t Widget = {
 /******************************************************************************/
 /******************************************************************************/
 #define p           ((GUI_PROGBAR_t *)h)
-static uint8_t __Control(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* param, void* result) {
-    __GUI_UNUSED(h);
-    __GUI_UNUSED(param);
-    __GUI_UNUSED(result);
+uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     switch (ctrl) {                                 /* Handle control function if required */
+        case GUI_WC_Draw: {
+            GUI_Dim_t x, y, w, width, height;
+            GUI_Display_t* disp = (GUI_Display_t *)param;
+    
+            x = __GUI_WIDGET_GetAbsoluteX(h);       /* Get absolute position on screen */
+            y = __GUI_WIDGET_GetAbsoluteY(h);       /* Get absolute position on screen */
+            width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
+            height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
+           
+            w = ((width - 2) * (p->Value - p->Min)) / (p->Max - p->Min);   /* Get width for active part */
+            
+            GUI_DRAW_FilledRectangle(disp, x + w + 1, y, width - w - 2, height, p->Color[GUI_PROGBAR_COLOR_BG]);
+            GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, w, height - 2, p->Color[GUI_PROGBAR_COLOR_FG]);
+            GUI_DRAW_Rectangle(disp, x, y, width, height, p->Color[GUI_PROGBAR_COLOR_BORDER]);
+            
+            /* Draw text if possible */
+            if (h->Font) {
+                const GUI_Char* text = NULL;
+                GUI_Char buff[5];
+                
+                if (p->Flags & GUI_PROGBAR_FLAG_PERCENT) {
+                    sprintf((char *)buff, "%d%%", ((p->Value - p->Min) * 100) / (p->Max - p->Min));
+                    text = buff;
+                } else if (h->Text && GUI_STRING_Length(h->Text)) {
+                    text = h->Text;
+                }
+                
+                if (text) {                         /* If text is valid, print it */
+                    GUI_DRAW_FONT_t f;
+                    GUI_DRAW_FONT_Init(&f);         /* Init structure */
+                    
+                    f.X = x + 1;
+                    f.Y = y + 1;
+                    f.Width = width;
+                    f.Height = height - 2;
+                    f.Align = GUI_HALIGN_CENTER | GUI_VALIGN_CENTER;
+                    f.Color1Width = w ? w - 1 : 0;
+                    f.Color1 = p->Color[GUI_PROGBAR_COLOR_BG];
+                    f.Color2 = p->Color[GUI_PROGBAR_COLOR_FG];
+                    GUI_DRAW_WriteText(disp, h->Font, text, &f);
+                }
+            }
+        }
+#if GUI_USE_TOUCH
+        case GUI_WC_TouchStart: {
+            *(__GUI_TouchStatus_t *)result = touchHANDLEDNOFOCUS;
+            return 1;
+        }
+#endif /* GUI_USE_TOUCH */
         default:                                    /* Handle default option */
+            __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
     }
 }
-
-static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp) {
-    GUI_Dim_t x, y, w;
-    
-    x = __GUI_WIDGET_GetAbsoluteX(h);               /* Get absolute position on screen */
-    y = __GUI_WIDGET_GetAbsoluteY(h);               /* Get absolute position on screen */
-   
-    w = ((h->Width - 2) * (p->Value - p->Min)) / (p->Max - p->Min);   /* Get width for active part */
-    
-    GUI_DRAW_FilledRectangle(disp, x + w + 1, y, h->Width - w - 2, h->Height, p->Color[GUI_PROGBAR_COLOR_BG]);
-    GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, w, h->Height - 2, p->Color[GUI_PROGBAR_COLOR_FG]);
-    GUI_DRAW_Rectangle(disp, x, y, h->Width, h->Height, p->Color[GUI_PROGBAR_COLOR_BORDER]);
-    
-    /* Draw text if possible */
-    if (h->Font) {
-        const GUI_Char* text = NULL;
-        GUI_Char buff[5];
-        
-        if (p->Flags & GUI_PROGBAR_FLAG_PERCENT) {
-            sprintf((char *)buff, "%d%%", ((p->Value - p->Min) * 100) / (p->Max - p->Min));
-            text = buff;
-        } else if (h->Text && GUI_STRING_Length(h->Text)) {
-            text = h->Text;
-        }
-        
-        if (text) {                                 /* If text is valid, print it */
-            GUI_DRAW_FONT_t f;
-            GUI_DRAW_FONT_Init(&f);                 /* Init structure */
-            
-            f.X = x + 1;
-            f.Y = y + 1;
-            f.Width = h->Width;
-            f.Height = h->Height - 2;
-            f.Align = GUI_HALIGN_CENTER | GUI_VALIGN_CENTER;
-            f.Color1Width = w ? w - 1 : 0;
-            f.Color1 = p->Color[GUI_PROGBAR_COLOR_BG];
-            f.Color2 = p->Color[GUI_PROGBAR_COLOR_FG];
-            GUI_DRAW_WriteText(disp, h->Font, text, &f);
-        }
-    }
-}
-
-#if GUI_USE_TOUCH
-static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts) {
-    __GUI_UNUSED2(h, ts);
-    return touchHANDLEDNOFOCUS;                     /* Handle widget touch but ignore focus */
-}
-#endif /* GUI_USE_TOUCH */
 
 /******************************************************************************/
 /******************************************************************************/
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_t GUI_PROGBAR_Create(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height) {
+GUI_HANDLE_p GUI_PROGBAR_Create(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height) {
     GUI_PROGBAR_t* ptr;
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_PROGBAR_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height);   /* Allocate memory for basic widget */
+    ptr = (GUI_PROGBAR_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, 0);    /* Allocate memory for basic widget */
     if (ptr) {        
         /* Color setup */
         ptr->Color[GUI_PROGBAR_COLOR_BG] = GUI_COLOR_GRAY;
@@ -161,10 +141,10 @@ GUI_HANDLE_t GUI_PROGBAR_Create(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t
     }
     __GUI_LEAVE();                                  /* Leave GUI */
     
-    return (GUI_HANDLE_t)ptr;
+    return (GUI_HANDLE_p)ptr;
 }
 
-GUI_HANDLE_t GUI_PROGBAR_SetColor(GUI_HANDLE_t h, GUI_PROGBAR_COLOR_t index, GUI_Color_t color) {
+GUI_HANDLE_p GUI_PROGBAR_SetColor(GUI_HANDLE_p h, GUI_PROGBAR_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h);                          /* Check parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
@@ -177,7 +157,7 @@ GUI_HANDLE_t GUI_PROGBAR_SetColor(GUI_HANDLE_t h, GUI_PROGBAR_COLOR_t index, GUI
     return h;
 }
 
-GUI_HANDLE_t GUI_PROGBAR_SetValue(GUI_HANDLE_t h, int32_t val) {
+GUI_HANDLE_p GUI_PROGBAR_SetValue(GUI_HANDLE_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h);                          /* Check parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
@@ -190,7 +170,7 @@ GUI_HANDLE_t GUI_PROGBAR_SetValue(GUI_HANDLE_t h, int32_t val) {
     return h;
 }
 
-GUI_HANDLE_t GUI_PROGBAR_SetMin(GUI_HANDLE_t h, int32_t val) {
+GUI_HANDLE_p GUI_PROGBAR_SetMin(GUI_HANDLE_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h);                          /* Check parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
@@ -206,7 +186,7 @@ GUI_HANDLE_t GUI_PROGBAR_SetMin(GUI_HANDLE_t h, int32_t val) {
     return h;
 }
 
-GUI_HANDLE_t GUI_PROGBAR_SetMax(GUI_HANDLE_t h, int32_t val) {
+GUI_HANDLE_p GUI_PROGBAR_SetMax(GUI_HANDLE_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h);                          /* Check parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
@@ -222,7 +202,7 @@ GUI_HANDLE_t GUI_PROGBAR_SetMax(GUI_HANDLE_t h, int32_t val) {
     return h;
 }
 
-GUI_HANDLE_t GUI_PROGBAR_EnablePercentages(GUI_HANDLE_t h) {
+GUI_HANDLE_p GUI_PROGBAR_EnablePercentages(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h);                          /* Check parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
@@ -235,7 +215,7 @@ GUI_HANDLE_t GUI_PROGBAR_EnablePercentages(GUI_HANDLE_t h) {
     return h;
 }
 
-GUI_HANDLE_t GUI_PROGBAR_DisablePercentages(GUI_HANDLE_t h) {
+GUI_HANDLE_p GUI_PROGBAR_DisablePercentages(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h);                          /* Check parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 

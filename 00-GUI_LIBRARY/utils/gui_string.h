@@ -51,7 +51,7 @@ extern "C" {
  */
 
 /**
- * \defgroup        GUI_STRING_UNICODE Unicode
+ * \defgroup        GUI_STRING_UNICODE Unicode processing
  * \brief           Unicode processing functions with UTF-8 character encoding
  *
  * Core functions capable of encoding and decoding UTF-8 UNICODE format.
@@ -112,14 +112,14 @@ uint8_t GUI_STRING_UNICODE_Encode(const uint32_t c, GUI_Char* out);
  */
 
 /**
- * \brief           Returns length of string
+ * \brief           Return length of string
  *      
  *                  Example input string: EasyGUI\\xDF\\x8F
  *
  *                  1. When \ref GUI_USE_UNICODE is set to 1, function will try to parse unicode characters
- *                      function will return 8 on top input string
+ *                      and will return 8 on top input string
  *                  2. When \ref GUI_USE_UNICODE is set to 0, function will count all the bytes until string end is reached
- *                      function will return 9 on top input string
+ *                      and will return 9 on top input string
  *
  * \param[in]       *src: Pointer to source string to get length
  * \retval          Number of visible characters in string
@@ -128,7 +128,7 @@ uint8_t GUI_STRING_UNICODE_Encode(const uint32_t c, GUI_Char* out);
 size_t GUI_STRING_Length(const GUI_Char* src);
 
 /**
- * \brief           Returns total number of bytes required for string
+ * \brief           Return total number of bytes required for string
  *      
  * \note            When \ref GUI_USE_UNICODE is set to 0, this function returns the same as \ref GUI_STRING_Length
  *
@@ -158,7 +158,7 @@ GUI_Char* GUI_STRING_Copy(GUI_Char* dst, const GUI_Char* src);
 GUI_Char* GUI_STRING_CopyN(GUI_Char* dst, const GUI_Char* src, size_t len);
 
 /**
- * \brief           Compares 2 strings
+ * \brief           Compare 2 strings
  * \param[in]       *s1: First memory address
  * \param[in]       *s2: Second memory address
  * \retval          0: Strings the same
@@ -167,7 +167,7 @@ GUI_Char* GUI_STRING_CopyN(GUI_Char* dst, const GUI_Char* src, size_t len);
 int GUI_STRING_Compare(const GUI_Char* s1, const GUI_Char* s2);
 
 /**
- * \brief           Checks if character is printable
+ * \brief           Check if character is printable
  * \param[in]       ch: First memory address
  * \retval          1: Character is printable
  * \retval          0: Character is not printable

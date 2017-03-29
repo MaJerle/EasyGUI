@@ -23,6 +23,7 @@
  * | OTHER DEALINGS IN THE SOFTWARE.
  * |----------------------------------------------------------------------
  */
+#define GUI_INTERNAL
 #include "gui_buffer.h"
 
 uint8_t GUI_BUFFER_Init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr) {

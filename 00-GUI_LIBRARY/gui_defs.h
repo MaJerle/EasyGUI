@@ -41,6 +41,8 @@ extern "C" {
 #include "string.h"
 #include "stdint.h"
 #include "stdio.h"
+#include "stddef.h"
+#include "gui_config.h"
 
 /**
  * \addtogroup      GUI
@@ -53,16 +55,20 @@ extern "C" {
  * \{
  */
 
-#define GUI_FLAG_REDRAW                 ((uint32_t)(1UL << 0UL))    /*!< Indicates widget should be redrawn */
-#define GUI_FLAG_CHILD                  ((uint32_t)(1UL << 1UL))    /*!< Indicates widget is child (window) */
-#define GUI_FLAG_DYNAMICTEXTALLOC       ((uint32_t)(1UL << 2UL))    /*!< Indicates memory for text has been dynamically allocated */
-#define GUI_FLAG_ACTIVE                 ((uint32_t)(1UL << 3UL))    /*!< Indicates widget is active by mouser or touch */
-#define GUI_FLAG_FOCUS                  ((uint32_t)(1UL << 4UL))    /*!< Indicates widget is currently in focus */
-#define GUI_FLAG_VISIBLE                ((uint32_t)(1UL << 5UL))    /*!< Indicates widget is visible */
-#define GUI_FLAG_DISABLED               ((uint32_t)(1UL << 6UL))    /*!< Indicates widget is disabled */
-#define GUI_FLAG_3D                     ((uint32_t)(1UL << 7UL))    /*!< Indicates widget has enabled 3D style */
+#define GUI_FLAG_REDRAW                 ((uint32_t)0x00000001)  /*!< Indicates widget should be redrawn */
+#define GUI_FLAG_CHILD                  ((uint32_t)0x00000002)  /*!< Indicates widget is child (window) */
+#define GUI_FLAG_DYNAMICTEXTALLOC       ((uint32_t)0x00000004)  /*!< Indicates memory for text has been dynamically allocated */
+#define GUI_FLAG_ACTIVE                 ((uint32_t)0x00000008)  /*!< Indicates widget is active by mouser or touch */
+#define GUI_FLAG_FOCUS                  ((uint32_t)0x00000010)  /*!< Indicates widget is currently in focus */
+#define GUI_FLAG_HIDDEN                 ((uint32_t)0x00000020)  /*!< Indicates widget is hidden */
+#define GUI_FLAG_DISABLED               ((uint32_t)0x00000040)  /*!< Indicates widget is disabled */
+#define GUI_FLAG_3D                     ((uint32_t)0x00000080)  /*!< Indicates widget has enabled 3D style */
+#define GUI_FLAG_WIDTH_PERCENT          ((uint32_t)0x00000100)  /*!< Indicates widget width is in units of percentage according to parent widget width */
+#define GUI_FLAG_HEIGHT_PERCENT         ((uint32_t)0x00000200)  /*!< Indicates widget height is in units of percentage according to parent widget height */
+#define GUI_FLAG_WIDTH_FILL             ((uint32_t)0x00000400)  /*!< Indicates widget width fills to the end of widget */
+#define GUI_FLAG_HEIGHT_FILL            ((uint32_t)0x00000800)  /*!< Indicates widget height fills to the end of widget */
 
-#define GUI_FLAG_LCD_WAIT_LAYER_CONFIRM ((uint32_t)(1UL << 0UL))    /*!< Indicates waiting for layer change confirmation */
+#define GUI_FLAG_LCD_WAIT_LAYER_CONFIRM ((uint32_t)0x00000001)  /*!< Indicates waiting for layer change confirmation */
 
 /**
  * \}
@@ -94,6 +100,7 @@ extern "C" {
 
 /**
  * \defgroup        GUI_Typedefs Structures and enumerations
+ * \brief           List of core structures and enumerations
  * \{
  */
 
@@ -107,7 +114,8 @@ typedef enum GUI_Result_t {
 
 /**
  * \brief           Linked list structure
- * \note            This structure must be first element in \ref GUI_HANDLE_t structure
+ * \note            This structure must be first element in \ref GUI_HANDLE_p structure
+ * \sa              GUI_LinkedListRoot_t
  */
 typedef struct GUI_LinkedList_t {
     void* Prev;                             /*!< Previous object in linked list */
@@ -115,57 +123,85 @@ typedef struct GUI_LinkedList_t {
 } GUI_LinkedList_t;
 
 /**
+ * \brief           Structure used for dynamic struct allocation
+ * \sa              GUI_LinkedListRoot_t
+ */
+typedef struct GUI_LinkedListMulti_t {
+    GUI_LinkedList_t List;                  /*!< Linked list structure, must be first on structure for casting */
+    void* Element;                          /*!< Pointer to element in linked list */
+} GUI_LinkedListMulti_t;
+
+/**
  * \brief           Linked list root structure for start and end widget in structure
+ * \sa              GUI_LinkedList_t
+ * \sa              GUI_LinkedListMulti_t
  */
 typedef struct GUI_LinkedListRoot_t {
     void* First;                            /*!< First element in linked list */
     void* Last;                             /*!< Last element in linked list */
 } GUI_LinkedListRoot_t;
-
+ 
 /**
- * \brief           GUI object ID
+ * \brief           Core timer structure for GUI timers
  */
-typedef uint32_t    GUI_ID_t;
+typedef struct GUI_TIMER_CORE_t {
+    uint32_t Time;                          /*!< Last processed time */
+    GUI_LinkedListRoot_t List;              /*!< Root linked list object */
+} GUI_TIMER_CORE_t;
 
+typedef uint32_t    GUI_ID_t;               /*!< GUI object ID */
+typedef uint32_t    GUI_Color_t;            /*!< Color definition */
+typedef uint16_t    GUI_Dim_t;              /*!< GUI dimensions in units of pixels */
+typedef int16_t     GUI_iDim_t;             /*!< GUI signed dimensions in units of pixels  */
+typedef uint8_t     GUI_Byte;               /*!< GUI byte data type */
+typedef GUI_Byte    GUI_Byte_t;             /*!< GUI byte data type */
+typedef int8_t      GUI_iByte;              /*!< GUI signed byte data type */
+typedef GUI_iByte   GUI_iByte_t;            /*!< GUI signed byte data type */
+typedef uint8_t     GUI_Char;               /*!< GUI char data type for all string operations */
+#define _T(x)       (GUI_Char *)(x)         /*!< Macro to force strings to right format for processing */
+#define GUI_Const   const                   /*!< Macro for constant keyword */
+    
 /**
- * \brief           Color definition
- */
-typedef uint32_t    GUI_Color_t;
+ * \brief           Get container object from member
+ * 
+ * Consider below structure
+ * \code{c}
+//Declare driver structure
+typedef struct {
+    int x;
+    int y;
+} drv_t
 
-/**
- * \brief           GUI dimensions in units of pixels
- */
-typedef uint16_t    GUI_Dim_t;
+//Declare custom structure
+//Use in custom software
+typedef struct {
+    int a;
+    int b;
+    int c;
+    drv_t driver;
+} my_structure;
 
-/**
- * \brief           GUI signed dimensions in units of pixels 
- */
-typedef int16_t     GUI_iDim_t;
+//Create structure object
+my_structure my;
 
-/**
- * \brief           GUI byte data type
- */
-typedef uint8_t     GUI_Byte_t, GUI_Byte;
+//Create pointer to structure object
+drv_t* driver_ptr = &my->driver;
 
-/**
- * \brief           GUI signed byte data type
+//Pass pointer to our working function somewhere
+//Let's assume this function is callback called from our software
+void myFunc(drv_t* drv) {
+    //We know drv pointer is child of my_structure
+    //Let's get that my_structure pointer from drv_t structure
+    my_structure* my_struct = GUI_ContainerOf(drv, my_structure, driver);
+    
+    //Check if they match
+    if (my_struct == &my) {
+        //This should be true
+    }
+}
+\endcode
  */
-typedef int8_t      GUI_iByte_t, GUI_iByte;
-
-/**
- * \brief           GUI char data type for all string operations
- */
-typedef uint8_t     GUI_Char;
-
-/**
- * \brief           Macro to force strings to right format for processing
- */
-#define _T(x)       (GUI_Char *)(x)
-
-/**
- * \brief           Macro for constant keyword
- */
-#define GUI_Const   const
+#define             GUI_ContainerOf(ptr, type, memb)      (type *)((char *)(ptr) - (char *)offsetof(type, memb))
 
 /**
  * \brief           Color gradient definition
@@ -196,10 +232,20 @@ typedef enum __GUI_TouchStatus_t {
  * \brief           Single touch data structure
  */
 typedef struct GUI_TouchData_t {
-    GUI_Dim_t X;                            /*!< Touch X coordinate */
-    GUI_Dim_t Y;                            /*!< Touch Y coordinate */
+    uint8_t Count;                          /*!< Number of touches detected */
+    GUI_iDim_t X[GUI_TOUCH_MAX_PRESSES];    /*!< Touch X coordinate */
+    GUI_iDim_t Y[GUI_TOUCH_MAX_PRESSES];    /*!< Touch Y coordinate */
     GUI_TouchState_t Status;                /*!< Touch status, pressed or released */
 } GUI_TouchData_t;
+
+/**
+ * \brief           Internal touch structure used for widget callbacks
+ */
+typedef struct __GUI_TouchData_t {
+    GUI_TouchData_t TS;                     /*!< Touch structure from outside */
+    GUI_iDim_t RelX[GUI_TOUCH_MAX_PRESSES]; /*!< Relative X position to current widget */
+    GUI_iDim_t RelY[GUI_TOUCH_MAX_PRESSES]; /*!< Relative Y position to current widget */
+} __GUI_TouchData_t;
 
 /**
  * \brief           Single key data structure
@@ -212,6 +258,14 @@ typedef struct GUI_KeyboardData_t {
 #endif
     uint8_t Flags;                          /*!< Flags for special keys */
 } GUI_KeyboardData_t;
+
+/**
+ * \brief           Internal single key data structure
+ * \note            Used for private purpose between input and widget
+ */
+typedef struct __GUI_KeyboardData_t {
+    GUI_KeyboardData_t KB;                  /*!< Keyboard structure */
+} __GUI_KeyboardData_t;
 
 /**
  * \brief           Keyboard internal processing enumeration
@@ -275,7 +329,8 @@ typedef struct GUI_LL_t {
 } GUI_LL_t;
 
 /**
- * \defgroup        GUI_FONT
+ * \defgroup        GUI_FONT Fonts
+ * \brief           Font description structures and flags
  * \{
  */
  
@@ -572,6 +627,27 @@ typedef struct {
 /**
  * \}
  */
+  
+/**
+ * \addtogroup      GUI_TIMER
+ * \{
+ */
+ 
+/**
+ * \brief           Timer structure
+ */
+typedef struct GUI_TIMER_t {
+    GUI_LinkedList_t List;                  /*!< Linked list entry, must be first on the list */
+    uint16_t Period;                        /*!< Timer period value */
+    uint16_t Counter;                       /*!< Timer current counter */
+    uint8_t Flags;                          /*!< Timer flags */
+    void* Params;                           /*!< Custom parameters passed to callback function */
+    void (*Callback)    (struct GUI_TIMER_t *); /*!< Timer callback function */
+} GUI_TIMER_t;
+
+/**
+ * \}
+ */
 
 /**
  * \addtogroup      GUI_WIDGETS_CORE
@@ -582,9 +658,132 @@ typedef struct {
  * \brief           Control parameters for widget
  * \note            Must always start with number 1
  */
-typedef enum GUI_WidgetControl_t {
-    GUI_WidgetControl_ExcludeLinkedList = 0x01, /*!< Add widget to linked list after widget creation [param = NONE, result = NONE] */
-} GUI_WidgetControl_t;
+typedef enum GUI_WC_t {
+    /**
+     * \brief       Draw widget on screen
+     *
+     * \param[in]   *param: Pointer to \ref GUI_Display_t structure
+     * \param[out]  *result: None
+     */
+    GUI_WC_Draw = 0x01,
+    
+    /**
+     * \brief       Check if widget should not be added to linked list after creation
+     *
+     * \param[in]   *param: None
+     * \param[out]  *result: Pointer to uint8_t variable type to store result to [1 = exclude, 0 = do not exclude]
+     */
+    GUI_WC_ExcludeLinkedList,
+    
+    /**
+     * \brief       Check if widget can be removed. User can perform check if for example widget needs save or similar operation
+     *
+     * \param[in]   *param: None
+     * \param[out]  *result: Pointer to uint8_t variable type to store result to [1 = remove, 0 = do not remove]
+     * \sa          GUI_WC_Remove
+     */
+    GUI_WC_CanRemove,
+    
+    /**
+     * \brief       Notification before widget delete will actually happen.
+     *              In case of specific user allocations in memory, they can be restored here
+     * 
+     * \param[in]   *param: None
+     * \param[out]  *result: None
+     * \sa          GUI_WC_CanRemove
+     */
+    GUI_WC_Remove,
+    
+    /**
+     * \brief       Notification called when widget becomes focused
+     *
+     * \param[in]   *param None
+     * \param[out]  *result: None
+     * \sa          GUI_WC_FocusOut
+     */
+    GUI_WC_FocusIn,
+    
+    /**
+     * \brief       Notification called when widget clears widget state
+     *
+     * \param[in]   *param None
+     * \param[out]  *result: None
+     * \sa          GUI_WC_FocusIn
+     */
+    GUI_WC_FocusOut,
+    
+    /**
+     * \brief       Notification for active status on widget
+     *
+     * \note        Called when widget just become active
+     *
+     * \param[in]   *param None
+     * \param[out]  *result: None
+     * \sa          GUI_WC_ActiveOut
+     */
+    GUI_WC_ActiveIn,
+    
+    /**
+     * \brief       Notification for cleared active status on widget
+     *
+     * \note        Called when widget just clears active
+     *
+     * \param[in]   *param None
+     * \param[out]  *result: None
+     * \sa          GUI_WC_ActiveIn
+     */
+    GUI_WC_ActiveOut,
+    
+    /**
+     * \brief       Notification when touch down event occurs on widget
+     *
+     * \param[in]   *param Pointer to \ref __GUI_TouchData_t structure
+     * \param[out]  *result: Value of \ref __GUI_TouchStatus_t enumeration
+     * \sa          GUI_WC_TouchMove
+     * \sa          GUI_WC_TouchEnd
+     */
+    GUI_WC_TouchStart,
+    
+    /**
+     * \brief       Notification when touch move event occurs on widget
+     *
+     * \param[in]   *param Pointer to \ref __GUI_TouchData_t structure
+     * \param[out]  *result: Value of \ref __GUI_TouchStatus_t enumeration
+     * \sa          GUI_WC_TouchStart
+     * \sa          GUI_WC_TouchEnd
+     */
+    GUI_WC_TouchMove,
+    
+    /**
+     * \brief       Notification when touch up event occurs on widget
+     *
+     * \param[in]   *param Pointer to \ref __GUI_TouchData_t structure
+     * \param[out]  *result: Value of \ref __GUI_TouchStatus_t enumeration
+     * \sa          GUI_WC_TouchStart
+     * \sa          GUI_WC_TouchMove
+     */
+    GUI_WC_TouchEnd,
+    
+    /**
+     * \brief       Notification when key has been pushed to this widget
+     *
+     * \param[in]   *param Pointer to \ref __GUI_KeyboardData_t structure
+     * \param[out]  *result: Value of \ref __GUI_KeyboardStatus_t enumeration
+     */
+    GUI_WC_KeyPress,
+} GUI_WC_t;
+
+/**
+ * \defgroup        GUI_WIDGETS_CORE_FLAGS Widget type flags
+ * \brief           Flags used for widget type description
+ * \{
+ */
+
+#define GUI_FLAG_WIDGET_ALLOW_CHILDREN      ((uint16_t)0x0001)  /*!< Widget allows children widgets */
+
+/**
+ * \}
+ */
 
 /**
  * \brief           Structure declaration
@@ -598,22 +797,18 @@ typedef struct GUI_WIDGET_t {
     struct {
         const GUI_Char* Name;               /*!< Widget name for display purpose */
         uint16_t WidgetSize;                /*!< Bytes required for widget memory allocation */
-        GUI_Byte AllowChildren;             /*!< Set to 1 if widget allows children widgets */
+        uint8_t Flags;                      /*!< List of flags for widget setup. This field can use \ref GUI_WIDGETS_CORE_FLAGS flags */
     } MetaData;                             /*!< Meta data structure for widget */
-    GUI_Byte (*Control)     (struct GUI_HANDLE *, GUI_WidgetControl_t, void *, void *);  /*!< Pointer to control function, returns 1 if command handled or 0 if not */
-    void (*Draw)            (struct GUI_HANDLE *, GUI_Display_t *);  /*!< Pointer to widget drawing operation */
-#if GUI_USE_TOUCH
-    struct {
-        __GUI_TouchStatus_t (*TouchDown)    (struct GUI_HANDLE *, GUI_TouchData_t *);   /*!< Pointer to touch down event function callback */
-        __GUI_TouchStatus_t (*TouchUp)      (struct GUI_HANDLE *, GUI_TouchData_t *);   /*!< Pointer to touch move event function callback */
-        __GUI_TouchStatus_t (*TouchMove)    (struct GUI_HANDLE *, GUI_TouchData_t *);   /*!< Pointer to touch up event function callback */
-    } TouchEvents;                          /*!< Group for touch events for widget */
-#endif /* GUI_USE_TOUCH */
-#if GUI_USE_KEYBOARD
-    struct {
-        __GUI_KeyboardStatus_t (*KeyPress)  (struct GUI_HANDLE *, GUI_KeyboardData_t *);    /*!< Pointer to key press event function callback */
-    } KeyboardEvents;                       /*!< Group for keyboard events for widget */
-#endif /* GUI_USE_KEYBOARD */
+    
+    /**
+     * \brief       callback function for widget
+     * 
+     *              Handles everything related to widget. 
+     *                  - Draw widget
+     *                  - Touch handling
+     *                  - Key presses
+     */
+    GUI_Byte (*Callback)    (struct GUI_HANDLE* h, GUI_WC_t cmd, void* param, void* result);    /*!< Pointer to control function, returns 1 if command handled or 0 if not */
 } GUI_WIDGET_t;
 
 /**
@@ -623,16 +818,20 @@ typedef struct GUI_HANDLE {
     GUI_LinkedList_t List;                  /*!< Linked list entry, must always be first on list */
     GUI_ID_t Id;                            /*!< Widget ID number */
     const GUI_WIDGET_t* Widget;             /*!< Widget parameters with callback functions */
-    struct GUI_HANDLE* Parent;              /*!< Pointer to parent window object */
+    uint8_t (*Callback) (struct GUI_HANDLE* h, GUI_WC_t cmd, void* param, void* result);    /*!< Callback function for widget specific */
+    struct GUI_HANDLE* Parent;              /*!< Pointer to parent widget */
     GUI_Dim_t X;                            /*!< Object X position relative to parent window in units of pixels */
     GUI_Dim_t Y;                            /*!< Object Y position relative to parent window in units of pixels */
-    GUI_Dim_t Width;                        /*!< Object width in units of pixels */
-    GUI_Dim_t Height;                       /*!< Object height in units of pixels */
+    GUI_Dim_t Width;                        /*!< Object width in units of pixels or percentages */
+    GUI_Dim_t Height;                       /*!< Object height in units of pixels or percentages */
+    uint32_t Padding;                       /*!< 4-byte long padding, each byte of one side, MSB = top padding, LSB = left padding.
+                                                    Used for children widgets if virtual padding should be used */
     uint32_t Flags;                         /*!< All possible flags for specific widget */
     GUI_Const GUI_FONT_t* Font;             /*!< Font used for widget drawings */
     GUI_Char* Text;                         /*!< Pointer to widget text if exists */
     uint32_t TextMemSize;                   /*!< Number of bytes for text when dynamically allocated */
     uint32_t TextCursor;                    /*!< Text cursor position */
+    GUI_TIMER_t* Timer;                     /*!< Software timer pointer */
 } GUI_HANDLE;
 
 /**
@@ -646,7 +845,7 @@ typedef struct GUI_HANDLE_ROOT {
 /**
  * \brief           Handle object for GUI widget
  */
-typedef GUI_HANDLE* GUI_HANDLE_t;
+typedef GUI_HANDLE* GUI_HANDLE_p;
 
 /**
  * \}

@@ -58,6 +58,8 @@ extern "C" {
 #include "utils/gui_buffer.h"
 #include "utils/gui_linkedlist.h"
 #include "utils/gui_string.h"
+#include "utils/gui_timer.h"
+#include "utils/gui_math.h"
 
 /* GUI Low-Level drivers */
 #include "gui_ll.h"
@@ -75,7 +77,7 @@ extern "C" {
 /**
  * \brief           GUI Handle object from main object
  */ 
-#define __GH(x)                     ((GUI_HANDLE_t)(x))
+#define __GH(x)                     ((GUI_HANDLE_p)(x))
 
 /**
  * \brief           GUI Handle root object from main object with children widgets
@@ -96,8 +98,9 @@ extern "C" {
  * \brief           Free memory for widget which was just deleted
  */
 #define __GUI_MEMWIDFREE(p)         do {            \
+    __GUI_DEBUG("Memory free: 0x%08X; Type: %s\r\n", (uint32_t)(p), (p)->Widget->MetaData.Name);  \
     free(p);                                        \
-    p = 0;                                          \
+    (p) = 0;                                          \
 } while (0)
 
 /**
@@ -170,7 +173,59 @@ extern "C" {
 #define __GUI_UNUSED4(x, y, z, k)   { __GUI_UNUSED(x); __GUI_UNUSED(y); __GUI_UNUSED(z); __GUI_UNUSED(k); }
 
 /**
- * \} GUI_Internal
+ * \brief           Clear focus on focused widget already
+ * \hideinitializer
+ */
+#define __GUI_FOCUS_CLEAR()         do {                    \
+    if (GUI.FocusedWidget) {                                \
+        __GUI_WIDGET_Callback(GUI.FocusedWidget, GUI_WC_FocusOut, NULL, NULL);  \
+        GUI.FocusedWidget->Flags &= ~GUI_FLAG_FOCUS;        \
+        __GUI_WIDGET_Invalidate(GUI.FocusedWidget);         \
+        GUI.FocusedWidget = 0;                              \
+    }                                                       \
+} while (0)
+
+/**
+ * \brief           Set focus to specific widget
+ * \note            If any previous widget has focus, it will be cleared first on it
+ * \hideinitializer
+ */
+#define __GUI_FOCUS_SET(h)          do {                    \
+    __GUI_FOCUS_CLEAR();                                    \
+    GUI.FocusedWidget = __GH(h);                            \
+    GUI.FocusedWidget->Flags |= GUI_FLAG_FOCUS;             \
+    __GUI_WIDGET_Callback(GUI.FocusedWidget, GUI_WC_FocusIn, NULL, NULL);   \
+    __GUI_WIDGET_Invalidate(GUI.FocusedWidget);             \
+} while (0)
+
+/**
+ * \brief           Clear active flag on touch active widget
+ * \note            If any previous widget has active flag, it will be cleared first on it
+ * \hideinitializer
+ */
+#define __GUI_ACTIVE_CLEAR()        do {                    \
+    if (GUI.ActiveWidget) {                                 \
+        __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_ActiveOut, NULL, NULL);  \
+        GUI.ActiveWidget->Flags &= ~GUI_FLAG_ACTIVE;        \
+        __GUI_WIDGET_Invalidate(GUI.FocusedWidget);         \
+        GUI.ActiveWidget = 0;                               \
+    }                                                       \
+} while (0)
+
+/**
+ * \brief           Set active status to widget
+ * \hideinitializer
+ */
+#define __GUI_ACTIVE_SET(h)         do {                    \
+    __GUI_ACTIVE_CLEAR();                                   \
+    GUI.ActiveWidget = __GH(h);                             \
+    GUI.ActiveWidget->Flags |= GUI_FLAG_ACTIVE;             \
+    __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_ActiveIn, NULL, NULL);   \
+    __GUI_WIDGET_Invalidate(GUI.ActiveWidget);              \
+} while (0)
+
+/**
+ * \}
  */
 #endif /* !defined(DOXYGEN) */
 
@@ -183,11 +238,12 @@ typedef struct GUI_t {
     GUI_LL_t LL;                            /*!< Low-level drawing routines for LCD */
     GUI_Display_t Display;                  /*!< Clipping management if exists */
     
-    GUI_HANDLE_t WindowActive;              /*!< Pointer to currently active window when creating new widgets */
-    GUI_HANDLE_t FocusedWidget;             /*!< Pointer to focused widget for keyboard events if any */
-    GUI_HANDLE_t ActiveWidget;              /*!< Pointer to widget currently active by mouse or touch press */
+    GUI_HANDLE_p WindowActive;              /*!< Pointer to currently active window when creating new widgets */
+    GUI_HANDLE_p FocusedWidget;             /*!< Pointer to focused widget for keyboard events if any */
+    GUI_HANDLE_p ActiveWidget;              /*!< Pointer to widget currently active by mouse or touch press */
     
-    GUI_LinkedListRoot_t Root;              /*!< Root linked list widget */
+    GUI_LinkedListRoot_t Root;              /*!< Root linked list of widgets */
+    GUI_TIMER_CORE_t Timers;                /*!< Software structure management */
 } GUI_t;
 extern GUI_t GUI;
 
@@ -208,6 +264,7 @@ GUI_Result_t GUI_Init(void);
  * \retval          Number of jobs done in current call
  */
 int32_t GUI_Process(void);
+void GUI_UpdateTime(uint32_t millis);
 
 //Notify GUI from low-level that layer is in use
 void GUI_LCD_ConfirmActiveLayer(GUI_Byte layer_num);

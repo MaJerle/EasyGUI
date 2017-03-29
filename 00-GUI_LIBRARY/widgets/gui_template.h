@@ -39,7 +39,6 @@ extern "C" {
 
 /**
  * \addtogroup      GUI_WIDGETS
- * \brief       
  * \{
  */
 #include "gui_widget.h"
@@ -50,47 +49,11 @@ extern "C" {
  */
 
 /**
- * \defgroup        GUI_TEMPLATE_Macros
- * \brief           Library defines
- * \{
- */
-
-
-
-/**
- * \} GUI_TEMPLATE_Macros
- */
- 
-/**
- * \defgroup        GUI_TEMPLATE_Typedefs
- * \brief           Library Typedefs
- * \{
- */
-
-
-
-/**
- * \} GUI_TEMPLATE_Typedefs
+ * \}
  */
 
 /**
- * \defgroup        GUI_TEMPLATE_Functions
- * \brief           Library Functions
- * \{
- */
-
-
-
-/**
- * \} GUI_TEMPLATE_Functions
- */
- 
-/**
- * \} GUI_TEMPLATE
- */
-
-/**
- * \} GUI_WIDGETS
+ * \}
  */
 
 /* C++ detection */

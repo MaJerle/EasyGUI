@@ -37,22 +37,25 @@
 
 /**
  * \defgroup        GUI_CONF Configuration
- * \brief           List of default GUI colors
+ * \brief           GUI configuration setup
  * \{
  */
 
 /**
  * \brief           Enables (1) or disables (0) clipping regions for redraw operations
+ *
  */
 #define GUI_USE_CLIPPING                1
 
 /**
  * \brief           Enables (1) or disables (0) touch support
+ *
  */
 #define GUI_USE_TOUCH                   1
 
 /**
  * \brief           Enables (1) or disables (0) keyboard support
+ *
  */
 #define GUI_USE_KEYBOARD                1
 
@@ -65,13 +68,15 @@
 
 /**
  * \brief           Maximal number of touch entries in buffer
+ *
  */
-#define TOUCH_BUFFER_SIZE               10
+#define GUI_TOUCH_BUFFER_SIZE           10
 
 /**
  * \brief           Maximal number of keyboard entries in buffer
+ *
  */
-#define KEYBOARD_BUFFER_SIZE            10
+#define GUI_KEYBOARD_BUFFER_SIZE        10
 
 /**
  * \}

@@ -23,6 +23,7 @@
  * | OTHER DEALINGS IN THE SOFTWARE.
  * |----------------------------------------------------------------------
  */
+#define GUI_INTERNAL
 #include "gui_window.h"
 
 /******************************************************************************/
@@ -38,13 +39,6 @@
 /******************************************************************************/
 #define __GW(x)             ((GUI_WINDOW_t *)(x))
 
-static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp);
-static uint8_t __Control(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* param, void* result);
-
-#if GUI_USE_TOUCH  
-static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts);
-#endif /* GUI_USE_TOUCH */
-
 /******************************************************************************/
 /******************************************************************************/
 /***                            Private variables                            **/
@@ -54,22 +48,9 @@ const static GUI_WIDGET_t Widget = {
     {
         _T("Window"),                               /*!< Widget name */
         sizeof(GUI_WINDOW_t),                       /*!< Size of widget for memory allocation */
-        1,                                          /*!< Allow children objects on widget */
+        GUI_FLAG_WIDGET_ALLOW_CHILDREN,             /*!< List of widget flags */
     },
-    __Control,                                      /*!< Control function */
-    __Draw,                                         /*!< Widget draw function */
-#if GUI_USE_TOUCH
-    {
-        __TouchDown,                                /*!< Touch down callback function */
-        0,                                          /*!< Touch up callback function */
-        0                                           /*!< Touch move callback function */
-    },
-#endif /* GUI_USE_TOUCH */
-#if GUI_USE_KEYBOARD
-    {
-        0,                                          /*!< Keyboard key pressed callback function */
-    }
-#endif /* GUI_USE_KEYBOARD */
+    GUI_WINDOW_Callback,                            /*!< Control function */
 };
 
 /******************************************************************************/
@@ -78,24 +59,23 @@ const static GUI_WIDGET_t Widget = {
 /******************************************************************************/
 /******************************************************************************/
 #define w          ((GUI_WINDOW_t *)h)
-static uint8_t __Control(GUI_HANDLE_t h, GUI_WidgetControl_t ctrl, void* param, void* result) {
-    __GUI_UNUSED3(h, param, result);
+uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     switch (ctrl) {                                 /* Handle control function if required */
+        case GUI_WC_Draw: {
+            GUI_Display_t* disp = (GUI_Display_t *)param;
+            GUI_DRAW_FilledRectangle(disp, __GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h), __GUI_WIDGET_GetWidth(h), __GUI_WIDGET_GetHeight(h), w->Color[GUI_WINDOW_COLOR_BG]);
+            return 1;
+        }
+#if GUI_USE_TOUCH  
+        case GUI_WC_TouchStart:
+            *(__GUI_TouchStatus_t *)result = touchHANDLEDNOFOCUS;   /* Set handled status */
+            return 1;
+#endif /* GUI_USE_TOUCH */
         default:                                    /* Handle default option */
+            __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
     }
 }
-
-static void __Draw(GUI_HANDLE_t h, GUI_Display_t* disp) {
-    GUI_DRAW_FilledRectangle(disp, __GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h), h->Width, h->Height, w->Color[GUI_WINDOW_COLOR_BG]);
-}
-
-#if GUI_USE_TOUCH  
-static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts) {
-    __GUI_UNUSED2(h, ts);
-    return touchHANDLEDNOFOCUS;                     /* Notify that touch has been pressed */
-}
-#endif /* GUI_USE_TOUCH */
 #undef w
 
 /******************************************************************************/
@@ -103,40 +83,58 @@ static __GUI_TouchStatus_t __TouchDown(GUI_HANDLE_t h, GUI_TouchData_t* ts) {
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_t GUI_WINDOW_Create(GUI_ID_t id) {
+GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id) {
     GUI_WINDOW_t* ptr;
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_WINDOW_t *)__GUI_WIDGET_Create(&Widget, id, 0, 0, GUI.LCD.Width, GUI.LCD.Height);    /* Allocate memory for basic widget */
+    ptr = (GUI_WINDOW_t *)__GUI_WIDGET_Create(&Widget, id, 0, 0, GUI.LCD.Width, GUI.LCD.Height, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP); /* Allocate memory for basic widget */
     if (ptr) {
         ptr->Color[GUI_WINDOW_COLOR_BG] = GUI_COLOR_LIGHTGRAY;  /* Set default color */
         
-        GUI_WINDOW_SetActive(ptr);                  /* Set active window */
+        GUI_WINDOW_SetActive(__GH(ptr));            /* Set active window */
     }
     __GUI_LEAVE();                                  /* Leave GUI */
     return __GH(ptr);
 }
 
-GUI_HANDLE_t GUI_WINDOW_CreateChild(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height) {
+GUI_HANDLE_p GUI_WINDOW_CreateChild(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height) {
     GUI_WINDOW_t* ptr;
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_WINDOW_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height);    /* Allocate memory for basic widget */
+    ptr = (GUI_WINDOW_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, 0); /* Allocate memory for basic widget */
     if (ptr) {        
         ptr->Color[GUI_WINDOW_COLOR_BG] = GUI_COLOR_LIGHTGRAY;  /* Set default color */
         
         /* Control setup */
         __GH(ptr)->Flags |= GUI_FLAG_CHILD;         /* This window is child window */
         
-        GUI_WINDOW_SetActive(ptr);                  /* Set active window */
+        __GUI_WIDGET_SetPaddingTop(ptr, 10);
+        __GUI_WIDGET_SetPaddingRight(ptr, 10);
+        __GUI_WIDGET_SetPaddingBottom(ptr, 10);
+        __GUI_WIDGET_SetPaddingLeft(ptr, 10);
+        
+        GUI_WINDOW_SetActive(__GH(ptr));            /* Set active window */
     }
     __GUI_LEAVE();                                  /* Leave GUI */
     return __GH(ptr);
 }
 
-GUI_HANDLE_t GUI_WINDOW_SetColor(GUI_HANDLE_t h, GUI_WINDOW_COLOR_t index, GUI_Color_t color) {
+void GUI_WINDOW_SetActive(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMSVOID(h);                      /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    GUI.WindowActive = h;                           /* Set new active window */
+    __GUI_WIDGET_MoveDownTree(h);                   /* Move widget down on tree */
+    
+    __GUI_FOCUS_CLEAR();                            /* Clear focus on widget */
+    __GUI_ACTIVE_CLEAR();                           /* Clear active on widget */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+}
+
+GUI_HANDLE_p GUI_WINDOW_SetColor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -149,7 +147,7 @@ GUI_HANDLE_t GUI_WINDOW_SetColor(GUI_HANDLE_t h, GUI_WINDOW_COLOR_t index, GUI_C
     return h;                                       /* Return widget pointer */
 }
 
-GUI_HANDLE_t GUI_WINDOW_SetBorderRadius(GUI_HANDLE_t h, GUI_Dim_t radius) {
+GUI_HANDLE_p GUI_WINDOW_SetBorderRadius(GUI_HANDLE_p h, GUI_Dim_t radius) {
     __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -162,7 +160,7 @@ GUI_HANDLE_t GUI_WINDOW_SetBorderRadius(GUI_HANDLE_t h, GUI_Dim_t radius) {
     return h;                                       /* Return widget pointer */
 }
 
-GUI_HANDLE_t GUI_WINDOW_SetBorderWidth(GUI_HANDLE_t h, GUI_Dim_t width) {
+GUI_HANDLE_p GUI_WINDOW_SetBorderWidth(GUI_HANDLE_p h, GUI_Dim_t width) {
     __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     

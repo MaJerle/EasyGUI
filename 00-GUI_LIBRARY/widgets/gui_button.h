@@ -78,10 +78,10 @@ typedef struct GUI_BUTTON_t {
  * \param[in]       y: Widget Y position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
- * \retval          > 0: \ref GUI_HANDLE_t object of created widget
+ * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_t GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height);
+GUI_HANDLE_p GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height);
 
 /**
  * \brief           Set color to specific part of widget
@@ -90,9 +90,11 @@ GUI_HANDLE_t GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
  * \param[in]       color: Color value
  * \retval          Widget handle
  */
-GUI_HANDLE_t GUI_BUTTON_SetColor(GUI_HANDLE_t h, GUI_BUTTON_COLOR_t index, GUI_Color_t color);
-GUI_HANDLE_t GUI_BUTTON_SetBorderWidth(GUI_HANDLE_t h, GUI_Dim_t width);
-GUI_HANDLE_t GUI_BUTTON_SetBorderRadius(GUI_HANDLE_t h, GUI_Dim_t size);
+GUI_HANDLE_p GUI_BUTTON_SetColor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color);
+GUI_HANDLE_p GUI_BUTTON_SetBorderWidth(GUI_HANDLE_p h, GUI_Dim_t width);
+GUI_HANDLE_p GUI_BUTTON_SetBorderRadius(GUI_HANDLE_p h, GUI_Dim_t size);
+
+uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
     
 /**
  * \}
