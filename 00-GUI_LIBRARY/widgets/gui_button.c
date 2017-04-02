@@ -60,9 +60,6 @@ const static GUI_WIDGET_t Widget = {
 /******************************************************************************/
 #define b                   ((GUI_BUTTON_t *)(h))
 uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
-#if GUI_USE_TOUCH
-    static GUI_iDim_t tX, tY;
-#endif /* GUI_USE_TOUCH */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
@@ -109,22 +106,14 @@ uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
         }
 #if GUI_USE_TOUCH 
         case GUI_WC_TouchStart: {
-            __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
-            tX = ts->RelX[0];                       /* Get relative X position */
-            tY = ts->RelY[0];                       /* Get relative Y position */
             *(__GUI_TouchStatus_t *)result = touchHANDLED;
             return 1;
         }
         case GUI_WC_TouchMove: {
-            __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
-            tX = ts->RelX[0];                       /* Get relative X position */
-            tY = ts->RelY[0];                       /* Get relative Y position */
             *(__GUI_TouchStatus_t *)result = touchHANDLED;
             return 1;
         }
         case GUI_WC_TouchEnd: {
-            __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
-            __GUI_WIDGET_SetXY(h, ts->RelX[0] - __GUI_WIDGET_GetAbsoluteX(h->Parent) - tX, ts->TS.Y[0] - __GUI_WIDGET_GetAbsoluteY(h->Parent) - tY);
             return 1;
         }
 #endif /* GUI_USE_TOUCH */
@@ -146,7 +135,7 @@ GUI_HANDLE_p GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_BUTTON_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, 0);     /* Allocate memory for basic widget */
+    ptr = (GUI_BUTTON_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, 0); /* Allocate memory for basic widget */
     if (ptr) {        
         /* Color setup */
         ptr->Color[GUI_BUTTON_COLOR_BG] = GUI_COLOR_GRAY;   /* Set background color */
@@ -163,8 +152,8 @@ GUI_HANDLE_p GUI_BUTTON_SetColor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_C
     __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (__GB(h)->Color[index] != color) {         /* Any parameter changed */
-        __GB(h)->Color[index] = color;            /* Set parameter */
+    if (__GB(h)->Color[index] != color) {           /* Any parameter changed */
+        __GB(h)->Color[index] = color;              /* Set parameter */
         __GUI_WIDGET_Invalidate(h);                 /* Redraw object */
     }
     

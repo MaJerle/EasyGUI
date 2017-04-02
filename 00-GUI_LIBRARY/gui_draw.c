@@ -247,7 +247,7 @@ void GUI_DRAW_Fill(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iD
     if ((y + height) > disp->Y2) {
         height = disp->Y2 - y;
     }
-#endif
+#endif /* GUI_USE_CLIPPING */
     GUI.LL.FillRect(&GUI.LCD, GUI.LCD.DrawingLayer, x, y, width, height, color);
 }
 
@@ -256,7 +256,7 @@ void GUI_DRAW_SetPixel(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GU
     if (y < disp->Y1 || y >= disp->Y2 || x < disp->X1 || x >= disp->X2) {
         return;
     }
-#endif
+#endif /* GUI_USE_CLIPPING */
     GUI.LL.SetPixel(&GUI.LCD, GUI.LCD.DrawingLayer, x, y, color);
 }
 
@@ -276,7 +276,7 @@ void GUI_DRAW_VLine(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_i
     if ((y + length) > disp->Y2) {
         length = disp->Y2 - y;
     }
-#endif
+#endif /* GUI_USE_CLIPPING */
     GUI.LL.DrawVLine(&GUI.LCD, GUI.LCD.DrawingLayer, x, y, length, color);
 }
 
@@ -292,7 +292,7 @@ void GUI_DRAW_HLine(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_i
     if ((x + length) > disp->X2) {
         length = disp->X2 - x;
     }
-#endif
+#endif /* GUI_USE_CLIPPING */
     GUI.LL.DrawHLine(&GUI.LCD, GUI.LCD.DrawingLayer, x, y, length, color);
 }
 
@@ -305,16 +305,26 @@ void GUI_DRAW_Line(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_
 	GUI_iDim_t deltax = 0, deltay = 0, x = 0, y = 0, xinc1 = 0, xinc2 = 0, 
 	yinc1 = 0, yinc2 = 0, den = 0, num = 0, numadd = 0, numpixels = 0, 
 	curpixel = 0;
+    
+    /* Check if coordinates are inside drawing region */
+    if (
+        (x1 < disp->X1 && x2 < disp->X1) ||         /* X coordinates outside left of display */
+        (x1 > disp->X2 && x2 > disp->X2) ||         /* X coordinates outside right of display */
+        (y1 < disp->Y1 && y2 < disp->Y1) ||         /* Y coordinates outside top of display */
+        (y1 > disp->Y2 && y2 > disp->Y2)            /* Y coordinates outside bottom of display */
+    ) {
+        return;
+    }
 
 	deltax = __GUI_ABS(x2 - x1);
 	deltay = __GUI_ABS(y2 - y1);
     
-    if (deltax == 0) {
-        GUI_DRAW_VLine(disp, x1, y1, deltay, color);
+    if (deltax == 0) {                              /* Straight vertical line */
+        GUI_DRAW_VLine(disp, x1, __GUI_MIN(y1, y2), deltay, color);
         return;
     }
-    if (deltay == 0) {
-        GUI_DRAW_HLine(disp, x1, y1, deltax, color);
+    if (deltay == 0) {                              /* Straight horizontal line */
+        GUI_DRAW_HLine(disp, __GUI_MIN(x1, x2), y1, deltax, color);
         return;
     }
     
@@ -354,13 +364,7 @@ void GUI_DRAW_Line(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_
 	}
 
 	for (curpixel = 0; curpixel <= numpixels; curpixel++) {
-#if GUI_USE_CLIPPING
-		if (x >= GUI.Display.X1 && x <= GUI.Display.X2) {
-            GUI_DRAW_SetPixel(disp, x, y, color);
-        }
-#else
         GUI_DRAW_SetPixel(disp, x, y, color);
-#endif
 		num += numadd;
 		if (num >= den) {
 			num -= den;
@@ -460,9 +464,9 @@ void GUI_DRAW_Circle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_
 
 void GUI_DRAW_FilledCircle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t r, GUI_Color_t color) {
     GUI_DRAW_FilledCircleCorner(disp, x, y, r, GUI_DRAW_CIRCLE_TL, color);
-    GUI_DRAW_FilledCircleCorner(disp, x - 1, y, r, GUI_DRAW_CIRCLE_TR, color);
+    GUI_DRAW_FilledCircleCorner(disp, x, y, r, GUI_DRAW_CIRCLE_TR, color);
     GUI_DRAW_FilledCircleCorner(disp, x, y - 1, r, GUI_DRAW_CIRCLE_BL, color);
-    GUI_DRAW_FilledCircleCorner(disp, x - 1, y - 1, r, GUI_DRAW_CIRCLE_BR, color);
+    GUI_DRAW_FilledCircleCorner(disp, x, y - 1, r, GUI_DRAW_CIRCLE_BR, color);
 }
 
 void GUI_DRAW_Triangle(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1,  GUI_iDim_t x2, GUI_iDim_t y2, GUI_iDim_t x3, GUI_iDim_t y3, GUI_Color_t color) {
@@ -541,7 +545,7 @@ void GUI_DRAW_CircleCorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t 
     )) {
         return;
     }
-#endif
+#endif /* GUI_USE_CLIPPING */
 
     while (x < y) {
         if (f >= 0) {
@@ -589,7 +593,7 @@ void GUI_DRAW_FilledCircleCorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_i
     )) {
         return;
     }
-#endif
+#endif /* GUI_USE_CLIPPING */
 
     while (x < y) {
         if (f >= 0) {

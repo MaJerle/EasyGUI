@@ -64,27 +64,33 @@ static GUI_Byte_t KBBufferData[GUI_TOUCH_BUFFER_SIZE * sizeof(GUI_KeyboardData_t
 /******************************************************************************/
 /******************************************************************************/
 #if GUI_USE_TOUCH
-uint8_t GUI_INPUT_AddTouch(const GUI_TouchData_t* Data) {
-    return GUI_BUFFER_Write(&TSBuffer, Data, sizeof(*Data)) ? 1 : 0;    /* Write data to buffer */
+uint8_t GUI_INPUT_TouchAdd(GUI_TouchData_t* ts) {
+    ts->Time = GUI.Time;                            /* Set event time */
+    return GUI_BUFFER_Write(&TSBuffer, ts, sizeof(*ts)) ? 1 : 0;    /* Write data to buffer */
 }
 
-GUI_Byte_t __GUI_INPUT_ReadTouch(GUI_TouchData_t* Data) {
-    if (GUI_BUFFER_GetFull(&TSBuffer) >= sizeof(*Data)) {
-        return (GUI_Byte_t)GUI_BUFFER_Read(&TSBuffer, Data, sizeof(*Data)); /* Read data fro mbuffer */
+uint8_t __GUI_INPUT_TouchRead(GUI_TouchData_t* ts) {
+    if (GUI_BUFFER_GetFull(&TSBuffer) >= sizeof(*ts)) {
+        return (uint8_t)GUI_BUFFER_Read(&TSBuffer, ts, sizeof(*ts)); /* Read data fro mbuffer */
     }
     return 0;
+}
+
+uint8_t __GUI_INPUT_TouchAvailable(void) {
+    return GUI_BUFFER_GetFull(&TSBuffer) > 0;       /* Check if any available touch */
 }
 #endif /* GUI_USE_TOUCH */
 
 
 #if GUI_USE_KEYBOARD
-uint8_t GUI_INPUT_AddKey(const GUI_KeyboardData_t* Data) {
-    return GUI_BUFFER_Write(&KBBuffer, Data, sizeof(*Data)) ? 1 : 0;    /* Write data to buffer */
+uint8_t GUI_INPUT_KeyAdd(GUI_KeyboardData_t* kb) {
+    kb->Time = GUI.Time;                            /* Set event time */
+    return GUI_BUFFER_Write(&KBBuffer, kb, sizeof(*kb)) ? 1 : 0;    /* Write data to buffer */
 }
 
-GUI_Byte_t __GUI_INPUT_ReadKey(GUI_KeyboardData_t* Data) {
-    if (GUI_BUFFER_GetFull(&KBBuffer) >= sizeof(*Data)) {
-        return (GUI_Byte_t)GUI_BUFFER_Read(&KBBuffer, Data, sizeof(*Data)); /* Read data fro mbuffer */
+uint8_t __GUI_INPUT_KeyRead(GUI_KeyboardData_t* kb) {
+    if (GUI_BUFFER_GetFull(&KBBuffer) >= sizeof(*kb)) {
+        return (uint8_t)GUI_BUFFER_Read(&KBBuffer, kb, sizeof(*kb)); /* Read data fro mbuffer */
     }
     return 0;
 }

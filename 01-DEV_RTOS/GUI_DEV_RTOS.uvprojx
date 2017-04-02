@@ -1316,6 +1316,16 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_progbar.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_checkbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_checkbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_radio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_radio.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2698,6 +2708,16 @@
               <FileName>gui_progbar.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_progbar.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_checkbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_checkbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_radio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_radio.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4083,6 +4103,16 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_progbar.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_checkbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_checkbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_radio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_radio.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -5200,6 +5230,16 @@
               <FileName>gui_progbar.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_progbar.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_checkbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_checkbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_radio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_radio.c</FilePath>
             </File>
           </Files>
         </Group>

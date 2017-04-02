@@ -49,6 +49,31 @@ extern "C" {
  */
     
 /**
+ * \brief           Window color list enumeration
+ */
+typedef enum GUI_WINDOW_COLOR_t {
+    GUI_WINDOW_COLOR_BG = 0x00,             /*!< Background color index */
+} GUI_WINDOW_COLOR_t;
+
+#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+/**
+ * \brief           Window object structure
+ */
+typedef struct GUI_WINDOW_t {
+    GUI_HANDLE_ROOT_t C;                    /*!< GUI handle object, must always be first on list */
+    
+    GUI_TIMER_t* Timer;                     /*!< Pointer to timer structure */
+    
+    uint32_t Number;                        /*!< Window number */
+    
+    GUI_Color_t Color[1];                   /*!< List of colors */
+    
+    GUI_Dim_t BorderRadius;                 /*!< Radius in units of pixels for children windows */
+    GUI_Dim_t BorderWidth;                  /*!< Border width */
+} GUI_WINDOW_t;
+#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+    
+/**
  * \brief           Get desktop window
  * \hideinitializer
  */
@@ -71,29 +96,6 @@ void GUI_WINDOW_SetActive(GUI_HANDLE_p h);
  * \hideinitializer
  */
 #define GUI_WINDOW_IsChild(p)       (((GUI_HANDLE_p)(p))->Flags & GUI_FLAG_CHILD)
-    
-/**
- * \brief           Window color list enumeration
- */
-typedef enum GUI_WINDOW_COLOR_t {
-    GUI_WINDOW_COLOR_BG = 0x00,             /*!< Background color index */
-} GUI_WINDOW_COLOR_t;
-
-/**
- * \brief           Window object structure
- */
-typedef struct GUI_WINDOW_t {
-    GUI_HANDLE_ROOT_t C;                    /*!< GUI handle object, must always be first on list */
-    
-    GUI_TIMER_t* Timer;                     /*!< Pointer to timer structure */
-    
-    uint32_t Number;                        /*!< Window number */
-    
-    GUI_Color_t Color[1];                   /*!< List of colors */
-    
-    GUI_Dim_t BorderRadius;                 /*!< Radius in units of pixels for children windows */
-    GUI_Dim_t BorderWidth;                  /*!< Border width */
-} GUI_WINDOW_t;
 
 /**
  * \brief           Create new base widget window with desktop window as a parent

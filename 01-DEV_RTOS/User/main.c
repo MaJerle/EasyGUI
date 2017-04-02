@@ -60,6 +60,8 @@ CTS         PA3                 RTS from ST to CTS from GSM
 #include "gui_progbar.h"
 #include "gui_graph.h"
 #include "gui_edittext.h"
+#include "gui_checkbox.h"
+#include "gui_radio.h"
 
 #include "math.h"
 
@@ -71,6 +73,8 @@ GUI_HANDLE_p led[8][2];
 GUI_HANDLE_p prog1, prog2, prog3, prog4;
 GUI_HANDLE_p graph1, graph2, graph3;
 GUI_HANDLE_p edit1, edit2, edit3;
+GUI_HANDLE_p cb1, cb2;
+GUI_HANDLE_p rb[4];
 
 GUI_GRAPH_DATA_p graphdata1, graphdata2, graphdata3, graphdata4;
 
@@ -92,7 +96,7 @@ int main(void) {
     GUI_KeyboardData_t key;
     uint32_t state;
     
-    static int i = 0, len = 360, radius = 50;
+    static float i = 0, len = 360, radius = 9;
     float x, y;
     
     TM_RCC_InitSystem();                                    /* Init system */
@@ -101,8 +105,6 @@ int main(void) {
     TM_DISCO_ButtonInit();                                  /* Init button */
     TM_DELAY_Init();                                        /* Init delay */
     TM_USART_Init(DISCO_USART, DISCO_USART_PP, 115200);     /* Init USART for debug purpose */
-    
-   
     
     /* Print first screen message */
     printf("GUI; Compiled: %s %s, sizeof: %d\r\n", __DATE__, __TIME__, sizeof(char *) * 5);
@@ -113,72 +115,64 @@ int main(void) {
     
     win1 = GUI_WINDOW_GetDesktop();                         /* Get desktop window */
     
-    //Subwindow 1
-    wins[0] = GUI_WINDOW_CreateChild(0, 10, 10, 300, 180);
-    GUI_WINDOW_SetColor(wins[0], GUI_WINDOW_COLOR_BG, GUI_COLOR_LIGHTGREEN);
+    /* Button */
+    btn1 = GUI_BUTTON_Create(1, 10, 10, 120, 40);
+    GUI_WIDGET_SetFont(btn1, &GUI_Font_Arial_Narrow_Italic_22);
+    GUI_WIDGET_AllocTextMemory(btn1, 255);
+    GUI_WIDGET_SetText(btn1, _T("Button"));
     
-    edit1 = GUI_EDITTEXT_Create(1, 10, 10, 380, 50);
+    /* Edit text */
+    edit1 = GUI_EDITTEXT_Create(1, 140, 10, 120, 40);
     GUI_WIDGET_SetFont(edit1, &GUI_Font_Arial_Narrow_Italic_22);
     GUI_WIDGET_AllocTextMemory(edit1, 255);
-    edit2 = GUI_EDITTEXT_Create(1, 15, 50, 100, 50);
-    GUI_WIDGET_SetFont(edit2, &GUI_Font_Arial_Narrow_Italic_22);
-    GUI_WIDGET_AllocTextMemory(edit2, 255);    
-    graph1 = GUI_GRAPH_Create(0, 0, 0, 1000, 1000);
+    GUI_WIDGET_SetText(edit1, _T("Edit text"));
+    
+    /* Graph */
+    graph1 = GUI_GRAPH_Create(0, 270, 10, 200, 150);
  
-    GUI_WINDOW_SetActive(win1);
+    GUI_GRAPH_SetMinX(graph1, -10);
+    GUI_GRAPH_SetMaxX(graph1, 10);
+    GUI_GRAPH_SetMinY(graph1, -10);
+    GUI_GRAPH_SetMaxY(graph1, 10);
     
-    //Subwindow 2
-    wins[1] = GUI_WINDOW_CreateChild(1, 280, 25, 180, 150);
-    GUI_WINDOW_SetColor(wins[1], GUI_WINDOW_COLOR_BG, GUI_COLOR_DARKRED);
-    graph2 = GUI_GRAPH_Create(0, 0, 0, 1000, 1000);
- 
-    GUI_WINDOW_SetActive(win1);
-    
-    //Subwindow 3
-    wins[2] = GUI_WINDOW_CreateChild(1, 50, 50, 400, 2000);
-    //wins[2] = GUI_WINDOW_CreateChild(1, 0, 0, 1000, 1000);
-    GUI_WINDOW_SetColor(wins[2], GUI_WINDOW_COLOR_BG, GUI_COLOR_LIGHTBLUE);
-    
-    graph3 = GUI_GRAPH_Create(0, 0, 0, 1000, 1000);
-    
-    GUI_GRAPH_SetMinX(graph3, -224);
-    GUI_GRAPH_SetMaxX(graph3, 225);
-    GUI_GRAPH_SetMinY(graph3, -121);
-    GUI_GRAPH_SetMaxY(graph3, 122);
-    
+    len = 10;
     graphdata1 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_XY, len);
-    graphdata2 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_XY, len);
-    graphdata3 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_YT, len);
-    graphdata4 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_YT, len);
+    graphdata2 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_YT, len);
     
     #define PI      3.14159265359f
     
-    for (i = 0; i < len; i++) {
-        x = cos((float)i * (2.0f * PI / 180.0f));
-        y = sin((float)i * (2.0f * PI / 180.0f));
+    for (i = 0; i <= 360; i += 360 / len) {
+        x = cos((float)i * (PI / 180.0f));
+        y = sin((float)i * (PI / 180.0f));
         GUI_GRAPH_DATA_AddValue(graphdata1, x * radius, y * radius);
-        GUI_GRAPH_DATA_AddValue(graphdata2, x * radius / 2, y * radius / 2);
-        GUI_GRAPH_DATA_AddValue(graphdata3, x * radius / 3, y * radius / 3);
-        GUI_GRAPH_DATA_AddValue(graphdata4, x * radius / 3, y * radius / 4);
+        GUI_GRAPH_DATA_AddValue(graphdata2, x * radius / 3, y * radius / 4);
     }
     
     graphdata1->Color = GUI_COLOR_RED;
     graphdata2->Color = GUI_COLOR_GREEN;
-    graphdata3->Color = GUI_COLOR_BLUE;
-    graphdata4->Color = GUI_COLOR_MAGENTA;
    
     GUI_GRAPH_AttachData(graph1, graphdata1);
-    GUI_GRAPH_AttachData(graph2, graphdata1);
-    GUI_GRAPH_AttachData(graph3, graphdata1);
     GUI_GRAPH_AttachData(graph1, graphdata2);
-    GUI_GRAPH_AttachData(graph2, graphdata2);
-    GUI_GRAPH_AttachData(graph3, graphdata2);
-    GUI_GRAPH_AttachData(graph1, graphdata3);
-    GUI_GRAPH_AttachData(graph2, graphdata3);
-    GUI_GRAPH_AttachData(graph3, graphdata3);
-    GUI_GRAPH_AttachData(graph1, graphdata4);
-    GUI_GRAPH_AttachData(graph2, graphdata4);
-    GUI_GRAPH_AttachData(graph3, graphdata4);
+    
+    /* Progress bar */
+    prog1 = GUI_PROGBAR_Create(2, 10, 60, 120, 40);
+    GUI_WIDGET_SetFont(prog1, &GUI_Font_Arial_Narrow_Italic_22);
+    GUI_WIDGET_SetText(prog1, _T("Progbar"));
+    
+    /* Checkbox */
+    cb1 = GUI_CHECKBOX_Create(1, 140, 60, 60, 40);
+    GUI_WIDGET_SetFont(cb1, &GUI_Font_Arial_Narrow_Italic_22);
+    GUI_WIDGET_SetText(cb1, _T("CB1"));
+    cb2 = GUI_CHECKBOX_Create(1, 200, 60, 60, 40);
+    GUI_WIDGET_SetFont(cb2, &GUI_Font_Arial_Narrow_Italic_22);
+    GUI_WIDGET_SetText(cb2, _T("CB1"));
+    
+    /* Radio control */
+    for (state = 0; state < 4; state++) {
+        rb[state] = GUI_RADIO_Create(10, 10, 110 + (state * 30), 120, 25);
+        GUI_WIDGET_SetFont(rb[state], &GUI_Font_Arial_Narrow_Italic_22);
+        GUI_WIDGET_SetText(rb[state], _T("RB1"));
+    }
     
     __GUI_LINKEDLIST_PrintList(NULL);
 
@@ -192,7 +186,7 @@ int main(void) {
     state = 0;
 	while (1) {
         GUI_Process();
-        if ((TM_DELAY_Time() - time) >= 1000) {
+        if ((TM_DELAY_Time() - time) >= 500) {
             time = TM_DELAY_Time();
             
             //__GUI_TIMER_Start(edit1->Timer);
@@ -204,6 +198,12 @@ int main(void) {
 //            }
 //            __GUI_LINKEDLIST_PrintList(NULL);
             state++;
+            GUI_PROGBAR_SetValue(prog1, state % 100);
+            
+            x = cos((float)i * (PI / 180.0f));
+            y = sin((float)i * (PI / 180.0f));
+            GUI_GRAPH_DATA_AddValue(graphdata2, x * radius / 3, y * radius / 4);
+            i += 360 / len;
         }
         
         while (!TM_USART_BufferEmpty(DISCO_USART)) {
@@ -212,16 +212,9 @@ int main(void) {
             switch (GUI_STRING_UNICODE_Decode(&s, ch)) {
                 case UNICODE_OK:
                     key.Keys[s.t - 1] = ch;
-                    GUI_INPUT_AddKey(&key);
-                
-                    if (ch == 'M') {
-                        GUI_GRAPH_SetMinY(graph3, -100);
-                        GUI_GRAPH_SetMaxY(graph3, 100);
-                    } else if (ch >= 'A' && ch <= 'Z') {
-                        GUI_GRAPH_DATA_AddValue(graphdata1, 0, ch - 'A');
-                        GUI_GRAPH_DATA_AddValue(graphdata2, 0, ch - 'G');
-                        GUI_GRAPH_DATA_AddValue(graphdata3, 0, ch - 'O');
-                    }
+                    GUI_INPUT_KeyAdd(&key);
+                    key.Keys[0] = 0;
+                    GUI_INPUT_KeyAdd(&key);
                     break;
                 case UNICODE_PROGRESS:
                     key.Keys[s.t - s.r - 1] = ch;
@@ -234,7 +227,7 @@ int main(void) {
 
 /* 1ms handler */
 void TM_DELAY_1msHandler() {
-    //osSystickHandler();                     /* Kernel systick handler processing */
+    //osSystickHandler();                             /* Kernel systick handler processing */
     
     GUI_UpdateTime(1);
 }
@@ -249,23 +242,34 @@ int fputc(int ch, FILE* fil) {
  * Handle EXTI interrupt routine
  */
 void TM_EXTI_Handler(uint16_t GPIO_Pin) {
-    static GUI_TouchData_t p;
+    static GUI_TouchData_t p = {0}, t = {0};
     if (GPIO_Pin == GPIO_PIN_13) {
-        uint8_t i;
-        GUI_TouchData_t t;
-        TM_TOUCH_Read(&TS);
+        uint8_t i, update = 0, diffx, diffy;
+        TM_TOUCH_Read(&TS);                         /* Read touch data */
         
         memset((void *)&t, 0x00, sizeof(t));
+        t.Status = TS.NumPresses ? GUI_TouchState_PRESSED : GUI_TouchState_RELEASED;
         t.Count = TS.NumPresses > GUI_TOUCH_MAX_PRESSES ? GUI_TOUCH_MAX_PRESSES : TS.NumPresses;
         for (i = 0; i < t.Count; i++) {
             t.X[i] = TS.X[i];
             t.Y[i] = TS.Y[i];
         }
-        t.Status = TS.NumPresses ? GUI_TouchState_PRESSED : GUI_TouchState_RELEASED;
+        if (t.Count != p.Count) {
+            update = 1;
+        } else {
+            for (i = 0; i < t.Count; i++) {
+                diffx = __GUI_ABS(p.X[i] - t.X[i]);
+                diffy = __GUI_ABS(p.Y[i] - t.Y[i]);
+                if (diffx > 3 || diffy > 3) {
+                    update = 1;
+                    break;
+                }
+            }
+        }
         
         /* Check differences */
-        if (memcmp(&p, &t, sizeof(p)) || t.Status == GUI_TouchState_RELEASED) {
-            GUI_INPUT_AddTouch(&t);
+        if (update || t.Status == GUI_TouchState_RELEASED) {
+            GUI_INPUT_TouchAdd(&t);
             memcpy(&p, &t, sizeof(p));
         }
     }

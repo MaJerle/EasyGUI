@@ -43,6 +43,7 @@ extern "C" {
 #include "stdio.h"
 #include "stddef.h"
 #include "gui_config.h"
+#include "pt/pt.h"
 
 /**
  * \addtogroup      GUI
@@ -215,8 +216,8 @@ typedef struct GUI_Gradient_t {
  * \brief           Touch state on widget
  */
 typedef enum GUI_TouchState_t {
+    GUI_TouchState_RELEASED = 0x00,         /*!< Touch released */
     GUI_TouchState_PRESSED = 0x01,          /*!< Touch detected */
-    GUI_TouchState_RELEASED = 0x00          /*!< Touch released */
 } GUI_TouchState_t;
 
 /**
@@ -236,6 +237,7 @@ typedef struct GUI_TouchData_t {
     GUI_iDim_t X[GUI_TOUCH_MAX_PRESSES];    /*!< Touch X coordinate */
     GUI_iDim_t Y[GUI_TOUCH_MAX_PRESSES];    /*!< Touch Y coordinate */
     GUI_TouchState_t Status;                /*!< Touch status, pressed or released */
+    uint32_t Time;                          /*!< Time when touch was recorded */
 } GUI_TouchData_t;
 
 /**
@@ -245,6 +247,11 @@ typedef struct __GUI_TouchData_t {
     GUI_TouchData_t TS;                     /*!< Touch structure from outside */
     GUI_iDim_t RelX[GUI_TOUCH_MAX_PRESSES]; /*!< Relative X position to current widget */
     GUI_iDim_t RelY[GUI_TOUCH_MAX_PRESSES]; /*!< Relative Y position to current widget */
+#if GUI_TOUCH_MAX_PRESSES > 1 || defined(DOXYGEN)
+    float Distance;                         /*!< Distance between 2 points when 2 touch elements are detected */
+    float DistanceOld;                      /*!< Old distance between 2 points */
+#endif /* GUI_TOUCH_MAX_PRESSES > 1 || defined(DOXYGEN) */
+    struct pt pt;                           /*!< Protothreads structure */
 } __GUI_TouchData_t;
 
 /**
@@ -252,11 +259,12 @@ typedef struct __GUI_TouchData_t {
  */
 typedef struct GUI_KeyboardData_t {
 #if GUI_USE_UNICODE
-    GUI_Char Keys[4];                       /*!< Key pressed, plain UTF-8 bytes, up to 4 bytes */
+    GUI_Char Keys[4];                       /*!< Key pressed, plain unicode bytes, up to 4 bytes */
 #else
-    GUI_Char Keys[1];                       /*!< Key pressed */
+    GUI_Char Keys[1];                       /*!< Key pressed, no unicode support */
 #endif
     uint8_t Flags;                          /*!< Flags for special keys */
+    uint32_t Time;                          /*!< Event time */
 } GUI_KeyboardData_t;
 
 /**
@@ -771,6 +779,10 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: Value of \ref __GUI_KeyboardStatus_t enumeration
      */
     GUI_WC_KeyPress,
+    
+    GUI_WC_Click,
+    GUI_WC_LongClick,
+    GUI_WC_DblClick,
 } GUI_WC_t;
 
 /**

@@ -49,27 +49,6 @@ extern "C" {
  */
 
 /**
- * \brief           Get progress bar minimum value
- * \param[in]       h: Progress bar handle
- * \retval          Minimal value
- */
-#define GUI_PROGBAR_GetMin(h)           (((GUI_PROGBAR_t *)h)->Min)
-
-/**
- * \brief           Get progress bar maximal value
- * \param[in]       h: Progress bar handle
- * \retval          Minimal value
- */
-#define GUI_PROGBAR_GetMax(h)           (((GUI_PROGBAR_t *)h)->Max)
-
-/**
- * \brief           Get progress bar current value
- * \param[in]       h: Progress bar handle
- * \retval          Current value
- */
-#define GUI_PROGBAR_GetValue(h)         (((GUI_PROGBAR_t *)h)->Value)
-
-/**
  * \brief           Progress bar color list enumeration
  */
 typedef enum GUI_PROGBAR_COLOR_t {
@@ -78,6 +57,7 @@ typedef enum GUI_PROGBAR_COLOR_t {
     GUI_PROGBAR_COLOR_BORDER = 0x02         /*!< Border color index */
 } GUI_PROGBAR_COLOR_t;
 
+#if defined(GUI_INTERNAL) || defined(DOXYGEN)
 /**
  * \brief           Progress bar widget structure
  */
@@ -91,6 +71,7 @@ typedef struct GUI_PROGBAR_t {
     int32_t Value;                          /*!< Current value for progress bar */
     uint8_t Flags;                          /*!< Flags variable */
 } GUI_PROGBAR_t;
+#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 /**
  * \brief           Create new progress bar widget

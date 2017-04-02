@@ -374,7 +374,7 @@ void LoopWidgets(GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;         //Value holding widgets of parent
 
     for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, 0); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
-        //Loop throught each widget of parent
+        //Loop through each widget of parent
     }
 }
 \endcode
@@ -390,7 +390,7 @@ GUI_HANDLE_p __GUI_LINKEDLIST_WidgetGetNext(GUI_HANDLE_ROOT_t* parent, GUI_HANDL
  * \brief           Get previous widget from current widget handle
  * \note            With combination of input parameters, function acts different:
  *                  <table>
- *                      <tr><th>parent  <th>h   <th>__GUI_LINKEDLIST_WidgetGetNext(parent, h)
+ *                      <tr><th>parent  <th>h   <th>__GUI_LINKEDLIST_WidgetGetPrev(parent, h)
  *                      <tr><td>0       <td>0   <td>0
  *                      <tr><td>0       <td>> 0 <td>Previous widget of <b>h</b> if exists, <b>0</b> otherwise
  *                      <tr><td>> 0     <td>0   <td>Last widget in <b>parent</b> list if exists, <b>0</b> otherwise

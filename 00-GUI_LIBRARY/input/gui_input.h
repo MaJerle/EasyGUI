@@ -45,20 +45,20 @@ extern "C" {
 
 /**
  * \brief           Adds new touch data to internal buffer for further processing
- * \param[in]       *Data: Pointer to \ref GUI_TouchData_t touch data
+ * \param[in]       *kb: Pointer to \ref GUI_TouchData_t touch data
  * \retval          1: Success
  * \retval          0: Failure
  */
-uint8_t GUI_INPUT_AddTouch(const GUI_TouchData_t* Data);
+uint8_t GUI_INPUT_TouchAdd(GUI_TouchData_t* ts);
 
 /**
  * \brief           Adds new key data to internal buffer for further processing
- * \param[in]       *Data: Pointer to \ref GUI_KeyboardData_t key data
+ * \param[in]       *kb: Pointer to \ref GUI_KeyboardData_t key data
  * \retval          1: Success
  * \retval          0: Failure
  * \sa              GUI_Keys
  */
-uint8_t GUI_INPUT_AddKey(const GUI_KeyboardData_t* Data);
+uint8_t GUI_INPUT_KeyAdd(GUI_KeyboardData_t* kb);
 
 #if !defined(DOXYGEN) && defined(GUI_INTERNAL)
 /**
@@ -68,24 +68,26 @@ uint8_t GUI_INPUT_AddKey(const GUI_KeyboardData_t* Data);
  */
 void __GUI_INPUT_Init(void);
 
-/**
- * \brief           Initializes input functionality
- * \param[out]      *Data: Pointer to \ref GUI_TouchData_t to save touch data
- * \retval          Number of bytes read from internal buffer
- */
-GUI_Byte_t __GUI_INPUT_ReadTouch(GUI_TouchData_t* Data);
+uint8_t __GUI_INPUT_TouchAvailable(void);
 
 /**
- * \brief           Initializes input functionality
- * \param[out]      *Data: Pointer to \ref GUI_TouchData_t to save keyboard data
+ * \brief           Read touch value
+ * \param[out]      *ts: Pointer to \ref GUI_TouchData_t to save touch data
  * \retval          Number of bytes read from internal buffer
  */
-GUI_Byte_t __GUI_INPUT_ReadKey(GUI_KeyboardData_t* Data);
+uint8_t __GUI_INPUT_TouchRead(GUI_TouchData_t* ts);
+
+/**
+ * \brief           Read input key from buffer
+ * \param[out]      *kb: Pointer to \ref GUI_KeyboardData_t to save keyboard data
+ * \retval          Number of bytes read from internal buffer
+ */
+uint8_t __GUI_INPUT_KeyRead(GUI_KeyboardData_t* kb);
 
 #endif /* !defined(DOXYGEN) && defined(GUI_INTERNAL) */
 
 /**
- * \} GUI_INPUT
+ * \}
  */
 
 /* C++ detection */

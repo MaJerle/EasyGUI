@@ -58,6 +58,7 @@ typedef enum GUI_BUTTON_COLOR_t {
     GUI_BUTTON_COLOR_BORDER = 0x02          /*!< Border color index in array */
 } GUI_BUTTON_COLOR_t;
 
+#if defined(GUI_INTERNAL) || defined(DOXYGEN)
 /**
  * \brief           GUI button structure
  */
@@ -70,6 +71,7 @@ typedef struct GUI_BUTTON_t {
     GUI_Dim_t BorderWidth;                  /*!< Border width */
     GUI_Dim_t BorderRadius;                 /*!< Border radius */
 } GUI_BUTTON_t;
+#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 /**
  * \brief           Create new button widget

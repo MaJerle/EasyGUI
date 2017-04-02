@@ -87,6 +87,9 @@ void __GUI_LINKEDLIST_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* e
     if (root->Last == element) {                    /* If current is the same as last */
         root->Last = prev;                          /* Set previous as last element */
     }
+    
+    element->Prev = NULL;                           /*!< Clear element pointer */
+    element->Next = NULL;                           /*!< Clear element pointer */
 }
 
 void* __GUI_LINKEDLIST_GETNEXT_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
@@ -123,7 +126,7 @@ uint8_t __GUI_LINKEDLIST_MOVEDOWN_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList
     Prev = element->Prev;                           /* Get previous element */
     Next = element->Next;                           /* Get next element */
     if (Next) {                                     /* Check if next is available */
-        NextNext = Next->Next;                  /* Get next element of next element */
+        NextNext = Next->Next;                      /* Get next element of next element */
     }
     
     if (NextNext) {                                 /* If there is available memory */

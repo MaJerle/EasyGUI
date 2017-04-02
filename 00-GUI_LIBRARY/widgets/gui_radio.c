@@ -1,6 +1,6 @@
 /**	
  * |----------------------------------------------------------------------
- * | Copyright (c) 2017 Tilen Majerle
+ * | Copyright (c) 2016 Tilen Majerle
  * |  
  * | Permission is hereby granted, free of charge, to any person
  * | obtaining a copy of this software and associated documentation
@@ -24,7 +24,7 @@
  * |----------------------------------------------------------------------
  */
 #define GUI_INTERNAL
-#include "gui_edittext.h"
+#include "gui_radio.h"
 
 /******************************************************************************/
 /******************************************************************************/
@@ -37,8 +37,8 @@
 /***                           Private definitions                           **/
 /******************************************************************************/
 /******************************************************************************/
-#define __GE(x)             ((GUI_EDITTEXT_t *)(x))
-    
+#define __GR(x)             ((GUI_RADIO_t *)(x))
+
 /******************************************************************************/
 /******************************************************************************/
 /***                            Private variables                            **/
@@ -46,11 +46,11 @@
 /******************************************************************************/
 const static GUI_WIDGET_t Widget = {
     {
-        _T("EDITTEXT"),                             /*!< Widget name */
-        sizeof(GUI_EDITTEXT_t),                     /*!< Size of widget for memory allocation */
+        _T("Radio"),                                /*!< Widget name */
+        sizeof(GUI_RADIO_t),                        /*!< Size of widget for memory allocation */
         0,                                          /*!< List of widget flags */
     },
-    GUI_EDITTEXT_Callback,                          /*!< Control function */
+    GUI_RADIO_Callback                              /*!< Callback function */
 };
 
 /******************************************************************************/
@@ -58,106 +58,119 @@ const static GUI_WIDGET_t Widget = {
 /***                            Private functions                            **/
 /******************************************************************************/
 /******************************************************************************/
-void TimerCallback(GUI_TIMER_t* timer) {
-    GUI_EDITTEXT_t* edit = __GE(__GUI_TIMER_GetParams(timer));  /* Get parameters from timer */
+void __GUI_RADIO_SetActive(GUI_HANDLE_p h) {
+    GUI_HANDLE_p handle;
     
-    /* Set new color */
-    edit->Color[GUI_EDITTEXT_COLOR_BG] = (edit->Color[GUI_EDITTEXT_COLOR_BG] + 1) * ((edit->Color[GUI_EDITTEXT_COLOR_BG] >> 4) + 3);
+    if (__GR(h)->Flags & GUI_FLAG_RADIO_DISABLED) { /* Check if it can be enabled */
+        return;
+    }
     
-    __GUI_WIDGET_Invalidate(__GH(edit));            /* Invalidate widget */
+    /**
+     * Find radio widgets on the same page
+     * and with the same group ID as widget to be set as active
+     */
+    for (handle = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)h->Parent, NULL); handle; handle = __GUI_LINKEDLIST_WidgetGetNext(NULL, handle)) {
+        if (handle->Widget == &Widget && __GR(handle)->GroupId == __GR(h)->GroupId) {    /* Check if widget is radio box and group is the same as clicked widget */
+            __GR(handle)->SelectedValue = __GR(h)->Value;   /* Set selected value for widget */
+            if (__GR(handle)->Flags & GUI_FLAG_RADIO_CHECKED) { /* Check if widget active */
+                __GR(handle)->Flags &= ~GUI_FLAG_RADIO_CHECKED; /* Clear flag */
+                __GUI_WIDGET_Invalidate(handle);    /* Invalidate widget */
+            }
+        }
+    }
+    
+    __GR(h)->Flags |= GUI_FLAG_RADIO_CHECKED;       /* Set active flag */
+    __GR(h)->SelectedValue = __GR(h)->Value;        /* Set selected value of this radio */
+    __GUI_WIDGET_Invalidate(h);                     /* Invalidate widget */
 }
 
-#define e          ((GUI_EDITTEXT_t *)h)
-uint8_t GUI_EDITTEXT_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+#define c                   ((GUI_RADIO_t *)(h))
+uint8_t GUI_RADIO_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
-            GUI_Dim_t x, y, width, height;
             GUI_Display_t* disp = (GUI_Display_t *)param;
-    
+            GUI_Color_t c1;
+            GUI_iDim_t x, y, width, height, size, sx, sy;
+            
             x = __GUI_WIDGET_GetAbsoluteX(h);       /* Get absolute X coordinate */
             y = __GUI_WIDGET_GetAbsoluteY(h);       /* Get absolute Y coordinate */
             width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
             height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
             
-            GUI_DRAW_FilledRectangle(disp, x, y, width, height, __GE(h)->Color[GUI_EDITTEXT_COLOR_BG]);
-            GUI_DRAW_Rectangle(disp, x, y, width, height, __GE(h)->Color[GUI_EDITTEXT_COLOR_BORDER]);
+            size = 20;                              /* Circle size in pixels */
             
-            if (GUI_WIDGET_IsFocused(h)) {          /* Check if widget is in focus */
-                GUI_DRAW_Rectangle(disp, x + 2, y + 2, width - 4, height - 4, __GE(h)->Color[GUI_EDITTEXT_COLOR_BORDER]);
+            sx = x;
+            sy = y + (height - size) / 2;
+            
+            if (__GR(h)->Flags & GUI_FLAG_RADIO_DISABLED) {
+                c1 = GUI_COLOR_GRAY;
+            } else {
+                c1 = GUI_COLOR_WHITE;
             }
             
-            if (__GUI_WIDGET_IsFontAndTextSet(h)) { /* Ready to write string */
+            GUI_DRAW_FilledCircle(disp, sx + size / 2, sy + size / 2, size / 2, c1);
+            GUI_DRAW_Circle(disp, sx + size / 2, sy + size / 2, size / 2, GUI_COLOR_BLACK);
+            
+            if (GUI_WIDGET_IsFocused(h)) {          /* When in focus */
+                GUI_DRAW_Circle(disp, sx + size / 2, sy + size / 2, size / 2 - 2, GUI_COLOR_GRAY);
+            }
+
+            if (__GR(h)->Flags & GUI_FLAG_RADIO_CHECKED) {
+                GUI_DRAW_FilledCircle(disp, sx + size / 2, sy + size / 2, size / 2 - 5, GUI_COLOR_DARKGRAY);
+            }
+            
+            /* Draw text if possible */
+            if (__GUI_WIDGET_IsFontAndTextSet(h)) {
                 GUI_DRAW_FONT_t f;
-                GUI_DRAW_FONT_Init(&f);             /* Init font drawing */
+                GUI_DRAW_FONT_Init(&f);             /* Init structure */
                 
-                f.X = x + 5;
-                f.Y = y + 5;
-                f.Width = width - 10;
-                f.Height = height - 10;
+                f.X = sx + size + 5;
+                f.Y = y + 1;
+                f.Width = width - size - 5;
+                f.Height = height - 2;
                 f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.Color1Width = f.Width;
-                f.Color1 = __GE(h)->Color[GUI_EDITTEXT_COLOR_TEXT];
-                f.Flags |= GUI_FLAG_FONT_RIGHTALIGN;
+                f.Color1 = GUI_COLOR_BLACK;
                 GUI_DRAW_WriteText(disp, h->Font, h->Text, &f);
             }
+            
             return 1;
         }
-        case GUI_WC_FocusIn:
-            return 1;
-        case GUI_WC_FocusOut:
-            return 1;
-#if GUI_USE_TOUCH
+#if GUI_USE_TOUCH 
         case GUI_WC_TouchStart: {
-            *(__GUI_TouchStatus_t *)result = touchHANDLED;
+            if (__GR(h)->Flags & GUI_FLAG_RADIO_DISABLED) { /* Ignore disabled state */
+                *(__GUI_TouchStatus_t *)result = touchHANDLEDNOFOCUS;
+            } else {
+                __GUI_RADIO_SetActive(h);           /* Set widget as active */
+                *(__GUI_TouchStatus_t *)result = touchHANDLED;
+            }
             return 1;
         }
 #endif /* GUI_USE_TOUCH */
-#if GUI_USE_KEYBOARD
-        case GUI_WC_KeyPress: {
-            __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;
-            __GUI_WIDGET_ProcessTextKey(h, kb);
-            return 1;
-        }
-#endif /* GUI_USE_KEYBOARD */
         default:                                    /* Handle default option */
             __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
     }
 }
+#undef c
 
-#undef e
 
 /******************************************************************************/
 /******************************************************************************/
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height) {
-    GUI_EDITTEXT_t* ptr;
+GUI_HANDLE_p GUI_RADIO_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height) {
+    GUI_RADIO_t* ptr;
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_EDITTEXT_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, 0);   /* Allocate memory for basic widget */
+    ptr = (GUI_RADIO_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, 0);   /* Allocate memory for basic widget */
     if (ptr) {        
-        /* Color setup */
-        ptr->Color[GUI_EDITTEXT_COLOR_BG] = GUI_COLOR_WHITE;    /* Set background color */
-        ptr->Color[GUI_EDITTEXT_COLOR_BORDER] = GUI_COLOR_BLACK;    /* Set background color */
-        ptr->Color[GUI_EDITTEXT_COLOR_TEXT] = GUI_COLOR_BLACK;  /* Set foreground color */
+
     }
     __GUI_LEAVE();                                  /* Leave GUI */
     
     return (GUI_HANDLE_p)ptr;
 }
 
-GUI_HANDLE_p GUI_EDITTEXT_SetColor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    if (__GE(h)->Color[index] != color) {         /* Any parameter changed */
-        __GE(h)->Color[index] = color;            /* Set parameter */
-        __GUI_WIDGET_Invalidate(h);                 /* Redraw object */
-    }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
-}

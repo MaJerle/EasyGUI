@@ -233,17 +233,22 @@ extern "C" {
  * \brief           GUI main object structure
  */
 typedef struct GUI_t {
-    uint32_t Time;                          /*!< Current time in units of milliseconds */
+    volatile uint32_t Time;                 /*!< Current time in units of milliseconds */
     GUI_LCD_t LCD;                          /*!< LCD low-level settings */
     GUI_LL_t LL;                            /*!< Low-level drawing routines for LCD */
     GUI_Display_t Display;                  /*!< Clipping management if exists */
     
     GUI_HANDLE_p WindowActive;              /*!< Pointer to currently active window when creating new widgets */
     GUI_HANDLE_p FocusedWidget;             /*!< Pointer to focused widget for keyboard events if any */
-    GUI_HANDLE_p ActiveWidget;              /*!< Pointer to widget currently active by mouse or touch press */
     
     GUI_LinkedListRoot_t Root;              /*!< Root linked list of widgets */
     GUI_TIMER_CORE_t Timers;                /*!< Software structure management */
+    
+#if GUI_USE_TOUCH || defined(DOXYGEN)
+    GUI_TouchData_t TouchOld;               /*!< Old touch data, used for event management */
+    __GUI_TouchData_t Touch;                /*!< Current touch data and processing tool */
+    GUI_HANDLE_p ActiveWidget;              /*!< Pointer to widget currently active by touch */
+#endif /* GUI_USE_TOUCH */
 } GUI_t;
 extern GUI_t GUI;
 

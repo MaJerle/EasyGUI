@@ -68,8 +68,9 @@ typedef enum GUI_LED_TYPE_t {
     GUI_LED_TYPE_CIRCLE = 0x01              /*!< Led is circle */
 } GUI_LED_TYPE_t;
 
+#if defined(GUI_INTERNAL) || defined(DOXYGEN)
 /**
- * \brief           LED structure
+ * \brief           LED object structure
  */
 typedef struct GUI_LED_t {
     GUI_HANDLE C;                           /*!< Global widget object */
@@ -77,6 +78,7 @@ typedef struct GUI_LED_t {
     GUI_LED_TYPE_t Type;                    /*!< Led shape type */
     GUI_Byte Flags;                         /*!< Flags management for LED */
 } GUI_LED_t;
+#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 /**
  * \brief           Create new led widget

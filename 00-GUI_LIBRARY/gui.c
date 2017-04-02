@@ -110,12 +110,55 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
 }
 
 #if GUI_USE_TOUCH
-void __SetRelativeCoordinate(__GUI_TouchData_t* touch, GUI_iDim_t x, GUI_iDim_t y) {
-    uint8_t i = 0;
-    for (i = 0; i < touch->TS.Count; i++) {
-        touch->RelX[i] = touch->TS.X[i] - x;    /* Get relative coordinate on widget */
-        touch->RelY[i] = touch->TS.Y[i] - y;    /* Get relative coordinate on widget */
+PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, GUI_TouchData_t* old, uint8_t v)) {
+    static volatile uint32_t Time;
+    PT_BEGIN(&ts->pt);
+    
+    /**
+     * At startup, wait for pressed touch and released before
+     */
+    PT_WAIT_UNTIL(&ts->pt, v && ts->TS.Status && !old->Status);
+    __GUI_DEBUG("PT: PRESSED\r\n");
+    
+    Time = ts->TS.Time;                             /* Get start time of this touch */
+    
+    PT_YIELD(&ts->pt);                              /* Stop thread and continue next time on event */
+    
+    /**
+     * Wait for new touch event or timeout
+     */
+    PT_WAIT_UNTIL(&ts->pt, v || (GUI.Time - Time) > 2000); /* Wait touch with released state */
+    
+    /**
+     * Check what was the reason for thread to continue
+     */
+    if (v) {                                        /* New touch event occurred */
+        if (ts->TS.Status) {
+            __GUI_DEBUG("PT: JUST MOVE\r\n");
+        } else {
+            __GUI_DEBUG("PT: NORMAL CLICK\r\n");
+            PT_EXIT(&ts->pt);
+        }
+    } else {
+        __GUI_DEBUG("PT: LONG CLICK\r\n");
     }
+    
+    PT_END(&ts->pt);
+}
+
+void __SetRelativeCoordinate(__GUI_TouchData_t* ts, GUI_iDim_t x, GUI_iDim_t y) {
+    uint8_t i = 0;
+    for (i = 0; i < ts->TS.Count; i++) {
+        ts->RelX[i] = ts->TS.X[i] - x;              /* Get relative coordinate on widget */
+        ts->RelY[i] = ts->TS.Y[i] - y;              /* Get relative coordinate on widget */
+    }
+
+#if GUI_TOUCH_MAX_PRESSES > 1
+    if (ts->TS.Count == 2) {                        /* 2 points detected */
+        ts->DistanceOld = ts->Distance;             /* Save old distance */
+        GUI_MATH_DistanceBetweenXY(ts->RelX[0], ts->RelY[0], ts->RelX[1], ts->RelY[1], &ts->Distance);  /* Calculate distance between 2 points */
+    }
+#endif /* GUI_TOUCH_MAX_PRESSES > 1 */
 }
 
 __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_TouchData_t* touchLast, GUI_HANDLE_p parent) {
@@ -143,49 +186,42 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_TouchData_t* to
         width = __GUI_WIDGET_GetWidth(h);           /* Get widget width */
         height = __GUI_WIDGET_GetHeight(h);         /* Get widget height */
         
-        /* Check if widget is in drawing area */
+        /* Check if widget is in touch area */
         if (touch->TS.X[0] >= x && touch->TS.X[0] <= (x + width) && touch->TS.Y[0] >= y && touch->TS.Y[0] <= (y + height)) {
-            if (touch->TS.Status && !touchLast->Status) {   /* Check for touchdown event */
-                __SetRelativeCoordinate(touch, x, y);   /* Set relative coordinate */
+            __SetRelativeCoordinate(touch, x, y);   /* Set relative coordinate */
 
-                processed = __GUI_WIDGET_Callback(h, GUI_WC_TouchStart, touch, &tStat);
-                if (processed) {                    /* Check if command has been processed */
-                    if (tStat != touchCONTINUE) {   /* If touch was handled */
-                        /**
-                         * Move widget down on parent linked list and do the same with all of its parents,
-                         * no matter of touch focus or not
-                         */
-                        __GUI_WIDGET_MoveDownTree(h);
+            processed = __GUI_WIDGET_Callback(h, GUI_WC_TouchStart, touch, &tStat);
+            if (processed) {                    /* Check if command has been processed */
+                if (tStat != touchCONTINUE) {   /* If touch was handled */
+                    /**
+                     * Move widget down on parent linked list and do the same with all of its parents,
+                     * no matter of touch focus or not
+                     */
+                    __GUI_WIDGET_MoveDownTree(h);
+                    
+                    if (tStat == touchHANDLED) {    /* Touch handled for widget completelly */
                         
-                        if (tStat == touchHANDLED) {    /* Touch handled for widget completelly */
-                            
-                            /**
-                             * Set active widget and set flag for it
-                             * Set focus widget and set flag for iz
-                             */
-                            __GUI_FOCUS_SET(h);
-                            __GUI_ACTIVE_SET(h);
-                            
-                            /**
-                             * Invalidate actual handle object
-                             * Already invalidated in __GUI_ACTIVE_SET function
-                             */
-                            //__GUI_WIDGET_Invalidate(h);
-                        } else {                    /* Touch handled with no focus */
-                            /**
-                             * When touch was handled without focus,
-                             * process only clearing currently focused and active widgets and clear them
-                             */
-                            __GUI_FOCUS_CLEAR();
-                            __GUI_ACTIVE_CLEAR();
-                        }
-                        return tStat;
+                        /**
+                         * Set active widget and set flag for it
+                         * Set focus widget and set flag for iz
+                         */
+                        __GUI_FOCUS_SET(h);
+                        __GUI_ACTIVE_SET(h);
+                        
+                        /**
+                         * Invalidate actual handle object
+                         * Already invalidated in __GUI_ACTIVE_SET function
+                         */
+                        //__GUI_WIDGET_Invalidate(h);
+                    } else {                    /* Touch handled with no focus */
+                        /**
+                         * When touch was handled without focus,
+                         * process only clearing currently focused and active widgets and clear them
+                         */
+                        __GUI_FOCUS_CLEAR();
+                        __GUI_ACTIVE_CLEAR();
                     }
-                }
-            } else if (!touch->TS.Status && touchLast->Status) {    /* Check for touchup event */
-                __GUI_WIDGET_Callback(h, GUI_WC_TouchEnd, touch, &tStat);    /* Process touch up event */
-                if (h == GUI.ActiveWidget) {
-                    __GUI_ACTIVE_CLEAR();           /* Clear active */
+                    return tStat;
                 }
             }
         }
@@ -240,10 +276,7 @@ GUI_Result_t GUI_Init(void) {
 
 int32_t GUI_Process(void) {
     int32_t cnt = 0;
-#if GUI_USE_TOUCH  
-    static uint8_t first = 1;
-    static GUI_TouchData_t touchLast;
-    __GUI_TouchData_t touch;
+#if GUI_USE_TOUCH
     __GUI_TouchStatus_t tStat;
 #endif /* GUI_USE_TOUCH */
 #if GUI_USE_KEYBOARD
@@ -251,52 +284,60 @@ int32_t GUI_Process(void) {
     __GUI_KeyboardStatus_t kStat;
 #endif /* GUI_USE_KEYBOARD */
 
-#if GUI_USE_TOUCH  
-    /**
-     * Touch manipulation
-     */
-    if (first) {                                    /* Process first call */
-        first = 0;
-        memset(&touchLast, 0x00, sizeof(touchLast));
-        touchLast.Status = GUI_TouchState_RELEASED; /* Start with released touch */
-    } 
-
-    while (__GUI_INPUT_ReadTouch(&touch.TS)) {      /* Process all touch events possible */
-        /* If there is already an active touch */
-        if (touchLast.Status && touch.TS.Status) {
-            if (GUI.ActiveWidget) {                 /* If active widget exists */
-                __SetRelativeCoordinate(&touch, __GUI_WIDGET_GetAbsoluteX(GUI.ActiveWidget), __GUI_WIDGET_GetAbsoluteY(GUI.ActiveWidget));  /* Set relative touch from current touch */
-                if (touch.TS.Count == touchLast.Count) {
-                    __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchMove, &touch, &tStat);  /* The same amount of touch events currently */
-                } else {
-                    __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchStart, &touch, &tStat);  /* The same amount of touch events currently */
+#if GUI_USE_TOUCH
+    if (__GUI_INPUT_TouchAvailable()) {             /* Check if any touch available */
+        while (__GUI_INPUT_TouchRead(&GUI.Touch.TS)) {  /* Process all touch events possible */
+            if (GUI.Touch.TS.Status && GUI.TouchOld.Status) {
+                /**
+                 * Old status: pressed
+                 * New status: pressed
+                 * Action: Touch move on active element
+                 */
+                if (GUI.ActiveWidget) {             /* If active widget exists */
+                    __SetRelativeCoordinate(&GUI.Touch, __GUI_WIDGET_GetAbsoluteX(GUI.ActiveWidget), __GUI_WIDGET_GetAbsoluteY(GUI.ActiveWidget));  /* Set relative touch from current touch */
+                    if (GUI.Touch.TS.Count == GUI.TouchOld.Count) {
+                        __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchMove, &GUI.Touch, &tStat);  /* The same amount of touch events currently */
+                    } else {
+                        __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchStart, &GUI.Touch, &tStat); /* New amount of touch elements happened */
+                    }
                 }
-                __GUI_UNUSED(tStat);
-            }                                       /* Wait for touch up */
-        } else {
-            /* Process other touches */
-            if (__ProcessTouch(&touch, &touchLast, NULL) == touchHANDLED) {
-                
+            } else if (!GUI.Touch.TS.Status && GUI.TouchOld.Status) {
+                /**
+                 * Old status: pressed
+                 * New status: released
+                 * Action: Touch up on active element
+                 */
+                if (GUI.ActiveWidget) {             /* Check if active widget */
+                    __SetRelativeCoordinate(&GUI.Touch, __GUI_WIDGET_GetAbsoluteX(GUI.ActiveWidget), __GUI_WIDGET_GetAbsoluteY(GUI.ActiveWidget));  /* Set relative touch from current touch */
+                    __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchEnd, &GUI.Touch, &tStat);   /* Process callback function */
+                    __GUI_ACTIVE_CLEAR();           /* Clear active widget */
+                }
+            } else if (GUI.Touch.TS.Status && !GUI.TouchOld.Status) {
+                /**
+                 * Old status: released
+                 * New status: pressed
+                 * Action: Touch down on element, find element
+                 */
+                if (__ProcessTouch(&GUI.Touch, &GUI.TouchOld, NULL) == touchHANDLED) {
+                    
+                }
             }
+            
+            __TouchEvents_Thread(&GUI.Touch, &GUI.TouchOld, 1); /* Call thread for touch process */
+            
+            memcpy((void *)&GUI.TouchOld, (void *)&GUI.Touch.TS, sizeof(GUI_TouchData_t)); /* Copy current touch to last touch status */
         }
-        
-        /* In case odd things happen, make sure there is no active widget */
-        if (!touch.TS.Status) {                     /* If touch released, release active widget */
-            if (GUI.ActiveWidget) {                 /* If touch is active, clear flag */
-                GUI.ActiveWidget->Flags &= ~GUI_FLAG_ACTIVE;    /* Remove active flag, touch/mouse not active */
-                __GUI_WIDGET_Invalidate(GUI.ActiveWidget);  /* Invalidate widget */
-            }
-            GUI.ActiveWidget = 0;                   /* No active widget anymore */
-        }
-        memcpy((void *)&touchLast, (void *)&touch.TS, sizeof(GUI_TouchData_t)); /* Copy current touch to last touch status */
+    } else {                                        /* No new touch events, periodically call touch event thread */
+        __TouchEvents_Thread(&GUI.Touch, &GUI.TouchOld,  0);    /* Call periodically data */
     }
+    __GUI_UNUSED(tStat);                            /* Ignore compiler warnings */
 #endif /* GUI_USE_TOUCH */
     
 #if GUI_USE_KEYBOARD
     /**
      * Keyboard data reads
      */
-    while (__GUI_INPUT_ReadKey(&key.KB)) {          /* Read all keyboard entires */
+    while (__GUI_INPUT_KeyRead(&key.KB)) {          /* Read all keyboard entires */
         if (GUI.FocusedWidget) {                    /* Check if any widget is in focus already */
             if (key.KB.Keys[0] == GUI_KEY_TAB) {    /* Tab key pressed, set next widget as focused */
                 GUI_HANDLE_p h = __GUI_LINKEDLIST_WidgetGetNext(NULL, GUI.FocusedWidget);   /* Get next widget if possible */

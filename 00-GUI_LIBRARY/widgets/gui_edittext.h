@@ -57,6 +57,7 @@ typedef enum GUI_EDITTEXT_COLOR_t {
     GUI_EDITTEXT_COLOR_TEXT = 0x02          /*!< Text color index */
 } GUI_EDITTEXT_COLOR_t;
     
+#if defined(GUI_INTERNAL) || defined(DOXYGEN)
 /**
  * \brief           GUI EDIT TEXT widget structure
  */
@@ -65,6 +66,7 @@ typedef struct GUI_EDITTEXT_t {
     
     GUI_Color_t Color[3];                   /*!< List of colors */
 } GUI_EDITTEXT_t;
+#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 /**
  * \brief           Create new edit text widget

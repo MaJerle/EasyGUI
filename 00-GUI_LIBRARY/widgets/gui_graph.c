@@ -64,7 +64,6 @@ const static GUI_WIDGET_t Widget = {
 uint8_t GUI_GRAPH_Callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
 #if GUI_USE_TOUCH
 static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
-static uint32_t distance_old;
 #endif /* GUI_USE_TOUCH */    
     switch (cmd) {                                  /* Handle control function if required */
         case GUI_WC_Draw: {                         /* Draw widget */
@@ -94,18 +93,17 @@ static uint32_t distance_old;
             /* Draw horizontal lines */
             if (g->Rows) {
                 float step;
-                uint8_t i;
                 step = (float)(height - bt - bb) / (float)g->Rows;
-                for (i = 0; i < g->Rows - 1; i++) {
-                    GUI_DRAW_HLine(disp, x + bl, y + bt + (i + 1) * step, width - bl - br, g->Color[GUI_GRAPH_COLOR_GRID]);
+                for (i = 1; i < g->Rows; i++) {
+                    GUI_DRAW_HLine(disp, x + bl, y + bt + i * step, width - bl - br, g->Color[GUI_GRAPH_COLOR_GRID]);
                 }
             }
             /* Draw vertical lines */
             if (g->Columns) {
                 float step;
                 step = (float)(width - bl - br) / (float)g->Columns;
-                for (i = 0; i < g->Columns - 1; i++) {
-                    GUI_DRAW_VLine(disp, x + bl + (i + 1) * step, y + bt, height - bt - bb, g->Color[GUI_GRAPH_COLOR_GRID]);
+                for (i = 1; i < g->Columns; i++) {
+                    GUI_DRAW_VLine(disp, x + bl + i * step, y + bt, height - bt - bb, g->Color[GUI_GRAPH_COLOR_GRID]);
                 }
             }
             
@@ -119,7 +117,7 @@ static uint32_t distance_old;
                 float yStep = (float)(height - bt - bb) / (float)ySize;  /* calculate Y step */
                 GUI_Dim_t yBottom = y + height - bb - 1;    /* Bottom Y value */
                 GUI_Dim_t xLeft = x + bl;                   /* Left X position */
-                uint32_t i, l;
+                uint32_t read, write;
                 
                 memcpy(&display, disp, sizeof(GUI_Display_t));  /* Save GUI display data */
                 
@@ -129,36 +127,55 @@ static uint32_t distance_old;
                 disp->Y1 = y + bt;
                 disp->Y2 = disp->Y1 + height - bt - bb;
                 
-                /* Check data array */
+                /* Draw all plot attached to graph */
                 for (link = __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(&g->Root, 0); link; link = __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(0, link)) {
                     data = (GUI_GRAPH_DATA_p)__GUI_LINKEDLIST_MULTI_GetData(link);  /* Get data from list */
                     
+                    read = data->Ptr;                       /* Get start read pointer */
+                    write = data->Ptr;                      /* Get start write pointer */
+                    
                     if (data->Type == GUI_GRAPH_TYPE_YT) {  /* Draw YT plot */
-                        i = 0;
-                        if (data->Length > xSize) {         /* If more data than allowed for plot, print only end of array */
-                            i = data->Length - xSize - 1;   /* Calculate new start index position */
+                        /* Calculate first point */
+                        x1 = xLeft - g->MinX * xStep;       /* Calculate start X */
+                        y1 = yBottom - (data->Data[read] - g->MinY) * yStep;    /* Calculate start Y */
+                        if (++read == data->Length) {       /* Check overflow */
+                            read = 0;
                         }
-                        l = 1;
-                        x1 = xLeft;                         /* Calculate start X */
-                        y1 = yBottom - (data->Data[i] - g->MinY) * yStep;   /* Calculate start Y */
-                        for (i++; i < data->Length; i++, l++) { /* Go through all elements, start on second valid line index */
-                            x2 = xLeft + l * xStep;         /* Calculate next X */
-                            y2 = yBottom - (data->Data[i] - g->MinY) * yStep;   /* Calculate next Y */
-                            GUI_DRAW_Line(disp, x1, y1, x2, y2, data->Color);   /* Draw actual line */
-                            x1 = x2;                        /* Copy X */
-                            y1 = y2;                        /* Copy Y */
-                        }
-                    } else if (data->Type == GUI_GRAPH_TYPE_XY) {   /* Draw XY plot */
-                        i = 0;
                         
-                        x1 = xLeft + (int16_t)((float)(data->Data[i + 0] - g->MinX) * (float)xStep);
-                        y1 = yBottom - (int16_t)((float)(data->Data[i + 1] - g->MinY) * (float)yStep);
-                        for (i = 2; i <= 2 * data->Length - 2; i += 2) {
-                            x2 = xLeft + (int16_t)((float)(data->Data[i + 0] - g->MinX) * (float)xStep);
-                            y2 = yBottom - (int16_t)((float)(data->Data[i + 1] - g->MinY) * (float)yStep);
+                        /* Outside of right || outside on left */
+                        if (x1 > disp->X2 || (x1 + (data->Length * xStep)) < disp->X1) {    /* Plot start is on the right of active area */
+                            continue;
+                        }
+                        
+                        while (read != write && x1 <= disp->X2) {   /* Calculate next points */
+                            x2 = x1 + xStep;                /* Calculate next X */
+                            y2 = yBottom - ((float)data->Data[read] - g->MinY) * yStep; /* Calculate next Y */
+                            if (x1 >= disp->X1 && x1 < disp->X2) {
+                                GUI_DRAW_Line(disp, x1, y1, x2, y2, data->Color);   /* Draw actual line */
+                            }
+                            x1 = x2, y1 = y2;               /* Copy values as old */
+                            
+                            if (++read == data->Length) {   /* Check overflow */
+                                read = 0;
+                            }
+                        }
+                    } else if (data->Type == GUI_GRAPH_TYPE_XY) {   /* Draw XY plot */                        
+                        /* Calculate first point */
+                        x1 = xLeft + ((float)data->Data[2 * read + 0] - g->MinX) * xStep;
+                        y1 = yBottom - ((float)data->Data[2 * read + 1] - g->MinY) * yStep;
+                        if (++read == data->Length) {       /* Check overflow */
+                            read = 0;
+                        }
+                        
+                        while (read != write) {             /* Calculate next points */
+                            x2 = xLeft + ((float)(data->Data[2 * read + 0] - g->MinX) * xStep);
+                            y2 = yBottom - ((float)(data->Data[2 * read + 1] - g->MinY) * yStep);
                             GUI_DRAW_Line(disp, x1, y1, x2, y2, data->Color);   /* Draw actual line */
-                            x1 = x2;
-                            y1 = y2;
+                            x1 = x2, y1 = y2;               /* Check overflow */
+                            
+                            if (++read == data->Length) {   /* Check overflow */
+                                read = 0;
+                            }
                         }
                     }
                 }
@@ -174,9 +191,6 @@ static uint32_t distance_old;
                 tX[i] = ts->RelX[i];                /* Relative X position on widget */
                 tY[i] = ts->RelY[i];                /* Relative Y position on widget */
             }
-            if (ts->TS.Count == 2) {                /* Check for 2 fingers */
-                distance_old = sqrt((ts->RelX[0] - ts->RelX[1]) * (ts->RelX[0] - ts->RelX[1]) + (ts->RelY[0] - ts->RelY[1]) * (ts->RelY[0] - ts->RelY[1]));
-            }
             *(__GUI_TouchStatus_t *)result = touchHANDLED;  /* Set touch status */
             __GUI_DEBUG("TOUCH START\r\n");
             return 1;
@@ -187,6 +201,7 @@ static uint32_t distance_old;
             GUI_iDim_t x, y;
             float diff;
             float step;
+            __GUI_DEBUG("TOUCH MOVE\r\n");
             
             if (ts->TS.Count == 1) {                /* Move graph on single widget */
                 x = ts->RelX[0];
@@ -201,16 +216,14 @@ static uint32_t distance_old;
                 diff = (float)(y - tY[0]) / step;
                 __GG(h)->MinY += diff;
                 __GG(h)->MaxY += diff;
-            } else {                                /* Scale widget on multiple widgets */
-                float distance_new, centerX, centerY, zoom, pos;
+#if GUI_TOUCH_MAX_PRESSES > 1
+            } else if (ts->TS.Count == 2) {         /* Scale widget on multiple widgets */
+                float centerX, centerY, zoom, pos;
                 
-                /* Calculate distance between 2 points */
-                GUI_MATH_DistanceBetweenXY(ts->RelX[0], ts->RelY[0], ts->RelX[1], ts->RelY[1], &distance_new);
+                GUI_MATH_CenterOfXY(ts->RelX[0], ts->RelY[0], ts->RelX[1], ts->RelY[1], &centerX, &centerY);    /* Calculate center position between points */
+                zoom = ts->Distance / ts->DistanceOld;  /* Calculate zoom value */
                 
-                /* Calculate center position between points */
-                GUI_MATH_CenterOfXY(ts->RelX[0], ts->RelY[0], ts->RelX[1], ts->RelY[1], &centerX, &centerY);
-               
-                zoom = (float)distance_new / (float)distance_old;   /* Calculate new zoom */
+                __GUI_DEBUG("Zoom: %.3f\r\n", zoom);
                 
                 pos = (float)centerX / (float)__GUI_WIDGET_GetWidth(h); /* Calculate X position where on plot should we zoom */
                 g->MinX += (g->MaxX - g->MinX) * (zoom - 1.0f) * pos;
@@ -219,9 +232,7 @@ static uint32_t distance_old;
                 pos = (float)centerY / (float)__GUI_WIDGET_GetHeight(h);/* Calculate Y position where on plot should we zoom */
                 g->MinY += (g->MaxY - g->MinY) * (zoom - 1.0f) * pos;
                 g->MaxY -= (g->MaxY - g->MinY) * (zoom - 1.0f) * (1.0f - pos);
-                   
-                distance_old = distance_new;
-                __GUI_DEBUG("dx: %3f; dy: %3f: r: %3f\r\n", g->MaxX - g->MinX, g->MaxY - g->MinY, (g->MaxX - g->MinX) / (g->MaxY - g->MinY));
+#endif /* GUI_TOUCH_MAX_PRESSES > 1 */
             }
             
             for (i = 0; i < ts->TS.Count; i++) {
@@ -232,6 +243,18 @@ static uint32_t distance_old;
             __GUI_WIDGET_Invalidate(h);
             return 1;
         }
+        case GUI_WC_TouchEnd:
+            __GUI_DEBUG("TOUCH END\r\n");
+            return 1;
+        case GUI_WC_Click:
+            __GUI_DEBUG("CLICK\r\n");
+            return 1;
+        case GUI_WC_DblClick:
+            __GUI_DEBUG("DBL CLICK\r\n");
+            return 1;
+        case GUI_WC_LongClick:
+            __GUI_DEBUG("LONG CLICK\r\n");
+            return 1;
 #endif /* GUI_USE_TOUCH */
 #if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
         case GUI_WC_Remove: {                       /* When widget is about to be removed */
@@ -294,7 +317,7 @@ GUI_HANDLE_p GUI_GRAPH_Create(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t w
         ptr->Color[GUI_GRAPH_COLOR_BG] = GUI_COLOR_GRAY;    /* Set background color */
         ptr->Color[GUI_GRAPH_COLOR_FG] = GUI_COLOR_BLACK;   /* Set foreground color */
         ptr->Color[GUI_GRAPH_COLOR_BORDER] = GUI_COLOR_BLACK;   /* Set foreground color */
-        ptr->Color[GUI_GRAPH_COLOR_GRID] = GUI_COLOR_ALPHA(GUI_COLOR_GREEN, GUI_COLOR_ALPHA_50); /* Set foreground color */
+        ptr->Color[GUI_GRAPH_COLOR_GRID] = 0xFF002F00;  /* Set grid color */
         
         ptr->Border[GUI_GRAPH_BORDER_TOP] = 5;      /* Set borders */
         ptr->Border[GUI_GRAPH_BORDER_RIGHT] = 5;
@@ -371,7 +394,7 @@ GUI_HANDLE_p GUI_GRAPH_DetachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
     return h;
 }
 
-GUI_HANDLE_p GUI_GRAPH_SetMinX(GUI_HANDLE_p h, int16_t v) {
+GUI_HANDLE_p GUI_GRAPH_SetMinX(GUI_HANDLE_p h, float v) {
     __GUI_ASSERTPARAMS(h);                          /* Check parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     if (__GG(h)->MinX != v) {
@@ -382,7 +405,7 @@ GUI_HANDLE_p GUI_GRAPH_SetMinX(GUI_HANDLE_p h, int16_t v) {
     return h;
 }
 
-GUI_HANDLE_p GUI_GRAPH_SetMaxX(GUI_HANDLE_p h, int16_t v) {
+GUI_HANDLE_p GUI_GRAPH_SetMaxX(GUI_HANDLE_p h, float v) {
     __GUI_ASSERTPARAMS(h);                          /* Check parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     if (__GG(h)->MaxX != v) {
@@ -393,7 +416,7 @@ GUI_HANDLE_p GUI_GRAPH_SetMaxX(GUI_HANDLE_p h, int16_t v) {
     return h;
 }
 
-GUI_HANDLE_p GUI_GRAPH_SetMinY(GUI_HANDLE_p h, int16_t v) {
+GUI_HANDLE_p GUI_GRAPH_SetMinY(GUI_HANDLE_p h, float v) {
     __GUI_ASSERTPARAMS(h);                          /* Check parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     if (__GG(h)->MinY != v) {
@@ -404,7 +427,7 @@ GUI_HANDLE_p GUI_GRAPH_SetMinY(GUI_HANDLE_p h, int16_t v) {
     return h;
 }
 
-GUI_HANDLE_p GUI_GRAPH_SetMaxY(GUI_HANDLE_p h, int16_t v) {
+GUI_HANDLE_p GUI_GRAPH_SetMaxY(GUI_HANDLE_p h, float v) {
     __GUI_ASSERTPARAMS(h);                          /* Check parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     if (__GG(h)->MaxY != v) {
@@ -450,24 +473,19 @@ GUI_GRAPH_DATA_p GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_t type, uint16_t length) {
 }
 
 void GUI_GRAPH_DATA_AddValue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y) {
-    uint16_t i;
-    
     __GUI_ASSERTPARAMSVOID(data);                   /* Check parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    //TODO: Consider using cyclic buffer for data storage
-    
     if (data->Type == GUI_GRAPH_TYPE_YT) {          /* YT plot */
-        for (i = 1; i < data->Length; i++) {        /* Shift data up */
-            data->Data[i - 1] = data->Data[i];    
-        }
-        data->Data[data->Length - 1] = y;           /* Add new value */
-    } else {                                        /* XY plot */
-        for (i = 2; i < 2 * data->Length; i++) {    /* Shift data up */
-            data->Data[i - 2] = data->Data[i];
-        }
-        data->Data[2 * data->Length - 2] = x;       /* Add X value */
-        data->Data[2 * data->Length - 1] = y;       /* Add Y value */
+        data->Data[data->Ptr] = y;                  /* Only Y value is relevant */
+    } else if (data->Type == GUI_GRAPH_TYPE_XY) {   /* XY plot */
+        data->Data[2 * data->Ptr + 0] = x;          /* Set X value */
+        data->Data[2 * data->Ptr + 1] = y;          /* Set Y value */
+    }
+    
+    data->Ptr++;                                    /* Increase write and read pointers */
+    if (data->Ptr >= data->Length) {
+        data->Ptr = 0;                              /* Reset read operation */
     }
     
 #if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE

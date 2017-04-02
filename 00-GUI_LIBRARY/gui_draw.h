@@ -131,13 +131,13 @@ extern "C" {
  * \sa              GUI_DRAW_FONT_Init
  */
 typedef struct GUI_DRAW_FONT_t {
-    GUI_iDim_t X;                            /*!< Top left X position for rectangle */
-    GUI_iDim_t Y;                            /*!< Top left Y position for rectangle */
-    GUI_iDim_t Width;                        /*!< Rectangle width for string draw */
-    GUI_iDim_t Height;                       /*!< Rectangle height for string draw */
+    GUI_iDim_t X;                           /*!< Top left X position for rectangle */
+    GUI_iDim_t Y;                           /*!< Top left Y position for rectangle */
+    GUI_iDim_t Width;                       /*!< Rectangle width for string draw */
+    GUI_iDim_t Height;                      /*!< Rectangle height for string draw */
     GUI_Byte Align;                         /*!< Alignment parameters */
     GUI_Byte Flags;                         /*!< Flags for future use */
-    GUI_iDim_t Color1Width;                  /*!< Width for color 1 */
+    GUI_iDim_t Color1Width;                 /*!< Width for color 1 */
     GUI_Color_t Color1;                     /*!< Color 1 */
     GUI_Color_t Color2;                     /*!< Color 2 */
 } GUI_DRAW_FONT_t;

@@ -338,7 +338,7 @@ uint8_t __GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width);
  * \brief           Set height of widget in percentage relative to parent widget
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
- * \param[in]       width: Height in percentage
+ * \param[in]       height: Height in percentage
  * \retval          1: Successful
  * \retval          1: Failed
  * \sa              GUI_WIDGET_SetWidth
@@ -385,6 +385,15 @@ uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* key);
     __GUI_WIDGET_SetPaddingRight(h, x);                 \
 } while (0)
 
+/**
+ * \brief           Process widget callback with command, parameters and result pointers
+ * \param[in,out]   h: Widget handle
+ * \param[in]       cmd: Callback command. This parameter can be a value of \ref GUI_WC_t enumeration
+ * \param[in]       param: Pointer to parameters if any for this command
+ * \param[out]      result: Pointer to result pointer where calback can store result
+ * \retval          1: Command processed by widget
+ * \retval          0: Command was not processed by widget
+ */
 #define __GUI_WIDGET_Callback(h, cmd, param, result)    (h)->Callback ? (h)->Callback(h, cmd, param, result) : (h)->Widget->Callback(h, cmd, param, result)
 
 /**

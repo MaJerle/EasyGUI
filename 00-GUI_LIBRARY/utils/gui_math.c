@@ -71,7 +71,7 @@ uint8_t GUI_MATH_RSqrt(float x, float* result) {
 	x2 = x * 0.5f;
 	y = x;
 	i = *(int32_t *)&y;                             /* Read float number memory representation as long integer */
-	i = 0x5f3759df - (i >> 1);                      /* Subtract integer number divided by 2 from magic number */
+	i = 0x5F3759dF - (i >> 1);                      /* Subtract integer number divided by 2 from magic number */
 	y = *(float *)&i;                               /* Read new integer value as float again */
 	y = y * (th - (x2 * y * y));                    /* Calculate using iterations */
 	y = y * (th - (x2 * y * y));                    /* Calculate using iterations */
@@ -86,8 +86,8 @@ uint8_t GUI_MATH_DistanceBetweenXY(float x1, float y1, float x2, float y2, float
 }
 
 uint8_t GUI_MATH_CenterOfXY(float x1, float y1, float x2, float y2, float* resultX, float* resultY) {
-    *resultX = (x1 + x2) / 2;                       /* Calculate middle point for X position */
-    *resultX = (y1 + y2) / 2;                       /* Calculate middle point for Y position */
+    *resultX = (x1 + x2) / 2.0f;                    /* Calculate middle point for X position */
+    *resultY = (y1 + y2) / 2.0f;                    /* Calculate middle point for Y position */
     
     return 1;
 }

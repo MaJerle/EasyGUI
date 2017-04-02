@@ -87,12 +87,15 @@ typedef struct GUI_GRAPH_DATA_p {
     
     int16_t* Data;                          /*!< Pointer to actual data object */
     uint32_t Length;                        /*!< Size of data array */
+    uint32_t Ptr;                           /*!< Read/Write start pointer */
+    
     GUI_Color_t Color;                      /*!< Curve color */
     GUI_GRAPH_TYPE_t Type;                  /*!< Plot data type */
 } GUI_GRAPH_DATA_t;
 
 typedef GUI_GRAPH_DATA_t *  GUI_GRAPH_DATA_p;   /*!< GUI Graph data pointer */
 
+#if defined(GUI_INTERNAL) || defined(DOXYGEN)
 /**
  * \brief           Graph widget structure
  */
@@ -104,11 +107,12 @@ typedef struct GUI_GRAPH_t {
     GUI_Dim_t Border[4];                    /*!< Borders for widgets */
     uint8_t Rows;                           /*!< Number of rows in plot represented with lines */
     uint8_t Columns;                        /*!< Number of columns in plot represented with lines */
-    float MinX;                           /*!< Minimal X value for plot */
-    float MaxX;                           /*!< Maximal X value for plot */
-    float MinY;                           /*!< Minimal Y value for plot */
-    float MaxY;                           /*!< Maximal Y value for plot */
+    float MinX;                             /*!< Minimal X value for plot */
+    float MaxX;                             /*!< Maximal X value for plot */
+    float MinY;                             /*!< Minimal Y value for plot */
+    float MaxY;                             /*!< Maximal Y value for plot */
 } GUI_GRAPH_t;
+#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 /**
  * \brief           Create new graph widget
@@ -130,10 +134,10 @@ GUI_HANDLE_p GUI_GRAPH_Create(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t w
  * \retval          Widget handle
  */
 GUI_HANDLE_p GUI_GRAPH_SetColor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t color);
-GUI_HANDLE_p GUI_GRAPH_SetMinX(GUI_HANDLE_p h, int16_t v);
-GUI_HANDLE_p GUI_GRAPH_SetMaxX(GUI_HANDLE_p h, int16_t v);
-GUI_HANDLE_p GUI_GRAPH_SetMinY(GUI_HANDLE_p h, int16_t v);
-GUI_HANDLE_p GUI_GRAPH_SetMaxY(GUI_HANDLE_p h, int16_t v);
+GUI_HANDLE_p GUI_GRAPH_SetMinX(GUI_HANDLE_p h, float v);
+GUI_HANDLE_p GUI_GRAPH_SetMaxX(GUI_HANDLE_p h, float v);
+GUI_HANDLE_p GUI_GRAPH_SetMinY(GUI_HANDLE_p h, float v);
+GUI_HANDLE_p GUI_GRAPH_SetMaxY(GUI_HANDLE_p h, float v);
 GUI_HANDLE_p GUI_GRAPH_AttachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
 GUI_HANDLE_p GUI_GRAPH_DetachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
 uint8_t GUI_GRAPH_Callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
