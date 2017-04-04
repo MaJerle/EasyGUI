@@ -211,9 +211,7 @@ GUI_Color_t LCD_GetPixel(GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t x, GUI_Dim_t y
     return *(volatile GUI_Color_t *)(LCD_FRAME_BUFFER + (layer * LCD_FRAME_BUFFER_SIZE) + LCD_PIXEL_SIZE * (LCD_WIDTH * y + x));
 }
 
-void LCD_Fill(GUI_LCD_t* LCD, uint8_t layer, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t OffLine, GUI_Color_t color) { 
-    while (DMA2D->CR & DMA2D_CR_START);             /* Wait previous operation to finish */
-
+void LCD_Fill(GUI_LCD_t* LCD, uint8_t layer, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t OffLine, GUI_Color_t color) {
     DMA2D->CR = 0x00030000UL;                       /* Register to memory and TCIE */
     DMA2D->OCOLR = color;                           /* Color to be used */
     DMA2D->OMAR = (uint32_t)dst;                    /* Destination address */
@@ -221,6 +219,8 @@ void LCD_Fill(GUI_LCD_t* LCD, uint8_t layer, void* dst, GUI_Dim_t xSize, GUI_Dim
     DMA2D->OPFCCR = LTDC_PIXEL_FORMAT_ARGB8888;     /* Defines the number of pixels to be transfered */
     DMA2D->NLR = (uint32_t)(xSize << 16) | (uint16_t)ySize; /* Size configuration of area to be transfered */
     DMA2D->CR |= DMA2D_CR_START;                    /* Start actual transfer */
+    
+    while (DMA2D->CR & DMA2D_CR_START);             /* Wait previous operation to finish */
 }
 
 void LCD_Copy(GUI_LCD_t* LCD, uint8_t layer, void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {

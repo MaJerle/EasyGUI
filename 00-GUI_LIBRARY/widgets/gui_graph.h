@@ -111,6 +111,10 @@ typedef struct GUI_GRAPH_t {
     float MaxX;                             /*!< Maximal X value for plot */
     float MinY;                             /*!< Minimal Y value for plot */
     float MaxY;                             /*!< Maximal Y value for plot */
+    float VisibleMinX;                      /*!< Visible minimal X value for plot */
+    float VisibleMaxX;                      /*!< Visible maximal X value for plot */
+    float VisibleMinY;                      /*!< Visible minimal Y value for plot */
+    float VisibleMaxY;                      /*!< Visible maximal Y value for plot */
 } GUI_GRAPH_t;
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
@@ -121,10 +125,12 @@ typedef struct GUI_GRAPH_t {
  * \param[in]       y: Widget Y position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
+ * \param[in]       flags: Flags for create procedure
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_GRAPH_Create(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height);
+GUI_HANDLE_p GUI_GRAPH_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags);
 
 /**
  * \brief           Set color to specific part of widget

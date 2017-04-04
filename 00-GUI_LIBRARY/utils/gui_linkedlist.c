@@ -372,7 +372,7 @@ void __GUI_LINKEDLIST_PrintList(GUI_HANDLE_ROOT_t* root) {
         list = &GUI.Root;
     }
     for (h = (GUI_HANDLE_ROOT_t *)list->First; h; h = h->Handle.List.Next) {
-        __GUI_DEBUG("%*d: Widget: %s; Redraw: %d\r\n", depth, depth, h->Handle.Widget->MetaData.Name, h->Handle.Flags & GUI_FLAG_REDRAW);
+        __GUI_DEBUG("%*d: Widget: %s; Redraw: %d\r\n", depth, depth, h->Handle.Widget->Name, h->Handle.Flags & GUI_FLAG_REDRAW);
         if (__GUI_WIDGET_AllowChildren(h)) {
             __GUI_LINKEDLIST_PrintList(h);
         }

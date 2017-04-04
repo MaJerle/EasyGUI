@@ -45,12 +45,10 @@
 /******************************************************************************/
 /******************************************************************************/
 const static GUI_WIDGET_t Widget = {
-    {
-        _T("EDITTEXT"),                             /*!< Widget name */
-        sizeof(GUI_EDITTEXT_t),                     /*!< Size of widget for memory allocation */
-        0,                                          /*!< List of widget flags */
-    },
-    GUI_EDITTEXT_Callback,                          /*!< Control function */
+    .Name = _T("EDITTEXT"),                         /*!< Widget name */
+    .Size = sizeof(GUI_EDITTEXT_t),                 /*!< Size of widget for memory allocation */
+    .Flags = 0,                                     /*!< List of widget flags */
+    .Callback = GUI_EDITTEXT_Callback,              /*!< Control function */
 };
 
 /******************************************************************************/
@@ -132,12 +130,12 @@ uint8_t GUI_EDITTEXT_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height) {
+GUI_HANDLE_p GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags) {
     GUI_EDITTEXT_t* ptr;
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_EDITTEXT_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, 0);   /* Allocate memory for basic widget */
+    ptr = (GUI_EDITTEXT_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, flags);   /* Allocate memory for basic widget */
     if (ptr) {        
         /* Color setup */
         ptr->Color[GUI_EDITTEXT_COLOR_BG] = GUI_COLOR_WHITE;    /* Set background color */

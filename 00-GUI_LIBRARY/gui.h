@@ -98,7 +98,7 @@ extern "C" {
  * \brief           Free memory for widget which was just deleted
  */
 #define __GUI_MEMWIDFREE(p)         do {            \
-    __GUI_DEBUG("Memory free: 0x%08X; Type: %s\r\n", (uint32_t)(p), (p)->Widget->MetaData.Name);  \
+    __GUI_DEBUG("Memory free: 0x%08X; Type: %s\r\n", (uint32_t)(p), (p)->Widget->Name);  \
     free(p);                                        \
     (p) = 0;                                          \
 } while (0)
@@ -208,6 +208,7 @@ extern "C" {
         __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_ActiveOut, NULL, NULL);  \
         GUI.ActiveWidget->Flags &= ~GUI_FLAG_ACTIVE;        \
         __GUI_WIDGET_Invalidate(GUI.FocusedWidget);         \
+        GUI.ActiveWidgetOld = GUI.ActiveWidget;             \
         GUI.ActiveWidget = 0;                               \
     }                                                       \
 } while (0)
@@ -245,9 +246,10 @@ typedef struct GUI_t {
     GUI_TIMER_CORE_t Timers;                /*!< Software structure management */
     
 #if GUI_USE_TOUCH || defined(DOXYGEN)
-    GUI_TouchData_t TouchOld;               /*!< Old touch data, used for event management */
+    __GUI_TouchData_t TouchOld;             /*!< Old touch data, used for event management */
     __GUI_TouchData_t Touch;                /*!< Current touch data and processing tool */
     GUI_HANDLE_p ActiveWidget;              /*!< Pointer to widget currently active by touch */
+    GUI_HANDLE_p ActiveWidgetOld;           /*!< Previously active widget */
 #endif /* GUI_USE_TOUCH */
 } GUI_t;
 extern GUI_t GUI;

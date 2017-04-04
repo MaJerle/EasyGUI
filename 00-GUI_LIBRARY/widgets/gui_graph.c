@@ -47,12 +47,10 @@
 /******************************************************************************/
 /******************************************************************************/
 const static GUI_WIDGET_t Widget = {
-    {
-        _T("Graph"),                                /*!< Widget name */
-        sizeof(GUI_GRAPH_t),                        /*!< Size of widget for memory allocation */
-        0,                                          /*!< List of widget flags */
-    },
-    GUI_GRAPH_Callback                              /*!< Callback function for various events */
+    .Name = _T("Graph"),                            /*!< Widget name */
+    .Size = sizeof(GUI_GRAPH_t),                    /*!< Size of widget for memory allocation */
+    .Flags = 0,                                     /*!< List of widget flags */
+    .Callback = GUI_GRAPH_Callback                  /*!< Callback function for various events */
 };
 
 /******************************************************************************/
@@ -61,6 +59,15 @@ const static GUI_WIDGET_t Widget = {
 /******************************************************************************/
 /******************************************************************************/
 #define g       ((GUI_GRAPH_t *)h)
+
+/* Reset zoom control on graph */
+void __GUI_GRAPH_Reset(GUI_HANDLE_p h) {
+    g->VisibleMaxX = g->MaxX;
+    g->VisibleMinX = g->MinX;
+    g->VisibleMaxY = g->MaxY;
+    g->VisibleMinY = g->MinY;
+}
+
 uint8_t GUI_GRAPH_Callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
 #if GUI_USE_TOUCH
 static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
@@ -108,13 +115,13 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
             }
             
             /* Check if any data attached to this graph */
-            if (g->Root.First) {                            /* We have attached plots */
+            if (g->Root.First) {                    /* We have attached plots */
                 GUI_Display_t display;
-                register GUI_iDim_t x1, y1, x2, y2;         /* Try to add these variables to core registers */
-                float xSize = g->MaxX - g->MinX;            /* Calculate X size */
-                float ySize = g->MaxY - g->MinY;            /* Calculate Y size */
-                float xStep = (float)(width - bl - br) / (float)xSize;   /* Calculate X step */
-                float yStep = (float)(height - bt - bb) / (float)ySize;  /* calculate Y step */
+                register GUI_iDim_t x1, y1, x2, y2; /* Try to add these variables to core registers */
+                float xSize = g->VisibleMaxX - g->VisibleMinX;  /* Calculate X size */
+                float ySize = g->VisibleMaxY - g->VisibleMinY;  /* Calculate Y size */
+                float xStep = (float)(width - bl - br) / (float)xSize;  /* Calculate X step */
+                float yStep = (float)(height - bt - bb) / (float)ySize; /* calculate Y step */
                 GUI_Dim_t yBottom = y + height - bb - 1;    /* Bottom Y value */
                 GUI_Dim_t xLeft = x + bl;                   /* Left X position */
                 uint32_t read, write;
@@ -131,14 +138,14 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 for (link = __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(&g->Root, 0); link; link = __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(0, link)) {
                     data = (GUI_GRAPH_DATA_p)__GUI_LINKEDLIST_MULTI_GetData(link);  /* Get data from list */
                     
-                    read = data->Ptr;                       /* Get start read pointer */
-                    write = data->Ptr;                      /* Get start write pointer */
+                    read = data->Ptr;               /* Get start read pointer */
+                    write = data->Ptr;              /* Get start write pointer */
                     
                     if (data->Type == GUI_GRAPH_TYPE_YT) {  /* Draw YT plot */
                         /* Calculate first point */
-                        x1 = xLeft - g->MinX * xStep;       /* Calculate start X */
-                        y1 = yBottom - (data->Data[read] - g->MinY) * yStep;    /* Calculate start Y */
-                        if (++read == data->Length) {       /* Check overflow */
+                        x1 = xLeft - g->VisibleMinX * xStep;/* Calculate start X */
+                        y1 = yBottom - (data->Data[read] - g->VisibleMinY) * yStep;    /* Calculate start Y */
+                        if (++read == data->Length) {   /* Check overflow */
                             read = 0;
                         }
                         
@@ -149,11 +156,11 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                         
                         while (read != write && x1 <= disp->X2) {   /* Calculate next points */
                             x2 = x1 + xStep;                /* Calculate next X */
-                            y2 = yBottom - ((float)data->Data[read] - g->MinY) * yStep; /* Calculate next Y */
+                            y2 = yBottom - ((float)data->Data[read] - g->VisibleMinY) * yStep;  /* Calculate next Y */
                             if (x1 >= disp->X1 && x1 < disp->X2) {
                                 GUI_DRAW_Line(disp, x1, y1, x2, y2, data->Color);   /* Draw actual line */
                             }
-                            x1 = x2, y1 = y2;               /* Copy values as old */
+                            x1 = x2, y1 = y2;       /* Copy values as old */
                             
                             if (++read == data->Length) {   /* Check overflow */
                                 read = 0;
@@ -161,17 +168,17 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                         }
                     } else if (data->Type == GUI_GRAPH_TYPE_XY) {   /* Draw XY plot */                        
                         /* Calculate first point */
-                        x1 = xLeft + ((float)data->Data[2 * read + 0] - g->MinX) * xStep;
-                        y1 = yBottom - ((float)data->Data[2 * read + 1] - g->MinY) * yStep;
-                        if (++read == data->Length) {       /* Check overflow */
+                        x1 = xLeft + ((float)data->Data[2 * read + 0] - g->VisibleMinX) * xStep;
+                        y1 = yBottom - ((float)data->Data[2 * read + 1] - g->VisibleMinY) * yStep;
+                        if (++read == data->Length) {   /* Check overflow */
                             read = 0;
                         }
                         
-                        while (read != write) {             /* Calculate next points */
-                            x2 = xLeft + ((float)(data->Data[2 * read + 0] - g->MinX) * xStep);
-                            y2 = yBottom - ((float)(data->Data[2 * read + 1] - g->MinY) * yStep);
+                        while (read != write) {     /* Calculate next points */
+                            x2 = xLeft + ((float)(data->Data[2 * read + 0] - g->VisibleMinX) * xStep);
+                            y2 = yBottom - ((float)(data->Data[2 * read + 1] - g->VisibleMinY) * yStep);
                             GUI_DRAW_Line(disp, x1, y1, x2, y2, data->Color);   /* Draw actual line */
-                            x1 = x2, y1 = y2;               /* Check overflow */
+                            x1 = x2, y1 = y2;       /* Check overflow */
                             
                             if (++read == data->Length) {   /* Check overflow */
                                 read = 0;
@@ -184,7 +191,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
             return 1;
         }
 #if GUI_USE_TOUCH
-        case GUI_WC_TouchStart: {                    /* Touch down event */
+        case GUI_WC_TouchStart: {                   /* Touch down event */
             __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
             uint8_t i = 0;
             for (i = 0; i < ts->TS.Count; i++) {
@@ -192,7 +199,6 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 tY[i] = ts->RelY[i];                /* Relative Y position on widget */
             }
             *(__GUI_TouchStatus_t *)result = touchHANDLED;  /* Set touch status */
-            __GUI_DEBUG("TOUCH START\r\n");
             return 1;
         }
         case GUI_WC_TouchMove: {                    /* Touch move event */
@@ -201,21 +207,20 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
             GUI_iDim_t x, y;
             float diff;
             float step;
-            __GUI_DEBUG("TOUCH MOVE\r\n");
             
             if (ts->TS.Count == 1) {                /* Move graph on single widget */
                 x = ts->RelX[0];
                 y = ts->RelY[0];
                 
-                step = (float)(__GUI_WIDGET_GetWidth(h) - __GG(h)->Border[GUI_GRAPH_BORDER_LEFT] - __GG(h)->Border[GUI_GRAPH_BORDER_RIGHT]) / (float)(__GG(h)->MaxX - __GG(h)->MinX);
+                step = (float)(__GUI_WIDGET_GetWidth(h) - g->Border[GUI_GRAPH_BORDER_LEFT] - g->Border[GUI_GRAPH_BORDER_RIGHT]) / (float)(g->VisibleMaxX - g->VisibleMinX);
                 diff = (float)(x - tX[0]) / step;
-                __GG(h)->MinX -= diff;
-                __GG(h)->MaxX -= diff;
+                g->VisibleMinX -= diff;
+                g->VisibleMaxX -= diff;
                 
-                step = (float)(__GUI_WIDGET_GetHeight(h) - __GG(h)->Border[GUI_GRAPH_BORDER_TOP] - __GG(h)->Border[GUI_GRAPH_BORDER_BOTTOM]) / (float)(__GG(h)->MaxY - __GG(h)->MinY);
+                step = (float)(__GUI_WIDGET_GetHeight(h) - g->Border[GUI_GRAPH_BORDER_TOP] - g->Border[GUI_GRAPH_BORDER_BOTTOM]) / (float)(g->VisibleMaxY - g->VisibleMinY);
                 diff = (float)(y - tY[0]) / step;
-                __GG(h)->MinY += diff;
-                __GG(h)->MaxY += diff;
+                g->VisibleMinY += diff;
+                g->VisibleMaxY += diff;
 #if GUI_TOUCH_MAX_PRESSES > 1
             } else if (ts->TS.Count == 2) {         /* Scale widget on multiple widgets */
                 float centerX, centerY, zoom, pos;
@@ -223,15 +228,13 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 GUI_MATH_CenterOfXY(ts->RelX[0], ts->RelY[0], ts->RelX[1], ts->RelY[1], &centerX, &centerY);    /* Calculate center position between points */
                 zoom = ts->Distance / ts->DistanceOld;  /* Calculate zoom value */
                 
-                __GUI_DEBUG("Zoom: %.3f\r\n", zoom);
-                
                 pos = (float)centerX / (float)__GUI_WIDGET_GetWidth(h); /* Calculate X position where on plot should we zoom */
-                g->MinX += (g->MaxX - g->MinX) * (zoom - 1.0f) * pos;
-                g->MaxX -= (g->MaxX - g->MinX) * (zoom - 1.0f) * (1.0f - pos);
+                g->VisibleMinX += (g->VisibleMaxX - g->VisibleMinX) * (zoom - 1.0f) * pos;
+                g->VisibleMaxX -= (g->VisibleMaxX - g->VisibleMinX) * (zoom - 1.0f) * (1.0f - pos);
                 
                 pos = (float)centerY / (float)__GUI_WIDGET_GetHeight(h);/* Calculate Y position where on plot should we zoom */
-                g->MinY += (g->MaxY - g->MinY) * (zoom - 1.0f) * pos;
-                g->MaxY -= (g->MaxY - g->MinY) * (zoom - 1.0f) * (1.0f - pos);
+                g->VisibleMinY += (g->VisibleMaxY - g->VisibleMinY) * (zoom - 1.0f) * pos;
+                g->VisibleMaxY -= (g->VisibleMaxY - g->VisibleMinY) * (zoom - 1.0f) * (1.0f - pos);
 #endif /* GUI_TOUCH_MAX_PRESSES > 1 */
             }
             
@@ -244,16 +247,10 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
             return 1;
         }
         case GUI_WC_TouchEnd:
-            __GUI_DEBUG("TOUCH END\r\n");
-            return 1;
-        case GUI_WC_Click:
-            __GUI_DEBUG("CLICK\r\n");
             return 1;
         case GUI_WC_DblClick:
-            __GUI_DEBUG("DBL CLICK\r\n");
-            return 1;
-        case GUI_WC_LongClick:
-            __GUI_DEBUG("LONG CLICK\r\n");
+            __GUI_GRAPH_Reset(h);                   /* Reset zoom */
+            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
             return 1;
 #endif /* GUI_USE_TOUCH */
 #if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
@@ -306,12 +303,12 @@ static void InvalidateGraphs(GUI_GRAPH_DATA_p data) {
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_GRAPH_Create(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height) {
+GUI_HANDLE_p GUI_GRAPH_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags) {
     GUI_GRAPH_t* ptr;
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_GRAPH_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, 0);  /* Allocate memory for basic widget */
+    ptr = (GUI_GRAPH_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, flags);  /* Allocate memory for basic widget */
     if (ptr) {        
         /* Color setup */
         ptr->Color[GUI_GRAPH_COLOR_BG] = GUI_COLOR_GRAY;    /* Set background color */
@@ -324,10 +321,11 @@ GUI_HANDLE_p GUI_GRAPH_Create(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t w
         ptr->Border[GUI_GRAPH_BORDER_BOTTOM] = 5;
         ptr->Border[GUI_GRAPH_BORDER_LEFT] = 5;
         
-        ptr->MaxX = 100;
-        ptr->MinX = 1;
-        ptr->MaxY = 100;
-        ptr->MinY = 0;
+        ptr->MaxX = 10;
+        ptr->MinX = -10;
+        ptr->MaxY = 10;
+        ptr->MinY = -20;
+        __GUI_GRAPH_Reset((GUI_HANDLE_p)ptr);       /* Reset plot */
         
         ptr->Rows = 8;                              /* Number of rows */
         ptr->Columns = 10;                          /* Number of columns */

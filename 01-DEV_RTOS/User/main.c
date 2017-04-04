@@ -62,8 +62,11 @@ CTS         PA3                 RTS from ST to CTS from GSM
 #include "gui_edittext.h"
 #include "gui_checkbox.h"
 #include "gui_radio.h"
+#include "gui_listbox.h"
 
 #include "math.h"
+
+#define COUNT_OF(x)     (sizeof(x) / sizeof((x)[0]))
 
 TM_TOUCH_t TS;
 
@@ -75,6 +78,7 @@ GUI_HANDLE_p graph1, graph2, graph3;
 GUI_HANDLE_p edit1, edit2, edit3;
 GUI_HANDLE_p cb1, cb2;
 GUI_HANDLE_p rb[4];
+GUI_HANDLE_p lb1;
 
 GUI_GRAPH_DATA_p graphdata1, graphdata2, graphdata3, graphdata4;
 
@@ -89,6 +93,18 @@ extern GUI_Const GUI_FONT_t GUI_Font_Arial_Narrow_Italic_22;
 uint32_t time;
 
 GUI_TIMER_t *tim1, *tim2;
+
+GUI_Char* listboxtexts[] = {
+    _T("String 1 testiram, ce dela"),
+    _T("String 2 testiram, ce dela"),
+    _T("String 3 testiram, ce dela"),
+    _T("String 4 testiram, ce dela"),
+    _T("String 5 testiram, ce dela"),
+    _T("String 6 testiram, ce dela"),
+    _T("String 7 testiram, ce dela"),
+    _T("String 8 testiram, ce dela"),
+    _T("String 9 testiram, ce dela")
+};
 
 int main(void) {
     GUI_STRING_UNICODE_t s;
@@ -116,19 +132,21 @@ int main(void) {
     win1 = GUI_WINDOW_GetDesktop();                         /* Get desktop window */
     
     /* Button */
-    btn1 = GUI_BUTTON_Create(1, 10, 10, 120, 40);
+    btn1 = GUI_BUTTON_Create(1, 10, 10, 120, 40, 0, 0);
     GUI_WIDGET_SetFont(btn1, &GUI_Font_Arial_Narrow_Italic_22);
     GUI_WIDGET_AllocTextMemory(btn1, 255);
     GUI_WIDGET_SetText(btn1, _T("Button"));
     
     /* Edit text */
-    edit1 = GUI_EDITTEXT_Create(1, 140, 10, 120, 40);
+    edit1 = GUI_EDITTEXT_Create(1, 140, 10, 120, 40, 0, 0);
     GUI_WIDGET_SetFont(edit1, &GUI_Font_Arial_Narrow_Italic_22);
     GUI_WIDGET_AllocTextMemory(edit1, 255);
     GUI_WIDGET_SetText(edit1, _T("Edit text"));
     
+    #define PI      3.14159265359f
+    
     /* Graph */
-    graph1 = GUI_GRAPH_Create(0, 270, 10, 200, 150);
+    graph1 = GUI_GRAPH_Create(0, 270, 10, 200, 150, 0, 0);
  
     GUI_GRAPH_SetMinX(graph1, -10);
     GUI_GRAPH_SetMaxX(graph1, 10);
@@ -138,8 +156,6 @@ int main(void) {
     len = 10;
     graphdata1 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_XY, len);
     graphdata2 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_YT, len);
-    
-    #define PI      3.14159265359f
     
     for (i = 0; i <= 360; i += 360 / len) {
         x = cos((float)i * (PI / 180.0f));
@@ -155,24 +171,31 @@ int main(void) {
     GUI_GRAPH_AttachData(graph1, graphdata2);
     
     /* Progress bar */
-    prog1 = GUI_PROGBAR_Create(2, 10, 60, 120, 40);
+    prog1 = GUI_PROGBAR_Create(2, 10, 60, 120, 40, 0, 0);
     GUI_WIDGET_SetFont(prog1, &GUI_Font_Arial_Narrow_Italic_22);
     GUI_WIDGET_SetText(prog1, _T("Progbar"));
     
     /* Checkbox */
-    cb1 = GUI_CHECKBOX_Create(1, 140, 60, 60, 40);
+    cb1 = GUI_CHECKBOX_Create(1, 140, 60, 60, 40, 0, 0);
     GUI_WIDGET_SetFont(cb1, &GUI_Font_Arial_Narrow_Italic_22);
     GUI_WIDGET_SetText(cb1, _T("CB1"));
-    cb2 = GUI_CHECKBOX_Create(1, 200, 60, 60, 40);
+    cb2 = GUI_CHECKBOX_Create(1, 200, 60, 60, 40, 0, 0);
     GUI_WIDGET_SetFont(cb2, &GUI_Font_Arial_Narrow_Italic_22);
     GUI_WIDGET_SetText(cb2, _T("CB1"));
     
     /* Radio control */
     for (state = 0; state < 4; state++) {
-        rb[state] = GUI_RADIO_Create(10, 10, 110 + (state * 30), 120, 25);
+        rb[state] = GUI_RADIO_Create(10, 10, 110 + (state * 30), 60, 25, 0, 0);
         GUI_WIDGET_SetFont(rb[state], &GUI_Font_Arial_Narrow_Italic_22);
         GUI_WIDGET_SetText(rb[state], _T("RB1"));
+        GUI_RADIO_SetGroup(rb[state], state % 2);
+        GUI_RADIO_SetValue(rb[state], state);
     }
+    
+    /* Listbox */
+    lb1 = GUI_LISTBOX_Create(1, 80, 110, 180, 150, NULL, 0);
+    GUI_WIDGET_SetFont(lb1, &GUI_Font_Arial_Narrow_Italic_22);
+    GUI_LISTBOX_SetPointers(lb1, listboxtexts, COUNT_OF(listboxtexts));
     
     __GUI_LINKEDLIST_PrintList(NULL);
 
@@ -215,6 +238,18 @@ int main(void) {
                     GUI_INPUT_KeyAdd(&key);
                     key.Keys[0] = 0;
                     GUI_INPUT_KeyAdd(&key);
+                
+                    if (ch == 'D') {
+                        uint8_t a, b;
+                        __GUI_DEBUG("----\r\n");
+                        for (state = 0; state < 4; state++) {
+                            a = GUI_RADIO_GetValue(rb[state]);
+                            b = GUI_RADIO_GetSelectedValue(rb[state]);
+                            __GUI_DEBUG("V: %d, S: %d\r\n", a, b);
+                        }
+                    } else if (ch == 'V') {
+                        GUI_RADIO_SetValue(rb[0], 9);
+                    }
                     break;
                 case UNICODE_PROGRESS:
                     key.Keys[s.t - s.r - 1] = ch;

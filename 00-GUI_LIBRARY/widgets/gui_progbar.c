@@ -47,12 +47,10 @@
 /******************************************************************************/
 /******************************************************************************/
 const static GUI_WIDGET_t Widget = {
-    {
-        _T("PROGBAR"),                              /*!< Widget name */
-        sizeof(GUI_PROGBAR_t),                      /*!< Size of widget for memory allocation */
-        0,                                          /*!< List of widget flags */
-    },
-    GUI_PROGBAR_Callback,                           /*!< Callback function */
+    .Name = _T("PROGBAR"),                          /*!< Widget name */
+    .Size = sizeof(GUI_PROGBAR_t),                  /*!< Size of widget for memory allocation */
+    .Flags = 0,                                     /*!< List of widget flags */
+    .Callback = GUI_PROGBAR_Callback,               /*!< Callback function */
 };
 
 /******************************************************************************/
@@ -123,12 +121,12 @@ uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_PROGBAR_Create(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height) {
+GUI_HANDLE_p GUI_PROGBAR_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags) {
     GUI_PROGBAR_t* ptr;
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_PROGBAR_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, 0);    /* Allocate memory for basic widget */
+    ptr = (GUI_PROGBAR_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, flags);    /* Allocate memory for basic widget */
     if (ptr) {        
         /* Color setup */
         ptr->Color[GUI_PROGBAR_COLOR_BG] = GUI_COLOR_GRAY;

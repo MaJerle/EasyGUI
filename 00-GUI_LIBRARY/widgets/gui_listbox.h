@@ -1,6 +1,6 @@
 /**
  * \author  Tilen Majerle
- * \brief   GUI Checkbox widget
+ * \brief   GUI LISTBOX widget
  *  
 \verbatim
    ----------------------------------------------------------------------
@@ -28,8 +28,8 @@
    ----------------------------------------------------------------------
 \endverbatim
  */
-#ifndef GUI_CHECKBOX_H
-#define GUI_CHECKBOX_H
+#ifndef GUI_LISTBOX_H
+#define GUI_LISTBOX_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -43,28 +43,32 @@ extern "C" {
 #include "gui_widget.h"
 
 /**
- * \defgroup        GUI_CHECKBOX Checkbox
- * \brief           Checkbox widget
+ * \defgroup        GUI_LISTBOX LISTBOX
+ * \brief           LISTBOX widget
  * \{
  */
     
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)
-
-#define GUI_FLAG_CHECKBOX_CHECKED           0x01    /*!< Indicates checkbox is checked */
-#define GUI_FLAG_CHECKBOX_DISABLED          0x02    /*!< Indicates checkbox is disabled */
+    
+#define GUI_FLAG_LISTBOX_DYNAMIC        0x01/*!< Pointers array allocated dynamically */
     
 /**
- * \brief           Checkbox object structure
+ * \brief           LISTBOX object structure
  */
-typedef struct GUI_CHECKBOX_t {
+typedef struct GUI_LISTBOX_t {
     GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
     
+    uint16_t MaxCount;                      /*!< Maximal number of allowed strings in listbox widget */
+    uint16_t Count;                         /*!< Current number of strings attached to this widget */
+    uint16_t Selected;                      /*!< Selected text index */
+    uint16_t StartIndex;                    /*!< Index in array of string on top of visible area of widget */
+    GUI_Char** Pointers;                    /*!< Pointer to list of pointers of strings */
     uint8_t Flags;                          /*!< Widget flags */
-} GUI_CHECKBOX_t;
+} GUI_LISTBOX_t;
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 /**
- * \brief           Create new checkbox widget
+ * \brief           Create new LISTBOX widget
  * \param[in]       id: Widget unique ID to use for identity for callback processing
  * \param[in]       x: Widget X position relative to parent widget
  * \param[in]       y: Widget Y position relative to parent widget
@@ -75,9 +79,14 @@ typedef struct GUI_CHECKBOX_t {
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_CHECKBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags);
+GUI_HANDLE_p GUI_LISTBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags);
+GUI_HANDLE_p GUI_LISTBOX_AllocatePointers(GUI_HANDLE_p h, uint16_t count);
+GUI_HANDLE_p GUI_LISTBOX_FreePointers(GUI_HANDLE_p h);
+GUI_HANDLE_p GUI_LISTBOX_SetPointers(GUI_HANDLE_p h, GUI_Char** ptrs, uint16_t count);
+GUI_HANDLE_p GUI_LISTBOX_SetString(GUI_HANDLE_p h, uint16_t index, const GUI_Char* text);
+GUI_HANDLE_p GUI_LISTBOX_AddString(GUI_HANDLE_p h, const GUI_Char* text);
 
-uint8_t GUI_CHECKBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /**
  * \}

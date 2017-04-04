@@ -806,11 +806,9 @@ struct GUI_HANDLE;
  * \brief           Structure for each widget type
  */
 typedef struct GUI_WIDGET_t {
-    struct {
-        const GUI_Char* Name;               /*!< Widget name for display purpose */
-        uint16_t WidgetSize;                /*!< Bytes required for widget memory allocation */
-        uint8_t Flags;                      /*!< List of flags for widget setup. This field can use \ref GUI_WIDGETS_CORE_FLAGS flags */
-    } MetaData;                             /*!< Meta data structure for widget */
+    const GUI_Char* Name;                   /*!< Widget name for display purpose */
+    uint16_t Size;                          /*!< Bytes required for widget memory allocation */
+    uint8_t Flags;                          /*!< List of flags for widget setup. This field can use \ref GUI_WIDGETS_CORE_FLAGS flags */
     
     /**
      * \brief       callback function for widget

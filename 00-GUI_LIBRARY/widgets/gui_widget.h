@@ -257,12 +257,13 @@ uint8_t __GUI_WIDGET_FreeTextMemory(GUI_HANDLE_p h);
  * \param[in]       y: Widget Y position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       flags: Flags for create procedure
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  * \sa              __GUI_WIDGET_Remove
  */
-GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, uint8_t flags);
+GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags);
 
 /**
  * \brief           Remove widget and all of its children widgets
@@ -513,7 +514,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \retval          0: Widget does not allow children widgets
  * \hideinitializer
  */
-#define __GUI_WIDGET_AllowChildren(h)               (__GH(h)->Widget->MetaData.Flags & GUI_FLAG_WIDGET_ALLOW_CHILDREN)
+#define __GUI_WIDGET_AllowChildren(h)               (__GH(h)->Widget->Flags & GUI_FLAG_WIDGET_ALLOW_CHILDREN)
 
 /**
  * \}

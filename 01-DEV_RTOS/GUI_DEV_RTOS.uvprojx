@@ -1326,6 +1326,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_radio.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_listbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_listbox.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2718,6 +2723,11 @@
               <FileName>gui_radio.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_radio.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_listbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_listbox.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4113,6 +4123,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_radio.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_listbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_listbox.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4503,7 +4518,7 @@
             <wLevel>0</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>0</uC99>
+            <uC99>1</uC99>
             <useXO>0</useXO>
             <v6Lang>0</v6Lang>
             <v6LangP>0</v6LangP>
@@ -5240,6 +5255,11 @@
               <FileName>gui_radio.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_radio.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_listbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_listbox.c</FilePath>
             </File>
           </Files>
         </Group>

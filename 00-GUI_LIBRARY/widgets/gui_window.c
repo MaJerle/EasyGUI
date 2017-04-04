@@ -45,12 +45,10 @@
 /******************************************************************************/
 /******************************************************************************/
 const static GUI_WIDGET_t Widget = {
-    {
-        _T("Window"),                               /*!< Widget name */
-        sizeof(GUI_WINDOW_t),                       /*!< Size of widget for memory allocation */
-        GUI_FLAG_WIDGET_ALLOW_CHILDREN,             /*!< List of widget flags */
-    },
-    GUI_WINDOW_Callback,                            /*!< Control function */
+    .Name = _T("Window"),                           /*!< Widget name */
+    .Size = sizeof(GUI_WINDOW_t),                   /*!< Size of widget for memory allocation */
+    .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
+    .Callback = GUI_WINDOW_Callback,                /*!< Control function */
 };
 
 /******************************************************************************/
@@ -88,7 +86,7 @@ GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id) {
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_WINDOW_t *)__GUI_WIDGET_Create(&Widget, id, 0, 0, GUI.LCD.Width, GUI.LCD.Height, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP); /* Allocate memory for basic widget */
+    ptr = (GUI_WINDOW_t *)__GUI_WIDGET_Create(&Widget, id, 0, 0, GUI.LCD.Width, GUI.LCD.Height, 0, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);  /* Allocate memory for basic widget */
     if (ptr) {
         ptr->Color[GUI_WINDOW_COLOR_BG] = GUI_COLOR_LIGHTGRAY;  /* Set default color */
         
@@ -98,12 +96,12 @@ GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id) {
     return __GH(ptr);
 }
 
-GUI_HANDLE_p GUI_WINDOW_CreateChild(GUI_ID_t id, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t width, GUI_Dim_t height) {
+GUI_HANDLE_p GUI_WINDOW_CreateChild(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags) {
     GUI_WINDOW_t* ptr;
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_WINDOW_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, 0); /* Allocate memory for basic widget */
+    ptr = (GUI_WINDOW_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, flags); /* Allocate memory for basic widget */
     if (ptr) {        
         ptr->Color[GUI_WINDOW_COLOR_BG] = GUI_COLOR_LIGHTGRAY;  /* Set default color */
         

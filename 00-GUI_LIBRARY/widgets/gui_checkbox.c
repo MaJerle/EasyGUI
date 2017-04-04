@@ -45,12 +45,10 @@
 /******************************************************************************/
 /******************************************************************************/
 const static GUI_WIDGET_t Widget = {
-    {
-        _T("Checkbox"),                             /*!< Widget name */
-        sizeof(GUI_CHECKBOX_t),                     /*!< Size of widget for memory allocation */
-        0,                                          /*!< List of widget flags */
-    },
-    GUI_CHECKBOX_Callback                           /*!< Callback function */
+    .Name = _T("Checkbox"),                         /*!< Widget name */
+    .Size = sizeof(GUI_CHECKBOX_t),                 /*!< Size of widget for memory allocation */
+    .Flags = 0,                                     /*!< List of widget flags */
+    .Callback = GUI_CHECKBOX_Callback               /*!< Callback function */
 };
 
 /******************************************************************************/
@@ -118,15 +116,18 @@ uint8_t GUI_CHECKBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
         }
 #if GUI_USE_TOUCH 
         case GUI_WC_TouchStart: {
-            if (__GC(h)->Flags & GUI_FLAG_CHECKBOX_DISABLED) {  /* Check if widget is disabled */
+            if (c->Flags & GUI_FLAG_CHECKBOX_DISABLED) {    /* Check if widget is disabled */
                 *(__GUI_TouchStatus_t *)result = touchHANDLEDNOFOCUS;   /* Handle touch without focus */
             } else {
-                __GC(h)->Flags ^= GUI_FLAG_CHECKBOX_CHECKED;    /* Toggle checked state */
                 *(__GUI_TouchStatus_t *)result = touchHANDLED;  /* Touch is handled and in focus */
             }
             return 1;
         }
 #endif /* GUI_USE_TOUCH */
+        case GUI_WC_Click: {
+            c->Flags ^= GUI_FLAG_CHECKBOX_CHECKED;  /* Toggle checked state */
+            return 1;
+        }
         default:                                    /* Handle default option */
             __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
@@ -140,12 +141,12 @@ uint8_t GUI_CHECKBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_CHECKBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height) {
+GUI_HANDLE_p GUI_CHECKBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags) {
     GUI_CHECKBOX_t* ptr;
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_CHECKBOX_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, 0);   /* Allocate memory for basic widget */
+    ptr = (GUI_CHECKBOX_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, flags);   /* Allocate memory for basic widget */
     if (ptr) {        
 
     }

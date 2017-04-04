@@ -45,12 +45,10 @@
 /******************************************************************************/
 /******************************************************************************/
 const static GUI_WIDGET_t Widget = {
-    {
-        _T("LED"),                                  /*!< Widget name */
-        sizeof(GUI_LED_t),                          /*!< Size of widget for memory allocation */
-        0,                                          /*!< List of widget flags */
-    },
-    GUI_LED_Callback,                               /*!< Control function */
+    .Name = _T("LED"),                              /*!< Widget name */ 
+    .Size = sizeof(GUI_LED_t),                      /*!< Size of widget for memory allocation */
+    .Flags = 0,                                     /*!< List of widget flags */
+    .Callback = GUI_LED_Callback,                   /*!< Control function */
 };
 
 /******************************************************************************/
@@ -107,13 +105,13 @@ uint8_t GUI_LED_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* resul
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_LED_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height) {
+GUI_HANDLE_p GUI_LED_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags) {
     GUI_LED_t* h;
     
     __GUI_ASSERTACTIVEWIN();                        /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    h = (GUI_LED_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, 0);  /* Allocate memory for basic widget */
+    h = (GUI_LED_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, flags);  /* Allocate memory for basic widget */
     if (h) {        
         /* Color setup */
         h->Color[GUI_LED_COLOR_ON] = GUI_COLOR_LIGHTBLUE;       /* Set color when led is on */

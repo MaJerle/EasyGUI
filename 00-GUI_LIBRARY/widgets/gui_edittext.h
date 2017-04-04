@@ -68,6 +68,7 @@ typedef struct GUI_EDITTEXT_t {
 } GUI_EDITTEXT_t;
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
+
 /**
  * \brief           Create new edit text widget
  * \param[in]       id: Widget unique ID to use for identity for callback processing
@@ -75,10 +76,12 @@ typedef struct GUI_EDITTEXT_t {
  * \param[in]       y: Widget Y position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
+ * \param[in]       flags: Flags for widget creation
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height);
+GUI_HANDLE_p GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags);
 
 /**
  * \brief           Set color to specific part of widget

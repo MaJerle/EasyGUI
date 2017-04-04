@@ -110,38 +110,61 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
 }
 
 #if GUI_USE_TOUCH
-PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, GUI_TouchData_t* old, uint8_t v)) {
+PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, uint8_t v, GUI_WC_t* result)) {
     static volatile uint32_t Time;
+    static uint8_t i = 0;
+    
+    *result = (GUI_WC_t)0;
+    
     PT_BEGIN(&ts->pt);
     
-    /**
-     * At startup, wait for pressed touch and released before
-     */
-    PT_WAIT_UNTIL(&ts->pt, v && ts->TS.Status && !old->Status);
-    __GUI_DEBUG("PT: PRESSED\r\n");
-    
-    Time = ts->TS.Time;                             /* Get start time of this touch */
-    
-    PT_YIELD(&ts->pt);                              /* Stop thread and continue next time on event */
-    
-    /**
-     * Wait for new touch event or timeout
-     */
-    PT_WAIT_UNTIL(&ts->pt, v || (GUI.Time - Time) > 2000); /* Wait touch with released state */
-    
-    /**
-     * Check what was the reason for thread to continue
-     */
-    if (v) {                                        /* New touch event occurred */
-        if (ts->TS.Status) {
-            __GUI_DEBUG("PT: JUST MOVE\r\n");
+    for (i = 0; i < 2; i++) {
+        /**
+         * Wait for valid input with pressed state
+         */
+        PT_WAIT_UNTIL(&ts->pt, v && ts->TS.Status && !old->TS.Status);
+        
+        Time = ts->TS.Time;                             /* Get start time of this touch */
+        PT_YIELD(&ts->pt);                              /* Stop thread for now and wait next call */
+            
+        /**
+         * Either wait for released status or timeout
+         */
+        PT_WAIT_UNTIL(&ts->pt, v || (GUI.Time - Time) > 2000); /* Wait touch with released state */
+        
+        /**
+         * Check what was the reason for thread to continue
+         */
+        if (v) {                                    /* New touch event occurred */
+            if (!ts->TS.Status) {
+                if (!i) {                    
+                    *result = GUI_WC_Click;             /* Click event occurred */
+                    
+                    Time = ts->TS.Time;                 /* Save last time */
+                    PT_YIELD(&ts->pt);                  /* Stop thread for now and wait next call */
+                    
+                    /**
+                     * Wait for valid input with pressed state
+                     */
+                    PT_WAIT_UNTIL(&ts->pt, (v && ts->TS.Status) || (GUI.Time - Time) > 300);
+                    if ((GUI.Time - Time) > 300) {      /* Check timeout for new pressed state */
+                        PT_EXIT(&ts->pt);               /* Exit protothread */
+                    }
+                } else {
+                    *result = GUI_WC_DblClick;          /* Double click event */
+                    PT_EXIT(&ts->pt);                   /* Reset protothread */
+                }
+            } else {
+                
+            }
         } else {
-            __GUI_DEBUG("PT: NORMAL CLICK\r\n");
-            PT_EXIT(&ts->pt);
+            if (!i) {
+                *result = GUI_WC_LongClick;         /* Click event occurred */
+            }
+            PT_EXIT(&ts->pt);                       /* Exit protothread here */
         }
-    } else {
-        __GUI_DEBUG("PT: LONG CLICK\r\n");
     }
+
     
     PT_END(&ts->pt);
 }
@@ -161,7 +184,7 @@ void __SetRelativeCoordinate(__GUI_TouchData_t* ts, GUI_iDim_t x, GUI_iDim_t y) 
 #endif /* GUI_TOUCH_MAX_PRESSES > 1 */
 }
 
-__GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_TouchData_t* touchLast, GUI_HANDLE_p parent) {
+__GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;
     __GUI_TouchStatus_t tStat = touchCONTINUE;
     GUI_Dim_t x, y, width, height;
@@ -175,7 +198,7 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_TouchData_t* to
         
         /* Check children elements first */
         if (__GUI_WIDGET_AllowChildren(h)) {        /* If children widgets are allowed */
-            tStat = __ProcessTouch(touch, touchLast, h);    /* Process touch on widget elements first */
+            tStat = __ProcessTouch(touch, h);       /* Process touch on widget elements first */
             if (tStat != touchCONTINUE) {           /* If we should not continue */
                 return tStat;
             }
@@ -278,6 +301,7 @@ int32_t GUI_Process(void) {
     int32_t cnt = 0;
 #if GUI_USE_TOUCH
     __GUI_TouchStatus_t tStat;
+    GUI_WC_t result;
 #endif /* GUI_USE_TOUCH */
 #if GUI_USE_KEYBOARD
     __GUI_KeyboardData_t key;
@@ -287,7 +311,7 @@ int32_t GUI_Process(void) {
 #if GUI_USE_TOUCH
     if (__GUI_INPUT_TouchAvailable()) {             /* Check if any touch available */
         while (__GUI_INPUT_TouchRead(&GUI.Touch.TS)) {  /* Process all touch events possible */
-            if (GUI.Touch.TS.Status && GUI.TouchOld.Status) {
+            if (GUI.Touch.TS.Status && GUI.TouchOld.TS.Status) {
                 /**
                  * Old status: pressed
                  * New status: pressed
@@ -295,13 +319,36 @@ int32_t GUI_Process(void) {
                  */
                 if (GUI.ActiveWidget) {             /* If active widget exists */
                     __SetRelativeCoordinate(&GUI.Touch, __GUI_WIDGET_GetAbsoluteX(GUI.ActiveWidget), __GUI_WIDGET_GetAbsoluteY(GUI.ActiveWidget));  /* Set relative touch from current touch */
-                    if (GUI.Touch.TS.Count == GUI.TouchOld.Count) {
+                    if (GUI.Touch.TS.Count == GUI.TouchOld.TS.Count) {
                         __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchMove, &GUI.Touch, &tStat);  /* The same amount of touch events currently */
                     } else {
                         __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchStart, &GUI.Touch, &tStat); /* New amount of touch elements happened */
                     }
                 }
-            } else if (!GUI.Touch.TS.Status && GUI.TouchOld.Status) {
+            } else if (GUI.Touch.TS.Status && !GUI.TouchOld.TS.Status) {
+                /**
+                 * Old status: released
+                 * New status: pressed
+                 * Action: Touch down on element, find element
+                 */
+                if (__ProcessTouch(&GUI.Touch, NULL) == touchHANDLED) {
+                    if (GUI.ActiveWidget != GUI.ActiveWidgetOld) {  /* If new active widget is not the same as previous */
+                        PT_INIT(&GUI.Touch.pt)      /* Reset threads */
+                    }
+                }
+            }
+            
+            if (GUI.ActiveWidget) {
+                /**
+                 * Check for events
+                 */
+                __TouchEvents_Thread(&GUI.Touch, &GUI.TouchOld, 1, &result);    /* Call thread for touch process */
+                if (result != 0) {                  /* Valid event occurred */
+                    __GUI_WIDGET_Callback(GUI.ActiveWidget, result, &GUI.Touch.TS, NULL);
+                }
+            }
+            
+            if (!GUI.Touch.TS.Status && GUI.TouchOld.TS.Status) {
                 /**
                  * Old status: pressed
                  * New status: released
@@ -312,23 +359,15 @@ int32_t GUI_Process(void) {
                     __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchEnd, &GUI.Touch, &tStat);   /* Process callback function */
                     __GUI_ACTIVE_CLEAR();           /* Clear active widget */
                 }
-            } else if (GUI.Touch.TS.Status && !GUI.TouchOld.Status) {
-                /**
-                 * Old status: released
-                 * New status: pressed
-                 * Action: Touch down on element, find element
-                 */
-                if (__ProcessTouch(&GUI.Touch, &GUI.TouchOld, NULL) == touchHANDLED) {
-                    
-                }
             }
             
-            __TouchEvents_Thread(&GUI.Touch, &GUI.TouchOld, 1); /* Call thread for touch process */
-            
-            memcpy((void *)&GUI.TouchOld, (void *)&GUI.Touch.TS, sizeof(GUI_TouchData_t)); /* Copy current touch to last touch status */
+            memcpy((void *)&GUI.TouchOld, (void *)&GUI.Touch, sizeof(GUI.Touch));   /* Copy current touch to last touch status */
         }
     } else {                                        /* No new touch events, periodically call touch event thread */
-        __TouchEvents_Thread(&GUI.Touch, &GUI.TouchOld,  0);    /* Call periodically data */
+        __TouchEvents_Thread(&GUI.Touch, &GUI.TouchOld, 0, &result);    /* Call thread for touch process periodically, handle long presses or timeouts */
+        if (result != 0) {                  /* Valid event occurred */
+            __GUI_WIDGET_Callback(GUI.ActiveWidget, result, &GUI.Touch, NULL);
+        }
     }
     __GUI_UNUSED(tStat);                            /* Ignore compiler warnings */
 #endif /* GUI_USE_TOUCH */

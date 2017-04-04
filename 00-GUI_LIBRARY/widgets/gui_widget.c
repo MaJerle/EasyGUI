@@ -449,23 +449,26 @@ uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
     return 0;
 }
 
-GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, uint8_t flags) {
+GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags) {
     GUI_HANDLE_p h;
     GUI_Byte result = 0;
     
     __GUI_ASSERTPARAMS(widget && widget->Callback); /* Check input parameters */
     
-    h = (GUI_HANDLE_p)__GUI_MEMALLOC(widget->MetaData.WidgetSize);
-    __GUI_DEBUG("Alloc memory: 0x%08X; Type: %s\r\n", (uint32_t)h, widget->MetaData.Name);
+    h = (GUI_HANDLE_p)__GUI_MEMALLOC(widget->Size);
     if (h) {
-        memset(h, 0x00, widget->MetaData.WidgetSize);   /* Set memory to 0 */
+        memset(h, 0x00, widget->Size);              /* Set memory to 0 */
         
         h->Id = id;                                 /* Save ID */
         h->Widget = widget;                         /* Widget object structure */
         if (flags & GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP) {
             h->Parent = GUI_WINDOW_GetDesktop();    /* Set parent object */
         } else {
-            h->Parent = GUI.WindowActive;           /* Set parent object. It will be NULL on first call */
+            if (parent && __GUI_WIDGET_AllowChildren(parent)) {
+                h->Parent = parent;
+            } else {
+                h->Parent = GUI.WindowActive;       /* Set parent object. It will be NULL on first call */
+            }
         }
         
         __GUI_WIDGET_SetSize(h, width, height);     /* Set widget size */
@@ -478,7 +481,7 @@ GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iD
         }
         __GUI_WIDGET_Invalidate(h);                 /* Invalidate object */
     } else {
-        __GUI_DEBUG("Alloc failed for widget %s with %d bytes\r\n", (char *)widget->MetaData.Name, widget->MetaData.WidgetSize);
+        __GUI_DEBUG("Alloc failed for widget %s with %d bytes\r\n", (char *)widget->Name, widget->Size);
     }
     
     return h;
