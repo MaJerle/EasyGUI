@@ -51,6 +51,9 @@ extern "C" {
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)
     
 #define GUI_FLAG_LISTBOX_DYNAMIC        0x01/*!< Pointers array allocated dynamically */
+#define GUI_FLAG_LISTBOX_SLIDER_ON      0x02/*!< Slider is currently active */
+#define GUI_FLAG_LISTBOX_SLIDER_AUTO    0x04/*!< Show right slider automatically when required */
+#define GUI_FLAG_LISTBOX_SLIDER_MANUAL  0x08/*!< Show right slider always */
     
 /**
  * \brief           LISTBOX object structure
@@ -58,11 +61,12 @@ extern "C" {
 typedef struct GUI_LISTBOX_t {
     GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
     
-    uint16_t MaxCount;                      /*!< Maximal number of allowed strings in listbox widget */
-    uint16_t Count;                         /*!< Current number of strings attached to this widget */
-    uint16_t Selected;                      /*!< Selected text index */
-    uint16_t StartIndex;                    /*!< Index in array of string on top of visible area of widget */
+    int16_t MaxCount;                       /*!< Maximal number of allowed strings in listbox widget */
+    int16_t Count;                          /*!< Current number of strings attached to this widget */
+    int16_t Selected;                       /*!< Selected text index */
+    int16_t StartIndex;                     /*!< Index in array of string on top of visible area of widget */
     GUI_Char** Pointers;                    /*!< Pointer to list of pointers of strings */
+    GUI_Dim_t SliderWidth;                  /*!< Slider with in units of pixels */
     uint8_t Flags;                          /*!< Widget flags */
 } GUI_LISTBOX_t;
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */

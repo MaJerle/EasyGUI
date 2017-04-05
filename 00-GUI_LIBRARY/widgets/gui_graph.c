@@ -205,8 +205,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
             __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
             uint8_t i;
             GUI_iDim_t x, y;
-            float diff;
-            float step;
+            float diff, step;
             
             if (ts->TS.Count == 1) {                /* Move graph on single widget */
                 x = ts->RelX[0];
@@ -248,11 +247,11 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
         }
         case GUI_WC_TouchEnd:
             return 1;
+#endif /* GUI_USE_TOUCH */
         case GUI_WC_DblClick:
             __GUI_GRAPH_Reset(h);                   /* Reset zoom */
             __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
             return 1;
-#endif /* GUI_USE_TOUCH */
 #if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
         case GUI_WC_Remove: {                       /* When widget is about to be removed */
             GUI_GRAPH_DATA_p data;

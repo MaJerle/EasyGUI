@@ -113,18 +113,21 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
 PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, uint8_t v, GUI_WC_t* result)) {
     static volatile uint32_t Time;
     static uint8_t i = 0;
+    static GUI_iDim_t x[2], y[2];
     
     *result = (GUI_WC_t)0;
     
     PT_BEGIN(&ts->pt);
     
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < 2;) {
         /**
          * Wait for valid input with pressed state
          */
-        PT_WAIT_UNTIL(&ts->pt, v && ts->TS.Status && !old->TS.Status);
+        PT_WAIT_UNTIL(&ts->pt, v && ts->TS.Status && !old->TS.Status && ts->TS.Count == 1);
         
         Time = ts->TS.Time;                             /* Get start time of this touch */
+        x[i] = ts->RelX[0];                             /* Save X value */
+        y[i] = ts->RelY[0];                             /* Save Y value */
         PT_YIELD(&ts->pt);                              /* Stop thread for now and wait next call */
             
         /**
@@ -135,9 +138,14 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
         /**
          * Check what was the reason for thread to continue
          */
-        if (v) {                                    /* New touch event occurred */
-            if (!ts->TS.Status) {
-                if (!i) {                    
+        if (v) {                                        /* New touch event occurred */
+            if (!ts->TS.Status) {                       /* We received released state */
+                if (i) {                                /* Try to get second click, check difference for double click */
+                    if (__GUI_ABS(x[0] - x[1]) > 10 || __GUI_ABS(y[0] - y[1]) > 10) {
+                        i = 0;
+                    }
+                }
+                if (!i) {                               /* On first call, this is click event */
                     *result = GUI_WC_Click;             /* Click event occurred */
                     
                     Time = ts->TS.Time;                 /* Save last time */
@@ -163,6 +171,7 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
             }
             PT_EXIT(&ts->pt);                       /* Exit protothread here */
         }
+        i++;
     }
 
     

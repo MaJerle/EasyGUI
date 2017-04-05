@@ -103,7 +103,61 @@ GUI_Char* listboxtexts[] = {
     _T("String 6 testiram, ce dela"),
     _T("String 7 testiram, ce dela"),
     _T("String 8 testiram, ce dela"),
-    _T("String 9 testiram, ce dela")
+    _T("String 9 testiram, ce dela"),
+    _T("String 4 testiram, ce dela"),
+    _T("String 5 testiram, ce dela"),
+    _T("String 6 testiram, ce dela"),
+    _T("String 7 testiram, ce dela"),
+    _T("String 8 testiram, ce dela"),
+    _T("String 9 testiram, ce dela"),
+    _T("String 4 testiram, ce dela"),
+    _T("String 5 testiram, ce dela"),
+    _T("String 6 testiram, ce dela"),
+    _T("String 7 testiram, ce dela"),
+    _T("String 8 testiram, ce dela"),
+    _T("String 9 testiram, ce dela"),
+    _T("String 4 testiram, ce dela"),
+    _T("String 5 testiram, ce dela"),
+    _T("String 6 testiram, ce dela"),
+    _T("String 7 testiram, ce dela"),
+    _T("String 8 testiram, ce dela"),
+    _T("String 9 testiram, ce dela"),
+    _T("String 4 testiram, ce dela"),
+    _T("String 5 testiram, ce dela"),
+    _T("String 6 testiram, ce dela"),
+    _T("String 7 testiram, ce dela"),
+    _T("String 8 testiram, ce dela"),
+    _T("String 9 testiram, ce dela"),
+    _T("String 4 testiram, ce dela"),
+    _T("String 5 testiram, ce dela"),
+    _T("String 6 testiram, ce dela"),
+    _T("String 7 testiram, ce dela"),
+    _T("String 8 testiram, ce dela"),
+    _T("String 9 testiram, ce dela"),
+    _T("String 4 testiram, ce dela"),
+    _T("String 5 testiram, ce dela"),
+    _T("String 6 testiram, ce dela"),
+    _T("String 7 testiram, ce dela"),
+    _T("String 8 testiram, ce dela"),
+    _T("String 9 testiram, ce dela"),
+    _T("String 4 testiram, ce dela"),
+    _T("String 5 testiram, ce dela"),
+    _T("String 6 testiram, ce dela"),
+    _T("String 7 testiram, ce dela"),
+    _T("String 8 testiram, ce dela"),
+    _T("String 9 testiram, ce dela"),
+    _T("String 4 testiram, ce dela"),
+    _T("String 5 testiram, ce dela"),
+    _T("String 6 testiram, ce dela"),
+    _T("String 7 testiram, ce dela"),
+    _T("String 8 testiram, ce dela"),
+    _T("String 9 testiram, ce dela"),
+    _T("String 4 testiram, ce dela"),
+    _T("String 5 testiram, ce dela"),
+    _T("String 6 testiram, ce dela"),
+    _T("String 7 testiram, ce dela"),
+    _T("String 8 testiram, ce dela"),
+    _T("String 9 testiram, ce dela"),
 };
 
 int main(void) {
@@ -148,10 +202,10 @@ int main(void) {
     /* Graph */
     graph1 = GUI_GRAPH_Create(0, 270, 10, 200, 150, 0, 0);
  
-    GUI_GRAPH_SetMinX(graph1, -10);
-    GUI_GRAPH_SetMaxX(graph1, 10);
-    GUI_GRAPH_SetMinY(graph1, -10);
-    GUI_GRAPH_SetMaxY(graph1, 10);
+    GUI_GRAPH_SetMinX(graph1, 10);
+    GUI_GRAPH_SetMaxX(graph1, 20);
+    GUI_GRAPH_SetMinY(graph1, 10);
+    GUI_GRAPH_SetMaxY(graph1, 20);
     
     len = 10;
     graphdata1 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_XY, len);
@@ -194,7 +248,7 @@ int main(void) {
     
     /* Listbox */
     lb1 = GUI_LISTBOX_Create(1, 80, 110, 180, 150, NULL, 0);
-    GUI_WIDGET_SetFont(lb1, &GUI_Font_Arial_Narrow_Italic_22);
+    GUI_WIDGET_SetFont(lb1, &GUI_Font_Comic_Sans_MS_Regular_22);
     GUI_LISTBOX_SetPointers(lb1, listboxtexts, COUNT_OF(listboxtexts));
     
     __GUI_LINKEDLIST_PrintList(NULL);
@@ -209,7 +263,7 @@ int main(void) {
     state = 0;
 	while (1) {
         GUI_Process();
-        if ((TM_DELAY_Time() - time) >= 500) {
+        if ((TM_DELAY_Time() - time) >= 50) {
             time = TM_DELAY_Time();
             
             //__GUI_TIMER_Start(edit1->Timer);
