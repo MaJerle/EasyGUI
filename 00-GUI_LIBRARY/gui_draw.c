@@ -476,67 +476,67 @@ void GUI_DRAW_Triangle(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, 
 }
 
 void GUI_DRAW_FilledTriangle(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_iDim_t x2, GUI_iDim_t y2, GUI_iDim_t x3, GUI_iDim_t y3, GUI_Color_t color) {
-	GUI_iDim_t deltax = 0, deltay = 0, x = 0, y = 0, xinc1 = 0, xinc2 = 0, 
-	yinc1 = 0, yinc2 = 0, den = 0, num = 0, numadd = 0, numpixels = 0, 
-	curpixel = 0;
+    GUI_iDim_t deltax = 0, deltay = 0, x = 0, y = 0, xinc1 = 0, xinc2 = 0, 
+    yinc1 = 0, yinc2 = 0, den = 0, num = 0, numadd = 0, numpixels = 0, 
+    curpixel = 0;
 
-	deltax = __GUI_ABS(x2 - x1);
-	deltay = __GUI_ABS(y2 - y1);
-	x = x1;
-	y = y1;
+    deltax = __GUI_ABS(x2 - x1);
+    deltay = __GUI_ABS(y2 - y1);
+    x = x1;
+    y = y1;
 
-	if (x2 >= x1) {
-		xinc1 = 1;
-		xinc2 = 1;
-	} else {
-		xinc1 = -1;
-		xinc2 = -1;
-	}
+    if (x2 >= x1) {
+        xinc1 = 1;
+        xinc2 = 1;
+    } else {
+        xinc1 = -1;
+        xinc2 = -1;
+    }
 
-	if (y2 >= y1) {
-		yinc1 = 1;
-		yinc2 = 1;
-	} else {
-		yinc1 = -1;
-		yinc2 = -1;
-	}
+    if (y2 >= y1) {
+        yinc1 = 1;
+        yinc2 = 1;
+    } else {
+        yinc1 = -1;
+        yinc2 = -1;
+    }
 
-	if (deltax >= deltay){
-		xinc1 = 0;
-		yinc2 = 0;
-		den = deltax;
-		num = deltax / 2;
-		numadd = deltay;
-		numpixels = deltax;
-	} else {
-		xinc2 = 0;
-		yinc1 = 0;
-		den = deltay;
-		num = deltay / 2;
-		numadd = deltax;
-		numpixels = deltay;
-	}
+    if (deltax >= deltay){
+        xinc1 = 0;
+        yinc2 = 0;
+        den = deltax;
+        num = deltax / 2;
+        numadd = deltay;
+        numpixels = deltax;
+    } else {
+        xinc2 = 0;
+        yinc1 = 0;
+        den = deltay;
+        num = deltay / 2;
+        numadd = deltax;
+        numpixels = deltay;
+    }
 
-	for (curpixel = 0; curpixel <= numpixels; curpixel++) {
-		GUI_DRAW_Line(disp, x, y, x3, y3, color);
+    for (curpixel = 0; curpixel <= numpixels; curpixel++) {
+        GUI_DRAW_Line(disp, x, y, x3, y3, color);
 
-		num += numadd;
-		if (num >= den) {
-			num -= den;
-			x += xinc1;
-			y += yinc1;
-		}
-		x += xinc2;
-		y += yinc2;
-	}
+        num += numadd;
+        if (num >= den) {
+            num -= den;
+            x += xinc1;
+            y += yinc1;
+        }
+        x += xinc2;
+        y += yinc2;
+    }
 }
 
 void GUI_DRAW_CircleCorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t y0, GUI_iDim_t r, GUI_Byte_t c, GUI_Color_t color) {
-	GUI_iDim_t f = 1 - r;
-	GUI_iDim_t ddF_x = 1;
-	GUI_iDim_t ddF_y = -2 * r;
-	GUI_iDim_t x = 0;
-	GUI_iDim_t y = r;
+    GUI_iDim_t f = 1 - r;
+    GUI_iDim_t ddF_x = 1;
+    GUI_iDim_t ddF_y = -2 * r;
+    GUI_iDim_t x = 0;
+    GUI_iDim_t y = r;
     
 #if GUI_USE_CLIPPING
     if (!__GUI_RECT_MATCH(
@@ -558,24 +558,24 @@ void GUI_DRAW_CircleCorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t 
         f += ddF_x;
 
         if (c & GUI_DRAW_CIRCLE_TL) {               /* Top left corner */
-			GUI_DRAW_SetPixel(disp, x0 - y, y0 - x, color);
-			GUI_DRAW_SetPixel(disp, x0 - x, y0 - y, color);
-		}
-		
+            GUI_DRAW_SetPixel(disp, x0 - y, y0 - x, color);
+            GUI_DRAW_SetPixel(disp, x0 - x, y0 - y, color);
+        }
+
         if (c & GUI_DRAW_CIRCLE_TR) {               /* Top right corner */
-			GUI_DRAW_SetPixel(disp, x0 + x, y0 - y, color);
-			GUI_DRAW_SetPixel(disp, x0 + y, y0 - x, color);
-		}
-		
-		if (c & GUI_DRAW_CIRCLE_BR) {               /* Bottom right corner */
-			GUI_DRAW_SetPixel(disp, x0 + x, y0 + y, color);
-			GUI_DRAW_SetPixel(disp, x0 + y, y0 + x, color);
-		}
-		
+            GUI_DRAW_SetPixel(disp, x0 + x, y0 - y, color);
+            GUI_DRAW_SetPixel(disp, x0 + y, y0 - x, color);
+        }
+
+        if (c & GUI_DRAW_CIRCLE_BR) {               /* Bottom right corner */
+            GUI_DRAW_SetPixel(disp, x0 + x, y0 + y, color);
+            GUI_DRAW_SetPixel(disp, x0 + y, y0 + x, color);
+        }
+
         if (c & GUI_DRAW_CIRCLE_BL) {               /* Bottom left corner */
-			GUI_DRAW_SetPixel(disp, x0 - x, y0 + y, color);
-			GUI_DRAW_SetPixel(disp, x0 - y, y0 + x, color);
-		}
+            GUI_DRAW_SetPixel(disp, x0 - x, y0 + y, color);
+            GUI_DRAW_SetPixel(disp, x0 - y, y0 + x, color);
+        }
     }
 }
 

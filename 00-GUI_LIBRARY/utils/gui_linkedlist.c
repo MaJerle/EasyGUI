@@ -203,13 +203,13 @@ GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_ADD_GEN(GUI_LinkedListRoot_t* root
     }
     
     ptr->Element = element;                         /* Save pointer to our element */
-    __GUI_LINKEDLIST_ADD_GEN(root, (GUI_LinkedList_t *)&ptr->List); /* Add element to linked list */
+    __GUI_LINKEDLIST_ADD_GEN(root, &ptr->List);     /* Add element to linked list */
     
     return ptr;
 }
 
 uint8_t __GUI_LINKEDLIST_MULTI_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
-    __GUI_LINKEDLIST_REMOVE_GEN(root, (GUI_LinkedList_t *)&element->List);  /* Remove element from linked list */
+    __GUI_LINKEDLIST_REMOVE_GEN(root, &element->List);  /* Remove element from linked list */
     __GUI_MEMFREE(element);                         /* Free memory */
     return 1;
 }
@@ -237,11 +237,11 @@ GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_GETPREV_GEN(GUI_LinkedListRoot_t* 
 }
 
 uint8_t __GUI_LINKEDLIST_MULTI_MOVEDOWN_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
-    return __GUI_LINKEDLIST_MOVEDOWN_GEN(root, (GUI_LinkedList_t *)element);    /* Move down elemenet */
+    return __GUI_LINKEDLIST_MOVEDOWN_GEN(root, &element->List); /* Move down elemenet */
 }
 
 uint8_t __GUI_LINKEDLIST_MULTI_MOVEUP_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
-    return __GUI_LINKEDLIST_MOVEUP_GEN(root, (GUI_LinkedList_t *)element);  /* Move down elemenet */
+    return __GUI_LINKEDLIST_MOVEUP_GEN(root, &element->List);   /* Move down elemenet */
 }
 
 uint8_t __GUI_LINKEDLIST_MULTI_FIND_REMOVE(GUI_LinkedListRoot_t* root, void* element) {
@@ -266,32 +266,32 @@ uint8_t __GUI_LINKEDLIST_MULTI_FIND_REMOVE(GUI_LinkedListRoot_t* root, void* ele
 /******************************************************************************/
 void __GUI_LINKEDLIST_WidgetAdd(GUI_HANDLE_ROOT_t* root, GUI_HANDLE_p h) {    
     if (root) {
-        __GUI_LINKEDLIST_ADD_GEN(&root->RootList, (GUI_LinkedList_t *)h);
+        __GUI_LINKEDLIST_ADD_GEN(&root->RootList, &h->List);
     } else {
-        __GUI_LINKEDLIST_ADD_GEN(&GUI.Root, (GUI_LinkedList_t *)h);
+        __GUI_LINKEDLIST_ADD_GEN(&GUI.Root, &h->List);
     }
 }
 
 void __GUI_LINKEDLIST_WidgetRemove(GUI_HANDLE_p h) {    
     if (h->Parent) {
-        __GUI_LINKEDLIST_REMOVE_GEN(&((GUI_HANDLE_ROOT_t *)h->Parent)->RootList, (GUI_LinkedList_t *)h);
+        __GUI_LINKEDLIST_REMOVE_GEN(&((GUI_HANDLE_ROOT_t *)h->Parent)->RootList, &h->List);
     } else {
-        __GUI_LINKEDLIST_REMOVE_GEN(&GUI.Root, (GUI_LinkedList_t *)h);
+        __GUI_LINKEDLIST_REMOVE_GEN(&GUI.Root, &h->List);
     }
 }
 
 GUI_Byte __GUI_LINKEDLIST_WidgetMoveUp(GUI_HANDLE_p h) {
     if (h->Parent) {
-        return __GUI_LINKEDLIST_MOVEUP_GEN(&__GHR(h->Parent)->RootList, (GUI_LinkedList_t *)h);
+        return __GUI_LINKEDLIST_MOVEUP_GEN(&__GHR(h->Parent)->RootList, &h->List);
     }
-    return __GUI_LINKEDLIST_MOVEUP_GEN(&GUI.Root, (GUI_LinkedList_t *)h);
+    return __GUI_LINKEDLIST_MOVEUP_GEN(&GUI.Root, &h->List);
 }
 
 GUI_Byte __GUI_LINKEDLIST_WidgetMoveDown(GUI_HANDLE_p h) {
     if (h->Parent) {
-        return __GUI_LINKEDLIST_MOVEDOWN_GEN(&__GHR(h->Parent)->RootList, (GUI_LinkedList_t *)h);
+        return __GUI_LINKEDLIST_MOVEDOWN_GEN(&__GHR(h->Parent)->RootList, &h->List);
     }
-    return __GUI_LINKEDLIST_MOVEDOWN_GEN(&GUI.Root, (GUI_LinkedList_t *)h);
+    return __GUI_LINKEDLIST_MOVEDOWN_GEN(&GUI.Root, &h->List);
 }
 
 GUI_HANDLE_p __GUI_LINKEDLIST_WidgetGetNext(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h) {

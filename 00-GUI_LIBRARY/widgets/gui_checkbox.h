@@ -77,6 +77,18 @@ typedef struct GUI_CHECKBOX_t {
  */
 GUI_HANDLE_p GUI_CHECKBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags);
 
+/**
+ * \brief           Widget callback function for all event
+ * \note            Called either from GUI stack or from widget itself to notify user
+ *
+ * \note            Can be overwritten by user when required to handle specific events
+ * \param[in,out]   h: Widget handle where callback occurred
+ * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
+ * \param[in]       *param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
+ * \param[out]      *result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
+ * \retval          1: Command has been processed
+ * \retval          0: Command has not been processed
+ */
 uint8_t GUI_CHECKBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /**

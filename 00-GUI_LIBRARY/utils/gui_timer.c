@@ -68,14 +68,14 @@ GUI_TIMER_t* __GUI_TIMER_Create(uint16_t period, void (*callback)(GUI_TIMER_t *)
         ptr->Params = params;                       /* Timer custom parameters */
         ptr->Flags = flags;                         /* Timer flags management */
         
-        __GUI_LINKEDLIST_ADD_GEN(&GUI.Timers.List, (GUI_LinkedList_t *)ptr);    /* Add timer to linked list */
+        __GUI_LINKEDLIST_ADD_GEN(&GUI.Timers.List, &ptr->List); /* Add timer to linked list */
     }
     return ptr;
 }
 
 void __GUI_TIMER_Remove(GUI_TIMER_t** t) {  
     __GUI_ASSERTPARAMSVOID(t && *t);                /* Check input parameters */  
-    __GUI_LINKEDLIST_REMOVE_GEN(&GUI.Timers.List, (GUI_LinkedList_t *)(*t));    /* Remove timer from linked list */
+    __GUI_LINKEDLIST_REMOVE_GEN(&GUI.Timers.List, &(*t)->List); /* Remove timer from linked list */
     __GUI_MEMFREE(*t);                              /* Free memory for timer */
     *t = 0;                                         /* Restore pointer */
 }

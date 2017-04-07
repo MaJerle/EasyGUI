@@ -252,7 +252,9 @@ typedef struct GUI_t {
     GUI_HANDLE_p ActiveWidgetOld;           /*!< Previously active widget */
 #endif /* GUI_USE_TOUCH */
 } GUI_t;
+#if defined(GUI_INTERNAL)
 extern GUI_t GUI;
+#endif /* defined(GUI_INTERNAL) */
 
 /* Include widget structure */
 #include "widgets/gui_widget.h"

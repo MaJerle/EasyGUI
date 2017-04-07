@@ -43,17 +43,23 @@ extern "C" {
 #include "gui_widget.h"
 
 /**
- * \defgroup        GUI_LISTBOX LISTBOX
+ * \defgroup        GUI_LISTBOX Listbox
  * \brief           LISTBOX widget
  * \{
  */
     
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)
     
-#define GUI_FLAG_LISTBOX_DYNAMIC        0x01/*!< Pointers array allocated dynamically */
-#define GUI_FLAG_LISTBOX_SLIDER_ON      0x02/*!< Slider is currently active */
-#define GUI_FLAG_LISTBOX_SLIDER_AUTO    0x04/*!< Show right slider automatically when required */
-#define GUI_FLAG_LISTBOX_SLIDER_MANUAL  0x08/*!< Show right slider always */
+#define GUI_FLAG_LISTBOX_SLIDER_ON      0x01/*!< Slider is currently active */
+#define GUI_FLAG_LISTBOX_SLIDER_AUTO    0x02/*!< Show right slider automatically when required, otherwise, manual mode is used */
+
+/**
+ * \brief           LISTBOX string item object
+ */
+typedef struct GUI_LISTBOX_ITEM_t {
+    GUI_LinkedList_t List;                  /*!< Linked list entry, must be first on list */
+    GUI_Char* Text;                         /*!< Text entry */
+} GUI_LISTBOX_ITEM_t;
     
 /**
  * \brief           LISTBOX object structure
@@ -61,12 +67,13 @@ extern "C" {
 typedef struct GUI_LISTBOX_t {
     GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
     
-    int16_t MaxCount;                       /*!< Maximal number of allowed strings in listbox widget */
     int16_t Count;                          /*!< Current number of strings attached to this widget */
     int16_t Selected;                       /*!< Selected text index */
-    int16_t StartIndex;                     /*!< Index in array of string on top of visible area of widget */
-    GUI_Char** Pointers;                    /*!< Pointer to list of pointers of strings */
-    GUI_Dim_t SliderWidth;                  /*!< Slider with in units of pixels */
+    int16_t VisibleStartIndex;              /*!< Index in array of string on top of visible area of widget */
+    
+    GUI_LinkedListRoot_t Root;              /*!< Root of linked list entries */
+    
+    GUI_Dim_t SliderWidth;                  /*!< Slider width in units of pixels */
     uint8_t Flags;                          /*!< Widget flags */
 } GUI_LISTBOX_t;
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
@@ -84,12 +91,116 @@ typedef struct GUI_LISTBOX_t {
  * \retval          0: Widget creation failed
  */
 GUI_HANDLE_p GUI_LISTBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags);
-GUI_HANDLE_p GUI_LISTBOX_AllocatePointers(GUI_HANDLE_p h, uint16_t count);
-GUI_HANDLE_p GUI_LISTBOX_FreePointers(GUI_HANDLE_p h);
-GUI_HANDLE_p GUI_LISTBOX_SetPointers(GUI_HANDLE_p h, GUI_Char** ptrs, uint16_t count);
-GUI_HANDLE_p GUI_LISTBOX_SetString(GUI_HANDLE_p h, uint16_t index, const GUI_Char* text);
-GUI_HANDLE_p GUI_LISTBOX_AddString(GUI_HANDLE_p h, const GUI_Char* text);
 
+/**
+ * \brief           Add a new string to list box
+ * \param[in,out]   h: Widget handle
+ * \param[in]       *text: Pointer to text to add to list. Only pointer is saved to memory!
+ * \retval          1: String added to the end
+ * \retval          0: String not added
+ */
+uint8_t GUI_LISTBOX_AddString(GUI_HANDLE_p h, const GUI_Char* text);
+
+/**
+ * \brief           Delete first string from list
+ * \param[in,out]   h: Widget handle
+ * \retval          1: String deleted
+ * \retval          0: String not deleted
+ * \sa              GUI_LISTBOX_DeleteString
+ * \sa              GUI_LISTBOX_DeleteLastString
+ */
+uint8_t GUI_LISTBOX_DeleteFirstString(GUI_HANDLE_p h);
+
+/**
+ * \brief           Delete last string from list
+ * \param[in,out]   h: Widget handle
+ * \retval          1: String deleted
+ * \retval          0: String not deleted
+ * \sa              GUI_LISTBOX_DeleteString
+ * \sa              GUI_LISTBOX_DeleteFirstString
+ */
+uint8_t GUI_LISTBOX_DeleteLastString(GUI_HANDLE_p h);
+
+/**
+ * \brief           Delete specific entry from list
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: List index (position) to delete
+ * \retval          1: String deleted
+ * \retval          0: String not deleted
+ * \sa              GUI_LISTBOX_DeleteFirstString
+ * \sa              GUI_LISTBOX_DeleteLastString
+ */
+uint8_t GUI_LISTBOX_DeleteString(GUI_HANDLE_p h, uint16_t index);
+
+/**
+ * \brief           Set string value to already added string index
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Index (position) on list to set/change text
+ * \param[in]       *text: Pointer to text to add to list. Only pointer is saved to memory!
+ * \retval          1: String changed
+ * \retval          0: String not changed
+ */
+uint8_t GUI_LISTBOX_SetString(GUI_HANDLE_p h, uint16_t index, const GUI_Char* text);
+
+/**
+ * \brief           Set selected value
+ * \param[in,out]   h: Widget handle
+ * \param[in]       selection: Set to -1 to invalidate selection or 0 - count-1 for specific selection 
+ * \retval          1: Selection changed
+ * \retval          0: Selection not changed
+ */
+uint8_t GUI_LISTBOX_SetSelection(GUI_HANDLE_p h, int16_t selection);
+
+/**
+ * \brief           Get selected value
+ * \param[in,out]   h: Widget handle
+ * \retval          Selection number or -1 if no selection
+ */
+int16_t GUI_LISTBOX_GetSelection(GUI_HANDLE_p h);
+
+/**
+ * \brief           Set auto mode for slider
+ * \note            When it is enabled, slider will only appear if needed to show more entries on list
+ * \param[in,out]   h: Widget handle
+ * \param[in]       autoMode: Auto mode status. Set to 1 for auto mode or 0 for manual mode
+ * \retval          1: Set OK
+ * \retval          0: Set ERROR
+ * \sa              GUI_LISTBOX_SetSliderVisibility
+ */
+uint8_t GUI_LISTBOX_SetSliderAuto(GUI_HANDLE_p h, uint8_t autoMode);
+
+/**
+ * \brief           Set manual visibility for slider
+ * \note            Slider must be in manual mode in order to get this to work
+ * \param[in,out]   h: Widget handle
+ * \param[in]       visible: Slider visible status, 1 or 0
+ * \retval          1: Set to desired value
+ * \retval          0: Not set to desired value
+ * \sa              GUI_LISTBOX_SetSliderAuto
+ */
+uint8_t GUI_LISTBOX_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible);
+
+/**
+ * \brief           Scroll list if possible
+ * \param[in,out]   h: Widget handle
+ * \param[in]       step: Step to scroll. Positive step will scroll up, negative will scroll down
+ * \retval          1: Scroll successful
+ * \retval          0: Scroll not successful
+ */
+uint8_t GUI_LISTBOX_Scroll(GUI_HANDLE_p h, int16_t step);
+
+/**
+ * \brief           Widget callback function for all event
+ * \note            Called either from GUI stack or from widget itself to notify user
+ *
+ * \note            Can be overwritten by user when required to handle specific events
+ * \param[in,out]   h: Widget handle where callback occurred
+ * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
+ * \param[in]       *param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
+ * \param[out]      *result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
+ * \retval          1: Command has been processed
+ * \retval          0: Command has not been processed
+ */
 uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /**

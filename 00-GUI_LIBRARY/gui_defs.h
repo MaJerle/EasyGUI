@@ -780,9 +780,39 @@ typedef enum GUI_WC_t {
      */
     GUI_WC_KeyPress,
     
+    /**
+     * \brief       Notification when click event has been detected
+     *
+     * \param[in]   *param Pointer to \ref __GUI_TouchData_t structure with valid touch press location
+     * \param[out]  *result: None
+     */
     GUI_WC_Click,
+    
+    /**
+     * \brief       Notification when long press has been detected
+     *
+     * \param[in]   *param Pointer to \ref __GUI_TouchData_t structure with valid touch press location
+     * \param[out]  *result: None
+     */
     GUI_WC_LongClick,
+    
+    /**
+     * \brief       Notification when double click has been detected
+     *
+     * \param[in]   *param Pointer to \ref __GUI_TouchData_t structure with valid touch press location
+     * \param[out]  *result: None
+     */
     GUI_WC_DblClick,
+    
+    /**     
+     * \brief       Notification when widget selection has changed
+     *
+     * \note        Called from widget by user when necessary. Not all widget reports this value by itself
+     *
+     * \param[in]   *param None
+     * \param[out]  *result: None
+     */
+    GUI_WC_SelectionChanged,
 } GUI_WC_t;
 
 /**
@@ -825,7 +855,7 @@ typedef struct GUI_WIDGET_t {
  * \brief           Common GUI values for widgets
  */
 typedef struct GUI_HANDLE {
-    GUI_LinkedList_t List;                  /*!< Linked list entry, must always be first on list */
+    GUI_LinkedList_t List;                  /*!< Linked list entry, must always be on top for casting */
     GUI_ID_t Id;                            /*!< Widget ID number */
     const GUI_WIDGET_t* Widget;             /*!< Widget parameters with callback functions */
     uint8_t (*Callback) (struct GUI_HANDLE* h, GUI_WC_t cmd, void* param, void* result);    /*!< Callback function for widget specific */

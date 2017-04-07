@@ -145,28 +145,6 @@ GUI_HANDLE_p GUI_WINDOW_SetColor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_C
     return h;                                       /* Return widget pointer */
 }
 
-GUI_HANDLE_p GUI_WINDOW_SetBorderRadius(GUI_HANDLE_p h, GUI_Dim_t radius) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    if (GUI_WINDOW_IsChild(h) && __GW(h)->BorderRadius != radius) {
-        __GW(h)->BorderRadius = radius;             /* Set property */
-        __GUI_WIDGET_Invalidate(h);                 /* Redraw widget */
-    }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return h;                                       /* Return widget pointer */
-}
-
-GUI_HANDLE_p GUI_WINDOW_SetBorderWidth(GUI_HANDLE_p h, GUI_Dim_t width) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    if (GUI_WINDOW_IsChild(h) && __GW(h)->BorderWidth != width) {
-        __GW(h)->BorderWidth = width;               /* Set property */
-        __GUI_WIDGET_Invalidate(h);                 /* Redraw widget */
-    }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return h;                                       /* Return widget pointer */
+GUI_HANDLE_p GUI_WINDOW_GetDesktop(void) {
+    return (GUI_HANDLE_p)__GUI_LINKEDLIST_GETNEXT_GEN(&GUI.Root, NULL); /* Return desktop window */
 }

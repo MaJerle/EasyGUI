@@ -385,27 +385,29 @@ int32_t GUI_Process(void) {
     /**
      * Keyboard data reads
      */
+    __GUI_UNUSED(kStat);
     while (__GUI_INPUT_KeyRead(&key.KB)) {          /* Read all keyboard entires */
         if (GUI.FocusedWidget) {                    /* Check if any widget is in focus already */
-            if (key.KB.Keys[0] == GUI_KEY_TAB) {    /* Tab key pressed, set next widget as focused */
-                GUI_HANDLE_p h = __GUI_LINKEDLIST_WidgetGetNext(NULL, GUI.FocusedWidget);   /* Get next widget if possible */
-                if (h && __GUI_WIDGET_IsHidden(h)) {    /* Ignore hidden widget */
-                    h = 0;
-                }
-                if (!h) {                           /* There is no next widget */
-                    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)GUI.FocusedWidget->Parent, NULL); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
-                        if (__GUI_WIDGET_IsVisible(h)) {    /* Check if widget is visible */
-                            break;
+            kStat = keyCONTINUE;
+            __GUI_WIDGET_Callback(GUI.FocusedWidget, GUI_WC_KeyPress, &key, &kStat);
+            if (kStat != keyHANDLED) {
+                if (key.KB.Keys[0] == GUI_KEY_TAB) {/* Tab key pressed, set next widget as focused */
+                    GUI_HANDLE_p h = __GUI_LINKEDLIST_WidgetGetNext(NULL, GUI.FocusedWidget);   /* Get next widget if possible */
+                    if (h && __GUI_WIDGET_IsHidden(h)) {    /* Ignore hidden widget */
+                        h = 0;
+                    }
+                    if (!h) {                       /* There is no next widget */
+                        for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)GUI.FocusedWidget->Parent, NULL); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
+                            if (__GUI_WIDGET_IsVisible(h)) {    /* Check if widget is visible */
+                                break;
+                            }
                         }
                     }
+                    if (h) {                        /* We have next widget */
+                        __GUI_LINKEDLIST_WidgetMoveToBottom(h); /* Set widget to the down of list */
+                        __GUI_FOCUS_SET(h);         /* Set focus to new widget */
+                    }
                 }
-                if (h) {                            /* We have next widget */
-                    __GUI_LINKEDLIST_WidgetMoveToBottom(h);    /* Set widget to the down of list */
-                    __GUI_FOCUS_SET(h);             /* Set focus to new widget */
-                }
-            } else {                                /* Other key */
-                __GUI_WIDGET_Callback(GUI.FocusedWidget, GUI_WC_KeyPress, &key, &kStat);
-                __GUI_UNUSED(kStat);
             }
         }
     }

@@ -72,7 +72,7 @@ TM_TOUCH_t TS;
 
 GUI_HANDLE_p win1, win2, win3, wins[3];
 GUI_HANDLE_p btn1, btn2, btn3, btn4, btn5, btn6;
-GUI_HANDLE_p led[8][2];
+GUI_HANDLE_p led[8];
 GUI_HANDLE_p prog1, prog2, prog3, prog4;
 GUI_HANDLE_p graph1, graph2, graph3;
 GUI_HANDLE_p edit1, edit2, edit3;
@@ -103,61 +103,6 @@ GUI_Char* listboxtexts[] = {
     _T("String 6 testiram, ce dela"),
     _T("String 7 testiram, ce dela"),
     _T("String 8 testiram, ce dela"),
-    _T("String 9 testiram, ce dela"),
-    _T("String 4 testiram, ce dela"),
-    _T("String 5 testiram, ce dela"),
-    _T("String 6 testiram, ce dela"),
-    _T("String 7 testiram, ce dela"),
-    _T("String 8 testiram, ce dela"),
-    _T("String 9 testiram, ce dela"),
-    _T("String 4 testiram, ce dela"),
-    _T("String 5 testiram, ce dela"),
-    _T("String 6 testiram, ce dela"),
-    _T("String 7 testiram, ce dela"),
-    _T("String 8 testiram, ce dela"),
-    _T("String 9 testiram, ce dela"),
-    _T("String 4 testiram, ce dela"),
-    _T("String 5 testiram, ce dela"),
-    _T("String 6 testiram, ce dela"),
-    _T("String 7 testiram, ce dela"),
-    _T("String 8 testiram, ce dela"),
-    _T("String 9 testiram, ce dela"),
-    _T("String 4 testiram, ce dela"),
-    _T("String 5 testiram, ce dela"),
-    _T("String 6 testiram, ce dela"),
-    _T("String 7 testiram, ce dela"),
-    _T("String 8 testiram, ce dela"),
-    _T("String 9 testiram, ce dela"),
-    _T("String 4 testiram, ce dela"),
-    _T("String 5 testiram, ce dela"),
-    _T("String 6 testiram, ce dela"),
-    _T("String 7 testiram, ce dela"),
-    _T("String 8 testiram, ce dela"),
-    _T("String 9 testiram, ce dela"),
-    _T("String 4 testiram, ce dela"),
-    _T("String 5 testiram, ce dela"),
-    _T("String 6 testiram, ce dela"),
-    _T("String 7 testiram, ce dela"),
-    _T("String 8 testiram, ce dela"),
-    _T("String 9 testiram, ce dela"),
-    _T("String 4 testiram, ce dela"),
-    _T("String 5 testiram, ce dela"),
-    _T("String 6 testiram, ce dela"),
-    _T("String 7 testiram, ce dela"),
-    _T("String 8 testiram, ce dela"),
-    _T("String 9 testiram, ce dela"),
-    _T("String 4 testiram, ce dela"),
-    _T("String 5 testiram, ce dela"),
-    _T("String 6 testiram, ce dela"),
-    _T("String 7 testiram, ce dela"),
-    _T("String 8 testiram, ce dela"),
-    _T("String 9 testiram, ce dela"),
-    _T("String 4 testiram, ce dela"),
-    _T("String 5 testiram, ce dela"),
-    _T("String 6 testiram, ce dela"),
-    _T("String 7 testiram, ce dela"),
-    _T("String 8 testiram, ce dela"),
-    _T("String 9 testiram, ce dela"),
 };
 
 int main(void) {
@@ -246,10 +191,20 @@ int main(void) {
         GUI_RADIO_SetValue(rb[state], state);
     }
     
+    /* Leds */
+    led[0] = GUI_LED_Create(0, 10, 242, 20, 20, 0, 0);
+    led[1] = GUI_LED_Create(0, 40, 242, 20, 20, 0, 0);
+    GUI_LED_Set(led[0], 1);
+    GUI_LED_SetType(led[1], GUI_LED_TYPE_CIRCLE);
+    
     /* Listbox */
     lb1 = GUI_LISTBOX_Create(1, 80, 110, 180, 150, NULL, 0);
     GUI_WIDGET_SetFont(lb1, &GUI_Font_Comic_Sans_MS_Regular_22);
-    GUI_LISTBOX_SetPointers(lb1, listboxtexts, COUNT_OF(listboxtexts));
+    for (state = 0; state < COUNT_OF(listboxtexts); state++) {
+        GUI_LISTBOX_AddString(lb1, listboxtexts[state]);
+    }
+    GUI_LISTBOX_SetSliderAuto(lb1, 0);
+    GUI_LISTBOX_SetSliderVisibility(lb1, 1);
     
     __GUI_LINKEDLIST_PrintList(NULL);
 
@@ -294,15 +249,15 @@ int main(void) {
                     GUI_INPUT_KeyAdd(&key);
                 
                     if (ch == 'D') {
-                        uint8_t a, b;
-                        __GUI_DEBUG("----\r\n");
-                        for (state = 0; state < 4; state++) {
-                            a = GUI_RADIO_GetValue(rb[state]);
-                            b = GUI_RADIO_GetSelectedValue(rb[state]);
-                            __GUI_DEBUG("V: %d, S: %d\r\n", a, b);
-                        }
+                        GUI_LISTBOX_DeleteLastString(lb1);
+                    } else if (ch == 'A') {
+                        GUI_LISTBOX_AddString(lb1, _T("Test"));
+                    } else if (ch == 'C') {
+                        GUI_LISTBOX_SetString(lb1, 2, _T("Changed"));
+                    } else if (ch == 'B') {
+                        GUI_LISTBOX_Scroll(lb1, 1);
                     } else if (ch == 'V') {
-                        GUI_RADIO_SetValue(rb[0], 9);
+                        GUI_LISTBOX_Scroll(lb1, -1);
                     }
                     break;
                 case UNICODE_PROGRESS:

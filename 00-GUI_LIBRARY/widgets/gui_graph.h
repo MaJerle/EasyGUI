@@ -146,9 +146,39 @@ GUI_HANDLE_p GUI_GRAPH_SetMinY(GUI_HANDLE_p h, float v);
 GUI_HANDLE_p GUI_GRAPH_SetMaxY(GUI_HANDLE_p h, float v);
 GUI_HANDLE_p GUI_GRAPH_AttachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
 GUI_HANDLE_p GUI_GRAPH_DetachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
-uint8_t GUI_GRAPH_Callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 
+/**
+ * \brief           Widget callback function for all event
+ * \note            Called either from GUI stack or from widget itself to notify user
+ *
+ * \note            Can be overwritten by user when required to handle specific events
+ * \param[in,out]   h: Widget handle where callback occurred
+ * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
+ * \param[in]       *param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
+ * \param[out]      *result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
+ * \retval          1: Command has been processed
+ * \retval          0: Command has not been processed
+ */
+uint8_t GUI_GRAPH_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+
+
+/**
+ * \brief           Creates data object according to specific type
+ * \note            Data type used in graph widget is 2-byte (short int)
+ * 
+ * \note            When \arg GUI_GRAPH_TYPE_XY is used, 2 * length * sizeof(short int) of bytes is allocated for X and Y value
+ * \param[in]       type: Type of data. According to selected type different allocation size will occur
+ * \param[in]       length: Number of points on plot.
+ * \retval          Handle of created object or NULL of memory allocation fail
+ */
 GUI_GRAPH_DATA_p GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_t type, uint16_t length);
+
+/**
+ * \brief           Add new value to the end of data object
+ * \param[in]       data: Data object handle
+ * \param[in]       x: X position for point. Used only in case data type is \ref GUI_GRAPH_TYPE_XY, otherwise it is ignored
+ * \param[in]       y: Y position for point. Always used no matter of data type
+ */
 void GUI_GRAPH_DATA_AddValue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y);
  
 /**

@@ -68,11 +68,11 @@ void __GUI_GRAPH_Reset(GUI_HANDLE_p h) {
     g->VisibleMinY = g->MinY;
 }
 
-uint8_t GUI_GRAPH_Callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
+uint8_t GUI_GRAPH_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
 #if GUI_USE_TOUCH
 static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
 #endif /* GUI_USE_TOUCH */    
-    switch (cmd) {                                  /* Handle control function if required */
+    switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {                         /* Draw widget */
             GUI_GRAPH_DATA_p data;
             GUI_LinkedListMulti_t* link;

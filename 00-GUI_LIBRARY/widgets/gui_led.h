@@ -109,6 +109,18 @@ GUI_HANDLE_p GUI_LED_On(GUI_HANDLE_p h);
 GUI_HANDLE_p GUI_LED_Toggle(GUI_HANDLE_p h);
 GUI_HANDLE_p GUI_LED_Set(GUI_HANDLE_p h, uint8_t state);
 
+/**
+ * \brief           Widget callback function for all event
+ * \note            Called either from GUI stack or from widget itself to notify user
+ *
+ * \note            Can be overwritten by user when required to handle specific events
+ * \param[in,out]   h: Widget handle where callback occurred
+ * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
+ * \param[in]       *param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
+ * \param[out]      *result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
+ * \retval          1: Command has been processed
+ * \retval          0: Command has not been processed
+ */
 uint8_t GUI_LED_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /**

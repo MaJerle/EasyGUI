@@ -281,6 +281,14 @@ uint8_t __GUI_LINKEDLIST_MULTI_MOVEUP_GEN(GUI_LinkedListRoot_t* root, GUI_Linked
  * \sa              __GUI_LINKEDLIST_MULTI_REMOVE_GEN
  */
 uint8_t __GUI_LINKEDLIST_MULTI_FIND_REMOVE(GUI_LinkedListRoot_t* root, void* element);
+    
+/**
+ * \brief           Checks if linked list has any entries
+ * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \retval          0: No entries
+ * \retval          > 0: Has entries
+ */
+#define __GUI_LINKEDLIST_HasEntries(root)       ((root)->First)
 
 /**
  * \defgroup        GUI_LINKEDLIST_WIDGET Widget linked list
