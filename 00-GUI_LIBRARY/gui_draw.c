@@ -302,9 +302,9 @@ void GUI_DRAW_HLine(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_i
 /******************************************************************************/
 /******************************************************************************/
 void GUI_DRAW_Line(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_iDim_t x2, GUI_iDim_t y2, GUI_Color_t color) {
-	GUI_iDim_t deltax = 0, deltay = 0, x = 0, y = 0, xinc1 = 0, xinc2 = 0, 
-	yinc1 = 0, yinc2 = 0, den = 0, num = 0, numadd = 0, numpixels = 0, 
-	curpixel = 0;
+    GUI_iDim_t deltax = 0, deltay = 0, x = 0, y = 0, xinc1 = 0, xinc2 = 0, 
+    yinc1 = 0, yinc2 = 0, den = 0, num = 0, numadd = 0, numpixels = 0, 
+    curpixel = 0;
     
     /* Check if coordinates are inside drawing region */
     if (
@@ -327,53 +327,53 @@ void GUI_DRAW_Line(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_
         GUI_DRAW_HLine(disp, __GUI_MIN(x1, x2), y1, deltax, color);
         return;
     }
-    
-	x = x1;
-	y = y1;
-	
-	if (x2 >= x1) {
-		xinc1 = 1;
-		xinc2 = 1;
-	} else {
-		xinc1 = -1;
-		xinc2 = -1;
-	}
 
-	if (y2 >= y1) {
-		yinc1 = 1;
-		yinc2 = 1;
-	} else {
-		yinc1 = -1;
-		yinc2 = -1;
-	}
+    x = x1;
+    y = y1;
 
-	if (deltax >= deltay) {
-		xinc1 = 0;
-		yinc2 = 0;
-		den = deltax;
-		num = deltax / 2;
-		numadd = deltay;
-		numpixels = deltax;
-	} else {
-		xinc2 = 0;
-		yinc1 = 0;
-		den = deltay;
-		num = deltay / 2;
-		numadd = deltax;
-		numpixels = deltay;
-	}
+    if (x2 >= x1) {
+        xinc1 = 1;
+        xinc2 = 1;
+    } else {
+        xinc1 = -1;
+        xinc2 = -1;
+    }
 
-	for (curpixel = 0; curpixel <= numpixels; curpixel++) {
+    if (y2 >= y1) {
+        yinc1 = 1;
+        yinc2 = 1;
+    } else {
+        yinc1 = -1;
+        yinc2 = -1;
+    }
+
+    if (deltax >= deltay) {
+        xinc1 = 0;
+        yinc2 = 0;
+        den = deltax;
+        num = deltax / 2;
+        numadd = deltay;
+        numpixels = deltax;
+    } else {
+        xinc2 = 0;
+        yinc1 = 0;
+        den = deltay;
+        num = deltay / 2;
+        numadd = deltax;
+        numpixels = deltay;
+    }
+
+    for (curpixel = 0; curpixel <= numpixels; curpixel++) {
         GUI_DRAW_SetPixel(disp, x, y, color);
-		num += numadd;
-		if (num >= den) {
-			num -= den;
-			x += xinc1;
-			y += yinc1;
-		}
-		x += xinc2;
-		y += yinc2;
-	}
+        num += numadd;
+        if (num >= den) {
+            num -= den;
+            x += xinc1;
+            y += yinc1;
+        }
+        x += xinc2;
+        y += yinc2;
+    }
 }
 
 void GUI_DRAW_Rectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_Color_t color) {
