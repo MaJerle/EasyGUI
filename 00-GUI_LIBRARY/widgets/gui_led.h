@@ -1,5 +1,5 @@
 /**
- * \author  Tilen Majerle
+ * \author  Tilen Majerle <tilen@majerle.eu>
  * \brief   GUI led widget
  *	
 \verbatim
@@ -99,15 +99,52 @@ GUI_HANDLE_p GUI_LED_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t w
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index. This parameter can be a value of \ref GUI_LED_COLOR_t enumeration
  * \param[in]       color: Color value
- * \retval          Widget handle
+ * \retval          1: Color was set ok
+ * \retval          0: Color was not set
  */
-GUI_HANDLE_p GUI_LED_SetColor(GUI_HANDLE_p h, GUI_LED_COLOR_t index, GUI_Color_t color);
-GUI_HANDLE_p GUI_LED_SetType(GUI_HANDLE_p h, GUI_LED_TYPE_t index);
+uint8_t GUI_LED_SetColor(GUI_HANDLE_p h, GUI_LED_COLOR_t index, GUI_Color_t color);
 
-GUI_HANDLE_p GUI_LED_Off(GUI_HANDLE_p h);
-GUI_HANDLE_p GUI_LED_On(GUI_HANDLE_p h);
-GUI_HANDLE_p GUI_LED_Toggle(GUI_HANDLE_p h);
-GUI_HANDLE_p GUI_LED_Set(GUI_HANDLE_p h, uint8_t state);
+/**
+ * \brief           Set led type
+ * \param[in,out]   h: Widget handle
+ * \param[in]       type: New type for LED. This parameter can be a value of \ref GUI_LED_TYPE_t enumeration
+ * \retval          1: Type was set ok
+ * \retval          0: Type was not set
+ */
+uint8_t GUI_LED_SetType(GUI_HANDLE_p h, GUI_LED_TYPE_t type);
+
+/**
+ * \brief           Turn LED on
+ * \param[in,out]   h: Widget handle
+ * \retval          1: LED was turned on
+ * \retval          0: LED was not turned on
+ */
+uint8_t GUI_LED_On(GUI_HANDLE_p h);
+
+/**
+ * \brief           Turn LED off
+ * \param[in,out]   h: Widget handle
+ * \retval          1: LED was turned off
+ * \retval          0: LED was not turned off
+ */
+uint8_t GUI_LED_Off(GUI_HANDLE_p h);
+
+/**
+ * \brief           Toggle LED state
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Led was toggled ok
+ * \retval          0: Led was not toggled
+ */
+uint8_t GUI_LED_Toggle(GUI_HANDLE_p h);
+
+/**
+ * \brief           Set LED value either on or off
+ * \param[in,out]   h: Widget handle
+ * \param[in]       state: LED state, either 1 or 0 according to selected state
+ * \retval          1: Led state was set ok
+ * \retval          0: Led state was not set
+ */
+uint8_t GUI_LED_Set(GUI_HANDLE_p h, uint8_t state);
 
 /**
  * \brief           Widget callback function for all event

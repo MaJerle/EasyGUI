@@ -1,5 +1,5 @@
 /**
- * \author  Tilen Majerle
+ * \author  Tilen Majerle <tilen@majerle.eu>
  * \brief   GUI graph widget
  *  
 \verbatim
@@ -137,15 +137,76 @@ GUI_HANDLE_p GUI_GRAPH_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index. This parameter can be a value of \ref GUI_GRAPH_COLOR_t enumeration
  * \param[in]       color: Color value
- * \retval          Widget handle
+ * \retval          1: Color was set ok
+ * \retval          0: Color was not set
  */
-GUI_HANDLE_p GUI_GRAPH_SetColor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t color);
-GUI_HANDLE_p GUI_GRAPH_SetMinX(GUI_HANDLE_p h, float v);
-GUI_HANDLE_p GUI_GRAPH_SetMaxX(GUI_HANDLE_p h, float v);
-GUI_HANDLE_p GUI_GRAPH_SetMinY(GUI_HANDLE_p h, float v);
-GUI_HANDLE_p GUI_GRAPH_SetMaxY(GUI_HANDLE_p h, float v);
-GUI_HANDLE_p GUI_GRAPH_AttachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
-GUI_HANDLE_p GUI_GRAPH_DetachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
+uint8_t GUI_GRAPH_SetColor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t color);
+
+/**
+ * \brief           Set minimal X value of plot
+ * \param[in,out]   h: Widget handle
+ * \param[in]       v: New minimal X value
+ * \retval          1: Value was set ok
+ * \retval          0: Value was not set
+ * \sa              GUI_GRAPH_SetMaxX
+ * \sa              GUI_GRAPH_SetMinY
+ * \sa              GUI_GRAPH_SetMaxY
+ */
+uint8_t GUI_GRAPH_SetMinX(GUI_HANDLE_p h, float v);
+
+/**
+ * \brief           Set maximal X value of plot
+ * \param[in,out]   h: Widget handle
+ * \param[in]       v: New maximal X value
+ * \retval          1: Value was set ok
+ * \retval          0: Value was not set
+ * \sa              GUI_GRAPH_SetMinX
+ * \sa              GUI_GRAPH_SetMinY
+ * \sa              GUI_GRAPH_SetMaxY
+ */
+uint8_t GUI_GRAPH_SetMaxX(GUI_HANDLE_p h, float v);
+
+/**
+ * \brief           Set minimal Y value of plot
+ * \param[in,out]   h: Widget handle
+ * \param[in]       v: New minimal Y value
+ * \retval          1: Value was set ok
+ * \retval          0: Value was not set
+ * \sa              GUI_GRAPH_SetMinX
+ * \sa              GUI_GRAPH_SetMaxX
+ * \sa              GUI_GRAPH_SetMaxY
+ */
+uint8_t GUI_GRAPH_SetMinY(GUI_HANDLE_p h, float v);
+
+/**
+ * \brief           Set maximal Y value of plot
+ * \param[in,out]   h: Widget handle
+ * \param[in]       v: New maximal Y value
+ * \retval          1: Value was set ok
+ * \retval          0: Value was not set
+ * \sa              GUI_GRAPH_SetMinX
+ * \sa              GUI_GRAPH_SetMaxX
+ * \sa              GUI_GRAPH_SetMinY
+ */
+uint8_t GUI_GRAPH_SetMaxY(GUI_HANDLE_p h, float v);
+
+/**
+ * \brief           Attach new data object to graph widget
+ * \param[in,out]   h: Graph widget handle
+ * \param[in]       data: Data object handle
+ * \retval          1: Attaching was successful
+ * \retval          0: Attaching failed
+ */
+uint8_t GUI_GRAPH_AttachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
+
+/**
+ * \brief           Detach existing data object from graph widget
+ * \param[in,out]   h: Graph widget handle
+ * \param[in]       data: Data object handle
+ * \retval          1: Detaching was successful
+ * \retval          0: Detaching failed
+ */
+uint8_t GUI_GRAPH_DetachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
 
 /**
  * \brief           Widget callback function for all event
@@ -161,7 +222,6 @@ GUI_HANDLE_p GUI_GRAPH_DetachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
  */
 uint8_t GUI_GRAPH_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
-
 /**
  * \brief           Creates data object according to specific type
  * \note            Data type used in graph widget is 2-byte (short int)
@@ -169,7 +229,8 @@ uint8_t GUI_GRAPH_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
  * \note            When \arg GUI_GRAPH_TYPE_XY is used, 2 * length * sizeof(short int) of bytes is allocated for X and Y value
  * \param[in]       type: Type of data. According to selected type different allocation size will occur
  * \param[in]       length: Number of points on plot.
- * \retval          Handle of created object or NULL of memory allocation fail
+ * \retval          > 0: \ref GUI_GRAPH_DATA_p object of created widget
+ * \retval          0: Data creation failed
  */
 GUI_GRAPH_DATA_p GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_t type, uint16_t length);
 
@@ -178,8 +239,10 @@ GUI_GRAPH_DATA_p GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_t type, uint16_t length);
  * \param[in]       data: Data object handle
  * \param[in]       x: X position for point. Used only in case data type is \ref GUI_GRAPH_TYPE_XY, otherwise it is ignored
  * \param[in]       y: Y position for point. Always used no matter of data type
+ * \retval          1: Value was added to data object ok
+ * \retval          0: Value was not added to data object
  */
-void GUI_GRAPH_DATA_AddValue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y);
+uint8_t GUI_GRAPH_DATA_AddValue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y);
  
 /**
  * \}

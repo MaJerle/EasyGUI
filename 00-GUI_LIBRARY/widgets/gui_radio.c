@@ -82,10 +82,12 @@ void __GUI_RADIO_SetActive(GUI_HANDLE_p h) {
     }
     __GR(h)->Flags |= GUI_FLAG_RADIO_CHECKED;       /* Set active flag */
     __GR(h)->SelectedValue = __GR(h)->Value;        /* Set selected value of this radio */
+    __GUI_WIDGET_Callback(h, GUI_WC_SelectionChanged, NULL, NULL);  /* Call user function */
 }
 
 #define c                   ((GUI_RADIO_t *)(h))
 uint8_t GUI_RADIO_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
@@ -177,8 +179,8 @@ GUI_HANDLE_p GUI_RADIO_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
     return (GUI_HANDLE_p)ptr;
 }
 
-GUI_HANDLE_p GUI_RADIO_SetGroup(GUI_HANDLE_p h, uint8_t groupId) {
-    __GUI_ASSERTPARAMS(h);                          /* Check input parameters */
+uint8_t GUI_RADIO_SetGroup(GUI_HANDLE_p h, uint8_t groupId) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GR(h)->GroupId != groupId) {
@@ -202,11 +204,11 @@ GUI_HANDLE_p GUI_RADIO_SetGroup(GUI_HANDLE_p h, uint8_t groupId) {
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_RADIO_SetValue(GUI_HANDLE_p h, uint32_t value) {
-    __GUI_ASSERTPARAMS(h);                          /* Check input parameters */
+uint8_t GUI_RADIO_SetValue(GUI_HANDLE_p h, uint32_t value) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GR(h)->Value != value) {
@@ -217,13 +219,13 @@ GUI_HANDLE_p GUI_RADIO_SetValue(GUI_HANDLE_p h, uint32_t value) {
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
 uint32_t GUI_RADIO_GetValue(GUI_HANDLE_p h) {
     uint32_t val;
     
-    __GUI_ASSERTPARAMS(h);                          /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     val = __GR(h)->Value;
@@ -235,7 +237,7 @@ uint32_t GUI_RADIO_GetValue(GUI_HANDLE_p h) {
 uint32_t GUI_RADIO_GetSelectedValue(GUI_HANDLE_p h) {
     uint32_t val;
     
-    __GUI_ASSERTPARAMS(h);                          /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     val = __GR(h)->SelectedValue;

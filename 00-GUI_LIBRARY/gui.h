@@ -1,5 +1,5 @@
 /**
- * \author  Tilen Majerle
+ * \author  Tilen Majerle <tilen@majerle.eu>
  * \website http://majerle.eu
  * \license MIT
  * \version 0.1.0

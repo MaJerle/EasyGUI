@@ -67,6 +67,7 @@ void TimerCallback(GUI_TIMER_t* timer) {
 
 #define e          ((GUI_EDITTEXT_t *)h)
 uint8_t GUI_EDITTEXT_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
             GUI_Dim_t x, y, width, height;
@@ -147,8 +148,8 @@ GUI_HANDLE_p GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Di
     return (GUI_HANDLE_p)ptr;
 }
 
-GUI_HANDLE_p GUI_EDITTEXT_SetColor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
+uint8_t GUI_EDITTEXT_SetColor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GE(h)->Color[index] != color) {         /* Any parameter changed */
@@ -157,5 +158,5 @@ GUI_HANDLE_p GUI_EDITTEXT_SetColor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, G
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }

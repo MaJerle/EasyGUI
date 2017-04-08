@@ -1,5 +1,5 @@
 /**
- * \author  Tilen Majerle
+ * \author  Tilen Majerle <tilen@majerle.eu>
  * \brief   GUI INPUT
  *	
 \verbatim
@@ -44,15 +44,15 @@ extern "C" {
 #include "../gui.h"
 
 /**
- * \brief           Adds new touch data to internal buffer for further processing
- * \param[in]       *kb: Pointer to \ref GUI_TouchData_t touch data
+ * \brief           Add new touch data to internal buffer for further processing
+ * \param[in]       *ts: Pointer to \ref GUI_TouchData_t touch data with valid input
  * \retval          1: Success
  * \retval          0: Failure
  */
 uint8_t GUI_INPUT_TouchAdd(GUI_TouchData_t* ts);
 
 /**
- * \brief           Adds new key data to internal buffer for further processing
+ * \brief           Add new key data to internal buffer for further processing
  * \param[in]       *kb: Pointer to \ref GUI_KeyboardData_t key data
  * \retval          1: Success
  * \retval          0: Failure
@@ -61,29 +61,10 @@ uint8_t GUI_INPUT_TouchAdd(GUI_TouchData_t* ts);
 uint8_t GUI_INPUT_KeyAdd(GUI_KeyboardData_t* kb);
 
 #if !defined(DOXYGEN) && defined(GUI_INTERNAL)
-/**
- * \brief           Initializes input functionality
- * \param           None
- * \retval          None
- */
 void __GUI_INPUT_Init(void);
-
 uint8_t __GUI_INPUT_TouchAvailable(void);
-
-/**
- * \brief           Read touch value
- * \param[out]      *ts: Pointer to \ref GUI_TouchData_t to save touch data
- * \retval          Number of bytes read from internal buffer
- */
 uint8_t __GUI_INPUT_TouchRead(GUI_TouchData_t* ts);
-
-/**
- * \brief           Read input key from buffer
- * \param[out]      *kb: Pointer to \ref GUI_KeyboardData_t to save keyboard data
- * \retval          Number of bytes read from internal buffer
- */
 uint8_t __GUI_INPUT_KeyRead(GUI_KeyboardData_t* kb);
-
 #endif /* !defined(DOXYGEN) && defined(GUI_INTERNAL) */
 
 /**

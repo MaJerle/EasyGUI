@@ -58,6 +58,7 @@ const static GUI_WIDGET_t Widget = {
 /******************************************************************************/
 #define b                   ((GUI_BUTTON_t *)(h))
 uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
@@ -150,8 +151,8 @@ GUI_HANDLE_p GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
     return (GUI_HANDLE_p)ptr;
 }
 
-GUI_HANDLE_p GUI_BUTTON_SetColor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
+uint8_t GUI_BUTTON_SetColor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GB(h)->Color[index] != color) {           /* Any parameter changed */
@@ -160,11 +161,11 @@ GUI_HANDLE_p GUI_BUTTON_SetColor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_C
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_BUTTON_SetBorderRadius(GUI_HANDLE_p h, GUI_Dim_t size) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
+uint8_t GUI_BUTTON_SetBorderRadius(GUI_HANDLE_p h, GUI_Dim_t size) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GB(h)->BorderRadius != size) {            /* Any dimensions changed */
@@ -173,31 +174,5 @@ GUI_HANDLE_p GUI_BUTTON_SetBorderRadius(GUI_HANDLE_p h, GUI_Dim_t size) {
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
-}
-
-GUI_HANDLE_p GUI_BUTTON_SetBorderWidth(GUI_HANDLE_p h, GUI_Dim_t width) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    if (__GB(h)->BorderWidth != width) {            /* Any parameter changed */
-        __GB(h)->BorderWidth = width;               /* Set parameter */
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Redraw object */
-    }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
-}
-
-GUI_HANDLE_p GUI_BUTTON_SetRadius(GUI_HANDLE_p h, GUI_Dim_t rad) {
-    __GUI_ASSERTPARAMS(h);                        /* Check valid parameter */ 
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    if (__GB(h)->BorderRadius != rad) {             /* Any parameter changed */
-        __GB(h)->BorderRadius = rad;                /* Set parameter */
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Redraw object */
-    }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }

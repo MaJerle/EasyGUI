@@ -1,5 +1,5 @@
 /**
- * \author  Tilen Majerle
+ * \author  Tilen Majerle <tilen@majerle.eu>
  * \brief   GUI button widget
  *	
 \verbatim
@@ -92,11 +92,19 @@ GUI_HANDLE_p GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index. This parameter can be a value of \ref GUI_BUTTON_COLOR_t enumeration
  * \param[in]       color: Color value
- * \retval          Widget handle
+ * \retval          1: Color was set ok
+ * \retval          0: Color was not set
  */
-GUI_HANDLE_p GUI_BUTTON_SetColor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color);
-GUI_HANDLE_p GUI_BUTTON_SetBorderWidth(GUI_HANDLE_p h, GUI_Dim_t width);
-GUI_HANDLE_p GUI_BUTTON_SetBorderRadius(GUI_HANDLE_p h, GUI_Dim_t size);
+uint8_t GUI_BUTTON_SetColor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color);
+
+/**
+ * \brief           Set border radius size
+ * \param[in,out]   h: Widget handle
+ * \param[in]       size: Border radius size
+ * \retval          1: Border radius was set ok
+ * \retval          0: Border radius was not set
+ */
+uint8_t GUI_BUTTON_SetBorderRadius(GUI_HANDLE_p h, GUI_Dim_t size);
 
 /**
  * \brief           Widget callback function for all event

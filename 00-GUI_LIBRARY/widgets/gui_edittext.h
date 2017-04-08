@@ -1,5 +1,5 @@
 /**
- * \author  Tilen Majerle
+ * \author  Tilen Majerle <tilen@majerle.eu>
  * \brief   GUI edit text widget
  *  
 \verbatim
@@ -88,9 +88,10 @@ GUI_HANDLE_p GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Di
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index. This parameter can be a value of \ref GUI_EDITTEXT_COLOR_t enumeration
  * \param[in]       color: Color value
- * \retval          Widget handle
+ * \retval          1: Color was set ok
+ * \retval          0: Color was not set
  */
-GUI_HANDLE_p GUI_EDITTEXT_SetColor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color);
+uint8_t GUI_EDITTEXT_SetColor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color);
 
 /**
  * \brief           Widget callback function for all event

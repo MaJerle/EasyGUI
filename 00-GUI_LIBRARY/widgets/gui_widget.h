@@ -1,5 +1,5 @@
 /**
- * \author  Tilen Majerle
+ * \author  Tilen Majerle <tilen@majerle.eu>
  * \brief   GUI Widget handle manager
  *	
 \verbatim
@@ -358,13 +358,59 @@ uint8_t __GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, GUI_Dim_t height);
  */
 uint8_t __GUI_WIDGET_IsChildOf(GUI_HANDLE_p h, GUI_HANDLE_p parent);
 
-//Fonts and text manupulation
+/**
+ * \brief           Check if widget has set font and text
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in]       h: Widget handle
+ * \retval          1: Widget has font and text set
+ * \retval          0: Widget does not have font or text set
+ */
 uint8_t __GUI_WIDGET_IsFontAndTextSet(GUI_HANDLE_p h);
+
+/**
+ * \brief           Process text key (add character, remove it, move cursor, etc)
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       *key: Pointer to \ref __GUI_KeyboardData_t structure
+ * \retval          1: Key processed
+ * \retval          0: Key not processed
+ */
 uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* key);
 
+/**
+ * \brief           Get widget top padding as 8-bit value
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in]       h: Widget handle
+ * \retval          Padding in units of pixels
+ * \hideinitializer
+ */
 #define __GUI_WIDGET_GetPaddingTop(h)               (uint8_t)(((__GH(h)->Padding >> 24) & 0xFFUL))
+
+/**
+ * \brief           Get widget right padding as 8-bit value
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in]       h: Widget handle
+ * \retval          Padding in units of pixels
+ * \hideinitializer
+ */
 #define __GUI_WIDGET_GetPaddingRight(h)             (uint8_t)(((__GH(h)->Padding >> 16) & 0xFFUL))
+
+/**
+ * \brief           Get widget bottom padding as 8-bit value
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in]       h: Widget handle
+ * \retval          Padding in units of pixels
+ * \hideinitializer
+ */
 #define __GUI_WIDGET_GetPaddingBottom(h)            (uint8_t)(((__GH(h)->Padding >>  8) & 0xFFUL))
+
+/**
+ * \brief           Get widget left padding as 8-bit value
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in]       h: Widget handle
+ * \retval          Padding in units of pixels
+ * \hideinitializer
+ */
 #define __GUI_WIDGET_GetPaddingLeft(h)              (uint8_t)(((__GH(h)->Padding >>  0) & 0xFFUL))
 
 #define __GUI_WIDGET_SetPaddingTop(h, x)            (__GH(h)->Padding = (uint32_t)((__GH(h)->Padding & 0x00FFFFFFUL) | (uint32_t)((uint8_t)(x)) << 24))

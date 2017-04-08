@@ -58,6 +58,7 @@ const static GUI_WIDGET_t Widget = {
 /******************************************************************************/
 #define w          ((GUI_WINDOW_t *)h)
 uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
@@ -119,8 +120,8 @@ GUI_HANDLE_p GUI_WINDOW_CreateChild(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI
     return __GH(ptr);
 }
 
-void GUI_WINDOW_SetActive(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMSVOID(h);                      /* Check input parameters */
+uint8_t GUI_WINDOW_SetActive(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     GUI.WindowActive = h;                           /* Set new active window */
@@ -130,10 +131,11 @@ void GUI_WINDOW_SetActive(GUI_HANDLE_p h) {
     __GUI_ACTIVE_CLEAR();                           /* Clear active on widget */
     
     __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
 }
 
-GUI_HANDLE_p GUI_WINDOW_SetColor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
+uint8_t GUI_WINDOW_SetColor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GW(h)->Color[index] != color) {
@@ -142,7 +144,7 @@ GUI_HANDLE_p GUI_WINDOW_SetColor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_C
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;                                       /* Return widget pointer */
+    return 1;
 }
 
 GUI_HANDLE_p GUI_WINDOW_GetDesktop(void) {

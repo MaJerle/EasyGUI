@@ -59,7 +59,17 @@ const static GUI_WIDGET_t Widget = {
 /******************************************************************************/
 /******************************************************************************/
 #define p           ((GUI_PROGBAR_t *)h)
+static
+void __SetValue(GUI_HANDLE_p h, int32_t val) {
+    if (p->Value != val && val >= p->Min && val <= p->Max) {    /* Value has changed */
+        p->Value = val;                             /* Set value */
+        __GUI_WIDGET_Invalidate(h);                 /* Redraw widget */
+        __GUI_WIDGET_Callback(h, GUI_WC_ValueChanged, NULL, NULL);  /* Process callback */
+    }
+}
+
 uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
             GUI_Dim_t x, y, w, width, height;
@@ -142,8 +152,8 @@ GUI_HANDLE_p GUI_PROGBAR_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim
     return (GUI_HANDLE_p)ptr;
 }
 
-GUI_HANDLE_p GUI_PROGBAR_SetColor(GUI_HANDLE_p h, GUI_PROGBAR_COLOR_t index, GUI_Color_t color) {
-    __GUI_ASSERTPARAMS(h);                          /* Check parameters */
+uint8_t GUI_PROGBAR_SetColor(GUI_HANDLE_p h, GUI_PROGBAR_COLOR_t index, GUI_Color_t color) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
     if (__GP(h)->Color[index] != color) {
@@ -152,24 +162,21 @@ GUI_HANDLE_p GUI_PROGBAR_SetColor(GUI_HANDLE_p h, GUI_PROGBAR_COLOR_t index, GUI
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_PROGBAR_SetValue(GUI_HANDLE_p h, int32_t val) {
-    __GUI_ASSERTPARAMS(h);                          /* Check parameters */
+uint8_t GUI_PROGBAR_SetValue(GUI_HANDLE_p h, int32_t val) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
-    if (__GP(h)->Value != val && val >= __GP(h)->Min && val <= __GP(h)->Max) {  /* Value has changed */
-        __GP(h)->Value = val;                       /* Set value */
-        __GUI_WIDGET_Invalidate(h);                 /* Redraw widget */
-    }
+    __SetValue(h, val);                             /* Set value */
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_PROGBAR_SetMin(GUI_HANDLE_p h, int32_t val) {
-    __GUI_ASSERTPARAMS(h);                          /* Check parameters */
+uint8_t GUI_PROGBAR_SetMin(GUI_HANDLE_p h, int32_t val) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
     if (__GP(h)->Min != val && val < __GP(h)->Max) {
@@ -181,11 +188,11 @@ GUI_HANDLE_p GUI_PROGBAR_SetMin(GUI_HANDLE_p h, int32_t val) {
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_PROGBAR_SetMax(GUI_HANDLE_p h, int32_t val) {
-    __GUI_ASSERTPARAMS(h);                          /* Check parameters */
+uint8_t GUI_PROGBAR_SetMax(GUI_HANDLE_p h, int32_t val) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
     if (__GP(h)->Max != val && val > __GP(h)->Min) {
@@ -197,11 +204,11 @@ GUI_HANDLE_p GUI_PROGBAR_SetMax(GUI_HANDLE_p h, int32_t val) {
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_PROGBAR_EnablePercentages(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(h);                          /* Check parameters */
+uint8_t GUI_PROGBAR_EnablePercentages(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
     if (!(__GP(h)->Flags & GUI_PROGBAR_FLAG_PERCENT)) {
@@ -210,11 +217,11 @@ GUI_HANDLE_p GUI_PROGBAR_EnablePercentages(GUI_HANDLE_p h) {
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_PROGBAR_DisablePercentages(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(h);                          /* Check parameters */
+uint8_t GUI_PROGBAR_DisablePercentages(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
     if (__GP(h)->Flags & GUI_PROGBAR_FLAG_PERCENT) {
@@ -223,5 +230,5 @@ GUI_HANDLE_p GUI_PROGBAR_DisablePercentages(GUI_HANDLE_p h) {
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }

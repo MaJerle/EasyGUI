@@ -57,6 +57,16 @@ const static GUI_WIDGET_t Widget = {
 /******************************************************************************/
 /******************************************************************************/
 #define c                   ((GUI_CHECKBOX_t *)(h))
+static
+void __SetValue(GUI_HANDLE_p h, uint8_t state) {
+    if (state) {
+        c->Flags |= GUI_FLAG_CHECKBOX_CHECKED;      /* Set flag */
+    } else {
+        c->Flags &= ~GUI_FLAG_CHECKBOX_CHECKED;     /* Clear flag */
+    }
+    __GUI_WIDGET_Callback(h, GUI_WC_ValueChanged, NULL, NULL);  /* Process callback */
+}
+
 uint8_t GUI_CHECKBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
@@ -125,7 +135,7 @@ uint8_t GUI_CHECKBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
         }
 #endif /* GUI_USE_TOUCH */
         case GUI_WC_Click: {
-            c->Flags ^= GUI_FLAG_CHECKBOX_CHECKED;  /* Toggle checked state */
+            __SetValue(h, (c->Flags & GUI_FLAG_CHECKBOX_CHECKED) ? 0 : 1);  /* Toggle checked state */
             return 1;
         }
         default:                                    /* Handle default option */

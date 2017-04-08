@@ -1,5 +1,5 @@
 /**
- * \author  Tilen Majerle
+ * \author  Tilen Majerle <tilen@majerle.eu>
  * \brief   GUI progress bar widget
  *  
 \verbatim
@@ -92,14 +92,55 @@ GUI_HANDLE_p GUI_PROGBAR_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index. This parameter can be a value of \ref GUI_PROGBAR_COLOR_t enumeration
  * \param[in]       color: Color value
- * \retval          Widget handle
+ * \retval          1: Color was set ok
+ * \retval          0: Color vas not set
  */
-GUI_HANDLE_p GUI_PROGBAR_SetColor(GUI_HANDLE_p h, GUI_PROGBAR_COLOR_t index, GUI_Color_t color);
-GUI_HANDLE_p GUI_PROGBAR_SetMin(GUI_HANDLE_p h, int32_t val);
-GUI_HANDLE_p GUI_PROGBAR_SetMax(GUI_HANDLE_p h, int32_t val);
-GUI_HANDLE_p GUI_PROGBAR_SetValue(GUI_HANDLE_p h, int32_t val);
-GUI_HANDLE_p GUI_PROGBAR_EnablePercentages(GUI_HANDLE_p h);
-GUI_HANDLE_p GUI_PROGBAR_DisablePercentages(GUI_HANDLE_p h);
+uint8_t GUI_PROGBAR_SetColor(GUI_HANDLE_p h, GUI_PROGBAR_COLOR_t index, GUI_Color_t color);
+
+/**
+ * \brief           Set progress bar minimal value
+ * \param[in,out]   h: Widget handle
+ * \param[in]       val: New minimal value
+ * \retval          1: Value was set ok
+ * \retval          0: Value vas not set
+ */
+uint8_t GUI_PROGBAR_SetMin(GUI_HANDLE_p h, int32_t val);
+
+/**
+ * \brief           Set progress bar maximal value
+ * \param[in,out]   h: Widget handle
+ * \param[in]       val: New maximal value
+ * \retval          1: Value was set ok
+ * \retval          0: Value vas not set
+ */
+uint8_t GUI_PROGBAR_SetMax(GUI_HANDLE_p h, int32_t val);
+
+/**
+ * \brief           Set progress bar current value
+ * \param[in,out]   h: Widget handle
+ * \param[in]       val: New current value
+ * \retval          1: Value was set ok
+ * \retval          0: Value vas not set
+ */
+uint8_t GUI_PROGBAR_SetValue(GUI_HANDLE_p h, int32_t val);
+
+/**
+ * \brief           Enable progress bar percentages text
+ * \note            This will show percentages as text according to current value
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Percentage mode was enabled ok
+ * \retval          0: Percange mode was not enabled
+ */
+uint8_t GUI_PROGBAR_EnablePercentages(GUI_HANDLE_p h);
+
+/**
+ * \brief           Disable progress bar percentages text
+ * \note            This will hide percentage text and will show user text input
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Percentage mode was disabled ok
+ * \retval          0: Percange mode was not disabled
+ */
+uint8_t GUI_PROGBAR_DisablePercentages(GUI_HANDLE_p h);
 
 /**
  * \brief           Widget callback function for all event

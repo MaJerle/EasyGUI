@@ -334,8 +334,8 @@ GUI_HANDLE_p GUI_GRAPH_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
     return (GUI_HANDLE_p)ptr;
 }
 
-GUI_HANDLE_p GUI_GRAPH_SetColor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t color) {
-    __GUI_ASSERTPARAMS(h);                          /* Check parameters */
+uint8_t GUI_GRAPH_SetColor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t color) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GG(h)->Color[index] != color) {
@@ -344,11 +344,11 @@ GUI_HANDLE_p GUI_GRAPH_SetColor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Col
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_GRAPH_AttachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
-    __GUI_ASSERTPARAMS(h && data);
+uint8_t GUI_GRAPH_AttachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     /**
@@ -366,11 +366,11 @@ GUI_HANDLE_p GUI_GRAPH_AttachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
 #endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_GRAPH_DetachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
-    __GUI_ASSERTPARAMS(h && data);
+uint8_t GUI_GRAPH_DetachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget && data);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     /**
@@ -388,51 +388,59 @@ GUI_HANDLE_p GUI_GRAPH_DetachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
 #endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_GRAPH_SetMinX(GUI_HANDLE_p h, float v) {
-    __GUI_ASSERTPARAMS(h);                          /* Check parameters */
+uint8_t GUI_GRAPH_SetMinX(GUI_HANDLE_p h, float v) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
+    
     if (__GG(h)->MinX != v) {
         __GG(h)->MinX = v;                          /* Set new parameter */
         __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
     }
+    
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_GRAPH_SetMaxX(GUI_HANDLE_p h, float v) {
-    __GUI_ASSERTPARAMS(h);                          /* Check parameters */
+uint8_t GUI_GRAPH_SetMaxX(GUI_HANDLE_p h, float v) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
+    
     if (__GG(h)->MaxX != v) {
         __GG(h)->MaxX = v;                          /* Set new parameter */
         __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
     }
+    
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_GRAPH_SetMinY(GUI_HANDLE_p h, float v) {
-    __GUI_ASSERTPARAMS(h);                          /* Check parameters */
+uint8_t GUI_GRAPH_SetMinY(GUI_HANDLE_p h, float v) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
+    
     if (__GG(h)->MinY != v) {
         __GG(h)->MinY = v;                          /* Set new parameter */
         __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
     }
+    
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_GRAPH_SetMaxY(GUI_HANDLE_p h, float v) {
-    __GUI_ASSERTPARAMS(h);                          /* Check parameters */
+uint8_t GUI_GRAPH_SetMaxY(GUI_HANDLE_p h, float v) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
+    
     if (__GG(h)->MaxY != v) {
         __GG(h)->MaxY = v;                          /* Set new parameter */
         __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
     }
+    
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
 
@@ -469,8 +477,8 @@ GUI_GRAPH_DATA_p GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_t type, uint16_t length) {
     return data;
 }
 
-void GUI_GRAPH_DATA_AddValue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y) {
-    __GUI_ASSERTPARAMSVOID(data);                   /* Check parameters */
+uint8_t GUI_GRAPH_DATA_AddValue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y) {
+    __GUI_ASSERTPARAMS(data);                       /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (data->Type == GUI_GRAPH_TYPE_YT) {          /* YT plot */
@@ -490,4 +498,5 @@ void GUI_GRAPH_DATA_AddValue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y) {
 #endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     
     __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
 }

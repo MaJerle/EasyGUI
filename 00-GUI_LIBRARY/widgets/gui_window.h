@@ -1,5 +1,5 @@
 /**
- * \author  Tilen Majerle
+ * \author  Tilen Majerle <tilen@majerle.eu>
  * \brief   GUI window object manager
  *	
 \verbatim
@@ -81,21 +81,26 @@ GUI_HANDLE_p GUI_WINDOW_GetDesktop(void);
     
 /**
  * \brief           Set active window for future widgets and for current top window
- * \hideinitializer
+ * \param[in]       h: Widget handle to set as active window
+ * \retval          1: Widget was set ok
+ * \retval          0: Widget was not set
  */
-void GUI_WINDOW_SetActive(GUI_HANDLE_p h);
+uint8_t GUI_WINDOW_SetActive(GUI_HANDLE_p h);
 
 /**
  * \brief           Get parent window object
- * \hideinitializer
+ * \param[in]       h: Widget object for parent check
+ * \retval          Parent widget handle
  */
-#define GUI_WINDOW_GetParent(p)     ((GUI_HANDLE_p)(p))->Parent
+#define GUI_WINDOW_GetParent(h)     ((GUI_HANDLE_p)(h))->Parent
 
 /**
  * \brief           Check if window is child
- * \hideinitializer
+ * \param[in]       h: Widget object for parent check
+ * \retval          1: Window is child
+ * \retval          0: WIndow is not child
  */
-#define GUI_WINDOW_IsChild(p)       (((GUI_HANDLE_p)(p))->Flags & GUI_FLAG_CHILD)
+#define GUI_WINDOW_IsChild(h)       (!!(((GUI_HANDLE_p)(h))->Flags & GUI_FLAG_CHILD))
 
 /**
  * \brief           Create new base widget window with desktop window as a parent
@@ -124,9 +129,10 @@ GUI_HANDLE_p GUI_WINDOW_CreateChild(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index. This parameter can be a value of \ref GUI_WINDOW_COLOR_t enumeration
  * \param[in]       color: Color value
- * \retval          Widget handle
+ * \retval          1: Color was set ok
+ * \retval          0: Color was not set
  */
-GUI_HANDLE_p GUI_WINDOW_SetColor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color);
+uint8_t GUI_WINDOW_SetColor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color);
 
 /**
  * \brief           Widget callback function for all event

@@ -1,5 +1,5 @@
 /**
- * \author  Tilen Majerle
+ * \author  Tilen Majerle <tilen@majerle.eu>
  * \brief   GUI structures and enumerations
  *	
 \verbatim
@@ -809,10 +809,34 @@ typedef enum GUI_WC_t {
      *
      * \note        Called from widget by user when necessary. Not all widget reports this value by itself
      *
+     * \note        Used by widgets where selection can be changed (listbox, selectbox, radio, etc)
+     *
      * \param[in]   *param None
      * \param[out]  *result: None
      */
     GUI_WC_SelectionChanged,
+    
+    /**     
+     * \brief       Value of widget has been changed
+     *
+     * \note        Called from widget by user when necessary. Not all widget reports this value by itself
+     *
+     * \note        Used by widgets where value or status can change (checkbox)
+     *
+     * \param[in]   *param None
+     * \param[out]  *result: None
+     */
+    GUI_WC_ValueChanged,
+    
+    /**     
+     * \brief       Widget text value has been changed
+     *
+     * \note        Called from widget by user when necessary. Not all widget reports this value by itself
+     *
+     * \param[in]   *param None
+     * \param[out]  *result: None
+     */
+    GUI_WC_TextChanged,
 } GUI_WC_t;
 
 /**

@@ -57,7 +57,8 @@ const static GUI_WIDGET_t Widget = {
 /******************************************************************************/
 /******************************************************************************/
 #define l           ((GUI_LED_t *)h)
-uint8_t GUI_LED_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {    
+uint8_t GUI_LED_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
@@ -124,8 +125,8 @@ GUI_HANDLE_p GUI_LED_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t w
     return (GUI_HANDLE_p)h;
 }
 
-GUI_HANDLE_p GUI_LED_SetColor(GUI_HANDLE_p h, GUI_LED_COLOR_t index, GUI_Color_t color) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
+uint8_t GUI_LED_SetColor(GUI_HANDLE_p h, GUI_LED_COLOR_t index, GUI_Color_t color) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GL(h)->Color[index] != color) {           /* Any parameter changed */
@@ -134,11 +135,11 @@ GUI_HANDLE_p GUI_LED_SetColor(GUI_HANDLE_p h, GUI_LED_COLOR_t index, GUI_Color_t
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_LED_SetType(GUI_HANDLE_p h, GUI_LED_TYPE_t type) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
+uint8_t GUI_LED_SetType(GUI_HANDLE_p h, GUI_LED_TYPE_t type) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GL(h)->Type != type) {                    /* Any parameter changed */
@@ -147,11 +148,11 @@ GUI_HANDLE_p GUI_LED_SetType(GUI_HANDLE_p h, GUI_LED_TYPE_t type) {
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_LED_Off(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
+uint8_t GUI_LED_Off(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if ((__GL(h)->Flags & GUI_LED_FLAG_ON)) {       /* Any parameter changed */
@@ -160,11 +161,11 @@ GUI_HANDLE_p GUI_LED_Off(GUI_HANDLE_p h) {
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_LED_On(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
+uint8_t GUI_LED_On(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (!(__GL(h)->Flags & GUI_LED_FLAG_ON)) {      /* Any parameter changed */
@@ -173,22 +174,22 @@ GUI_HANDLE_p GUI_LED_On(GUI_HANDLE_p h) {
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_LED_Toggle(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
+uint8_t GUI_LED_Toggle(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     __GL(h)->Flags ^= GUI_LED_FLAG_ON;              /* Toggle enable bit */
     __GUI_WIDGET_Invalidate(h);                     /* Redraw object */
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }
 
-GUI_HANDLE_p GUI_LED_Set(GUI_HANDLE_p h, GUI_Byte state) {
-    __GUI_ASSERTPARAMS(h);                          /* Check valid parameter */
+uint8_t GUI_LED_Set(GUI_HANDLE_p h, GUI_Byte state) {
+    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (state && !(__GL(h)->Flags & GUI_LED_FLAG_ON)) { /* If led should be enabled but is now closed */
@@ -200,5 +201,5 @@ GUI_HANDLE_p GUI_LED_Set(GUI_HANDLE_p h, GUI_Byte state) {
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return h;
+    return 1;
 }

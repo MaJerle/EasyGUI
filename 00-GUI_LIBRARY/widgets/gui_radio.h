@@ -1,5 +1,5 @@
 /**
- * \author  Tilen Majerle
+ * \author  Tilen Majerle <tilen@majerle.eu>
  * \brief   GUI RADIO widget
  *  
 \verbatim
@@ -86,17 +86,19 @@ GUI_HANDLE_p GUI_RADIO_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
  * \note            Radio widgets with the same group must be on the same parent widget
  * \param[in,out]   h: Widget handle
  * \param[in]       groupId: Group ID for widget
- * \retval          Widget handle
+ * \retval          1: Group set ok
+ * \retval          0: Group was not set
  */
-GUI_HANDLE_p GUI_RADIO_SetGroup(GUI_HANDLE_p h, uint8_t groupId);
+uint8_t GUI_RADIO_SetGroup(GUI_HANDLE_p h, uint8_t groupId);
 
 /**
  * \brief           Set value for widget when pressed
  * \param[in,out]   h: Widget handle
  * \param[in]       value: Value of widget group when specific widget is selected
- * \retval          Widget handle
+ * \retval          1: Value set ok
+ * \retval          0: Value was not set
  */
-GUI_HANDLE_p GUI_RADIO_SetValue(GUI_HANDLE_p h, uint32_t value);
+uint8_t GUI_RADIO_SetValue(GUI_HANDLE_p h, uint32_t value);
 
 /**
  * \brief           Get value for specific widget
@@ -113,6 +115,18 @@ uint32_t GUI_RADIO_GetValue(GUI_HANDLE_p h);
  */
 uint32_t GUI_RADIO_GetSelectedValue(GUI_HANDLE_p h);
 
+/**
+ * \brief           Widget callback function for all event
+ * \note            Called either from GUI stack or from widget itself to notify user
+ *
+ * \note            Can be overwritten by user when required to handle specific events
+ * \param[in,out]   h: Widget handle where callback occurred
+ * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
+ * \param[in]       *param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
+ * \param[out]      *result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
+ * \retval          1: Command has been processed
+ * \retval          0: Command has not been processed
+ */
 uint8_t GUI_RADIO_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
     
 /**

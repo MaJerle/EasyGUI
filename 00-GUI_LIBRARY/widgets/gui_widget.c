@@ -347,17 +347,20 @@ uint8_t __GUI_WIDGET_SetText(GUI_HANDLE_p h, const GUI_Char* text) {
                 GUI_STRING_Copy(h->Text, text);     /* Copy entire string */
             }
             __GUI_WIDGET_Invalidate(h);             /* Redraw object */
+            __GUI_WIDGET_Callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
         }
     } else {                                        /* Memory allocated by user */
         if (h->Text && h->Text == text) {           /* In case the same pointer is passed to WIDGET */
             if (GUI_STRING_Compare(h->Text, text)) {/* If strings does not match, source string updated? */
                 __GUI_WIDGET_Invalidate(h);         /* Redraw object */
+                __GUI_WIDGET_Callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
             }
         }
         
         if (h->Text != text) {                      /* Check if pointer do not match */
             h->Text = (GUI_Char *)text;             /* Set parameter */
             __GUI_WIDGET_Invalidate(h);             /* Redraw object */
+            __GUI_WIDGET_Callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
         }
     }
     h->TextCursor = GUI_STRING_LengthTotal(h->Text);/* Set cursor to the end of string */
@@ -380,6 +383,7 @@ uint8_t __GUI_WIDGET_AllocateTextMemory(GUI_HANDLE_p h, uint32_t size) {
         h->Flags &= ~GUI_FLAG_DYNAMICTEXTALLOC;     /* Not allocated */
     }
     __GUI_WIDGET_Invalidate(h);                     /* Redraw object */
+    __GUI_WIDGET_Callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
     return 1;
 }
 
@@ -390,6 +394,7 @@ uint8_t __GUI_WIDGET_FreeTextMemory(GUI_HANDLE_p h) {
         h->TextMemSize = 0;                         /* Reset memory size */
         h->Flags &= ~GUI_FLAG_DYNAMICTEXTALLOC;     /* Not allocated */
         __GUI_WIDGET_Invalidate(h);                 /* Redraw object */
+        __GUI_WIDGET_Callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
     }
     return 1;
 }
@@ -425,7 +430,8 @@ uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
             }
             h->Text[tlen + l] = 0;                  /* Add 0 to the end */
             
-            __GUI_WIDGET_Invalidate(h);
+            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
+            __GUI_WIDGET_Callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
             return 1;
         }
     } else if (ch == 8 || ch == 127) {              /* Backspace character */
@@ -443,6 +449,7 @@ uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
             h->Text[tlen - l] = 0;                  /* Set 0 to the end of string */
             
             __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
+            __GUI_WIDGET_Callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
             return 1;
         }
     }
