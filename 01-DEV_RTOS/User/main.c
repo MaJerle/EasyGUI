@@ -70,7 +70,7 @@ CTS         PA3                 RTS from ST to CTS from GSM
 
 TM_TOUCH_t TS;
 
-GUI_HANDLE_p win1, win2, win3, wins[3];
+GUI_HANDLE_p win1, win2, win3, win4, win5, win6;
 GUI_HANDLE_p btn1, btn2, btn3, btn4, btn5, btn6;
 GUI_HANDLE_p led[8];
 GUI_HANDLE_p prog1, prog2, prog3, prog4;
@@ -151,6 +151,13 @@ int main(void) {
     
     win1 = GUI_WINDOW_GetDesktop();                         /* Get desktop window */
     
+//    win2 = GUI_WINDOW_CreateChild(0, 10, 10, 460, 252, win1, 0);
+//    win3 = GUI_WINDOW_CreateChild(0, 10, 10, 440, 232, win2, 0);
+//    win4 = GUI_WINDOW_CreateChild(0, 10, 10, 420, 212, win3, 0);
+    
+//    GUI_WINDOW_SetColor(win2, GUI_WINDOW_COLOR_BG, GUI_COLOR_LIGHTGREEN);
+//    GUI_WINDOW_SetColor(win3, GUI_WINDOW_COLOR_BG, GUI_COLOR_LIGHTBLUE);
+    
     /* Button */
     btn1 = GUI_BUTTON_Create(1, 10, 10, 120, 40, 0, 0);
     GUI_WIDGET_SetFont(btn1, &GUI_Font_Arial_Narrow_Italic_22);
@@ -173,6 +180,9 @@ int main(void) {
     GUI_GRAPH_SetMaxX(graph1, 100);
     GUI_GRAPH_SetMinY(graph1, -100);
     GUI_GRAPH_SetMaxY(graph1, 100);
+    GUI_WIDGET_Invalidate(graph1);
+    GUI_GRAPH_ZoomReset(graph1);
+    GUI_GRAPH_Zoom(graph1, 0.1, 0.5, 0.5);
     
     graphdata1 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_XY, len);
     graphdata2 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_YT, len / 2);
@@ -209,7 +219,7 @@ int main(void) {
         rb[state] = GUI_RADIO_Create(10, 10, 110 + (state * 30), 60, 25, 0, 0);
         GUI_WIDGET_SetFont(rb[state], &GUI_Font_Arial_Narrow_Italic_22);
         GUI_WIDGET_SetText(rb[state], _T("RB1"));
-        GUI_RADIO_SetGroup(rb[state], state % 2);
+        GUI_RADIO_SetGroup(rb[state], state % 1);
         GUI_RADIO_SetValue(rb[state], state);
     }
     

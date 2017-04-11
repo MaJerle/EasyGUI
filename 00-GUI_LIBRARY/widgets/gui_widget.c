@@ -190,7 +190,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h) {
     return 0;
 }
 
-GUI_Dim_t __GUI_WIDGET_GetAbsoluteX(GUI_HANDLE_p h) {
+GUI_iDim_t __GUI_WIDGET_GetAbsoluteX(GUI_HANDLE_p h) {
     /* Assuming linked list is first element in structure */
     /* Second element is common structure */
     GUI_HANDLE_p w = 0;
@@ -198,17 +198,18 @@ GUI_Dim_t __GUI_WIDGET_GetAbsoluteX(GUI_HANDLE_p h) {
     
     if (h) {
         w = __GH(h)->Parent;
-        out = __GH(h)->X;
+        out = __GH(h)->X;                           /* Our X value */
     }
     
     while (w) {                                     /* Go through all parent windows */
         out += __GH(w)->X + __GUI_WIDGET_GetPaddingLeft(w);   /* Add X offset from parent and left padding of parent */
+        out -= __GHR(w)->ScrollX;                   /* Decrease by scroll value */
         w = __GH(w)->Parent;                        /* Get next parent */
     }
     return out;
 }
 
-GUI_Dim_t __GUI_WIDGET_GetAbsoluteY(GUI_HANDLE_p h) {
+GUI_iDim_t __GUI_WIDGET_GetAbsoluteY(GUI_HANDLE_p h) {
     /* Assuming linked list is first element in structure */
     /* Second element is common structure */
     GUI_HANDLE_p w = 0;
@@ -221,10 +222,57 @@ GUI_Dim_t __GUI_WIDGET_GetAbsoluteY(GUI_HANDLE_p h) {
     
     while (w) {                                     /* Go through all parent windows */
         out += __GH(w)->Y + __GUI_WIDGET_GetPaddingTop(w);/* Add X offset from parent + parent top padding */
+        out -= __GHR(w)->ScrollY;                   /* Decrease by scroll value */
         w = __GH(w)->Parent;                        /* Get next parent */
     }
     return out;
 }
+
+#if !GUI_WIDGET_INSIDE_PARENT_ONLY
+GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteX(GUI_HANDLE_p h) {
+    /* Assuming linked list is first element in structure */
+    /* Second element is common structure */
+    GUI_Dim_t out = 0;
+    
+    if (h) {
+        h = __GH(h)->Parent;                        /* Get parent of widget */
+    }
+    
+    if (h) {
+        out = __GH(h)->Y + __GUI_WIDGET_GetPaddingTop(h);   /* From parent widget, get absolute X and its padding */
+        h = __GH(h)->Parent;                        /* Go to next parent */
+    }
+    
+    while (h) {                                     /* Go through all parent windows */
+        out += __GH(h)->X + __GUI_WIDGET_GetPaddingLeft(h); /* Add X offset from parent and left padding of parent */
+        out -= __GHR(h)->ScrollX;                   /* In addition, decrease by scroll value */
+        h = __GH(h)->Parent;                        /* Get next parent */
+    }
+    return out;
+}
+
+GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h) {
+    /* Assuming linked list is first element in structure */
+    /* Second element is common structure */
+    GUI_Dim_t out = 0;
+    
+    if (h) {
+        h = __GH(h)->Parent;                        /* Get parent of widget */
+    }
+    
+    if (h) {
+        out = __GH(h)->Y + __GUI_WIDGET_GetPaddingTop(h);   /* From parent widget, get absolute Y and its padding */
+        h = __GH(h)->Parent;                        /* Go to next parent */
+    }
+    
+    while (h) {                                     /* Go through all parent windows */
+        out += __GH(h)->Y + __GUI_WIDGET_GetPaddingTop(h);  /* Add Y offset from parent and top padding of parent */
+        out -= __GHR(h)->ScrollY;                   /* In addition, decrease by scroll value */
+        h = __GH(h)->Parent;                        /* Get next parent */
+    }
+    return out;
+}
+#endif /* !GUI_WIDGET_INSIDE_PARENT_ONLY */
 
 uint8_t __GUI_WIDGET_Invalidate(GUI_HANDLE_p h) {
     uint8_t ret = __GUI_WIDGET_InvalidatePrivate(h, 1); /* Invalidate widget with clipping */
@@ -240,6 +288,7 @@ uint8_t __GUI_WIDGET_InvalidateWithParent(GUI_HANDLE_p h) {
 }
 
 uint8_t __GUI_WIDGET_SetXY(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
+#if GUI_WIDGET_INSIDE_PARENT_ONLY
     if (__GH(h)->X != x || __GH(h)->Y != y) {
         GUI_iDim_t pW, pH, width, height;
         
@@ -268,19 +317,21 @@ uint8_t __GUI_WIDGET_SetXY(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
         if (y > pH) {
             y = pH - 1;
         }
+    }
+#endif /* GUI_WIDGET_INSIDE_PARENT_ONLY */
         
-        if (__GH(h)->X != x || __GH(h)->Y != y) {            
-            __GUI_WIDGET_SetClippingRegion(h);      /* Set new clipping region */
-            __GH(h)->X = x;                         /* Set parameter */
-            __GH(h)->Y = y;                         /* Set parameter */
-            __GUI_WIDGET_InvalidateWithParent(h);   /* Invalidate object */
-        }
+    if (__GH(h)->X != x || __GH(h)->Y != y) {            
+        __GUI_WIDGET_SetClippingRegion(h);          /* Set new clipping region */
+        __GH(h)->X = x;                             /* Set parameter */
+        __GH(h)->Y = y;                             /* Set parameter */
+        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate object */
     }
     return 1;
 }
 
-uint8_t __GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t hi) {  
-    if (wi != __GH(h)->Width || hi != __GH(h)->Height) { 
+uint8_t __GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t hi) {
+#if GUI_WIDGET_INSIDE_PARENT_ONLY
+    if (wi != __GH(h)->Width || hi != __GH(h)->Height) {
         GUI_Dim_t pW, pH;
         
         pW = __GUI_WIDGET_GetParentInnerWidth(h);   /* Get parent width */
@@ -311,7 +362,10 @@ uint8_t __GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t hi) {
                 hi = pH - __GH(h)->Y;
             }
         }
-
+    }
+#endif /* GUI_WIDGET_INSIDE_PARENT_ONLY */
+    
+    if (wi != __GH(h)->Width || hi != __GH(h)->Height) {
         __GUI_WIDGET_SetClippingRegion(h);          /* Set clipping region before changed position */
         __GH(h)->Width = wi;                        /* Set parameter */
         __GH(h)->Height = hi;                       /* Set parameter */

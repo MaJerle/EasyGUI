@@ -60,7 +60,7 @@ uint32_t __GetNumberOfPendingWidgets(GUI_HANDLE_p parent) {
     if (parent && __GH(parent)->Flags & GUI_FLAG_REDRAW) {  /* Check for specific widget */
         return 1;                                   /* We have object to redraw */
     }
-    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, 0); h; h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, h)) {
+    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, 0); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
         if (__GUI_WIDGET_AllowChildren(h)) {        /* If this widget has children elements */
             cnt += __GetNumberOfPendingWidgets(h);  /* Redraw this widget and all its children if required */
         } else if (__GH(h)->Flags & GUI_FLAG_REDRAW) {  /* Check if we need redraw */
@@ -70,23 +70,47 @@ uint32_t __GetNumberOfPendingWidgets(GUI_HANDLE_p parent) {
     return cnt;
 }
 
-//Draws widgets
-static GUI_Display_t tmpDisp;
-
+/* Clip widget before draw/touch operation */
 static
 void __CheckDispClipping(GUI_HANDLE_p h) {
-    GUI_Dim_t x, y, wi, hi;
+    GUI_iDim_t x, y;
+    GUI_Dim_t wi, hi;
     
+    /* Set widget itself first */
     x = __GUI_WIDGET_GetAbsoluteX(h);
     y = __GUI_WIDGET_GetAbsoluteY(h);
     wi = __GUI_WIDGET_GetWidth(h);
     hi = __GUI_WIDGET_GetHeight(h);
     
-    memcpy(&tmpDisp, &GUI.Display, sizeof(tmpDisp));
-    if (tmpDisp.X1 < x) { tmpDisp.X1 = x; }
-    if (tmpDisp.X2 > x + wi) { tmpDisp.X2 = x + wi; }
-    if (tmpDisp.Y1 < y) { tmpDisp.Y1 = y; }
-    if (tmpDisp.Y2 > y + hi) { tmpDisp.Y2 = y + hi; }
+    memcpy(&GUI.DisplayTemp, &GUI.Display, sizeof(GUI.DisplayTemp));
+    if (GUI.DisplayTemp.X1 == (GUI_iDim_t)0x7FFF)   { GUI.DisplayTemp.X1 = 0; }
+    if (GUI.DisplayTemp.Y1 == (GUI_iDim_t)0x7FFF)   { GUI.DisplayTemp.Y1 = 0; }
+    if (GUI.DisplayTemp.X2 == (GUI_iDim_t)0x8000)   { GUI.DisplayTemp.X2 = (GUI_iDim_t)GUI.LCD.Width; }
+    if (GUI.DisplayTemp.Y2 == (GUI_iDim_t)0x8000)   { GUI.DisplayTemp.Y2 = (GUI_iDim_t)GUI.LCD.Height; }
+    
+    if (GUI.DisplayTemp.X1 < x)         { GUI.DisplayTemp.X1 = x; }
+    if (GUI.DisplayTemp.X2 > x + wi)    { GUI.DisplayTemp.X2 = x + wi; }
+    if (GUI.DisplayTemp.Y1 < y)         { GUI.DisplayTemp.Y1 = y; }
+    if (GUI.DisplayTemp.Y2 > y + hi)    { GUI.DisplayTemp.Y2 = y + hi; }
+    
+#if !GUI_WIDGET_INSIDE_PARENT_ONLY
+    while (h) {
+        /* Check that widget is not drawn over parent */
+        x = __GUI_WIDGET_GetParentAbsoluteX(h);         /* Parent absolute X position for inner widgets */
+        y = __GUI_WIDGET_GetParentAbsoluteY(h);         /* Parent absolute Y position for inner widgets */
+        
+        //TODO: Get visible widget area only!
+        wi = __GUI_WIDGET_GetParentInnerWidth(h);       /* Get parent inner width */
+        hi = __GUI_WIDGET_GetParentInnerHeight(h);      /* Get parent inner height */
+        
+        if (GUI.DisplayTemp.X1 < x)         { GUI.DisplayTemp.X1 = x; }
+        if (GUI.DisplayTemp.X2 > x + wi)    { GUI.DisplayTemp.X2 = x + wi; }
+        if (GUI.DisplayTemp.Y1 < y)         { GUI.DisplayTemp.Y1 = y; }
+        if (GUI.DisplayTemp.Y2 > y + hi)    { GUI.DisplayTemp.Y2 = y + hi; }
+        
+        h = __GH(h)->Parent;                        /* Check parent widget */
+    }
+#endif /* !GUI_WIDGET_INSIDE_PARENT_ONLY */
 }
 
 uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
@@ -103,7 +127,7 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
         }
         if (__GUI_WIDGET_IsInsideClippingRegion(parent)) {  /* If draw function is set and drawing is inside clipping region */
             __CheckDispClipping(parent);            /* Check coordinates for drawings */
-            __GUI_WIDGET_Callback(parent, GUI_WC_Draw, &tmpDisp, NULL);
+            __GUI_WIDGET_Callback(parent, GUI_WC_Draw, &GUI.DisplayTemp, NULL);
         }
     }
 
@@ -119,7 +143,7 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
                 __GH(h)->Flags &= ~GUI_FLAG_REDRAW; /* Clear flag */
                 if (__GUI_WIDGET_IsInsideClippingRegion(h)) {   /* If draw function is set and drawing is inside clipping region */
                     __CheckDispClipping(h);         /* Check coordinates for drawings */
-                    __GUI_WIDGET_Callback(h, GUI_WC_Draw, &tmpDisp, NULL);  /* Draw widget */
+                    __GUI_WIDGET_Callback(h, GUI_WC_Draw, &GUI.DisplayTemp, NULL);  /* Draw widget */
                 }
                 cnt++;
             }
@@ -216,7 +240,6 @@ void __SetRelativeCoordinate(__GUI_TouchData_t* ts, GUI_iDim_t x, GUI_iDim_t y) 
 __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;
     __GUI_TouchStatus_t tStat = touchCONTINUE;
-    GUI_Dim_t x, y, width, height;
     uint8_t processed;
     
     /* Check touches if any matches, go reverse on linked list */
@@ -233,14 +256,11 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
             }
         }
         
-        x = __GUI_WIDGET_GetAbsoluteX(h);           /* Get actual widget X position */
-        y = __GUI_WIDGET_GetAbsoluteY(h);           /* Get actual widget Y position */
-        width = __GUI_WIDGET_GetWidth(h);           /* Get widget width */
-        height = __GUI_WIDGET_GetHeight(h);         /* Get widget height */
+        __CheckDispClipping(h);                     /* Check display region where widget is placed */
         
         /* Check if widget is in touch area */
-        if (touch->TS.X[0] >= x && touch->TS.X[0] <= (x + width) && touch->TS.Y[0] >= y && touch->TS.Y[0] <= (y + height)) {
-            __SetRelativeCoordinate(touch, x, y);   /* Set relative coordinate */
+        if (touch->TS.X[0] >= GUI.DisplayTemp.X1 && touch->TS.X[0] <= GUI.DisplayTemp.X2 && touch->TS.Y[0] >= GUI.DisplayTemp.Y1 && touch->TS.Y[0] <= GUI.DisplayTemp.Y2) {
+            __SetRelativeCoordinate(touch, __GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h)); /* Set relative coordinate */
 
             processed = __GUI_WIDGET_Callback(h, GUI_WC_TouchStart, touch, &tStat);
             if (processed) {                    /* Check if command has been processed */
@@ -457,10 +477,10 @@ int32_t GUI_Process(void) {
         //GUI_DRAW_Rectangle(& GUI.Display, GUI.Display.X1, GUI.Display.Y1, GUI.Display.X2 - GUI.Display.X1, GUI.Display.Y2 - GUI.Display.Y1, GUI_COLOR_CYAN);
         
         /* Invalid clipping region */
-        GUI.Display.X1 = 0xFFFF;
-        GUI.Display.Y1 = 0xFFFF;
-        GUI.Display.X2 = 0;
-        GUI.Display.Y2 = 0;
+        GUI.Display.X1 = 0x7FFF;
+        GUI.Display.Y1 = 0x7FFF;
+        GUI.Display.X2 = 0x8000;
+        GUI.Display.Y2 = 0x8000;
         
         /* Set drawing layer as pending */
         GUI.LCD.Layers[drawing].Pending = 1;

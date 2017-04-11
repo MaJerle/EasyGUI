@@ -1739,57 +1739,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>620</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134261700</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\00-GUI_LIBRARY\widgets\gui_widget.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\project\../00-GUI_LIBRARY/widgets/gui_widget.c\620</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>617</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134261678</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\00-GUI_LIBRARY\widgets\gui_widget.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\project\../00-GUI_LIBRARY/widgets/gui_widget.c\617</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>615</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134261660</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\00-GUI_LIBRARY\widgets\gui_widget.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\project\../00-GUI_LIBRARY/widgets/gui_widget.c\615</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
           <LineNumber>66</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134246550</Address>
+          <Address>134248098</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -1806,6 +1758,36 @@
           <count>0</count>
           <WinNumber>1</WinNumber>
           <ItemText>o</ItemText>
+        </Ww>
+        <Ww>
+          <count>1</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>disp,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>2</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>o-&gt;Parent,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>3</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>(GUI_HANDLE_ROOT_t *)h,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>4</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>out,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>5</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>GUI.DisplayTemp,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>6</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>touch,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
@@ -2790,7 +2772,7 @@
 
   <Group>
     <GroupName>GUI WIDGETS</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

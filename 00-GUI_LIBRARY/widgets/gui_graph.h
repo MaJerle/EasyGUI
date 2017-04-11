@@ -190,6 +190,25 @@ uint8_t GUI_GRAPH_SetMinY(GUI_HANDLE_p h, float v);
 uint8_t GUI_GRAPH_SetMaxY(GUI_HANDLE_p h, float v);
 
 /**
+ * \brief           Reset zoom of widget
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Zoom was reseted
+ * \retval          0: Zoom was not reseted
+ */
+uint8_t GUI_GRAPH_ZoomReset(GUI_HANDLE_p h);
+
+/**
+ * \brief           Zoom widget display data
+ * \param[in,out]   h: Widget handle
+ * \param[in]       zoom: Zoom coeficient. Use 2.0f to double zoom, use 0.5 to unzoom 2 times, etc.
+ * \param[in]       x: X coordinate on plot where zoom focus will apply. Valid value between 0 and 1 relative to width area. Use 0.5 to zoom to center
+ * \param[in]       y: Y coordinate on plot where zoom focus will apply. Valid value between 0 and 1 relative to height area. Use 0.5 to zoom to center
+ * \retval          1: Zoom was reseted
+ * \retval          0: Zoom was not reseted
+ */
+uint8_t GUI_GRAPH_Zoom(GUI_HANDLE_p h, float zoom, float x, float y);
+
+/**
  * \brief           Attach new data object to graph widget
  * \param[in,out]   h: Graph widget handle
  * \param[in]       data: Data object handle

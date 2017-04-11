@@ -73,9 +73,13 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
             GUI_DRAW_FilledRectangle(disp, __GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h), __GUI_WIDGET_GetWidth(h), __GUI_WIDGET_GetHeight(h), __GUI_WIDGET_GetColor(h, GUI_WINDOW_COLOR_BG));
+            GUI_DRAW_Rectangle(disp, 
+                __GUI_WIDGET_GetAbsoluteX(h) + __GUI_WIDGET_GetPaddingLeft(h) - 1, __GUI_WIDGET_GetAbsoluteY(h) + __GUI_WIDGET_GetPaddingTop(h) - 1,
+                __GUI_WIDGET_GetWidth(h) - __GUI_WIDGET_GetPaddingLeft(h) - __GUI_WIDGET_GetPaddingRight(h) + 2, __GUI_WIDGET_GetHeight(h) - __GUI_WIDGET_GetPaddingTop(h) - __GUI_WIDGET_GetPaddingBottom(h) + 2,
+                GUI_COLOR_BLACK);
             return 1;
         }
-#if GUI_USE_TOUCH  
+#if GUI_USE_TOUCH
         case GUI_WC_TouchStart:
             *(__GUI_TouchStatus_t *)result = touchHANDLEDNOFOCUS;   /* Set handled status */
             return 1;

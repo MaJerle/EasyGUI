@@ -152,7 +152,7 @@ typedef struct GUI_TIMER_CORE_t {
 
 typedef uint32_t    GUI_ID_t;               /*!< GUI object ID */
 typedef uint32_t    GUI_Color_t;            /*!< Color definition */
-typedef uint16_t    GUI_Dim_t;              /*!< GUI dimensions in units of pixels */
+typedef int16_t     GUI_Dim_t;              /*!< GUI dimensions in units of pixels */
 typedef int16_t     GUI_iDim_t;             /*!< GUI signed dimensions in units of pixels  */
 typedef uint8_t     GUI_Byte;               /*!< GUI byte data type */
 typedef GUI_Byte    GUI_Byte_t;             /*!< GUI byte data type */
@@ -311,10 +311,10 @@ typedef struct GUI_LCD_t {
  * \brief           GUI clipping management
  */
 typedef struct GUI_Display_t {
-    GUI_Dim_t X1;                           /*!< Clipping area start X */
-    GUI_Dim_t Y1;                           /*!< Clipping area start Y */
-    GUI_Dim_t X2;                           /*!< Clipping area end X */
-    GUI_Dim_t Y2;                           /*!< Clipping area end Y */
+    GUI_iDim_t X1;                          /*!< Clipping area start X */
+    GUI_iDim_t Y1;                          /*!< Clipping area start Y */
+    GUI_iDim_t X2;                          /*!< Clipping area end X */
+    GUI_iDim_t Y2;                          /*!< Clipping area end Y */
 } GUI_Display_t;
 
 /**
@@ -896,8 +896,8 @@ typedef struct GUI_HANDLE {
     const GUI_WIDGET_t* Widget;             /*!< Widget parameters with callback functions */
     GUI_WIDGET_CALLBACK_t Callback;         /*!< Callback function prototype */
     struct GUI_HANDLE* Parent;              /*!< Pointer to parent widget */
-    GUI_Dim_t X;                            /*!< Object X position relative to parent window in units of pixels */
-    GUI_Dim_t Y;                            /*!< Object Y position relative to parent window in units of pixels */
+    GUI_iDim_t X;                           /*!< Object X position relative to parent window in units of pixels */
+    GUI_iDim_t Y;                           /*!< Object Y position relative to parent window in units of pixels */
     GUI_Dim_t Width;                        /*!< Object width in units of pixels or percentages */
     GUI_Dim_t Height;                       /*!< Object height in units of pixels or percentages */
     uint32_t Padding;                       /*!< 4-byte long padding, each byte of one side, MSB = top padding, LSB = left padding.
@@ -916,7 +916,12 @@ typedef struct GUI_HANDLE {
  */
 typedef struct GUI_HANDLE_ROOT {
     GUI_HANDLE Handle;                      /*!< Root widget structure, must be first in structure */
-    GUI_LinkedListRoot_t RootList;          /*!< Linked list root structure */
+    
+    GUI_LinkedListRoot_t RootList;          /*!< Linked list root of children widgets */
+#if !GUI_WIDGET_INSIDE_PARENT_ONLY || defined(DOXYGEN)
+    GUI_iDim_t ScrollX;                     /*!< Scroll of widgets in horizontal direction in units of pixels */
+    GUI_iDim_t ScrollY;                     /*!< Scroll of widgets in vertical direction in units of pixels */
+#endif /* !GUI_WIDGET_INSIDE_PARENT_ONLY || defined(DOXYGEN) */
 } GUI_HANDLE_ROOT_t;
 
 /**

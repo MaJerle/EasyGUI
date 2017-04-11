@@ -119,7 +119,7 @@ extern "C" {
  * \retval          X position on LCD
  * \hideinitializer
  */
-GUI_Dim_t __GUI_WIDGET_GetAbsoluteX(GUI_HANDLE_p h);
+GUI_iDim_t __GUI_WIDGET_GetAbsoluteX(GUI_HANDLE_p h);
 
 /**
  * \brief           Get absolute Y position on LCD for specific widget
@@ -128,7 +128,12 @@ GUI_Dim_t __GUI_WIDGET_GetAbsoluteX(GUI_HANDLE_p h);
  * \retval          Y position on LCD
  * \hideinitializer
  */
-GUI_Dim_t __GUI_WIDGET_GetAbsoluteY(GUI_HANDLE_p h);
+GUI_iDim_t __GUI_WIDGET_GetAbsoluteY(GUI_HANDLE_p h);
+
+//Returns parent X and Y absolute positions including padding position without parent scroll but with scrolls of parents of parent
+//Used to get clipping area for first children widget in tree
+GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteX(GUI_HANDLE_p h);
+GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h);
 
 /**
  * \brief           Invalidate widget for redraw 

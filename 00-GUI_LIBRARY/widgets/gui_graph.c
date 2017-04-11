@@ -72,11 +72,27 @@ const static GUI_WIDGET_t Widget = {
 #define g       ((GUI_GRAPH_t *)h)
 
 /* Reset zoom control on graph */
+static
 void __GUI_GRAPH_Reset(GUI_HANDLE_p h) {
     g->VisibleMaxX = g->MaxX;
     g->VisibleMinX = g->MinX;
     g->VisibleMaxY = g->MaxY;
     g->VisibleMinY = g->MinY;
+}
+
+/* Zoom plot */
+static
+void __GUI_GRAPH_Zoom(GUI_HANDLE_p h, float zoom, float xpos, float ypos) {
+    if (xpos < 0) { xpos = 0.5; }
+    if (xpos > 1) { xpos = 0.5; }
+    if (ypos < 0) { ypos = 0.5; }
+    if (ypos > 1) { ypos = 0.5; }
+           
+    g->VisibleMinX += (g->VisibleMaxX - g->VisibleMinX) * (zoom - 1.0f) * xpos;
+    g->VisibleMaxX -= (g->VisibleMaxX - g->VisibleMinX) * (zoom - 1.0f) * (1.0f - xpos);
+
+    g->VisibleMinY += (g->VisibleMaxY - g->VisibleMinY) * (zoom - 1.0f) * ypos;
+    g->VisibleMaxY -= (g->VisibleMaxY - g->VisibleMinY) * (zoom - 1.0f) * (1.0f - ypos);
 }
 
 static
@@ -141,10 +157,18 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 memcpy(&display, disp, sizeof(GUI_Display_t));  /* Save GUI display data */
                 
                 /* Set clipping region */
-                disp->X1 = x + bl;
-                disp->X2 = disp->X1 + width - bl - br;
-                disp->Y1 = y + bt;
-                disp->Y2 = disp->Y1 + height - bt - bb;
+                if ((x + bl) > disp->X1) {
+                    disp->X1 = x + bl;
+                }
+                if ((x + width - br) < disp->X2) {
+                    disp->X2 = x + width - br;
+                }
+                if ((y + bt) > disp->Y1) {
+                    disp->Y1 = y + bt;
+                }
+                if ((y + height - bb) < disp->Y2) {
+                    disp->Y2 = y + height - bb;
+                }
                 
                 /* Draw all plot attached to graph */
                 for (link = __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(&g->Root, 0); link; link = __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(0, link)) {
@@ -169,7 +193,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                         while (read != write && x1 <= disp->X2) {   /* Calculate next points */
                             x2 = x1 + xStep;                /* Calculate next X */
                             y2 = yBottom - ((float)data->Data[read] - g->VisibleMinY) * yStep;  /* Calculate next Y */
-                            if (x1 >= disp->X1 && x1 < disp->X2) {
+                            if ((x1 >= disp->X1 || x2 >= disp->X1) && (x1 < disp->X2 || x2 < disp->X2)) {
                                 GUI_DRAW_Line(disp, x1, y1, x2, y2, data->Color);   /* Draw actual line */
                             }
                             x1 = x2, y1 = y2;       /* Copy values as old */
@@ -234,18 +258,12 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 g->VisibleMaxY += diff;
 #if GUI_TOUCH_MAX_PRESSES > 1
             } else if (ts->TS.Count == 2) {         /* Scale widget on multiple widgets */
-                float centerX, centerY, zoom, pos;
+                float centerX, centerY, zoom;
                 
                 GUI_MATH_CenterOfXY(ts->RelX[0], ts->RelY[0], ts->RelX[1], ts->RelY[1], &centerX, &centerY);    /* Calculate center position between points */
                 zoom = ts->Distance / ts->DistanceOld;  /* Calculate zoom value */
                 
-                pos = (float)centerX / (float)__GUI_WIDGET_GetWidth(h); /* Calculate X position where on plot should we zoom */
-                g->VisibleMinX += (g->VisibleMaxX - g->VisibleMinX) * (zoom - 1.0f) * pos;
-                g->VisibleMaxX -= (g->VisibleMaxX - g->VisibleMinX) * (zoom - 1.0f) * (1.0f - pos);
-                
-                pos = (float)centerY / (float)__GUI_WIDGET_GetHeight(h);/* Calculate Y position where on plot should we zoom */
-                g->VisibleMinY += (g->VisibleMaxY - g->VisibleMinY) * (zoom - 1.0f) * pos;
-                g->VisibleMaxY -= (g->VisibleMaxY - g->VisibleMinY) * (zoom - 1.0f) * (1.0f - pos);
+                __GUI_GRAPH_Zoom(h, zoom, (float)centerX / (float)__GUI_WIDGET_GetWidth(h), (float)centerY / (float)__GUI_WIDGET_GetHeight(h));
 #endif /* GUI_TOUCH_MAX_PRESSES > 1 */
             }
             
@@ -448,6 +466,26 @@ uint8_t GUI_GRAPH_SetMaxY(GUI_HANDLE_p h, float v) {
     return 1;
 }
 
+uint8_t GUI_GRAPH_ZoomReset(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    __GUI_GRAPH_Reset(h);                           /* Reset zoom */
+    __GUI_WIDGET_Invalidate(h);                     /* Invalidate widget */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
+}
+
+uint8_t GUI_GRAPH_Zoom(GUI_HANDLE_p h, float zoom, float x, float y) {
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    __GUI_GRAPH_Zoom(h, zoom, x, y);                /* Reset zoom */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
+}
 
 /*************************/
 /* GRAPH DATA functions  */

@@ -237,7 +237,9 @@ typedef struct GUI_t {
     volatile uint32_t Time;                 /*!< Current time in units of milliseconds */
     GUI_LCD_t LCD;                          /*!< LCD low-level settings */
     GUI_LL_t LL;                            /*!< Low-level drawing routines for LCD */
-    GUI_Display_t Display;                  /*!< Clipping management if exists */
+    
+    GUI_Display_t Display;                  /*!< Clipping management */
+    GUI_Display_t DisplayTemp;              /*!< Clipping for widgets for drawing and touch */
     
     GUI_HANDLE_p WindowActive;              /*!< Pointer to currently active window when creating new widgets */
     GUI_HANDLE_p FocusedWidget;             /*!< Pointer to focused widget for keyboard events if any */

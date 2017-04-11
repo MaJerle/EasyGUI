@@ -90,6 +90,14 @@
 #define GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE       1
 
 /**
+ * \brief           Enables (1) or disables (0) widget mode inside parent only
+ *                  When mode is enabled and widget is outside parent, it won't be visible
+ *
+ * \note            This can be used for scrolling mode when necessary
+ */
+#define GUI_WIDGET_INSIDE_PARENT_ONLY   0
+
+/**
  * \}
  */
  
