@@ -60,7 +60,7 @@
 #define LCD_FRAME_BUFFER_SIZE   ((uint32_t)(LCD_WIDTH * LCD_HEIGHT * LCD_PIXEL_SIZE))
 
 /* Number of layers */
-#define GUI_LAYERS              2
+#define GUI_LAYERS              4
     
 /******************************************************************************/
 /******************************************************************************/
@@ -275,6 +275,7 @@ void HAL_LTDC_LineEvenCallback(LTDC_HandleTypeDef *hltdc) {
             LTDC_LAYER(hltdc, 0)->CFBAR = Layers[i].StartAddress;
             __HAL_LTDC_RELOAD_CONFIG(hltdc);
             GUI_LCD_ConfirmActiveLayer(i);
+            break;
         }
     }
     HAL_LTDC_ProgramLineEvent(&LTDCHandle, 0); 

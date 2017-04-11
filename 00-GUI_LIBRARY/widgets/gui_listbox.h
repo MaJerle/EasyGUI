@@ -48,6 +48,18 @@ extern "C" {
  * \{
  */
     
+/**
+ * \brief           List of listbox colors
+ */
+typedef enum GUI_LISTBOX_COLOR_t {
+    GUI_LISTBOX_COLOR_BG = 0x00,            /*!< Background color */
+    GUI_LISTBOX_COLOR_TEXT,                 /*!< Default text color */
+    GUI_LISTBOX_COLOR_SEL_FOC,              /*!< Text color of selected item when widget is in focus */
+    GUI_LISTBOX_COLOR_SEL_NOFOC,            /*!< Text color of selected item when widget is not in focus */
+    GUI_LISTBOX_COLOR_SEL_FOC_BG,           /*!< Background color of selected item when widget is in focus */
+    GUI_LISTBOX_COLOR_SEL_NOFOC_BG,         /*!< Background color of selected item when widget is not in focus */
+} GUI_LISTBOX_COLOR_t;
+
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)
     
 #define GUI_FLAG_LISTBOX_SLIDER_ON      0x01/*!< Slider is currently active */
@@ -91,6 +103,16 @@ typedef struct GUI_LISTBOX_t {
  * \retval          0: Widget creation failed
  */
 GUI_HANDLE_p GUI_LISTBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags);
+
+/**
+ * \brief           Set color to listbox
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Index in array of colors. This parameter can be a value of \ref GUI_LISTBOX_COLOR_t enumeration
+ * \param[in]       color: Actual color code to set
+ * \retval          1: Color was set ok
+ * \retval          0: Color was not set
+ */
+uint8_t GUI_LISTBOX_SetColor(GUI_HANDLE_p h, GUI_LISTBOX_COLOR_t index, GUI_Color_t color);
 
 /**
  * \brief           Add a new string to list box
@@ -188,20 +210,6 @@ uint8_t GUI_LISTBOX_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible);
  * \retval          0: Scroll not successful
  */
 uint8_t GUI_LISTBOX_Scroll(GUI_HANDLE_p h, int16_t step);
-
-/**
- * \brief           Widget callback function for all event
- * \note            Called either from GUI stack or from widget itself to notify user
- *
- * \note            Can be overwritten by user when required to handle specific events
- * \param[in,out]   h: Widget handle where callback occurred
- * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
- * \param[in]       *param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
- * \param[out]      *result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
- * \retval          1: Command has been processed
- * \retval          0: Command has not been processed
- */
-uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /**
  * \}

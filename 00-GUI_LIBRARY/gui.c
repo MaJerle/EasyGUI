@@ -57,13 +57,13 @@ uint32_t __GetNumberOfPendingWidgets(GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;
     uint32_t cnt = 0;
     
-    if (parent && parent->Flags & GUI_FLAG_REDRAW) {    /* Check for specific widget */
+    if (parent && __GH(parent)->Flags & GUI_FLAG_REDRAW) {  /* Check for specific widget */
         return 1;                                   /* We have object to redraw */
     }
     for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, 0); h; h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, h)) {
         if (__GUI_WIDGET_AllowChildren(h)) {        /* If this widget has children elements */
             cnt += __GetNumberOfPendingWidgets(h);  /* Redraw this widget and all its children if required */
-        } else if (h->Flags & GUI_FLAG_REDRAW) {    /* Check if we need redraw */
+        } else if (__GH(h)->Flags & GUI_FLAG_REDRAW) {  /* Check if we need redraw */
             cnt++;                                  /* Increase number of elements to redraw */
         }
     }
@@ -71,20 +71,39 @@ uint32_t __GetNumberOfPendingWidgets(GUI_HANDLE_p parent) {
 }
 
 //Draws widgets
+static GUI_Display_t tmpDisp;
+
+static
+void __CheckDispClipping(GUI_HANDLE_p h) {
+    GUI_Dim_t x, y, wi, hi;
+    
+    x = __GUI_WIDGET_GetAbsoluteX(h);
+    y = __GUI_WIDGET_GetAbsoluteY(h);
+    wi = __GUI_WIDGET_GetWidth(h);
+    hi = __GUI_WIDGET_GetHeight(h);
+    
+    memcpy(&tmpDisp, &GUI.Display, sizeof(tmpDisp));
+    if (tmpDisp.X1 < x) { tmpDisp.X1 = x; }
+    if (tmpDisp.X2 > x + wi) { tmpDisp.X2 = x + wi; }
+    if (tmpDisp.Y1 < y) { tmpDisp.Y1 = y; }
+    if (tmpDisp.Y2 > y + hi) { tmpDisp.Y2 = y + hi; }
+}
+
 uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;
     uint32_t cnt = 0;
     
-    if (parent && (parent->Flags & GUI_FLAG_REDRAW)) {  /* Check if parent window should redraw operation */
+    if (parent && (__GH(parent)->Flags & GUI_FLAG_REDRAW)) {  /* Check if parent window should redraw operation */
         if (!__GUI_WIDGET_IsVisible(parent)) {      /* Check if visible */
             return 0;                               /* Stop execution if parent is hidden */
         }
-        parent->Flags &= ~GUI_FLAG_REDRAW;          /* Clear flag */
+        __GH(parent)->Flags &= ~GUI_FLAG_REDRAW;    /* Clear flag */
         for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, 0); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
-            h->Flags |= GUI_FLAG_REDRAW;            /* Set redraw bit to all children elements */
+            __GH(h)->Flags |= GUI_FLAG_REDRAW;      /* Set redraw bit to all children elements */
         }
         if (__GUI_WIDGET_IsInsideClippingRegion(parent)) {  /* If draw function is set and drawing is inside clipping region */
-            __GUI_WIDGET_Callback(parent, GUI_WC_Draw, &GUI.Display, NULL);
+            __CheckDispClipping(parent);            /* Check coordinates for drawings */
+            __GUI_WIDGET_Callback(parent, GUI_WC_Draw, &tmpDisp, NULL);
         }
     }
 
@@ -96,10 +115,11 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
         if (__GUI_WIDGET_AllowChildren(h)) {        /* If this widget allows children widgets */
             cnt += __RedrawWidgets(h);              /* Redraw this widget and all its children if required */
         } else {
-            if (h->Flags & GUI_FLAG_REDRAW) {       /* Check if redraw required */
-                h->Flags &= ~GUI_FLAG_REDRAW;       /* Clear flag */
+            if (__GH(h)->Flags & GUI_FLAG_REDRAW) { /* Check if redraw required */
+                __GH(h)->Flags &= ~GUI_FLAG_REDRAW; /* Clear flag */
                 if (__GUI_WIDGET_IsInsideClippingRegion(h)) {   /* If draw function is set and drawing is inside clipping region */
-                    __GUI_WIDGET_Callback(h, GUI_WC_Draw, &GUI.Display, NULL);  /* Draw widget */
+                    __CheckDispClipping(h);         /* Check coordinates for drawings */
+                    __GUI_WIDGET_Callback(h, GUI_WC_Draw, &tmpDisp, NULL);  /* Draw widget */
                 }
                 cnt++;
             }
@@ -201,7 +221,7 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
     
     /* Check touches if any matches, go reverse on linked list */
     for (h = __GUI_LINKEDLIST_WidgetGetPrev((GUI_HANDLE_ROOT_t *)parent, 0); h; h = __GUI_LINKEDLIST_WidgetGetPrev((GUI_HANDLE_ROOT_t *)parent, h)) {
-        if (h->Flags & GUI_FLAG_HIDDEN) {           /* Ignore hidden widget */
+        if (__GUI_WIDGET_IsHidden(h)) {             /* Ignore hidden widget */
             continue;
         }
         
@@ -305,7 +325,7 @@ GUI_Result_t GUI_Init(void) {
     
     return guiOK;
 }
-
+#include "tm_stm32_general.h"
 int32_t GUI_Process(void) {
     int32_t cnt = 0;
 #if GUI_USE_TOUCH
@@ -397,7 +417,7 @@ int32_t GUI_Process(void) {
                         h = 0;
                     }
                     if (!h) {                       /* There is no next widget */
-                        for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)GUI.FocusedWidget->Parent, NULL); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
+                        for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)__GH(GUI.FocusedWidget)->Parent, NULL); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
                             if (__GUI_WIDGET_IsVisible(h)) {    /* Check if widget is visible */
                                 break;
                             }
@@ -422,6 +442,7 @@ int32_t GUI_Process(void) {
      * Redrawing operations
      */
     if (!(GUI.LCD.Flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM) && __GetNumberOfPendingWidgets(NULL)) {  /* Check if anything to draw first */
+        uint32_t time;
         GUI_Byte active = GUI.LCD.ActiveLayer;
         GUI_Byte drawing = GUI.LCD.DrawingLayer;
         
@@ -429,7 +450,9 @@ int32_t GUI_Process(void) {
         GUI.LL.Copy(&GUI.LCD, drawing, (void *)GUI.LCD.Layers[active].StartAddress, (void *)GUI.LCD.Layers[drawing].StartAddress, GUI.LCD.Width, GUI.LCD.Height, 0, 0);
             
         /* Actually draw new screen based on setup */
+        time = TM_GENERAL_DWTCounterGetValue();
         cnt = __RedrawWidgets(NULL);                /* Redraw all widgets now */
+        __GUI_DEBUG("T: %d\r\n", TM_GENERAL_DWTCounterGetValue() - time);
         
         //GUI_DRAW_Rectangle(& GUI.Display, GUI.Display.X1, GUI.Display.Y1, GUI.Display.X2 - GUI.Display.X1, GUI.Display.Y2 - GUI.Display.Y1, GUI_COLOR_CYAN);
         

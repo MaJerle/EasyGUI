@@ -309,7 +309,7 @@ uint8_t __GUI_LINKEDLIST_MULTI_FIND_REMOVE(GUI_LinkedListRoot_t* root, void* ele
  * \sa              __GUI_LINKEDLIST_IsWidgetLast
  * \hideinitializer
  */
-#define __GUI_LINKEDLIST_IsWidgetFirst(h)       (!(h) || !((GUI_HANDLE_p)(h))->List.Prev)
+#define __GUI_LINKEDLIST_IsWidgetFirst(h)       (!(h) || !(__GH(h))->List.Prev)
 
 /**
  * \brief           Check if widget is last child element in linked list
@@ -320,7 +320,7 @@ uint8_t __GUI_LINKEDLIST_MULTI_FIND_REMOVE(GUI_LinkedListRoot_t* root, void* ele
  * \sa              __GUI_LINKEDLIST_IsWidgetFirst
  * \hideinitializer
  */
-#define __GUI_LINKEDLIST_IsWidgetLast(h)        (!(h) || !((GUI_HANDLE_p)(h))->List.Next)
+#define __GUI_LINKEDLIST_IsWidgetLast(h)        (!(h) || !(__GH(h))->List.Next)
 
 /**
  * \brief           Add new widget to linked list of parent widget

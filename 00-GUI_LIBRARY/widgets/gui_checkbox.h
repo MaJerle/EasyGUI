@@ -48,6 +48,16 @@ extern "C" {
  * \{
  */
     
+/**
+ * \brief           List of checkbox colors
+ */
+typedef enum {
+    GUI_CHECKBOX_COLOR_BG = 0x00,           /*!< Background color index */
+    GUI_CHECKBOX_COLOR_FG,                  /*!< Foreground color index */
+    GUI_CHECKBOX_COLOR_BORDER,              /*!< Border color index */
+    GUI_CHECKBOX_COLOR_DISABLED_BG,         /*!< Background color index when disabled */
+} GUI_CHECKBOX_COLOR_t;
+
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)
 
 #define GUI_FLAG_CHECKBOX_CHECKED           0x01    /*!< Indicates checkbox is checked */
@@ -78,18 +88,48 @@ typedef struct GUI_CHECKBOX_t {
 GUI_HANDLE_p GUI_CHECKBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags);
 
 /**
- * \brief           Widget callback function for all event
- * \note            Called either from GUI stack or from widget itself to notify user
- *
- * \note            Can be overwritten by user when required to handle specific events
- * \param[in,out]   h: Widget handle where callback occurred
- * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
- * \param[in]       *param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
- * \param[out]      *result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
- * \retval          1: Command has been processed
- * \retval          0: Command has not been processed
+ * \brief           Set color to specific part of widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Color index. This parameter can be a value of \ref GUI_CHECKBOX_COLOR_t enumeration
+ * \param[in]       color: Color value
+ * \retval          1: Color was set ok
+ * \retval          0: Color vas not set
  */
-uint8_t GUI_CHECKBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+uint8_t GUI_CHECKBOX_SetColor(GUI_HANDLE_p h, GUI_CHECKBOX_COLOR_t index, GUI_Color_t color);
+
+/**
+ * \brief           Set checked status to widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       checked: Checked status
+ * \retval          1: Checkbox was set to desired checked value
+ * \retval          0: Checkbox was not set to desired checked value
+ */
+uint8_t GUI_CHECKBOX_SetChecked(GUI_HANDLE_p h, uint8_t checked);
+
+/**
+ * \brief           Check if checkbox is checked
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Checkbox is checked
+ * \retval          0: Checkbox is not checked
+ */
+uint8_t GUI_CHECKBOX_IsChecked(GUI_HANDLE_p h);
+
+/**
+ * \brief           Set disabled status to widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       disabled: Disabled status
+ * \retval          1: Checkbox was set to desired disabled value
+ * \retval          0: Checkbox was not set to desired disabled value
+ */
+uint8_t GUI_CHECKBOX_SetDisabled(GUI_HANDLE_p h, uint8_t disabled);
+
+/**
+ * \brief           Check if checkbox is disabled
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Checkbox is disabled
+ * \retval          0: Checkbox is not disabled
+ */
+uint8_t GUI_CHECKBOX_IsDisabled(GUI_HANDLE_p h);
 
 /**
  * \}

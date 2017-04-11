@@ -77,12 +77,12 @@ extern "C" {
 /**
  * \brief           GUI Handle object from main object
  */ 
-#define __GH(x)                     ((GUI_HANDLE_p)(x))
+#define __GH(x)                     ((struct GUI_HANDLE *)(x))
 
 /**
  * \brief           GUI Handle root object from main object with children widgets
  */ 
-#define __GHR(x)                    ((GUI_HANDLE_ROOT_t *)(x))
+#define __GHR(x)                    ((struct GUI_HANDLE_ROOT *)(x))
 
 /**
  * \brief           Allocate memory with specific size
@@ -98,7 +98,7 @@ extern "C" {
  * \brief           Free memory for widget which was just deleted
  */
 #define __GUI_MEMWIDFREE(p)         do {            \
-    __GUI_DEBUG("Memory free: 0x%08X; Type: %s\r\n", (uint32_t)(p), (p)->Widget->Name);  \
+    __GUI_DEBUG("Memory free: 0x%08X; Type: %s\r\n", (uint32_t)__GH(p), __GH(p)->Widget->Name);  \
     free(p);                                        \
     (p) = 0;                                          \
 } while (0)
@@ -179,7 +179,7 @@ extern "C" {
 #define __GUI_FOCUS_CLEAR()         do {                    \
     if (GUI.FocusedWidget) {                                \
         __GUI_WIDGET_Callback(GUI.FocusedWidget, GUI_WC_FocusOut, NULL, NULL);  \
-        GUI.FocusedWidget->Flags &= ~GUI_FLAG_FOCUS;        \
+        __GH(GUI.FocusedWidget)->Flags &= ~GUI_FLAG_FOCUS;  \
         __GUI_WIDGET_Invalidate(GUI.FocusedWidget);         \
         GUI.FocusedWidget = 0;                              \
     }                                                       \
@@ -193,7 +193,7 @@ extern "C" {
 #define __GUI_FOCUS_SET(h)          do {                    \
     __GUI_FOCUS_CLEAR();                                    \
     GUI.FocusedWidget = __GH(h);                            \
-    GUI.FocusedWidget->Flags |= GUI_FLAG_FOCUS;             \
+    __GH(GUI.FocusedWidget)->Flags |= GUI_FLAG_FOCUS;       \
     __GUI_WIDGET_Callback(GUI.FocusedWidget, GUI_WC_FocusIn, NULL, NULL);   \
     __GUI_WIDGET_Invalidate(GUI.FocusedWidget);             \
 } while (0)
@@ -206,8 +206,8 @@ extern "C" {
 #define __GUI_ACTIVE_CLEAR()        do {                    \
     if (GUI.ActiveWidget) {                                 \
         __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_ActiveOut, NULL, NULL);  \
-        GUI.ActiveWidget->Flags &= ~GUI_FLAG_ACTIVE;        \
-        __GUI_WIDGET_Invalidate(GUI.FocusedWidget);         \
+        __GH(GUI.ActiveWidget)->Flags &= ~GUI_FLAG_ACTIVE;  \
+        __GUI_WIDGET_Invalidate(GUI.ActiveWidget);          \
         GUI.ActiveWidgetOld = GUI.ActiveWidget;             \
         GUI.ActiveWidget = 0;                               \
     }                                                       \
@@ -220,7 +220,7 @@ extern "C" {
 #define __GUI_ACTIVE_SET(h)         do {                    \
     __GUI_ACTIVE_CLEAR();                                   \
     GUI.ActiveWidget = __GH(h);                             \
-    GUI.ActiveWidget->Flags |= GUI_FLAG_ACTIVE;             \
+    __GH(GUI.ActiveWidget)->Flags |= GUI_FLAG_ACTIVE;       \
     __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_ActiveIn, NULL, NULL);   \
     __GUI_WIDGET_Invalidate(GUI.ActiveWidget);              \
 } while (0)

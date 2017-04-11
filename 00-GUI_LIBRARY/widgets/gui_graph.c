@@ -40,17 +40,28 @@
 /******************************************************************************/
 #define __GG(x)             ((GUI_GRAPH_t *)(x))
 
+static
+uint8_t GUI_GRAPH_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /******************************************************************************/
 /******************************************************************************/
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
+const static GUI_Color_t Colors[] = {
+    GUI_COLOR_GRAY,                                 /*!< Default background color */
+    GUI_COLOR_BLACK,                                /*!< Default foreground color */
+    GUI_COLOR_BLACK,                                /*!< Default border color */
+    0xFF002F00,                                     /*!< Default grid color */
+};
+
 const static GUI_WIDGET_t Widget = {
     .Name = _T("Graph"),                            /*!< Widget name */
     .Size = sizeof(GUI_GRAPH_t),                    /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = GUI_GRAPH_Callback                  /*!< Callback function for various events */
+    .Callback = GUI_GRAPH_Callback,                 /*!< Callback function for various events */
+    .Colors = Colors,                               /*<! List of default colors */
+    .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
 };
 
 /******************************************************************************/
@@ -68,6 +79,7 @@ void __GUI_GRAPH_Reset(GUI_HANDLE_p h) {
     g->VisibleMinY = g->MinY;
 }
 
+static
 uint8_t GUI_GRAPH_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
 #if GUI_USE_TOUCH
 static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
@@ -90,19 +102,19 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
             width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
             height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
             
-            GUI_DRAW_FilledRectangle(disp, x, y, bl, height, g->Color[GUI_GRAPH_COLOR_BG]);
-            GUI_DRAW_FilledRectangle(disp, x + bl, y, width - bl - br, bt, g->Color[GUI_GRAPH_COLOR_BG]);
-            GUI_DRAW_FilledRectangle(disp, x + bl, y + height - bb, width - bl - br, bb, g->Color[GUI_GRAPH_COLOR_BG]);
-            GUI_DRAW_FilledRectangle(disp, x + width - br, y, br, height, g->Color[GUI_GRAPH_COLOR_BG]);
-            GUI_DRAW_FilledRectangle(disp, x + bl, y + bt, width - bl - br, height - bt - bb, g->Color[GUI_GRAPH_COLOR_FG]);
-            GUI_DRAW_Rectangle(disp, x, y, width, height, g->Color[GUI_GRAPH_COLOR_BORDER]);
+            GUI_DRAW_FilledRectangle(disp, x, y, bl, height, __GUI_WIDGET_GetColor(h, GUI_GRAPH_COLOR_BG));
+            GUI_DRAW_FilledRectangle(disp, x + bl, y, width - bl - br, bt, __GUI_WIDGET_GetColor(h, GUI_GRAPH_COLOR_BG));
+            GUI_DRAW_FilledRectangle(disp, x + bl, y + height - bb, width - bl - br, bb, __GUI_WIDGET_GetColor(h, GUI_GRAPH_COLOR_BG));
+            GUI_DRAW_FilledRectangle(disp, x + width - br, y, br, height, __GUI_WIDGET_GetColor(h, GUI_GRAPH_COLOR_BG));
+            GUI_DRAW_FilledRectangle(disp, x + bl, y + bt, width - bl - br, height - bt - bb, __GUI_WIDGET_GetColor(h, GUI_GRAPH_COLOR_FG));
+            GUI_DRAW_Rectangle(disp, x, y, width, height, __GUI_WIDGET_GetColor(h, GUI_GRAPH_COLOR_BORDER));
             
             /* Draw horizontal lines */
             if (g->Rows) {
                 float step;
                 step = (float)(height - bt - bb) / (float)g->Rows;
                 for (i = 1; i < g->Rows; i++) {
-                    GUI_DRAW_HLine(disp, x + bl, y + bt + i * step, width - bl - br, g->Color[GUI_GRAPH_COLOR_GRID]);
+                    GUI_DRAW_HLine(disp, x + bl, y + bt + i * step, width - bl - br, __GUI_WIDGET_GetColor(h, GUI_GRAPH_COLOR_GRID));
                 }
             }
             /* Draw vertical lines */
@@ -110,14 +122,14 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 float step;
                 step = (float)(width - bl - br) / (float)g->Columns;
                 for (i = 1; i < g->Columns; i++) {
-                    GUI_DRAW_VLine(disp, x + bl + i * step, y + bt, height - bt - bb, g->Color[GUI_GRAPH_COLOR_GRID]);
+                    GUI_DRAW_VLine(disp, x + bl + i * step, y + bt, height - bt - bb, __GUI_WIDGET_GetColor(h, GUI_GRAPH_COLOR_GRID));
                 }
             }
             
             /* Check if any data attached to this graph */
             if (g->Root.First) {                    /* We have attached plots */
                 GUI_Display_t display;
-                register GUI_iDim_t x1, y1, x2, y2; /* Try to add these variables to core registers */
+                register float x1, y1, x2, y2;      /* Try to add these variables to core registers */
                 float xSize = g->VisibleMaxX - g->VisibleMinX;  /* Calculate X size */
                 float ySize = g->VisibleMaxY - g->VisibleMinY;  /* Calculate Y size */
                 float xStep = (float)(width - bl - br) / (float)xSize;  /* Calculate X step */
@@ -309,12 +321,6 @@ GUI_HANDLE_p GUI_GRAPH_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
     
     ptr = (GUI_GRAPH_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, flags);  /* Allocate memory for basic widget */
     if (ptr) {        
-        /* Color setup */
-        ptr->Color[GUI_GRAPH_COLOR_BG] = GUI_COLOR_GRAY;    /* Set background color */
-        ptr->Color[GUI_GRAPH_COLOR_FG] = GUI_COLOR_BLACK;   /* Set foreground color */
-        ptr->Color[GUI_GRAPH_COLOR_BORDER] = GUI_COLOR_BLACK;   /* Set foreground color */
-        ptr->Color[GUI_GRAPH_COLOR_GRID] = 0xFF002F00;  /* Set grid color */
-        
         ptr->Border[GUI_GRAPH_BORDER_TOP] = 5;      /* Set borders */
         ptr->Border[GUI_GRAPH_BORDER_RIGHT] = 5;
         ptr->Border[GUI_GRAPH_BORDER_BOTTOM] = 5;
@@ -335,20 +341,19 @@ GUI_HANDLE_p GUI_GRAPH_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
 }
 
 uint8_t GUI_GRAPH_SetColor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t color) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    uint8_t ret;
+    
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (__GG(h)->Color[index] != color) {
-        __GG(h)->Color[index] = color;              /* Set parameter */
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
-    }
+    ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set color */
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return 1;
+    return ret;
 }
 
 uint8_t GUI_GRAPH_AttachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     /**
@@ -370,7 +375,7 @@ uint8_t GUI_GRAPH_AttachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
 }
 
 uint8_t GUI_GRAPH_DetachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget && data);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget && data);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     /**
@@ -392,7 +397,7 @@ uint8_t GUI_GRAPH_DetachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
 }
 
 uint8_t GUI_GRAPH_SetMinX(GUI_HANDLE_p h, float v) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GG(h)->MinX != v) {
@@ -405,7 +410,7 @@ uint8_t GUI_GRAPH_SetMinX(GUI_HANDLE_p h, float v) {
 }
 
 uint8_t GUI_GRAPH_SetMaxX(GUI_HANDLE_p h, float v) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GG(h)->MaxX != v) {
@@ -418,7 +423,7 @@ uint8_t GUI_GRAPH_SetMaxX(GUI_HANDLE_p h, float v) {
 }
 
 uint8_t GUI_GRAPH_SetMinY(GUI_HANDLE_p h, float v) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GG(h)->MinY != v) {
@@ -431,7 +436,7 @@ uint8_t GUI_GRAPH_SetMinY(GUI_HANDLE_p h, float v) {
 }
 
 uint8_t GUI_GRAPH_SetMaxY(GUI_HANDLE_p h, float v) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GG(h)->MaxY != v) {

@@ -378,6 +378,17 @@ uint8_t __GUI_WIDGET_IsFontAndTextSet(GUI_HANDLE_p h);
 uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* key);
 
 /**
+ * \brief           Set color to widget specific index
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Index in array of colors
+ * \param[in]       color: Actual color code to set
+ * \retval          1: Color was set ok
+ * \retval          0: Color was not set
+ */
+uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
+
+/**
  * \brief           Get widget top padding as 8-bit value
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in]       h: Widget handle
@@ -441,7 +452,9 @@ uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* key);
  * \retval          1: Command processed by widget
  * \retval          0: Command was not processed by widget
  */
-#define __GUI_WIDGET_Callback(h, cmd, param, result)    (h)->Callback ? (h)->Callback(h, cmd, param, result) : (h)->Widget->Callback(h, cmd, param, result)
+#define __GUI_WIDGET_Callback(h, cmd, param, result)    __GH(h)->Callback ? __GH(h)->Callback(h, cmd, param, result) : __GH(h)->Widget->Callback(h, cmd, param, result)
+
+#define __GUI_WIDGET_GetColor(h, index)     (__GH(h)->Colors ? __GH(h)->Colors[(uint8_t)(index)] : (__GH(h)->Widget->Colors ? __GH(h)->Widget->Colors[(uint8_t)(index)] : GUI_COLOR_BLACK))
 
 /**
  * \brief           Get total width of widget in units of pixels
@@ -494,7 +507,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \sa              __GUI_WIDGET_GetParentHeight
  * \hideinitializer
  */
-#define __GUI_WIDGET_GetParentWidth(h)              (__GH(h)->Parent ? __GUI_WIDGET_GetWidth((h)->Parent) : GUI.LCD.Width)
+#define __GUI_WIDGET_GetParentWidth(h)              (__GH(h)->Parent ? __GUI_WIDGET_GetWidth(__GH(h)->Parent) : GUI.LCD.Width)
 
 /**
  * \brief           Returns height of parent element. If parent does not exists, it returns LCD height
@@ -504,7 +517,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \sa              __GUI_WIDGET_GetParentWidth
  * \hideinitializer
  */
-#define __GUI_WIDGET_GetParentHeight(h)             (__GH(h)->Parent ? __GUI_WIDGET_GetHeight((h)->Parent) : GUI.LCD.Height)
+#define __GUI_WIDGET_GetParentHeight(h)             (__GH(h)->Parent ? __GUI_WIDGET_GetHeight(__GH(h)->Parent) : GUI.LCD.Height)
 
 /**
  * \brief           Returns inner width of parent element. If parent does not exists, it returns LCD width
@@ -516,7 +529,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \sa              __GUI_WIDGET_GetParentInnerHeight
  * \hideinitializer
  */
-#define __GUI_WIDGET_GetParentInnerWidth(h)         (__GH(h)->Parent ? __GUI_WIDGET_GetInnerWidth((h)->Parent) : GUI.LCD.Width)
+#define __GUI_WIDGET_GetParentInnerWidth(h)         (__GH(h)->Parent ? __GUI_WIDGET_GetInnerWidth(__GH(h)->Parent) : GUI.LCD.Width)
 
 /**
  * \brief           Returns inner height of parent element. If parent does not exists, it returns LCD height
@@ -528,7 +541,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \sa              __GUI_WIDGET_GetParentInnerWidth
  * \hideinitializer
  */
-#define __GUI_WIDGET_GetParentInnerHeight(h)        (__GH(h)->Parent ? __GUI_WIDGET_GetInnerHeight((h)->Parent) : GUI.LCD.Height)
+#define __GUI_WIDGET_GetParentInnerHeight(h)        (__GH(h)->Parent ? __GUI_WIDGET_GetInnerHeight(__GH(h)->Parent) : GUI.LCD.Height)
 
 /**
  * \brief           Check if widget is visible
@@ -597,10 +610,11 @@ uint32_t GUI_WIDGET_AllocTextMemory(GUI_HANDLE_p h, uint32_t size);
 /**
  * \brief           Frees memory previously allocated for text
  * \param[in,out]   h: Widget handle to free memory on
- * \retval          Widget handle
+ * \retval          1: Free was ok
+ * \retval          0: Free was not ok
  * \sa              GUI_WIDGET_AllocTextMemory
  */
-GUI_HANDLE_p GUI_WIDGET_FreeTextMemory(GUI_HANDLE_p h);
+uint8_t GUI_WIDGET_FreeTextMemory(GUI_HANDLE_p h);
 
 /**
  * \brief           Set text to widget
@@ -609,107 +623,166 @@ GUI_HANDLE_p GUI_WIDGET_FreeTextMemory(GUI_HANDLE_p h);
  *                     and each further change of input pointer text will affect to output
  * \param[in,out]   h: Widget handle
  * \param[in]       *text: Pointer to text to set to widget
- * \retval          Widget handle
+ * \retval          1: Text was set ok
+ * \retval          0: Text was not set
  * \sa              GUI_WIDGET_AllocTextMemory
+ * \sa              GUI_WIDGET_FreeTextMemory
  * \sa              GUI_WIDGET_SetFont
+ * \sa              GUI_WIDGET_GetText
+ * \sa              GUI_WIDGET_GetTextCopy
  */
-GUI_HANDLE_p GUI_WIDGET_SetText(GUI_HANDLE_p h, const GUI_Char* text);
+uint8_t GUI_WIDGET_SetText(GUI_HANDLE_p h, const GUI_Char* text);
+
+/**
+ * \brief           Get text from widget
+ * \param[in,out]   h: Widget handle
+ * \retval          Pointer to text from widget
+ * \sa              GUI_WIDGET_SetText
+ * \sa              GUI_WIDGET_GetTextCopy
+ */
+const GUI_Char* GUI_WIDGET_GetText(GUI_HANDLE_p h);
+
+/**
+ * \brief           Get text from widget
+ * \note            Text from widget is copied to input pointer
+ * \param[in,out]   h: Widget handle
+ * \param[out]      *dst: Destination pointer
+ * \param[in]       len: Size of output buffer in units of \ref GUI_Char
+ * \retval          Pointer to text from widget
+ * \sa              GUI_WIDGET_SetText
+ * \sa              GUI_WIDGET_GetText
+ */
+const GUI_Char* GUI_WIDGET_GetTextCopy(GUI_HANDLE_p h, GUI_Char* dst, uint32_t len);
 
 /**
  * \brief           Set widget font for drawing operations
  * \param[in,out]   h: Widget handle
  * \param[in]       *font: Pointer to \ref GUI_FONT_t object for font
- * \retval          Widget handle
+ * \retval          1: Font was set ok
+ * \retval          0: Font was not set
  * \sa              GUI_WIDGET_SetText
  */
-GUI_HANDLE_p GUI_WIDGET_SetFont(GUI_HANDLE_p h, GUI_Const GUI_FONT_t* font);
+uint8_t GUI_WIDGET_SetFont(GUI_HANDLE_p h, GUI_Const GUI_FONT_t* font);
 
 /**
  * \brief           Set widget size in units of pixels
  * \param[in,out]   h: Widget handle
  * \param[in]       width: Width in units of pixels
  * \param[in]       height: Height in units of pixels
- * \retval          Widget handle
+ * \retval          1: Size was set ok
+ * \retval          0: Size was not set
  * \sa              GUI_WIDGET_SetXY
  */
-GUI_HANDLE_p GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t width, GUI_Dim_t height);
+uint8_t GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t width, GUI_Dim_t height);
 
 /**
  * \brief           Set width of widget in units of pixels
  * \param[in,out]   h: Widget handle
  * \param[in]       width: Width in units of pixels
- * \retval          Widget handle
+ * \retval          1: Width was set ok
+ * \retval          0: Width was not set
  * \sa              GUI_WIDGET_SetHeight
  * \sa              GUI_WIDGET_SetWidthPercent
  * \sa              GUI_WIDGET_SetHeightPercent
  */
-GUI_HANDLE_p GUI_WIDGET_SetWidth(GUI_HANDLE_p h, GUI_Dim_t width);
+uint8_t GUI_WIDGET_SetWidth(GUI_HANDLE_p h, GUI_Dim_t width);
 
 /**
  * \brief           Set height of widget in units of pixels
  * \param[in,out]   h: Widget handle
  * \param[in]       height: Height in units of pixels
- * \retval          Widget handle
+ * \retval          1: Height was set ok
+ * \retval          0: Height was not set
  * \sa              GUI_WIDGET_SetWidth
  * \sa              GUI_WIDGET_SetWidthPercent
  * \sa              GUI_WIDGET_SetHeightPercent
  */
-GUI_HANDLE_p GUI_WIDGET_SetHeight(GUI_HANDLE_p h, GUI_Dim_t height);
+uint8_t GUI_WIDGET_SetHeight(GUI_HANDLE_p h, GUI_Dim_t height);
 
 /**
  * \brief           Set width of widget in percentage relative to parent widget
  * \param[in,out]   h: Widget handle
  * \param[in]       width: Width in percentage
- * \retval          Widget handle
+ * \retval          1: Width was set ok
+ * \retval          0: Width was not set
  * \sa              GUI_WIDGET_SetWidth
  * \sa              GUI_WIDGET_SetHeight
  * \sa              GUI_WIDGET_SetHeightPercent
  */
-GUI_HANDLE_p GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width);
+uint8_t GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width);
 
 /**
  * \brief           Set height of widget in percentage relative to parent widget
  * \param[in,out]   h: Widget handle
  * \param[in]       height: Height in percentage
- * \retval          Widget handle
+ * \retval          1: Height was set ok
+ * \retval          0: Height was not set
  * \sa              GUI_WIDGET_SetWidth
  * \sa              GUI_WIDGET_SetHeight
  * \sa              GUI_WIDGET_SetWidthPercent
  */
-GUI_HANDLE_p GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, GUI_Dim_t height);
+uint8_t GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, GUI_Dim_t height);
 
 /**
  * \brief           Set widget position relative to parent object in units of pixels
  * \param[in,out]   h: Widget handle
  * \param[in]       x: X position relative to parent object
  * \param[in]       y: Y position relative to parent object
- * \retval          Widget handle
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
  * \sa              GUI_WIDGET_SetSize
  */
-GUI_HANDLE_p GUI_WIDGET_SetXY(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y);
+uint8_t GUI_WIDGET_SetXY(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y);
 
 /**
  * \brief           Show widget from visible area
  * \param[in,out]   h: Widget handle
- * \retval          Widget handle
+ * \retval          1: Text was shown ok
+ * \retval          0: Text was not shown
  * \sa              GUI_WIDGET_Hide
  */
-GUI_HANDLE_p GUI_WIDGET_Show(GUI_HANDLE_p h);
+uint8_t GUI_WIDGET_Show(GUI_HANDLE_p h);
 
 /**
  * \brief           Hide widget from visible area
  * \param[in,out]   h: Widget handle
- * \retval          Widget handle
+ * \retval          1: Widget was hidden ok
+ * \retval          0: Widget was not hidden
  * \sa              GUI_WIDGET_Show
  */
-GUI_HANDLE_p GUI_WIDGET_Hide(GUI_HANDLE_p h);
+uint8_t GUI_WIDGET_Hide(GUI_HANDLE_p h);
 
 /**
  * \brief           Invalidate widget object and prepare to new redraw
  * \param[in,out]   h: Widget handle
- * \retval          Widget handle
+ * \retval          1: Widget was invalidated ok
+ * \retval          0: Widget was not invalidated
  */
-GUI_HANDLE_p GUI_WIDGET_Invalidate(GUI_HANDLE_p h);
+uint8_t GUI_WIDGET_Invalidate(GUI_HANDLE_p h);
+
+/**
+ * \brief           Set callback function to widget
+ * \param[in,out]   h: Widget handle object
+ * \param[in]       callback: Callback function for widget
+ * \retval          1: Callback was set ok
+ * \retval          1: Callback was not set
+ */
+uint8_t GUI_WIDGET_SetCallback(GUI_HANDLE_p h, GUI_WIDGET_CALLBACK_t callback);
+
+/**
+ * \brief           Widget callback function for all events
+ * \note            Called either from GUI stack or from widget itself to notify user
+ *
+ * \note            Call this function inside custom callback widget function for unhandled events
+ *                     It will automatically call required function according to input widget
+ * \param[in,out]   h: Widget handle where callback occurred
+ * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
+ * \param[in]       *param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
+ * \param[out]      *result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
+ * \retval          1: Command has been processed
+ * \retval          0: Command has not been processed
+ */
+uint8_t GUI_WIDGET_ProcessDefaultCallback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /**
  * \brief           Check if widget is children of parent

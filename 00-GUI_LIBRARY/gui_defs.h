@@ -162,6 +162,8 @@ typedef uint8_t     GUI_Char;               /*!< GUI char data type for all stri
 #define _T(x)       (GUI_Char *)(x)         /*!< Macro to force strings to right format for processing */
 #define GUI_Const   const                   /*!< Macro for constant keyword */
     
+#define GUI_COUNT_OF(x)         (sizeof(x) / sizeof((x)[0]))
+    
 /**
  * \brief           Get container object from member
  * 
@@ -857,6 +859,22 @@ typedef enum GUI_WC_t {
 struct GUI_HANDLE;
 
 /**
+ * \brief           Handle object for GUI widget
+ */
+typedef void* GUI_HANDLE_p;
+
+/**
+ * \brief       Callback function for widget
+ * 
+ *              Handles everything related to widget. 
+ *                  - Draw widget
+ *                  - Touch handling
+ *                  - Key presses
+ *                  - Value change, selection change
+ */
+typedef uint8_t (*GUI_WIDGET_CALLBACK_t) (GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
+
+/**
  * \brief           Structure for each widget type
  */
 typedef struct GUI_WIDGET_t {
@@ -864,15 +882,9 @@ typedef struct GUI_WIDGET_t {
     uint16_t Size;                          /*!< Bytes required for widget memory allocation */
     uint8_t Flags;                          /*!< List of flags for widget setup. This field can use \ref GUI_WIDGETS_CORE_FLAGS flags */
     
-    /**
-     * \brief       callback function for widget
-     * 
-     *              Handles everything related to widget. 
-     *                  - Draw widget
-     *                  - Touch handling
-     *                  - Key presses
-     */
-    GUI_Byte (*Callback)    (struct GUI_HANDLE* h, GUI_WC_t cmd, void* param, void* result);    /*!< Pointer to control function, returns 1 if command handled or 0 if not */
+    GUI_WIDGET_CALLBACK_t Callback;         /*!< Pointer to control function, returns 1 if command handled or 0 if not */
+    const GUI_Color_t* Colors;              /*!< Pointer to list of colors as default values for widget */
+    uint8_t ColorsCount;                    /*!< Number of colors used in widget */
 } GUI_WIDGET_t;
 
 /**
@@ -882,7 +894,7 @@ typedef struct GUI_HANDLE {
     GUI_LinkedList_t List;                  /*!< Linked list entry, must always be on top for casting */
     GUI_ID_t Id;                            /*!< Widget ID number */
     const GUI_WIDGET_t* Widget;             /*!< Widget parameters with callback functions */
-    uint8_t (*Callback) (struct GUI_HANDLE* h, GUI_WC_t cmd, void* param, void* result);    /*!< Callback function for widget specific */
+    GUI_WIDGET_CALLBACK_t Callback;         /*!< Callback function prototype */
     struct GUI_HANDLE* Parent;              /*!< Pointer to parent widget */
     GUI_Dim_t X;                            /*!< Object X position relative to parent window in units of pixels */
     GUI_Dim_t Y;                            /*!< Object Y position relative to parent window in units of pixels */
@@ -896,6 +908,7 @@ typedef struct GUI_HANDLE {
     uint32_t TextMemSize;                   /*!< Number of bytes for text when dynamically allocated */
     uint32_t TextCursor;                    /*!< Text cursor position */
     GUI_TIMER_t* Timer;                     /*!< Software timer pointer */
+    GUI_Color_t* Colors;                    /*!< Pointer to allocated color memory when used */
 } GUI_HANDLE;
 
 /**
@@ -905,11 +918,6 @@ typedef struct GUI_HANDLE_ROOT {
     GUI_HANDLE Handle;                      /*!< Root widget structure, must be first in structure */
     GUI_LinkedListRoot_t RootList;          /*!< Linked list root structure */
 } GUI_HANDLE_ROOT_t;
-
-/**
- * \brief           Handle object for GUI widget
- */
-typedef GUI_HANDLE* GUI_HANDLE_p;
 
 /**
  * \}

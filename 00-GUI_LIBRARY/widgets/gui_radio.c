@@ -39,16 +39,28 @@
 /******************************************************************************/
 #define __GR(x)             ((GUI_RADIO_t *)(x))
 
+static
+uint8_t GUI_RADIO_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+
 /******************************************************************************/
 /******************************************************************************/
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
+const static GUI_Color_t Colors[] = {
+    GUI_COLOR_WHITE,                                /*!< Default background color */
+    GUI_COLOR_DARKGRAY,                             /*!< Default freground color */
+    GUI_COLOR_BLACK,                                /*!< Default border color */
+    GUI_COLOR_GRAY,                                 /*!< Default background color when disabled */
+};
+
 const static GUI_WIDGET_t Widget = {
     .Name = _T("Radio"),                            /*!< Widget name */
     .Size = sizeof(GUI_RADIO_t),                    /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = GUI_RADIO_Callback                  /*!< Callback function */
+    .Callback = GUI_RADIO_Callback,                 /*!< Callback function */
+    .Colors = Colors,                               /*!< List of default colors */
+    .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
 };
 
 /******************************************************************************/
@@ -67,8 +79,8 @@ void __GUI_RADIO_SetActive(GUI_HANDLE_p h) {
      * Find radio widgets on the same page
      * and with the same group ID as widget to be set as active
      */
-    for (handle = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)h->Parent, NULL); handle; handle = __GUI_LINKEDLIST_WidgetGetNext(NULL, handle)) {
-        if (handle != h && handle->Widget == &Widget && __GR(handle)->GroupId == __GR(h)->GroupId) {    /* Check if widget is radio box and group is the same as clicked widget */
+    for (handle = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)__GH(h)->Parent, NULL); handle; handle = __GUI_LINKEDLIST_WidgetGetNext(NULL, handle)) {
+        if (handle != h && __GH(handle)->Widget == &Widget && __GR(handle)->GroupId == __GR(h)->GroupId) {  /* Check if widget is radio box and group is the same as clicked widget */
             __GR(handle)->SelectedValue = __GR(h)->Value;   /* Set selected value for widget */
             if (__GR(handle)->Flags & GUI_FLAG_RADIO_CHECKED) { /* Check if widget active */
                 __GR(handle)->Flags &= ~GUI_FLAG_RADIO_CHECKED; /* Clear flag */
@@ -86,8 +98,9 @@ void __GUI_RADIO_SetActive(GUI_HANDLE_p h) {
 }
 
 #define c                   ((GUI_RADIO_t *)(h))
+static
 uint8_t GUI_RADIO_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
@@ -105,20 +118,20 @@ uint8_t GUI_RADIO_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
             sy = y + (height - size) / 2;
             
             if (__GR(h)->Flags & GUI_FLAG_RADIO_DISABLED) {
-                c1 = GUI_COLOR_GRAY;
+                c1 = __GUI_WIDGET_GetColor(h, GUI_RADIO_COLOR_DISABLED_BG);
             } else {
-                c1 = GUI_COLOR_WHITE;
+                c1 = __GUI_WIDGET_GetColor(h, GUI_RADIO_COLOR_BG);
             }
             
             GUI_DRAW_FilledCircle(disp, sx + size / 2, sy + size / 2, size / 2, c1);
-            GUI_DRAW_Circle(disp, sx + size / 2, sy + size / 2, size / 2, GUI_COLOR_BLACK);
+            GUI_DRAW_Circle(disp, sx + size / 2, sy + size / 2, size / 2, __GUI_WIDGET_GetColor(h, GUI_RADIO_COLOR_BORDER));
             
             if (GUI_WIDGET_IsFocused(h)) {          /* When in focus */
-                GUI_DRAW_Circle(disp, sx + size / 2, sy + size / 2, size / 2 - 2, GUI_COLOR_GRAY);
+                GUI_DRAW_Circle(disp, sx + size / 2, sy + size / 2, size / 2 - 2, __GUI_WIDGET_GetColor(h, GUI_RADIO_COLOR_FG));
             }
 
             if (__GR(h)->Flags & GUI_FLAG_RADIO_CHECKED) {
-                GUI_DRAW_FilledCircle(disp, sx + size / 2, sy + size / 2, size / 2 - 5, GUI_COLOR_DARKGRAY);
+                GUI_DRAW_FilledCircle(disp, sx + size / 2, sy + size / 2, size / 2 - 5, __GUI_WIDGET_GetColor(h, GUI_RADIO_COLOR_FG));
             }
             
             /* Draw text if possible */
@@ -132,8 +145,8 @@ uint8_t GUI_RADIO_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
                 f.Height = height - 2;
                 f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.Color1Width = f.Width;
-                f.Color1 = GUI_COLOR_BLACK;
-                GUI_DRAW_WriteText(disp, h->Font, h->Text, &f);
+                f.Color1 = __GUI_WIDGET_GetColor(h, GUI_RADIO_COLOR_FG);
+                GUI_DRAW_WriteText(disp, __GH(h)->Font, __GH(h)->Text, &f);
             }
             
             return 1;
@@ -179,8 +192,20 @@ GUI_HANDLE_p GUI_RADIO_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
     return (GUI_HANDLE_p)ptr;
 }
 
+uint8_t GUI_RADIO_SetColor(GUI_HANDLE_p h, GUI_RADIO_COLOR_t index, GUI_Color_t color) {
+    uint8_t ret;
+    
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+
+    ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set colors */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
+}
+
 uint8_t GUI_RADIO_SetGroup(GUI_HANDLE_p h, uint8_t groupId) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GR(h)->GroupId != groupId) {
@@ -192,8 +217,8 @@ uint8_t GUI_RADIO_SetGroup(GUI_HANDLE_p h, uint8_t groupId) {
          *
          * This is to set selected value to new radio with new group ID
          */
-        for (handle = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)h->Parent, NULL); handle; handle = __GUI_LINKEDLIST_WidgetGetNext(NULL, handle)) {
-            if (handle != h && handle->Widget == &Widget && __GR(handle)->GroupId == groupId) { /* Check if widget is radio box and group is the same as input group */
+        for (handle = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)__GH(h)->Parent, NULL); handle; handle = __GUI_LINKEDLIST_WidgetGetNext(NULL, handle)) {
+            if (handle != h && __GH(handle)->Widget == &Widget && __GR(handle)->GroupId == groupId) {   /* Check if widget is radio box and group is the same as input group */
                 __GR(h)->SelectedValue = __GR(handle)->SelectedValue;   /* Set selected value for widget */
                 break;          
             }
@@ -208,7 +233,7 @@ uint8_t GUI_RADIO_SetGroup(GUI_HANDLE_p h, uint8_t groupId) {
 }
 
 uint8_t GUI_RADIO_SetValue(GUI_HANDLE_p h, uint32_t value) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GR(h)->Value != value) {
@@ -225,7 +250,7 @@ uint8_t GUI_RADIO_SetValue(GUI_HANDLE_p h, uint32_t value) {
 uint32_t GUI_RADIO_GetValue(GUI_HANDLE_p h) {
     uint32_t val;
     
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     val = __GR(h)->Value;
@@ -237,7 +262,7 @@ uint32_t GUI_RADIO_GetValue(GUI_HANDLE_p h) {
 uint32_t GUI_RADIO_GetSelectedValue(GUI_HANDLE_p h) {
     uint32_t val;
     
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     val = __GR(h)->SelectedValue;

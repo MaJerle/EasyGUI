@@ -66,8 +66,6 @@ typedef struct GUI_WINDOW_t {
     
     uint32_t Number;                        /*!< Window number */
     
-    GUI_Color_t Color[1];                   /*!< List of colors */
-    
     GUI_Dim_t BorderRadius;                 /*!< Radius in units of pixels for children windows */
     GUI_Dim_t BorderWidth;                  /*!< Border width */
 } GUI_WINDOW_t;
@@ -133,20 +131,6 @@ GUI_HANDLE_p GUI_WINDOW_CreateChild(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI
  * \retval          0: Color was not set
  */
 uint8_t GUI_WINDOW_SetColor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color);
-
-/**
- * \brief           Widget callback function for all event
- * \note            Called either from GUI stack or from widget itself to notify user
- *
- * \note            Can be overwritten by user when required to handle specific events
- * \param[in,out]   h: Widget handle where callback occurred
- * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
- * \param[in]       *param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
- * \param[out]      *result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
- * \retval          1: Command has been processed
- * \retval          0: Command has not been processed
- */
-uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
  
 /**
  * \}

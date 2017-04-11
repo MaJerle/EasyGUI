@@ -48,6 +48,16 @@ extern "C" {
  * \{
  */
     
+/**
+ * \brief           List of radio colors
+ */
+typedef enum {
+    GUI_RADIO_COLOR_BG = 0x00,              /*!< Background color index */
+    GUI_RADIO_COLOR_FG,                     /*!< Foreground color index */
+    GUI_RADIO_COLOR_BORDER,                 /*!< Border color index */
+    GUI_RADIO_COLOR_DISABLED_BG,            /*!< Background color index when disabled */
+} GUI_RADIO_COLOR_t;
+    
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)
     
 #define GUI_FLAG_RADIO_CHECKED              0x01    /*!< Indicates radio is currently checked */
@@ -82,6 +92,16 @@ typedef struct GUI_RADIO_t {
 GUI_HANDLE_p GUI_RADIO_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags);
 
 /**
+ * \brief           Set color to specific part of widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Color index. This parameter can be a value of \ref GUI_RADIO_COLOR_t enumeration
+ * \param[in]       color: Color value
+ * \retval          1: Color was set ok
+ * \retval          0: Color vas not set
+ */
+uint8_t GUI_RADIO_SetColor(GUI_HANDLE_p h, GUI_RADIO_COLOR_t index, GUI_Color_t color);
+
+/**
  * \brief           Set radio group for widget
  * \note            Radio widgets with the same group must be on the same parent widget
  * \param[in,out]   h: Widget handle
@@ -114,20 +134,6 @@ uint32_t GUI_RADIO_GetValue(GUI_HANDLE_p h);
  * \retval          Widget selected value
  */
 uint32_t GUI_RADIO_GetSelectedValue(GUI_HANDLE_p h);
-
-/**
- * \brief           Widget callback function for all event
- * \note            Called either from GUI stack or from widget itself to notify user
- *
- * \note            Can be overwritten by user when required to handle specific events
- * \param[in,out]   h: Widget handle where callback occurred
- * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
- * \param[in]       *param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
- * \param[out]      *result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
- * \retval          1: Command has been processed
- * \retval          0: Command has not been processed
- */
-uint8_t GUI_RADIO_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
     
 /**
  * \}

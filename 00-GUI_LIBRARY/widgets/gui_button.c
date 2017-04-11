@@ -39,16 +39,27 @@
 /******************************************************************************/
 #define __GB(x)             ((GUI_BUTTON_t *)(x))
 
+static
+uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+    
 /******************************************************************************/
 /******************************************************************************/
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
+static const GUI_Color_t Colors[] = {
+    GUI_COLOR_GRAY,                                 /*!< Default background color index */
+    GUI_COLOR_BLACK,                                /*!< Default foreground color index */
+    GUI_COLOR_GRAY,                                 /*!< Default border color index in array */
+};
+
 const static GUI_WIDGET_t Widget = {
     .Name = _T("Button"),                           /*!< Widget name */
     .Size = sizeof(GUI_BUTTON_t),                   /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = GUI_BUTTON_Callback                 /*!< Callback function */
+    .Callback = GUI_BUTTON_Callback,                /*!< Callback function */
+    .Colors = Colors,                               /*!< List of default colors */
+    .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
 };
 
 /******************************************************************************/
@@ -57,8 +68,9 @@ const static GUI_WIDGET_t Widget = {
 /******************************************************************************/
 /******************************************************************************/
 #define b                   ((GUI_BUTTON_t *)(h))
+static
 uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
@@ -70,18 +82,18 @@ uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
             width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
             height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
             
-            if (h->Flags & GUI_FLAG_ACTIVE) {       /* Set colors for button */
-                c1 = b->Color[GUI_BUTTON_COLOR_FG];
-                c2 = b->Color[GUI_BUTTON_COLOR_BG];
+            if (__GH(h)->Flags & GUI_FLAG_ACTIVE) { /* Set colors for button */
+                c1 = __GUI_WIDGET_GetColor(h, GUI_BUTTON_COLOR_FG);
+                c2 = __GUI_WIDGET_GetColor(h, GUI_BUTTON_COLOR_BG);
             } else {
-                c2 = b->Color[GUI_BUTTON_COLOR_FG];
-                c1 = b->Color[GUI_BUTTON_COLOR_BG];
+                c2 = __GUI_WIDGET_GetColor(h, GUI_BUTTON_COLOR_FG);
+                c1 = __GUI_WIDGET_GetColor(h, GUI_BUTTON_COLOR_BG);
             }
             
             /* Draw actual button structure */
-            if (h->Flags & GUI_FLAG_3D) {
+            if (__GH(h)->Flags & GUI_FLAG_3D) {
                 GUI_DRAW_FilledRectangle(disp, x, y, width, height, c1);
-                GUI_DRAW_Rectangle3D(disp, x, y, width, height, h->Flags & GUI_FLAG_ACTIVE ? GUI_DRAW_3D_State_Lowered : GUI_DRAW_3D_State_Raised);
+                GUI_DRAW_Rectangle3D(disp, x, y, width, height, __GH(h)->Flags & GUI_FLAG_ACTIVE ? GUI_DRAW_3D_State_Lowered : GUI_DRAW_3D_State_Raised);
             } else {
                 GUI_DRAW_FilledRoundedRectangle(disp, x, y, width, height, b->BorderRadius, c1);
                 GUI_DRAW_RoundedRectangle(disp, x, y, width, height, b->BorderRadius, c2);
@@ -99,7 +111,7 @@ uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
                 f.Align = GUI_HALIGN_CENTER | GUI_VALIGN_CENTER;
                 f.Color1Width = f.Width;
                 f.Color1 = c2;
-                GUI_DRAW_WriteText(disp, h->Font, h->Text, &f);
+                GUI_DRAW_WriteText(disp, __GH(h)->Font, __GH(h)->Text, &f);
             }
             return 1;
         }
@@ -139,33 +151,26 @@ GUI_HANDLE_p GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
     __GUI_ENTER();                                  /* Enter GUI */
     
     ptr = (GUI_BUTTON_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, flags); /* Allocate memory for basic widget */
-    if (ptr) {        
-        /* Color setup */
-        ptr->Color[GUI_BUTTON_COLOR_BG] = GUI_COLOR_GRAY;   /* Set background color */
-        ptr->Color[GUI_BUTTON_COLOR_FG] = GUI_COLOR_BLACK;  /* Set foreground color */
-        
-        ptr->BorderRadius = 8;                      /* Set border radius */
-    }
+
     __GUI_LEAVE();                                  /* Leave GUI */
     
     return (GUI_HANDLE_p)ptr;
 }
 
 uint8_t GUI_BUTTON_SetColor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    uint8_t ret;
+    
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (__GB(h)->Color[index] != color) {           /* Any parameter changed */
-        __GB(h)->Color[index] = color;              /* Set parameter */
-        __GUI_WIDGET_Invalidate(h);                 /* Redraw object */
-    }
+    ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set color */
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return 1;
+    return ret;
 }
 
 uint8_t GUI_BUTTON_SetBorderRadius(GUI_HANDLE_p h, GUI_Dim_t size) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (__GB(h)->BorderRadius != size) {            /* Any dimensions changed */

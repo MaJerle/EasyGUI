@@ -39,16 +39,30 @@
 /******************************************************************************/
 #define __GL(x)             ((GUI_LISTBOX_t *)(x))
 
+static
+uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+
 /******************************************************************************/
 /******************************************************************************/
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
+const static GUI_Color_t Colors[] = {
+    GUI_COLOR_WIN_BG,
+    GUI_COLOR_WIN_TEXT,
+    GUI_COLOR_WIN_SEL_FOC,
+    GUI_COLOR_WIN_SEL_NOFOC,
+    GUI_COLOR_WIN_SEL_FOC_BG,
+    GUI_COLOR_WIN_SEL_NOFOC_BG
+};
+
 const static GUI_WIDGET_t Widget = {
     .Name = _T("LISTBOX"),                          /*!< Widget name */
     .Size = sizeof(GUI_LISTBOX_t),                  /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = GUI_LISTBOX_Callback                /*!< Callback function */
+    .Callback = GUI_LISTBOX_Callback,               /*!< Callback function */
+    .Colors = Colors,
+    .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Define number of colors */
 };
 
 /******************************************************************************/
@@ -80,12 +94,22 @@ GUI_LISTBOX_ITEM_t* __GetListboxItem(GUI_HANDLE_p h, uint16_t index) {
     return item;
 }
 
+/* Get item height in listbox */
+static
+uint16_t __ItemHeight(GUI_HANDLE_p h, uint16_t* offset) {
+    uint16_t size = (float)__GH(h)->Font->Size * 1.3f;
+    if (offset) {                                   /* Calculate top offset */
+        *offset = (size - __GH(h)->Font->Size) >> 1;
+    }
+    return size;                                    /* Return height for element */
+}
+
 /* Get number of entries maximal on one page */
 static
 int16_t __NumberOfEntriesPerPage(GUI_HANDLE_p h) {
     int16_t res = 0;
-    if (h->Font) {                                  /* Font is responsible for this setup */
-        res = __GUI_WIDGET_GetHeight(h) / h->Font->Size;
+    if (__GH(h)->Font) {                            /* Font is responsible for this setup */
+        res = __GUI_WIDGET_GetHeight(h) / __ItemHeight(h, NULL);
     }
     return res;
 }
@@ -118,6 +142,26 @@ void __SetSelection(GUI_HANDLE_p h, int16_t selected) {
         o->Selected = selected;
         __GUI_WIDGET_Callback(h, GUI_WC_SelectionChanged, NULL, NULL);  /* Notify about selection changed */
     }                         
+}
+
+/* Increase or decrease selection */
+static
+void __IncSelection(GUI_HANDLE_p h, int16_t dir) {
+    if (dir < 0) {                                  /* Slide elements up */
+        if ((o->Selected + dir) < 0) {
+            __SetSelection(h, 0);
+        } else {
+            __SetSelection(h, o->Selected + dir);
+        }
+        __GUI_WIDGET_Invalidate(h);
+    } else if (dir > 0) {
+        if ((o->Selected + dir) > (o->Count - 1)) { /* Slide elements down */
+            __SetSelection(h, o->Count - 1);
+        } else {
+            __SetSelection(h, o->Selected + dir);
+        }
+        __GUI_WIDGET_Invalidate(h);
+    }
 }
 
 /* Check values */
@@ -170,6 +214,7 @@ uint8_t __DeleteListboxItem(GUI_HANDLE_p h, uint16_t index) {
     return 0;
 }
 
+static
 uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
 #if GUI_USE_TOUCH
     static GUI_iDim_t tY;
@@ -178,14 +223,14 @@ uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
-            GUI_Dim_t x, y, width, height, sliderW = 0;
+            GUI_Dim_t x, y, width, height, sliderW = 0, sliderH = 0;
             
             x = __GUI_WIDGET_GetAbsoluteX(h);       /* Get absolute X coordinate */
             y = __GUI_WIDGET_GetAbsoluteY(h);       /* Get absolute Y coordinate */
             width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
             height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
             
-            GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, width - 2, height - 2, GUI_COLOR_WHITE);
+            GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, width - 2, height - 2, __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_BG));
             GUI_DRAW_Rectangle(disp, x, y, width, height, GUI_COLOR_GRAY);
             
             /* Draw side scrollbar */
@@ -194,43 +239,55 @@ uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                 int16_t mPP;
                 
                 sliderW = o->SliderWidth;
+                sliderH = sliderW * 2 / 3;
+                
+                GUI_DRAW_FilledRectangle(disp, x + width - sliderW + 1, y + sliderH - 1, sliderW - 2, height - 2 * (sliderH - 2), GUI_COLOR_WIN_MIDDLEGRAY);
+                
+                /* Separator line */
                 GUI_DRAW_VLine(disp, x + width - sliderW, y, height, GUI_COLOR_GRAY);
-                GUI_DRAW_Rectangle3D(disp, x + width - sliderW + 1, y + 1, sliderW - 2, sliderW - 2, GUI_DRAW_3D_State_Raised);
-                GUI_DRAW_FilledTriangle(disp, x + width - sliderW + 5, y + sliderW - 7, x + width - sliderW / 2 - 1, y + 6, x + width - 7, y + sliderW - 7, GUI_COLOR_BLACK);
+                /* Top box */
+                GUI_DRAW_FilledRectangle(disp, x + width - sliderW + 1, y + 1, sliderW - 2, sliderH - 2, GUI_COLOR_WIN_LIGHTGRAY);
+                GUI_DRAW_Rectangle3D(disp, x + width - sliderW + 1, y + 1, sliderW - 2, sliderH - 2, GUI_DRAW_3D_State_Raised);
+                GUI_DRAW_FilledTriangle(disp, x + width - sliderW + 5, y + sliderH - 7, x + width - sliderW / 2 - 1, y + 6, x + width - 7, y + sliderH - 7, GUI_COLOR_BLACK);
+                /* Bottom box */
+                GUI_DRAW_FilledRectangle(disp, x + width - sliderW + 1, y + height - sliderH + 1, sliderW - 2, sliderH - 2, GUI_COLOR_WIN_LIGHTGRAY);
+                GUI_DRAW_Rectangle3D(disp, x + width - sliderW + 1, y + height - sliderH + 1, sliderW - 2, sliderH - 2, GUI_DRAW_3D_State_Raised);
+                GUI_DRAW_FilledTriangle(disp, x + width - sliderW + 5, y + height - sliderH + 7, x + width - sliderW / 2 - 1, y + height - 7, x + width - 7, y + height - sliderH + 7, GUI_COLOR_BLACK);
                 
-                GUI_DRAW_Rectangle3D(disp, x + width - sliderW + 1, y + height - sliderW + 1, sliderW - 2, sliderW - 2, GUI_DRAW_3D_State_Raised);
-                GUI_DRAW_FilledTriangle(disp, x + width - sliderW + 5, y + height - sliderW + 7, x + width - sliderW / 2 - 1, y + height - 7, x + width - 7, y + height - sliderW + 7, 
-                GUI_COLOR_BLACK);
-                
-                midHeight = (height - 2U * sliderW + 2);    /* Calculate middle rectangle part */
+                midHeight = (height - 2U * sliderH + 2);    /* Calculate middle rectangle part */
                 mPP = __NumberOfEntriesPerPage(h);  /* Get number of entries visible at a time */
                 
                 if (mPP < o->Count) {
                     /* Draw rectangle on the middle */
                     rectHeight = midHeight * mPP / o->Count;    /* Entire area for drawing middle part */
-                    if (rectHeight < 5) {
-                        rectHeight = 5;
+                    if (rectHeight < 6) {
+                        rectHeight = 6;
                     }
                     yOffset = (midHeight - rectHeight) * o->VisibleStartIndex / (o->Count - mPP);
                 } else {
                     rectHeight = midHeight;
                 }
-                GUI_DRAW_FilledRectangle(disp, x + width - sliderW + 2, y + sliderW + yOffset, sliderW - 4, rectHeight - 2, GUI_COLOR_BLACK);
+                GUI_DRAW_FilledRectangle(disp, x + width - sliderW + 2, y + sliderH + yOffset - 1, sliderW - 4, rectHeight, GUI_COLOR_WIN_LIGHTGRAY);
+                GUI_DRAW_Rectangle3D(disp, x + width - sliderW + 1, y + sliderH + yOffset - 1, sliderW - 2, rectHeight, GUI_DRAW_3D_State_Raised);
             }
             
             /* Draw text if possible */
-            if (h->Font && __GUI_LINKEDLIST_HasEntries(&__GL(h)->Root)) {   /* Is first set? */
+            if (__GH(h)->Font && __GUI_LINKEDLIST_HasEntries(&__GL(h)->Root)) { /* Is first set? */
                 GUI_DRAW_FONT_t f;
                 GUI_LISTBOX_ITEM_t* item;
+                uint16_t yOffset;
+                uint16_t itemHeight;                /* Get item height */
                 uint16_t index = 0;                 /* Start index */
+                
+                itemHeight = __ItemHeight(h, &yOffset); /* Get item height and Y offset */
                 
                 GUI_DRAW_FONT_Init(&f);             /* Init structure */
                 
                 f.X = x + 2;
                 f.Y = y + 1;
                 f.Width = width - sliderW - 1;
-                f.Height = height - 2;
-                f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_TOP;
+                f.Height = itemHeight;
+                f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.Color1Width = f.Width;
                 
                 for (item = (GUI_LISTBOX_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&o->Root, NULL); 
@@ -239,17 +296,16 @@ uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                 
                 while (height && item) {            /* Try to process all strings */                    
                     if (index == __GL(h)->Selected) {
-                        GUI_DRAW_FilledRectangle(disp, x + 1, f.Y, f.Width, __GUI_MIN(f.Height, h->Font->Size), GUI_WIDGET_IsFocused(h) ? 0xFF97EEFF : 0xFFDDDDDD);
-                        f.Color1 = GUI_COLOR_BLACK;
+                        GUI_DRAW_FilledRectangle(disp, x + 1, f.Y, f.Width, __GUI_MIN(f.Height, itemHeight), GUI_WIDGET_IsFocused(h) ? __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_FOC_BG) : __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_NOFOC_BG));
+                        f.Color1 = GUI_WIDGET_IsFocused(h) ? __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_FOC) : __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_NOFOC);
                     } else {
-                        f.Color1 = GUI_COLOR_BLACK;
+                        f.Color1 = __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_TEXT);
                     }
-                    GUI_DRAW_WriteText(disp, h->Font, item->Text, &f);
-                    if (f.Height < h->Font->Size) {
+                    GUI_DRAW_WriteText(disp, __GH(h)->Font, item->Text, &f);
+                    if (f.Height < itemHeight) {
                         break;
                     } else {
-                        f.Height -= h->Font->Size;
-                        f.Y += h->Font->Size;
+                        f.Y += itemHeight;
                     }
                     item = (GUI_LISTBOX_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(NULL, &item->List);
                     index++;
@@ -268,8 +324,8 @@ uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
         }
         case GUI_WC_TouchMove: {
             __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
-            if (h->Font) {
-                GUI_Dim_t height = h->Font->Size;    /* Get element height */
+            if (__GH(h)->Font) {
+                GUI_Dim_t height = __ItemHeight(h, NULL);   /* Get element height */
                 GUI_iDim_t diff = tY - ts->RelY[0];
                 
                 if (__GUI_ABS(diff) > height) {
@@ -296,8 +352,8 @@ uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                     handled = 1;
                 }
             }
-            if (!handled && h->Font) {
-                uint16_t height = h->Font->Size;    /* Get element height */
+            if (!handled && __GH(h)->Font) {
+                uint16_t height = __ItemHeight(h, NULL);    /* Get element height */
                 uint16_t tmpSelected;
                 
                 tmpSelected = ts->RelY[0] / height; /* Get temporary selected index */
@@ -305,6 +361,15 @@ uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                     __SetSelection(h, o->VisibleStartIndex + tmpSelected);
                     __GUI_WIDGET_Invalidate(h);     /* Choose new selection */
                 }
+            }
+            return 1;
+        }
+        case GUI_WC_KeyPress: {
+            __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;
+            if (kb->KB.Keys[0] == GUI_KEY_DOWN) {   /* On pressed down */
+                __IncSelection(h, 1);               /* Increase selection */
+            } else if (kb->KB.Keys[0] == GUI_KEY_UP) {
+                __IncSelection(h, -1);              /* Decrease selection */
             }
             return 1;
         }
@@ -336,11 +401,23 @@ GUI_HANDLE_p GUI_LISTBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim
     return (GUI_HANDLE_p)ptr;
 }
 
+uint8_t GUI_LISTBOX_SetColor(GUI_HANDLE_p h, GUI_LISTBOX_COLOR_t index, GUI_Color_t color) {
+    uint8_t ret = 0;
+    
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set new color */
+
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
+}
+
 uint8_t GUI_LISTBOX_AddString(GUI_HANDLE_p h, const GUI_Char* text) {
     GUI_LISTBOX_ITEM_t* item;
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     item = (GUI_LISTBOX_ITEM_t *)__GUI_MEMALLOC(sizeof(*item)); /* Allocate memory for entry */
@@ -363,7 +440,7 @@ uint8_t GUI_LISTBOX_SetString(GUI_HANDLE_p h, uint16_t index, const GUI_Char* te
     GUI_LISTBOX_ITEM_t* item;
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     item = __GetListboxItem(h, index);              /* Get list item from handle */
@@ -379,7 +456,7 @@ uint8_t GUI_LISTBOX_SetString(GUI_HANDLE_p h, uint16_t index, const GUI_Char* te
 uint8_t GUI_LISTBOX_DeleteFirstString(GUI_HANDLE_p h) {
     uint8_t ret;
     
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     ret = __DeleteListboxItem(h, 0);                /* Delete first item */
@@ -391,7 +468,7 @@ uint8_t GUI_LISTBOX_DeleteFirstString(GUI_HANDLE_p h) {
 uint8_t GUI_LISTBOX_DeleteLastString(GUI_HANDLE_p h) {
     uint8_t ret;
     
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     ret = __DeleteListboxItem(h, __GL(h)->Count - 1);   /* Delete last item */
@@ -403,7 +480,7 @@ uint8_t GUI_LISTBOX_DeleteLastString(GUI_HANDLE_p h) {
 uint8_t GUI_LISTBOX_DeleteString(GUI_HANDLE_p h, uint16_t index) {
     uint8_t ret;
     
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     ret = __DeleteListboxItem(h, index);            /* Delete item */
@@ -413,7 +490,7 @@ uint8_t GUI_LISTBOX_DeleteString(GUI_HANDLE_p h, uint16_t index) {
 }
 
 uint8_t GUI_LISTBOX_SetSliderAuto(GUI_HANDLE_p h, uint8_t autoMode) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (autoMode && !(__GL(h)->Flags & GUI_FLAG_LISTBOX_SLIDER_AUTO)) {
@@ -431,7 +508,7 @@ uint8_t GUI_LISTBOX_SetSliderAuto(GUI_HANDLE_p h, uint8_t autoMode) {
 uint8_t GUI_LISTBOX_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (!(__GL(h)->Flags & GUI_FLAG_LISTBOX_SLIDER_AUTO)) {
@@ -453,7 +530,7 @@ uint8_t GUI_LISTBOX_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible) {
 uint8_t GUI_LISTBOX_Scroll(GUI_HANDLE_p h, int16_t step) {
     volatile int16_t start;
     
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     start = __GL(h)->VisibleStartIndex;
@@ -472,7 +549,7 @@ uint8_t GUI_LISTBOX_Scroll(GUI_HANDLE_p h, int16_t step) {
 }
 
 uint8_t GUI_LISTBOX_SetSelection(GUI_HANDLE_p h, int16_t selection) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     __SetSelection(h, selection);                   /* Set selection */
@@ -486,7 +563,7 @@ uint8_t GUI_LISTBOX_SetSelection(GUI_HANDLE_p h, int16_t selection) {
 int16_t GUI_LISTBOX_GetSelection(GUI_HANDLE_p h) {
     int16_t selection;
     
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     selection = __GL(h)->Selected;                  /* Read selection */

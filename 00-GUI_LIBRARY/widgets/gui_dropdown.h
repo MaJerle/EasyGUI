@@ -1,10 +1,10 @@
 /**
  * \author  Tilen Majerle <tilen@majerle.eu>
- * \brief   GUI button widget
- *	
+ * \brief   GUI dropdown widget
+ *  
 \verbatim
    ----------------------------------------------------------------------
-    Copyright (c) 2017 Tilen Majerle
+    Copyright (c) 2016 Tilen Majerle
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -28,50 +28,71 @@
    ----------------------------------------------------------------------
 \endverbatim
  */
-#ifndef GUI_BUTTON_H
-#define GUI_BUTTON_H
+#ifndef GUI_DROPDOWN_H
+#define GUI_DROPDOWN_H
 
 /* C++ detection */
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
+
 /**
  * \addtogroup      GUI_WIDGETS
  * \{
  */
-    
 #include "gui_widget.h"
 
 /**
- * \defgroup        GUI_BUTTON Button
- * \brief           Button which can be pressed
+ * \defgroup        GUI_DROPDOWN Dropdown
+ * \brief           Dropdown widget
  * \{
  */
 
+    
 /**
- * \brief           Button color list enumeration
+ * \brief           List of dropdown colors
  */
-typedef enum GUI_BUTTON_COLOR_t {
-    GUI_BUTTON_COLOR_BG = 0x00,             /*!< Background color index */
-    GUI_BUTTON_COLOR_FG,                    /*!< Foreground color index */
-    GUI_BUTTON_COLOR_BORDER,                /*!< Border color index in array */
-} GUI_BUTTON_COLOR_t;
+typedef enum GUI_DROPDOWN_COLOR_t {
+    GUI_DROPDOWN_COLOR_BG = 0x00,           /*!< Background color */
+    GUI_DROPDOWN_COLOR_TEXT,                /*!< Default text color */
+    GUI_DROPDOWN_COLOR_SEL_FOC,             /*!< Text color of selected item when widget is in focus */
+    GUI_DROPDOWN_COLOR_SEL_NOFOC,           /*!< Text color of selected item when widget is not in focus */
+    GUI_DROPDOWN_COLOR_SEL_FOC_BG,          /*!< Background color of selected item when widget is in focus */
+    GUI_DROPDOWN_COLOR_SEL_NOFOC_BG,        /*!< Background color of selected item when widget is not in focus */
+} GUI_DROPDOWN_COLOR_t;
 
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)
+    
+#define GUI_FLAG_DROPDOWN_SLIDER_ON     0x01/*!< Slider is currently active */
+#define GUI_FLAG_DROPDOWN_SLIDER_AUTO   0x02/*!< Show right slider automatically when required, otherwise, manual mode is used */
+
 /**
- * \brief           GUI button structure
+ * \brief           Dropdown string item object
  */
-typedef struct GUI_BUTTON_t {
+typedef struct GUI_DROPDOWN_ITEM_t {
+    GUI_LinkedList_t List;                  /*!< Linked list entry, must be first on list */
+    GUI_Char* Text;                         /*!< Text entry */
+} GUI_DROPDOWN_ITEM_t;
+    
+/**
+ * \brief           Dropdown object structure
+ */
+typedef struct GUI_DROPDOWN_t {
     GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
     
-    GUI_Dim_t BorderWidth;                  /*!< Border width */
-    GUI_Dim_t BorderRadius;                 /*!< Border radius */
-} GUI_BUTTON_t;
+    int16_t Count;                          /*!< Current number of strings attached to this widget */
+    int16_t Selected;                       /*!< Selected text index */
+    int16_t VisibleStartIndex;              /*!< Index in array of string on top of visible area of widget */
+    
+    GUI_LinkedListRoot_t Root;              /*!< Root of linked list entries */
+    
+    GUI_Dim_t SliderWidth;                  /*!< Slider width in units of pixels */
+    uint8_t Flags;                          /*!< Widget flags */
+} GUI_DROPDOWN_t;
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 /**
- * \brief           Create new button widget
+ * \brief           Create new dropdown widget
  * \param[in]       id: Widget unique ID to use for identity for callback processing
  * \param[in]       x: Widget X position relative to parent widget
  * \param[in]       y: Widget Y position relative to parent widget
@@ -82,31 +103,12 @@ typedef struct GUI_BUTTON_t {
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags);
-
-/**
- * \brief           Set color to specific part of widget
- * \param[in,out]   h: Widget handle
- * \param[in]       index: Color index. This parameter can be a value of \ref GUI_BUTTON_COLOR_t enumeration
- * \param[in]       color: Color value
- * \retval          1: Color was set ok
- * \retval          0: Color was not set
- */
-uint8_t GUI_BUTTON_SetColor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color);
-
-/**
- * \brief           Set border radius size
- * \param[in,out]   h: Widget handle
- * \param[in]       size: Border radius size
- * \retval          1: Border radius was set ok
- * \retval          0: Border radius was not set
- */
-uint8_t GUI_BUTTON_SetBorderRadius(GUI_HANDLE_p h, GUI_Dim_t size);
+GUI_HANDLE_p GUI_DROPDOWN_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags);
     
 /**
  * \}
  */
- 
+
 /**
  * \}
  */

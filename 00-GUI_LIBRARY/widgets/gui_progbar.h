@@ -64,8 +64,6 @@ typedef enum GUI_PROGBAR_COLOR_t {
 typedef struct GUI_PROGBAR_t {
     GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
     
-    GUI_Color_t Color[3];                   /*!< List of colors for widget */
-    
     int32_t Min;                            /*!< Low value for progress bar */
     int32_t Max;                            /*!< High value for progress bar */
     int32_t Value;                          /*!< Current value for progress bar */
@@ -103,6 +101,11 @@ uint8_t GUI_PROGBAR_SetColor(GUI_HANDLE_p h, GUI_PROGBAR_COLOR_t index, GUI_Colo
  * \param[in]       val: New minimal value
  * \retval          1: Value was set ok
  * \retval          0: Value vas not set
+ * \sa              GUI_PROGBAR_SetValue
+ * \sa              GUI_PROGBAR_SetMax
+ * \sa              GUI_PROGBAR_GetValue
+ * \sa              GUI_PROGBAR_GetMin
+ * \sa              GUI_PROGBAR_GetMax
  */
 uint8_t GUI_PROGBAR_SetMin(GUI_HANDLE_p h, int32_t val);
 
@@ -112,6 +115,11 @@ uint8_t GUI_PROGBAR_SetMin(GUI_HANDLE_p h, int32_t val);
  * \param[in]       val: New maximal value
  * \retval          1: Value was set ok
  * \retval          0: Value vas not set
+ * \sa              GUI_PROGBAR_SetValue
+ * \sa              GUI_PROGBAR_SetMin
+ * \sa              GUI_PROGBAR_GetValue
+ * \sa              GUI_PROGBAR_GetMin
+ * \sa              GUI_PROGBAR_GetMax
  */
 uint8_t GUI_PROGBAR_SetMax(GUI_HANDLE_p h, int32_t val);
 
@@ -121,8 +129,49 @@ uint8_t GUI_PROGBAR_SetMax(GUI_HANDLE_p h, int32_t val);
  * \param[in]       val: New current value
  * \retval          1: Value was set ok
  * \retval          0: Value vas not set
+ * \sa              GUI_PROGBAR_SetMin
+ * \sa              GUI_PROGBAR_SetMax
+ * \sa              GUI_PROGBAR_GetValue
+ * \sa              GUI_PROGBAR_GetMin
+ * \sa              GUI_PROGBAR_GetMax
  */
 uint8_t GUI_PROGBAR_SetValue(GUI_HANDLE_p h, int32_t val);
+
+/**
+ * \brief           Get progress bar minimal value
+ * \param[in,out]   h: Widget handle
+ * \retval          Minimal value
+ * \sa              GUI_PROGBAR_SetValue
+ * \sa              GUI_PROGBAR_SetMin
+ * \sa              GUI_PROGBAR_SetMax
+ * \sa              GUI_PROGBAR_GetValue
+ * \sa              GUI_PROGBAR_GetMax
+ */
+int32_t GUI_PROGBAR_GetMin(GUI_HANDLE_p h);
+
+/**
+ * \brief           Get progress bar maximal value
+ * \param[in,out]   h: Widget handle
+ * \retval          Maximal value
+ * \sa              GUI_PROGBAR_SetValue
+ * \sa              GUI_PROGBAR_SetMin
+ * \sa              GUI_PROGBAR_SetMax
+ * \sa              GUI_PROGBAR_GetValue
+ * \sa              GUI_PROGBAR_GetMin
+ */
+int32_t GUI_PROGBAR_GetMax(GUI_HANDLE_p h);
+
+/**
+ * \brief           Get progress bar current value
+ * \param[in,out]   h: Widget handle
+ * \retval          Current value
+ * \sa              GUI_PROGBAR_SetValue
+ * \sa              GUI_PROGBAR_SetMin
+ * \sa              GUI_PROGBAR_SetMax
+ * \sa              GUI_PROGBAR_GetMin
+ * \sa              GUI_PROGBAR_GetMax
+ */
+int32_t GUI_PROGBAR_GetValue(GUI_HANDLE_p h);
 
 /**
  * \brief           Enable progress bar percentages text
@@ -141,20 +190,6 @@ uint8_t GUI_PROGBAR_EnablePercentages(GUI_HANDLE_p h);
  * \retval          0: Percange mode was not disabled
  */
 uint8_t GUI_PROGBAR_DisablePercentages(GUI_HANDLE_p h);
-
-/**
- * \brief           Widget callback function for all event
- * \note            Called either from GUI stack or from widget itself to notify user
- *
- * \note            Can be overwritten by user when required to handle specific events
- * \param[in,out]   h: Widget handle where callback occurred
- * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
- * \param[in]       *param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
- * \param[out]      *result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
- * \retval          1: Command has been processed
- * \retval          0: Command has not been processed
- */
-uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /**
  * \}

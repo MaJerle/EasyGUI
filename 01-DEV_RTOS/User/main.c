@@ -95,15 +95,36 @@ uint32_t time;
 GUI_TIMER_t *tim1, *tim2;
 
 GUI_Char* listboxtexts[] = {
-    _T("String 1 testiram, ce dela"),
-    _T("String 2 testiram, ce dela"),
-    _T("String 3 testiram, ce dela"),
-    _T("String 4 testiram, ce dela"),
-    _T("String 5 testiram, ce dela"),
-    _T("String 6 testiram, ce dela"),
-    _T("String 7 testiram, ce dela"),
-    _T("String 8 testiram, ce dela"),
+    _T("Item 1"),
+    _T("Item 2"),
+    _T("Item 3"),
+    _T("Item 4"),
+    _T("Item 5"),
+    _T("Item 6"),
+    _T("Item 7"),
+    _T("Item 8"),
 };
+
+uint8_t edittext_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
+    if (cmd == GUI_WC_ValueChanged) {
+        __GUI_DEBUG("Value changed!\r\n");
+        return 1;
+    } else {
+        return GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    }
+}
+
+uint8_t checkbox_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
+    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    if (cmd == GUI_WC_Click) {
+        if (GUI_CHECKBOX_IsChecked(h)) {
+            TM_DISCO_LedOn(LED_ALL);
+        } else {
+            TM_DISCO_LedOff(LED_ALL);
+        }
+    }
+    return ret;
+}
 
 int main(void) {
     GUI_STRING_UNICODE_t s;
@@ -111,7 +132,7 @@ int main(void) {
     GUI_KeyboardData_t key;
     uint32_t state;
     
-    static float i = 0, len = 360, radius = 9;
+    static float i = 0, len = 72, radius = 90;
     float x, y;
     
     TM_RCC_InitSystem();                                    /* Init system */
@@ -141,20 +162,20 @@ int main(void) {
     GUI_WIDGET_SetFont(edit1, &GUI_Font_Arial_Narrow_Italic_22);
     GUI_WIDGET_AllocTextMemory(edit1, 255);
     GUI_WIDGET_SetText(edit1, _T("Edit text"));
+    GUI_WIDGET_SetCallback(edit1, edittext_callback);
     
     #define PI      3.14159265359f
     
     /* Graph */
     graph1 = GUI_GRAPH_Create(0, 270, 10, 200, 150, 0, 0);
  
-    GUI_GRAPH_SetMinX(graph1, 10);
-    GUI_GRAPH_SetMaxX(graph1, 20);
-    GUI_GRAPH_SetMinY(graph1, 10);
-    GUI_GRAPH_SetMaxY(graph1, 20);
+    GUI_GRAPH_SetMinX(graph1, -100);
+    GUI_GRAPH_SetMaxX(graph1, 100);
+    GUI_GRAPH_SetMinY(graph1, -100);
+    GUI_GRAPH_SetMaxY(graph1, 100);
     
-    len = 10;
     graphdata1 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_XY, len);
-    graphdata2 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_YT, len);
+    graphdata2 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_YT, len / 2);
     
     for (i = 0; i <= 360; i += 360 / len) {
         x = cos((float)i * (PI / 180.0f));
@@ -176,6 +197,7 @@ int main(void) {
     
     /* Checkbox */
     cb1 = GUI_CHECKBOX_Create(1, 140, 60, 60, 40, 0, 0);
+    GUI_WIDGET_SetCallback(cb1, checkbox_callback);
     GUI_WIDGET_SetFont(cb1, &GUI_Font_Arial_Narrow_Italic_22);
     GUI_WIDGET_SetText(cb1, _T("CB1"));
     cb2 = GUI_CHECKBOX_Create(1, 200, 60, 60, 40, 0, 0);
@@ -218,6 +240,7 @@ int main(void) {
     state = 0;
 	while (1) {
         GUI_Process();
+        
         if ((TM_DELAY_Time() - time) >= 50) {
             time = TM_DELAY_Time();
             
@@ -235,7 +258,7 @@ int main(void) {
             x = cos((float)i * (PI / 180.0f));
             y = sin((float)i * (PI / 180.0f));
             GUI_GRAPH_DATA_AddValue(graphdata2, x * radius / 3, y * radius / 4);
-            i += 360 / len;
+            i += 360.0f / len;
         }
         
         while (!TM_USART_BufferEmpty(DISCO_USART)) {
@@ -243,6 +266,11 @@ int main(void) {
             __GUI_DEBUG("Key: %c (%2X)\r\n", ch, ch);
             switch (GUI_STRING_UNICODE_Decode(&s, ch)) {
                 case UNICODE_OK:
+                    if (ch == '.') {
+                        ch = GUI_KEY_DOWN;
+                    } else if (ch == ',') {
+                        ch = GUI_KEY_UP;
+                    }
                     key.Keys[s.t - 1] = ch;
                     GUI_INPUT_KeyAdd(&key);
                     key.Keys[0] = 0;

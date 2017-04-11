@@ -1,6 +1,5 @@
 /**
- * \author  Tilen Majerle
- * \email   tilen@majerle.eu
+ * \author  Tilen Majerle <tilen@majerle.eu>
  * \brief   GUI template
  *  
 \verbatim

@@ -39,16 +39,25 @@
 /******************************************************************************/
 #define __GW(x)             ((GUI_WINDOW_t *)(x))
 
+static
+uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+    
 /******************************************************************************/
 /******************************************************************************/
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
+const static GUI_Color_t Colors[] = {
+    GUI_COLOR_LIGHTGRAY,                            /*!< Default background color */
+};
+
 const static GUI_WIDGET_t Widget = {
     .Name = _T("Window"),                           /*!< Widget name */
     .Size = sizeof(GUI_WINDOW_t),                   /*!< Size of widget for memory allocation */
     .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
     .Callback = GUI_WINDOW_Callback,                /*!< Control function */
+    .Colors = Colors,                               /*!< Pointer to colors array */
+    .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
 };
 
 /******************************************************************************/
@@ -57,12 +66,13 @@ const static GUI_WIDGET_t Widget = {
 /******************************************************************************/
 /******************************************************************************/
 #define w          ((GUI_WINDOW_t *)h)
+static
 uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
-            GUI_DRAW_FilledRectangle(disp, __GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h), __GUI_WIDGET_GetWidth(h), __GUI_WIDGET_GetHeight(h), w->Color[GUI_WINDOW_COLOR_BG]);
+            GUI_DRAW_FilledRectangle(disp, __GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h), __GUI_WIDGET_GetWidth(h), __GUI_WIDGET_GetHeight(h), __GUI_WIDGET_GetColor(h, GUI_WINDOW_COLOR_BG));
             return 1;
         }
 #if GUI_USE_TOUCH  
@@ -89,8 +99,6 @@ GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id) {
     
     ptr = (GUI_WINDOW_t *)__GUI_WIDGET_Create(&Widget, id, 0, 0, GUI.LCD.Width, GUI.LCD.Height, 0, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);  /* Allocate memory for basic widget */
     if (ptr) {
-        ptr->Color[GUI_WINDOW_COLOR_BG] = GUI_COLOR_LIGHTGRAY;  /* Set default color */
-        
         GUI_WINDOW_SetActive(__GH(ptr));            /* Set active window */
     }
     __GUI_LEAVE();                                  /* Leave GUI */
@@ -103,9 +111,7 @@ GUI_HANDLE_p GUI_WINDOW_CreateChild(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI
     __GUI_ENTER();                                  /* Enter GUI */
     
     ptr = (GUI_WINDOW_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, flags); /* Allocate memory for basic widget */
-    if (ptr) {        
-        ptr->Color[GUI_WINDOW_COLOR_BG] = GUI_COLOR_LIGHTGRAY;  /* Set default color */
-        
+    if (ptr) {
         /* Control setup */
         __GH(ptr)->Flags |= GUI_FLAG_CHILD;         /* This window is child window */
         
@@ -121,7 +127,7 @@ GUI_HANDLE_p GUI_WINDOW_CreateChild(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI
 }
 
 uint8_t GUI_WINDOW_SetActive(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     GUI.WindowActive = h;                           /* Set new active window */
@@ -135,16 +141,14 @@ uint8_t GUI_WINDOW_SetActive(GUI_HANDLE_p h) {
 }
 
 uint8_t GUI_WINDOW_SetColor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color) {
-    __GUI_ASSERTPARAMS(h && h->Widget == &Widget);  /* Check input parameters */
+    uint8_t ret;
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (__GW(h)->Color[index] != color) {
-        __GW(h)->Color[index] = color;              /* Set property */
-        __GUI_WIDGET_Invalidate(h);                 /* Redraw widget */
-    }
+    ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set desired color */
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return 1;
+    return ret;
 }
 
 GUI_HANDLE_p GUI_WINDOW_GetDesktop(void) {

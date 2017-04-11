@@ -101,6 +101,17 @@ extern "C" {
 #define GUI_COLOR_ALPHA_95              0xF2000000  /*!< 95% alpha of selected color */
 #define GUI_COLOR_ALPHA_100             0xFF000000  /*!< 100% alpha of selected color */
 
+#define GUI_COLOR_WIN_DARKGRAY          0xFF555555
+#define GUI_COLOR_WIN_MIDDLEGRAY        0xFF848484
+#define GUI_COLOR_WIN_LIGHTGRAY         0xFFC6C6C6
+
+#define GUI_COLOR_WIN_BG                GUI_COLOR_WHITE /*!< Default widget background color */
+#define GUI_COLOR_WIN_TEXT              GUI_COLOR_BLACK /*!< Default text color */
+#define GUI_COLOR_WIN_SEL_FOC           GUI_COLOR_WHITE /*!< Text color of selected item when widget in focus */
+#define GUI_COLOR_WIN_SEL_NOFOC         GUI_COLOR_WHITE /*!< Text color of selected item when widget not in focus */
+#define GUI_COLOR_WIN_SEL_FOC_BG        GUI_COLOR_BLUE  /*!< Background color of selected item when widget in focus */
+#define GUI_COLOR_WIN_SEL_NOFOC_BG      GUI_COLOR_WIN_MIDDLEGRAY    /*!< Background color of selected item when widget not in focus */
+
 /**
  * \brief           Macro for combining default color with transparent value
  * \param[in]       c: Colors in ARGB 8888 format
