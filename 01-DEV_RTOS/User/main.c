@@ -151,12 +151,21 @@ int main(void) {
     
     win1 = GUI_WINDOW_GetDesktop();                         /* Get desktop window */
     
-//    win2 = GUI_WINDOW_CreateChild(0, 10, 10, 460, 252, win1, 0);
-//    win3 = GUI_WINDOW_CreateChild(0, 10, 10, 440, 232, win2, 0);
-//    win4 = GUI_WINDOW_CreateChild(0, 10, 10, 420, 212, win3, 0);
+    win2 = GUI_WINDOW_CreateChild(10, 10, 10, 460, 252, win1, 0);
+    win3 = GUI_WINDOW_CreateChild(0, 25, 10, 400, 232, win2, 0);
+    win4 = GUI_WINDOW_CreateChild(0, 25, 5, 350, 212, win3, 0);
     
-//    GUI_WINDOW_SetColor(win2, GUI_WINDOW_COLOR_BG, GUI_COLOR_LIGHTGREEN);
-//    GUI_WINDOW_SetColor(win3, GUI_WINDOW_COLOR_BG, GUI_COLOR_LIGHTBLUE);
+    GUI_WIDGET_SetText(win2, _T("Subwin 1"));
+    GUI_WIDGET_SetText(win3, _T("Subwin 2"));
+    GUI_WIDGET_SetText(win4, _T("Subwin 3"));
+    
+    GUI_WIDGET_SetFont(win2, &GUI_Font_Arial_Bold_18);
+    GUI_WIDGET_SetFont(win3, &GUI_Font_Arial_Bold_18);
+    GUI_WIDGET_SetFont(win4, &GUI_Font_Arial_Bold_18);
+    
+//    GUI_WIDGET_SetScrollX(win2, -10);
+//    GUI_WIDGET_SetScrollX(win3, 5);
+//    GUI_WIDGET_SetScrollX(win4, 90);
     
     /* Button */
     btn1 = GUI_BUTTON_Create(1, 10, 10, 120, 40, 0, 0);

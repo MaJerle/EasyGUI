@@ -53,7 +53,7 @@ extern "C" {
  */
 typedef enum GUI_LISTBOX_COLOR_t {
     GUI_LISTBOX_COLOR_BG = 0x00,            /*!< Background color */
-    GUI_LISTBOX_COLOR_TEXT,                 /*!< Default text color */
+    GUI_LISTBOX_COLOR_TEXT,                 /*!< Text color index */
     GUI_LISTBOX_COLOR_SEL_FOC,              /*!< Text color of selected item when widget is in focus */
     GUI_LISTBOX_COLOR_SEL_NOFOC,            /*!< Text color of selected item when widget is not in focus */
     GUI_LISTBOX_COLOR_SEL_FOC_BG,           /*!< Background color of selected item when widget is in focus */

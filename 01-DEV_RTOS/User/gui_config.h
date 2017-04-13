@@ -95,7 +95,7 @@
  *
  * \note            This can be used for scrolling mode when necessary
  */
-#define GUI_WIDGET_INSIDE_PARENT_ONLY   0
+#define GUI_WIDGET_INSIDE_PARENT        0
 
 /**
  * \}

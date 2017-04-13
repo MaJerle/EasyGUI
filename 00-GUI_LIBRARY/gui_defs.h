@@ -918,10 +918,10 @@ typedef struct GUI_HANDLE_ROOT {
     GUI_HANDLE Handle;                      /*!< Root widget structure, must be first in structure */
     
     GUI_LinkedListRoot_t RootList;          /*!< Linked list root of children widgets */
-#if !GUI_WIDGET_INSIDE_PARENT_ONLY || defined(DOXYGEN)
+#if !GUI_WIDGET_INSIDE_PARENT || defined(DOXYGEN)
     GUI_iDim_t ScrollX;                     /*!< Scroll of widgets in horizontal direction in units of pixels */
     GUI_iDim_t ScrollY;                     /*!< Scroll of widgets in vertical direction in units of pixels */
-#endif /* !GUI_WIDGET_INSIDE_PARENT_ONLY || defined(DOXYGEN) */
+#endif /* !GUI_WIDGET_INSIDE_PARENT || defined(DOXYGEN) */
 } GUI_HANDLE_ROOT_t;
 
 /**

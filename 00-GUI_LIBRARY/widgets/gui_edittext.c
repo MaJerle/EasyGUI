@@ -90,7 +90,7 @@ uint8_t GUI_EDITTEXT_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             GUI_DRAW_FilledRectangle(disp, x, y, width, height, __GUI_WIDGET_GetColor(h, GUI_EDITTEXT_COLOR_BG));
             GUI_DRAW_Rectangle(disp, x, y, width, height, __GUI_WIDGET_GetColor(h, GUI_EDITTEXT_COLOR_BORDER));
             
-            if (GUI_WIDGET_IsFocused(h)) {          /* Check if widget is in focus */
+            if (__GUI_WIDGET_IsFocused(h)) {        /* Check if widget is in focus */
                 GUI_DRAW_Rectangle(disp, x + 2, y + 2, width - 4, height - 4, __GUI_WIDGET_GetColor(h, GUI_EDITTEXT_COLOR_BORDER));
             }
             

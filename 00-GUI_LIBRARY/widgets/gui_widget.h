@@ -132,6 +132,9 @@ GUI_iDim_t __GUI_WIDGET_GetAbsoluteY(GUI_HANDLE_p h);
 
 //Returns parent X and Y absolute positions including padding position without parent scroll but with scrolls of parents of parent
 //Used to get clipping area for first children widget in tree
+//X and Y position for inner drawing elements area
+//Consider parent widget is on location x = 0, y = 0 on base tree. It has top padding 10 and left padding = 2;
+//OutputX = absolute X + left padding
 GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteX(GUI_HANDLE_p h);
 GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h);
 
@@ -581,17 +584,27 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
 #define __GUI_WIDGET_AllowChildren(h)               (__GH(h)->Widget->Flags & GUI_FLAG_WIDGET_ALLOW_CHILDREN)
 
 /**
- * \}
- */
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
-
-/**
  * \brief           Checks if Widget handle is currently in focus
+ * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: \ref GUI_HANDLE_p widget
  * \retval          Status whether widget is in focus or not
  * \hideinitializer
  */
-#define GUI_WIDGET_IsFocused(h)                     (__GH(h) == GUI.FocusedWidget)
+#define __GUI_WIDGET_IsFocused(h)                   (__GH(h) == GUI.FocusedWidget)
+
+/**
+ * \brief           Check if widget or any of its children widgets is in focus
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle to test
+ * \retval          1: Widget or children widgets in focus
+ * \retval          0: Neither widget or any of children not in focus
+ */
+uint8_t __GUI_WIDGET_IsFocusedOrChildren(GUI_HANDLE_p h);
+
+/**
+ * \}
+ */
+#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 /**
  * \brief           Remove widget from memory
@@ -797,6 +810,9 @@ uint8_t GUI_WIDGET_ProcessDefaultCallback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* p
  * \retval          0: Widget handle is not in tree of parent handle
  */
 uint8_t GUI_WIDGET_IsChildOf(GUI_HANDLE_p h, GUI_HANDLE_p parent);
+
+uint8_t GUI_WIDGET_SetScrollX(GUI_HANDLE_p h, GUI_iDim_t scroll);
+uint8_t GUI_WIDGET_SetScrollY(GUI_HANDLE_p h, GUI_iDim_t scroll);
 
 #if defined(GUI_INTERNAL) && !defined(DOXYGEN)
 //Strictly private functions by GUI

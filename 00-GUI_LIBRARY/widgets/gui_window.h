@@ -53,6 +53,9 @@ extern "C" {
  */
 typedef enum GUI_WINDOW_COLOR_t {
     GUI_WINDOW_COLOR_BG = 0x00,             /*!< Background color index */
+    GUI_WINDOW_COLOR_TEXT,                  /*!< Text color index */
+    GUI_WINDOW_COLOR_TOP_BG_FOC,            /*!< Top background color when widget in focus */
+    GUI_WINDOW_COLOR_TOP_BG_NOFOC,          /*!< Top background color when widget not in focus */
 } GUI_WINDOW_COLOR_t;
 
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)
@@ -84,21 +87,6 @@ GUI_HANDLE_p GUI_WINDOW_GetDesktop(void);
  * \retval          0: Widget was not set
  */
 uint8_t GUI_WINDOW_SetActive(GUI_HANDLE_p h);
-
-/**
- * \brief           Get parent window object
- * \param[in]       h: Widget object for parent check
- * \retval          Parent widget handle
- */
-#define GUI_WINDOW_GetParent(h)     ((GUI_HANDLE_p)(h))->Parent
-
-/**
- * \brief           Check if window is child
- * \param[in]       h: Widget object for parent check
- * \retval          1: Window is child
- * \retval          0: WIndow is not child
- */
-#define GUI_WINDOW_IsChild(h)       (!!(((GUI_HANDLE_p)(h))->Flags & GUI_FLAG_CHILD))
 
 /**
  * \brief           Create new base widget window with desktop window as a parent

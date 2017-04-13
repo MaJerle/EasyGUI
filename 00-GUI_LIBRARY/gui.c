@@ -52,7 +52,7 @@ GUI_t GUI;
 /***                            Private functions                            **/
 /******************************************************************************/
 /******************************************************************************/
-//Gets number of widgets waiting for redraw
+/* Gets number of widgets waiting for redraw */
 uint32_t __GetNumberOfPendingWidgets(GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;
     uint32_t cnt = 0;
@@ -93,13 +93,11 @@ void __CheckDispClipping(GUI_HANDLE_p h) {
     if (GUI.DisplayTemp.Y1 < y)         { GUI.DisplayTemp.Y1 = y; }
     if (GUI.DisplayTemp.Y2 > y + hi)    { GUI.DisplayTemp.Y2 = y + hi; }
     
-#if !GUI_WIDGET_INSIDE_PARENT_ONLY
-    while (h) {
-        /* Check that widget is not drawn over parent */
+#if !GUI_WIDGET_INSIDE_PARENT
+    /* Check that widget is not drawn over any of parent widgets because of scrolling */
+    for (; h; h = __GH(h)->Parent) {
         x = __GUI_WIDGET_GetParentAbsoluteX(h);         /* Parent absolute X position for inner widgets */
         y = __GUI_WIDGET_GetParentAbsoluteY(h);         /* Parent absolute Y position for inner widgets */
-        
-        //TODO: Get visible widget area only!
         wi = __GUI_WIDGET_GetParentInnerWidth(h);       /* Get parent inner width */
         hi = __GUI_WIDGET_GetParentInnerHeight(h);      /* Get parent inner height */
         
@@ -107,10 +105,8 @@ void __CheckDispClipping(GUI_HANDLE_p h) {
         if (GUI.DisplayTemp.X2 > x + wi)    { GUI.DisplayTemp.X2 = x + wi; }
         if (GUI.DisplayTemp.Y1 < y)         { GUI.DisplayTemp.Y1 = y; }
         if (GUI.DisplayTemp.Y2 > y + hi)    { GUI.DisplayTemp.Y2 = y + hi; }
-        
-        h = __GH(h)->Parent;                        /* Check parent widget */
     }
-#endif /* !GUI_WIDGET_INSIDE_PARENT_ONLY */
+#endif /* !GUI_WIDGET_INSIDE_PARENT */
 }
 
 uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
@@ -472,7 +468,7 @@ int32_t GUI_Process(void) {
         /* Actually draw new screen based on setup */
         time = TM_GENERAL_DWTCounterGetValue();
         cnt = __RedrawWidgets(NULL);                /* Redraw all widgets now */
-        __GUI_DEBUG("T: %d\r\n", TM_GENERAL_DWTCounterGetValue() - time);
+        //__GUI_DEBUG("T: %d\r\n", TM_GENERAL_DWTCounterGetValue() - time);
         
         //GUI_DRAW_Rectangle(& GUI.Display, GUI.Display.X1, GUI.Display.Y1, GUI.Display.X2 - GUI.Display.X1, GUI.Display.Y2 - GUI.Display.Y1, GUI_COLOR_CYAN);
         

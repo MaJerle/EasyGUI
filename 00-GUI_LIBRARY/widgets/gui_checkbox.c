@@ -125,7 +125,7 @@ uint8_t GUI_CHECKBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             GUI_DRAW_FilledRectangle(disp, sx + 1, sy + 1, size - 2, size - 2, c1);
             GUI_DRAW_Rectangle3D(disp, sx, sy, size, size, GUI_DRAW_3D_State_Lowered);
             
-            if (GUI_WIDGET_IsFocused(h)) {          /* When in focus */
+            if (__GUI_WIDGET_IsFocused(h)) {        /* When in focus */
                 GUI_DRAW_Rectangle(disp, sx + 2, sy + 2, size - 4, size - 4, __GUI_WIDGET_GetColor(h, GUI_CHECKBOX_COLOR_FG));
             }
             

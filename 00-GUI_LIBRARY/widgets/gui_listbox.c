@@ -296,8 +296,8 @@ uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                 
                 while (height && item) {            /* Try to process all strings */                    
                     if (index == __GL(h)->Selected) {
-                        GUI_DRAW_FilledRectangle(disp, x + 1, f.Y, f.Width, __GUI_MIN(f.Height, itemHeight), GUI_WIDGET_IsFocused(h) ? __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_FOC_BG) : __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_NOFOC_BG));
-                        f.Color1 = GUI_WIDGET_IsFocused(h) ? __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_FOC) : __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_NOFOC);
+                        GUI_DRAW_FilledRectangle(disp, x + 1, f.Y, f.Width, __GUI_MIN(f.Height, itemHeight), __GUI_WIDGET_IsFocused(h) ? __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_FOC_BG) : __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_NOFOC_BG));
+                        f.Color1 = __GUI_WIDGET_IsFocused(h) ? __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_FOC) : __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_NOFOC);
                     } else {
                         f.Color1 = __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_TEXT);
                     }

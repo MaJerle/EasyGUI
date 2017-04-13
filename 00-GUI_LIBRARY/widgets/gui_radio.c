@@ -126,7 +126,7 @@ uint8_t GUI_RADIO_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
             GUI_DRAW_FilledCircle(disp, sx + size / 2, sy + size / 2, size / 2, c1);
             GUI_DRAW_Circle(disp, sx + size / 2, sy + size / 2, size / 2, __GUI_WIDGET_GetColor(h, GUI_RADIO_COLOR_BORDER));
             
-            if (GUI_WIDGET_IsFocused(h)) {          /* When in focus */
+            if (__GUI_WIDGET_IsFocused(h)) {        /* When in focus */
                 GUI_DRAW_Circle(disp, sx + size / 2, sy + size / 2, size / 2 - 2, __GUI_WIDGET_GetColor(h, GUI_RADIO_COLOR_FG));
             }
 

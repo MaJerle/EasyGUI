@@ -107,6 +107,7 @@ extern "C" {
 
 #define GUI_COLOR_WIN_BG                GUI_COLOR_WHITE /*!< Default widget background color */
 #define GUI_COLOR_WIN_TEXT              GUI_COLOR_BLACK /*!< Default text color */
+#define GUI_COLOR_WIN_TEXT_TITLE        GUI_COLOR_WHITE /*!< Default text color for titles/labels */
 #define GUI_COLOR_WIN_SEL_FOC           GUI_COLOR_WHITE /*!< Text color of selected item when widget in focus */
 #define GUI_COLOR_WIN_SEL_NOFOC         GUI_COLOR_WHITE /*!< Text color of selected item when widget not in focus */
 #define GUI_COLOR_WIN_SEL_FOC_BG        GUI_COLOR_BLUE  /*!< Background color of selected item when widget in focus */

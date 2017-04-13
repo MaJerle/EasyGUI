@@ -24,3 +24,5 @@
 .gitattributes
 delete_unused_files.bat
 00-GUI_LIBRARY/x_application_note.h
+
+*.TMP
