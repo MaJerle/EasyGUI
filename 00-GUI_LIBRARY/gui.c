@@ -52,6 +52,7 @@ GUI_t GUI;
 /***                            Private functions                            **/
 /******************************************************************************/
 /******************************************************************************/
+
 /* Gets number of widgets waiting for redraw */
 uint32_t __GetNumberOfPendingWidgets(GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;
@@ -61,6 +62,9 @@ uint32_t __GetNumberOfPendingWidgets(GUI_HANDLE_p parent) {
         return 1;                                   /* We have object to redraw */
     }
     for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, 0); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
+        if (!__GUI_WIDGET_IsVisible(h)) {           /* Check if visible */
+            continue;
+        }
         if (__GUI_WIDGET_AllowChildren(h)) {        /* If this widget has children elements */
             cnt += __GetNumberOfPendingWidgets(h);  /* Redraw this widget and all its children if required */
         } else if (__GH(h)->Flags & GUI_FLAG_REDRAW) {  /* Check if we need redraw */
@@ -93,7 +97,6 @@ void __CheckDispClipping(GUI_HANDLE_p h) {
     if (GUI.DisplayTemp.Y1 < y)         { GUI.DisplayTemp.Y1 = y; }
     if (GUI.DisplayTemp.Y2 > y + hi)    { GUI.DisplayTemp.Y2 = y + hi; }
     
-#if !GUI_WIDGET_INSIDE_PARENT
     /* Check that widget is not drawn over any of parent widgets because of scrolling */
     for (; h; h = __GH(h)->Parent) {
         x = __GUI_WIDGET_GetParentAbsoluteX(h);         /* Parent absolute X position for inner widgets */
@@ -106,7 +109,6 @@ void __CheckDispClipping(GUI_HANDLE_p h) {
         if (GUI.DisplayTemp.Y1 < y)         { GUI.DisplayTemp.Y1 = y; }
         if (GUI.DisplayTemp.Y2 > y + hi)    { GUI.DisplayTemp.Y2 = y + hi; }
     }
-#endif /* !GUI_WIDGET_INSIDE_PARENT */
 }
 
 uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
@@ -268,13 +270,12 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
                     __GUI_WIDGET_MoveDownTree(h);
                     
                     if (tStat == touchHANDLED) {    /* Touch handled for widget completelly */
-                        
                         /**
                          * Set active widget and set flag for it
                          * Set focus widget and set flag for iz
                          */
-                        __GUI_FOCUS_SET(h);
-                        __GUI_ACTIVE_SET(h);
+                        __GUI_WIDGET_FOCUS_SET(h);
+                        __GUI_WIDGET_ACTIVE_SET(h);
                         
                         /**
                          * Invalidate actual handle object
@@ -286,8 +287,8 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
                          * When touch was handled without focus,
                          * process only clearing currently focused and active widgets and clear them
                          */
-                        __GUI_FOCUS_CLEAR();
-                        __GUI_ACTIVE_CLEAR();
+                        __GUI_WIDGET_FOCUS_CLEAR();
+                        __GUI_WIDGET_ACTIVE_CLEAR();
                     }
                     return tStat;
                 }
@@ -377,7 +378,7 @@ int32_t GUI_Process(void) {
                  * Action: Touch down on element, find element
                  */
                 if (__ProcessTouch(&GUI.Touch, NULL) == touchHANDLED) {
-                    if (GUI.ActiveWidget != GUI.ActiveWidgetOld) {  /* If new active widget is not the same as previous */
+                    if (GUI.ActiveWidget != GUI.ActiveWidgetPrev) { /* If new active widget is not the same as previous */
                         PT_INIT(&GUI.Touch.pt)      /* Reset threads */
                     }
                 }
@@ -402,7 +403,7 @@ int32_t GUI_Process(void) {
                 if (GUI.ActiveWidget) {             /* Check if active widget */
                     __SetRelativeCoordinate(&GUI.Touch, __GUI_WIDGET_GetAbsoluteX(GUI.ActiveWidget), __GUI_WIDGET_GetAbsoluteY(GUI.ActiveWidget));  /* Set relative touch from current touch */
                     __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchEnd, &GUI.Touch, &tStat);   /* Process callback function */
-                    __GUI_ACTIVE_CLEAR();           /* Clear active widget */
+                    __GUI_WIDGET_ACTIVE_CLEAR();    /* Clear active widget */
                 }
             }
             
@@ -441,7 +442,7 @@ int32_t GUI_Process(void) {
                     }
                     if (h) {                        /* We have next widget */
                         __GUI_LINKEDLIST_WidgetMoveToBottom(h); /* Set widget to the down of list */
-                        __GUI_FOCUS_SET(h);         /* Set focus to new widget */
+                        __GUI_WIDGET_FOCUS_SET(h);  /* Set focus to new widget */
                     }
                 }
             }
@@ -455,6 +456,13 @@ int32_t GUI_Process(void) {
     __GUI_TIMER_Process();                          /* Process all timers */
     
     /**
+     * Check if anything to delete 
+     */
+    if (GUI.Flags & GUI_FLAG_REMOVE) {              /* Check if at least one widget should be deleted */
+        __GUI_WIDGET_ExecuteRemove();               /* Execute deletion */
+    }
+    
+    /**
      * Redrawing operations
      */
     if (!(GUI.LCD.Flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM) && __GetNumberOfPendingWidgets(NULL)) {  /* Check if anything to draw first */
@@ -462,13 +470,13 @@ int32_t GUI_Process(void) {
         GUI_Byte active = GUI.LCD.ActiveLayer;
         GUI_Byte drawing = GUI.LCD.DrawingLayer;
         
+        time = TM_GENERAL_DWTCounterGetValue();
         /* Copy current status from one layer to another */
         GUI.LL.Copy(&GUI.LCD, drawing, (void *)GUI.LCD.Layers[active].StartAddress, (void *)GUI.LCD.Layers[drawing].StartAddress, GUI.LCD.Width, GUI.LCD.Height, 0, 0);
             
         /* Actually draw new screen based on setup */
-        time = TM_GENERAL_DWTCounterGetValue();
         cnt = __RedrawWidgets(NULL);                /* Redraw all widgets now */
-        //__GUI_DEBUG("T: %d\r\n", TM_GENERAL_DWTCounterGetValue() - time);
+        __GUI_DEBUG("T: %d\r\n", TM_GENERAL_DWTCounterGetValue() - time);
         
         //GUI_DRAW_Rectangle(& GUI.Display, GUI.Display.X1, GUI.Display.Y1, GUI.Display.X2 - GUI.Display.X1, GUI.Display.Y2 - GUI.Display.Y1, GUI_COLOR_CYAN);
         

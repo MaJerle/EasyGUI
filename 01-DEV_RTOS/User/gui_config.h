@@ -42,11 +42,6 @@
  */
 
 /**
- * \brief           Enables (1) or disables (0) clipping regions for redraw operations
- */
-#define GUI_USE_CLIPPING                1
-
-/**
  * \brief           Enables (1) or disables (0) touch support
  */
 #define GUI_USE_TOUCH                   1

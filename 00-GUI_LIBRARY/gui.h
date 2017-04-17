@@ -92,15 +92,19 @@ extern "C" {
 /**
  * \brief           Free memory from specific address
  */
-#define __GUI_MEMFREE(p)            free(p)
+#define __GUI_MEMFREE(p)            do {            \
+    free(p);                                        \
+    (p) = NULL;                                     \
+} while (0);
 
 /**
  * \brief           Free memory for widget which was just deleted
  */
 #define __GUI_MEMWIDFREE(p)         do {            \
     __GUI_DEBUG("Memory free: 0x%08X; Type: %s\r\n", (uint32_t)__GH(p), __GH(p)->Widget->Name);  \
+    memset(p, 0x00, __GH(p)->Widget->Size);         \
     free(p);                                        \
-    (p) = 0;                                          \
+    (p) = 0;                                        \
 } while (0)
 
 /**
@@ -173,59 +177,6 @@ extern "C" {
 #define __GUI_UNUSED4(x, y, z, k)   { __GUI_UNUSED(x); __GUI_UNUSED(y); __GUI_UNUSED(z); __GUI_UNUSED(k); }
 
 /**
- * \brief           Clear focus on focused widget already
- * \hideinitializer
- */
-#define __GUI_FOCUS_CLEAR()         do {                    \
-    if (GUI.FocusedWidget) {                                \
-        __GUI_WIDGET_Callback(GUI.FocusedWidget, GUI_WC_FocusOut, NULL, NULL);  \
-        __GH(GUI.FocusedWidget)->Flags &= ~GUI_FLAG_FOCUS;  \
-        __GUI_WIDGET_Invalidate(GUI.FocusedWidget);         \
-        GUI.FocusedWidget = 0;                              \
-    }                                                       \
-} while (0)
-
-/**
- * \brief           Set focus to specific widget
- * \note            If any previous widget has focus, it will be cleared first on it
- * \hideinitializer
- */
-#define __GUI_FOCUS_SET(h)          do {                    \
-    __GUI_FOCUS_CLEAR();                                    \
-    GUI.FocusedWidget = __GH(h);                            \
-    __GH(GUI.FocusedWidget)->Flags |= GUI_FLAG_FOCUS;       \
-    __GUI_WIDGET_Callback(GUI.FocusedWidget, GUI_WC_FocusIn, NULL, NULL);   \
-    __GUI_WIDGET_Invalidate(GUI.FocusedWidget);             \
-} while (0)
-
-/**
- * \brief           Clear active flag on touch active widget
- * \note            If any previous widget has active flag, it will be cleared first on it
- * \hideinitializer
- */
-#define __GUI_ACTIVE_CLEAR()        do {                    \
-    if (GUI.ActiveWidget) {                                 \
-        __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_ActiveOut, NULL, NULL);  \
-        __GH(GUI.ActiveWidget)->Flags &= ~GUI_FLAG_ACTIVE;  \
-        __GUI_WIDGET_Invalidate(GUI.ActiveWidget);          \
-        GUI.ActiveWidgetOld = GUI.ActiveWidget;             \
-        GUI.ActiveWidget = 0;                               \
-    }                                                       \
-} while (0)
-
-/**
- * \brief           Set active status to widget
- * \hideinitializer
- */
-#define __GUI_ACTIVE_SET(h)         do {                    \
-    __GUI_ACTIVE_CLEAR();                                   \
-    GUI.ActiveWidget = __GH(h);                             \
-    __GH(GUI.ActiveWidget)->Flags |= GUI_FLAG_ACTIVE;       \
-    __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_ActiveIn, NULL, NULL);   \
-    __GUI_WIDGET_Invalidate(GUI.ActiveWidget);              \
-} while (0)
-
-/**
  * \}
  */
 #endif /* !defined(DOXYGEN) */
@@ -238,11 +189,14 @@ typedef struct GUI_t {
     GUI_LCD_t LCD;                          /*!< LCD low-level settings */
     GUI_LL_t LL;                            /*!< Low-level drawing routines for LCD */
     
+    uint32_t Flags;                         /*!< Core GUI flags management */
+    
     GUI_Display_t Display;                  /*!< Clipping management */
     GUI_Display_t DisplayTemp;              /*!< Clipping for widgets for drawing and touch */
     
     GUI_HANDLE_p WindowActive;              /*!< Pointer to currently active window when creating new widgets */
     GUI_HANDLE_p FocusedWidget;             /*!< Pointer to focused widget for keyboard events if any */
+    GUI_HANDLE_p FocusedWidgetPrev;         /*!< Pointer to previously focused widget */
     
     GUI_LinkedListRoot_t Root;              /*!< Root linked list of widgets */
     GUI_TIMER_CORE_t Timers;                /*!< Software structure management */
@@ -251,7 +205,7 @@ typedef struct GUI_t {
     __GUI_TouchData_t TouchOld;             /*!< Old touch data, used for event management */
     __GUI_TouchData_t Touch;                /*!< Current touch data and processing tool */
     GUI_HANDLE_p ActiveWidget;              /*!< Pointer to widget currently active by touch */
-    GUI_HANDLE_p ActiveWidgetOld;           /*!< Previously active widget */
+    GUI_HANDLE_p ActiveWidgetPrev;          /*!< Previously active widget */
 #endif /* GUI_USE_TOUCH */
 } GUI_t;
 #if defined(GUI_INTERNAL)

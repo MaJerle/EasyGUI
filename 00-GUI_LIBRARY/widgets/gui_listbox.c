@@ -72,8 +72,9 @@ const static GUI_WIDGET_t Widget = {
 /******************************************************************************/
 #define o                   ((GUI_LISTBOX_t *)(h))
 
+/* Get item from listbox entry */
 static
-GUI_LISTBOX_ITEM_t* __GetListboxItem(GUI_HANDLE_p h, uint16_t index) {
+GUI_LISTBOX_ITEM_t* __GetItem(GUI_HANDLE_p h, uint16_t index) {
     uint16_t i = 0;
     GUI_LISTBOX_ITEM_t* item = 0;
     
@@ -195,10 +196,10 @@ void __CheckValues(GUI_HANDLE_p h) {
 
 /* Delete list item box by index */
 static
-uint8_t __DeleteListboxItem(GUI_HANDLE_p h, uint16_t index) {
+uint8_t __DeleteItem(GUI_HANDLE_p h, uint16_t index) {
     GUI_LISTBOX_ITEM_t* item;
     
-    item = __GetListboxItem(h, index);              /* Get list item from handle */
+    item = __GetItem(h, index);                     /* Get list item from handle */
     if (item) {
         __GUI_LINKEDLIST_REMOVE_GEN(&__GL(h)->Root, &item->List);
         __GL(h)->Count--;                           /* Decrease count */
@@ -223,52 +224,35 @@ uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
-            GUI_Dim_t x, y, width, height, sliderW = 0, sliderH = 0;
+            GUI_Dim_t x, y, width, height;
             
             x = __GUI_WIDGET_GetAbsoluteX(h);       /* Get absolute X coordinate */
             y = __GUI_WIDGET_GetAbsoluteY(h);       /* Get absolute Y coordinate */
             width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
             height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
             
-            GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, width - 2, height - 2, __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_BG));
-            GUI_DRAW_Rectangle(disp, x, y, width, height, GUI_COLOR_GRAY);
+            GUI_DRAW_Rectangle3D(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
+            GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_BG));
             
             /* Draw side scrollbar */
             if (o->Flags & GUI_FLAG_LISTBOX_SLIDER_ON) {
-                GUI_Dim_t midHeight, rectHeight, yOffset = 0;
-                int16_t mPP;
+                GUI_DRAW_SB_t sb;
+                GUI_DRAW_ScrollBar_init(&sb);
                 
-                sliderW = o->SliderWidth;
-                sliderH = sliderW * 2 / 3;
+                width -= o->SliderWidth;            /* Decrease available width */
                 
-                GUI_DRAW_FilledRectangle(disp, x + width - sliderW + 1, y + sliderH - 1, sliderW - 2, height - 2 * (sliderH - 2), GUI_COLOR_WIN_MIDDLEGRAY);
+                sb.X = x + width - 1;
+                sb.Y = y + 1;
+                sb.Width = o->SliderWidth;
+                sb.Height = height - 2;
+                sb.Dir = GUI_DRAW_SB_DIR_VERTICAL;
+                sb.EntriesTop = o->VisibleStartIndex;
+                sb.EntriesTotal = o->Count;
+                sb.EntriesVisible = __NumberOfEntriesPerPage(h);
                 
-                /* Separator line */
-                GUI_DRAW_VLine(disp, x + width - sliderW, y, height, GUI_COLOR_GRAY);
-                /* Top box */
-                GUI_DRAW_FilledRectangle(disp, x + width - sliderW + 1, y + 1, sliderW - 2, sliderH - 2, GUI_COLOR_WIN_LIGHTGRAY);
-                GUI_DRAW_Rectangle3D(disp, x + width - sliderW + 1, y + 1, sliderW - 2, sliderH - 2, GUI_DRAW_3D_State_Raised);
-                GUI_DRAW_FilledTriangle(disp, x + width - sliderW + 5, y + sliderH - 7, x + width - sliderW / 2 - 1, y + 6, x + width - 7, y + sliderH - 7, GUI_COLOR_BLACK);
-                /* Bottom box */
-                GUI_DRAW_FilledRectangle(disp, x + width - sliderW + 1, y + height - sliderH + 1, sliderW - 2, sliderH - 2, GUI_COLOR_WIN_LIGHTGRAY);
-                GUI_DRAW_Rectangle3D(disp, x + width - sliderW + 1, y + height - sliderH + 1, sliderW - 2, sliderH - 2, GUI_DRAW_3D_State_Raised);
-                GUI_DRAW_FilledTriangle(disp, x + width - sliderW + 5, y + height - sliderH + 7, x + width - sliderW / 2 - 1, y + height - 7, x + width - 7, y + height - sliderH + 7, GUI_COLOR_BLACK);
-                
-                midHeight = (height - 2U * sliderH + 2);    /* Calculate middle rectangle part */
-                mPP = __NumberOfEntriesPerPage(h);  /* Get number of entries visible at a time */
-                
-                if (mPP < o->Count) {
-                    /* Draw rectangle on the middle */
-                    rectHeight = midHeight * mPP / o->Count;    /* Entire area for drawing middle part */
-                    if (rectHeight < 6) {
-                        rectHeight = 6;
-                    }
-                    yOffset = (midHeight - rectHeight) * o->VisibleStartIndex / (o->Count - mPP);
-                } else {
-                    rectHeight = midHeight;
-                }
-                GUI_DRAW_FilledRectangle(disp, x + width - sliderW + 2, y + sliderH + yOffset - 1, sliderW - 4, rectHeight, GUI_COLOR_WIN_LIGHTGRAY);
-                GUI_DRAW_Rectangle3D(disp, x + width - sliderW + 1, y + sliderH + yOffset - 1, sliderW - 2, rectHeight, GUI_DRAW_3D_State_Raised);
+                GUI_DRAW_ScrollBar(disp, &sb);      /* Draw scroll bar */
+            } else {
+                width--;                            /* Go one pixel down for alignment */
             }
             
             /* Draw text if possible */
@@ -278,38 +262,43 @@ uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                 uint16_t yOffset;
                 uint16_t itemHeight;                /* Get item height */
                 uint16_t index = 0;                 /* Start index */
+                GUI_iDim_t tmp;
                 
                 itemHeight = __ItemHeight(h, &yOffset); /* Get item height and Y offset */
                 
                 GUI_DRAW_FONT_Init(&f);             /* Init structure */
                 
-                f.X = x + 2;
-                f.Y = y + 1;
-                f.Width = width - sliderW - 1;
+                f.X = x + 4;
+                f.Y = y + 2;
+                f.Width = width - 4;
                 f.Height = itemHeight;
                 f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.Color1Width = f.Width;
                 
+                tmp = disp->Y2;                     /* Scale out drawing area */
+                if (disp->Y2 > (y + height - 2)) {
+                    disp->Y2 = y + height - 2;
+                }
+                
                 for (item = (GUI_LISTBOX_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&o->Root, NULL); 
                     item && index < o->VisibleStartIndex; 
                     item = (GUI_LISTBOX_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(NULL, &item->List), index++);
-                
                 while (height && item) {            /* Try to process all strings */                    
                     if (index == __GL(h)->Selected) {
-                        GUI_DRAW_FilledRectangle(disp, x + 1, f.Y, f.Width, __GUI_MIN(f.Height, itemHeight), __GUI_WIDGET_IsFocused(h) ? __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_FOC_BG) : __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_NOFOC_BG));
+                        GUI_DRAW_FilledRectangle(disp, x + 2, f.Y, width - 3, __GUI_MIN(f.Height, itemHeight), __GUI_WIDGET_IsFocused(h) ? __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_FOC_BG) : __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_NOFOC_BG));
                         f.Color1 = __GUI_WIDGET_IsFocused(h) ? __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_FOC) : __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_SEL_NOFOC);
                     } else {
                         f.Color1 = __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_TEXT);
                     }
                     GUI_DRAW_WriteText(disp, __GH(h)->Font, item->Text, &f);
-                    if (f.Height < itemHeight) {
+                    f.Y += itemHeight;
+                    if (f.Y > disp->Y2) {
                         break;
-                    } else {
-                        f.Y += itemHeight;
                     }
                     item = (GUI_LISTBOX_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(NULL, &item->List);
                     index++;
                 }
+                disp->Y2 = tmp;
             }
             
             return 1;
@@ -385,12 +374,12 @@ uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_LISTBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags) {
+GUI_HANDLE_p GUI_LISTBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_LISTBOX_t* ptr;
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_LISTBOX_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, flags);   /* Allocate memory for basic widget */
+    ptr = (GUI_LISTBOX_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);    /* Allocate memory for basic widget */
     if (ptr) {        
         ptr->Selected = -1;                         /*!< Invalidate selection */
         ptr->SliderWidth = 30;                      /*!< Set slider width */
@@ -443,7 +432,7 @@ uint8_t GUI_LISTBOX_SetString(GUI_HANDLE_p h, uint16_t index, const GUI_Char* te
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    item = __GetListboxItem(h, index);              /* Get list item from handle */
+    item = __GetItem(h, index);                     /* Get list item from handle */
     if (item) {
         item->Text = (GUI_Char *)text;              /* Set new text */
         __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
@@ -459,7 +448,7 @@ uint8_t GUI_LISTBOX_DeleteFirstString(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __DeleteListboxItem(h, 0);                /* Delete first item */
+    ret = __DeleteItem(h, 0);                       /* Delete first item */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -471,7 +460,7 @@ uint8_t GUI_LISTBOX_DeleteLastString(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __DeleteListboxItem(h, __GL(h)->Count - 1);   /* Delete last item */
+    ret = __DeleteItem(h, __GL(h)->Count - 1);      /* Delete last item */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -483,7 +472,7 @@ uint8_t GUI_LISTBOX_DeleteString(GUI_HANDLE_p h, uint16_t index) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __DeleteListboxItem(h, index);            /* Delete item */
+    ret = __DeleteItem(h, index);                   /* Delete item */
 
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;

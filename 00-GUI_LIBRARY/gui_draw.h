@@ -105,9 +105,12 @@ extern "C" {
 #define GUI_COLOR_WIN_MIDDLEGRAY        0xFF848484
 #define GUI_COLOR_WIN_LIGHTGRAY         0xFFC6C6C6
 
+#define GUI_COLOR_WIN_BLUE              0xFF5590B7
+#define GUI_COLOR_WIN_RED               0xFFD14752
+
 #define GUI_COLOR_WIN_BG                GUI_COLOR_WHITE /*!< Default widget background color */
 #define GUI_COLOR_WIN_TEXT              GUI_COLOR_BLACK /*!< Default text color */
-#define GUI_COLOR_WIN_TEXT_TITLE        GUI_COLOR_WHITE /*!< Default text color for titles/labels */
+#define GUI_COLOR_WIN_TEXT_TITLE        GUI_COLOR_BLACK /*!< Default text color for titles/labels */
 #define GUI_COLOR_WIN_SEL_FOC           GUI_COLOR_WHITE /*!< Text color of selected item when widget in focus */
 #define GUI_COLOR_WIN_SEL_NOFOC         GUI_COLOR_WHITE /*!< Text color of selected item when widget not in focus */
 #define GUI_COLOR_WIN_SEL_FOC_BG        GUI_COLOR_BLUE  /*!< Background color of selected item when widget in focus */
@@ -148,11 +151,32 @@ typedef struct GUI_DRAW_FONT_t {
     GUI_iDim_t Width;                       /*!< Rectangle width for string draw */
     GUI_iDim_t Height;                      /*!< Rectangle height for string draw */
     GUI_Byte Align;                         /*!< Alignment parameters */
+    GUI_Dim_t LineHeight;                   /*!< Line height, only when multiline mode is enabled */
     GUI_Byte Flags;                         /*!< Flags for future use */
     GUI_iDim_t Color1Width;                 /*!< Width for color 1 */
     GUI_Color_t Color1;                     /*!< Color 1 */
     GUI_Color_t Color2;                     /*!< Color 2 */
+    uint32_t ScrollY;                       /*!< Scroll in vertical direction */
 } GUI_DRAW_FONT_t;
+
+typedef enum GUI_DRAW_SB_DIR_t {
+    GUI_DRAW_SB_DIR_VERTICAL = 0x00,        /*!< Vertical slider */
+    GUI_DRAW_SB_DIR_HORIZONTAL = 0x00,      /*!< Horizontal slider */
+} GUI_DRAW_SB_DIR_t;
+
+/**
+ * \brief           Scroll bar structure
+ */
+typedef struct GUI_DRAW_SB_t {
+    GUI_iDim_t X;                           /*!< X position on screen */
+    GUI_iDim_t Y;                           /*!< Y position on screen */
+    GUI_iDim_t Width;                       /*!< Total width */
+    GUI_iDim_t Height;                      /*!< Total height */
+    GUI_DRAW_SB_DIR_t Dir;                  /*!< Scroll bar direction (horizontal or vertical */
+    uint32_t EntriesTotal;                  /*!< Total number of entries */
+    uint32_t EntriesVisible;                /*!< Number of entries visible at a time */
+    uint32_t EntriesTop;                    /*!< Top visible entry number */
+} GUI_DRAW_SB_t;
 
 /**
  * \brief           3D states enumeration
@@ -427,6 +451,16 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
  * \retval          None
  */
 void GUI_DRAW_Rectangle3D(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_DRAW_3D_State_t state);
+
+void GUI_DRAW_ScrollBar_init(GUI_DRAW_SB_t* sb);
+
+/**
+ * \brief           Draw scroll bar to screen
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       *sb: Pointer to \ref GUI_DRAW_SB_t parameters for scroll bar
+ * \retval          None
+ */
+void GUI_DRAW_ScrollBar(const GUI_Display_t* disp, GUI_DRAW_SB_t* sb);
 
 /**
  * \} GUI_DRAW

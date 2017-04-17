@@ -1336,6 +1336,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_dropdown.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_textview.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_textview.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2738,6 +2743,11 @@
               <FileName>gui_dropdown.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_dropdown.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_textview.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_textview.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4143,6 +4153,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_dropdown.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_textview.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_textview.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -5280,6 +5295,11 @@
               <FileName>gui_dropdown.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_dropdown.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_textview.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_textview.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -68,6 +68,8 @@ const static GUI_WIDGET_t Widget = {
 /***                            Private functions                            **/
 /******************************************************************************/
 /******************************************************************************/
+#define c                   ((GUI_RADIO_t *)(h))
+static
 void __GUI_RADIO_SetActive(GUI_HANDLE_p h) {
     GUI_HANDLE_p handle;
     
@@ -97,7 +99,21 @@ void __GUI_RADIO_SetActive(GUI_HANDLE_p h) {
     __GUI_WIDGET_Callback(h, GUI_WC_SelectionChanged, NULL, NULL);  /* Call user function */
 }
 
-#define c                   ((GUI_RADIO_t *)(h))
+/* Set disabled status */
+static
+uint8_t __SetDisabled(GUI_HANDLE_p h, uint8_t state) {
+    if (state && !(c->Flags & GUI_FLAG_RADIO_DISABLED)) {
+        c->Flags |= GUI_FLAG_RADIO_DISABLED;        /* Set flag */
+        __GUI_WIDGET_Invalidate(h);
+        return 1;
+    } else if (!state && (c->Flags & GUI_FLAG_RADIO_DISABLED)) {
+        c->Flags &= ~GUI_FLAG_RADIO_DISABLED;       /* Clear flag */
+        __GUI_WIDGET_Invalidate(h);
+        return 1;
+    }
+    return 0;
+}
+
 static
 uint8_t GUI_RADIO_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -178,12 +194,12 @@ uint8_t GUI_RADIO_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_RADIO_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags) {
+GUI_HANDLE_p GUI_RADIO_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_RADIO_t* ptr;
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_RADIO_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, flags);  /* Allocate memory for basic widget */
+    ptr = (GUI_RADIO_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
     if (ptr) {        
 
     }
@@ -232,6 +248,17 @@ uint8_t GUI_RADIO_SetGroup(GUI_HANDLE_p h, uint8_t groupId) {
     return 1;
 }
 
+uint8_t GUI_RADIO_GetGroup(GUI_HANDLE_p h) {
+    uint8_t group = 0;
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    group = __GR(h)->GroupId;
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return group;
+}
+
 uint8_t GUI_RADIO_SetValue(GUI_HANDLE_p h, uint32_t value) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
@@ -269,4 +296,28 @@ uint32_t GUI_RADIO_GetSelectedValue(GUI_HANDLE_p h) {
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return val;
+}
+
+uint8_t GUI_RADIO_SetDisabled(GUI_HANDLE_p h, uint8_t disabled) {
+    uint8_t ret;
+    
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+
+    ret = __SetDisabled(h, disabled);               /* Set checked status */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
+}
+
+uint8_t GUI_RADIO_IsDisabled(GUI_HANDLE_p h) {
+    uint8_t ret;
+    
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+
+    ret = __GR(h)->Flags & GUI_FLAG_RADIO_DISABLED ? 1 : 0;
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
 }

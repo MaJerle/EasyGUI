@@ -76,10 +76,12 @@ uint8_t __SetChecked(GUI_HANDLE_p h, uint8_t state) {
     if (state && !(c->Flags & GUI_FLAG_CHECKBOX_CHECKED)) {
         c->Flags |= GUI_FLAG_CHECKBOX_CHECKED;      /* Set flag */
         __GUI_WIDGET_Callback(h, GUI_WC_ValueChanged, NULL, NULL);  /* Process callback */
+        __GUI_WIDGET_Invalidate(h);
         return 1;
     } else if (!state && (c->Flags & GUI_FLAG_CHECKBOX_CHECKED)) {
         c->Flags &= ~GUI_FLAG_CHECKBOX_CHECKED;     /* Clear flag */
         __GUI_WIDGET_Callback(h, GUI_WC_ValueChanged, NULL, NULL);  /* Process callback */
+        __GUI_WIDGET_Invalidate(h);
         return 1;
     }
     return 0;
@@ -90,9 +92,11 @@ static
 uint8_t __SetDisabled(GUI_HANDLE_p h, uint8_t state) {
     if (state && !(c->Flags & GUI_FLAG_CHECKBOX_DISABLED)) {
         c->Flags |= GUI_FLAG_CHECKBOX_DISABLED;     /* Set flag */
+        __GUI_WIDGET_Invalidate(h);
         return 1;
     } else if (!state && (c->Flags & GUI_FLAG_CHECKBOX_DISABLED)) {
         c->Flags &= ~GUI_FLAG_CHECKBOX_DISABLED;    /* Clear flag */
+        __GUI_WIDGET_Invalidate(h);
         return 1;
     }
     return 0;
@@ -183,12 +187,12 @@ uint8_t GUI_CHECKBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_CHECKBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags) {
+GUI_HANDLE_p GUI_CHECKBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_CHECKBOX_t* ptr;
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_CHECKBOX_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, flags);   /* Allocate memory for basic widget */
+    ptr = (GUI_CHECKBOX_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);   /* Allocate memory for basic widget */
 
     __GUI_LEAVE();                                  /* Leave GUI */
     

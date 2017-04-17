@@ -49,6 +49,7 @@
 /***                            Private functions                            **/
 /******************************************************************************/
 /******************************************************************************/
+static
 const GUI_FONT_CharInfo_t* __StringGetCharPtr(const GUI_FONT_t* font, uint32_t ch) {
     if (ch >= font->StartChar && ch <= font->EndChar) { /* Character is in font structure */
         return &font->Data[(ch) - font->StartChar]; /* Return character pointer from font */
@@ -58,6 +59,7 @@ const GUI_FONT_CharInfo_t* __StringGetCharPtr(const GUI_FONT_t* font, uint32_t c
     return 0;                                       /* No character in font */
 }
 
+static
 void __StringGetCharSize(const GUI_FONT_t* font, uint32_t ch, GUI_iDim_t* width, GUI_iDim_t* height) {
     const GUI_FONT_CharInfo_t* c = 0;
     
@@ -71,19 +73,73 @@ void __StringGetCharSize(const GUI_FONT_t* font, uint32_t ch, GUI_iDim_t* width,
     }
 }
 
-//Get string width
-void __StringRectangle(const GUI_FONT_t* font, const GUI_Char* str, GUI_iDim_t* width, GUI_iDim_t* height) {
-    GUI_iDim_t w, h;
+/* Get string rectangle width and height */
+static
+uint16_t __StringRectangle(const GUI_FONT_t* font, const GUI_Char* str, const GUI_DRAW_FONT_t* draw, GUI_iDim_t* width, GUI_iDim_t* height, uint8_t onlyToNextLine) {
+    GUI_iDim_t w, h, mW = 0, cW = 0, cH = 0;
     uint32_t ch;
     uint8_t i;
     const GUI_Char* s = str;
+    uint16_t cnt = 0;
     
-    *width = 0;
-    *height = 0;
-    while (GUI_STRING_GetCh(&s, &ch, &i)) {         /* Get next character from string */
-        __StringGetCharSize(font, ch, &w, &h);      /* Get character width and height */
-        *width += w;                                /* Increase width */
+    cH = draw->LineHeight;
+    if (draw->Flags & GUI_FLAG_FONT_MULTILINE) {    /* We want to know exact rectangle for drawing multi line texts including new lines and carriage return */
+        while (GUI_STRING_GetCh(&s, &ch, &i)) {     /* Get next character from string */
+            if ((uint8_t)'\r' == (uint8_t)ch || (uint8_t)'\n' == (uint8_t)ch) { /* CR is for reset X value */
+                if (mW < cW) {                      /* Current width check */
+                    mW = cW;                        /* Save as max width currently */
+                }
+                cW = 0;
+                if ((uint8_t)'\n' == (uint8_t)ch) { /* On LF */
+                    cH += draw->LineHeight;         /* Increase line value */
+                    if (onlyToNextLine) {
+                        if ((uint8_t)'\n' == (uint8_t)ch) { /* Include LF character in output character */
+                            cnt++;
+                        }
+                        break;
+                    }
+                }
+                cnt++;
+                continue;
+            }
+            
+            __StringGetCharSize(font, ch, &w, &h);  /* Get character width and height */
+            if (cW + w < draw->Width) {             /* Check if in range */
+                cW += w;                            /* Increase X position */
+            } else {
+                cW = 0;                             /* Check width */
+                cH += draw->LineHeight;             /* Increase line height */
+                if (mW < cW) {                      /* Current width check */
+                    mW = cW;                        /* Save as max width currently */
+                }
+                if (onlyToNextLine) {               /* Check only until next line detected */
+                    break;
+                }
+            }
+            if (mW < cW) {                          /* Current width check */
+                mW = cW;                            /* Save as max width currently */
+            }
+            cnt++;
+        }
+        if (width) {
+            *width = mW;
+        }
+    } else {
+        while (GUI_STRING_GetCh(&s, &ch, &i)) {     /* Get next character from string */
+            cnt++;
+            __StringGetCharSize(font, ch, &w, &h);  /* Get character width and height */
+            if ((uint8_t)'\r' != (uint8_t)ch && (uint8_t)'\n' != (uint8_t)ch) {
+                cW += w;                        /* Increase width */
+            }
+        }
+        if (width) {
+            *width = cW;
+        }
     }
+    if (height) {
+        *height = cH;
+    }
+    return cnt;                                     /* Return number of characters processed */
 }
 
 /* Draw character to screen */
@@ -220,7 +276,6 @@ void GUI_DRAW_FillScreen(const GUI_Display_t* disp, GUI_Color_t color) {
 }
 
 void GUI_DRAW_Fill(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_Color_t color) {
-#if GUI_USE_CLIPPING
     if (                                            /* Check if redraw is inside area */
         x >= disp->X2 ||                            /* Too right */
         y >= disp->Y2 ||                            /* Too bottom */
@@ -247,16 +302,13 @@ void GUI_DRAW_Fill(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iD
     if ((y + height) > disp->Y2) {
         height = disp->Y2 - y;
     }
-#endif /* GUI_USE_CLIPPING */
     GUI.LL.FillRect(&GUI.LCD, GUI.LCD.DrawingLayer, x, y, width, height, color);
 }
 
 void GUI_DRAW_SetPixel(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_Color_t color) {
-#if GUI_USE_CLIPPING
     if (y < disp->Y1 || y >= disp->Y2 || x < disp->X1 || x >= disp->X2) {
         return;
     }
-#endif /* GUI_USE_CLIPPING */
     GUI.LL.SetPixel(&GUI.LCD, GUI.LCD.DrawingLayer, x, y, color);
 }
 
@@ -265,7 +317,6 @@ GUI_Color_t GUI_DRAW_GetPixel(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_
 }
 
 void GUI_DRAW_VLine(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t length, GUI_Color_t color) {
-#if GUI_USE_CLIPPING
     if (x >= disp->X2 || x < disp->X1 || y > disp->Y2 || (y + length) < disp->Y1) {
         return;
     }
@@ -276,12 +327,10 @@ void GUI_DRAW_VLine(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_i
     if ((y + length) > disp->Y2) {
         length = disp->Y2 - y;
     }
-#endif /* GUI_USE_CLIPPING */
     GUI.LL.DrawVLine(&GUI.LCD, GUI.LCD.DrawingLayer, x, y, length, color);
 }
 
 void GUI_DRAW_HLine(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t length, GUI_Color_t color) {
-#if GUI_USE_CLIPPING
     if (y >= disp->Y2 || y < disp->Y1 || x > disp->X2 || (x + length) < disp->X1) {
         return;
     }
@@ -292,7 +341,6 @@ void GUI_DRAW_HLine(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_i
     if ((x + length) > disp->X2) {
         length = disp->X2 - x;
     }
-#endif /* GUI_USE_CLIPPING */
     GUI.LL.DrawHLine(&GUI.LCD, GUI.LCD.DrawingLayer, x, y, length, color);
 }
 
@@ -538,14 +586,12 @@ void GUI_DRAW_CircleCorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t 
     GUI_iDim_t x = 0;
     GUI_iDim_t y = r;
     
-#if GUI_USE_CLIPPING
     if (!__GUI_RECT_MATCH(
         disp->X1, disp->Y1, disp->X2 - disp->X1, disp->Y2 - disp->Y1,
         x0 - r, y0 - r, 2 * r, 2 * r
     )) {
         return;
     }
-#endif /* GUI_USE_CLIPPING */
 
     while (x < y) {
         if (f >= 0) {
@@ -586,14 +632,12 @@ void GUI_DRAW_FilledCircleCorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_i
     GUI_iDim_t x = 0;
     GUI_iDim_t y = r;
     
-#if GUI_USE_CLIPPING
     if (!__GUI_RECT_MATCH(
         disp->X1, disp->Y1, disp->X2 - disp->X1, disp->Y2 - disp->Y1,
         x0 - r, y0 - r, 2 * r, 2 * r
     )) {
         return;
     }
-#endif /* GUI_USE_CLIPPING */
 
     while (x < y) {
         if (f >= 0) {
@@ -645,9 +689,15 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
     GUI_iDim_t w, h, x, y;
     uint32_t ch;
     uint8_t i;
+    uint16_t cnt;
+    GUI_iDim_t startX;
     const GUI_FONT_CharInfo_t* c;
     
-    __StringRectangle(font, str, &w, &h);           /* Get string width for this box */
+    if (!draw->LineHeight) {                        /* When line height is not set */
+        draw->LineHeight = font->Size;              /* Set font size */
+    }
+    
+    __StringRectangle(font, str, draw, &w, &h, 0);  /* Get string width for this box */
     if (w > draw->Width) {                          /* If string is wider than available rectangle */
         if (draw->Flags & GUI_FLAG_FONT_RIGHTALIGN) {   /* Check right align text */
             str = __StringGetPointerForWidth(font, str, draw);
@@ -660,29 +710,84 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
     y = draw->Y;                                    /* Get start Y position */
     
     if (draw->Align & GUI_VALIGN_CENTER) {          /* Check for vertical align center */
-        y += (draw->Height - font->Size) / 2;       /* Align center of drawing area */
+        y += (draw->Height - h) / 2;                /* Align center of drawing area */
     } else if (draw->Align & GUI_VALIGN_BOTTOM) {   /* Check for vertical align bottom */
-        y += draw->Height - font->Size;             /* Align bottom of drawing area */
+        y += draw->Height - h;                      /* Align bottom of drawing area */
     }
     
-    if (draw->Align & GUI_HALIGN_CENTER) {          /* Check for horizontal align center */
-        x += (draw->Width - w) / 2;                 /* Align center of drawing area */
-    } else if (draw->Align & GUI_HALIGN_RIGHT) {    /* Check for horizontal align right */
-        x += draw->Width - w;                       /* Align right of drawing area */
+    if (y < draw->Y) {                              /* Check situation first */
+        y = draw->Y;
     }
     
-    while (GUI_STRING_GetCh(&str, &ch, &i)) {       /* Go through entire string */
-        if ((c = __StringGetCharPtr(font, ch)) == 0) {  /* Get character pointer */
-            continue;                               /* Character is not known */
+    y -= draw->ScrollY;                             /* Go scroll top */
+    
+    while ((cnt = __StringRectangle(font, str, draw, &w, NULL, 1)) > 0) {
+        x = draw->X;;                                       
+        if (draw->Align & GUI_HALIGN_CENTER) {      /* Check for horizontal align center */
+            x += (draw->Width - w) / 2;             /* Align center of drawing area */
+        } else if (draw->Align & GUI_HALIGN_RIGHT) {/* Check for horizontal align right */
+            x += draw->Width - w;                   /* Align right of drawing area */
         }
-        
-        if (w < (c->xSize + c->xMargin)) {          /* Check available width */
-            break;                                  /* Stop execution right now */
+        startX = x;                                 /* save start X position */
+        while (cnt-- && GUI_STRING_GetCh(&str, &ch, &i)) {            
+            if ((uint8_t)'\r' == (uint8_t)ch || (uint8_t)'\n' == (uint8_t)ch) { /* Check CR & LF characters */
+                if (draw->Flags & GUI_FLAG_FONT_MULTILINE) {
+                    x = startX;                     /* Go to beginning of line */
+                }
+                continue;
+            }
+            if (y > disp->Y2) {                     /* Check if Y over line */
+                break;
+            }
+            if (x > disp->X2) {                     /* Check if Y over line */
+                continue;
+            }
+            
+            if ((c = __StringGetCharPtr(font, ch)) == 0) {  /* Get character pointer */
+                continue;                           /* Character is not known */
+            }
+            __DRAW_Char(disp, font, draw, x, y, c); /* Draw actual char */
+            
+            x += c->xSize + c->xMargin;             /* Increase X position */
         }
-        
-        __DRAW_Char(disp, font, draw, x, y, c);     /* Draw actual char */
-        
-        x += c->xSize + c->xMargin;                 /* Increase X position */
-        w -= c->xSize + c->xMargin;                 /* Decrease available width for char */
-    } 
+        y += draw->LineHeight;                      /* Go to new line for next text */
+        if (!(draw->Flags & GUI_FLAG_FONT_MULTILINE)) { /* Draw only first line in non-multiline environment */
+            break;
+        }
+    }
+}
+
+void GUI_DRAW_ScrollBar_init(GUI_DRAW_SB_t* sb) {
+    memset(sb, 0x00, sizeof(*sb));                  /* Reset structure */
+}
+
+void GUI_DRAW_ScrollBar(const GUI_Display_t* disp, GUI_DRAW_SB_t* sb) {
+    GUI_Dim_t btnW, btnH, midHeight, rectHeight, midOffset = 0;
+
+    btnW = sb->Width;
+    btnH = (sb->Width << 1) / 3;
+    
+    /* Top box */
+    GUI_DRAW_Rectangle3D(disp, sb->X, sb->Y, btnW, btnH, GUI_DRAW_3D_State_Raised);
+    GUI_DRAW_FilledRectangle(disp, sb->X + 2, sb->Y + 2, btnW - 4, btnH - 4, GUI_COLOR_WIN_MIDDLEGRAY);
+    
+    /* Bottom box */
+    GUI_DRAW_Rectangle3D(disp, sb->X, sb->Y + sb->Height - btnH, btnW, btnH, GUI_DRAW_3D_State_Raised);
+    GUI_DRAW_FilledRectangle(disp, sb->X + 2, sb->Y + sb->Height - btnH + 2, btnW - 4, btnH - 4, GUI_COLOR_WIN_MIDDLEGRAY);
+    
+    /* Middle part */
+    midHeight = (sb->Height - 2U * btnH);           /* Calculate middle rectangle part */
+    GUI_DRAW_FilledRectangle(disp, sb->X, sb->Y + btnH, sb->Width, midHeight, GUI_COLOR_WIN_MIDDLEGRAY);
+    
+    /* Calculate size and offset for middle part */
+    if (sb->EntriesVisible < sb->EntriesTotal) {    /* More entries than available visual space */
+        rectHeight = midHeight * sb->EntriesVisible / sb->EntriesTotal; /* Entire area for drawing middle part */
+        if (rectHeight < 6) {                       /* Calculate middle height */
+            rectHeight = 6;
+        }
+        midOffset = (midHeight - rectHeight) * sb->EntriesTop / (sb->EntriesTotal - sb->EntriesVisible);
+    } else {
+        rectHeight = midHeight;
+    }
+    GUI_DRAW_Rectangle3D(disp, sb->X, sb->Y + btnH + midOffset, sb->Width, rectHeight, GUI_DRAW_3D_State_Raised); 
 }

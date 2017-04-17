@@ -87,11 +87,11 @@ uint8_t GUI_EDITTEXT_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
             height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
             
-            GUI_DRAW_FilledRectangle(disp, x, y, width, height, __GUI_WIDGET_GetColor(h, GUI_EDITTEXT_COLOR_BG));
-            GUI_DRAW_Rectangle(disp, x, y, width, height, __GUI_WIDGET_GetColor(h, GUI_EDITTEXT_COLOR_BORDER));
+            GUI_DRAW_Rectangle3D(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
+            GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, __GUI_WIDGET_GetColor(h, GUI_EDITTEXT_COLOR_BG));
             
             if (__GUI_WIDGET_IsFocused(h)) {        /* Check if widget is in focus */
-                GUI_DRAW_Rectangle(disp, x + 2, y + 2, width - 4, height - 4, __GUI_WIDGET_GetColor(h, GUI_EDITTEXT_COLOR_BORDER));
+                GUI_DRAW_Rectangle(disp, x + 3, y + 3, width - 6, height - 6, __GUI_WIDGET_GetColor(h, GUI_EDITTEXT_COLOR_BORDER));
             }
             
             if (__GUI_WIDGET_IsFontAndTextSet(h)) { /* Ready to write string */
@@ -140,12 +140,12 @@ uint8_t GUI_EDITTEXT_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags) {
+GUI_HANDLE_p GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_EDITTEXT_t* ptr;
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_EDITTEXT_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, flags);   /* Allocate memory for basic widget */
+    ptr = (GUI_EDITTEXT_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);   /* Allocate memory for basic widget */
 
     __GUI_LEAVE();                                  /* Leave GUI */
     

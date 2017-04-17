@@ -59,29 +59,31 @@ extern "C" {
  * \{
  */  
     
-#define GUI_ID_WINDOW_BASE          ((uint16_t)0x0000)                          /*!< Window base ID */
-#define GUI_ID_WINDOW_1             ((uint16_t)(GUI_ID_WINDOW_BASE + 0x0001))   /*!< Window object ID 1 */
-#define GUI_ID_WINDOW_2             ((uint16_t)(GUI_ID_WINDOW_BASE + 0x0002))   /*!< Window object ID 2 */
-#define GUI_ID_WINDOW_3             ((uint16_t)(GUI_ID_WINDOW_BASE + 0x0003))   /*!< Window object ID 3 */
-#define GUI_ID_WINDOW_4             ((uint16_t)(GUI_ID_WINDOW_BASE + 0x0004))   /*!< Window object ID 4 */
-#define GUI_ID_WINDOW_5             ((uint16_t)(GUI_ID_WINDOW_BASE + 0x0005))   /*!< Window object ID 5 */
-#define GUI_ID_WINDOW_6             ((uint16_t)(GUI_ID_WINDOW_BASE + 0x0006))   /*!< Window object ID 6 */
-#define GUI_ID_WINDOW_7             ((uint16_t)(GUI_ID_WINDOW_BASE + 0x0007))   /*!< Window object ID 7 */
-#define GUI_ID_WINDOW_8             ((uint16_t)(GUI_ID_WINDOW_BASE + 0x0008))   /*!< Window object ID 8 */
-#define GUI_ID_WINDOW_9             ((uint16_t)(GUI_ID_WINDOW_BASE + 0x0009))   /*!< Window object ID 9 */
-#define GUI_ID_WINDOW_10            ((uint16_t)(GUI_ID_WINDOW_BASE + 0x000A))   /*!< Window object ID 10 */
+#define GUI_ID_WINDOW_BASE          ((GUI_ID_t)0x0000)                          /*!< Window base ID */
+#define GUI_ID_WINDOW_1             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0001))   /*!< Window object ID 1 */
+#define GUI_ID_WINDOW_2             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0002))   /*!< Window object ID 2 */
+#define GUI_ID_WINDOW_3             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0003))   /*!< Window object ID 3 */
+#define GUI_ID_WINDOW_4             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0004))   /*!< Window object ID 4 */
+#define GUI_ID_WINDOW_5             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0005))   /*!< Window object ID 5 */
+#define GUI_ID_WINDOW_6             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0006))   /*!< Window object ID 6 */
+#define GUI_ID_WINDOW_7             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0007))   /*!< Window object ID 7 */
+#define GUI_ID_WINDOW_8             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0008))   /*!< Window object ID 8 */
+#define GUI_ID_WINDOW_9             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0009))   /*!< Window object ID 9 */
+#define GUI_ID_WINDOW_10            ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x000A))   /*!< Window object ID 10 */
     
-#define GUI_ID_BUTTON_BASE          ((uint16_t)0x0100)                          /*!< Button base ID */
-#define GUI_ID_BUTTON_1             ((uint16_t)(GUI_ID_BUTTON_BASE + 0x0001))   /*!< Button object ID 1 */
-#define GUI_ID_BUTTON_2             ((uint16_t)(GUI_ID_BUTTON_BASE + 0x0002))   /*!< Button object ID 2 */
-#define GUI_ID_BUTTON_3             ((uint16_t)(GUI_ID_BUTTON_BASE + 0x0003))   /*!< Button object ID 3 */
-#define GUI_ID_BUTTON_4             ((uint16_t)(GUI_ID_BUTTON_BASE + 0x0004))   /*!< Button object ID 4 */
-#define GUI_ID_BUTTON_5             ((uint16_t)(GUI_ID_BUTTON_BASE + 0x0005))   /*!< Button object ID 5 */
-#define GUI_ID_BUTTON_6             ((uint16_t)(GUI_ID_BUTTON_BASE + 0x0006))   /*!< Button object ID 6 */
-#define GUI_ID_BUTTON_7             ((uint16_t)(GUI_ID_BUTTON_BASE + 0x0007))   /*!< Button object ID 7 */
-#define GUI_ID_BUTTON_8             ((uint16_t)(GUI_ID_BUTTON_BASE + 0x0008))   /*!< Button object ID 8 */
-#define GUI_ID_BUTTON_9             ((uint16_t)(GUI_ID_BUTTON_BASE + 0x0009))   /*!< Button object ID 9 */
-#define GUI_ID_BUTTON_10            ((uint16_t)(GUI_ID_BUTTON_BASE + 0x000A))   /*!< Button object ID 10 */
+#define GUI_ID_BUTTON_BASE          ((GUI_ID_t)0x0100)                          /*!< Button base ID */
+#define GUI_ID_BUTTON_1             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0001))   /*!< Button object ID 1 */
+#define GUI_ID_BUTTON_2             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0002))   /*!< Button object ID 2 */
+#define GUI_ID_BUTTON_3             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0003))   /*!< Button object ID 3 */
+#define GUI_ID_BUTTON_4             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0004))   /*!< Button object ID 4 */
+#define GUI_ID_BUTTON_5             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0005))   /*!< Button object ID 5 */
+#define GUI_ID_BUTTON_6             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0006))   /*!< Button object ID 6 */
+#define GUI_ID_BUTTON_7             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0007))   /*!< Button object ID 7 */
+#define GUI_ID_BUTTON_8             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0008))   /*!< Button object ID 8 */
+#define GUI_ID_BUTTON_9             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0009))   /*!< Button object ID 9 */
+#define GUI_ID_BUTTON_10            ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x000A))   /*!< Button object ID 10 */
+
+#define GUI_ID_USER                 ((GUI_ID_t)(0x10000))
     
 /**
  * \}
@@ -111,6 +113,22 @@ extern "C" {
  *
  * \{
  */
+ 
+/**
+ * \brief           Widget footprint value
+ * \hideinitializer
+ */
+#define GUI_WIDGET_FOOTPRINT            0x00ACCE55
+ 
+/**
+ * \brief           Checks if inserted pointer is valid widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in]       h: Input pointer to test for widget
+ * \retval          1: Pointer is widget
+ * \retval          0: Pointer is not widget
+ * \hideinitializer
+ */
+#define __GUI_WIDGET_IsWidget(h)        ((h) && __GH(h)->Footprint == GUI_WIDGET_FOOTPRINT)
 
 /**
  * \brief           Get absolute X position on LCD for specific widget
@@ -137,6 +155,24 @@ GUI_iDim_t __GUI_WIDGET_GetAbsoluteY(GUI_HANDLE_p h);
 //OutputX = absolute X + left padding
 GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteX(GUI_HANDLE_p h);
 GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h);
+
+/**
+ * \brief           Get widget relative X position according to parent widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          Relative X according to parent widget
+ * \hideinitializer
+ */
+#define __GUI_WIDGET_GetRelativeX(h)    ((__GH(h)->Flags & GUI_FLAG_EXPANDED) ? 0 : __GH(h)->X)
+
+/**
+ * \brief           Get widget relative Y position according to parent widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          Relative Y according to parent widget
+ * \hideinitializer
+ */
+#define __GUI_WIDGET_GetRelativeY(h)    ((__GH(h)->Flags & GUI_FLAG_EXPANDED) ? 0 : __GH(h)->Y)
 
 /**
  * \brief           Invalidate widget for redraw 
@@ -266,23 +302,27 @@ uint8_t __GUI_WIDGET_FreeTextMemory(GUI_HANDLE_p h);
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
+ * \param[in]       cb: Widget callback function. Set to NULL to use default widget specific callback
  * \param[in]       flags: Flags for create procedure
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  * \sa              __GUI_WIDGET_Remove
  */
-GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags);
+GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Remove widget and all of its children widgets
+ *  
+ *                  Function checks widget and all its children if they can be deleted. 
+ *                  If so, flag for delete will be set and procedure will be executed later when all other processing is done
+ *
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param           *h: Pointer to \ref GUI_HANDLE_p structure to remove widget
- *                      Pointer will be invalidated and set to 0
+ * \param           *h: Widget handle to remove
  * \retval          0: Failed
  * \retval          1: Success
  * \sa              __GUI_WIDGET_Create
  */
-uint8_t __GUI_WIDGET_Remove(GUI_HANDLE_p* h);
+uint8_t __GUI_WIDGET_Remove(GUI_HANDLE_p h);
 
 /**
  * \brief           Show widget from visible area
@@ -303,6 +343,25 @@ uint8_t __GUI_WIDGET_Show(GUI_HANDLE_p h);
  * \sa              __GUI_WIDGET_Show
  */
 uint8_t __GUI_WIDGET_Hide(GUI_HANDLE_p h);
+
+/**
+ * \brief           Toggle expandend (maximized) mode of widget (mostly of windows)
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget expandend status toggled ok
+ * \retval          0: Widget expandend status was not toggled
+ */
+uint8_t __GUI_WIDGET_ToggleExpanded(GUI_HANDLE_p h);
+
+/**
+ * \brief           Set expandend mode
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       state: State for expanded mode
+ * \retval          1: Widget expandend status set ok
+ * \retval          0: Widget expandend status was not set
+ */
+uint8_t __GUI_WIDGET_SetExpanded(GUI_HANDLE_p h, uint8_t state);
 
 /**
  * \brief           Set width of widget in units of pixels
@@ -451,8 +510,21 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
     __GUI_WIDGET_SetPaddingRight(h, x);                 \
 } while (0)
 
+#define __GUI_WIDGET_GetId(h)               (__GH(h)->Id)
+
+#define __GUI_WIDGET_IsExpanded(h)          (__GH(h)->Flags & GUI_FLAG_EXPANDED)
+
+/**
+ * \brief           Get pointer to parent widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          Pointer to parent widget
+ */
+#define __GUI_WIDGET_GetParent(h)           (__GH(h)->Parent)
+
 /**
  * \brief           Process widget callback with command, parameters and result pointers
+ * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
  * \param[in]       cmd: Callback command. This parameter can be a value of \ref GUI_WC_t enumeration
  * \param[in]       param: Pointer to parameters if any for this command
@@ -460,12 +532,21 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
  * \retval          1: Command processed by widget
  * \retval          0: Command was not processed by widget
  */
-#define __GUI_WIDGET_Callback(h, cmd, param, result)    __GH(h)->Callback ? __GH(h)->Callback(h, cmd, param, result) : __GH(h)->Widget->Callback(h, cmd, param, result)
+#define __GUI_WIDGET_Callback(h, cmd, param, result)    (__GH(h)->Callback ? __GH(h)->Callback(h, cmd, param, result) : __GH(h)->Widget->Callback(h, cmd, param, result))
 
+/**
+ * \brief           Get widget colors from list of colors
+ *                  It takes colors from allocated memory if exists or from default widget setup for default
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Color index from color array for specific widget
+ * \retval          Color index
+ */
 #define __GUI_WIDGET_GetColor(h, index)     (__GH(h)->Colors ? __GH(h)->Colors[(uint8_t)(index)] : (__GH(h)->Widget->Colors ? __GH(h)->Widget->Colors[(uint8_t)(index)] : GUI_COLOR_BLACK))
 
 /**
  * \brief           Get total width of widget in units of pixels
+ *                     Function returns width of widget according to current widget setup (expanded, fill, percent, etc.)
  * \note            Since this function is private, it can only be used by user inside GUI library
  *
  * \note            Even if percentage width is used, function will always return value in pixels
@@ -477,6 +558,7 @@ GUI_Dim_t __GUI_WIDGET_GetWidth(GUI_HANDLE_p h);
 
 /**
  * \brief           Get total height of widget
+ *                     Function returns height of widget according to current widget setup (expanded, fill, percent, etc.)
  * \note            Since this function is private, it can only be used by user inside GUI library
  *
  * \note            Even if percentage height is used, function will always return value in pixels
@@ -605,6 +687,9 @@ uint8_t __GUI_WIDGET_IsFocusedOrChildren(GUI_HANDLE_p h);
  * \}
  */
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+
+GUI_ID_t GUI_WIDGET_GetId(GUI_HANDLE_p h);
+GUI_HANDLE_p GUI_WIDGET_GetById(GUI_ID_t id);
 
 /**
  * \brief           Remove widget from memory
@@ -767,8 +852,11 @@ uint8_t GUI_WIDGET_Show(GUI_HANDLE_p h);
  * \retval          1: Widget was hidden ok
  * \retval          0: Widget was not hidden
  * \sa              GUI_WIDGET_Show
+ * \sa              GUI_WIDGET_PutOnFront
  */
 uint8_t GUI_WIDGET_Hide(GUI_HANDLE_p h);
+
+uint8_t GUI_WIDGET_PutOnFront(GUI_HANDLE_p h);
 
 /**
  * \brief           Invalidate widget object and prepare to new redraw
@@ -786,6 +874,9 @@ uint8_t GUI_WIDGET_Invalidate(GUI_HANDLE_p h);
  * \retval          1: Callback was not set
  */
 uint8_t GUI_WIDGET_SetCallback(GUI_HANDLE_p h, GUI_WIDGET_CALLBACK_t callback);
+
+uint8_t GUI_WIDGET_SetUserData(GUI_HANDLE_p h, void* data);
+void* GUI_WIDGET_GetUserData(GUI_HANDLE_p h);
 
 /**
  * \brief           Widget callback function for all events
@@ -814,6 +905,8 @@ uint8_t GUI_WIDGET_IsChildOf(GUI_HANDLE_p h, GUI_HANDLE_p parent);
 uint8_t GUI_WIDGET_SetScrollX(GUI_HANDLE_p h, GUI_iDim_t scroll);
 uint8_t GUI_WIDGET_SetScrollY(GUI_HANDLE_p h, GUI_iDim_t scroll);
 
+uint8_t GUI_WIDGET_SetFontDefault(const GUI_FONT_t* font);
+
 #if defined(GUI_INTERNAL) && !defined(DOXYGEN)
 //Strictly private functions by GUI
 //Widget initialization purpose
@@ -825,6 +918,14 @@ uint8_t __GUI_WIDGET_IsInsideClippingRegion(GUI_HANDLE_p h);
 
 //Move widget down and all its parents with it
 void __GUI_WIDGET_MoveDownTree(GUI_HANDLE_p h);
+
+void __GUI_WIDGET_FOCUS_CLEAR(void);
+void __GUI_WIDGET_FOCUS_SET(GUI_HANDLE_p h);
+void __GUI_WIDGET_ACTIVE_CLEAR(void);
+void __GUI_WIDGET_ACTIVE_SET(GUI_HANDLE_p h);
+
+//Execute actual widget remove process
+uint8_t __GUI_WIDGET_ExecuteRemove(void);
 #endif /* !defined(DOXYGEN) */
 
 /**

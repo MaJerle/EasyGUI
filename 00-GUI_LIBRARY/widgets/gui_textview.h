@@ -1,10 +1,10 @@
 /**
  * \author  Tilen Majerle <tilen@majerle.eu>
- * \brief   GUI button widget
- *	
+ * \brief   GUI dropdown widget
+ *  
 \verbatim
    ----------------------------------------------------------------------
-    Copyright (c) 2017 Tilen Majerle
+    Copyright (c) 2016 Tilen Majerle
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -28,50 +28,69 @@
    ----------------------------------------------------------------------
 \endverbatim
  */
-#ifndef GUI_BUTTON_H
-#define GUI_BUTTON_H
+#ifndef GUI_TEXTVIEW_H
+#define GUI_TEXTVIEW_H
 
 /* C++ detection */
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
+
 /**
  * \addtogroup      GUI_WIDGETS
  * \{
  */
-    
 #include "gui_widget.h"
 
 /**
- * \defgroup        GUI_BUTTON Button
- * \brief           Button which can be pressed
+ * \defgroup        GUI_TEXTVIEW Text view
+ * \brief           Text view widget
  * \{
  */
 
+    
 /**
- * \brief           Button color list enumeration
+ * \brief           List of text view colors
  */
-typedef enum GUI_BUTTON_COLOR_t {
-    GUI_BUTTON_COLOR_BG = 0x00,             /*!< Background color index */
-    GUI_BUTTON_COLOR_FG,                    /*!< Foreground color index */
-    GUI_BUTTON_COLOR_BORDER,                /*!< Border color index in array */
-} GUI_BUTTON_COLOR_t;
+typedef enum GUI_TEXTVIEW_COLOR_t {
+    GUI_TEXTVIEW_COLOR_BG = 0x00,           /*!< Background color */
+    GUI_TEXTVIEW_COLOR_TEXT,                /*!< Default text color */
+} GUI_TEXTVIEW_COLOR_t;
+
+/**
+ * \brief           Vertical align for text view inside box
+ */
+typedef enum GUI_TEXTVIEW_VALIGN_t {        
+    GUI_TEXTVIEW_VALIGN_TOP = GUI_VALIGN_TOP,       /*!< Vertical align top, default value */
+    GUI_TEXTVIEW_VALIGN_CENTER = GUI_VALIGN_CENTER, /*!< Vertical align center */
+    GUI_TEXTVIEW_VALIGN_BOTTOM = GUI_VALIGN_BOTTOM  /*!< Vertical align bottom */
+} GUI_TEXTVIEW_VALIGN_t;
+
+/**
+ * \brief           Horizontal align for text view inside box
+ */
+typedef enum GUI_TEXTVIEW_HALIGN_t {        
+    GUI_TEXTVIEW_HALIGN_LEFT = GUI_HALIGN_LEFT,     /*!< Horizontal align left, default value */
+    GUI_TEXTVIEW_HALIGN_CENTER = GUI_HALIGN_CENTER, /*!< Horizontal align center */
+    GUI_TEXTVIEW_HALIGN_RIGHT = GUI_HALIGN_RIGHT    /*!< Horizontal align right */
+} GUI_TEXTVIEW_HALIGN_t;
 
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)
-/**
- * \brief           GUI button structure
- */
-typedef struct GUI_BUTTON_t {
-    GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
     
-    GUI_Dim_t BorderWidth;                  /*!< Border width */
-    GUI_Dim_t BorderRadius;                 /*!< Border radius */
-} GUI_BUTTON_t;
+/**
+ * \brief           Dropdown object structure
+ */
+typedef struct GUI_TEXTVIEW_t {
+    GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
+
+    GUI_TEXTVIEW_VALIGN_t VAlign;           /*!< Vertical text align */
+    GUI_TEXTVIEW_HALIGN_t HAlign;           /*!< Horizontal text align */
+    uint8_t Flags;                          /*!< Widget flags */
+} GUI_TEXTVIEW_t;
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 /**
- * \brief           Create new button widget
+ * \brief           Create new text view widget
  * \param[in]       id: Widget unique ID to use for identity for callback processing
  * \param[in]       x: Widget X position relative to parent widget
  * \param[in]       y: Widget Y position relative to parent widget
@@ -83,31 +102,15 @@ typedef struct GUI_BUTTON_t {
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p GUI_TEXTVIEW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
-/**
- * \brief           Set color to specific part of widget
- * \param[in,out]   h: Widget handle
- * \param[in]       index: Color index. This parameter can be a value of \ref GUI_BUTTON_COLOR_t enumeration
- * \param[in]       color: Color value
- * \retval          1: Color was set ok
- * \retval          0: Color was not set
- */
-uint8_t GUI_BUTTON_SetColor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color);
-
-/**
- * \brief           Set border radius size
- * \param[in,out]   h: Widget handle
- * \param[in]       size: Border radius size
- * \retval          1: Border radius was set ok
- * \retval          0: Border radius was not set
- */
-uint8_t GUI_BUTTON_SetBorderRadius(GUI_HANDLE_p h, GUI_Dim_t size);
+uint8_t GUI_TEXTVIEW_SetVAlign(GUI_HANDLE_p h, GUI_TEXTVIEW_VALIGN_t align);
+uint8_t GUI_TEXTVIEW_SetHAlign(GUI_HANDLE_p h, GUI_TEXTVIEW_HALIGN_t align);
     
 /**
  * \}
  */
- 
+
 /**
  * \}
  */

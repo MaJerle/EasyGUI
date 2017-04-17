@@ -91,10 +91,11 @@ uint8_t GUI_WINDOW_SetActive(GUI_HANDLE_p h);
 /**
  * \brief           Create new base widget window with desktop window as a parent
  * \param           id: Widget unique ID to use for identity for callback processing
+ * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id);
+GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb);
 
 /**
  * \brief           Create new child window widget
@@ -104,11 +105,12 @@ GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id);
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
+ * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_WINDOW_CreateChild(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, uint16_t flags);
+GUI_HANDLE_p GUI_WINDOW_CreateChild(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Set color to specific part of widget

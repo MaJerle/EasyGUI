@@ -68,6 +68,8 @@ extern "C" {
 #define GUI_FLAG_HEIGHT_PERCENT         ((uint32_t)0x00000200)  /*!< Indicates widget height is in units of percentage according to parent widget height */
 #define GUI_FLAG_WIDTH_FILL             ((uint32_t)0x00000400)  /*!< Indicates widget width fills to the end of widget */
 #define GUI_FLAG_HEIGHT_FILL            ((uint32_t)0x00000800)  /*!< Indicates widget height fills to the end of widget */
+#define GUI_FLAG_EXPANDED               ((uint32_t)0x00001000)  /*!< Indicates children widget is set to (temporary) XY = 0,0 and width/height = parent width / parent height (maximize windows function) */
+#define GUI_FLAG_REMOVE                 ((uint32_t)0x00002000)  /*!< Indicates widget should be deleted */
 
 #define GUI_FLAG_LCD_WAIT_LAYER_CONFIRM ((uint32_t)0x00000001)  /*!< Indicates waiting for layer change confirmation */
 
@@ -370,6 +372,7 @@ typedef struct {
 
 #define GUI_FLAG_FONT_AA                0x01/*!< Indicates anti-alliasing on font */
 #define GUI_FLAG_FONT_RIGHTALIGN        0x02/*!< Indicates right align text if string length is too wide for rectangle */
+#define GUI_FLAG_FONT_MULTILINE         0x04/*!< Indicates multi line support on widget */
 
 #if !defined(DOXYGEN)
 #define ________                        0x00
@@ -656,6 +659,11 @@ typedef struct GUI_TIMER_t {
 } GUI_TIMER_t;
 
 /**
+ * \brief           Pointer to \ref GUI_TIMER_t
+ */
+typedef GUI_TIMER_t* GUI_TIMER_p;
+
+/**
  * \}
  */
 
@@ -670,12 +678,20 @@ typedef struct GUI_TIMER_t {
  */
 typedef enum GUI_WC_t {
     /**
+     * \brief       Widget has been just created and ready to init for future setup
+     *
+     * \param[in]   *param: None
+     * \param[out]  *result: None
+     */
+    GUI_WC_Init = 0x01,
+    
+    /**
      * \brief       Draw widget on screen
      *
      * \param[in]   *param: Pointer to \ref GUI_Display_t structure
      * \param[out]  *result: None
      */
-    GUI_WC_Draw = 0x01,
+    GUI_WC_Draw,
     
     /**
      * \brief       Check if widget should not be added to linked list after creation
@@ -861,7 +877,7 @@ struct GUI_HANDLE;
 /**
  * \brief           Handle object for GUI widget
  */
-typedef void* GUI_HANDLE_p;
+typedef struct GUI_HANDLE* GUI_HANDLE_p;
 
 /**
  * \brief       Callback function for widget
@@ -893,6 +909,7 @@ typedef struct GUI_WIDGET_t {
 typedef struct GUI_HANDLE {
     GUI_LinkedList_t List;                  /*!< Linked list entry, must always be on top for casting */
     GUI_ID_t Id;                            /*!< Widget ID number */
+    uint32_t Footprint;                     /*!< Footprint indicates widget is valid */
     const GUI_WIDGET_t* Widget;             /*!< Widget parameters with callback functions */
     GUI_WIDGET_CALLBACK_t Callback;         /*!< Callback function prototype */
     struct GUI_HANDLE* Parent;              /*!< Pointer to parent widget */
@@ -909,6 +926,7 @@ typedef struct GUI_HANDLE {
     uint32_t TextCursor;                    /*!< Text cursor position */
     GUI_TIMER_t* Timer;                     /*!< Software timer pointer */
     GUI_Color_t* Colors;                    /*!< Pointer to allocated color memory when used */
+    void* UserData;                         /*!< Pointer to optional user data */
 } GUI_HANDLE;
 
 /**
@@ -918,10 +936,8 @@ typedef struct GUI_HANDLE_ROOT {
     GUI_HANDLE Handle;                      /*!< Root widget structure, must be first in structure */
     
     GUI_LinkedListRoot_t RootList;          /*!< Linked list root of children widgets */
-#if !GUI_WIDGET_INSIDE_PARENT || defined(DOXYGEN)
     GUI_iDim_t ScrollX;                     /*!< Scroll of widgets in horizontal direction in units of pixels */
     GUI_iDim_t ScrollY;                     /*!< Scroll of widgets in vertical direction in units of pixels */
-#endif /* !GUI_WIDGET_INSIDE_PARENT || defined(DOXYGEN) */
 } GUI_HANDLE_ROOT_t;
 
 /**
