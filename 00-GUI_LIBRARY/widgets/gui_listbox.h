@@ -98,6 +98,7 @@ typedef struct GUI_LISTBOX_t {
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
+ * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed

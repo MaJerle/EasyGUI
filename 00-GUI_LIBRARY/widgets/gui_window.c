@@ -209,6 +209,17 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
             }
             return 1;
         }
+        case GUI_WC_DblClick: {
+            GUI_iDim_t pt;
+            __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param; /* Get touch parameters */
+            
+            pt = __GUI_WIDGET_GetPaddingTop(h);     /* Get top padding */
+            
+            if (ts->RelY[0] <= pt) {                /* Top widget part detected */
+                __GUI_WIDGET_ToggleExpanded(h);     /* Toggle expanded mode */
+            }
+            return 1;
+        }
         default:                                    /* Handle default option */
             __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */

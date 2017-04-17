@@ -80,6 +80,7 @@ GUI_GRAPH_DATA_p graphdata1, graphdata2, graphdata3, graphdata4;
 #define ID_BASE_BTN         (ID_BASE_WIN + 0x0100)
 #define ID_BASE_TEXTWIEW    (ID_BASE_BTN + 0x0100)
 #define ID_BASE_CHECKBOX    (ID_BASE_TEXTWIEW + 0x0100)
+#define ID_BASE_LED         (ID_BASE_CHECKBOX + 0x0100)
 
 /* List of window widget IDs */
 #define ID_WIN_BTN          (ID_BASE_WIN + 0x01)
@@ -108,6 +109,11 @@ GUI_GRAPH_DATA_p graphdata1, graphdata2, graphdata3, graphdata4;
 #define ID_TEXTVIEW_1       (ID_BASE_TEXTWIEW + 0x01)
 
 #define ID_CHECKBOX_LED     (ID_BASE_CHECKBOX + 0x01)
+
+#define ID_LED_1            (ID_BASE_LED + 0x01)
+#define ID_LED_2            (ID_BASE_LED + 0x02)
+#define ID_LED_3            (ID_BASE_LED + 0x03)
+#define ID_LED_4            (ID_BASE_LED + 0x04)
 
 typedef struct {
     GUI_ID_t win_id;
@@ -214,6 +220,18 @@ int main(void) {
     state = 0;
 	while (1) {
         GUI_Process();
+        
+        if (TM_DISCO_ButtonPressed()) {
+            GUI_HANDLE_p handle = GUI_WIDGET_GetById(ID_LED_1);
+            if (handle) {
+                GUI_LED_On(handle);
+            }
+        } else {
+            GUI_HANDLE_p handle = GUI_WIDGET_GetById(ID_LED_1);
+            if (handle) {
+                GUI_LED_Off(handle);
+            }
+        }
         
         if ((TM_DELAY_Time() - time) >= 50) {
             time = TM_DELAY_Time();
@@ -340,13 +358,28 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
             case ID_WIN_PROGBAR: {      /* Progress bar */
                 handle = GUI_PROGBAR_Create(2, 10, 10, 400, 40, h, 0, 0);
                 GUI_WIDGET_SetText(handle, _T("Progbar"));
+                
+                handle = GUI_PROGBAR_Create(2, 10, 100, 400, 40, h, 0, 0);
+                GUI_WIDGET_SetText(handle, _T("Progbar"));
+                GUI_PROGBAR_EnablePercentages(handle);
                 break;
             }
             case ID_WIN_LED: {          /* Leds */
-                handle = GUI_LED_Create(0, 10, 10, 50, 50, h, 0, 0);
-                GUI_LED_Set(handle, 1);
-                handle = GUI_LED_Create(0, 10, 100, 50, 50, h, 0, 0);
+                handle = GUI_LED_Create(ID_LED_1, 10, 10, 20, 20, h, 0, 0);
                 GUI_LED_SetType(handle, GUI_LED_TYPE_CIRCLE);
+                GUI_LED_Set(handle, 1);
+                handle = GUI_LED_Create(ID_LED_2, 10, 40, 20, 20, h, 0, 0);
+                GUI_LED_SetType(handle, GUI_LED_TYPE_CIRCLE);
+                
+                handle = GUI_LED_Create(ID_LED_3, 10, 70, 20, 20, h, 0, 0);
+                GUI_LED_SetType(handle, GUI_LED_TYPE_RECT);
+                GUI_LED_Set(handle, 1);
+                handle = GUI_LED_Create(ID_LED_4, 10, 100, 20, 20, h, 0, 0);
+                GUI_LED_SetType(handle, GUI_LED_TYPE_RECT);
+                
+                handle = GUI_TEXTVIEW_Create(0, 40, 10, 400, 1000, h, 0, 0);
+                GUI_WIDGET_SetFont(handle, &GUI_Font_Arial_Bold_18);
+                GUI_WIDGET_SetText(handle, _T("\"LED\" are widgets used to indicate some status or any other situation. Press blue button on discovery board to see LED in happen\r\n"));
                 break;
             }
             case ID_WIN_TEXTVIEW: {     /* Text view */

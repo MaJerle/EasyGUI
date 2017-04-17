@@ -1100,3 +1100,15 @@ uint8_t GUI_WIDGET_SetFontDefault(const GUI_FONT_t* font) {
     WIDGET_Default.Font = font;                     /* Set default font */
     return 1;
 }
+
+uint8_t GUI_WIDGET_IncSelection(GUI_HANDLE_p h, int16_t dir) {
+    uint8_t ret = 0;
+    
+    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    ret = __GUI_WIDGET_Callback(h, GUI_WC_IncSelection, &dir, &ret);    /* Increase selection for specific amount */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
+}

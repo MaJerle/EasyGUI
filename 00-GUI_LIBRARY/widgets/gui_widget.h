@@ -83,7 +83,7 @@ extern "C" {
 #define GUI_ID_BUTTON_9             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0009))   /*!< Button object ID 9 */
 #define GUI_ID_BUTTON_10            ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x000A))   /*!< Button object ID 10 */
 
-#define GUI_ID_USER                 ((GUI_ID_t)(0x10000))
+#define GUI_ID_USER                 ((GUI_ID_t)(0x10000))                       /*!< Start number of user based ID values for widgets */
     
 /**
  * \}
@@ -856,6 +856,13 @@ uint8_t GUI_WIDGET_Show(GUI_HANDLE_p h);
  */
 uint8_t GUI_WIDGET_Hide(GUI_HANDLE_p h);
 
+/**
+ * \brief           Put widget to front view and put it to focused state
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget was put ok
+ * \retval          0: Widget was not put
+ * \sa              GUI_WIDGET_Hide
+ */
 uint8_t GUI_WIDGET_PutOnFront(GUI_HANDLE_p h);
 
 /**
@@ -875,7 +882,23 @@ uint8_t GUI_WIDGET_Invalidate(GUI_HANDLE_p h);
  */
 uint8_t GUI_WIDGET_SetCallback(GUI_HANDLE_p h, GUI_WIDGET_CALLBACK_t callback);
 
+/**
+ * \brief           Set custom user data to widget
+ * \note            Specially useful in callback processing if required
+ * \param[in,out]   h: Widget handle
+ * \param[in]       data: Pointer to custom user data
+ * \retval          1: Data were set OK
+ * \retval          0: Data were not set
+ * \sa              GUI_WIDGET_GetUserData
+ */
 uint8_t GUI_WIDGET_SetUserData(GUI_HANDLE_p h, void* data);
+
+/**
+ * \brief           Get custom user data from widget previously set with \ref GUI_WIDGET_SetUserData
+ * \param[in,out]   h: Widget handle
+ * \retval          Pointer to user data
+ * \sa              GUI_WIDGET_GetUserData
+ */
 void* GUI_WIDGET_GetUserData(GUI_HANDLE_p h);
 
 /**
@@ -901,6 +924,16 @@ uint8_t GUI_WIDGET_ProcessDefaultCallback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* p
  * \retval          0: Widget handle is not in tree of parent handle
  */
 uint8_t GUI_WIDGET_IsChildOf(GUI_HANDLE_p h, GUI_HANDLE_p parent);
+
+/**
+ * \brief           Increase selection for widget
+ * \note            Widget must implement \ref GUI_WC_IncSelection command in callback function and process it
+ * \param[in,out]   h: Widget handle
+ * \param[in]       dir: Increase direction. Positive number means number of increases, negative is number of decreases
+ * \retval          1: Increase/Decrease was ok
+ * \retval          0: Increase/Decrease was not ok
+ */
+uint8_t GUI_WIDGET_IncSelection(GUI_HANDLE_p h, int16_t dir);
 
 uint8_t GUI_WIDGET_SetScrollX(GUI_HANDLE_p h, GUI_iDim_t scroll);
 uint8_t GUI_WIDGET_SetScrollY(GUI_HANDLE_p h, GUI_iDim_t scroll);

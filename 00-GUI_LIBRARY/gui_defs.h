@@ -164,7 +164,7 @@ typedef uint8_t     GUI_Char;               /*!< GUI char data type for all stri
 #define _T(x)       (GUI_Char *)(x)         /*!< Macro to force strings to right format for processing */
 #define GUI_Const   const                   /*!< Macro for constant keyword */
     
-#define GUI_COUNT_OF(x)         (sizeof(x) / sizeof((x)[0]))
+#define GUI_COUNT_OF(x)         (sizeof(x) / sizeof((x)[0]))    /*!< Count number of elements in array */
     
 /**
  * \brief           Get container object from member
@@ -723,7 +723,7 @@ typedef enum GUI_WC_t {
     /**
      * \brief       Notification called when widget becomes focused
      *
-     * \param[in]   *param None
+     * \param[in]   *param: None
      * \param[out]  *result: None
      * \sa          GUI_WC_FocusOut
      */
@@ -732,7 +732,7 @@ typedef enum GUI_WC_t {
     /**
      * \brief       Notification called when widget clears widget state
      *
-     * \param[in]   *param None
+     * \param[in]   *param: None
      * \param[out]  *result: None
      * \sa          GUI_WC_FocusIn
      */
@@ -743,7 +743,7 @@ typedef enum GUI_WC_t {
      *
      * \note        Called when widget just become active
      *
-     * \param[in]   *param None
+     * \param[in]   *param: None
      * \param[out]  *result: None
      * \sa          GUI_WC_ActiveOut
      */
@@ -754,7 +754,7 @@ typedef enum GUI_WC_t {
      *
      * \note        Called when widget just clears active
      *
-     * \param[in]   *param None
+     * \param[in]   *param: None
      * \param[out]  *result: None
      * \sa          GUI_WC_ActiveIn
      */
@@ -763,7 +763,7 @@ typedef enum GUI_WC_t {
     /**
      * \brief       Notification when touch down event occurs on widget
      *
-     * \param[in]   *param Pointer to \ref __GUI_TouchData_t structure
+     * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure
      * \param[out]  *result: Value of \ref __GUI_TouchStatus_t enumeration
      * \sa          GUI_WC_TouchMove
      * \sa          GUI_WC_TouchEnd
@@ -773,7 +773,7 @@ typedef enum GUI_WC_t {
     /**
      * \brief       Notification when touch move event occurs on widget
      *
-     * \param[in]   *param Pointer to \ref __GUI_TouchData_t structure
+     * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure
      * \param[out]  *result: Value of \ref __GUI_TouchStatus_t enumeration
      * \sa          GUI_WC_TouchStart
      * \sa          GUI_WC_TouchEnd
@@ -783,7 +783,7 @@ typedef enum GUI_WC_t {
     /**
      * \brief       Notification when touch up event occurs on widget
      *
-     * \param[in]   *param Pointer to \ref __GUI_TouchData_t structure
+     * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure
      * \param[out]  *result: Value of \ref __GUI_TouchStatus_t enumeration
      * \sa          GUI_WC_TouchStart
      * \sa          GUI_WC_TouchMove
@@ -793,7 +793,7 @@ typedef enum GUI_WC_t {
     /**
      * \brief       Notification when key has been pushed to this widget
      *
-     * \param[in]   *param Pointer to \ref __GUI_KeyboardData_t structure
+     * \param[in]   *param: Pointer to \ref __GUI_KeyboardData_t structure
      * \param[out]  *result: Value of \ref __GUI_KeyboardStatus_t enumeration
      */
     GUI_WC_KeyPress,
@@ -801,7 +801,7 @@ typedef enum GUI_WC_t {
     /**
      * \brief       Notification when click event has been detected
      *
-     * \param[in]   *param Pointer to \ref __GUI_TouchData_t structure with valid touch press location
+     * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure with valid touch press location
      * \param[out]  *result: None
      */
     GUI_WC_Click,
@@ -809,7 +809,7 @@ typedef enum GUI_WC_t {
     /**
      * \brief       Notification when long press has been detected
      *
-     * \param[in]   *param Pointer to \ref __GUI_TouchData_t structure with valid touch press location
+     * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure with valid touch press location
      * \param[out]  *result: None
      */
     GUI_WC_LongClick,
@@ -817,7 +817,7 @@ typedef enum GUI_WC_t {
     /**
      * \brief       Notification when double click has been detected
      *
-     * \param[in]   *param Pointer to \ref __GUI_TouchData_t structure with valid touch press location
+     * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure with valid touch press location
      * \param[out]  *result: None
      */
     GUI_WC_DblClick,
@@ -829,7 +829,7 @@ typedef enum GUI_WC_t {
      *
      * \note        Used by widgets where selection can be changed (listbox, selectbox, radio, etc)
      *
-     * \param[in]   *param None
+     * \param[in]   *param: None
      * \param[out]  *result: None
      */
     GUI_WC_SelectionChanged,
@@ -841,7 +841,7 @@ typedef enum GUI_WC_t {
      *
      * \note        Used by widgets where value or status can change (checkbox)
      *
-     * \param[in]   *param None
+     * \param[in]   *param: None
      * \param[out]  *result: None
      */
     GUI_WC_ValueChanged,
@@ -851,10 +851,21 @@ typedef enum GUI_WC_t {
      *
      * \note        Called from widget by user when necessary. Not all widget reports this value by itself
      *
-     * \param[in]   *param None
+     * \param[in]   *param: None
      * \param[out]  *result: None
      */
     GUI_WC_TextChanged,
+    
+    /**     
+     * \brief       Widget should increase/decrease selection
+     *
+     * \note        Called from \ref GUI_WIDGET_IncSelection function to increase/decrease selection for widgets
+     *                 such as listbox or dropdown, where active selection can be changed
+     *
+     * \param[in]   *param: Pointer to \ref int16_t variable for amount of increase/decrease value
+     * \param[out]  *result: Pointer to output \ref uint8_t variable to save status of increase/decrease operation
+     */
+    GUI_WC_IncSelection,
 } GUI_WC_t;
 
 /**

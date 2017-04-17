@@ -234,6 +234,26 @@ void __CheckValues(GUI_HANDLE_p h) {
     }
 }
 
+/* Increase or decrease selection */
+static
+void __IncSelection(GUI_HANDLE_p h, int16_t dir) {
+    if (dir < 0) {                                  /* Slide elements up */
+        if ((o->Selected + dir) < 0) {
+            __SetSelection(h, 0);
+        } else {
+            __SetSelection(h, o->Selected + dir);
+        }
+        __GUI_WIDGET_Invalidate(h);
+    } else if (dir > 0) {
+        if ((o->Selected + dir) > (o->Count - 1)) { /* Slide elements down */
+            __SetSelection(h, o->Count - 1);
+        } else {
+            __SetSelection(h, o->Selected + dir);
+        }
+        __GUI_WIDGET_Invalidate(h);
+    }
+}
+
 /* Delete list item box by index */
 static
 uint8_t __DeleteItem(GUI_HANDLE_p h, uint16_t index) {
@@ -445,6 +465,17 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             __OpenClose(h, 0);                      /* Close widget */
         }
         case GUI_WC_KeyPress: {
+            __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;
+            if (kb->KB.Keys[0] == GUI_KEY_DOWN) {   /* On pressed down */
+                __IncSelection(h, 1);               /* Increase selection */
+            } else if (kb->KB.Keys[0] == GUI_KEY_UP) {
+                __IncSelection(h, -1);              /* Decrease selection */
+            }
+            return 1;
+        }
+        case GUI_WC_IncSelection: {
+            __IncSelection(h, *(int16_t *)param);   /* Increase selection */
+            *(uint8_t *)result = 1;                 /* Set operation result */
             return 1;
         }
         default:                                    /* Handle default option */

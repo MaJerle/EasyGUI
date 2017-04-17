@@ -362,6 +362,11 @@ uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
             }
             return 1;
         }
+        case GUI_WC_IncSelection: {
+            __IncSelection(h, *(int16_t *)param);   /* Increase selection */
+            *(uint8_t *)result = 1;                 /* Set operation result */
+            return 1;
+        }
         default:                                    /* Handle default option */
             __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
