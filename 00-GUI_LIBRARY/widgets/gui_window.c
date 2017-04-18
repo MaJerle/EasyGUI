@@ -113,8 +113,21 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
                 /* Draw maximize button */
                 GUI_DRAW_Rectangle3D(disp, x + wi - 2 * topH, y + 2, topH - 2, topH - 2, GUI_DRAW_3D_State_Raised);
                 GUI_DRAW_FilledRectangle(disp, x + wi - 2 * topH + 2, y + 4, topH - 6, topH - 6, GUI_COLOR_GRAY);
-                GUI_DRAW_Rectangle(disp, x + wi - 2 * topH + 4, y + 7, topH - 10, topH - 10, GUI_COLOR_BLACK); 
-                GUI_DRAW_HLine(disp, x + wi - 2 * topH + 4, y + 6, topH - 10, GUI_COLOR_BLACK); 
+                if (__GUI_WIDGET_IsExpanded(h)) {
+                    GUI_iDim_t tmpX, tmpY;
+                    tmpX = x + wi - 2 * topH + 4;
+                    tmpY = y + 7;
+                    GUI_DRAW_Rectangle(disp, tmpX, tmpY + 4, topH - 14, topH - 14, GUI_COLOR_BLACK);
+                    GUI_DRAW_HLine(disp, tmpX + 1, tmpY + 5, topH - 16, GUI_COLOR_BLACK); 
+                    
+                    GUI_DRAW_FilledRectangle(disp, tmpX + 4, tmpY, topH - 15, 2, GUI_COLOR_BLACK);
+                    GUI_DRAW_VLine(disp, tmpX + 4, tmpY + 2, 2, GUI_COLOR_BLACK);
+                    GUI_DRAW_VLine(disp, tmpX + 4 + topH - 15, tmpY, topH - 15, GUI_COLOR_BLACK);
+                    GUI_DRAW_HLine(disp, tmpX + topH - 14, tmpY + topH - 15, 4, GUI_COLOR_BLACK);
+                } else {
+                    GUI_DRAW_Rectangle(disp, x + wi - 2 * topH + 4, y + 7, topH - 10, topH - 10, GUI_COLOR_BLACK); 
+                    GUI_DRAW_HLine(disp, x + wi - 2 * topH + 4, y + 8, topH - 10, GUI_COLOR_BLACK); 
+                }
                 
                 /* Draw "close" button */
                 GUI_DRAW_Rectangle3D(disp, x + wi - topH, y + 2, topH - 2, topH - 2, GUI_DRAW_3D_State_Raised);

@@ -144,6 +144,9 @@ uint8_t __OpenClose(GUI_HANDLE_p h, uint8_t state) {
             o->VisibleStartIndex = o->Selected;
             if ((o->VisibleStartIndex + perPage) >= o->Count) {
                 o->VisibleStartIndex = o->Count - perPage;
+                if (o->VisibleStartIndex < 0) {
+                    o->VisibleStartIndex = 0;
+                }
             }
         }
         __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate widget */
@@ -300,10 +303,11 @@ void __ProcessClick(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
         } else {
             tmpSelected = (ts->RelY[0] - height1) / __ItemHeight(h, NULL);  /* Get temporary selected index */
         }
-        if ((o->VisibleStartIndex + tmpSelected) <= o->Count) {
+        if ((o->VisibleStartIndex + tmpSelected) < o->Count) {
             __SetSelection(h, o->VisibleStartIndex + tmpSelected);
             __GUI_WIDGET_Invalidate(h);             /* Choose new selection */
         }
+        __CheckValues(h);                           /* Check values */
     }
     __OpenClose(h, 0);                              /* Close widget on click */
 }
@@ -463,6 +467,7 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
         }
         case GUI_WC_FocusOut: {
             __OpenClose(h, 0);                      /* Close widget */
+            return 1;
         }
         case GUI_WC_KeyPress: {
             __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;

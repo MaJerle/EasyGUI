@@ -888,7 +888,7 @@ struct GUI_HANDLE;
 /**
  * \brief           Handle object for GUI widget
  */
-typedef struct GUI_HANDLE* GUI_HANDLE_p;
+typedef void* GUI_HANDLE_p;
 
 /**
  * \brief       Callback function for widget
@@ -928,7 +928,7 @@ typedef struct GUI_HANDLE {
     GUI_iDim_t Y;                           /*!< Object Y position relative to parent window in units of pixels */
     GUI_Dim_t Width;                        /*!< Object width in units of pixels or percentages */
     GUI_Dim_t Height;                       /*!< Object height in units of pixels or percentages */
-    uint32_t Padding;                       /*!< 4-byte long padding, each byte of one side, MSB = top padding, LSB = left padding.
+    uint32_t Padding;                       /*!< 4-bytes long padding, each byte of one side, MSB = top padding, LSB = left padding.
                                                     Used for children widgets if virtual padding should be used */
     uint32_t Flags;                         /*!< All possible flags for specific widget */
     GUI_Const GUI_FONT_t* Font;             /*!< Font used for widget drawings */

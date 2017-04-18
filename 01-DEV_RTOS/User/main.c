@@ -156,16 +156,16 @@ GUI_Char* listboxtexts[] = {
     _T("Item 0"),
     _T("Item 1"),
     _T("Item 2"),
-//    _T("Item 3"),
-//    _T("Item 4"),
-//    _T("Item 5"),
-//    _T("Item 6"),
-//    _T("Item 7"),
-//    _T("Item 8"),
-//    _T("Item 9"),
-//    _T("Item 10"),
-//    _T("Item 11"),
-//    _T("Item 12"),
+    _T("Item 3"),
+    _T("Item 4"),
+    _T("Item 5"),
+    _T("Item 6"),
+    _T("Item 7"),
+    _T("Item 8"),
+    _T("Item 9"),
+    _T("Item 10"),
+    _T("Item 11"),
+    _T("Item 12"),
 };
 
 uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
@@ -220,18 +220,6 @@ int main(void) {
     state = 0;
 	while (1) {
         GUI_Process();
-        
-        if (TM_DISCO_ButtonPressed()) {
-            GUI_HANDLE_p handle = GUI_WIDGET_GetById(ID_LED_1);
-            if (handle) {
-                GUI_LED_On(handle);
-            }
-        } else {
-            GUI_HANDLE_p handle = GUI_WIDGET_GetById(ID_LED_1);
-            if (handle) {
-                GUI_LED_Off(handle);
-            }
-        }
         
         if ((TM_DELAY_Time() - time) >= 50) {
             time = TM_DELAY_Time();

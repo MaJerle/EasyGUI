@@ -148,12 +148,27 @@ GUI_iDim_t __GUI_WIDGET_GetAbsoluteX(GUI_HANDLE_p h);
  */
 GUI_iDim_t __GUI_WIDGET_GetAbsoluteY(GUI_HANDLE_p h);
 
-//Returns parent X and Y absolute positions including padding position without parent scroll but with scrolls of parents of parent
-//Used to get clipping area for first children widget in tree
-//X and Y position for inner drawing elements area
-//Consider parent widget is on location x = 0, y = 0 on base tree. It has top padding 10 and left padding = 2;
-//OutputX = absolute X + left padding
+/**
+ * \brief           Get absolute inner X position of parent widget
+ * \note            This function returns inner X position in absolute form.
+ *                     Imagine parent absolute X is 10, and left padding is 2. Function returns 12.
+ *
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle for which parent should be calculated
+ * \retval          Parent absolute inner X position
+ */
 GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteX(GUI_HANDLE_p h);
+
+/**
+ * \brief           Get absolute inner Y position of parent widget
+ * \note            This function returns inner Y position in absolute form.
+ *                     Imagine parent absolute Y is 10, and top padding is 2. Function returns 12.
+ *
+ 
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle for which parent should be calculated
+ * \retval          Parent absolute inner Y position
+ */
 GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h);
 
 /**
@@ -510,9 +525,22 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
     __GUI_WIDGET_SetPaddingRight(h, x);                 \
 } while (0)
 
+/**
+ * \brief           Get widget ID
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          Widget ID
+ */
 #define __GUI_WIDGET_GetId(h)               (__GH(h)->Id)
 
-#define __GUI_WIDGET_IsExpanded(h)          (__GH(h)->Flags & GUI_FLAG_EXPANDED)
+/**
+ * \brief           Checks if widget is expanded to maximum relative to parent widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget is expandend
+ * \retval          0: Widget is not expanded
+ */
+#define __GUI_WIDGET_IsExpanded(h)          (!!(__GH(h)->Flags & GUI_FLAG_EXPANDED))
 
 /**
  * \brief           Get pointer to parent widget
@@ -688,7 +716,21 @@ uint8_t __GUI_WIDGET_IsFocusedOrChildren(GUI_HANDLE_p h);
  */
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
+
+/**
+ * \brief           Get widget ID
+ * \param[in,out]   h: Widget handle
+ * \retval          Widget ID
+ */
 GUI_ID_t GUI_WIDGET_GetId(GUI_HANDLE_p h);
+
+/**
+ * \brief           Get first widget handle by ID
+ * \note            If multiple widgets have the same ID, first found will be used
+ * \param[in,out]   id: Widget ID to search for
+ * \retval          > 0: Widget handle when widget found
+ * \retval          0: Widget not found
+ */
 GUI_HANDLE_p GUI_WIDGET_GetById(GUI_ID_t id);
 
 /**
@@ -938,6 +980,12 @@ uint8_t GUI_WIDGET_IncSelection(GUI_HANDLE_p h, int16_t dir);
 uint8_t GUI_WIDGET_SetScrollX(GUI_HANDLE_p h, GUI_iDim_t scroll);
 uint8_t GUI_WIDGET_SetScrollY(GUI_HANDLE_p h, GUI_iDim_t scroll);
 
+/**
+ * \brief           Set default font for widgets used on widget creation
+ * \param[in]       *font: Pointer to \ref GUI_FONT_t with font
+ * \retval          1: Font was set ok
+ * \retval          0: Font was not set
+ */
 uint8_t GUI_WIDGET_SetFontDefault(const GUI_FONT_t* font);
 
 #if defined(GUI_INTERNAL) && !defined(DOXYGEN)
