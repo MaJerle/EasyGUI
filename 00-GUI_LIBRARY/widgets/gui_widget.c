@@ -262,8 +262,6 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h) {
 }
 
 GUI_iDim_t __GUI_WIDGET_GetAbsoluteX(GUI_HANDLE_p h) {
-    /* Assuming linked list is first element in structure */
-    /* Second element is common structure */
     GUI_HANDLE_p w = 0;
     GUI_Dim_t out = 0;
     
@@ -284,8 +282,6 @@ GUI_iDim_t __GUI_WIDGET_GetAbsoluteX(GUI_HANDLE_p h) {
 }
 
 GUI_iDim_t __GUI_WIDGET_GetAbsoluteY(GUI_HANDLE_p h) {
-    /* Assuming linked list is first element in structure */
-    /* Second element is common structure */
     GUI_HANDLE_p w = 0;
     GUI_Dim_t out = 0;
     
@@ -305,8 +301,6 @@ GUI_iDim_t __GUI_WIDGET_GetAbsoluteY(GUI_HANDLE_p h) {
 }
 
 GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteX(GUI_HANDLE_p h) {
-    /* Assuming linked list is first element in structure */
-    /* Second element is common structure */
     GUI_Dim_t out = 0;
     
     if (h) {                                        /** Check valid widget */
@@ -320,8 +314,6 @@ GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteX(GUI_HANDLE_p h) {
 }
 
 GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h) {
-    /* Assuming linked list is first element in structure */
-    /* Second element is common structure */
     GUI_Dim_t out = 0;
     
     if (h) {                                        /** Check valid widget */

@@ -204,8 +204,6 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
                     *result = GUI_WC_DblClick;          /* Double click event */
                     PT_EXIT(&ts->pt);                   /* Reset protothread */
                 }
-            } else {
-                
             }
         } else {
             if (!i) {
@@ -261,37 +259,38 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
             __SetRelativeCoordinate(touch, __GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h)); /* Set relative coordinate */
 
             processed = __GUI_WIDGET_Callback(h, GUI_WC_TouchStart, touch, &tStat);
-            if (processed) {                    /* Check if command has been processed */
-                if (tStat != touchCONTINUE) {   /* If touch was handled */
-                    /**
-                     * Move widget down on parent linked list and do the same with all of its parents,
-                     * no matter of touch focus or not
-                     */
-                    __GUI_WIDGET_MoveDownTree(h);
-                    
-                    if (tStat == touchHANDLED) {    /* Touch handled for widget completelly */
-                        /**
-                         * Set active widget and set flag for it
-                         * Set focus widget and set flag for iz
-                         */
-                        __GUI_WIDGET_FOCUS_SET(h);
-                        __GUI_WIDGET_ACTIVE_SET(h);
-                        
-                        /**
-                         * Invalidate actual handle object
-                         * Already invalidated in __GUI_ACTIVE_SET function
-                         */
-                        //__GUI_WIDGET_Invalidate(h);
-                    } else {                    /* Touch handled with no focus */
-                        /**
-                         * When touch was handled without focus,
-                         * process only clearing currently focused and active widgets and clear them
-                         */
-                        __GUI_WIDGET_FOCUS_CLEAR();
-                        __GUI_WIDGET_ACTIVE_CLEAR();
-                    }
-                    return tStat;
+            if (processed) {                        /* Check if command has been processed */
+                if (tStat == touchCONTINUE) {       /* Check result status */
+                    tStat = touchHANDLED;           /* If command is processed, touchCONTINUE can't work */
                 }
+                /**
+                 * Move widget down on parent linked list and do the same with all of its parents,
+                 * no matter of touch focus or not
+                 */
+                __GUI_WIDGET_MoveDownTree(h);
+                
+                if (tStat == touchHANDLED) {        /* Touch handled for widget completelly */
+                    /**
+                     * Set active widget and set flag for it
+                     * Set focus widget and set flag for iz
+                     */
+                    __GUI_WIDGET_FOCUS_SET(h);
+                    __GUI_WIDGET_ACTIVE_SET(h);
+                    
+                    /**
+                     * Invalidate actual handle object
+                     * Already invalidated in __GUI_ACTIVE_SET function
+                     */
+                    //__GUI_WIDGET_Invalidate(h);
+                } else {                        /* Touch handled with no focus */
+                    /**
+                     * When touch was handled without focus,
+                     * process only clearing currently focused and active widgets and clear them
+                     */
+                    __GUI_WIDGET_FOCUS_CLEAR();
+                    __GUI_WIDGET_ACTIVE_CLEAR();
+                }
+                return tStat;
             }
         }
     }

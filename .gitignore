@@ -26,3 +26,4 @@ delete_unused_files.bat
 00-GUI_LIBRARY/x_application_note.h
 
 *.TMP
+01-DEV_RTOS/Targets/STM32F7_DISCOVERY/project.txt

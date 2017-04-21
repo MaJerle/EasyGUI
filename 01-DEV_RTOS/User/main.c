@@ -172,6 +172,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
 uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 uint8_t radio_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 uint8_t checkbox_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
+uint8_t led_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 
 #define PI      3.14159265359f
 
@@ -353,16 +354,16 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 break;
             }
             case ID_WIN_LED: {          /* Leds */
-                handle = GUI_LED_Create(ID_LED_1, 10, 10, 20, 20, h, 0, 0);
+                handle = GUI_LED_Create(ID_LED_1, 10, 10, 20, 20, h, led_callback, 0);
                 GUI_LED_SetType(handle, GUI_LED_TYPE_CIRCLE);
                 GUI_LED_Set(handle, 1);
-                handle = GUI_LED_Create(ID_LED_2, 10, 40, 20, 20, h, 0, 0);
+                handle = GUI_LED_Create(ID_LED_2, 10, 40, 20, 20, h, led_callback, 0);
                 GUI_LED_SetType(handle, GUI_LED_TYPE_CIRCLE);
                 
-                handle = GUI_LED_Create(ID_LED_3, 10, 70, 20, 20, h, 0, 0);
+                handle = GUI_LED_Create(ID_LED_3, 10, 70, 20, 20, h, led_callback, 0);
                 GUI_LED_SetType(handle, GUI_LED_TYPE_RECT);
                 GUI_LED_Set(handle, 1);
-                handle = GUI_LED_Create(ID_LED_4, 10, 100, 20, 20, h, 0, 0);
+                handle = GUI_LED_Create(ID_LED_4, 10, 100, 20, 20, h, led_callback, 0);
                 GUI_LED_SetType(handle, GUI_LED_TYPE_RECT);
                 
                 handle = GUI_TEXTVIEW_Create(0, 40, 10, 400, 1000, h, 0, 0);
@@ -372,7 +373,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
             }
             case ID_WIN_TEXTVIEW: {     /* Text view */
                 handle = GUI_TEXTVIEW_Create(ID_TEXTVIEW_1, 10, 10, 300, 180, h, 0, 0);
-                GUI_WIDGET_SetText(handle, _T("Text view with automatic new line detector and support for different aligns. SAMO JAKOOO\r\n\r\nHowever, I can also manually jump to new line! Just like Word works ;)"));
+                GUI_WIDGET_SetText(handle, _T("Text view with automatic new line detector and support for different aligns.\r\n\r\nHowever, I can also manually jump to new line! Just like Word works ;)"));
                 
                 handle = GUI_RADIO_Create(0, 10, 200, 150, 30, h, radio_callback, 0);
                 GUI_RADIO_SetGroup(handle, RADIO_GROUP_HALIGN);
@@ -445,6 +446,10 @@ uint8_t radio_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) 
         }
     }
     return ret;
+}
+
+uint8_t led_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
+    
 }
 
 uint8_t checkbox_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
