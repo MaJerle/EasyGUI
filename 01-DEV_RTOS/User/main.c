@@ -449,7 +449,8 @@ uint8_t radio_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) 
 }
 
 uint8_t led_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
-    
+    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    return ret;
 }
 
 uint8_t checkbox_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
@@ -491,7 +492,8 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                             GUI_WIDGET_Show(tmp);
                             GUI_WIDGET_PutOnFront(tmp);
                         } else {
-                            tmp = GUI_WINDOW_CreateChild(data->win_id, 5, 5, 470, 262, GUI_WINDOW_GetDesktop(), window_callback, NULL);
+                            //tmp = GUI_WINDOW_CreateChild(data->win_id, 5, 5, 470, 262, GUI_WINDOW_GetDesktop(), window_callback, NULL);
+                            tmp = GUI_WINDOW_CreateChild(data->win_id, 100, 20, 150, 100, GUI_WINDOW_GetDesktop(), window_callback, NULL);
                             GUI_WIDGET_SetText(tmp, data->win_text);
                             GUI_WIDGET_PutOnFront(tmp);
                         }

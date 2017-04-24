@@ -48,16 +48,14 @@ extern "C" {
  * \{
  */
 
-#define GUI_LED_FLAG_ON             0x01    /*!< Indicates LED is on */
-
 /**
  * \brief           List of available colors for LED
  */
 typedef enum GUI_LED_COLOR_t {
     GUI_LED_COLOR_ON = 0x00,                /*!< Color index for LED on status */
-    GUI_LED_COLOR_OFF = 0x01,               /*!< Color index for LED off status */
-    GUI_LED_COLOR_ON_BORDER = 0x02,         /*!< Color index for LED border on status */
-    GUI_LED_COLOR_OFF_BORDER = 0x03         /*!< Color index for LED border off status */
+    GUI_LED_COLOR_OFF,                      /*!< Color index for LED off status */
+    GUI_LED_COLOR_ON_BORDER,                /*!< Color index for LED border on status */
+    GUI_LED_COLOR_OFF_BORDER                /*!< Color index for LED border off status */
 } GUI_LED_COLOR_t;
 
 /**
@@ -69,6 +67,9 @@ typedef enum GUI_LED_TYPE_t {
 } GUI_LED_TYPE_t;
 
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)
+
+#define GUI_LED_FLAG_ON             0x01    /*!< Indicates LED is on */
+
 /**
  * \brief           LED object structure
  */
@@ -146,6 +147,14 @@ uint8_t GUI_LED_Toggle(GUI_HANDLE_p h);
  * \retval          0: Led state was not set
  */
 uint8_t GUI_LED_Set(GUI_HANDLE_p h, uint8_t state);
+
+/**
+ * \brief           Check if led is ON
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Led is ON
+ * \retval          0: Led is OFF
+ */
+uint8_t GUI_LED_IsOn(GUI_HANDLE_p h);
 
 /**
  * \}

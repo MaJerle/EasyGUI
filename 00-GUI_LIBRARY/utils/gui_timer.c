@@ -73,28 +73,36 @@ GUI_TIMER_t* __GUI_TIMER_Create(uint16_t period, void (*callback)(GUI_TIMER_t *)
     return ptr;
 }
 
-void __GUI_TIMER_Remove(GUI_TIMER_t** t) {  
-    __GUI_ASSERTPARAMSVOID(t && *t);                /* Check input parameters */  
+uint8_t __GUI_TIMER_Remove(GUI_TIMER_t** t) {  
+    __GUI_ASSERTPARAMS(t && *t);                    /* Check input parameters */  
     __GUI_LINKEDLIST_REMOVE_GEN(&GUI.Timers.List, &(*t)->List); /* Remove timer from linked list */
     __GUI_MEMFREE(*t);                              /* Free memory for timer */
     *t = 0;                                         /* Restore pointer */
+    
+    return 1;
 }
 
-void __GUI_TIMER_Start(GUI_TIMER_t* t) {
-    __GUI_ASSERTPARAMSVOID(t);                      /* Check input parameters */
+uint8_t __GUI_TIMER_Start(GUI_TIMER_t* t) {
+    __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
     t->Counter = t->Period;                         /* Reset counter to top value */
     t->Flags |= GUI_FLAG_TIMER_ACTIVE;              /* Set active flag */
+    
+    return 1;
 }
 
-void __GUI_TIMER_Stop(GUI_TIMER_t* t) {
-    __GUI_ASSERTPARAMSVOID(t);                      /* Check input parameters */
+uint8_t __GUI_TIMER_Stop(GUI_TIMER_t* t) {
+    __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
     t->Counter = t->Period;                         /* Reset counter to top value */
     t->Flags &= ~GUI_FLAG_TIMER_ACTIVE;             /* Clear active flag */
+    
+    return 1;
 }
 
-void __GUI_TIMER_Reset(GUI_TIMER_t* t) {
-    __GUI_ASSERTPARAMSVOID(t);                      /* Check input parameters */
+uint8_t __GUI_TIMER_Reset(GUI_TIMER_t* t) {
+    __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
     t->Counter = t->Period;                         /* Clear and reset timer */
+    
+    return 1;
 }
 
 void __GUI_TIMER_Process(void) {

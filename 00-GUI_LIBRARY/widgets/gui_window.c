@@ -160,6 +160,9 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
                 }
             }
             
+            __GUI_WIDGET_SetColor(h, GUI_WINDOW_COLOR_BG, 
+                (__GUI_WIDGET_GetColor(h, GUI_WINDOW_COLOR_BG) + 5) * (__GUI_WIDGET_GetColor(h, GUI_WINDOW_COLOR_BG) + 10));
+            
             return 1;
         }
 #if GUI_USE_TOUCH

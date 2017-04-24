@@ -64,9 +64,8 @@ extern "C" {
 /* GUI Low-Level drivers */
 #include "gui_ll.h"
 
-#if !defined(DOXYGEN)
 /**
- * \defgroup        GUI_Internal   
+ * \defgroup        GUI_Internal Internal macros 
  * \{
  */
 #define __GUI_ENTER()
@@ -76,21 +75,27 @@ extern "C" {
 
 /**
  * \brief           GUI Handle object from main object
+ * \retval          Pointer to GUI handle
+ * \hideinitializer
  */ 
 #define __GH(x)                     ((struct GUI_HANDLE *)(x))
 
 /**
  * \brief           GUI Handle root object from main object with children widgets
+ * \retval          Pointer to GUI root handle
+ * \hideinitializer
  */ 
 #define __GHR(x)                    ((struct GUI_HANDLE_ROOT *)(x))
 
 /**
- * \brief           Allocate memory with specific size
+ * \brief           Allocate memory with specific size in bytes
+ * \hideinitializer
  */
 #define __GUI_MEMALLOC(size)        malloc(size)
 
 /**
- * \brief           Free memory from specific address
+ * \brief           Free memory from specific address previously allocated with \ref __GUI_MEMALLOC
+ * \hideinitializer
  */
 #define __GUI_MEMFREE(p)            do {            \
     free(p);                                        \
@@ -99,6 +104,7 @@ extern "C" {
 
 /**
  * \brief           Free memory for widget which was just deleted
+ * \hideinitializer
  */
 #define __GUI_MEMWIDFREE(p)         do {            \
     __GUI_DEBUG("Memory free: 0x%08X; Type: %s\r\n", (uint32_t)__GH(p), __GH(p)->Widget->Name);  \
@@ -109,6 +115,7 @@ extern "C" {
 
 /**
  * \brief           Check input parameters and return value on failure
+ * \hideinitializer
  */
 #define __GUI_ASSERTPARAMS(c)       do {            \
     if (!(c)) {                                     \
@@ -118,17 +125,8 @@ extern "C" {
 } while (0)
 
 /**
- * \brief           Check input parameters and return void on failure
- */
-#define __GUI_ASSERTPARAMSVOID(c)   do {            \
-    if (!(c)) {                                     \
-        __GUI_DEBUG("Assert param failed in file %s and line %d\r\n", __FILE__, __LINE__);  \
-        return;                                     \
-    }                                               \
-} while (0)
-
-/**
  * \brief           Check if window is active for widget create
+ * \hideinitializer
  */
 #define __GUI_ASSERTACTIVEWIN()     do {            \
     if (!GUI.WindowActive) {                        \
@@ -137,49 +135,75 @@ extern "C" {
     }                                               \
 } while (0)
 
+/**
+ * \brief           Get maximal value between 2 values
+ * \param[in]       x: First value
+ * \param[in]       y: Second value
+ * \retval          Maximal value
+ * \hideinitializer
+ */
 #define __GUI_MAX(x, y)             ((x) > (y) ? (x) : (y))
+
+/**
+ * \brief           Get minimal value between 2 values
+ * \param[in]       x: First value
+ * \param[in]       y: Second value
+ * \retval          Minimal value
+ * \hideinitializer
+ */
 #define __GUI_MIN(x, y)             ((x) < (y) ? (x) : (y))
+
+/**
+ * \brief           Get absolute value of input
+ * \param[in]       x: Input value
+ * \retval          Absolute value of input
+ * \hideinitializer
+ */
 #define __GUI_ABS(x)                ((x) >= 0 ? (x) : -(x))
 
 /**
  * \brief           Check if 2 rectangle objects covers each other in any way
+ * \hideinitializer
  */
-#define __GUI_RECT_MATCH(x1, y1, w1, h1, x2, y2, w2, h2)    \
+#define __GUI_RECT_MATCH(h1x1, h1y1, h1x2, h1y2, h2x1, h2y1, h2x2, h2y2)    \
     !(                                                      \
-        (x1) > ((x2) + (w2)) ||                             \
-        (x2) > ((x1) + (w1)) ||                             \
-        (y1) > ((y2) + (h2)) ||                             \
-        (y2) > ((y1) + (h1))                                \
+        (h1x1) > (h2x2) ||                                  \
+        (h1y1) > (h2y2) ||                                  \
+        (h2x1) > (h1x2) ||                                  \
+        (h2y1) > (h1y2)                                  \
     )
 
 /**
  * \brief           Macro for unused variables to prevent compiler warnings
  * \note            It uses 1 parameter
+ * \hideinitializer
  */
 #define __GUI_UNUSED(x)             (void)(x)
 
 /**
  * \brief           Macro for unused variables to prevent compiler warnings
  * \note            It uses 2 parameters
+ * \hideinitializer
  */
 #define __GUI_UNUSED2(x, y)         { __GUI_UNUSED(x); __GUI_UNUSED(y); }
 
 /**
  * \brief           Macro for unused variables to prevent compiler warnings
  * \note            It uses 3 parameters
+ * \hideinitializer
  */
 #define __GUI_UNUSED3(x, y, z)      { __GUI_UNUSED(x); __GUI_UNUSED(y); __GUI_UNUSED(z); }
 
 /**
  * \brief           Macro for unused variables to prevent compiler warnings
  * \note            It uses 4 parameters
+ * \hideinitializer
  */
 #define __GUI_UNUSED4(x, y, z, k)   { __GUI_UNUSED(x); __GUI_UNUSED(y); __GUI_UNUSED(z); __GUI_UNUSED(k); }
 
 /**
  * \}
  */
-#endif /* !defined(DOXYGEN) */
 
 /**
  * \brief           GUI main object structure
@@ -218,7 +242,7 @@ extern GUI_t GUI;
 
 /**
  * \brief           Initializes GUI stack.
- *                    In additions, it prepares memory for work with widgets on later usage and
+ *                    In addition, it prepares memory for work with widgets on later usage and
  *                    calls low-layer functions to initialize LCD or custom driver for LCD
  * \retval          Member of \ref GUI_Result_t enumeration
  */

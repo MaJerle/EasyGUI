@@ -996,6 +996,7 @@ void __GUI_WIDGET_Init(void);
 //Clipping regions
 void __GUI_WIDGET_SetClippingRegion(GUI_HANDLE_p h);
 uint8_t __GUI_WIDGET_IsInsideClippingRegion(GUI_HANDLE_p h);
+uint8_t __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(GUI_HANDLE_p h, GUI_iDim_t* xOut, GUI_iDim_t* yOut, GUI_iDim_t* wOut, GUI_iDim_t* hOut);
 
 //Move widget down and all its parents with it
 void __GUI_WIDGET_MoveDownTree(GUI_HANDLE_p h);

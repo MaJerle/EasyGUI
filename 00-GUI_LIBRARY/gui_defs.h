@@ -70,6 +70,7 @@ extern "C" {
 #define GUI_FLAG_HEIGHT_FILL            ((uint32_t)0x00000800)  /*!< Indicates widget height fills to the end of widget */
 #define GUI_FLAG_EXPANDED               ((uint32_t)0x00001000)  /*!< Indicates children widget is set to (temporary) XY = 0,0 and width/height = parent width / parent height (maximize windows function) */
 #define GUI_FLAG_REMOVE                 ((uint32_t)0x00002000)  /*!< Indicates widget should be deleted */
+#define GUI_FLAG_IGNORE_INVALIDATE      ((uint32_t)0x00004000)  /*!< Indicates widget invalidation is ignored completely when invalidating it directly */
 
 #define GUI_FLAG_LCD_WAIT_LAYER_CONFIRM ((uint32_t)0x00000001)  /*!< Indicates waiting for layer change confirmation */
 

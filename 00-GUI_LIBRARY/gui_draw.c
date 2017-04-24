@@ -587,8 +587,8 @@ void GUI_DRAW_CircleCorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t 
     GUI_iDim_t y = r;
     
     if (!__GUI_RECT_MATCH(
-        disp->X1, disp->Y1, disp->X2 - disp->X1, disp->Y2 - disp->Y1,
-        x0 - r, y0 - r, 2 * r, 2 * r
+        disp->X1, disp->Y1, disp->X2, disp->Y2,
+        x0 - r, y0 - r, x0 + r, y0 + r
     )) {
         return;
     }
@@ -633,8 +633,8 @@ void GUI_DRAW_FilledCircleCorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_i
     GUI_iDim_t y = r;
     
     if (!__GUI_RECT_MATCH(
-        disp->X1, disp->Y1, disp->X2 - disp->X1, disp->Y2 - disp->Y1,
-        x0 - r, y0 - r, 2 * r, 2 * r
+        disp->X1, disp->Y1, disp->X2, disp->Y2,
+        x0 - r, y0 - r, x0 + r, y0 + r
     )) {
         return;
     }

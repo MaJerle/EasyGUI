@@ -72,33 +72,37 @@ GUI_TIMER_t* __GUI_TIMER_Create(uint16_t period, void (*callback)(GUI_TIMER_t *)
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in]       **t: Pointer to pointer to \ref GUI_TIMER_t structure.
  *                      After timer remove, pointer value where it points to will be changed
- * \retval          None
+ * \retval          1: Timer was removed ok
+ * \retval          0: Timer was not removed
  */
-void __GUI_TIMER_Remove(GUI_TIMER_t** t);
+uint8_t __GUI_TIMER_Remove(GUI_TIMER_t** t);
 
 /**
  * \brief           Start timer
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in]       *t: Pointer to \ref GUI_TIMER_t structure
- * \retval          None
+ * \retval          1: Timer was started ok
+ * \retval          0: Timer was not started
  */
-void __GUI_TIMER_Start(GUI_TIMER_t* t);
+uint8_t __GUI_TIMER_Start(GUI_TIMER_t* t);
 
 /**
  * \brief           Stop timer
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in]       *t: Pointer to \ref GUI_TIMER_t structure
- * \retval          None
+ * \retval          1: Timer was stopped ok
+ * \retval          0: Timer was not stopped
  */
-void __GUI_TIMER_Stop(GUI_TIMER_t* t);
+uint8_t __GUI_TIMER_Stop(GUI_TIMER_t* t);
 
 /**
  * \brief           Reset timer to zero
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in]       *t: Pointer to \ref GUI_TIMER_t structure
- * \retval          None
+ * \retval          1: Timer was reseted ok
+ * \retval          0: Timer was not reseted
  */
-void __GUI_TIMER_Reset(GUI_TIMER_t* t);
+uint8_t __GUI_TIMER_Reset(GUI_TIMER_t* t);
 
 /**
  * \brief           Internal processing called by GUI library

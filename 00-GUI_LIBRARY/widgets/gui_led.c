@@ -101,12 +101,6 @@ uint8_t GUI_LED_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* resul
                 GUI_DRAW_Circle(disp, x + width / 2, y + height / 2, width / 2, c2);
             }
         }
-#if GUI_USE_TOUCH
-        case GUI_WC_TouchStart: {
-            *(__GUI_TouchStatus_t *)result = touchHANDLEDNOFOCUS;
-            return 1;
-        }
-#endif /* GUI_USE_TOUCH */
         default:                                    /* Handle default option */
             __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
@@ -207,4 +201,16 @@ uint8_t GUI_LED_Set(GUI_HANDLE_p h, GUI_Byte state) {
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;
+}
+
+uint8_t GUI_LED_IsOn(GUI_HANDLE_p h) {
+    uint8_t ret;
+    
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    ret = !!(__GL(h)->Flags & GUI_LED_FLAG_ON);
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
 }

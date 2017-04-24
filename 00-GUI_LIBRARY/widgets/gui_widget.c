@@ -75,8 +75,12 @@ void __RemoveWidget(GUI_HANDLE_p h) {
      * Remove actual widget
      */
     if (GUI.FocusedWidget == h) {
-        __GUI_WIDGET_FOCUS_CLEAR();
-        GUI.FocusedWidget = 0;
+        if (__GH(h)->Parent) {
+            __GUI_WIDGET_FOCUS_SET(__GH(h)->Parent);    /* Set parent widget as focused */
+        } else {
+            __GUI_WIDGET_FOCUS_CLEAR();
+            GUI.FocusedWidget = 0;
+        }
     }
     if (GUI.FocusedWidgetPrev == h) {
         GUI.FocusedWidget = 0;
@@ -121,37 +125,39 @@ void __RemoveWidgets(GUI_HANDLE_p parent) {
 
 static
 void __GUI_WIDGET_SetClippingRegion(GUI_HANDLE_p h) {
-    GUI_Dim_t x, y, width, height;
+    GUI_Dim_t x1, y1, x2, y2;
     
-    x = __GUI_WIDGET_GetAbsoluteX(h);               /* Get widget absolute X */
-    y = __GUI_WIDGET_GetAbsoluteY(h);               /* Get widget absolute Y */
-    width = __GUI_WIDGET_GetWidth(h);               /* Get widget width */
-    height = __GUI_WIDGET_GetHeight(h);             /* Get widget height */
+    __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(h, &x1, &y1, &x2, &y2);  /* Get visible widget part and absolute position on screen */
     
     /* Set invalid clipping region */
-    if (GUI.Display.X1 > x) {
-        GUI.Display.X1 = x;
+    if (GUI.Display.X1 > x1) {
+        GUI.Display.X1 = x1;
     }
-    if (GUI.Display.X2 < (x + width)) {
-        GUI.Display.X2 = (x + width);
+    if (GUI.Display.X2 < (x2)) {
+        GUI.Display.X2 = (x2);
     }
-    if (GUI.Display.Y1 > y) {
-        GUI.Display.Y1 = y;
+    if (GUI.Display.Y1 > y1) {
+        GUI.Display.Y1 = y1;
     }
-    if (GUI.Display.Y2 < (y + height)) {
-        GUI.Display.Y2 = (y + height);
+    if (GUI.Display.Y2 < (y2)) {
+        GUI.Display.Y2 = (y2);
     }
 }
 
 static
 uint8_t __GUI_WIDGET_InvalidatePrivate(GUI_HANDLE_p h, uint8_t setclipping) {
     GUI_HANDLE_p h1, h2;
+    GUI_iDim_t h1x1, h1x2, h2x1, h2x2;
+    GUI_iDim_t h1y1, h1y2, h2y1, h2y2;
     
     if (!h) {
         return 0;
     }
     
     h1 = h;                                         /* Get widget handle */
+    if (__GH(h1)->Flags & GUI_FLAG_IGNORE_INVALIDATE) { /* Check ignore flag */
+        return 0;                                   /* Ignore invalidate process */
+    }
     __GH(h1)->Flags |= GUI_FLAG_REDRAW;             /* Redraw widget */
     
     if (setclipping) {
@@ -166,12 +172,14 @@ uint8_t __GUI_WIDGET_InvalidatePrivate(GUI_HANDLE_p h, uint8_t setclipping) {
      * Widget may not need redraw operation if positions don't match
      */
     for (; h1; h1 = __GUI_LINKEDLIST_WidgetGetNext(NULL, h1)) {
+        __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(h1, &h1x1, &h1y1, &h1x2, &h1y2);
         for (h2 = __GUI_LINKEDLIST_WidgetGetNext(NULL, h1); h2; h2 = __GUI_LINKEDLIST_WidgetGetNext(NULL, h2)) {
+            __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(h2, &h2x1, &h2y1, &h2x2, &h2y2);
             if (
                 __GH(h2)->Flags & GUI_FLAG_REDRAW ||    /* Bit is already set */
                 !__GUI_RECT_MATCH(
-                    __GUI_WIDGET_GetRelativeX(h1), __GUI_WIDGET_GetRelativeY(h1), __GUI_WIDGET_GetWidth(h1), __GUI_WIDGET_GetHeight(h1),
-                    __GUI_WIDGET_GetRelativeX(h2), __GUI_WIDGET_GetRelativeY(h2), __GUI_WIDGET_GetWidth(h2), __GUI_WIDGET_GetHeight(h2))
+                    h1x1, h1y1, h1x2, h1y2,
+                    h2x1, h2y1, h2x2, h2y2)
             ) {
                 continue;
             }
@@ -208,10 +216,46 @@ GUI_HANDLE_p __GetWidgetById(GUI_HANDLE_p parent, GUI_ID_t id, uint8_t deep) {
     return 0;
 }
 
+uint8_t __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(GUI_HANDLE_p h, GUI_iDim_t* x1, GUI_iDim_t* y1, GUI_iDim_t* x2, GUI_iDim_t* y2) {
+    GUI_iDim_t x, y, wi, hi;
+    
+    x = __GUI_WIDGET_GetAbsoluteX(h);               /* Get absolute X position */
+    y = __GUI_WIDGET_GetAbsoluteY(h);               /* Get absolute Y position */
+    wi = __GUI_WIDGET_GetWidth(h);                  /* Get absolute width */
+    hi = __GUI_WIDGET_GetHeight(h);                 /* Get absolute height */
+    
+    *x1 = x;
+    *y1 = y;
+    *x2 = x + wi;
+    *y2 = y + hi;
+    
+    if (*x1 < x)            { *x1 = x; }
+    if (*x2 > x + wi)       { *x2 = x + wi; }
+    if (*y1 < y)            { *y1 = y; }
+    if (*y2 > y + hi)       { *y2 = y + hi; }
+    
+    /* Check that widget is not drawn over any of parent widgets because of scrolling */
+    for (; h; h = __GH(h)->Parent) {
+        x = __GUI_WIDGET_GetParentAbsoluteX(h);     /* Parent absolute X position for inner widgets */
+        y = __GUI_WIDGET_GetParentAbsoluteY(h);     /* Parent absolute Y position for inner widgets */
+        wi = __GUI_WIDGET_GetParentInnerWidth(h);   /* Get parent inner width */
+        hi = __GUI_WIDGET_GetParentInnerHeight(h);  /* Get parent inner height */
+    
+        if (*x1 < x)        { *x1 = x; }
+        if (*x2 > x + wi)   { *x2 = x + wi; }
+        if (*y1 < y)        { *y1 = y; }
+        if (*y2 > y + hi)   { *y2 = y + hi; }
+    }
+    
+    return 1;
+}
+
 uint8_t __GUI_WIDGET_IsInsideClippingRegion(GUI_HANDLE_p h) {
+    GUI_iDim_t x1, y1, x2, y2;
+    __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(h, &x1, &y1, &x2, &y2);
     return __GUI_RECT_MATCH(
-        __GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h), __GUI_WIDGET_GetWidth(h), __GUI_WIDGET_GetHeight(h), 
-        GUI.Display.X1, GUI.Display.Y1, GUI.Display.X2 - GUI.Display.X1, GUI.Display.Y2 - GUI.Display.Y1
+        x1, y1, x2, y2, 
+        GUI.Display.X1, GUI.Display.Y1, GUI.Display.X2, GUI.Display.Y2
     );
 }
 
@@ -332,16 +376,18 @@ uint8_t __GUI_WIDGET_Invalidate(GUI_HANDLE_p h) {
 }
 
 uint8_t __GUI_WIDGET_InvalidateWithParent(GUI_HANDLE_p h) {
-    __GUI_WIDGET_Invalidate(h);                     /* Invalidate object */
+    __GUI_WIDGET_InvalidatePrivate(h, 1);           /* Invalidate object */
     if (__GH(h)->Parent) {                          /* If parent exists, invalid only parent */
-        __GUI_WIDGET_Invalidate(__GH(h)->Parent);   /* Invalidate parent object */
+        __GUI_WIDGET_InvalidatePrivate(__GH(h)->Parent, 0); /* Invalidate parent object */
     }
     return 1;
 }
 
 uint8_t __GUI_WIDGET_SetXY(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {       
     if (__GH(h)->X != x || __GH(h)->Y != y) {            
-        __GUI_WIDGET_SetClippingRegion(h);          /* Set new clipping region */
+        if (__GH(h)->Width > 0 && __GH(h)->Height > 0) {
+            __GUI_WIDGET_Invalidate(h);             /* Set new clipping region */
+        }
         __GH(h)->X = x;                             /* Set parameter */
         __GH(h)->Y = y;                             /* Set parameter */
         __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate object */
@@ -351,7 +397,9 @@ uint8_t __GUI_WIDGET_SetXY(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
 
 uint8_t __GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t hi) {    
     if (wi != __GH(h)->Width || hi != __GH(h)->Height) {
-        __GUI_WIDGET_SetClippingRegion(h);          /* Set clipping region before changed position */
+        if (__GH(h)->Width > 0 && __GH(h)->Height > 0) {
+            __GUI_WIDGET_Invalidate(h);             /* Invalidate old clipping region */
+        }
         __GH(h)->Width = wi;                        /* Set parameter */
         __GH(h)->Height = hi;                       /* Set parameter */
         __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate object */
@@ -528,8 +576,11 @@ GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iD
         /* Set widget default values */
         __GH(h)->Font = WIDGET_Default.Font;        /* Set default font */
         
+        __GH(h)->Flags |= GUI_FLAG_IGNORE_INVALIDATE;   /* Ignore invalidate flag */
         __GUI_WIDGET_SetSize(h, width, height);     /* Set widget size */
         __GUI_WIDGET_SetXY(h, x, y);                /* Set widget position */
+        __GH(h)->Flags &= ~GUI_FLAG_IGNORE_INVALIDATE;  /* Ignore invalidate flag */
+        __GUI_WIDGET_Invalidate(h);                 /* Invalidate properly now when everything is set correctly = set for valid clipping region part */
 
         result = 0;
         __GUI_WIDGET_Callback(h, GUI_WC_ExcludeLinkedList, 0, &result);
