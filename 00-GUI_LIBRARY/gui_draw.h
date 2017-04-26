@@ -101,12 +101,12 @@ extern "C" {
 #define GUI_COLOR_ALPHA_95              0xF2000000  /*!< 95% alpha of selected color */
 #define GUI_COLOR_ALPHA_100             0xFF000000  /*!< 100% alpha of selected color */
 
-#define GUI_COLOR_WIN_DARKGRAY          0xFF555555
-#define GUI_COLOR_WIN_MIDDLEGRAY        0xFF848484
-#define GUI_COLOR_WIN_LIGHTGRAY         0xFFC6C6C6
+#define GUI_COLOR_WIN_DARKGRAY          0xFF555555  /*!< Windows dark gray color */
+#define GUI_COLOR_WIN_MIDDLEGRAY        0xFF848484  /*!< Windows middle gray color */
+#define GUI_COLOR_WIN_LIGHTGRAY         0xFFC6C6C6  /*!< Windows light gray color */
 
-#define GUI_COLOR_WIN_BLUE              0xFF5590B7
-#define GUI_COLOR_WIN_RED               0xFFD14752
+#define GUI_COLOR_WIN_BLUE              0xFF5590B7  /*!< Windows blue color */
+#define GUI_COLOR_WIN_RED               0xFFD14752  /*!< Windows red color */
 
 #define GUI_COLOR_WIN_BG                GUI_COLOR_WHITE /*!< Default widget background color */
 #define GUI_COLOR_WIN_TEXT              GUI_COLOR_BLACK /*!< Default text color */
@@ -159,6 +159,9 @@ typedef struct GUI_DRAW_FONT_t {
     uint32_t ScrollY;                       /*!< Scroll in vertical direction */
 } GUI_DRAW_FONT_t;
 
+/**
+ * \brief           Scroll bar direction enumeration
+ */
 typedef enum GUI_DRAW_SB_DIR_t {
     GUI_DRAW_SB_DIR_VERTICAL = 0x00,        /*!< Vertical slider */
     GUI_DRAW_SB_DIR_HORIZONTAL = 0x00,      /*!< Horizontal slider */

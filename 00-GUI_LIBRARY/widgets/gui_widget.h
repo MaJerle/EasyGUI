@@ -977,7 +977,24 @@ uint8_t GUI_WIDGET_IsChildOf(GUI_HANDLE_p h, GUI_HANDLE_p parent);
  */
 uint8_t GUI_WIDGET_IncSelection(GUI_HANDLE_p h, int16_t dir);
 
+/**
+ * \brief           Set widget scroll on X axis
+ * \note            This is possible on widgets with children support (windows) to have scroll on X and Y possibility
+ * \param[in,out]   h: Widget handle
+ * \param[in]       scroll: Scroll value for X direction
+ * \retval          1: Scroll was set ok
+ * \retval          0: Scroll was not set
+ */
 uint8_t GUI_WIDGET_SetScrollX(GUI_HANDLE_p h, GUI_iDim_t scroll);
+
+/**
+ * \brief           Set widget scroll on Y axis
+ * \note            This is possible on widgets with children support (windows) to have scroll on X and Y possibility
+ * \param[in,out]   h: Widget handle
+ * \param[in]       scroll: Scroll value for Y direction
+ * \retval          1: Scroll was set ok
+ * \retval          0: Scroll was not set
+ */
 uint8_t GUI_WIDGET_SetScrollY(GUI_HANDLE_p h, GUI_iDim_t scroll);
 
 /**

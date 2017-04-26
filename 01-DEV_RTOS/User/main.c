@@ -247,6 +247,10 @@ int main(void) {
             __GUI_DEBUG("Key: %c (%2X)\r\n", ch, ch);
             switch (GUI_STRING_UNICODE_Decode(&s, ch)) {
                 case UNICODE_OK:
+                    if (ch == 'a') {
+                        __GUI_LINKEDLIST_PrintList(NULL);
+                        break;
+                    }
                     key.Keys[s.t - 1] = ch;
                     GUI_INPUT_KeyAdd(&key);
                     key.Keys[0] = 0;
@@ -493,7 +497,7 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                             GUI_WIDGET_PutOnFront(tmp);
                         } else {
                             //tmp = GUI_WINDOW_CreateChild(data->win_id, 5, 5, 470, 262, GUI_WINDOW_GetDesktop(), window_callback, NULL);
-                            tmp = GUI_WINDOW_CreateChild(data->win_id, 100, 20, 150, 100, GUI_WINDOW_GetDesktop(), window_callback, NULL);
+                            tmp = GUI_WINDOW_CreateChild(data->win_id, 40, 20, 300, 200, GUI_WINDOW_GetDesktop(), window_callback, NULL);
                             GUI_WIDGET_SetText(tmp, data->win_text);
                             GUI_WIDGET_PutOnFront(tmp);
                         }

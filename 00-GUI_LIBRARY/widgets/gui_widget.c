@@ -71,26 +71,27 @@ void __RemoveWidget(GUI_HANDLE_p h) {
         } while (h2);
     }
     
-    /**
-     * Remove actual widget
-     */
+    /* Check focus state */
     if (GUI.FocusedWidget == h) {
         if (__GH(h)->Parent) {
-            __GUI_WIDGET_FOCUS_SET(__GH(h)->Parent);    /* Set parent widget as focused */
+            GUI.FocusedWidget = __GH(h)->Parent;    /* Set parent widget as focused */
         } else {
-            __GUI_WIDGET_FOCUS_CLEAR();
+            __GUI_WIDGET_FOCUS_CLEAR();             /* Clear all widgets from focused */
             GUI.FocusedWidget = 0;
         }
     }
     if (GUI.FocusedWidgetPrev == h) {
-        GUI.FocusedWidget = 0;
+        GUI.FocusedWidgetPrev = 0;
     }
+    
+    /**
+     * Remove actual widget
+     */
     if (GUI.ActiveWidget == h) {
-        __GUI_WIDGET_ACTIVE_CLEAR();
         GUI.ActiveWidget = 0;
     }
     if (GUI.ActiveWidgetPrev == h) {
-        GUI.ActiveWidgetPrev = 0;
+        GUI.ActiveWidgetPrev = __GH(h)->Parent;
     }
     
     __GUI_WIDGET_InvalidateWithParent(h);           /* Invalidate object and its parent */
@@ -214,6 +215,20 @@ GUI_HANDLE_p __GetWidgetById(GUI_HANDLE_p parent, GUI_ID_t id, uint8_t deep) {
         }
     }
     return 0;
+}
+
+static
+GUI_HANDLE_p __GetCommonParentWidget(GUI_HANDLE_p h1, GUI_HANDLE_p h2) {
+    GUI_HANDLE_p tmp;
+    
+    for (; h1; h1 = __GH(h1)->Parent) {             /* Process all entries */
+        for (tmp = h2; tmp; tmp = __GH(tmp)->Parent) {
+            if (h1 == tmp) {
+                return tmp;
+            }
+        }
+    }
+    return GUI.Root.First;                          /* Return bottom widget on list */
 }
 
 uint8_t __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(GUI_HANDLE_p h, GUI_iDim_t* x1, GUI_iDim_t* y1, GUI_iDim_t* x2, GUI_iDim_t* y2) {
@@ -385,9 +400,7 @@ uint8_t __GUI_WIDGET_InvalidateWithParent(GUI_HANDLE_p h) {
 
 uint8_t __GUI_WIDGET_SetXY(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {       
     if (__GH(h)->X != x || __GH(h)->Y != y) {            
-        if (__GH(h)->Width > 0 && __GH(h)->Height > 0) {
-            __GUI_WIDGET_Invalidate(h);             /* Set new clipping region */
-        }
+        __GUI_WIDGET_InvalidateWithParent(h);       /* Set new clipping region */
         __GH(h)->X = x;                             /* Set parameter */
         __GH(h)->Y = y;                             /* Set parameter */
         __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate object */
@@ -397,9 +410,7 @@ uint8_t __GUI_WIDGET_SetXY(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
 
 uint8_t __GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t hi) {    
     if (wi != __GH(h)->Width || hi != __GH(h)->Height) {
-        if (__GH(h)->Width > 0 && __GH(h)->Height > 0) {
-            __GUI_WIDGET_Invalidate(h);             /* Invalidate old clipping region */
-        }
+        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate old clipping region */
         __GH(h)->Width = wi;                        /* Set parameter */
         __GH(h)->Height = hi;                       /* Set parameter */
         __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate object */
@@ -685,7 +696,7 @@ uint8_t __GUI_WIDGET_Hide(GUI_HANDLE_p h) {
      */
     
     if (GUI.FocusedWidget == h || __GUI_WIDGET_IsChildOf(GUI.FocusedWidget, h)) {   /* Clear focus */
-        __GUI_WIDGET_FOCUS_CLEAR();
+        __GUI_WIDGET_FOCUS_SET(__GH(h)->Parent);    /* Set parent widget as focused now */
     }
     if (GUI.ActiveWidget == h || __GUI_WIDGET_IsChildOf(GUI.ActiveWidget, h)) { /* Clear active */
         __GUI_WIDGET_ACTIVE_CLEAR();
@@ -695,8 +706,8 @@ uint8_t __GUI_WIDGET_Hide(GUI_HANDLE_p h) {
 
 uint8_t __GUI_WIDGET_ToggleExpanded(GUI_HANDLE_p h) {
     if (__GUI_WIDGET_IsExpanded(h)) {               /* Check current status */
-        __GH(h)->Flags &= ~GUI_FLAG_EXPANDED;       /* Clear expanded */
         __GUI_WIDGET_InvalidateWithParent(h);       /* Redraw everything in parent */
+        __GH(h)->Flags &= ~GUI_FLAG_EXPANDED;       /* Clear expanded */
     } else {
         __GH(h)->Flags |= GUI_FLAG_EXPANDED;        /* Expand widget */
         __GUI_WIDGET_Invalidate(h);                 /* Redraw only selected widget as it is over all window */
@@ -706,8 +717,8 @@ uint8_t __GUI_WIDGET_ToggleExpanded(GUI_HANDLE_p h) {
 
 uint8_t __GUI_WIDGET_SetExpanded(GUI_HANDLE_p h, uint8_t state) {
     if (!state && __GUI_WIDGET_IsExpanded(h)) {     /* Check current status */
+        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate with parent first for clipping region */
         __GH(h)->Flags &= ~GUI_FLAG_EXPANDED;       /* Clear expanded */
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Redraw everything in parent */
     } else if (state && !__GUI_WIDGET_IsExpanded(h)) {
         __GH(h)->Flags |= GUI_FLAG_EXPANDED;        /* Expand widget */
         __GUI_WIDGET_Invalidate(h);                 /* Redraw only selected widget as it is over all window */
@@ -795,34 +806,58 @@ void __GUI_WIDGET_MoveDownTree(GUI_HANDLE_p h) {
 
 /* Clear widget focus */
 void __GUI_WIDGET_FOCUS_CLEAR(void) {
-    if (GUI.FocusedWidget) {
-        __GUI_WIDGET_Callback(GUI.FocusedWidget, GUI_WC_FocusOut, NULL, NULL);
-        __GH(GUI.FocusedWidget)->Flags &= ~GUI_FLAG_FOCUS;
-        __GUI_WIDGET_Invalidate(GUI.FocusedWidget);
-        GUI.FocusedWidgetPrev = GUI.FocusedWidget;
+    if (GUI.FocusedWidget && GUI.FocusedWidget != GUI.Root.First) { /* First widget is always in focus */
+        GUI.FocusedWidgetPrev = GUI.FocusedWidget;  /* Clear everything */
+        do {
+            __GUI_WIDGET_Callback(GUI.FocusedWidget, GUI_WC_FocusOut, NULL, NULL);
+            __GH(GUI.FocusedWidget)->Flags &= ~GUI_FLAG_FOCUS;
+            __GUI_WIDGET_Invalidate(GUI.FocusedWidget);
+            GUI.FocusedWidget = __GH(GUI.FocusedWidget)->Parent;    /* Get parent widget */
+        } while (GUI.FocusedWidget != GUI.Root.First);
         GUI.FocusedWidget = 0;
     }
 }
 
 /* Set focus on widget */
 void __GUI_WIDGET_FOCUS_SET(GUI_HANDLE_p h) {
-    if (GUI.FocusedWidget == h) {
+    GUI_HANDLE_p common = NULL;
+    
+    if (GUI.FocusedWidget == h) {                   /* Check current focused widget */
         return;
     }
-    __GUI_WIDGET_FOCUS_CLEAR();
-    GUI.FocusedWidget = h;
-    __GH(GUI.FocusedWidget)->Flags |= GUI_FLAG_FOCUS;
-    __GUI_WIDGET_Callback(GUI.FocusedWidget, GUI_WC_FocusIn, NULL, NULL);
-    __GUI_WIDGET_Invalidate(GUI.FocusedWidget);
     
-    /* Check if we have to notify parent widgets too */
-    if (!GUI.FocusedWidgetPrev || __GUI_WIDGET_GetParent(GUI.FocusedWidgetPrev) != __GUI_WIDGET_GetParent(GUI.FocusedWidget)) {
-        GUI_HANDLE_p handle = __GUI_WIDGET_GetParent(GUI.FocusedWidget);
-        while (handle) {
-            __GUI_WIDGET_Invalidate(handle);
-            handle = __GUI_WIDGET_GetParent(handle);
+    /**
+     * Step 1:
+     *
+     * Identiy common parent from new and old focused widget
+     * Remove focused flag on widget which are not in tree from old focused
+     */
+    if (GUI.FocusedWidget) {                        /* We already have one widget in focus */
+        common = __GetCommonParentWidget(GUI.FocusedWidget, h); /* Get first widget in common */
+        if (common) {                               /* We have common object, invalidate only those which are not common in tree */
+            for (; GUI.FocusedWidget != common; GUI.FocusedWidget = __GH(GUI.FocusedWidget)->Parent) {
+                __GH(GUI.FocusedWidget)->Flags &= ~GUI_FLAG_FOCUS;  /* Clear focused flag */
+                __GUI_WIDGET_Callback(GUI.FocusedWidget, GUI_WC_FocusOut, NULL, NULL);  /* Notify with callback */
+                __GUI_WIDGET_Invalidate(GUI.FocusedWidget); /* Invalidate widget */
+            }
         }
+    } else {
+        common = GUI.Root.First;                    /* Get bottom widget */
     }
+    
+    /**
+     * Step 2:
+     *
+     * Set new widget as focused
+     * Set all widget from common to current as focused
+     */ 
+    GUI.FocusedWidget = h;                          /* Set new focused widget */
+    do {
+        __GH(h)->Flags |= GUI_FLAG_FOCUS;           /* Set focused flag */
+        __GUI_WIDGET_Callback(h, GUI_WC_FocusIn, NULL, NULL);   /* Notify with callback */
+        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
+        h = __GH(h)->Parent;                        /* Get parent widget */
+    } while (h && common && h != common);
 }
 
 /* Clear active widget status */
