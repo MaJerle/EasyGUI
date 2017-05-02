@@ -65,6 +65,7 @@ CTS         PA3                 RTS from ST to CTS from GSM
 #include "gui_listbox.h"
 #include "gui_textview.h"
 #include "gui_dropdown.h"
+#include "gui_dialog.h"
 
 #include "math.h"
 
@@ -74,46 +75,52 @@ TM_TOUCH_t TS;
 
 GUI_HANDLE_p win1, handle;
 GUI_GRAPH_DATA_p graphdata1, graphdata2, graphdata3, graphdata4;
+GUI_HANDLE_p dialog1;
 
-#define ID_BASE             (GUI_ID_USER)
-#define ID_BASE_WIN         (ID_BASE + 0x0100)
-#define ID_BASE_BTN         (ID_BASE_WIN + 0x0100)
-#define ID_BASE_TEXTWIEW    (ID_BASE_BTN + 0x0100)
-#define ID_BASE_CHECKBOX    (ID_BASE_TEXTWIEW + 0x0100)
-#define ID_BASE_LED         (ID_BASE_CHECKBOX + 0x0100)
+#define ID_BASE                 (GUI_ID_USER)
+#define ID_BASE_WIN             (ID_BASE + 0x0100)
+#define ID_BASE_BTN             (ID_BASE_WIN + 0x0100)
+#define ID_BASE_TEXTWIEW        (ID_BASE_BTN + 0x0100)
+#define ID_BASE_CHECKBOX        (ID_BASE_TEXTWIEW + 0x0100)
+#define ID_BASE_LED             (ID_BASE_CHECKBOX + 0x0100)
 
 /* List of window widget IDs */
-#define ID_WIN_BTN          (ID_BASE_WIN + 0x01)
-#define ID_WIN_EDIT         (ID_BASE_WIN + 0x02)
-#define ID_WIN_RADIO        (ID_BASE_WIN + 0x03)
-#define ID_WIN_CHECKBOX     (ID_BASE_WIN + 0x04)
-#define ID_WIN_PROGBAR      (ID_BASE_WIN + 0x05)
-#define ID_WIN_GRAPH        (ID_BASE_WIN + 0x06)
-#define ID_WIN_LISTBOX      (ID_BASE_WIN + 0x07)
-#define ID_WIN_LED          (ID_BASE_WIN + 0x08)
-#define ID_WIN_TEXTVIEW     (ID_BASE_WIN + 0x09)
-#define ID_WIN_DROPDOWN     (ID_BASE_WIN + 0x0A)
+#define ID_WIN_BTN              (ID_BASE_WIN + 0x01)
+#define ID_WIN_EDIT             (ID_BASE_WIN + 0x02)
+#define ID_WIN_RADIO            (ID_BASE_WIN + 0x03)
+#define ID_WIN_CHECKBOX         (ID_BASE_WIN + 0x04)
+#define ID_WIN_PROGBAR          (ID_BASE_WIN + 0x05)
+#define ID_WIN_GRAPH            (ID_BASE_WIN + 0x06)
+#define ID_WIN_LISTBOX          (ID_BASE_WIN + 0x07)
+#define ID_WIN_LED              (ID_BASE_WIN + 0x08)
+#define ID_WIN_TEXTVIEW         (ID_BASE_WIN + 0x09)
+#define ID_WIN_DROPDOWN         (ID_BASE_WIN + 0x0A)
+#define ID_WIN_DIALOG           (ID_BASE_WIN + 0x0B)
 
 /* List of base buttons IDs */
-#define ID_BTN_WIN_BTN      (ID_BASE_BTN + 0x01)
-#define ID_BTN_WIN_EDIT     (ID_BASE_BTN + 0x02)
-#define ID_BTN_WIN_RADIO    (ID_BASE_BTN + 0x03)
-#define ID_BTN_WIN_CHECKBOX (ID_BASE_BTN + 0x04)
-#define ID_BTN_WIN_PROGBAR  (ID_BASE_BTN + 0x05)
-#define ID_BTN_WIN_GRAPH    (ID_BASE_BTN + 0x06)
-#define ID_BTN_WIN_LISTBOX  (ID_BASE_BTN + 0x07)
-#define ID_BTN_WIN_LED      (ID_BASE_BTN + 0x08)
-#define ID_BTN_WIN_TEXTVIEW (ID_BASE_BTN + 0x09)
-#define ID_BTN_WIN_DROPDOWN (ID_BASE_BTN + 0x0A)
+#define ID_BTN_WIN_BTN          (ID_BASE_BTN + 0x01)
+#define ID_BTN_WIN_EDIT         (ID_BASE_BTN + 0x02)
+#define ID_BTN_WIN_RADIO        (ID_BASE_BTN + 0x03)
+#define ID_BTN_WIN_CHECKBOX     (ID_BASE_BTN + 0x04)
+#define ID_BTN_WIN_PROGBAR      (ID_BASE_BTN + 0x05)
+#define ID_BTN_WIN_GRAPH        (ID_BASE_BTN + 0x06)
+#define ID_BTN_WIN_LISTBOX      (ID_BASE_BTN + 0x07)
+#define ID_BTN_WIN_LED          (ID_BASE_BTN + 0x08)
+#define ID_BTN_WIN_TEXTVIEW     (ID_BASE_BTN + 0x09)
+#define ID_BTN_WIN_DROPDOWN     (ID_BASE_BTN + 0x0A)
+#define ID_BTN_WIN_DIALOG       (ID_BASE_BTN + 0x0B)
 
-#define ID_TEXTVIEW_1       (ID_BASE_TEXTWIEW + 0x01)
+#define ID_BTN_DIALOG_CONFIRM   (ID_BASE_BTN + 0x0C)
+#define ID_BTN_DIALOG_CANCEL    (ID_BASE_BTN + 0x0D)
 
-#define ID_CHECKBOX_LED     (ID_BASE_CHECKBOX + 0x01)
+#define ID_TEXTVIEW_1           (ID_BASE_TEXTWIEW + 0x01)
 
-#define ID_LED_1            (ID_BASE_LED + 0x01)
-#define ID_LED_2            (ID_BASE_LED + 0x02)
-#define ID_LED_3            (ID_BASE_LED + 0x03)
-#define ID_LED_4            (ID_BASE_LED + 0x04)
+#define ID_CHECKBOX_LED         (ID_BASE_CHECKBOX + 0x01)
+
+#define ID_LED_1                (ID_BASE_LED + 0x01)
+#define ID_LED_2                (ID_BASE_LED + 0x02)
+#define ID_LED_3                (ID_BASE_LED + 0x03)
+#define ID_LED_4                (ID_BASE_LED + 0x04)
 
 typedef struct {
     GUI_ID_t win_id;
@@ -140,6 +147,7 @@ bulk_init_t buttons[] = {
     {ID_BTN_WIN_LED,        _T("Led"),          {ID_WIN_LED, _T("Led")}},
     {ID_BTN_WIN_TEXTVIEW,   _T("Text view"),    {ID_WIN_TEXTVIEW, _T("Text view")}},
     {ID_BTN_WIN_DROPDOWN,   _T("Dropdown"),     {ID_WIN_DROPDOWN, _T("Dropdown")}},
+    {ID_BTN_WIN_DIALOG,     _T("Dialog"),       {ID_WIN_DIALOG, _T("Dialog")}},
 };
 
 char str[100];
@@ -173,11 +181,14 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
 uint8_t radio_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 uint8_t checkbox_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 uint8_t led_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
+uint8_t dialog_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 
 #define PI      3.14159265359f
 
 static float len = 72, radius = 90;
 float x, y;
+
+int pressed = 0;
 
 int main(void) {
     GUI_STRING_UNICODE_t s;
@@ -215,6 +226,8 @@ int main(void) {
     TS.Orientation = 1;
     TM_TOUCH_Init(NULL, &TS);
     
+    TM_EXTI_Attach(DISCO_BUTTON_PORT, DISCO_BUTTON_PIN, TM_EXTI_Trigger_Rising);
+    
     GUI_STRING_UNICODE_Init(&s);
   
 //    time = TM_DELAY_Time();
@@ -240,6 +253,17 @@ int main(void) {
 //            y = sin((float)i * (PI / 180.0f));
 //            GUI_GRAPH_DATA_AddValue(graphdata2, x * radius / 3, y * radius / 4);
 //            i += 360.0f / len;
+        }
+        
+        if (pressed) {
+            pressed = GUI_DIALOG_CreateBlocking(ID_WIN_DIALOG, 50, 10, 300, 150, 0, dialog_callback, 0);
+            if (pressed == 1) {
+                __GUI_DEBUG("Confirmed\r\n");
+                TM_DISCO_LedToggle(LED_GREEN);
+            } else if (pressed == 0) {
+                __GUI_DEBUG("Canceled\r\n");
+            }
+            pressed = 0;
         }
         
         while (!TM_USART_BufferEmpty(DISCO_USART)) {
@@ -378,6 +402,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
             case ID_WIN_TEXTVIEW: {     /* Text view */
                 handle = GUI_TEXTVIEW_Create(ID_TEXTVIEW_1, 10, 10, 300, 180, h, 0, 0);
                 GUI_WIDGET_SetText(handle, _T("Text view with automatic new line detector and support for different aligns.\r\n\r\nHowever, I can also manually jump to new line! Just like Word works ;)"));
+                GUI_WIDGET_SetExpanded(handle, 1);
                 
                 handle = GUI_RADIO_Create(0, 10, 200, 150, 30, h, radio_callback, 0);
                 GUI_RADIO_SetGroup(handle, RADIO_GROUP_HALIGN);
@@ -472,13 +497,15 @@ uint8_t checkbox_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* resul
 }
 
 uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
+    GUI_ID_t id;
     uint8_t res = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
     switch (cmd) {
         case GUI_WC_Init: {
             break;
         }
         case GUI_WC_Click: {
-            switch (GUI_WIDGET_GetId(h)) {
+            id = GUI_WIDGET_GetId(h);
+            switch (id) {
                 case ID_BTN_WIN_BTN:
                 case ID_BTN_WIN_CHECKBOX:
                 case ID_BTN_WIN_DROPDOWN:
@@ -488,7 +515,7 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 case ID_BTN_WIN_LISTBOX:
                 case ID_BTN_WIN_PROGBAR:
                 case ID_BTN_WIN_RADIO:
-                case ID_BTN_WIN_TEXTVIEW:  {
+                case ID_BTN_WIN_TEXTVIEW: {
                     btn_user_data_t* data = GUI_WIDGET_GetUserData(h);
                     if (data) {
                         GUI_HANDLE_p tmp;
@@ -497,11 +524,20 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                             GUI_WIDGET_PutOnFront(tmp);
                         } else {
                             //tmp = GUI_WINDOW_CreateChild(data->win_id, 5, 5, 470, 262, GUI_WINDOW_GetDesktop(), window_callback, NULL);
-                            tmp = GUI_WINDOW_CreateChild(data->win_id, 40, 20, 300, 200, GUI_WINDOW_GetDesktop(), window_callback, NULL);
+                            tmp = GUI_WINDOW_Create(data->win_id, 40, 20, 300, 200, GUI_WINDOW_GetDesktop(), window_callback, NULL);
                             GUI_WIDGET_SetText(tmp, data->win_text);
                             GUI_WIDGET_PutOnFront(tmp);
                         }
                     }
+                    break;
+                }
+                case ID_BTN_WIN_DIALOG: {
+                    GUI_DIALOG_Create(ID_WIN_DIALOG, 60, 20, 300, 150, 0, dialog_callback, 0);
+                    break;
+                }
+                case ID_BTN_DIALOG_CONFIRM:
+                case ID_BTN_DIALOG_CANCEL: {
+                    GUI_DIALOG_Dismiss(GUI_WIDGET_GetById(ID_WIN_DIALOG), ID_BTN_DIALOG_CONFIRM == id);
                     break;
                 }
                 default:
@@ -513,7 +549,33 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
             break;
     }
     return res;
-}  
+}
+
+uint8_t dialog_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
+    uint8_t res = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    switch (cmd) {
+        case GUI_WC_Init: {
+            handle = GUI_TEXTVIEW_Create(0, 10, 10, GUI_WIDGET_GetWidth(h) - 20, GUI_WIDGET_GetHeight(h) - 52, h, 0, 0);
+            if (TM_DISCO_LedIsOn(LED_GREEN)) {
+                GUI_WIDGET_SetText(handle, _T("LED is ON. Do you want to turn it off?"));
+            } else  {
+                GUI_WIDGET_SetText(handle, _T("LED is OFF. Do you want to turn it on?"));
+            }
+            handle = GUI_BUTTON_Create(ID_BTN_DIALOG_CONFIRM, 0,   118, 150, 32, h, button_callback, 0);
+            GUI_WIDGET_SetText(handle, _T("OK"));
+            handle = GUI_BUTTON_Create(ID_BTN_DIALOG_CANCEL,  150, 118, 150, 32, h, button_callback, 0);
+            GUI_WIDGET_SetText(handle, _T("CANCEL"));
+            GUI_WIDGET_SetFocus(handle);
+            break;
+        }
+        case GUI_WC_Draw: {
+            break;
+        }
+        default:
+            break;
+    }
+    return res;
+}
 
 /* 1ms handler */
 void TM_DELAY_1msHandler() {
@@ -533,7 +595,7 @@ int fputc(int ch, FILE* fil) {
  */
 void TM_EXTI_Handler(uint16_t GPIO_Pin) {
     static GUI_TouchData_t p = {0}, t = {0};
-    if (GPIO_Pin == GPIO_PIN_13) {
+    if (GPIO_PIN_13 == GPIO_Pin) {
         uint8_t i, update = 0, diffx, diffy;
         TM_TOUCH_Read(&TS);                         /* Read touch data */
         
@@ -562,5 +624,7 @@ void TM_EXTI_Handler(uint16_t GPIO_Pin) {
             GUI_INPUT_TouchAdd(&t);
             memcpy(&p, &t, sizeof(p));
         }
+    } else if (DISCO_BUTTON_PIN == GPIO_Pin) {
+        pressed = 1;
     }
 }

@@ -229,11 +229,11 @@ uint32_t GUI_BUFFER_ReadString(GUI_BUFFER_t* Buffer, char* buff, uint32_t buffsi
 int8_t GUI_BUFFER_CheckElement(GUI_BUFFER_t* Buffer, uint32_t pos, uint8_t* element);
 
 /**
- * \} GUI_BUFFER
+ * \}
  */
  
 /**
- * \} GUI_UTILS
+ * \}
  */
 
 /* C++ detection */

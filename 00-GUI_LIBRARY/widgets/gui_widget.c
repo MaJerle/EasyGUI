@@ -275,7 +275,7 @@ uint8_t __GUI_WIDGET_IsInsideClippingRegion(GUI_HANDLE_p h) {
 }
 
 void __GUI_WIDGET_Init(void) {
-    GUI_WINDOW_Create(GUI_ID_WINDOW_BASE, NULL);    /* Create base window object */
+    GUI_WINDOW_CreateDesktop(GUI_ID_WINDOW_BASE, NULL); /* Create base window object */
 }
 
 uint8_t __GUI_WIDGET_ExecuteRemove(void) {
@@ -574,7 +574,9 @@ GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iD
         __GH(h)->Widget = widget;                   /* Widget object structure */
         __GH(h)->Footprint = GUI_WIDGET_FOOTPRINT;  /* Set widget footprint */
         __GH(h)->Callback = cb;                     /* Set widget callback */
-        if (flags & GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP) {
+        if (__GUI_WIDGET_IsDialogBase(h)) {         /* Dialogs do not have parent widget */
+            __GH(h)->Parent = GUI_WINDOW_GetDesktop();  /* Set parent object */
+        } else if (flags & GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP) {
             __GH(h)->Parent = GUI_WINDOW_GetDesktop();  /* Set parent object */
         } else {
             if (parent && __GUI_WIDGET_AllowChildren(parent)) {
@@ -671,6 +673,9 @@ uint8_t __GUI_WIDGET_Remove(GUI_HANDLE_p h) {
     if (__GUI_WIDGET_CanRemove(h)) {                /* Check if we can delete widget */ 
         __GH(h)->Flags |= GUI_FLAG_REMOVE;          /* Set flag and delete it later */
         GUI.Flags |= GUI_FLAG_REMOVE;               /* Set flag for to remove at least one widget from tree */
+        if (__GUI_WIDGET_IsFocused(h)) {
+            __GUI_WIDGET_FOCUS_SET(__GH(h)->Parent);
+        }
         return 1;                                   /* Widget deleted */
     }
 
@@ -827,6 +832,10 @@ void __GUI_WIDGET_FOCUS_SET(GUI_HANDLE_p h) {
     }
     
     /**
+     * TODO: Check if widget is in list for remove or any parent of it
+     */
+    
+    /**
      * Step 1:
      *
      * Identiy common parent from new and old focused widget
@@ -835,7 +844,7 @@ void __GUI_WIDGET_FOCUS_SET(GUI_HANDLE_p h) {
     if (GUI.FocusedWidget) {                        /* We already have one widget in focus */
         common = __GetCommonParentWidget(GUI.FocusedWidget, h); /* Get first widget in common */
         if (common) {                               /* We have common object, invalidate only those which are not common in tree */
-            for (; GUI.FocusedWidget != common; GUI.FocusedWidget = __GH(GUI.FocusedWidget)->Parent) {
+            for (; GUI.FocusedWidget && common && GUI.FocusedWidget != common; GUI.FocusedWidget = __GH(GUI.FocusedWidget)->Parent) {
                 __GH(GUI.FocusedWidget)->Flags &= ~GUI_FLAG_FOCUS;  /* Clear focused flag */
                 __GUI_WIDGET_Callback(GUI.FocusedWidget, GUI_WC_FocusOut, NULL, NULL);  /* Notify with callback */
                 __GUI_WIDGET_Invalidate(GUI.FocusedWidget); /* Invalidate widget */
@@ -852,19 +861,19 @@ void __GUI_WIDGET_FOCUS_SET(GUI_HANDLE_p h) {
      * Set all widget from common to current as focused
      */ 
     GUI.FocusedWidget = h;                          /* Set new focused widget */
-    do {
+    while (h && common && h != common) {
         __GH(h)->Flags |= GUI_FLAG_FOCUS;           /* Set focused flag */
         __GUI_WIDGET_Callback(h, GUI_WC_FocusIn, NULL, NULL);   /* Notify with callback */
         __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
         h = __GH(h)->Parent;                        /* Get parent widget */
-    } while (h && common && h != common);
+    }
 }
 
 /* Clear active widget status */
 void __GUI_WIDGET_ACTIVE_CLEAR(void) {
     if (GUI.ActiveWidget) {
-        __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_ActiveOut, NULL, NULL);
         __GH(GUI.ActiveWidget)->Flags &= ~GUI_FLAG_ACTIVE;
+        __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_ActiveOut, NULL, NULL);
         GUI.ActiveWidgetPrev = GUI.ActiveWidget;
         GUI.ActiveWidget = 0;
     }
@@ -1006,6 +1015,28 @@ uint8_t GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, GUI_Dim_t height) {
     __GUI_ENTER();                                  /* Enter GUI */
     
     res = __GUI_WIDGET_SetHeightPercent(h, height); /* Set object height */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return res;
+}
+
+GUI_Dim_t GUI_WIDGET_GetWidth(GUI_HANDLE_p h) {
+    GUI_Dim_t res;
+    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    res = __GUI_WIDGET_GetWidth(h);                 /* Get widget width */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return res;
+}
+
+GUI_Dim_t GUI_WIDGET_GetHeight(GUI_HANDLE_p h) {
+    GUI_Dim_t res;
+    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    res = __GUI_WIDGET_GetHeight(h);                /* Get widget height */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1169,6 +1200,29 @@ uint8_t GUI_WIDGET_SetScrollY(GUI_HANDLE_p h, GUI_iDim_t scroll) {
         __GUI_WIDGET_Invalidate(h);
         ret = 1;
     }
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
+}
+
+uint8_t GUI_WIDGET_SetFocus(GUI_HANDLE_p h) {
+    uint8_t ret = 1;
+    
+    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_WIDGET_FOCUS_SET(h);                      /* Put widget in focus */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
+}
+
+uint8_t GUI_WIDGET_SetExpanded(GUI_HANDLE_p h, uint8_t state) {
+    uint8_t ret;
+    
+    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    ret = __GUI_WIDGET_SetExpanded(h, state);       /* Set expanded mode */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;

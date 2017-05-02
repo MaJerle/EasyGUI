@@ -95,7 +95,6 @@ uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
                 }
             }
             
-            
             /* Draw actual button structure */
             if (__GH(h)->Flags & GUI_FLAG_3D) {
                 GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, c1);
@@ -121,28 +120,16 @@ uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
             }
             return 1;
         }
-#if GUI_USE_TOUCH
-        case GUI_WC_TouchStart: {
-            *(__GUI_TouchStatus_t *)result = touchHANDLED;
+#if GUI_USE_KEYBOARD
+        case GUI_WC_KeyPress: {
+            __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;
+            if (kb->KB.Keys[0] == GUI_KEY_CR || kb->KB.Keys[0] == GUI_KEY_LF) {
+                __GUI_WIDGET_Callback(h, GUI_WC_Click, 0, 0);   /* Process click */
+                *(__GUI_KeyboardStatus_t *)result = keyHANDLED; /* Key handled */
+            }
             return 1;
         }
-        case GUI_WC_TouchMove: {
-            *(__GUI_TouchStatus_t *)result = touchHANDLED;
-            return 1;
-        }
-        case GUI_WC_TouchEnd: {
-            return 1;
-        }
-#endif /* GUI_USE_TOUCH */
-        case GUI_WC_Click: {
-            return 1;
-        }
-        case GUI_WC_ActiveOut: {            
-            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
-        }
-        case GUI_WC_ActiveIn: {            
-            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
-        }
+#endif /* GUI_USE_KEYBOARD */
         default:                                    /* Handle default option */
             __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */

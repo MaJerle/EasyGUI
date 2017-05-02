@@ -33,6 +33,7 @@
 
 /**
  * \addtogroup      GUI
+ * \{
  */
 
 /**
@@ -42,20 +43,12 @@
  */
 
 /**
- * \brief           Enables (1) or disables (0) clipping regions for redraw operations
- *
- */
-#define GUI_USE_CLIPPING                1
-
-/**
  * \brief           Enables (1) or disables (0) touch support
- *
  */
 #define GUI_USE_TOUCH                   1
 
 /**
  * \brief           Enables (1) or disables (0) keyboard support
- *
  */
 #define GUI_USE_KEYBOARD                1
 
@@ -64,19 +57,41 @@
  *
  * \note            UTF-8 encoding can be used for unicode characters
  */
-#define GUI_USE_UNICODE                 0
+#define GUI_USE_UNICODE                 1
 
 /**
  * \brief           Maximal number of touch entries in buffer
- *
  */
 #define GUI_TOUCH_BUFFER_SIZE           10
 
 /**
+ * \brief           Number of touch presses available at a time
+ *                  
+ *                  Specifies how many fingers can be detected by touch
+ */
+#define GUI_TOUCH_MAX_PRESSES           2
+
+/**
  * \brief           Maximal number of keyboard entries in buffer
- *
  */
 #define GUI_KEYBOARD_BUFFER_SIZE        10
+
+/**
+ * \brief           Enables (1) or disables (0) automatic invalidation of graph widgets
+ *                    when graph dataset changes
+ *
+ * \note            It requires additional memory because each grpah data saves reference
+ *                    to parent graph widget for invalidation
+ */
+#define GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE       1
+
+/**
+ * \brief           Enables (1) or disables (0) widget mode inside parent only
+ *                  When mode is enabled and widget is outside parent, it won't be visible
+ *
+ * \note            This can be used for scrolling mode when necessary
+ */
+#define GUI_WIDGET_INSIDE_PARENT        0
 
 /**
  * \}

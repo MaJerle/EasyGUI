@@ -123,7 +123,9 @@ uint8_t GUI_EDITTEXT_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 #if GUI_USE_KEYBOARD
         case GUI_WC_KeyPress: {
             __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;
-            __GUI_WIDGET_ProcessTextKey(h, kb);
+            if (__GUI_WIDGET_ProcessTextKey(h, kb)) {
+                *(__GUI_KeyboardStatus_t *)result = keyHANDLED; /* Key handled */
+            }
             return 1;
         }
 #endif /* GUI_USE_KEYBOARD */

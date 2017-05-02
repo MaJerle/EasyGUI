@@ -263,7 +263,7 @@ typedef struct __GUI_TouchData_t {
  * \brief           Single key data structure
  */
 typedef struct GUI_KeyboardData_t {
-#if GUI_USE_UNICODE
+#if GUI_USE_UNICODE || defined(DOXYGEN)
     GUI_Char Keys[4];                       /*!< Key pressed, plain unicode bytes, up to 4 bytes */
 #else
     GUI_Char Keys[1];                       /*!< Key pressed, no unicode support */
@@ -867,6 +867,17 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: Pointer to output \ref uint8_t variable to save status of increase/decrease operation
      */
     GUI_WC_IncSelection,
+    
+    
+    /**     
+     * \brief       Called when dialog is dismissed
+     *
+     * \note        Callback is activated when dismiss function is called
+     *
+     * \param[in]   *param: Pointer to int variable passed to dismiss function
+     * \param[out]  *result: None
+     */
+    GUI_WC_OnDismiss,
 } GUI_WC_t;
 
 /**
@@ -876,6 +887,7 @@ typedef enum GUI_WC_t {
  */
 
 #define GUI_FLAG_WIDGET_ALLOW_CHILDREN      ((uint16_t)0x0001)  /*!< Widget allows children widgets */
+#define GUI_FLAG_WIDGET_DIALOG_BASE         ((uint16_t)0x0002)  /*!< Widget is dialog base. When it is active, no other widget around dialog can be pressed */
 
 /**
  * \}

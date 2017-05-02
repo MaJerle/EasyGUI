@@ -33,6 +33,7 @@
 
 /**
  * \addtogroup      GUI
+ * \{
  */
 
 /**

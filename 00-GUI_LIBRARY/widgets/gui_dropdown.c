@@ -134,6 +134,7 @@ uint8_t __OpenClose(GUI_HANDLE_p h, uint8_t state) {
         __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
         return 1;
     } else if (!state && (o->Flags & GUI_FLAG_DROPDOWN_OPENED)) {
+        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate widget */
         o->Flags &= ~GUI_FLAG_DROPDOWN_OPENED;      /* Clear flag */
         o->C.Height = o->OldHeight;                 /* Restore height value */
         o->C.Y = o->OldY;                           /* Restore position */
@@ -149,7 +150,6 @@ uint8_t __OpenClose(GUI_HANDLE_p h, uint8_t state) {
                 }
             }
         }
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate widget */
         return 1;
     }
     return 0;
@@ -294,7 +294,7 @@ void __ProcessClick(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
     
     /* Check if press was on normal area when widget is closed */
     if (ts->RelY[0] >= y1 && ts->RelY[0] <= (y1 + height1)) {   /* Check first part */
-        __OpenClose(h, 0);                          /* Close widget on click */
+        
     } else {
         uint16_t tmpSelected;
         

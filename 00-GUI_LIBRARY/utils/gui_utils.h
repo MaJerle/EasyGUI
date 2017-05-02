@@ -38,13 +38,13 @@ extern "C" {
 
 /**
  * \defgroup        GUI_UTILS Utilities
- * \brief       
+ * \brief           Group for various utilities functions and modules
  * \{
  */
 #include "../gui.h"
 
 /**
- * \} GUI_UTILS
+ * \}
  */
 
 /* C++ detection */

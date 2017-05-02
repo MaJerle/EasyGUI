@@ -95,10 +95,10 @@ uint8_t GUI_WINDOW_SetActive(GUI_HANDLE_p h);
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb);
+GUI_HANDLE_p GUI_WINDOW_CreateDesktop(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb);
 
 /**
- * \brief           Create new child window widget
+ * \brief           Create new window widget
  * \param[in]       id: Widget unique ID to use for identity for callback processing
  * \param[in]       x: Widget X position relative to parent widget
  * \param[in]       y: Widget Y position relative to parent widget
@@ -110,7 +110,7 @@ GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb);
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_WINDOW_CreateChild(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Set color to specific part of widget

@@ -178,7 +178,7 @@ GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h);
  * \retval          Relative X according to parent widget
  * \hideinitializer
  */
-#define __GUI_WIDGET_GetRelativeX(h)    ((__GH(h)->Flags & GUI_FLAG_EXPANDED) ? 0 : __GH(h)->X)
+#define __GUI_WIDGET_GetRelativeX(h)    (__GUI_WIDGET_IsExpanded(h) ? 0 : __GH(h)->X)
 
 /**
  * \brief           Get widget relative Y position according to parent widget
@@ -187,7 +187,7 @@ GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h);
  * \retval          Relative Y according to parent widget
  * \hideinitializer
  */
-#define __GUI_WIDGET_GetRelativeY(h)    ((__GH(h)->Flags & GUI_FLAG_EXPANDED) ? 0 : __GH(h)->Y)
+#define __GUI_WIDGET_GetRelativeY(h)    (__GUI_WIDGET_IsExpanded(h) ? 0 : __GH(h)->Y)
 
 /**
  * \brief           Invalidate widget for redraw 
@@ -369,7 +369,7 @@ uint8_t __GUI_WIDGET_Hide(GUI_HANDLE_p h);
 uint8_t __GUI_WIDGET_ToggleExpanded(GUI_HANDLE_p h);
 
 /**
- * \brief           Set expandend mode
+ * \brief           Set expandend mode on widget. When enabled, widget will be at X,Y = 0,0 relative to parent and will have width,height = 100%,100%
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
  * \param[in]       state: State for expanded mode
@@ -694,13 +694,23 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
 #define __GUI_WIDGET_AllowChildren(h)               (__GH(h)->Widget->Flags & GUI_FLAG_WIDGET_ALLOW_CHILDREN)
 
 /**
+ * \brief           Check if widget is base for dialog
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget is dialog base
+ * \retval          0: Widget is not dialog
+ * \hideinitializer
+ */
+#define __GUI_WIDGET_IsDialogBase(h)                (__GH(h)->Widget->Flags & GUI_FLAG_WIDGET_DIALOG_BASE)
+
+/**
  * \brief           Checks if Widget handle is currently in focus
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in,out]   h: \ref GUI_HANDLE_p widget
+ * \param[in,out]   h: Widget handle
  * \retval          Status whether widget is in focus or not
  * \hideinitializer
  */
-#define __GUI_WIDGET_IsFocused(h)                   (__GH(h) == GUI.FocusedWidget)
+#define __GUI_WIDGET_IsFocused(h)                   (__GH(h)->Flags & GUI_FLAG_FOCUS)
 
 /**
  * \brief           Check if widget or any of its children widgets is in focus
@@ -869,6 +879,30 @@ uint8_t GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width);
 uint8_t GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, GUI_Dim_t height);
 
 /**
+ * \brief           Get total width of widget effective on screen in units of pixels
+ *                     Function returns width of widget according to current widget setup (expanded, fill, percent, etc.)
+ * \note            Even if percentage width is used, function will always return value in pixels
+ * \param[in]       h: Pointer to \ref GUI_HANDLE_p structure
+ * \retval          Total width in units of pixels
+ * \sa              GUI_WIDGET_GetHeight
+ * \sa              GUI_WIDGET_SetWidth
+ */
+GUI_Dim_t GUI_WIDGET_GetWidth(GUI_HANDLE_p h);
+
+/**
+ * \brief           Get total height of widget effective on screen in units of pixels
+ *                     Function returns height of widget according to current widget setup (expanded, fill, percent, etc.)
+ *
+ * \note            Even if percentage height is used, function will always return value in pixels
+ * \param[in]       h: Pointer to \ref GUI_HANDLE_p structure
+ * \retval          Total height in units of pixels
+ * \sa              GUI_WIDGET_GetWidth
+ * \sa              GUI_WIDGET_SetHeight
+ * \hideinitializer
+ */
+GUI_Dim_t GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
+
+/**
  * \brief           Set widget position relative to parent object in units of pixels
  * \param[in,out]   h: Widget handle
  * \param[in]       x: X position relative to parent object
@@ -998,12 +1032,29 @@ uint8_t GUI_WIDGET_SetScrollX(GUI_HANDLE_p h, GUI_iDim_t scroll);
 uint8_t GUI_WIDGET_SetScrollY(GUI_HANDLE_p h, GUI_iDim_t scroll);
 
 /**
+ * \brief           Manually set widget in focus
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget set to focus
+ * \retval          0: Widget was not set to focus
+ */
+uint8_t GUI_WIDGET_SetFocus(GUI_HANDLE_p h);
+
+/**
  * \brief           Set default font for widgets used on widget creation
  * \param[in]       *font: Pointer to \ref GUI_FONT_t with font
  * \retval          1: Font was set ok
  * \retval          0: Font was not set
  */
 uint8_t GUI_WIDGET_SetFontDefault(const GUI_FONT_t* font);
+
+/**
+ * \brief           Set expandend mode on widget. When enabled, widget will be at X,Y = 0,0 relative to parent and will have width,height = 100%,100%
+ * \param[in,out]   h: Widget handle
+ * \param[in]       state: State for expanded mode
+ * \retval          1: Widget expandend status set ok
+ * \retval          0: Widget expandend status was not set
+ */
+uint8_t GUI_WIDGET_SetExpanded(GUI_HANDLE_p h, uint8_t state);
 
 #if defined(GUI_INTERNAL) && !defined(DOXYGEN)
 //Strictly private functions by GUI

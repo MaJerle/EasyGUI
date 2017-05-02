@@ -46,7 +46,7 @@ extern "C" {
 
 /**
  * \defgroup        GUI_COLORS Colors
- * \brief           List of default GUI colors
+ * \brief           List of default GUI colors for fast development
  *
  * There are only predefined GUI colors which are most used.
  * For other colors, user can simply use any other RGB combination for any colors of 16M possible values
@@ -126,7 +126,7 @@ extern "C" {
 #define GUI_COLOR_ALPHA(c, a)           (((c) & 0x00FFFFFFUL) | (a))
     
 /**
- * \} GUI_COLORS
+ * \}
  */
     
 #define GUI_DRAW_CIRCLE_TL              0x01/*!< Draw top left part of circle */
@@ -455,6 +455,11 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
  */
 void GUI_DRAW_Rectangle3D(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_DRAW_3D_State_t state);
 
+/**
+ * \brief           Initializes \ref GUI_DRAW_SB_t structure for drawing operations
+ * \param[in]       *sb: Pointer to \ref GUI_DRAW_SB_t to initialize to default values
+ * \retval          None
+ */
 void GUI_DRAW_ScrollBar_init(GUI_DRAW_SB_t* sb);
 
 /**
@@ -466,7 +471,7 @@ void GUI_DRAW_ScrollBar_init(GUI_DRAW_SB_t* sb);
 void GUI_DRAW_ScrollBar(const GUI_Display_t* disp, GUI_DRAW_SB_t* sb);
 
 /**
- * \} GUI_DRAW
+ * \}
  */
 
 /* C++ detection */

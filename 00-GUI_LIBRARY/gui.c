@@ -157,7 +157,7 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
     static uint8_t i = 0;
     static GUI_iDim_t x[2], y[2];
     
-    *result = (GUI_WC_t)0;
+    *result = (GUI_WC_t)0;                          
     
     PT_BEGIN(&ts->pt);
     
@@ -167,10 +167,10 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
          */
         PT_WAIT_UNTIL(&ts->pt, v && ts->TS.Status && !old->TS.Status && ts->TS.Count == 1);
         
-        Time = ts->TS.Time;                             /* Get start time of this touch */
-        x[i] = ts->RelX[0];                             /* Save X value */
-        y[i] = ts->RelY[0];                             /* Save Y value */
-        PT_YIELD(&ts->pt);                              /* Stop thread for now and wait next call */
+        Time = ts->TS.Time;                         /* Get start time of this touch */
+        x[i] = ts->RelX[0];                         /* Save X value */
+        y[i] = ts->RelY[0];                         /* Save Y value */
+        PT_YIELD(&ts->pt);                          /* Stop thread for now and wait next call */
             
         /**
          * Either wait for released status or timeout
@@ -180,29 +180,29 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
         /**
          * Check what was the reason for thread to continue
          */
-        if (v) {                                        /* New touch event occurred */
-            if (!ts->TS.Status) {                       /* We received released state */
-                if (i) {                                /* Try to get second click, check difference for double click */
+        if (v) {                                    /* New touch event occurred */
+            if (!ts->TS.Status) {                   /* We received released state */
+                if (i) {                            /* Try to get second click, check difference for double click */
                     if (__GUI_ABS(x[0] - x[1]) > 10 || __GUI_ABS(y[0] - y[1]) > 10) {
                         i = 0;
                     }
                 }
-                if (!i) {                               /* On first call, this is click event */
-                    *result = GUI_WC_Click;             /* Click event occurred */
+                if (!i) {                           /* On first call, this is click event */
+                    *result = GUI_WC_Click;         /* Click event occurred */
                     
-                    Time = ts->TS.Time;                 /* Save last time */
-                    PT_YIELD(&ts->pt);                  /* Stop thread for now and wait next call */
+                    Time = ts->TS.Time;             /* Save last time */
+                    PT_YIELD(&ts->pt);              /* Stop thread for now and wait next call with new touch event */
                     
                     /**
                      * Wait for valid input with pressed state
                      */
                     PT_WAIT_UNTIL(&ts->pt, (v && ts->TS.Status) || (GUI.Time - Time) > 300);
-                    if ((GUI.Time - Time) > 300) {      /* Check timeout for new pressed state */
-                        PT_EXIT(&ts->pt);               /* Exit protothread */
+                    if ((GUI.Time - Time) > 300) {  /* Check timeout for new pressed state */
+                        PT_EXIT(&ts->pt);           /* Exit protothread */
                     }
                 } else {
-                    *result = GUI_WC_DblClick;          /* Double click event */
-                    PT_EXIT(&ts->pt);                   /* Reset protothread */
+                    *result = GUI_WC_DblClick;      /* Double click event */
+                    PT_EXIT(&ts->pt);               /* Reset protothread */
                 }
             }
         } else {
@@ -235,6 +235,8 @@ void __SetRelativeCoordinate(__GUI_TouchData_t* ts, GUI_iDim_t x, GUI_iDim_t y) 
 
 __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;
+    static uint8_t deep = 0;
+    uint8_t dialogOnly = 0;
     __GUI_TouchStatus_t tStat = touchCONTINUE;
     
     /* Check touches if any matches, go reverse on linked list */
@@ -243,9 +245,22 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
             continue;
         }
         
+        if (deep == 1) {                            /* On base elements list = children of base window element */
+            if (__GUI_WIDGET_IsDialogBase(h)) {     /* We found dialog element */
+                dialogOnly = 1;                     /* Check only widgets which are dialog based */
+            }
+        }
+        
+        /* When we should only check dialogs and previous element is not dialog anymore */
+        if (dialogOnly && !__GUI_WIDGET_IsDialogBase(h)) {
+            break;
+        }
+        
         /* Check children elements first */
         if (__GUI_WIDGET_AllowChildren(h)) {        /* If children widgets are allowed */
+            deep++;                                 /* Go deeper in level */
             tStat = __ProcessTouch(touch, h);       /* Process touch on widget elements first */
+            deep--;                                 /* Go back to normal level */
             if (tStat != touchCONTINUE) {           /* If we should not continue */
                 return tStat;
             }

@@ -101,7 +101,7 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
                 hi -= 4;
                 topH = pt - 4;
                 
-                inFocus = __GUI_WIDGET_IsFocusedOrChildren(h);  /* Check if window is in focus or any children widget */
+                inFocus = __GUI_WIDGET_IsFocused(h);    /* Check if window is in focus or any children widget */
                 
                 GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, wi - 2, topH, inFocus ? __GUI_WIDGET_GetColor(h, GUI_WINDOW_COLOR_TOP_BG_FOC) : __GUI_WIDGET_GetColor(h, GUI_WINDOW_COLOR_TOP_BG_NOFOC));
                 
@@ -174,7 +174,7 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
                 pt = __GUI_WIDGET_GetPaddingTop(h); /* Get top padding */
                 wi = __GUI_WIDGET_GetWidth(h);      /* Get widget width */
                 
-                if (ts->RelY[0] < pt && ts->RelX[0] < wi - pt) {
+                if (ts->RelY[0] < pt && ts->RelX[0] < (wi - pt)) {
                     Mode = 1;
                     tX = ts->RelX[0];
                     tY = ts->RelY[0];
@@ -248,7 +248,7 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb) {
+GUI_HANDLE_p GUI_WINDOW_CreateDesktop(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb) {
     GUI_WINDOW_t* ptr;
     
     __GUI_ENTER();                                  /* Enter GUI */
@@ -261,7 +261,7 @@ GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb) {
     return __GH(ptr);
 }
 
-GUI_HANDLE_p GUI_WINDOW_CreateChild(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_WINDOW_t* ptr;
     
     __GUI_ENTER();                                  /* Enter GUI */
