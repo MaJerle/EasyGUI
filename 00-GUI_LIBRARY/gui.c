@@ -168,10 +168,10 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
         PT_WAIT_UNTIL(&ts->pt, v && ts->TS.Status && !old->TS.Status && ts->TS.Count == 1);
         
         Time = ts->TS.Time;                         /* Get start time of this touch */
-        x[i] = ts->RelX[0];                         /* Save X value */
-        y[i] = ts->RelY[0];                         /* Save Y value */
+        x[i] = ts->TS.X[0];                         /* Save X value */
+        y[i] = ts->TS.Y[0];                         /* Save Y value */
         PT_YIELD(&ts->pt);                          /* Stop thread for now and wait next call */
-            
+        
         /**
          * Either wait for released status or timeout
          */
@@ -183,8 +183,8 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
         if (v) {                                    /* New touch event occurred */
             if (!ts->TS.Status) {                   /* We received released state */
                 if (i) {                            /* Try to get second click, check difference for double click */
-                    if (__GUI_ABS(x[0] - x[1]) > 10 || __GUI_ABS(y[0] - y[1]) > 10) {
-                        i = 0;
+                    if (__GUI_ABS(x[0] - x[1]) > 20 || __GUI_ABS(y[0] - y[1]) > 20) {
+                        i = 0;                      /* Difference was too big, reset and act like normal click */
                     }
                 }
                 if (!i) {                           /* On first call, this is click event */
@@ -206,7 +206,7 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
                 }
             }
         } else {
-            if (!i) {
+            if (!i) {                               /* Timeout occurred with no touch data, long click */
                 *result = GUI_WC_LongClick;         /* Click event occurred */
             }
             PT_EXIT(&ts->pt);                       /* Exit protothread here */
@@ -368,6 +368,10 @@ int32_t GUI_Process(void) {
 #if GUI_USE_TOUCH
     if (__GUI_INPUT_TouchAvailable()) {             /* Check if any touch available */
         while (__GUI_INPUT_TouchRead(&GUI.Touch.TS)) {  /* Process all touch events possible */
+            if (GUI.ActiveWidget && GUI.Touch.TS.Status) {  /* Check active widget for touch and pressed status */
+                __SetRelativeCoordinate(&GUI.Touch, __GUI_WIDGET_GetAbsoluteX(GUI.ActiveWidget), __GUI_WIDGET_GetAbsoluteY(GUI.ActiveWidget));  /* Set relative touch (for widget) from current touch */
+            }
+            
             if (GUI.Touch.TS.Status && GUI.TouchOld.TS.Status) {
                 /**
                  * Old status: pressed
@@ -375,7 +379,6 @@ int32_t GUI_Process(void) {
                  * Action: Touch move on active element
                  */
                 if (GUI.ActiveWidget) {             /* If active widget exists */
-                    __SetRelativeCoordinate(&GUI.Touch, __GUI_WIDGET_GetAbsoluteX(GUI.ActiveWidget), __GUI_WIDGET_GetAbsoluteY(GUI.ActiveWidget));  /* Set relative touch from current touch */
                     if (GUI.Touch.TS.Count == GUI.TouchOld.TS.Count) {
                         __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchMove, &GUI.Touch, &tStat);  /* The same amount of touch events currently */
                     } else {
@@ -411,7 +414,6 @@ int32_t GUI_Process(void) {
                  * Action: Touch up on active element
                  */
                 if (GUI.ActiveWidget) {             /* Check if active widget */
-                    __SetRelativeCoordinate(&GUI.Touch, __GUI_WIDGET_GetAbsoluteX(GUI.ActiveWidget), __GUI_WIDGET_GetAbsoluteY(GUI.ActiveWidget));  /* Set relative touch from current touch */
                     __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchEnd, &GUI.Touch, &tStat);   /* Process callback function */
                     __GUI_WIDGET_ACTIVE_CLEAR();    /* Clear active widget */
                 }

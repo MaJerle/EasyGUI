@@ -713,15 +713,6 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
 #define __GUI_WIDGET_IsFocused(h)                   (__GH(h)->Flags & GUI_FLAG_FOCUS)
 
 /**
- * \brief           Check if widget or any of its children widgets is in focus
- * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in,out]   h: Widget handle to test
- * \retval          1: Widget or children widgets in focus
- * \retval          0: Neither widget or any of children not in focus
- */
-uint8_t __GUI_WIDGET_IsFocusedOrChildren(GUI_HANDLE_p h);
-
-/**
  * \}
  */
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */

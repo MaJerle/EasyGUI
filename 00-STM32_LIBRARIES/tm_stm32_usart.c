@@ -400,7 +400,7 @@ void TM_USART_Puts(USART_TypeDef* USARTx, char* str) {
 	}
 }
 
-void TM_USART_Send(USART_TypeDef* USARTx, uint8_t* DataArray, uint16_t count) {
+void TM_USART_Send(USART_TypeDef* USARTx, uint8_t* DataArray, uint32_t count) {
 	/* Go through entire data array */
 	while (count--) {
 		/* Wait to be ready, buffer empty */

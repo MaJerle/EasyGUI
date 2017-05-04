@@ -157,6 +157,7 @@ extern GUI_Const GUI_FONT_t GUI_Font_Calibri_Bold_8;
 extern GUI_Const GUI_FONT_t GUI_Font_Arial_Bold_18;
 extern GUI_Const GUI_FONT_t GUI_Font_FontAwesome_Regular_30;
 extern GUI_Const GUI_FONT_t GUI_Font_Arial_Narrow_Italic_22;
+extern GUI_Const GUI_FONT_t GUI_Font_Arial_Narrow_Italic_21_AA;
 
 uint32_t time;
 
@@ -190,6 +191,8 @@ float x, y;
 
 int pressed = 0;
 
+extern GUI_t GUI;
+
 int main(void) {
     GUI_STRING_UNICODE_t s;
     
@@ -201,7 +204,7 @@ int main(void) {
     TM_DISCO_LedInit();                                     /* Init leds */
     TM_DISCO_ButtonInit();                                  /* Init button */
     TM_DELAY_Init();                                        /* Init delay */
-    TM_USART_Init(DISCO_USART, DISCO_USART_PP, 115200);     /* Init USART for debug purpose */
+    TM_USART_Init(DISCO_USART, DISCO_USART_PP, 115200*4);   /* Init USART for debug purpose */
     
     /* Print first screen message */
     printf("GUI; Compiled: %s %s, sizeof: %d\r\n", __DATE__, __TIME__, sizeof(char *) * 5);
@@ -210,7 +213,7 @@ int main(void) {
     
     GUI_Init();
     
-    GUI_WIDGET_SetFontDefault(&GUI_Font_Arial_Narrow_Italic_22);    /* Set default font for widgets */
+    GUI_WIDGET_SetFontDefault(&GUI_Font_Arial_Narrow_Italic_21_AA); /* Set default font for widgets */
     
     win1 = GUI_WINDOW_GetDesktop();                         /* Get desktop window */
     
@@ -268,11 +271,14 @@ int main(void) {
         
         while (!TM_USART_BufferEmpty(DISCO_USART)) {
             GUI_Char ch = TM_USART_Getc(DISCO_USART);
-            __GUI_DEBUG("Key: %c (%2X)\r\n", ch, ch);
             switch (GUI_STRING_UNICODE_Decode(&s, ch)) {
                 case UNICODE_OK:
                     if (ch == 'a') {
                         __GUI_LINKEDLIST_PrintList(NULL);
+                        break;
+                    }
+                    if (ch == 'b') {
+                        TM_USART_Send(DISCO_USART, (uint8_t *)GUI.LCD.Layers[GUI.LCD.ActiveLayer].StartAddress, 480 * 272 * 4);
                         break;
                     }
                     key.Keys[s.t - 1] = ch;

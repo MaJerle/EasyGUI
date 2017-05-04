@@ -767,23 +767,6 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color) 
     return ret;
 }
 
-uint8_t __GUI_WIDGET_IsFocusedOrChildren(GUI_HANDLE_p h) {
-    GUI_HANDLE_p handle;
-    
-    if (__GUI_WIDGET_IsFocused(h)) {                /* Check if widget is in focus */
-        return 1;
-    }
-    
-    if (__GUI_WIDGET_AllowChildren(h)) {            /* Allow only if widget can accept children widgets */
-        for (handle = __GUI_LINKEDLIST_WidgetGetNext(__GHR(h), NULL); handle; handle = __GUI_LINKEDLIST_WidgetGetNext(NULL, handle)) {
-            if (__GUI_WIDGET_IsFocusedOrChildren(handle)) { /* If widget is in focus ... */
-                return 1;                           /* ... stop execution and return */
-            }
-        }
-    }
-    return 0;
-}
-
 void __GUI_WIDGET_MoveDownTree(GUI_HANDLE_p h) {              
     /**
      * Move widget to the end of parent linked list
@@ -839,7 +822,7 @@ void __GUI_WIDGET_FOCUS_SET(GUI_HANDLE_p h) {
      * Step 1:
      *
      * Identiy common parent from new and old focused widget
-     * Remove focused flag on widget which are not in tree from old focused
+     * Remove focused flag on widget which are not in tree between old and new widgets
      */
     if (GUI.FocusedWidget) {                        /* We already have one widget in focus */
         common = __GetCommonParentWidget(GUI.FocusedWidget, h); /* Get first widget in common */

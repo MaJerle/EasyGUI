@@ -119,7 +119,7 @@ uint16_t __StringRectangle(const GUI_FONT_t* font, const GUI_Char* str, const GU
             if (mW < cW) {                          /* Current width check */
                 mW = cW;                            /* Save as max width currently */
             }
-            cnt++;
+            cnt++;                                  /* Increase number of processed characters */
         }
         if (width) {
             *width = mW;
@@ -454,10 +454,10 @@ void GUI_DRAW_Rectangle3D(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y,
     GUI_DRAW_Rectangle(disp, x, y, width, height, c1);
     
     GUI_DRAW_HLine(disp, x + 1, y + 1, width - 2, c2);
-    GUI_DRAW_VLine(disp, x + 1, y + 1, height - 2, c2);
+    GUI_DRAW_VLine(disp, x + 1, y + 1, height - 3, c2);
     
-    GUI_DRAW_HLine(disp, x + 1, y + height - 2, width - 2,  c3);
-    GUI_DRAW_VLine(disp, x + width - 2, y + 1, height - 2, c3);
+    GUI_DRAW_HLine(disp, x + 1, y + height - 2, width - 2, c3);
+    GUI_DRAW_VLine(disp, x + width - 2, y + 2, height - 4, c3);
 }
 
 void GUI_DRAW_RoundedRectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_iDim_t r, GUI_Color_t color) {
