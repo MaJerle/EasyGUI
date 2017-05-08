@@ -92,7 +92,7 @@ uint8_t GUI_DIALOG_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
 static
 uint8_t __GUI_DIALOG_IsDismissed(GUI_ID_t id) {
     DDList_t* list;
-    for (list = __GUI_LINKEDLIST_GETNEXT_GEN(&DDList, 0); list; list = __GUI_LINKEDLIST_GETNEXT_GEN(0, (GUI_LinkedList_t *)list)) {
+    for (list = (DDList_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&DDList, 0); list; list = (DDList_t *)__GUI_LINKEDLIST_GETNEXT_GEN(0, (GUI_LinkedList_t *)list)) {
         if (list->ID == id) {                       /* Check if there is entry from dismissed values */
             return 1;
         }
@@ -104,7 +104,7 @@ uint8_t __GUI_DIALOG_IsDismissed(GUI_ID_t id) {
 static
 int __GUI_DIALOG_GetDismissedStatus(GUI_ID_t id) {
     DDList_t* list;
-    for (list = __GUI_LINKEDLIST_GETNEXT_GEN(&DDList, 0); list; list = __GUI_LINKEDLIST_GETNEXT_GEN(0, (GUI_LinkedList_t *)list)) {
+    for (list = (DDList_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&DDList, 0); list; list = (DDList_t *)__GUI_LINKEDLIST_GETNEXT_GEN(0, (GUI_LinkedList_t *)list)) {
         if (list->ID == id) {                       /* Check if there is entry from dismissed values */
             break;
         }

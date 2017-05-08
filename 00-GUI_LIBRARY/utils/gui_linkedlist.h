@@ -93,12 +93,12 @@ void __GUI_LINKEDLIST_ADD_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* elem
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to remove from base linked list
- * \retval          None
+ * \retval          Pointer to removed \ref GUI_LinkedList_t element
  * \sa              __GUI_LINKEDLIST_ADD_GEN
  * \sa              __GUI_LINKEDLIST_MULTI_ADD_GEN
  * \sa              __GUI_LINKEDLIST_MULTI_REMOVE_GEN
  */
-void __GUI_LINKEDLIST_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
+GUI_LinkedList_t* __GUI_LINKEDLIST_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 
 /**
  * \brief           Get next element structure from doubly linked list
@@ -120,7 +120,7 @@ void __GUI_LINKEDLIST_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* e
  * \sa              __GUI_LINKEDLIST_MULTI_GETNEXT_GEN
  * \sa              __GUI_LINKEDLIST_MULTI_GETPREV_GEN
  */
-void* __GUI_LINKEDLIST_GETNEXT_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
+GUI_LinkedList_t* __GUI_LINKEDLIST_GETNEXT_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 
 /**
  * \brief           Get previous element structure from doubly linked list
@@ -142,7 +142,7 @@ void* __GUI_LINKEDLIST_GETNEXT_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t*
  * \sa              __GUI_LINKEDLIST_MULTI_GETNEXT_GEN
  * \sa              __GUI_LINKEDLIST_MULTI_GETPREV_GEN
  */
-void* __GUI_LINKEDLIST_GETPREV_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
+GUI_LinkedList_t* __GUI_LINKEDLIST_GETPREV_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 
 /**
  * \brief           Move widget down for one on doubly linked list

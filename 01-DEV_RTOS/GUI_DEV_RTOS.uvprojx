@@ -1346,6 +1346,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_dialog.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_listview.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_listview.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1415,6 +1420,11 @@
               <FileName>Arial_Narrow_Italic.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\Arial_Narrow_Italic.c</FilePath>
+            </File>
+            <File>
+              <FileName>Arial_Narrow_Italic_AA.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Arial_Narrow_Italic_AA.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2759,6 +2769,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_dialog.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_listview.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_listview.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2828,6 +2843,11 @@
               <FileName>Arial_Narrow_Italic.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\Arial_Narrow_Italic.c</FilePath>
+            </File>
+            <File>
+              <FileName>Arial_Narrow_Italic_AA.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Arial_Narrow_Italic_AA.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4173,6 +4193,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_dialog.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_listview.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_listview.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4243,6 +4268,11 @@
               <FileType>1</FileType>
               <FilePath>.\User\Arial_Narrow_Italic.c</FilePath>
             </File>
+            <File>
+              <FileName>Arial_Narrow_Italic_AA.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Arial_Narrow_Italic_AA.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
@@ -4251,7 +4281,7 @@
       <TargetName>STM32F7_DISCOVERY</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060300::V5.06 update 3 (build 300)::ARMCC</pCCUsed>
+      <pCCUsed>5060528::V5.06 update 5 (build 528)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F746NGHx</Device>
@@ -5321,6 +5351,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_dialog.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_listview.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_listview.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -5391,10 +5426,21 @@
               <FileType>1</FileType>
               <FilePath>.\User\Arial_Narrow_Italic.c</FilePath>
             </File>
+            <File>
+              <FileName>Arial_Narrow_Italic_AA.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Arial_Narrow_Italic_AA.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
     </Target>
   </Targets>
+
+  <RTE>
+    <apis/>
+    <components/>
+    <files/>
+  </RTE>
 
 </Project>

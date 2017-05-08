@@ -63,6 +63,7 @@ CTS         PA3                 RTS from ST to CTS from GSM
 #include "gui_checkbox.h"
 #include "gui_radio.h"
 #include "gui_listbox.h"
+#include "gui_listview.h"
 #include "gui_textview.h"
 #include "gui_dropdown.h"
 #include "gui_dialog.h"
@@ -96,6 +97,7 @@ GUI_HANDLE_p dialog1;
 #define ID_WIN_TEXTVIEW         (ID_BASE_WIN + 0x09)
 #define ID_WIN_DROPDOWN         (ID_BASE_WIN + 0x0A)
 #define ID_WIN_DIALOG           (ID_BASE_WIN + 0x0B)
+#define ID_WIN_LISTVIEW         (ID_BASE_WIN + 0x0C)
 
 /* List of base buttons IDs */
 #define ID_BTN_WIN_BTN          (ID_BASE_BTN + 0x01)
@@ -109,9 +111,10 @@ GUI_HANDLE_p dialog1;
 #define ID_BTN_WIN_TEXTVIEW     (ID_BASE_BTN + 0x09)
 #define ID_BTN_WIN_DROPDOWN     (ID_BASE_BTN + 0x0A)
 #define ID_BTN_WIN_DIALOG       (ID_BASE_BTN + 0x0B)
+#define ID_BTN_WIN_LISTVIEW     (ID_BASE_BTN + 0x0C)
 
-#define ID_BTN_DIALOG_CONFIRM   (ID_BASE_BTN + 0x0C)
-#define ID_BTN_DIALOG_CANCEL    (ID_BASE_BTN + 0x0D)
+#define ID_BTN_DIALOG_CONFIRM   (ID_BASE_BTN + 0x0D)
+#define ID_BTN_DIALOG_CANCEL    (ID_BASE_BTN + 0x0E)
 
 #define ID_TEXTVIEW_1           (ID_BASE_TEXTWIEW + 0x01)
 
@@ -148,6 +151,7 @@ bulk_init_t buttons[] = {
     {ID_BTN_WIN_TEXTVIEW,   _T("Text view"),    {ID_WIN_TEXTVIEW, _T("Text view")}},
     {ID_BTN_WIN_DROPDOWN,   _T("Dropdown"),     {ID_WIN_DROPDOWN, _T("Dropdown")}},
     {ID_BTN_WIN_DIALOG,     _T("Dialog"),       {ID_WIN_DIALOG, _T("Dialog")}},
+    {ID_BTN_WIN_LISTVIEW,   _T("Listview"),     {ID_WIN_LISTVIEW, _T("Listview")}},
 };
 
 char str[100];
@@ -341,6 +345,94 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 GUI_LISTBOX_SetSliderVisibility(handle, 0);
                 break;
             }
+            case ID_WIN_LISTVIEW: {     /* Listview */
+                GUI_LISTVIEW_ROW_p row;
+                handle = GUI_LISTVIEW_Create(0, 10, 10, 200, 40, h, 0, 0);
+                GUI_WIDGET_SetExpanded(handle, 1);
+                
+                GUI_LISTVIEW_AddColumn(handle, _T("Name"));
+                GUI_LISTVIEW_AddColumn(handle, _T("LastName"));
+                GUI_LISTVIEW_AddColumn(handle, _T("Email"));
+                GUI_LISTVIEW_AddColumn(handle, _T("Phone"));
+                
+                GUI_LISTVIEW_SetColumnWidth(handle, 0, 0);
+                GUI_LISTVIEW_SetColumnWidth(handle, 1, 200);
+                GUI_LISTVIEW_SetColumnWidth(handle, 2, 50);
+                GUI_LISTVIEW_SetColumnWidth(handle, 3, 80);
+                
+                row = GUI_LISTVIEW_AddRow(handle);
+                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Tilen"));
+                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Majerle"));
+                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@majerle.eu"));
+                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("040167724"));
+                
+                row = GUI_LISTVIEW_AddRow(handle);
+                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Nekdo"));
+                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Nekje"));
+                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("til@erle.eu"));
+                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("123456789"));
+                
+                row = GUI_LISTVIEW_AddRow(handle);
+                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
+                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
+                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
+                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
+                
+                row = GUI_LISTVIEW_AddRow(handle);
+                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Tilen"));
+                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Majerle"));
+                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@majerle.eu"));
+                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("040167724"));
+                
+                row = GUI_LISTVIEW_AddRow(handle);
+                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Nekdo"));
+                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Nekje"));
+                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("til@erle.eu"));
+                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("123456789"));
+                
+                row = GUI_LISTVIEW_AddRow(handle);
+                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
+                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
+                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
+                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
+                
+                row = GUI_LISTVIEW_AddRow(handle);
+                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Tilen"));
+                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Majerle"));
+                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@majerle.eu"));
+                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("040167724"));
+                
+                row = GUI_LISTVIEW_AddRow(handle);
+                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Nekdo"));
+                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Nekje"));
+                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("til@erle.eu"));
+                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("123456789"));
+                
+                row = GUI_LISTVIEW_AddRow(handle);
+                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
+                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
+                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
+                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
+                
+                row = GUI_LISTVIEW_AddRow(handle);
+                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Tilen"));
+                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Majerle"));
+                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@majerle.eu"));
+                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("040167724"));
+                
+                row = GUI_LISTVIEW_AddRow(handle);
+                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Nekdo"));
+                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Nekje"));
+                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("til@erle.eu"));
+                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("123456789"));
+                
+                row = GUI_LISTVIEW_AddRow(handle);
+                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
+                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
+                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
+                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
+                break;
+            }
             case ID_WIN_GRAPH: {        /* Graph window */
                 uint16_t i;
                 handle = GUI_GRAPH_Create(0, 10, 10, 400, 220, h, 0, 0);
@@ -519,6 +611,7 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 case ID_BTN_WIN_GRAPH:
                 case ID_BTN_WIN_LED:
                 case ID_BTN_WIN_LISTBOX:
+                case ID_BTN_WIN_LISTVIEW:
                 case ID_BTN_WIN_PROGBAR:
                 case ID_BTN_WIN_RADIO:
                 case ID_BTN_WIN_TEXTVIEW: {

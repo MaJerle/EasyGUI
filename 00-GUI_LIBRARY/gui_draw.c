@@ -128,6 +128,9 @@ uint16_t __StringRectangle(const GUI_FONT_t* font, const GUI_Char* str, const GU
         while (GUI_STRING_GetCh(&s, &ch, &i)) {     /* Get next character from string */
             cnt++;
             __StringGetCharSize(font, ch, &w, &h);  /* Get character width and height */
+            if (!(draw->Flags & GUI_FLAG_FONT_RIGHTALIGN) && (cW + w) > draw->Width) {  /* Check if end now */
+                break;
+            }
             if ((uint8_t)'\r' != (uint8_t)ch && (uint8_t)'\n' != (uint8_t)ch) {
                 cW += w;                        /* Increase width */
             }
@@ -739,7 +742,7 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
             if (y > disp->Y2) {                     /* Check if Y over line */
                 break;
             }
-            if (x > disp->X2) {                     /* Check if Y over line */
+            if (x > disp->X2) {                     /* Check if X over line */
                 continue;
             }
             

@@ -69,7 +69,7 @@ void __GUI_LINKEDLIST_ADD_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* elem
     }
 }
 
-void __GUI_LINKEDLIST_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
+GUI_LinkedList_t* __GUI_LINKEDLIST_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
     GUI_LinkedList_t* prev = element->Prev;         /* Get previous element of current */
     GUI_LinkedList_t* next = element->Next;         /* Get next element of current */
     
@@ -88,9 +88,10 @@ void __GUI_LINKEDLIST_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* e
     
     element->Prev = NULL;                           /*!< Clear element pointer */
     element->Next = NULL;                           /*!< Clear element pointer */
+    return element;
 }
 
-void* __GUI_LINKEDLIST_GETNEXT_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
+GUI_LinkedList_t* __GUI_LINKEDLIST_GETNEXT_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
     if (!element) { 
         if (root) {
             return (void *)root->First;
@@ -101,7 +102,7 @@ void* __GUI_LINKEDLIST_GETNEXT_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t*
     return element->Next;                           /* Get next widget of current in linked list */
 }
 
-void* __GUI_LINKEDLIST_GETPREV_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
+GUI_LinkedList_t* __GUI_LINKEDLIST_GETPREV_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
     if (!element) { 
         if (root) {
             return (void *)root->Last;
@@ -395,7 +396,7 @@ void __GUI_LINKEDLIST_PrintList(GUI_HANDLE_ROOT_t* root) {
         list = &GUI.Root;
     }
     for (h = (GUI_HANDLE_ROOT_t *)list->First; h; h = h->Handle.List.Next) {
-        __GUI_DEBUG("%*d: Widget: %s; A: 0x%08X; Redraw: %d; Delete: %d\r\n", depth, depth, h->Handle.Widget->Name, (uint32_t)h, h->Handle.Flags & GUI_FLAG_REDRAW, h->Handle.Flags & GUI_FLAG_REMOVE);
+        __GUI_DEBUG("%*d: W: %s; A: 0x%08X; R: %d; D: %d\r\n", depth, depth, h->Handle.Widget->Name, (uint32_t)h, h->Handle.Flags & GUI_FLAG_REDRAW, h->Handle.Flags & GUI_FLAG_REMOVE);
         if (__GUI_WIDGET_AllowChildren(h)) {
             __GUI_LINKEDLIST_PrintList(h);
         }

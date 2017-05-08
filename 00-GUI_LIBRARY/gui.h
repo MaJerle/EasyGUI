@@ -91,7 +91,13 @@ extern "C" {
  * \brief           Allocate memory with specific size in bytes
  * \hideinitializer
  */
-#define __GUI_MEMALLOC(size)        malloc(size)
+#define __GUI_MEMALLOC(size)        calloc(size, 1)
+
+/**
+ * \brief           Reallocate memory with specific size in bytes
+ * \hideinitializer
+ */
+#define __GUI_MEMREALLOC(ptr, size) realloc(ptr, size)
 
 /**
  * \brief           Free memory from specific address previously allocated with \ref __GUI_MEMALLOC

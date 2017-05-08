@@ -566,7 +566,7 @@ GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iD
     
     __GUI_ASSERTPARAMS(widget && widget->Callback); /* Check input parameters */
     
-    h = (GUI_HANDLE_p)__GUI_MEMALLOC(widget->Size);
+    h = (GUI_HANDLE_p)__GUI_MEMALLOC(widget->Size); /* Allocate memory for widget */
     if (h) {
         memset(h, 0x00, widget->Size);              /* Set memory to 0 */
         

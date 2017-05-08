@@ -406,15 +406,16 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.Color1Width = f.Width;
                 
-                for (item = (GUI_DROPDOWN_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&o->Root, NULL); 
-                    item && index < o->VisibleStartIndex; 
-                    item = (GUI_DROPDOWN_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(NULL, &item->List), index++);
-                
                 tmp = disp->Y2;
                 if (disp->Y2 > (y + height)) {      /* Set cut-off Y position for drawing operations */
                     disp->Y2 = y + height;
                 }
-                while (height && item) {            /* Try to process all strings */                    
+                
+                /* Try to process all strings */
+                for (index = 0, item = (GUI_DROPDOWN_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&o->Root, NULL); item && f.Y <= disp->Y2; item = (GUI_DROPDOWN_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(NULL, (GUI_LinkedList_t *)item), index++) {
+                    if (index < o->VisibleStartIndex) { /* Check for start visible */
+                        continue;
+                    }
                     if (index == __GD(h)->Selected) {
                         GUI_DRAW_FilledRectangle(disp, x + 2, f.Y, width - 3, __GUI_MIN(f.Height, itemHeight), __GUI_WIDGET_IsFocused(h) ? __GUI_WIDGET_GetColor(h, GUI_DROPDOWN_COLOR_SEL_FOC_BG) : __GUI_WIDGET_GetColor(h, GUI_DROPDOWN_COLOR_SEL_NOFOC_BG));
                         f.Color1 = __GUI_WIDGET_IsFocused(h) ? __GUI_WIDGET_GetColor(h, GUI_DROPDOWN_COLOR_SEL_FOC) : __GUI_WIDGET_GetColor(h, GUI_DROPDOWN_COLOR_SEL_NOFOC);
@@ -423,13 +424,15 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                     }
                     GUI_DRAW_WriteText(disp, __GH(h)->Font, item->Text, &f);
                     f.Y += itemHeight;
-                    if (f.Y > disp->Y2) {
-                        break;
-                    }
-                    item = (GUI_DROPDOWN_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(NULL, &item->List);
-                    index++;
                 }
                 disp->Y2 = tmp;                     /* Set temporary value back */
+            }
+            return 1;
+        }
+        case GUI_WC_Remove: {
+            GUI_DROPDOWN_ITEM_t* item;
+            while ((item = (GUI_DROPDOWN_ITEM_t *)__GUI_LINKEDLIST_REMOVE_GEN(&o->Root, (GUI_LinkedList_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&o->Root, 0))) != NULL) {
+                __GUI_MEMFREE(item);                /* Free memory */
             }
             return 1;
         }
