@@ -439,7 +439,7 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 #if GUI_USE_TOUCH
         case GUI_WC_TouchStart: {
             __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
-            tY = ts->RelY[0];
+            tY = ts->RelY[0];                       /* Save relative Y position */
             
             *(__GUI_TouchStatus_t *)result = touchHANDLED;
             return 1;
@@ -472,15 +472,19 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             __OpenClose(h, 0);                      /* Close widget */
             return 1;
         }
+#if GUI_USE_KEYBOARD
         case GUI_WC_KeyPress: {
             __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;
             if (kb->KB.Keys[0] == GUI_KEY_DOWN) {   /* On pressed down */
                 __IncSelection(h, 1);               /* Increase selection */
+                *(__GUI_KeyboardStatus_t *)result = keyHANDLED; /* Key has been pressed */
             } else if (kb->KB.Keys[0] == GUI_KEY_UP) {
                 __IncSelection(h, -1);              /* Decrease selection */
+                *(__GUI_KeyboardStatus_t *)result = keyHANDLED; /* Key has been pressed */
             }
             return 1;
         }
+#endif /* GUI_USE_KEYBOARD */
         case GUI_WC_IncSelection: {
             __IncSelection(h, *(int16_t *)param);   /* Increase selection */
             *(uint8_t *)result = 1;                 /* Set operation result */

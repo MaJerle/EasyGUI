@@ -94,6 +94,8 @@ GUI_STRING_UNICODE_Result_t GUI_STRING_UNICODE_Decode(GUI_STRING_UNICODE_t* s, c
         } else {                            /* Invalid byte sequence */
             s->res = 0;                     /* Reset remaining bytes */
             s->r = 0;                       /* Invalid character */
+            //TODO: Consider using decode function again like: 
+            //return GUI_STRING_UNICODE_Decode(s, c);
             return UNICODE_ERROR;           /* Return error */
         }
     }

@@ -13,6 +13,9 @@
 *.ini
 *.MajerleT
 
+*.html
+*.chm
+
 
 .gitignore
 

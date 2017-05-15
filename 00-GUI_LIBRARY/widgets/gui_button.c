@@ -130,6 +130,11 @@ uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
             return 1;
         }
 #endif /* GUI_USE_KEYBOARD */
+        case GUI_WC_ActiveIn:
+        case GUI_WC_ActiveOut: {
+            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
+            return 1;
+        }
         default:                                    /* Handle default option */
             __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */

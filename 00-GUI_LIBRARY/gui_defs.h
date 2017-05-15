@@ -321,24 +321,62 @@ typedef struct GUI_Display_t {
 } GUI_Display_t;
 
 /**
+ * \addtogroup      GUI_IMAGE
+ * \{
+ */
+
+/**
+ * \brief           Image descriptor structure
+ */
+typedef struct GUI_IMAGE_DESC_t {
+    GUI_Dim_t xSize;                        /*!< X size */
+    GUI_Dim_t ySize;                        /*!< Y size */
+    uint8_t BPP;                            /*!< Bits per pixel */
+    const uint8_t* Image;                   /*!< Pointer to image byte array */
+} GUI_IMAGE_DESC_t;
+
+/**
+ * \}
+ */
+
+
+/**
  * \brief           Low-level LCD command enumeration
  */
 typedef enum GUI_LL_Command_t {
-    GUI_LL_Command_SetActiveLayer = 0x00,   /*!< Set new layer as active layer */
+    /**
+     * \brief       Initialize low-level part of GUI
+     *
+     * \param[in]   *param: Pointer to \ref GUI_LL_t structure to fill data to
+     * \param[out]  *result: Pointer to \ref uint8_t variable to save result: 0 = OK otherwise ERROR
+     */
+    GUI_LL_Command_Init = 0x00,             /*!< Set new layer as active layer */
+    
+    /**
+     * \brief       Initialize low-level part of GUI
+     *
+     * \param[in]   *param: Pointer to \ref GUI_LL_t structure to fill data to
+     * \param[out]  *result: Pointer to \ref uint8_t variable to save result: 0 = OK otherwise ERROR
+     */
+    GUI_LL_Command_SetActiveLayer,          /*!< Set new layer as active layer */
 } GUI_LL_Command_t;
 
 /**
  * \brief           GUI Low-Level structure for drawing operations
  */
 typedef struct GUI_LL_t {
-    void            (*Init)         (GUI_LCD_t* LCD);                                                                           /*!< Pointer to LCD initialization function */
-    void            (*SetPixel)     (GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);                         /*!< Pointer to LCD set pixel function */
-    GUI_Color_t     (*GetPixel)     (GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t, GUI_Dim_t);                                      /*!< Pointer to read pixel from LCD */
-    void            (*Fill)         (GUI_LCD_t* LCD, uint8_t layer, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);      /*!< Pointer to LCD fill screen or rectangle function */
-    void            (*Copy)         (GUI_LCD_t* LCD, uint8_t layer, void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t);/*!< Pointer to LCD copy data from source to destination */
-    void            (*DrawHLine)    (GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);              /*!< Pointer to horizontal line drawing. Set to 0 if you do not have optimized version */
-    void            (*DrawVLine)    (GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);              /*!< Pointer to vertical line drawing. Set to 0 if you do not have optimized version */
-    void            (*FillRect)     (GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);   /*!< Pointer to function for filling rectangle on LCD */
+    void            (*Init)         (GUI_LCD_t *);                                                                      /*!< Pointer to LCD initialization function */
+    void            (*SetPixel)     (GUI_LCD_t *, uint8_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);                          /*!< Pointer to LCD set pixel function */
+    GUI_Color_t     (*GetPixel)     (GUI_LCD_t *, uint8_t, GUI_Dim_t, GUI_Dim_t);                                       /*!< Pointer to read pixel from LCD */
+    void            (*Fill)         (GUI_LCD_t *, uint8_t, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);       /*!< Pointer to LCD fill screen or rectangle function */
+    void            (*Copy)         (GUI_LCD_t *, uint8_t, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t);   /*!< Pointer to LCD copy data from source to destination */
+    void            (*CopyBlend)    (GUI_LCD_t *, uint8_t, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t);   /*!< Pointer to function for copying with blending support */
+    void            (*DrawHLine)    (GUI_LCD_t *, uint8_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);               /*!< Pointer to horizontal line drawing. Set to 0 if you do not have optimized version */
+    void            (*DrawVLine)    (GUI_LCD_t *, uint8_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);               /*!< Pointer to vertical line drawing. Set to 0 if you do not have optimized version */
+    void            (*FillRect)     (GUI_LCD_t *, uint8_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);    /*!< Pointer to function for filling rectangle on LCD */
+    void            (*DrawImage16)  (GUI_LCD_t *, uint8_t, const GUI_IMAGE_DESC_t *, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t); /*!< Pointer to function for drawing 16BPP (RGB565) images */
+    void            (*DrawImage24)  (GUI_LCD_t *, uint8_t, const GUI_IMAGE_DESC_t *, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t); /*!< Pointer to function for drawing 24BPP (RGB888) images */
+    void            (*DrawImage32)  (GUI_LCD_t *, uint8_t, const GUI_IMAGE_DESC_t *, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t); /*!< Pointer to function for drawing 32BPP (ARGB8888) images */
 } GUI_LL_t;
 
 /**
@@ -637,7 +675,7 @@ typedef struct {
 /**
  * \}
  */
-
+ 
 /**
  * \}
  */

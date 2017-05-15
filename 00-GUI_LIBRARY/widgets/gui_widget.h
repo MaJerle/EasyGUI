@@ -984,6 +984,21 @@ void* GUI_WIDGET_GetUserData(GUI_HANDLE_p h);
 uint8_t GUI_WIDGET_ProcessDefaultCallback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /**
+ * \brief           Widget callback function for all events
+ * \note            Called from user outside callback. For calling default callback
+ *                      inside custom callback for widget, use \ref GUI_WIDGET_ProcessDefaultCallback instead.
+ *                      If called from inside widget callback, it may result in recursive calls.
+ *
+ * \param[in,out]   h: Widget handle where callback occurred
+ * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
+ * \param[in]       *param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
+ * \param[out]      *result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
+ * \retval          1: Command has been processed
+ * \retval          0: Command has not been processed
+ */
+uint8_t GUI_WIDGET_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+
+/**
  * \brief           Check if widget is children of parent
  * \param[in]       h: Widget handle to test
  * \param[in]       parent: Parent widget handle to test if is parent

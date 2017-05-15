@@ -145,6 +145,16 @@ GUI_LinkedList_t* __GUI_LINKEDLIST_GETNEXT_GEN(GUI_LinkedListRoot_t* root, GUI_L
 GUI_LinkedList_t* __GUI_LINKEDLIST_GETPREV_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 
 /**
+ * \brief           Get item from linked list by index
+ * \note            Index value is the number of item in list order
+ * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       index: Number in list to get item
+ * \retval          0: Element not found
+ * \retval          > 0: Pointer to \ref GUI_LinkedList_t structure
+ */
+GUI_LinkedList_t* __GUI_LINKEDLIST_GETNEXT_BYINDEX_GEN(GUI_LinkedListRoot_t* root, uint16_t index);
+
+/**
  * \brief           Move widget down for one on doubly linked list
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element

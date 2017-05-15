@@ -7,8 +7,8 @@ import random
 By sending "b" character to serial you are able to read current screen from device if firmware is correct.
 """
 
-PORT = "COM3"
-BAUD = 115200*4
+PORT = "COM20"
+BAUD = 115200*2
 IMG_WIDTH = 480
 IMG_HEIGHT = 272
 DATA_SIZE = IMG_WIDTH * IMG_HEIGHT * 4

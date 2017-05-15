@@ -70,8 +70,15 @@ void __GUI_LINKEDLIST_ADD_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* elem
 }
 
 GUI_LinkedList_t* __GUI_LINKEDLIST_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
-    GUI_LinkedList_t* prev = element->Prev;         /* Get previous element of current */
-    GUI_LinkedList_t* next = element->Next;         /* Get next element of current */
+    GUI_LinkedList_t* prev;
+    GUI_LinkedList_t* next;
+    
+    if (!element) {                                 /* Maybe element is not even valid? */
+        return 0;
+    }
+
+    prev = element->Prev;                           /* Get previous element of current */
+    next = element->Next;                           /* Get next element of current */
     
     if (prev) {                                     /* If current element has previous elemnet */
         prev->Next = next;                          /* Set new next element to previous element */
@@ -193,6 +200,13 @@ uint8_t __GUI_LINKEDLIST_MOVEUP_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t
     return 1;                                       /* Move was successful */
 }
 
+GUI_LinkedList_t* __GUI_LINKEDLIST_GETNEXT_BYINDEX_GEN(GUI_LinkedListRoot_t* root, uint16_t index) {
+    GUI_LinkedList_t* item = __GUI_LINKEDLIST_GETNEXT_GEN(root, 0); /* Get first element */
+    while (index-- && item) {                       /* Scroll to next elements */
+        item = __GUI_LINKEDLIST_GETNEXT_GEN(0, (GUI_LinkedList_t *)item);
+    }
+    return item;                                    /* Get that item */
+}
 
 GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_ADD_GEN(GUI_LinkedListRoot_t* root, void* element) {
     GUI_LinkedListMulti_t* ptr;
@@ -208,7 +222,10 @@ GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_ADD_GEN(GUI_LinkedListRoot_t* root
 }
 
 uint8_t __GUI_LINKEDLIST_MULTI_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
-    __GUI_LINKEDLIST_REMOVE_GEN(root, &element->List);  /* Remove element from linked list */
+    if (!element) {                                 /* Check valid element */
+        return 0;
+    }
+    __GUI_LINKEDLIST_REMOVE_GEN(root, (GUI_LinkedList_t *)element); /* Remove element from linked list */
     __GUI_MEMFREE(element);                         /* Free memory */
     return 1;
 }
@@ -227,7 +244,7 @@ GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(GUI_LinkedListRoot_t* 
 GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_GETPREV_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
     if (!element) { 
         if (root) {
-            return (void *)root->Last;
+            return (GUI_LinkedListMulti_t *)root->Last;
         } else {
             return 0;
         }

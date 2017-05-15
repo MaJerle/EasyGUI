@@ -59,12 +59,13 @@ uint8_t GUI_LL_Init(GUI_LCD_t* LCD, GUI_LL_t* LL);
 /**
  * \brief           Send command to for LCD from GUI
  * \param[in,out]   *LCD: Pointer to \ref GUI_LCD_t structure with LCD properties
- * \param[in]       cmd: Command to be executed
- * \param[in]       *data: Optional data included in command
+ * \param[in]       cmd: Command to be executed. This parameter can be a value of \ref GUI_LL_Command_t enumeration
+ * \param[in]       *param: Optional data included in command. Check \ref GUI_LL_Command_t enumeration what is used for each command
+ * \param[out]      *result: Result from command
  * \retval          0: Command has been processed
  * \retval          1: Command has not been processed
  */
-uint8_t GUI_LL_Control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* data);
+uint8_t GUI_LL_Control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* result);
  
 /**
  * \}

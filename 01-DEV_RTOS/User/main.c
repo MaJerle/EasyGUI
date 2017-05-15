@@ -52,6 +52,8 @@ CTS         PA3                 RTS from ST to CTS from GSM
 #include "tm_stm32_exti.h"
 #include "cmsis_os.h"
 #include "tm_stm32_general.h"
+#include "main.h"
+#include "tm_stm32_sdram.h"
 
 #include "gui.h"
 #include "gui_window.h"
@@ -67,6 +69,7 @@ CTS         PA3                 RTS from ST to CTS from GSM
 #include "gui_textview.h"
 #include "gui_dropdown.h"
 #include "gui_dialog.h"
+#include "gui_image.h"
 
 #include "math.h"
 
@@ -98,6 +101,7 @@ GUI_HANDLE_p dialog1;
 #define ID_WIN_DROPDOWN         (ID_BASE_WIN + 0x0A)
 #define ID_WIN_DIALOG           (ID_BASE_WIN + 0x0B)
 #define ID_WIN_LISTVIEW         (ID_BASE_WIN + 0x0C)
+#define ID_WIN_IMAGE            (ID_BASE_WIN + 0x0D)
 
 /* List of base buttons IDs */
 #define ID_BTN_WIN_BTN          (ID_BASE_BTN + 0x01)
@@ -112,9 +116,10 @@ GUI_HANDLE_p dialog1;
 #define ID_BTN_WIN_DROPDOWN     (ID_BASE_BTN + 0x0A)
 #define ID_BTN_WIN_DIALOG       (ID_BASE_BTN + 0x0B)
 #define ID_BTN_WIN_LISTVIEW     (ID_BASE_BTN + 0x0C)
+#define ID_BTN_WIN_IMAGE        (ID_BASE_BTN + 0x0D)
 
-#define ID_BTN_DIALOG_CONFIRM   (ID_BASE_BTN + 0x0D)
-#define ID_BTN_DIALOG_CANCEL    (ID_BASE_BTN + 0x0E)
+#define ID_BTN_DIALOG_CONFIRM   (ID_BASE_BTN + 0x0E)
+#define ID_BTN_DIALOG_CANCEL    (ID_BASE_BTN + 0x0F)
 
 #define ID_TEXTVIEW_1           (ID_BASE_TEXTWIEW + 0x01)
 
@@ -150,8 +155,9 @@ bulk_init_t buttons[] = {
     {ID_BTN_WIN_LED,        _T("Led"),          {ID_WIN_LED, _T("Led")}},
     {ID_BTN_WIN_TEXTVIEW,   _T("Text view"),    {ID_WIN_TEXTVIEW, _T("Text view")}},
     {ID_BTN_WIN_DROPDOWN,   _T("Dropdown"),     {ID_WIN_DROPDOWN, _T("Dropdown")}},
-    {ID_BTN_WIN_DIALOG,     _T("Dialog"),       {ID_WIN_DIALOG, _T("Dialog")}},
+//    {ID_BTN_WIN_DIALOG,     _T("Dialog"),       {ID_WIN_DIALOG, _T("Dialog")}},
     {ID_BTN_WIN_LISTVIEW,   _T("Listview"),     {ID_WIN_LISTVIEW, _T("Listview")}},
+    {ID_BTN_WIN_IMAGE,      _T("Image"),        {ID_WIN_IMAGE, _T("Image")}},
 };
 
 char str[100];
@@ -187,6 +193,7 @@ uint8_t radio_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 uint8_t checkbox_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 uint8_t led_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 uint8_t dialog_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
+uint8_t listview_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 
 #define PI      3.14159265359f
 
@@ -208,10 +215,10 @@ int main(void) {
     TM_DISCO_LedInit();                                     /* Init leds */
     TM_DISCO_ButtonInit();                                  /* Init button */
     TM_DELAY_Init();                                        /* Init delay */
-    TM_USART_Init(DISCO_USART, DISCO_USART_PP, 115200*4);   /* Init USART for debug purpose */
+    TM_USART_Init(DISCO_USART, DISCO_USART_PP, 115200*2);   /* Init USART for debug purpose */
     
     /* Print first screen message */
-    printf("GUI; Compiled: %s %s, sizeof: %d\r\n", __DATE__, __TIME__, sizeof(char *) * 5);
+    printf("GUI; Compiled: %s %s\r\n", __DATE__, __TIME__);
     
     TM_GENERAL_DWTCounterEnable();
     
@@ -227,10 +234,16 @@ int main(void) {
         GUI_WIDGET_SetUserData(handle, &buttons[state].data);
     }
     
+    handle = GUI_WIDGET_GetById(buttons[COUNT_OF(buttons) - 1].id);
+    GUI_WIDGET_Callback(handle, GUI_WC_Click, 0, 0);
+    
     __GUI_LINKEDLIST_PrintList(NULL);
 
     TM_EXTI_Attach(GPIOI, GPIO_PIN_13, TM_EXTI_Trigger_Rising);
-    TS.Orientation = 1;
+    TS.Orientation = TOUCH_ORIENT_DEFAULT;
+#if defined(STM32F769_DISCOVERY)
+    TS.Orientation = TOUCH_ORIENT_INVERT_Y;
+#endif
     TM_TOUCH_Init(NULL, &TS);
     
     TM_EXTI_Attach(DISCO_BUTTON_PORT, DISCO_BUTTON_PIN, TM_EXTI_Trigger_Rising);
@@ -242,24 +255,16 @@ int main(void) {
 	while (1) {
         GUI_Process();
         
-        if ((TM_DELAY_Time() - time) >= 50) {
+        if ((TM_DELAY_Time() - time) >= 2000) {
             time = TM_DELAY_Time();
             
-            //__GUI_TIMER_Start(edit1->Timer);
-            
-//            if (state % 2) {
-//                GUI_WINDOW_SetActive(win2);
-//            } else {
-//                GUI_WINDOW_SetActive(win3);
-//            }
-//            __GUI_LINKEDLIST_PrintList(NULL);
-//            state++;
-//            GUI_PROGBAR_SetValue(prog1, state % 100);
-//            
-//            x = cos((float)i * (PI / 180.0f));
-//            y = sin((float)i * (PI / 180.0f));
-//            GUI_GRAPH_DATA_AddValue(graphdata2, x * radius / 3, y * radius / 4);
-//            i += 360.0f / len;
+            handle = GUI_WIDGET_GetById(buttons[state].id);
+            if (handle) {
+                //GUI_WIDGET_Callback(handle, GUI_WC_Click, 0, 0);
+            }
+            if (++state >= COUNT_OF(buttons)) {
+                state = 0;
+            }
         }
         
         if (pressed) {
@@ -277,13 +282,22 @@ int main(void) {
             GUI_Char ch = TM_USART_Getc(DISCO_USART);
             switch (GUI_STRING_UNICODE_Decode(&s, ch)) {
                 case UNICODE_OK:
-                    if (ch == 'a') {
+                    if (ch == 'l') {
                         __GUI_LINKEDLIST_PrintList(NULL);
                         break;
                     }
                     if (ch == 'b') {
                         TM_USART_Send(DISCO_USART, (uint8_t *)GUI.LCD.Layers[GUI.LCD.ActiveLayer].StartAddress, 480 * 272 * 4);
                         break;
+                    }
+                    if (ch == 'w') {
+                        ch = GUI_KEY_UP;
+                    } else if (ch == 's') {
+                        ch = GUI_KEY_DOWN;
+                    } else if (ch == 'a') {
+                        ch = GUI_KEY_LEFT;
+                    } else if (ch == 'd') {
+                        ch = GUI_KEY_RIGHT;
                     }
                     key.Keys[s.t - 1] = ch;
                     GUI_INPUT_KeyAdd(&key);
@@ -347,7 +361,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
             }
             case ID_WIN_LISTVIEW: {     /* Listview */
                 GUI_LISTVIEW_ROW_p row;
-                handle = GUI_LISTVIEW_Create(0, 10, 10, 200, 40, h, 0, 0);
+                handle = GUI_LISTVIEW_Create(0, 10, 10, 100, 40, h, listview_callback, 0);
                 GUI_WIDGET_SetExpanded(handle, 1);
                 
                 GUI_LISTVIEW_AddColumn(handle, _T("Name"));
@@ -355,10 +369,10 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 GUI_LISTVIEW_AddColumn(handle, _T("Email"));
                 GUI_LISTVIEW_AddColumn(handle, _T("Phone"));
                 
-                GUI_LISTVIEW_SetColumnWidth(handle, 0, 0);
-                GUI_LISTVIEW_SetColumnWidth(handle, 1, 200);
-                GUI_LISTVIEW_SetColumnWidth(handle, 2, 50);
-                GUI_LISTVIEW_SetColumnWidth(handle, 3, 80);
+                GUI_LISTVIEW_SetColumnWidth(handle, 0, 120);
+                GUI_LISTVIEW_SetColumnWidth(handle, 1, 150);
+                GUI_LISTVIEW_SetColumnWidth(handle, 2, 220);
+                GUI_LISTVIEW_SetColumnWidth(handle, 3, 160);
                 
                 row = GUI_LISTVIEW_AddRow(handle);
                 GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Tilen"));
@@ -550,6 +564,17 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 }
                 break;
             }
+            case ID_WIN_IMAGE: {
+                handle = GUI_BUTTON_Create(0, 10, 10, 300, 50, h, 0, 0);
+                GUI_WIDGET_SetText(handle, _T("Button"));
+                handle = GUI_IMAGE_Create(0, 2, 2, bmimage_brand.xSize, bmimage_brand.ySize, h, 0, 0);
+                GUI_IMAGE_SetSource(handle, &bmimage_brand);
+                handle = GUI_IMAGE_Create(0, 200, 40, bmimage_voyo.xSize, bmimage_voyo.ySize, h, 0, 0);
+                GUI_IMAGE_SetSource(handle, &bmimage_voyo);
+                handle = GUI_IMAGE_Create(0, 350, 10, bmimage_voyo565.xSize, bmimage_voyo565.ySize, h, 0, 0);
+                GUI_IMAGE_SetSource(handle, &bmimage_voyo565);
+                break;
+            }
             default:
                 break;  
         }
@@ -594,6 +619,14 @@ uint8_t checkbox_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* resul
     return ret;
 }
 
+uint8_t listview_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
+    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    if (cmd == GUI_WC_SelectionChanged) {
+        __GUI_DEBUG("Selection changed!\r\n");
+    }
+    return ret;
+}
+
 uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
     GUI_ID_t id;
     uint8_t res = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
@@ -609,6 +642,7 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 case ID_BTN_WIN_DROPDOWN:
                 case ID_BTN_WIN_EDIT:
                 case ID_BTN_WIN_GRAPH:
+                case ID_BTN_WIN_IMAGE:
                 case ID_BTN_WIN_LED:
                 case ID_BTN_WIN_LISTBOX:
                 case ID_BTN_WIN_LISTVIEW:
@@ -624,6 +658,7 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                         } else {
                             //tmp = GUI_WINDOW_CreateChild(data->win_id, 5, 5, 470, 262, GUI_WINDOW_GetDesktop(), window_callback, NULL);
                             tmp = GUI_WINDOW_Create(data->win_id, 40, 20, 300, 200, GUI_WINDOW_GetDesktop(), window_callback, NULL);
+                            GUI_WIDGET_SetExpanded(tmp, 1);
                             GUI_WIDGET_SetText(tmp, data->win_text);
                             GUI_WIDGET_PutOnFront(tmp);
                         }

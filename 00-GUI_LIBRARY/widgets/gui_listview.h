@@ -152,7 +152,7 @@ GUI_LISTVIEW_ROW_p GUI_LISTVIEW_AddRow(GUI_HANDLE_p h);
 uint8_t GUI_LISTVIEW_SetItemString(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row, uint16_t col, const GUI_Char* text);
 
 /**
- * \brief           Set selected row value
+ * \brief           Set selected row number
  * \param[in,out]   h: Widget handle
  * \param[in]       selection: Set to -1 to invalidate selection or 0 - count-1 for specific selection 
  * \retval          1: Selection changed
@@ -161,7 +161,7 @@ uint8_t GUI_LISTVIEW_SetItemString(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row, uint1
 uint8_t GUI_LISTVIEW_SetSelection(GUI_HANDLE_p h, int16_t selection);
 
 /**
- * \brief           Get selected row value
+ * \brief           Get selected row number
  * \param[in,out]   h: Widget handle
  * \retval          Selection number or -1 if no selection
  */

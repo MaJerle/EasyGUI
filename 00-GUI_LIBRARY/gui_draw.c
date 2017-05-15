@@ -125,15 +125,16 @@ uint16_t __StringRectangle(const GUI_FONT_t* font, const GUI_Char* str, const GU
             *width = mW;
         }
     } else {
+        cW = 0;
         while (GUI_STRING_GetCh(&s, &ch, &i)) {     /* Get next character from string */
-            cnt++;
             __StringGetCharSize(font, ch, &w, &h);  /* Get character width and height */
             if (!(draw->Flags & GUI_FLAG_FONT_RIGHTALIGN) && (cW + w) > draw->Width) {  /* Check if end now */
                 break;
             }
             if ((uint8_t)'\r' != (uint8_t)ch && (uint8_t)'\n' != (uint8_t)ch) {
-                cW += w;                        /* Increase width */
+                cW += w;                            /* Increase width */
             }
+            cnt++;                                  /* Increase number of characters to read */
         }
         if (width) {
             *width = cW;
@@ -671,6 +672,68 @@ void GUI_DRAW_FilledCircleCorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_i
     }
 }
 
+void GUI_DRAW_Image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_IMAGE_DESC_t* img) {
+    uint8_t bytes = img->BPP >> 3;                  /* Get number of bytes per pixel on image */
+    
+    GUI_Layer_t* layer;
+    const uint8_t* src;
+    const uint8_t* dst;
+    GUI_iDim_t width, height;
+    GUI_iDim_t offlineSrc, offlineDst;
+    
+    if (!__GUI_RECT_MATCH(
+        disp->X1, disp->Y1, disp->X2, disp->Y2,
+        x, y, x + img->xSize, y + img->ySize
+    )) {
+        return;
+    }
+    
+    layer = &GUI.LCD.Layers[GUI.LCD.DrawingLayer];  /* Set layer pointer */
+    
+    width = img->xSize;                             /* Set default width */
+    height = img->ySize;                            /* Set default height */
+    
+    src = (uint8_t *)(img->Image);                  /* Set source address */
+    dst = (uint8_t *)(layer->StartAddress + 4 * (y * GUI.LCD.Width + x));   /* Set destination start address */
+    
+    if (y < disp->Y1) {
+        src += (disp->Y1 - y) * img->xSize * bytes; /* Set offset for number of image lines */
+        dst += (disp->Y1 - y) * GUI.LCD.Width * 4;  /* Set offset for number of LCD lines */
+        height -= disp->Y1 - y;
+    }
+    if ((y + img->ySize) > disp->Y2) {
+        height -= y + img->ySize - disp->Y2;        /* Decrease effective height */
+    }
+    if (x < disp->X1) {                             /* Set offset start address if required */
+        src += (disp->X1 - x) * bytes;              /* Set offset of start address in X direction */
+        dst += (disp->X1 - x) * 4;                  /* Set offset of start address in X direction */
+        width -= disp->X1 - x;                      /* Increase source offline */
+    }
+    if ((x + img->xSize) > disp->X2) {
+        width -= x + img->xSize - disp->X2;         /* Decrease effective width */
+    }
+    
+    offlineSrc = img->xSize - width;                /* Set offline source */
+    offlineDst = GUI.LCD.Width - width;             /* Set offline destination */
+    
+    /*******************/
+    /*    Draw image   */
+    /*******************/
+    if (bytes == 4) {                               /* Draw 32BPP image */
+        if (GUI.LL.DrawImage32) {                   /* Draw image 32BPP if possible */
+            GUI.LL.DrawImage32(&GUI.LCD, GUI.LCD.DrawingLayer, img, (uint8_t *)src, (uint8_t *)dst, width, height, offlineSrc, offlineDst);
+        }
+    } else if (bytes == 3) {                        /* Draw 24BPP image */
+        if (GUI.LL.DrawImage24) {                   /* Draw image 24BPP if possible */
+            GUI.LL.DrawImage24(&GUI.LCD, GUI.LCD.DrawingLayer, img, (uint8_t *)src, (uint8_t *)dst, width, height, offlineSrc, offlineDst);
+        }
+    } else if (bytes == 2) {                        /* Draw 16BPP image */
+        if (GUI.LL.DrawImage16) {                   /* Draw image 16BPP if possible */
+            GUI.LL.DrawImage16(&GUI.LCD, GUI.LCD.DrawingLayer, img, (uint8_t *)src, (uint8_t *)dst, width, height, offlineSrc, offlineDst);
+        }
+    }
+}
+
 void GUI_DRAW_Poly(const GUI_Display_t* disp, const GUI_DRAW_Poly_t* points, GUI_Byte len, GUI_Color_t color) {
     GUI_iDim_t x = 0, y = 0;
 
@@ -731,7 +794,7 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
         } else if (draw->Align & GUI_HALIGN_RIGHT) {/* Check for horizontal align right */
             x += draw->Width - w;                   /* Align right of drawing area */
         }
-        startX = x;                                 /* save start X position */
+        startX = x;                                 /* Save start X position */
         while (cnt-- && GUI_STRING_GetCh(&str, &ch, &i)) {            
             if ((uint8_t)'\r' == (uint8_t)ch || (uint8_t)'\n' == (uint8_t)ch) { /* Check CR & LF characters */
                 if (draw->Flags & GUI_FLAG_FONT_MULTILINE) {

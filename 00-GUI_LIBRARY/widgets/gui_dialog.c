@@ -73,15 +73,6 @@ static
 uint8_t GUI_DIALOG_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
-        case GUI_WC_Draw: {
-            GUI_Display_t* disp = (GUI_Display_t *)param;
-            GUI_DRAW_FilledRectangle(disp,
-                __GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h),
-                __GUI_WIDGET_GetWidth(h), __GUI_WIDGET_GetHeight(h),
-                GUI_COLOR_LIGHTCYAN
-            );
-            return 1;
-        }
         default:                                    /* Handle default option */
             __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */

@@ -235,6 +235,25 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
             }
             return 1;
         }
+#if GUI_USE_KEYBOARD
+        case GUI_WC_KeyPress: {
+            __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;
+            if (kb->KB.Keys[0] == GUI_KEY_DOWN) {
+                __GUI_WIDGET_SetXY(h, __GH(h)->X, __GH(h)->Y + 1);
+                *(__GUI_KeyboardStatus_t *)result = keyHANDLED;
+            } else if (kb->KB.Keys[0] == GUI_KEY_UP) {
+                __GUI_WIDGET_SetXY(h, __GH(h)->X, __GH(h)->Y - 1);
+                *(__GUI_KeyboardStatus_t *)result = keyHANDLED;
+            } else if (kb->KB.Keys[0] == GUI_KEY_LEFT) {
+                __GUI_WIDGET_SetXY(h, __GH(h)->X - 1, __GH(h)->Y);
+                *(__GUI_KeyboardStatus_t *)result = keyHANDLED;
+            } else if (kb->KB.Keys[0] == GUI_KEY_RIGHT) {
+                __GUI_WIDGET_SetXY(h, __GH(h)->X + 1, __GH(h)->Y);
+                *(__GUI_KeyboardStatus_t *)result = keyHANDLED;
+            }
+            return 1;
+        }
+#endif /* GUI_USE_KEYBOARD */
         default:                                    /* Handle default option */
             __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */

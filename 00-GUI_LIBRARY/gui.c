@@ -323,10 +323,13 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
 /******************************************************************************/
 /******************************************************************************/
 GUI_Result_t GUI_Init(void) {
+    uint8_t result;
+    
     memset((void *)&GUI, 0x00, sizeof(GUI_t));      /* Reset GUI structure */
     
     /* Call LCD low-level function */
-    GUI_LL_Init(&GUI.LCD, &GUI.LL);                 /* Call low-level initialization */
+    result = 1;
+    GUI_LL_Control(&GUI.LCD, GUI_LL_Command_Init, &GUI.LL, &result);    /* Call low-level initialization */
     GUI.LL.Init(&GUI.LCD);                          /* Call user LCD driver function */
     
     /* Draw LCD with default color */
@@ -477,8 +480,9 @@ int32_t GUI_Process(void) {
      */
     if (!(GUI.LCD.Flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM) && __GetNumberOfPendingWidgets(NULL)) {  /* Check if anything to draw first */
         uint32_t time;
-        GUI_Byte active = GUI.LCD.ActiveLayer;
-        GUI_Byte drawing = GUI.LCD.DrawingLayer;
+        uint8_t active = GUI.LCD.ActiveLayer;
+        uint8_t drawing = GUI.LCD.DrawingLayer;
+        uint8_t result = 1;
         
         time = TM_GENERAL_DWTCounterGetValue();
         /* Copy current status from one layer to another */
@@ -501,7 +505,7 @@ int32_t GUI_Process(void) {
         
         /* Notify low-level about layer change */
         GUI.LCD.Flags |= GUI_FLAG_LCD_WAIT_LAYER_CONFIRM;
-        GUI_LL_Control(&GUI.LCD, GUI_LL_Command_SetActiveLayer, &drawing); /* Set new active layer to low-level driver */
+        GUI_LL_Control(&GUI.LCD, GUI_LL_Command_SetActiveLayer, &drawing, &result); /* Set new active layer to low-level driver */
         
         /* Swap active and drawing layers */
         /* New drawings won't be affected until confirmation from low-level is not received */

@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f7xx_hal_can.c
   * @author  MCD Application Team
-  * @version V1.0.1
-  * @date    25-June-2015
+  * @version V1.2.2
+  * @date    14-April-2017
   * @brief   CAN HAL module driver.
   *          This file provides firmware functions to manage the following 
   *          functionalities of the Controller Area Network (CAN) peripheral:
@@ -18,7 +18,8 @@
   ==============================================================================
     [..]            
       (#) Enable the CAN controller interface clock using 
-          __HAL_RCC_CAN1_CLK_ENABLE() for CAN1 and __HAL_RCC_CAN2_CLK_ENABLE() for CAN2
+          __HAL_RCC_CAN1_CLK_ENABLE() for CAN1,  __HAL_RCC_CAN2_CLK_ENABLE() for CAN2
+         and  __HAL_RCC_CAN3_CLK_ENABLE() for CAN3
       -@- In case you are using CAN2 only, you have to enable the CAN1 clock.
        
       (#) CAN pins configuration
@@ -30,8 +31,12 @@
       (#) Initialize and configure the CAN using HAL_CAN_Init() function.   
                  
       (#) Transmit the desired CAN frame using HAL_CAN_Transmit() function.
+
+      (#) Or transmit the desired CAN frame using HAL_CAN_Transmit_IT() function.
            
       (#) Receive a CAN frame using HAL_CAN_Receive() function.
+
+      (#) Or receive a CAN frame using HAL_CAN_Receive_IT() function.
 
      *** Polling mode IO operation ***
      =================================
@@ -73,7 +78,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -165,7 +170,7 @@ static HAL_StatusTypeDef CAN_Transmit_IT(CAN_HandleTypeDef* hcan);
   */
 HAL_StatusTypeDef HAL_CAN_Init(CAN_HandleTypeDef* hcan)
 {
-  uint32_t InitStatus = 3;
+  uint32_t InitStatus = CAN_INITSTATUS_FAILED;
   uint32_t tickstart = 0;
   
   /* Check CAN handle */
@@ -222,11 +227,7 @@ HAL_StatusTypeDef HAL_CAN_Init(CAN_HandleTypeDef* hcan)
   }
 
   /* Check acknowledge */
-  if ((hcan->Instance->MSR & CAN_MSR_INAK) != CAN_MSR_INAK)
-  {
-    InitStatus = CAN_INITSTATUS_FAILED;
-  }
-  else 
+  if ((hcan->Instance->MSR & CAN_MSR_INAK) == CAN_MSR_INAK)
   {
     /* Set the time triggered communication mode */
     if (hcan->Init.TTCM == ENABLE)
@@ -293,32 +294,28 @@ HAL_StatusTypeDef HAL_CAN_Init(CAN_HandleTypeDef* hcan)
                 ((uint32_t)hcan->Init.SJW) | \
                 ((uint32_t)hcan->Init.BS1) | \
                 ((uint32_t)hcan->Init.BS2) | \
-               ((uint32_t)hcan->Init.Prescaler - 1);
+                ((uint32_t)hcan->Init.Prescaler - 1);
 
     /* Request leave initialisation */
     hcan->Instance->MCR &= ~(uint32_t)CAN_MCR_INRQ;
 
-  /* Get tick */
-  tickstart = HAL_GetTick();
+    /* Get tick */
+    tickstart = HAL_GetTick();
 
-   /* Wait the acknowledge */
-   while((hcan->Instance->MSR & CAN_MSR_INAK) == CAN_MSR_INAK)
-   {
-    if((HAL_GetTick() - tickstart ) > CAN_TIMEOUT_VALUE)
-     {
-       hcan->State= HAL_CAN_STATE_TIMEOUT;
-       /* Process unlocked */
-       __HAL_UNLOCK(hcan);
-       return HAL_TIMEOUT;
-     }
-   }
+    /* Wait the acknowledge */
+    while((hcan->Instance->MSR & CAN_MSR_INAK) == CAN_MSR_INAK)
+    {
+      if((HAL_GetTick() - tickstart ) > CAN_TIMEOUT_VALUE)
+      {
+        hcan->State= HAL_CAN_STATE_TIMEOUT;
+        /* Process unlocked */
+        __HAL_UNLOCK(hcan);
+        return HAL_TIMEOUT;
+      }
+    }
 
     /* Check acknowledged */
-    if ((hcan->Instance->MSR & CAN_MSR_INAK) == CAN_MSR_INAK)
-    {
-      InitStatus = CAN_INITSTATUS_FAILED;
-    }
-    else
+    if ((hcan->Instance->MSR & CAN_MSR_INAK) != CAN_MSR_INAK)
     {
       InitStatus = CAN_INITSTATUS_SUCCESS;
     }
@@ -357,6 +354,7 @@ HAL_StatusTypeDef HAL_CAN_Init(CAN_HandleTypeDef* hcan)
 HAL_StatusTypeDef HAL_CAN_ConfigFilter(CAN_HandleTypeDef* hcan, CAN_FilterConfTypeDef* sFilterConfig)
 {
   uint32_t filternbrbitpos = 0;
+  CAN_TypeDef *can_ip;
   
   /* Check the parameters */
   assert_param(IS_CAN_FILTER_NUMBER(sFilterConfig->FilterNumber));
@@ -367,84 +365,101 @@ HAL_StatusTypeDef HAL_CAN_ConfigFilter(CAN_HandleTypeDef* hcan, CAN_FilterConfTy
   assert_param(IS_CAN_BANKNUMBER(sFilterConfig->BankNumber));
   
   filternbrbitpos = ((uint32_t)1) << sFilterConfig->FilterNumber;
+#if defined (CAN3)
+  /* Check the CAN instance */
+  if(hcan->Instance == CAN3)
+  {	
+    can_ip = CAN3;
+  }
+  else
+  {
+    can_ip = CAN1;    
+  }
+#else
+  can_ip = CAN1;
+#endif
 
   /* Initialisation mode for the filter */
-  CAN1->FMR |= (uint32_t)CAN_FMR_FINIT;
-  
+  can_ip->FMR |= (uint32_t)CAN_FMR_FINIT;
+
+#if defined (CAN2)  
   /* Select the start slave bank */
-  CAN1->FMR &= ~((uint32_t)CAN_FMR_CAN2SB);
-  CAN1->FMR |= (uint32_t)(sFilterConfig->BankNumber << 8);
+  can_ip->FMR &= ~((uint32_t)CAN_FMR_CAN2SB);
+  can_ip->FMR |= (uint32_t)(sFilterConfig->BankNumber << 8);
+#endif
      
   /* Filter Deactivation */
-  CAN1->FA1R &= ~(uint32_t)filternbrbitpos;
+  can_ip->FA1R &= ~(uint32_t)filternbrbitpos;
 
   /* Filter Scale */
   if (sFilterConfig->FilterScale == CAN_FILTERSCALE_16BIT)
   {
     /* 16-bit scale for the filter */
-    CAN1->FS1R &= ~(uint32_t)filternbrbitpos;
+    can_ip->FS1R &= ~(uint32_t)filternbrbitpos;
 
     /* First 16-bit identifier and First 16-bit mask */
     /* Or First 16-bit identifier and Second 16-bit identifier */
-    CAN1->sFilterRegister[sFilterConfig->FilterNumber].FR1 = 
-       ((0x0000FFFF & (uint32_t)sFilterConfig->FilterMaskIdLow) << 16) |
-        (0x0000FFFF & (uint32_t)sFilterConfig->FilterIdLow);
+    can_ip->sFilterRegister[sFilterConfig->FilterNumber].FR1 = 
+     ((0x0000FFFF & (uint32_t)sFilterConfig->FilterMaskIdLow) << 16) |
+      (0x0000FFFF & (uint32_t)sFilterConfig->FilterIdLow);
 
     /* Second 16-bit identifier and Second 16-bit mask */
     /* Or Third 16-bit identifier and Fourth 16-bit identifier */
-    CAN1->sFilterRegister[sFilterConfig->FilterNumber].FR2 = 
-       ((0x0000FFFF & (uint32_t)sFilterConfig->FilterMaskIdHigh) << 16) |
-        (0x0000FFFF & (uint32_t)sFilterConfig->FilterIdHigh);
+    can_ip->sFilterRegister[sFilterConfig->FilterNumber].FR2 = 
+     ((0x0000FFFF & (uint32_t)sFilterConfig->FilterMaskIdHigh) << 16) |
+      (0x0000FFFF & (uint32_t)sFilterConfig->FilterIdHigh);
   }
 
   if (sFilterConfig->FilterScale == CAN_FILTERSCALE_32BIT)
   {
     /* 32-bit scale for the filter */
-    CAN1->FS1R |= filternbrbitpos;
+    can_ip->FS1R |= filternbrbitpos;
+    
     /* 32-bit identifier or First 32-bit identifier */
-    CAN1->sFilterRegister[sFilterConfig->FilterNumber].FR1 = 
-       ((0x0000FFFF & (uint32_t)sFilterConfig->FilterIdHigh) << 16) |
-        (0x0000FFFF & (uint32_t)sFilterConfig->FilterIdLow);
+    can_ip->sFilterRegister[sFilterConfig->FilterNumber].FR1 = 
+     ((0x0000FFFF & (uint32_t)sFilterConfig->FilterIdHigh) << 16) |
+      (0x0000FFFF & (uint32_t)sFilterConfig->FilterIdLow);
+    
     /* 32-bit mask or Second 32-bit identifier */
-    CAN1->sFilterRegister[sFilterConfig->FilterNumber].FR2 = 
-       ((0x0000FFFF & (uint32_t)sFilterConfig->FilterMaskIdHigh) << 16) |
-        (0x0000FFFF & (uint32_t)sFilterConfig->FilterMaskIdLow);
+    can_ip->sFilterRegister[sFilterConfig->FilterNumber].FR2 = 
+     ((0x0000FFFF & (uint32_t)sFilterConfig->FilterMaskIdHigh) << 16) |
+      (0x0000FFFF & (uint32_t)sFilterConfig->FilterMaskIdLow);
   }
 
   /* Filter Mode */
   if (sFilterConfig->FilterMode == CAN_FILTERMODE_IDMASK)
   {
     /*Id/Mask mode for the filter*/
-    CAN1->FM1R &= ~(uint32_t)filternbrbitpos;
+    can_ip->FM1R &= ~(uint32_t)filternbrbitpos;
   }
   else /* CAN_FilterInitStruct->CAN_FilterMode == CAN_FilterMode_IdList */
   {
     /*Identifier list mode for the filter*/
-    CAN1->FM1R |= (uint32_t)filternbrbitpos;
+    can_ip->FM1R |= (uint32_t)filternbrbitpos;
   }
 
   /* Filter FIFO assignment */
   if (sFilterConfig->FilterFIFOAssignment == CAN_FILTER_FIFO0)
   {
     /* FIFO 0 assignation for the filter */
-    CAN1->FFA1R &= ~(uint32_t)filternbrbitpos;
+    can_ip->FFA1R &= ~(uint32_t)filternbrbitpos;
   }
 
   if (sFilterConfig->FilterFIFOAssignment == CAN_FILTER_FIFO1)
   {
     /* FIFO 1 assignation for the filter */
-    CAN1->FFA1R |= (uint32_t)filternbrbitpos;
+    can_ip->FFA1R |= (uint32_t)filternbrbitpos;
   }
   
   /* Filter activation */
   if (sFilterConfig->FilterActivation == ENABLE)
   {
-    CAN1->FA1R |= filternbrbitpos;
+    can_ip->FA1R |= filternbrbitpos;
   }
 
   /* Leave the initialisation mode for the filter */
-  CAN1->FMR &= ~((uint32_t)CAN_FMR_FINIT);
-  
+  can_ip->FMR &= ~((uint32_t)CAN_FMR_FINIT);
+   
   /* Return function status */
   return HAL_OK;
 }
@@ -490,6 +505,8 @@ HAL_StatusTypeDef HAL_CAN_DeInit(CAN_HandleTypeDef* hcan)
   */
 __weak void HAL_CAN_MspInit(CAN_HandleTypeDef* hcan)
 {
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hcan);
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_CAN_MspInit could be implemented in the user file
    */ 
@@ -503,6 +520,8 @@ __weak void HAL_CAN_MspInit(CAN_HandleTypeDef* hcan)
   */
 __weak void HAL_CAN_MspDeInit(CAN_HandleTypeDef* hcan)
 {
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hcan);
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_CAN_MspDeInit could be implemented in the user file
    */ 
@@ -538,83 +557,87 @@ __weak void HAL_CAN_MspDeInit(CAN_HandleTypeDef* hcan)
   */
 HAL_StatusTypeDef HAL_CAN_Transmit(CAN_HandleTypeDef* hcan, uint32_t Timeout)
 {
-  uint32_t  transmitmailbox = 5;
-  uint32_t tickstart = 0;
+ uint32_t transmitmailbox = CAN_TXSTATUS_NOMAILBOX;
+  uint32_t tickstart = 0U;
 
   /* Check the parameters */
   assert_param(IS_CAN_IDTYPE(hcan->pTxMsg->IDE));
   assert_param(IS_CAN_RTR(hcan->pTxMsg->RTR));
   assert_param(IS_CAN_DLC(hcan->pTxMsg->DLC));
-  
-  /* Process locked */
-  __HAL_LOCK(hcan);
-  
-  if(hcan->State == HAL_CAN_STATE_BUSY_RX) 
-  {
-    /* Change CAN state */
-    hcan->State = HAL_CAN_STATE_BUSY_TX_RX;
-  }
-  else
-  {
-    /* Change CAN state */
-    hcan->State = HAL_CAN_STATE_BUSY_TX;
-  }
-  
-  /* Select one empty transmit mailbox */
-  if ((hcan->Instance->TSR&CAN_TSR_TME0) == CAN_TSR_TME0)
-  {
-    transmitmailbox = 0;
-  }
-  else if ((hcan->Instance->TSR&CAN_TSR_TME1) == CAN_TSR_TME1)
-  {
-    transmitmailbox = 1;
-  }
-  else if ((hcan->Instance->TSR&CAN_TSR_TME2) == CAN_TSR_TME2)
-  {
-    transmitmailbox = 2;
-  }
-  else
-  {
-    transmitmailbox = CAN_TXSTATUS_NOMAILBOX;
-  }
 
-  if (transmitmailbox != CAN_TXSTATUS_NOMAILBOX)
-  {
+  if(((hcan->Instance->TSR&CAN_TSR_TME0) == CAN_TSR_TME0) || \
+     ((hcan->Instance->TSR&CAN_TSR_TME1) == CAN_TSR_TME1) || \
+     ((hcan->Instance->TSR&CAN_TSR_TME2) == CAN_TSR_TME2))
+  {  
+    /* Process locked */
+    __HAL_LOCK(hcan);
+  
+    /* Change CAN state */
+    switch(hcan->State)
+    {
+      case(HAL_CAN_STATE_BUSY_RX0):
+          hcan->State = HAL_CAN_STATE_BUSY_TX_RX0;
+          break;
+      case(HAL_CAN_STATE_BUSY_RX1):
+          hcan->State = HAL_CAN_STATE_BUSY_TX_RX1;
+          break;
+      case(HAL_CAN_STATE_BUSY_RX0_RX1):
+          hcan->State = HAL_CAN_STATE_BUSY_TX_RX0_RX1;
+          break;
+      default: /* HAL_CAN_STATE_READY */
+          hcan->State = HAL_CAN_STATE_BUSY_TX;
+          break;
+    }
+  
+    /* Select one empty transmit mailbox */
+    if ((hcan->Instance->TSR&CAN_TSR_TME0) == CAN_TSR_TME0)
+    {
+      transmitmailbox = CAN_TXMAILBOX_0;
+    }
+    else if ((hcan->Instance->TSR&CAN_TSR_TME1) == CAN_TSR_TME1)
+    {
+      transmitmailbox = CAN_TXMAILBOX_1;
+    }
+    else
+    {
+      transmitmailbox = CAN_TXMAILBOX_2;
+    }
+
     /* Set up the Id */
     hcan->Instance->sTxMailBox[transmitmailbox].TIR &= CAN_TI0R_TXRQ;
     if (hcan->pTxMsg->IDE == CAN_ID_STD)
     {
       assert_param(IS_CAN_STDID(hcan->pTxMsg->StdId));  
-      hcan->Instance->sTxMailBox[transmitmailbox].TIR |= ((hcan->pTxMsg->StdId << 21) | \
+      hcan->Instance->sTxMailBox[transmitmailbox].TIR |= ((hcan->pTxMsg->StdId << 21U) | \
                                                   hcan->pTxMsg->RTR);
     }
     else
     {
       assert_param(IS_CAN_EXTID(hcan->pTxMsg->ExtId));
-      hcan->Instance->sTxMailBox[transmitmailbox].TIR |= ((hcan->pTxMsg->ExtId << 3) | \
+      hcan->Instance->sTxMailBox[transmitmailbox].TIR |= ((hcan->pTxMsg->ExtId << 3U) | \
                                                   hcan->pTxMsg->IDE | \
                                                   hcan->pTxMsg->RTR);
     }
     
     /* Set up the DLC */
     hcan->pTxMsg->DLC &= (uint8_t)0x0000000F;
-    hcan->Instance->sTxMailBox[transmitmailbox].TDTR &= (uint32_t)0xFFFFFFF0;
+    hcan->Instance->sTxMailBox[transmitmailbox].TDTR &= (uint32_t)0xFFFFFFF0U;
     hcan->Instance->sTxMailBox[transmitmailbox].TDTR |= hcan->pTxMsg->DLC;
 
     /* Set up the data field */
-    hcan->Instance->sTxMailBox[transmitmailbox].TDLR = (((uint32_t)hcan->pTxMsg->Data[3] << 24) | 
-                                             ((uint32_t)hcan->pTxMsg->Data[2] << 16) |
-                                             ((uint32_t)hcan->pTxMsg->Data[1] << 8) | 
-                                             ((uint32_t)hcan->pTxMsg->Data[0]));
-    hcan->Instance->sTxMailBox[transmitmailbox].TDHR = (((uint32_t)hcan->pTxMsg->Data[7] << 24) | 
-                                             ((uint32_t)hcan->pTxMsg->Data[6] << 16) |
-                                             ((uint32_t)hcan->pTxMsg->Data[5] << 8) |
-                                             ((uint32_t)hcan->pTxMsg->Data[4]));
+    hcan->Instance->sTxMailBox[transmitmailbox].TDLR = (((uint32_t)hcan->pTxMsg->Data[3U] << 24U) | 
+                                             ((uint32_t)hcan->pTxMsg->Data[2U] << 16U) |
+                                             ((uint32_t)hcan->pTxMsg->Data[1U] << 8U) | 
+                                             ((uint32_t)hcan->pTxMsg->Data[0U]));
+    hcan->Instance->sTxMailBox[transmitmailbox].TDHR = (((uint32_t)hcan->pTxMsg->Data[7U] << 24U) | 
+                                             ((uint32_t)hcan->pTxMsg->Data[6U] << 16U) |
+                                             ((uint32_t)hcan->pTxMsg->Data[5U] << 8U) |
+                                             ((uint32_t)hcan->pTxMsg->Data[4U]));
     /* Request transmission */
     hcan->Instance->sTxMailBox[transmitmailbox].TIR |= CAN_TI0R_TXRQ;
   
-  /* Get tick */ 
-  tickstart = HAL_GetTick();
+    /* Get tick */
+    tickstart = HAL_GetTick();
   
     /* Check End of transmission flag */
     while(!(__HAL_CAN_TRANSMIT_STATUS(hcan, transmitmailbox)))
@@ -622,31 +645,38 @@ HAL_StatusTypeDef HAL_CAN_Transmit(CAN_HandleTypeDef* hcan, uint32_t Timeout)
       /* Check for the Timeout */
       if(Timeout != HAL_MAX_DELAY)
       {
-       if((Timeout == 0)||((HAL_GetTick() - tickstart ) > Timeout))
+       if((Timeout == 0U)||((HAL_GetTick() - tickstart ) > Timeout))
        {
          hcan->State = HAL_CAN_STATE_TIMEOUT;
+
+         __HAL_CAN_CANCEL_TRANSMIT(hcan, transmitmailbox);
+
          /* Process unlocked */
          __HAL_UNLOCK(hcan);
          return HAL_TIMEOUT;
         }
       }
     }
-    if(hcan->State == HAL_CAN_STATE_BUSY_TX_RX) 
+
+    /* Change CAN state */
+    switch(hcan->State)
     {
-      /* Change CAN state */
-      hcan->State = HAL_CAN_STATE_BUSY_RX;
-      
-      /* Process unlocked */
-      __HAL_UNLOCK(hcan);
+      case(HAL_CAN_STATE_BUSY_TX_RX0):
+          hcan->State = HAL_CAN_STATE_BUSY_RX0;
+          break;
+      case(HAL_CAN_STATE_BUSY_TX_RX1):
+          hcan->State = HAL_CAN_STATE_BUSY_RX1;
+          break;
+      case(HAL_CAN_STATE_BUSY_TX_RX0_RX1):
+          hcan->State = HAL_CAN_STATE_BUSY_RX0_RX1;
+          break;
+      default: /* HAL_CAN_STATE_BUSY_TX */
+          hcan->State = HAL_CAN_STATE_READY;
+          break;
     }
-    else
-    {
-      /* Change CAN state */
-      hcan->State = HAL_CAN_STATE_READY;
-      
-      /* Process unlocked */
-      __HAL_UNLOCK(hcan);
-    }
+
+    /* Process unlocked */
+    __HAL_UNLOCK(hcan);
     
     /* Return function status */
     return HAL_OK;
@@ -654,10 +684,7 @@ HAL_StatusTypeDef HAL_CAN_Transmit(CAN_HandleTypeDef* hcan, uint32_t Timeout)
   else
   {
     /* Change CAN state */
-    hcan->State = HAL_CAN_STATE_ERROR;
-
-    /* Process unlocked */
-    __HAL_UNLOCK(hcan);
+    hcan->State = HAL_CAN_STATE_ERROR; 
 
     /* Return function status */
     return HAL_ERROR;
@@ -672,113 +699,107 @@ HAL_StatusTypeDef HAL_CAN_Transmit(CAN_HandleTypeDef* hcan, uint32_t Timeout)
   */
 HAL_StatusTypeDef HAL_CAN_Transmit_IT(CAN_HandleTypeDef* hcan)
 {
-  uint32_t  transmitmailbox = 5;
-  uint32_t tmp = 0;
+ uint32_t  transmitmailbox = CAN_TXSTATUS_NOMAILBOX;
   
   /* Check the parameters */
   assert_param(IS_CAN_IDTYPE(hcan->pTxMsg->IDE));
   assert_param(IS_CAN_RTR(hcan->pTxMsg->RTR));
   assert_param(IS_CAN_DLC(hcan->pTxMsg->DLC));
   
-  tmp = hcan->State;
-  if((tmp == HAL_CAN_STATE_READY) || (tmp == HAL_CAN_STATE_BUSY_RX))
+  if(((hcan->Instance->TSR&CAN_TSR_TME0) == CAN_TSR_TME0) || \
+     ((hcan->Instance->TSR&CAN_TSR_TME1) == CAN_TSR_TME1) || \
+     ((hcan->Instance->TSR&CAN_TSR_TME2) == CAN_TSR_TME2))
   {
     /* Process Locked */
     __HAL_LOCK(hcan);
-    
+
     /* Select one empty transmit mailbox */
     if((hcan->Instance->TSR&CAN_TSR_TME0) == CAN_TSR_TME0)
     {
-      transmitmailbox = 0;
+      transmitmailbox = CAN_TXMAILBOX_0;
     }
     else if((hcan->Instance->TSR&CAN_TSR_TME1) == CAN_TSR_TME1)
     {
-      transmitmailbox = 1;
-    }
-    else if((hcan->Instance->TSR&CAN_TSR_TME2) == CAN_TSR_TME2)
-    {
-      transmitmailbox = 2;
+      transmitmailbox = CAN_TXMAILBOX_1;
     }
     else
     {
-      transmitmailbox = CAN_TXSTATUS_NOMAILBOX;
+      transmitmailbox = CAN_TXMAILBOX_2;
     }
 
-    if(transmitmailbox != CAN_TXSTATUS_NOMAILBOX)
+    /* Set up the Id */
+    hcan->Instance->sTxMailBox[transmitmailbox].TIR &= CAN_TI0R_TXRQ;
+    if(hcan->pTxMsg->IDE == CAN_ID_STD)
     {
-      /* Set up the Id */
-      hcan->Instance->sTxMailBox[transmitmailbox].TIR &= CAN_TI0R_TXRQ;
-      if(hcan->pTxMsg->IDE == CAN_ID_STD)
-      {
-        assert_param(IS_CAN_STDID(hcan->pTxMsg->StdId));  
-        hcan->Instance->sTxMailBox[transmitmailbox].TIR |= ((hcan->pTxMsg->StdId << 21) | \
-                                                  hcan->pTxMsg->RTR);
-      }
-      else
-      {
-        assert_param(IS_CAN_EXTID(hcan->pTxMsg->ExtId));
-        hcan->Instance->sTxMailBox[transmitmailbox].TIR |= ((hcan->pTxMsg->ExtId << 3) | \
-                                                  hcan->pTxMsg->IDE | \
-                                                  hcan->pTxMsg->RTR);
-      }
-    
-      /* Set up the DLC */
-      hcan->pTxMsg->DLC &= (uint8_t)0x0000000F;
-      hcan->Instance->sTxMailBox[transmitmailbox].TDTR &= (uint32_t)0xFFFFFFF0;
-      hcan->Instance->sTxMailBox[transmitmailbox].TDTR |= hcan->pTxMsg->DLC;
-
-      /* Set up the data field */
-      hcan->Instance->sTxMailBox[transmitmailbox].TDLR = (((uint32_t)hcan->pTxMsg->Data[3] << 24) | 
-                                             ((uint32_t)hcan->pTxMsg->Data[2] << 16) |
-                                             ((uint32_t)hcan->pTxMsg->Data[1] << 8) | 
-                                             ((uint32_t)hcan->pTxMsg->Data[0]));
-      hcan->Instance->sTxMailBox[transmitmailbox].TDHR = (((uint32_t)hcan->pTxMsg->Data[7] << 24) | 
-                                             ((uint32_t)hcan->pTxMsg->Data[6] << 16) |
-                                             ((uint32_t)hcan->pTxMsg->Data[5] << 8) |
-                                             ((uint32_t)hcan->pTxMsg->Data[4]));
-    
-      if(hcan->State == HAL_CAN_STATE_BUSY_RX) 
-      {
-        /* Change CAN state */
-        hcan->State = HAL_CAN_STATE_BUSY_TX_RX;
-      }
-      else
-      {
-        /* Change CAN state */
-        hcan->State = HAL_CAN_STATE_BUSY_TX;
-      }
-      
-      /* Set CAN error code to none */
-      hcan->ErrorCode = HAL_CAN_ERROR_NONE;
-      
-      /* Process Unlocked */
-      __HAL_UNLOCK(hcan);
-      
-      /* Enable Error warning Interrupt */
-      __HAL_CAN_ENABLE_IT(hcan, CAN_IT_EWG);
-      
-      /* Enable Error passive Interrupt */
-      __HAL_CAN_ENABLE_IT(hcan, CAN_IT_EPV);
-      
-      /* Enable Bus-off Interrupt */
-      __HAL_CAN_ENABLE_IT(hcan, CAN_IT_BOF);
-      
-      /* Enable Last error code Interrupt */
-      __HAL_CAN_ENABLE_IT(hcan, CAN_IT_LEC);
-      
-      /* Enable Error Interrupt */
-      __HAL_CAN_ENABLE_IT(hcan, CAN_IT_ERR);
-      
-      /* Enable Transmit mailbox empty Interrupt */
-      __HAL_CAN_ENABLE_IT(hcan, CAN_IT_TME);
-      
-      /* Request transmission */
-      hcan->Instance->sTxMailBox[transmitmailbox].TIR |= CAN_TI0R_TXRQ;
+      assert_param(IS_CAN_STDID(hcan->pTxMsg->StdId));  
+      hcan->Instance->sTxMailBox[transmitmailbox].TIR |= ((hcan->pTxMsg->StdId << 21U) | \
+                                                hcan->pTxMsg->RTR);
     }
+    else
+    {
+      assert_param(IS_CAN_EXTID(hcan->pTxMsg->ExtId));
+      hcan->Instance->sTxMailBox[transmitmailbox].TIR |= ((hcan->pTxMsg->ExtId << 3U) | \
+                                                hcan->pTxMsg->IDE | \
+                                                hcan->pTxMsg->RTR);
+    }
+    
+    /* Set up the DLC */
+    hcan->pTxMsg->DLC &= (uint8_t)0x0000000F;
+    hcan->Instance->sTxMailBox[transmitmailbox].TDTR &= (uint32_t)0xFFFFFFF0U;
+    hcan->Instance->sTxMailBox[transmitmailbox].TDTR |= hcan->pTxMsg->DLC;
+
+    /* Set up the data field */
+    hcan->Instance->sTxMailBox[transmitmailbox].TDLR = (((uint32_t)hcan->pTxMsg->Data[3U] << 24U) |
+                                           ((uint32_t)hcan->pTxMsg->Data[2U] << 16U) |
+                                           ((uint32_t)hcan->pTxMsg->Data[1U] << 8U) | 
+                                           ((uint32_t)hcan->pTxMsg->Data[0U]));
+    hcan->Instance->sTxMailBox[transmitmailbox].TDHR = (((uint32_t)hcan->pTxMsg->Data[7U] << 24U) |
+                                           ((uint32_t)hcan->pTxMsg->Data[6U] << 16U) |
+                                           ((uint32_t)hcan->pTxMsg->Data[5U] << 8U) |
+                                           ((uint32_t)hcan->pTxMsg->Data[4U]));
+
+    /* Change CAN state */
+    switch(hcan->State)
+    {
+      case(HAL_CAN_STATE_BUSY_RX0):
+          hcan->State = HAL_CAN_STATE_BUSY_TX_RX0;
+          break;
+      case(HAL_CAN_STATE_BUSY_RX1):
+          hcan->State = HAL_CAN_STATE_BUSY_TX_RX1;
+          break;
+      case(HAL_CAN_STATE_BUSY_RX0_RX1):
+          hcan->State = HAL_CAN_STATE_BUSY_TX_RX0_RX1;
+          break;
+      default: /* HAL_CAN_STATE_READY */
+          hcan->State = HAL_CAN_STATE_BUSY_TX;
+          break;
+    }
+
+    /* Set CAN error code to none */
+    hcan->ErrorCode = HAL_CAN_ERROR_NONE;
+
+    /* Process Unlocked */
+    __HAL_UNLOCK(hcan);
+
+    /* Request transmission */
+    hcan->Instance->sTxMailBox[transmitmailbox].TIR |= CAN_TI0R_TXRQ;
+
+    /* Enable Error warning, Error passive, Bus-off,
+       Last error and Error Interrupts */
+    __HAL_CAN_ENABLE_IT(hcan, CAN_IT_EWG |
+                              CAN_IT_EPV |
+                              CAN_IT_BOF |
+                              CAN_IT_LEC |
+                              CAN_IT_ERR |
+                              CAN_IT_TME);
   }
   else
   {
-    return HAL_BUSY;
+    /* Change CAN state */
+    hcan->State = HAL_CAN_STATE_ERROR; 
+
+    /* Return function status */
+    return HAL_ERROR;
   }
   
   return HAL_OK;
@@ -794,35 +815,81 @@ HAL_StatusTypeDef HAL_CAN_Transmit_IT(CAN_HandleTypeDef* hcan)
   */
 HAL_StatusTypeDef HAL_CAN_Receive(CAN_HandleTypeDef* hcan, uint8_t FIFONumber, uint32_t Timeout)
 {
-  uint32_t tickstart = 0;
-   
+   uint32_t tickstart = 0U;
+  CanRxMsgTypeDef* pRxMsg = NULL;
+ 
   /* Check the parameters */
   assert_param(IS_CAN_FIFO(FIFONumber));
-  
+
+  /* Check if CAN state is not busy for RX FIFO0 */
+  if ((FIFONumber == CAN_FIFO0) && ((hcan->State == HAL_CAN_STATE_BUSY_RX0) ||         \
+                                    (hcan->State == HAL_CAN_STATE_BUSY_TX_RX0) ||      \
+                                    (hcan->State == HAL_CAN_STATE_BUSY_RX0_RX1) ||     \
+                                    (hcan->State == HAL_CAN_STATE_BUSY_TX_RX0_RX1)))
+  {
+    return HAL_BUSY;
+  }
+
+  /* Check if CAN state is not busy for RX FIFO1 */
+  if ((FIFONumber == CAN_FIFO1) && ((hcan->State == HAL_CAN_STATE_BUSY_RX1) ||         \
+                                    (hcan->State == HAL_CAN_STATE_BUSY_TX_RX1) ||      \
+                                    (hcan->State == HAL_CAN_STATE_BUSY_RX0_RX1) ||     \
+                                    (hcan->State == HAL_CAN_STATE_BUSY_TX_RX0_RX1)))
+  {
+    return HAL_BUSY;
+  }
+
   /* Process locked */
   __HAL_LOCK(hcan);
-  
-  if(hcan->State == HAL_CAN_STATE_BUSY_TX) 
+
+  /* Change CAN state */
+  if (FIFONumber == CAN_FIFO0)
   {
-    /* Change CAN state */
-    hcan->State = HAL_CAN_STATE_BUSY_TX_RX;
+    switch(hcan->State)
+    {
+      case(HAL_CAN_STATE_BUSY_TX):
+        hcan->State = HAL_CAN_STATE_BUSY_TX_RX0;
+        break;
+      case(HAL_CAN_STATE_BUSY_RX1):
+        hcan->State = HAL_CAN_STATE_BUSY_RX0_RX1;
+        break;
+      case(HAL_CAN_STATE_BUSY_TX_RX1):
+        hcan->State = HAL_CAN_STATE_BUSY_TX_RX0_RX1;
+        break;
+      default: /* HAL_CAN_STATE_READY */
+        hcan->State = HAL_CAN_STATE_BUSY_RX0;
+        break;
+    }
   }
-  else
+  else /* FIFONumber == CAN_FIFO1 */
   {
-    /* Change CAN state */
-    hcan->State = HAL_CAN_STATE_BUSY_RX;
+    switch(hcan->State)
+    {
+      case(HAL_CAN_STATE_BUSY_TX):
+        hcan->State = HAL_CAN_STATE_BUSY_TX_RX1;
+        break;
+      case(HAL_CAN_STATE_BUSY_RX0):
+        hcan->State = HAL_CAN_STATE_BUSY_RX0_RX1;
+        break;
+      case(HAL_CAN_STATE_BUSY_TX_RX0):
+        hcan->State = HAL_CAN_STATE_BUSY_TX_RX0_RX1;
+        break;
+      default: /* HAL_CAN_STATE_READY */
+        hcan->State = HAL_CAN_STATE_BUSY_RX1;
+        break;
+    }
   }
-    
+
   /* Get tick */ 
   tickstart = HAL_GetTick();
   
   /* Check pending message */
-  while(__HAL_CAN_MSG_PENDING(hcan, FIFONumber) == 0)
+  while(__HAL_CAN_MSG_PENDING(hcan, FIFONumber) == 0U)
   {
     /* Check for the Timeout */
     if(Timeout != HAL_MAX_DELAY)
     {
-      if((Timeout == 0)||((HAL_GetTick() - tickstart ) > Timeout))
+      if((Timeout == 0U)||((HAL_GetTick() - tickstart ) > Timeout))
       {
         hcan->State = HAL_CAN_STATE_TIMEOUT;
         /* Process unlocked */
@@ -831,33 +898,45 @@ HAL_StatusTypeDef HAL_CAN_Receive(CAN_HandleTypeDef* hcan, uint8_t FIFONumber, u
       }
     }
   }
-  
-  /* Get the Id */
-  hcan->pRxMsg->IDE = (uint8_t)0x04 & hcan->Instance->sFIFOMailBox[FIFONumber].RIR;
-  if (hcan->pRxMsg->IDE == CAN_ID_STD)
+
+  /* Set RxMsg pointer */
+  if(FIFONumber == CAN_FIFO0)
   {
-    hcan->pRxMsg->StdId = (uint32_t)0x000007FF & (hcan->Instance->sFIFOMailBox[FIFONumber].RIR >> 21);
+    pRxMsg = hcan->pRxMsg;
+  }
+  else /* FIFONumber == CAN_FIFO1 */
+  {
+    pRxMsg = hcan->pRx1Msg;
+  }
+
+  /* Get the Id */
+  pRxMsg->IDE = (uint8_t)0x04 & hcan->Instance->sFIFOMailBox[FIFONumber].RIR;
+  if (pRxMsg->IDE == CAN_ID_STD)
+  {
+    pRxMsg->StdId = 0x000007FFU & (hcan->Instance->sFIFOMailBox[FIFONumber].RIR >> 21U);
   }
   else
   {
-    hcan->pRxMsg->ExtId = (uint32_t)0x1FFFFFFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RIR >> 3);
+    pRxMsg->ExtId = 0x1FFFFFFFU & (hcan->Instance->sFIFOMailBox[FIFONumber].RIR >> 3U);
   }
   
-  hcan->pRxMsg->RTR = (uint8_t)0x02 & hcan->Instance->sFIFOMailBox[FIFONumber].RIR;
+  pRxMsg->RTR = (uint8_t)0x02 & hcan->Instance->sFIFOMailBox[FIFONumber].RIR;
   /* Get the DLC */
-  hcan->pRxMsg->DLC = (uint8_t)0x0F & hcan->Instance->sFIFOMailBox[FIFONumber].RDTR;
+  pRxMsg->DLC = (uint8_t)0x0F & hcan->Instance->sFIFOMailBox[FIFONumber].RDTR;
   /* Get the FMI */
-  hcan->pRxMsg->FMI = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDTR >> 8);
+  pRxMsg->FMI = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDTR >> 8U);
+  /* Get the FIFONumber */
+  pRxMsg->FIFONumber = FIFONumber;
   /* Get the data field */
-  hcan->pRxMsg->Data[0] = (uint8_t)0xFF & hcan->Instance->sFIFOMailBox[FIFONumber].RDLR;
-  hcan->pRxMsg->Data[1] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDLR >> 8);
-  hcan->pRxMsg->Data[2] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDLR >> 16);
-  hcan->pRxMsg->Data[3] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDLR >> 24);
-  hcan->pRxMsg->Data[4] = (uint8_t)0xFF & hcan->Instance->sFIFOMailBox[FIFONumber].RDHR;
-  hcan->pRxMsg->Data[5] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDHR >> 8);
-  hcan->pRxMsg->Data[6] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDHR >> 16);
-  hcan->pRxMsg->Data[7] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDHR >> 24);
-  
+  pRxMsg->Data[0] = (uint8_t)0xFF & hcan->Instance->sFIFOMailBox[FIFONumber].RDLR;
+  pRxMsg->Data[1] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDLR >> 8U);
+  pRxMsg->Data[2] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDLR >> 16U);
+  pRxMsg->Data[3] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDLR >> 24U);
+  pRxMsg->Data[4] = (uint8_t)0xFF & hcan->Instance->sFIFOMailBox[FIFONumber].RDHR;
+  pRxMsg->Data[5] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDHR >> 8U);
+  pRxMsg->Data[6] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDHR >> 16U);
+  pRxMsg->Data[7] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDHR >> 24U);
+
   /* Release the FIFO */
   if(FIFONumber == CAN_FIFO0)
   {
@@ -869,23 +948,47 @@ HAL_StatusTypeDef HAL_CAN_Receive(CAN_HandleTypeDef* hcan, uint8_t FIFONumber, u
     /* Release FIFO1 */
     __HAL_CAN_FIFO_RELEASE(hcan, CAN_FIFO1);
   }
-  
-  if(hcan->State == HAL_CAN_STATE_BUSY_TX_RX) 
+
+  /* Change CAN state */
+  if (FIFONumber == CAN_FIFO0)
   {
-    /* Change CAN state */
-    hcan->State = HAL_CAN_STATE_BUSY_TX;
-    
-    /* Process unlocked */
-    __HAL_UNLOCK(hcan);
+    switch(hcan->State)
+    {
+      case(HAL_CAN_STATE_BUSY_TX_RX0):
+        hcan->State = HAL_CAN_STATE_BUSY_TX;
+        break;
+      case(HAL_CAN_STATE_BUSY_RX0_RX1):
+        hcan->State = HAL_CAN_STATE_BUSY_RX1;
+        break;
+      case(HAL_CAN_STATE_BUSY_TX_RX0_RX1):
+        hcan->State = HAL_CAN_STATE_BUSY_TX_RX1;
+        break;
+      default: /* HAL_CAN_STATE_BUSY_RX0 */
+        hcan->State = HAL_CAN_STATE_READY;
+        break;
+    }
   }
-  else
+  else /* FIFONumber == CAN_FIFO1 */
   {
-    /* Change CAN state */
-    hcan->State = HAL_CAN_STATE_READY;
-    
-    /* Process unlocked */
-    __HAL_UNLOCK(hcan);
+    switch(hcan->State)
+    {
+      case(HAL_CAN_STATE_BUSY_TX_RX1):
+        hcan->State = HAL_CAN_STATE_BUSY_TX;
+        break;
+      case(HAL_CAN_STATE_BUSY_RX0_RX1):
+        hcan->State = HAL_CAN_STATE_BUSY_RX0;
+        break;
+      case(HAL_CAN_STATE_BUSY_TX_RX0_RX1):
+        hcan->State = HAL_CAN_STATE_BUSY_TX_RX0;
+        break;
+      default: /* HAL_CAN_STATE_BUSY_RX1 */
+        hcan->State = HAL_CAN_STATE_READY;
+        break;
+    }
   }
+
+  /* Process unlocked */
+  __HAL_UNLOCK(hcan);
   
   /* Return function status */
   return HAL_OK;
@@ -899,67 +1002,96 @@ HAL_StatusTypeDef HAL_CAN_Receive(CAN_HandleTypeDef* hcan, uint8_t FIFONumber, u
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_CAN_Receive_IT(CAN_HandleTypeDef* hcan, uint8_t FIFONumber)
-{
-  uint32_t tmp = 0;
-  
+{  
   /* Check the parameters */
   assert_param(IS_CAN_FIFO(FIFONumber));
   
-  tmp = hcan->State;
-  if((tmp == HAL_CAN_STATE_READY) || (tmp == HAL_CAN_STATE_BUSY_TX))
-  {
-    /* Process locked */
-    __HAL_LOCK(hcan);
-  
-    if(hcan->State == HAL_CAN_STATE_BUSY_TX) 
-    {
-      /* Change CAN state */
-      hcan->State = HAL_CAN_STATE_BUSY_TX_RX;
-    }
-    else
-    {
-      /* Change CAN state */
-      hcan->State = HAL_CAN_STATE_BUSY_RX;
-    }
-    
-    /* Set CAN error code to none */
-    hcan->ErrorCode = HAL_CAN_ERROR_NONE;
-    
-    /* Enable Error warning Interrupt */
-    __HAL_CAN_ENABLE_IT(hcan, CAN_IT_EWG);
-      
-    /* Enable Error passive Interrupt */
-    __HAL_CAN_ENABLE_IT(hcan, CAN_IT_EPV);
-      
-    /* Enable Bus-off Interrupt */
-    __HAL_CAN_ENABLE_IT(hcan, CAN_IT_BOF);
-      
-    /* Enable Last error code Interrupt */
-    __HAL_CAN_ENABLE_IT(hcan, CAN_IT_LEC);
-      
-    /* Enable Error Interrupt */
-    __HAL_CAN_ENABLE_IT(hcan, CAN_IT_ERR);
-
-    /* Process unlocked */
-    __HAL_UNLOCK(hcan);
-
-    if(FIFONumber == CAN_FIFO0)
-    {
-      /* Enable FIFO 0 message pending Interrupt */
-      __HAL_CAN_ENABLE_IT(hcan, CAN_IT_FMP0);
-    }
-    else
-    {
-      /* Enable FIFO 1 message pending Interrupt */
-      __HAL_CAN_ENABLE_IT(hcan, CAN_IT_FMP1);
-    }
-    
-  }
-  else
+  /* Check if CAN state is not busy for RX FIFO0 */
+  if((FIFONumber == CAN_FIFO0) && ((hcan->State == HAL_CAN_STATE_BUSY_RX0) ||         \
+                                   (hcan->State == HAL_CAN_STATE_BUSY_TX_RX0) ||      \
+                                   (hcan->State == HAL_CAN_STATE_BUSY_RX0_RX1) ||     \
+                                   (hcan->State == HAL_CAN_STATE_BUSY_TX_RX0_RX1)))
   {
     return HAL_BUSY;
   }
-  
+
+  /* Check if CAN state is not busy for RX FIFO1 */
+  if((FIFONumber == CAN_FIFO1) && ((hcan->State == HAL_CAN_STATE_BUSY_RX1) ||         \
+                                   (hcan->State == HAL_CAN_STATE_BUSY_TX_RX1) ||      \
+                                   (hcan->State == HAL_CAN_STATE_BUSY_RX0_RX1) ||     \
+                                   (hcan->State == HAL_CAN_STATE_BUSY_TX_RX0_RX1)))
+  {
+    return HAL_BUSY;
+  }
+
+  /* Process locked */
+  __HAL_LOCK(hcan);
+
+  /* Change CAN state */
+  if(FIFONumber == CAN_FIFO0)
+  {
+    switch(hcan->State)
+    {
+      case(HAL_CAN_STATE_BUSY_TX):
+        hcan->State = HAL_CAN_STATE_BUSY_TX_RX0;
+        break;
+      case(HAL_CAN_STATE_BUSY_RX1):
+        hcan->State = HAL_CAN_STATE_BUSY_RX0_RX1;
+        break;
+      case(HAL_CAN_STATE_BUSY_TX_RX1):
+        hcan->State = HAL_CAN_STATE_BUSY_TX_RX0_RX1;
+        break;
+      default: /* HAL_CAN_STATE_READY */
+        hcan->State = HAL_CAN_STATE_BUSY_RX0;
+        break;
+    }
+  }
+  else /* FIFONumber == CAN_FIFO1 */
+  {
+    switch(hcan->State)
+    {
+      case(HAL_CAN_STATE_BUSY_TX):
+        hcan->State = HAL_CAN_STATE_BUSY_TX_RX1;
+        break;
+      case(HAL_CAN_STATE_BUSY_RX0):
+        hcan->State = HAL_CAN_STATE_BUSY_RX0_RX1;
+        break;
+      case(HAL_CAN_STATE_BUSY_TX_RX0):
+        hcan->State = HAL_CAN_STATE_BUSY_TX_RX0_RX1;
+        break;
+      default: /* HAL_CAN_STATE_READY */
+        hcan->State = HAL_CAN_STATE_BUSY_RX1;
+        break;
+    }
+  }
+  /* Set CAN error code to none */
+  hcan->ErrorCode = HAL_CAN_ERROR_NONE;
+
+  /* Enable interrupts: */
+  /*  - Enable Error warning Interrupt */
+  /*  - Enable Error passive Interrupt */
+  /*  - Enable Bus-off Interrupt */
+  /*  - Enable Last error code Interrupt */
+  /*  - Enable Error Interrupt */
+  /*  - Enable Transmit mailbox empty Interrupt */
+  __HAL_CAN_ENABLE_IT(hcan, CAN_IT_EWG |
+                            CAN_IT_EPV |
+                            CAN_IT_BOF |
+                            CAN_IT_LEC |
+                            CAN_IT_ERR |
+                            CAN_IT_TME);
+
+  if(FIFONumber == CAN_FIFO0)
+  {
+    /* Enable FIFO 0 overrun and message pending Interrupt */
+    __HAL_CAN_ENABLE_IT(hcan, CAN_IT_FOV0 | CAN_IT_FMP0);
+  }
+  else
+  {
+    /* Enable FIFO 1 overrun and message pending Interrupt */
+    __HAL_CAN_ENABLE_IT(hcan, CAN_IT_FOV1 | CAN_IT_FMP1);
+  }
+
   /* Return function status */
   return HAL_OK;
 }
@@ -993,7 +1125,7 @@ HAL_StatusTypeDef HAL_CAN_Sleep(CAN_HandleTypeDef* hcan)
     return HAL_ERROR;
   }
   
-  /* Get tick */
+  /* Get tick */ 
   tickstart = HAL_GetTick();
   
   /* Wait the acknowledge */
@@ -1079,8 +1211,33 @@ HAL_StatusTypeDef HAL_CAN_WakeUp(CAN_HandleTypeDef* hcan)
   */
 void HAL_CAN_IRQHandler(CAN_HandleTypeDef* hcan)
 {
-  uint32_t tmp1 = 0, tmp2 = 0, tmp3 = 0;
-  
+  uint32_t tmp1 = 0U, tmp2 = 0U, tmp3 = 0U;
+  uint32_t errorcode = HAL_CAN_ERROR_NONE;
+
+  /* Check Overrun flag for FIFO0 */
+  tmp1 = __HAL_CAN_GET_FLAG(hcan, CAN_FLAG_FOV0);
+  tmp2 = __HAL_CAN_GET_IT_SOURCE(hcan, CAN_IT_FOV0);
+  if(tmp1 && tmp2)
+  {
+    /* Set CAN error code to FOV0 error */
+    errorcode |= HAL_CAN_ERROR_FOV0;
+
+    /* Clear FIFO0 Overrun Flag */
+    __HAL_CAN_CLEAR_FLAG(hcan, CAN_FLAG_FOV0);
+  }
+  /* Check Overrun flag for FIFO1 */
+  tmp1 = __HAL_CAN_GET_FLAG(hcan, CAN_FLAG_FOV1);
+  tmp2 = __HAL_CAN_GET_IT_SOURCE(hcan, CAN_IT_FOV1);
+
+  if(tmp1 && tmp2)
+  {
+    /* Set CAN error code to FOV1 error */
+    errorcode |= HAL_CAN_ERROR_FOV1;
+
+    /* Clear FIFO1 Overrun Flag */
+    __HAL_CAN_CLEAR_FLAG(hcan, CAN_FLAG_FOV1);
+  }
+
   /* Check End of transmission flag */
   if(__HAL_CAN_GET_IT_SOURCE(hcan, CAN_IT_TME))
   {
@@ -1089,29 +1246,48 @@ void HAL_CAN_IRQHandler(CAN_HandleTypeDef* hcan)
     tmp3 = __HAL_CAN_TRANSMIT_STATUS(hcan, CAN_TXMAILBOX_2);
     if(tmp1 || tmp2 || tmp3)  
     {
-      /* Call transmit function */
-      CAN_Transmit_IT(hcan);
+      tmp1 = __HAL_CAN_GET_FLAG(hcan, CAN_FLAG_TXOK0);
+      tmp2 = __HAL_CAN_GET_FLAG(hcan, CAN_FLAG_TXOK1);
+      tmp3 = __HAL_CAN_GET_FLAG(hcan, CAN_FLAG_TXOK2);
+      /* Check Transmit success */
+      if(tmp1 || tmp2 || tmp3)
+      {
+        /* Call transmit function */
+        CAN_Transmit_IT(hcan);
+      }
+      else /* Transmit failure */
+      {
+        /* Set CAN error code to TXFAIL error */
+        errorcode |= HAL_CAN_ERROR_TXFAIL;
+      }
+
+      /* Clear transmission status flags (RQCPx and TXOKx) */
+      SET_BIT(hcan->Instance->TSR, CAN_TSR_RQCP0  | CAN_TSR_RQCP1  | CAN_TSR_RQCP2 | \
+                                   CAN_FLAG_TXOK0 | CAN_FLAG_TXOK1 | CAN_FLAG_TXOK2);
     }
   }
-  
+
   tmp1 = __HAL_CAN_MSG_PENDING(hcan, CAN_FIFO0);
   tmp2 = __HAL_CAN_GET_IT_SOURCE(hcan, CAN_IT_FMP0);
   /* Check End of reception flag for FIFO0 */
-  if((tmp1 != 0) && tmp2)
+  if((tmp1 != 0U) && tmp2)
   {
     /* Call receive function */
     CAN_Receive_IT(hcan, CAN_FIFO0);
   }
-  
+
   tmp1 = __HAL_CAN_MSG_PENDING(hcan, CAN_FIFO1);
   tmp2 = __HAL_CAN_GET_IT_SOURCE(hcan, CAN_IT_FMP1);
   /* Check End of reception flag for FIFO1 */
-  if((tmp1 != 0) && tmp2)
+  if((tmp1 != 0U) && tmp2)
   {
     /* Call receive function */
     CAN_Receive_IT(hcan, CAN_FIFO1);
   }
-  
+
+  /* Set error code in handle */
+  hcan->ErrorCode |= errorcode;
+
   tmp1 = __HAL_CAN_GET_FLAG(hcan, CAN_FLAG_EWG);
   tmp2 = __HAL_CAN_GET_IT_SOURCE(hcan, CAN_IT_EWG);
   tmp3 = __HAL_CAN_GET_IT_SOURCE(hcan, CAN_IT_ERR);
@@ -1120,8 +1296,6 @@ void HAL_CAN_IRQHandler(CAN_HandleTypeDef* hcan)
   {
     /* Set CAN error code to EWG error */
     hcan->ErrorCode |= HAL_CAN_ERROR_EWG;
-    /* Clear Error Warning Flag */ 
-    __HAL_CAN_CLEAR_FLAG(hcan, CAN_FLAG_EWG);
   }
   
   tmp1 = __HAL_CAN_GET_FLAG(hcan, CAN_FLAG_EPV);
@@ -1132,8 +1306,6 @@ void HAL_CAN_IRQHandler(CAN_HandleTypeDef* hcan)
   {
     /* Set CAN error code to EPV error */
     hcan->ErrorCode |= HAL_CAN_ERROR_EPV;
-    /* Clear Error Passive Flag */ 
-    __HAL_CAN_CLEAR_FLAG(hcan, CAN_FLAG_EPV);
   }
   
   tmp1 = __HAL_CAN_GET_FLAG(hcan, CAN_FLAG_BOF);
@@ -1144,8 +1316,6 @@ void HAL_CAN_IRQHandler(CAN_HandleTypeDef* hcan)
   {
     /* Set CAN error code to BOF error */
     hcan->ErrorCode |= HAL_CAN_ERROR_BOF;
-    /* Clear Bus-Off Flag */ 
-    __HAL_CAN_CLEAR_FLAG(hcan, CAN_FLAG_BOF);
   }
   
   tmp1 = HAL_IS_BIT_CLR(hcan->Instance->ESR, CAN_ESR_LEC);
@@ -1188,12 +1358,37 @@ void HAL_CAN_IRQHandler(CAN_HandleTypeDef* hcan)
     /* Clear Last error code Flag */ 
     hcan->Instance->ESR &= ~(CAN_ESR_LEC);
   }
-
+  
   /* Call the Error call Back in case of Errors */
   if(hcan->ErrorCode != HAL_CAN_ERROR_NONE)
   {
+    /* Clear ERRI Flag */ 
+    hcan->Instance->MSR = CAN_MSR_ERRI; 
     /* Set the CAN state ready to be able to start again the process */
     hcan->State = HAL_CAN_STATE_READY;
+
+    /* Disable interrupts: */
+    /*  - Disable Error warning Interrupt */
+    /*  - Disable Error passive Interrupt */
+    /*  - Disable Bus-off Interrupt */
+    /*  - Disable Last error code Interrupt */
+    /*  - Disable Error Interrupt */
+    /*  - Disable FIFO 0 message pending Interrupt */
+    /*  - Disable FIFO 0 Overrun Interrupt */
+    /*  - Disable FIFO 1 message pending Interrupt */
+    /*  - Disable FIFO 1 Overrun Interrupt */
+    /*  - Disable Transmit mailbox empty Interrupt */
+    __HAL_CAN_DISABLE_IT(hcan, CAN_IT_EWG |
+                               CAN_IT_EPV |
+                               CAN_IT_BOF |
+                               CAN_IT_LEC |
+                               CAN_IT_ERR |
+                               CAN_IT_FMP0|
+                               CAN_IT_FOV0|
+                               CAN_IT_FMP1|
+                               CAN_IT_FOV1|
+                               CAN_IT_TME);
+
     /* Call Error callback function */
     HAL_CAN_ErrorCallback(hcan);
   }  
@@ -1207,6 +1402,8 @@ void HAL_CAN_IRQHandler(CAN_HandleTypeDef* hcan)
   */
 __weak void HAL_CAN_TxCpltCallback(CAN_HandleTypeDef* hcan)
 {
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hcan);
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_CAN_TxCpltCallback could be implemented in the user file
    */
@@ -1220,6 +1417,8 @@ __weak void HAL_CAN_TxCpltCallback(CAN_HandleTypeDef* hcan)
   */
 __weak void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* hcan)
 {
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hcan);
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_CAN_RxCpltCallback could be implemented in the user file
    */
@@ -1233,6 +1432,8 @@ __weak void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* hcan)
   */
 __weak void HAL_CAN_ErrorCallback(CAN_HandleTypeDef *hcan)
 {
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hcan);
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_CAN_ErrorCallback could be implemented in the user file
    */
@@ -1284,6 +1485,7 @@ uint32_t HAL_CAN_GetError(CAN_HandleTypeDef *hcan)
 /**
   * @}
   */
+
 /**
   * @brief  Initiates and transmits a CAN frame message.
   * @param  hcan: pointer to a CAN_HandleTypeDef structure that contains
@@ -1292,38 +1494,37 @@ uint32_t HAL_CAN_GetError(CAN_HandleTypeDef *hcan)
   */
 static HAL_StatusTypeDef CAN_Transmit_IT(CAN_HandleTypeDef* hcan)
 {
-  /* Disable Transmit mailbox empty Interrupt */
+ /* Disable Transmit mailbox empty Interrupt */
   __HAL_CAN_DISABLE_IT(hcan, CAN_IT_TME);
   
   if(hcan->State == HAL_CAN_STATE_BUSY_TX)
   {   
-    /* Disable Error warning Interrupt */
-    __HAL_CAN_DISABLE_IT(hcan, CAN_IT_EWG);
-    
-    /* Disable Error passive Interrupt */
-    __HAL_CAN_DISABLE_IT(hcan, CAN_IT_EPV);
-    
-    /* Disable Bus-off Interrupt */
-    __HAL_CAN_DISABLE_IT(hcan, CAN_IT_BOF);
-    
-    /* Disable Last error code Interrupt */
-    __HAL_CAN_DISABLE_IT(hcan, CAN_IT_LEC);
-    
-    /* Disable Error Interrupt */
-    __HAL_CAN_DISABLE_IT(hcan, CAN_IT_ERR);
+    /* Disable Error warning, Error passive, Bus-off, Last error code
+       and Error Interrupts */
+    __HAL_CAN_DISABLE_IT(hcan, CAN_IT_EWG |
+                               CAN_IT_EPV |
+                               CAN_IT_BOF |
+                               CAN_IT_LEC |
+                               CAN_IT_ERR );
   }
-  
-  if(hcan->State == HAL_CAN_STATE_BUSY_TX_RX) 
+
+  /* Change CAN state */
+  switch(hcan->State)
   {
-    /* Change CAN state */
-    hcan->State = HAL_CAN_STATE_BUSY_RX;
+    case(HAL_CAN_STATE_BUSY_TX_RX0):
+      hcan->State = HAL_CAN_STATE_BUSY_RX0;
+      break;
+    case(HAL_CAN_STATE_BUSY_TX_RX1):
+      hcan->State = HAL_CAN_STATE_BUSY_RX1;
+      break;
+    case(HAL_CAN_STATE_BUSY_TX_RX0_RX1):
+      hcan->State = HAL_CAN_STATE_BUSY_RX0_RX1;
+      break;
+    default: /* HAL_CAN_STATE_BUSY_TX */
+      hcan->State = HAL_CAN_STATE_READY;
+      break;
   }
-  else
-  {
-    /* Change CAN state */
-    hcan->State = HAL_CAN_STATE_READY;
-  }
-  
+
   /* Transmission complete callback */ 
   HAL_CAN_TxCpltCallback(hcan);
   
@@ -1340,76 +1541,112 @@ static HAL_StatusTypeDef CAN_Transmit_IT(CAN_HandleTypeDef* hcan)
   */
 static HAL_StatusTypeDef CAN_Receive_IT(CAN_HandleTypeDef* hcan, uint8_t FIFONumber)
 {
-  /* Get the Id */
-  hcan->pRxMsg->IDE = (uint8_t)0x04 & hcan->Instance->sFIFOMailBox[FIFONumber].RIR;
-  if (hcan->pRxMsg->IDE == CAN_ID_STD)
+  uint32_t tmp1 = 0U;
+  CanRxMsgTypeDef* pRxMsg = NULL;
+
+  /* Set RxMsg pointer */
+  if(FIFONumber == CAN_FIFO0)
   {
-    hcan->pRxMsg->StdId = (uint32_t)0x000007FF & (hcan->Instance->sFIFOMailBox[FIFONumber].RIR >> 21);
+    pRxMsg = hcan->pRxMsg;
+  }
+  else /* FIFONumber == CAN_FIFO1 */
+  {
+    pRxMsg = hcan->pRx1Msg;
+  }
+
+  /* Get the Id */
+  pRxMsg->IDE = (uint8_t)0x04 & hcan->Instance->sFIFOMailBox[FIFONumber].RIR;
+  if (pRxMsg->IDE == CAN_ID_STD)
+  {
+    pRxMsg->StdId = 0x000007FFU & (hcan->Instance->sFIFOMailBox[FIFONumber].RIR >> 21U);
   }
   else
   {
-    hcan->pRxMsg->ExtId = (uint32_t)0x1FFFFFFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RIR >> 3);
+    pRxMsg->ExtId = 0x1FFFFFFFU & (hcan->Instance->sFIFOMailBox[FIFONumber].RIR >> 3U);
   }
   
-  hcan->pRxMsg->RTR = (uint8_t)0x02 & hcan->Instance->sFIFOMailBox[FIFONumber].RIR;
+  pRxMsg->RTR = (uint8_t)0x02 & hcan->Instance->sFIFOMailBox[FIFONumber].RIR;
   /* Get the DLC */
-  hcan->pRxMsg->DLC = (uint8_t)0x0F & hcan->Instance->sFIFOMailBox[FIFONumber].RDTR;
+  pRxMsg->DLC = (uint8_t)0x0F & hcan->Instance->sFIFOMailBox[FIFONumber].RDTR;
+  /* Get the FIFONumber */
+  pRxMsg->FIFONumber = FIFONumber;
   /* Get the FMI */
-  hcan->pRxMsg->FMI = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDTR >> 8);
+  pRxMsg->FMI = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDTR >> 8U);
   /* Get the data field */
-  hcan->pRxMsg->Data[0] = (uint8_t)0xFF & hcan->Instance->sFIFOMailBox[FIFONumber].RDLR;
-  hcan->pRxMsg->Data[1] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDLR >> 8);
-  hcan->pRxMsg->Data[2] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDLR >> 16);
-  hcan->pRxMsg->Data[3] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDLR >> 24);
-  hcan->pRxMsg->Data[4] = (uint8_t)0xFF & hcan->Instance->sFIFOMailBox[FIFONumber].RDHR;
-  hcan->pRxMsg->Data[5] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDHR >> 8);
-  hcan->pRxMsg->Data[6] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDHR >> 16);
-  hcan->pRxMsg->Data[7] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDHR >> 24);
+  pRxMsg->Data[0] = (uint8_t)0xFF & hcan->Instance->sFIFOMailBox[FIFONumber].RDLR;
+  pRxMsg->Data[1] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDLR >> 8U);
+  pRxMsg->Data[2] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDLR >> 16U);
+  pRxMsg->Data[3] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDLR >> 24U);
+  pRxMsg->Data[4] = (uint8_t)0xFF & hcan->Instance->sFIFOMailBox[FIFONumber].RDHR;
+  pRxMsg->Data[5] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDHR >> 8U);
+  pRxMsg->Data[6] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDHR >> 16U);
+  pRxMsg->Data[7] = (uint8_t)0xFF & (hcan->Instance->sFIFOMailBox[FIFONumber].RDHR >> 24U);
   /* Release the FIFO */
   /* Release FIFO0 */
   if (FIFONumber == CAN_FIFO0)
   {
     __HAL_CAN_FIFO_RELEASE(hcan, CAN_FIFO0);
-    
-    /* Disable FIFO 0 message pending Interrupt */
-    __HAL_CAN_DISABLE_IT(hcan, CAN_IT_FMP0);
+
+    /* Disable FIFO 0 overrun and message pending Interrupt */
+    __HAL_CAN_DISABLE_IT(hcan, CAN_IT_FOV0 | CAN_IT_FMP0);
   }
   /* Release FIFO1 */
   else /* FIFONumber == CAN_FIFO1 */
   {
     __HAL_CAN_FIFO_RELEASE(hcan, CAN_FIFO1);
-    
-    /* Disable FIFO 1 message pending Interrupt */
-    __HAL_CAN_DISABLE_IT(hcan, CAN_IT_FMP1);
+
+    /* Disable FIFO 1 overrun and message pending Interrupt */
+    __HAL_CAN_DISABLE_IT(hcan, CAN_IT_FOV1 | CAN_IT_FMP1);
   }
-  
-  if(hcan->State == HAL_CAN_STATE_BUSY_RX)
+
+  tmp1 = hcan->State;
+  if((tmp1 == HAL_CAN_STATE_BUSY_RX0) || (tmp1 == HAL_CAN_STATE_BUSY_RX1))
   {   
-    /* Disable Error warning Interrupt */
-    __HAL_CAN_DISABLE_IT(hcan, CAN_IT_EWG);
-    
-    /* Disable Error passive Interrupt */
-    __HAL_CAN_DISABLE_IT(hcan, CAN_IT_EPV);
-    
-    /* Disable Bus-off Interrupt */
-    __HAL_CAN_DISABLE_IT(hcan, CAN_IT_BOF);
-    
-    /* Disable Last error code Interrupt */
-    __HAL_CAN_DISABLE_IT(hcan, CAN_IT_LEC);
-    
-    /* Disable Error Interrupt */
-    __HAL_CAN_DISABLE_IT(hcan, CAN_IT_ERR);
+    /* Disable Error warning, Error passive, Bus-off, Last error code
+       and Error Interrupts */
+    __HAL_CAN_DISABLE_IT(hcan, CAN_IT_EWG |
+                               CAN_IT_EPV |
+                               CAN_IT_BOF |
+                               CAN_IT_LEC |
+                               CAN_IT_ERR);
   }
-  
-  if(hcan->State == HAL_CAN_STATE_BUSY_TX_RX) 
+
+  /* Change CAN state */
+  if (FIFONumber == CAN_FIFO0)
   {
-    /* Disable CAN state */
-    hcan->State = HAL_CAN_STATE_BUSY_TX;
+    switch(hcan->State)
+    {
+      case(HAL_CAN_STATE_BUSY_TX_RX0):
+        hcan->State = HAL_CAN_STATE_BUSY_TX;
+        break;
+      case(HAL_CAN_STATE_BUSY_RX0_RX1):
+        hcan->State = HAL_CAN_STATE_BUSY_RX1;
+        break;
+      case(HAL_CAN_STATE_BUSY_TX_RX0_RX1):
+        hcan->State = HAL_CAN_STATE_BUSY_TX_RX1;
+        break;
+      default: /* HAL_CAN_STATE_BUSY_RX0 */
+        hcan->State = HAL_CAN_STATE_READY;
+        break;
+    }
   }
-  else
+  else /* FIFONumber == CAN_FIFO1 */
   {
-    /* Change CAN state */
-    hcan->State = HAL_CAN_STATE_READY;
+    switch(hcan->State)
+    {
+      case(HAL_CAN_STATE_BUSY_TX_RX1):
+        hcan->State = HAL_CAN_STATE_BUSY_TX;
+        break;
+      case(HAL_CAN_STATE_BUSY_RX0_RX1):
+        hcan->State = HAL_CAN_STATE_BUSY_RX0;
+        break;
+      case(HAL_CAN_STATE_BUSY_TX_RX0_RX1):
+        hcan->State = HAL_CAN_STATE_BUSY_TX_RX0;
+        break;
+      default: /* HAL_CAN_STATE_BUSY_RX1 */
+        hcan->State = HAL_CAN_STATE_READY;
+        break;
+    }
   }
 
   /* Receive complete callback */ 

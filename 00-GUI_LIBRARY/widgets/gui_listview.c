@@ -60,8 +60,8 @@ const static GUI_WIDGET_t Widget = {
     .Name = _T("LISTVIEW"),                         /*!< Widget name */
     .Size = sizeof(GUI_LISTVIEW_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = GUI_LISTVIEW_Callback,               /*!< Callback function */
-    .Colors = Colors,
+    .Callback = GUI_LISTVIEW_Callback,              /*!< Callback function */
+    .Colors = Colors,                               /*!< List of default colors */
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Define number of colors */
 };
 
@@ -72,28 +72,36 @@ const static GUI_WIDGET_t Widget = {
 /******************************************************************************/
 #define o                   ((GUI_LISTVIEW_t *)(h))
 
-///* Get item from LISTVIEW entry */
-//static
-//GUI_LISTVIEW_ITEM_t* __GetItem(GUI_HANDLE_p h, uint16_t index) {
-//    uint16_t i = 0;
-//    GUI_LISTVIEW_ITEM_t* item = 0;
-//    
-//    if (index >= o->Count) {                        /* Check if valid index */
-//        return 0;
-//    }
-//    
-//    if (index == 0) {                               /* Check for first element */
-//        return (GUI_LISTVIEW_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&o->Root, NULL);  /* Return first element */
-//    } else if (index == o->Count - 1) {
-//        return (GUI_LISTVIEW_ITEM_t *)__GUI_LINKEDLIST_GETPREV_GEN(&o->Root, NULL);  /* Return last element */
-//    }
-//    
-//    item = (GUI_LISTVIEW_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&o->Root, NULL);
-//    while (i++ < index) {
-//        item = (GUI_LISTVIEW_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(NULL, &item->List);
-//    }
-//    return item;
-//}
+/* Get item from LISTVIEW entry */
+static
+GUI_LISTVIEW_ROW_t* __GetRow(GUI_HANDLE_p h, uint16_t r) {
+    GUI_LISTVIEW_ROW_t* row = 0;
+    
+    if (r >= o->Count) {                          /* Check if valid index */
+        return 0;
+    }
+    
+    if (r == 0) {                                 /* Check for first element */
+        row = (GUI_LISTVIEW_ROW_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&o->Root, 0);  /* Get first element */
+    } else if (r == o->Count - 1) {
+        row = (GUI_LISTVIEW_ROW_t *)__GUI_LINKEDLIST_GETPREV_GEN(&o->Root, 0);  /* Get last element */
+    } else {
+        row = (GUI_LISTVIEW_ROW_t *)__GUI_LINKEDLIST_GETNEXT_BYINDEX_GEN(&o->Root, r);  /* Get row by index */
+    }
+    return row;
+}
+
+/* Get item pointer from row pointer and column index */
+static
+GUI_LISTVIEW_ITEM_t* __GetItemFromRow(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_t* row, uint8_t c) {
+    uint8_t i;
+    
+    if (!row) {
+        return NULL;
+    }
+    
+    return (GUI_LISTVIEW_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_BYINDEX_GEN(&row->Root, c);  /* Get item by index value = column number */
+}
 
 /* Get item height in LISTVIEW */
 static
@@ -198,7 +206,7 @@ void __CheckValues(GUI_HANDLE_p h) {
 static
 uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
 #if GUI_USE_TOUCH
-    static GUI_iDim_t tY;
+    static GUI_iDim_t tX, tY;
 #endif /* GUI_USE_TOUCH */
     
     switch (ctrl) {                                 /* Handle control function if required */
@@ -326,9 +334,8 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 while ((item = (GUI_LISTVIEW_ITEM_t *)__GUI_LINKEDLIST_REMOVE_GEN(&row->Root, (GUI_LinkedList_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&row->Root, 0))) != NULL) {
                     __GUI_MEMFREE(item);
                 }
-                __GUI_MEMFREE(row);
+                __GUI_MEMFREE(row);                 /* Remove actual row entry */
             }
-            o->Count = 0;
             
             /**
              * Remove all columns
@@ -338,14 +345,14 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                     __GUI_MEMFREE(o->Cols[i]);      /* Remove column object */
                 }
                 __GUI_MEMFREE(o->Cols);             /* Remove block of pointers to columns */
-                o->ColsCount = 0;
             }
             return 1;
         }
 #if GUI_USE_TOUCH
         case GUI_WC_TouchStart: {
             __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
-            tY = ts->RelY[0];
+            tX = ts->RelX[0];                       /* Save X position */
+            tY = ts->RelY[0];                       /* Save Y position */
             
             *(__GUI_TouchStatus_t *)result = touchHANDLED;
             return 1;
@@ -354,11 +361,32 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
             if (__GH(h)->Font) {
                 GUI_Dim_t height = __ItemHeight(h, NULL);   /* Get element height */
-                GUI_iDim_t diff = tY - ts->RelY[0];
+                GUI_iDim_t diff;
                 
-                if (__GUI_ABS(diff) > height) {
+                diff = tY - ts->RelY[0];            /* Check Y difference */
+                if (__GUI_ABS(diff) > height) {     /* Difference must be greater than 1 height entry */
                     __Slide(h, diff > 0 ? 1 : -1);  /* Slide widget */
                     tY = ts->RelY[0];               /* Save pointer */
+                }
+                
+                if (tY < height) {                  /* Check if we are in top region part */
+                    uint16_t i;
+                    GUI_Dim_t sum = 0;
+                    
+                    diff = tX - ts->RelX[0];        /* Check X difference too */
+                    for (i = 0; i < o->ColsCount; i++) {    /* Check X position for column first */
+                        sum += o->Cols[i]->Width;   /* Check width */
+                        if (__GUI_ABS(tX - sum) < 10) {
+                            break;
+                        }
+                    }
+                    if (i != o->ColsCount) {
+                        if (o->Cols[i]->Width - diff >= 4) {
+                            o->Cols[i]->Width -= diff;  /* Set new width for difference */
+                        }
+                        tX = ts->RelX[0];           /* Set new start X position for relative calculation */
+                        __GUI_WIDGET_Invalidate(h); /* Invalidate widget */
+                    }
                 }
             }
             return 1;
@@ -367,6 +395,8 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
         case GUI_WC_Click: {
             __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
             uint8_t handled = 0;
+            uint16_t itemHeight = __ItemHeight(h, NULL);    /* Get element height */
+            
             GUI_Dim_t width = __GUI_WIDGET_GetWidth(h); /* Get widget widget */
             GUI_Dim_t height = __GUI_WIDGET_GetHeight(h);   /* Get widget height */
             
@@ -380,15 +410,33 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                     handled = 1;
                 }
             }
-            if (!handled && __GH(h)->Font) {
-                uint16_t height = __ItemHeight(h, NULL);    /* Get element height */
+            if (!handled) {
                 uint16_t tmpSelected;
                 
-                tmpSelected = (ts->RelY[0] - height) / height;  /* Get temporary selected index */
-                if ((o->VisibleStartIndex + tmpSelected) <= o->Count) {
-                    __SetSelection(h, o->VisibleStartIndex + tmpSelected);
-                    __GUI_WIDGET_Invalidate(h);     /* Choose new selection */
+                if (ts->RelY[0] > itemHeight) {     /* Check item height */
+                    tmpSelected = (ts->RelY[0] - itemHeight) / itemHeight;  /* Get temporary selected index */
+                    if ((o->VisibleStartIndex + tmpSelected) <= o->Count) {
+                        __SetSelection(h, o->VisibleStartIndex + tmpSelected);
+                        __GUI_WIDGET_Invalidate(h); /* Choose new selection */
+                    }
+                    handled = 1;
                 }
+            }
+            
+            if (!handled && ts->RelY[0] < itemHeight) { /* We are in top region */
+                uint16_t i;
+                GUI_Dim_t sum = 0;
+                for (i = 0; i < o->ColsCount; i++) {    /* Process all columns */
+                    if (ts->RelX[0] > sum && ts->RelX[0] < (sum + o->Cols[i]->Width)) {
+                        break;
+                    }
+                        
+                    sum += o->Cols[i]->Width;       /* Increase sum value */
+                }
+                if (i != o->ColsCount) {            /* We have value */
+                    //TODO: Sort rows on press
+                }
+                handled = 1;
             }
             return 1;
         }
@@ -397,8 +445,10 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;
             if (kb->KB.Keys[0] == GUI_KEY_DOWN) {   /* On pressed down */
                 __IncSelection(h, 1);               /* Increase selection */
+                *(__GUI_KeyboardStatus_t *)result = keyHANDLED;
             } else if (kb->KB.Keys[0] == GUI_KEY_UP) {
                 __IncSelection(h, -1);              /* Decrease selection */
+                *(__GUI_KeyboardStatus_t *)result = keyHANDLED;
             }
             return 1;
         }
@@ -553,69 +603,69 @@ uint8_t GUI_LISTVIEW_SetSliderAuto(GUI_HANDLE_p h, uint8_t autoMode) {
     return 1;
 }
 
-//uint8_t GUI_LISTVIEW_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible) {
-//    uint8_t ret = 0;
-//    
-//    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-//    __GUI_ENTER();                                  /* Enter GUI */
-//    
-//    if (!(__GL(h)->Flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO)) {
-//        if (visible && !(__GL(h)->Flags & GUI_FLAG_LISTVIEW_SLIDER_ON)) {
-//            __GL(h)->Flags |= GUI_FLAG_LISTVIEW_SLIDER_ON;
-//            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
-//            ret = 1;
-//        } else if (!visible && (__GL(h)->Flags & GUI_FLAG_LISTVIEW_SLIDER_ON)) {
-//            __GL(h)->Flags &= ~GUI_FLAG_LISTVIEW_SLIDER_ON;
-//            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
-//            ret = 1;
-//        }
-//    }
-//    
-//    __GUI_LEAVE();                                  /* Leave GUI */
-//    return ret;
-//}
+uint8_t GUI_LISTVIEW_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible) {
+    uint8_t ret = 0;
+    
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    if (!(__GL(h)->Flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO)) {
+        if (visible && !(__GL(h)->Flags & GUI_FLAG_LISTVIEW_SLIDER_ON)) {
+            __GL(h)->Flags |= GUI_FLAG_LISTVIEW_SLIDER_ON;
+            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
+            ret = 1;
+        } else if (!visible && (__GL(h)->Flags & GUI_FLAG_LISTVIEW_SLIDER_ON)) {
+            __GL(h)->Flags &= ~GUI_FLAG_LISTVIEW_SLIDER_ON;
+            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
+            ret = 1;
+        }
+    }
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
+}
 
-//uint8_t GUI_LISTVIEW_Scroll(GUI_HANDLE_p h, int16_t step) {
-//    volatile int16_t start;
-//    
-//    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-//    __GUI_ENTER();                                  /* Enter GUI */
-//    
-//    start = __GL(h)->VisibleStartIndex;
-//    __GL(h)->VisibleStartIndex += step;
-//        
-//    __CheckValues(h);                               /* Check widget values */
-//    
-//    start = start != __GL(h)->VisibleStartIndex;    /* Check if there was valid change */
-//    
-//    if (start) {
-//        __GUI_WIDGET_Invalidate(h);
-//    }
-//    
-//    __GUI_LEAVE();                                  /* Leave GUI */
-//    return start;
-//}
+uint8_t GUI_LISTVIEW_Scroll(GUI_HANDLE_p h, int16_t step) {
+    volatile int16_t start;
+    
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    start = __GL(h)->VisibleStartIndex;
+    __GL(h)->VisibleStartIndex += step;
+        
+    __CheckValues(h);                               /* Check widget values */
+    
+    start = start != __GL(h)->VisibleStartIndex;    /* Check if there was valid change */
+    
+    if (start) {
+        __GUI_WIDGET_Invalidate(h);
+    }
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return (uint8_t)start;
+}
 
-//uint8_t GUI_LISTVIEW_SetSelection(GUI_HANDLE_p h, int16_t selection) {
-//    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-//    __GUI_ENTER();                                  /* Enter GUI */
-//    
-//    __SetSelection(h, selection);                   /* Set selection */
-//    __CheckValues(h);                               /* Check values */
-//    __GUI_WIDGET_Invalidate(h);                     /* Invalidate widget */
-//    
-//    __GUI_LEAVE();                                  /* Leave GUI */
-//    return 1;
-//}
+uint8_t GUI_LISTVIEW_SetSelection(GUI_HANDLE_p h, int16_t selection) {
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    __SetSelection(h, selection);                   /* Set selection */
+    __CheckValues(h);                               /* Check values */
+    __GUI_WIDGET_Invalidate(h);                     /* Invalidate widget */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
+}
 
-//int16_t GUI_LISTVIEW_GetSelection(GUI_HANDLE_p h) {
-//    int16_t selection;
-//    
-//    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-//    __GUI_ENTER();                                  /* Enter GUI */
-//    
-//    selection = __GL(h)->Selected;                  /* Read selection */
-//    
-//    __GUI_LEAVE();                                  /* Leave GUI */
-//    return selection;
-//}
+int16_t GUI_LISTVIEW_GetSelection(GUI_HANDLE_p h) {
+    int16_t selection;
+    
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    selection = __GL(h)->Selected;                  /* Read selection */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return selection;
+}

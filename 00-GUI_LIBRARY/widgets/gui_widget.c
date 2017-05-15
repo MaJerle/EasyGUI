@@ -399,21 +399,33 @@ uint8_t __GUI_WIDGET_InvalidateWithParent(GUI_HANDLE_p h) {
 }
 
 uint8_t __GUI_WIDGET_SetXY(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {       
-    if (__GH(h)->X != x || __GH(h)->Y != y) {            
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Set new clipping region */
+    if (__GH(h)->X != x || __GH(h)->Y != y) {
+        if (!__GUI_WIDGET_IsExpanded(h)) {
+            __GUI_WIDGET_InvalidateWithParent(h);   /* Set old clipping region first */
+        }
         __GH(h)->X = x;                             /* Set parameter */
         __GH(h)->Y = y;                             /* Set parameter */
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate object */
+        if (!__GUI_WIDGET_IsExpanded(h)) {
+            __GUI_WIDGET_InvalidateWithParent(h);   /* Set new clipping region */
+        }
     }
     return 1;
 }
 
 uint8_t __GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t hi) {    
     if (wi != __GH(h)->Width || hi != __GH(h)->Height) {
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate old clipping region */
+        uint8_t invalidateSecond = 0;
+        if (!__GUI_WIDGET_IsExpanded(h)) {
+            __GUI_WIDGET_InvalidateWithParent(h);   /* Set old clipping region first */
+            if (wi > __GH(h)->Width || hi > __GH(h)->Height) {
+                invalidateSecond = 1;
+            }
+        }
         __GH(h)->Width = wi;                        /* Set parameter */
         __GH(h)->Height = hi;                       /* Set parameter */
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate object */
+        if (invalidateSecond) {                     /* Invalidate second time only if widget greater than before */
+            __GUI_WIDGET_InvalidateWithParent(h);   /* Set new clipping region */
+        }
     }
     return 1;
 }
@@ -1151,6 +1163,18 @@ uint8_t GUI_WIDGET_ProcessDefaultCallback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* p
     __GUI_ENTER();                                  /* Enter GUI */
     
     ret = __GH(h)->Widget->Callback(h, ctrl, param, result);    /* Call callback function */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
+}
+
+uint8_t GUI_WIDGET_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+    uint8_t ret;
+    
+    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    ret = __GUI_WIDGET_Callback(h, ctrl, param, result);    /* Call callback function */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
