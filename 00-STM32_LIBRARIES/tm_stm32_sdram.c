@@ -65,16 +65,16 @@ uint8_t TM_SDRAM_Init(void) {
 	
 	
 	/* FMC SDRAM control configuration */
-	SDRAMHandle.Init.SDBank             = SDRAM_BANK;
-	SDRAMHandle.Init.ColumnBitsNumber   = FMC_SDRAM_COLUMN_BITS_NUM_8;
-	SDRAMHandle.Init.RowBitsNumber      = SDRAM_ROWBITS_NUMBER;
-	SDRAMHandle.Init.MemoryDataWidth    = SDRAM_MEMORY_WIDTH;
-	SDRAMHandle.Init.InternalBankNumber = FMC_SDRAM_INTERN_BANKS_NUM_4;
-	SDRAMHandle.Init.CASLatency         = SDRAM_CAS_LATENCY;
-	SDRAMHandle.Init.WriteProtection    = FMC_SDRAM_WRITE_PROTECTION_DISABLE;
-	SDRAMHandle.Init.SDClockPeriod      = FMC_SDRAM_CLOCK_PERIOD_2;
-	SDRAMHandle.Init.ReadBurst          = SDRAM_READ_BURST_STATE;
-	SDRAMHandle.Init.ReadPipeDelay      = FMC_SDRAM_RPIPE_DELAY_0;
+    SDRAMHandle.Init.SDBank             = FMC_SDRAM_BANK1;
+    SDRAMHandle.Init.ColumnBitsNumber   = FMC_SDRAM_COLUMN_BITS_NUM_8;
+    SDRAMHandle.Init.RowBitsNumber      = FMC_SDRAM_ROW_BITS_NUM_12;
+    SDRAMHandle.Init.MemoryDataWidth    = SDRAM_MEMORY_WIDTH;
+    SDRAMHandle.Init.InternalBankNumber = FMC_SDRAM_INTERN_BANKS_NUM_4;
+    SDRAMHandle.Init.CASLatency         = FMC_SDRAM_CAS_LATENCY_3;
+    SDRAMHandle.Init.WriteProtection    = FMC_SDRAM_WRITE_PROTECTION_DISABLE;
+    SDRAMHandle.Init.SDClockPeriod      = SDRAM_CLOCK_PERIOD;
+    SDRAMHandle.Init.ReadBurst          = FMC_SDRAM_RBURST_ENABLE;
+    SDRAMHandle.Init.ReadPipeDelay      = FMC_SDRAM_RPIPE_DELAY_0;
 	
 	/* FMC SDRAM bank initialization */
 	HAL_SDRAM_Init(&SDRAMHandle, &Timing);
@@ -91,8 +91,7 @@ uint8_t TM_SDRAM_Init(void) {
 	HAL_SDRAM_SendCommand(&SDRAMHandle, &Command, SDRAM_TIMEOUT);
 	
 	/* Little delay */
-	timeout = SDRAM_TIMEOUT * 0xF;
-	while (timeout--);
+	HAL_Delay(2);
 	
 	/* Configure a PALL (precharge all) command */ 
 	Command.CommandMode          	= FMC_SDRAM_CMD_PALL;
@@ -117,6 +116,7 @@ uint8_t TM_SDRAM_Init(void) {
 	Command.CommandTarget          	= SDRAM_COMMAND_TARGET_BANK;
 	Command.AutoRefreshNumber      	= 1;
 	Command.ModeRegisterDefinition 	= (uint32_t)SDRAM_REG_VALUE;
+	Command.ModeRegisterDefinition 	= 0x30UL | 0x0200UL;
 	
 	/* Wait until the SDRAM controller is ready */
 	/* Send the command */

@@ -6,15 +6,21 @@ extern GUI_Layer_t Layers[];
 DSI_HandleTypeDef DSIHandle;
 DSI_VidCfgTypeDef DSIVIDEOHandle;
 
-#define LCD_OTM8009A_ID                 ((uint32_t) 0)
-#define ZONES                           1
+#define LCD_OTM8009A_ID         ((uint32_t) 0)
+#define ZONES                   4
+#define HACT_OUT                LCD_WIDTH/ZONES      /* !!!! SCREEN DIVIDED INTO 2 AREAS !!!! */
 
-volatile int32_t LCD_ActiveRegion    = 1;
-volatile int32_t LCD_Refershing      = 0;
+volatile int32_t LCD_ActiveRegion = 1;
+volatile int32_t LCD_Refershing = 0;
 
-#define LCD_DSI_PIXEL_DATA_FMT_RBG888  DSI_RGB888   /*!< DSI packet pixel format chosen is RGB888 : 24 bpp */
 #define LCD_DSI_PIXEL_DATA_FMT_RBG565  DSI_RGB565   /*!< DSI packet pixel format chosen is RGB565 : 16 bpp */
 
+/**
+  * @brief  Reload immediately all LTDC Layers.
+  * @param  __HANDLE__  LTDC handle
+  * @retval None.
+  */
+#define __HAL_LTDC_RELOAD_IMMEDIATE_CONFIG(__HANDLE__)  ((__HANDLE__)->Instance->SRCR |= LTDC_SRCR_IMR)
 
 uint8_t pPage[] = {0x00, 0x00, 0x01, 0xDF}; /*   0 -> 479 */
 uint8_t pCols[ZONES][4] = {
@@ -30,6 +36,10 @@ uint8_t pCols[ZONES][4] = {
     {0x00, 0x00, 0x03, 0x1F}, /*   0 -> 799 */
 #endif  
 };
+
+void LCD_SetUpdateRegion(int idx) {
+    HAL_DSI_LongWrite(&DSIHandle, 0, DSI_DCS_LONG_PKT_WRITE, 4, OTM8009A_CMD_CASET, pCols[idx]);
+}
 
 /**
   * @brief  De-Initializes the BSP LCD Msp
@@ -255,7 +265,7 @@ void _LCD_Init(void) {
     LTDCHandle.Init.TotalHeigh = (LCD_HEIGHT + VSA + VBP + VFP - 1);
 
     /* Initialize the LCD pixel width and pixel height */
-    LTDCHandle.LayerCfg->ImageWidth  = LCD_WIDTH;
+    LTDCHandle.LayerCfg->ImageWidth = LCD_WIDTH;
     LTDCHandle.LayerCfg->ImageHeight = LCD_HEIGHT;   
 
     /** LCD clock configuration
@@ -350,6 +360,7 @@ void _LCD_Init(void) {
 #else
     layer_cfg.PixelFormat = LTDC_PIXEL_FORMAT_ARGB8888;
 #endif
+    layer_cfg.PixelFormat = LTDC_PIXEL_FORMAT_RGB565;
     layer_cfg.Alpha0 = 0;
     layer_cfg.Backcolor.Blue = 0;
     layer_cfg.Backcolor.Green = 0;
@@ -374,11 +385,34 @@ void _LCD_Init(void) {
     HAL_NVIC_EnableIRQ(LTDC_IRQn);
     
     HAL_LTDC_ProgramLineEvent(&LTDCHandle, 0);
+    return;
+
+//    HAL_DSI_LongWrite(&DSIHandle, 0, DSI_DCS_LONG_PKT_WRITE, 4, OTM8009A_CMD_CASET, pCols[0]);
+//    HAL_DSI_LongWrite(&DSIHandle, 0, DSI_DCS_LONG_PKT_WRITE, 4, OTM8009A_CMD_PASET, pPage);
+
+//    /* Update pitch : the draw is done on the whole physical X Size */
+//    HAL_LTDC_SetPitch(&LTDCHandle, LCD_WIDTH, 0);
+//#if (GUI_LAYERS > 1)    
+//    HAL_LTDC_SetPitch(&LTDCHandle, LCD_WIDTH, 1);
+//#endif
+
+//    HAL_Delay(20);
+
+//    LCD_ReqTear();
+
+//    /* Send Display off DCS Command to display */
+//    HAL_DSI_ShortWrite(&DSIHandle,
+//                        0,
+//                        DSI_DCS_SHORT_PKT_WRITE_P1,
+//                        OTM8009A_CMD_DISPON,
+//                        0x00);
+//    __HAL_LTDC_ENABLE(&LTDCHandle);
 }
 
 /* IRQ callback for line event */
 void HAL_LTDC_LineEvenCallback(LTDC_HandleTypeDef *hltdc) {
     uint8_t i = 0;
+    
     for (i = 0; i < GUI_LAYERS; i++) {
         if (Layers[i].Pending) {                /* Is layer waiting for redraw operation */
             Layers[i].Pending = 0;
@@ -391,10 +425,64 @@ void HAL_LTDC_LineEvenCallback(LTDC_HandleTypeDef *hltdc) {
             break;
         }
     }
-    HAL_LTDC_ProgramLineEvent(hltdc, 0); 
+    HAL_LTDC_ProgramLineEvent(hltdc, 0);
 }
+
+uint8_t ActiveLayer = 0;
+
+///* Tearing effect callback */
+//void HAL_DSI_TearingEffectCallback(DSI_HandleTypeDef* hdsi) {
+//    uint32_t index = 0;
+
+//    if (!LCD_Refershing) {
+//        for(index = 0; index < GUI_LAYERS; index ++) {
+//            if (Layers[index].Pending) {
+//                GUI_LCD_ConfirmActiveLayer(index);
+//                ActiveLayer = index;
+//                Layers[index].Pending = 0;
+//            }
+//        }    
+//        LCD_Refershing = 1;
+//        LCD_ActiveRegion = 1;
+//        HAL_DSI_Refresh(hdsi); 
+//    }
+//}
+
+//void HAL_DSI_EndOfRefreshCallback(DSI_HandleTypeDef* hdsi) {
+//    uint32_t index = 0;
+
+//    if (LCD_ActiveRegion < ZONES) {
+//        LCD_Refershing = 1;
+//        /* Disable DSI Wrapper */
+//        __HAL_DSI_WRAPPER_DISABLE(hdsi);
+//        for(index = 0; index < GUI_LAYERS; index ++) {
+//            /* Update LTDC configuaration */
+//            LTDC_LAYER(&LTDCHandle, index)->CFBAR = Layers[ActiveLayer].StartAddress + LCD_ActiveRegion * HACT_OUT * 2;
+//        }
+//        __HAL_LTDC_RELOAD_IMMEDIATE_CONFIG(&LTDCHandle);
+//        __HAL_DSI_WRAPPER_ENABLE(hdsi);
+//        LCD_SetUpdateRegion(LCD_ActiveRegion++);
+//        /* Refresh the right part of the display */
+//        HAL_DSI_Refresh(hdsi);
+//    } else {
+//        LCD_Refershing = 0;
+
+//        __HAL_DSI_WRAPPER_DISABLE(&DSIHandle);
+//        for(index = 0; index < GUI_LAYERS; index ++) {
+//            LTDC_LAYER(&LTDCHandle, index)->CFBAR = Layers[ActiveLayer].StartAddress;
+//        }
+//        __HAL_LTDC_RELOAD_IMMEDIATE_CONFIG(&LTDCHandle);
+//        __HAL_DSI_WRAPPER_ENABLE(&DSIHandle);  
+//        LCD_SetUpdateRegion(0); 
+//    }
+//}
 
 /* IRQ function for LTDC */
 void LTDC_IRQHandler(void) {
     HAL_LTDC_IRQHandler(&LTDCHandle);
 }
+
+///* IRQ function for DSI */
+//void DSI_IRQHandler(void) {
+//    HAL_DSI_IRQHandler(&DSIHandle);
+//}

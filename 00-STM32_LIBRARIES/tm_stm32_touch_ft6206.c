@@ -110,9 +110,9 @@ uint8_t TM_TOUCH_FT6206_Read(TM_TOUCH_t* TS) {
 	}
     
 //    /* Read gesture */
-//    if (TM_I2C_Read(TOUCH_FT5336_I2C, TOUCH_FT5336_I2C_DEV, 0x01, &TS->Gesture) == TM_I2C_Result_Ok) {
-//        TS->Gesture = TS->Gesture;
-//    }
+    if (TM_I2C_Read(TOUCH_FT6206_I2C, TOUCH_FT6206_I2C_DEV, 0x01, &TS->Gesture) == TM_I2C_Result_Ok) {
+        TS->Gesture = TS->Gesture;
+    }
 	
 	/* Return OK */
 	return 0;

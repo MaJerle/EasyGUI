@@ -156,6 +156,8 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, GUI_DRAW_FON
     
     y += c->yPos;                                   /* Set Y position */
     
+    while (!GUI.LL.IsReady(&GUI.LCD));              /* Wait till ready */
+    
     if (font->Flags & GUI_FLAG_FONT_AA) {           /* Font has anti alliasing enabled */
         GUI_Color_t color;                          /* Temporary color for AA */
         GUI_Byte tmp, r1, g1, b1;
@@ -694,11 +696,11 @@ void GUI_DRAW_Image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_I
     height = img->ySize;                            /* Set default height */
     
     src = (uint8_t *)(img->Image);                  /* Set source address */
-    dst = (uint8_t *)(layer->StartAddress + 4 * (y * GUI.LCD.Width + x));   /* Set destination start address */
+    dst = (uint8_t *)(layer->StartAddress + GUI.LCD.PixelSize * (y * GUI.LCD.Width + x));   /* Set destination start address */
     
     if (y < disp->Y1) {
         src += (disp->Y1 - y) * img->xSize * bytes; /* Set offset for number of image lines */
-        dst += (disp->Y1 - y) * GUI.LCD.Width * 4;  /* Set offset for number of LCD lines */
+        dst += (disp->Y1 - y) * GUI.LCD.Width * GUI.LCD.PixelSize;  /* Set offset for number of LCD lines */
         height -= disp->Y1 - y;
     }
     if ((y + img->ySize) > disp->Y2) {
@@ -706,7 +708,7 @@ void GUI_DRAW_Image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_I
     }
     if (x < disp->X1) {                             /* Set offset start address if required */
         src += (disp->X1 - x) * bytes;              /* Set offset of start address in X direction */
-        dst += (disp->X1 - x) * 4;                  /* Set offset of start address in X direction */
+        dst += (disp->X1 - x) * GUI.LCD.PixelSize;  /* Set offset of start address in X direction */
         width -= disp->X1 - x;                      /* Increase source offline */
     }
     if ((x + img->xSize) > disp->X2) {

@@ -303,6 +303,7 @@ typedef struct GUI_Layer_t {
 typedef struct GUI_LCD_t {
     GUI_Dim_t Width;                        /*!< LCD width in units of pixels */
     GUI_Dim_t Height;                       /*!< LCD height in units of pixels */
+    uint8_t PixelSize;                      /*!< Number of bytes per pixel */
     GUI_Byte ActiveLayer;                   /*!< Active layer number currently shown to LCD */
     GUI_Byte DrawingLayer;                  /*!< Currently active drawing layer */
     GUI_Byte LayersCount;                   /*!< Number of layers used for LCD and drawings */
@@ -366,6 +367,7 @@ typedef enum GUI_LL_Command_t {
  */
 typedef struct GUI_LL_t {
     void            (*Init)         (GUI_LCD_t *);                                                                      /*!< Pointer to LCD initialization function */
+    uint8_t         (*IsReady)      (GUI_LCD_t *);                                                                      /*!< Pointer to LCD is ready function */
     void            (*SetPixel)     (GUI_LCD_t *, uint8_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);                          /*!< Pointer to LCD set pixel function */
     GUI_Color_t     (*GetPixel)     (GUI_LCD_t *, uint8_t, GUI_Dim_t, GUI_Dim_t);                                       /*!< Pointer to read pixel from LCD */
     void            (*Fill)         (GUI_LCD_t *, uint8_t, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);       /*!< Pointer to LCD fill screen or rectangle function */

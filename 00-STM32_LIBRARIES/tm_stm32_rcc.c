@@ -130,8 +130,10 @@ TM_RCC_Result_t TM_RCC_InitSystem(void) {
 	/* Try to init */
 #if defined(STM32F0xx)
 	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK) {
-#else
+#elif defined(STM32F7xx)
 	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_6) != HAL_OK) {
+#else
+	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK) {
 #endif
 		return TM_RCC_Result_Error;
 	}

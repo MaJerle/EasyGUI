@@ -7,10 +7,10 @@ import random
 By sending "b" character to serial you are able to read current screen from device if firmware is correct.
 """
 
-PORT = "COM20"
+PORT = "COM5"
 BAUD = 115200*2
-IMG_WIDTH = 480
-IMG_HEIGHT = 272
+IMG_WIDTH = 128
+IMG_HEIGHT = 128
 DATA_SIZE = IMG_WIDTH * IMG_HEIGHT * 4
 
 s = serial.Serial(PORT, BAUD)
