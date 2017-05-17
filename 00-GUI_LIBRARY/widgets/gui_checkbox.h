@@ -51,7 +51,7 @@ extern "C" {
 /**
  * \brief           List of checkbox colors
  */
-typedef enum {
+typedef enum GUI_CHECKBOX_COLOR_t {
     GUI_CHECKBOX_COLOR_BG = 0x00,           /*!< Background color index */
     GUI_CHECKBOX_COLOR_FG,                  /*!< Foreground color index */
     GUI_CHECKBOX_COLOR_BORDER,              /*!< Border color index */

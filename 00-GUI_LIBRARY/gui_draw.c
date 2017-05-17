@@ -290,6 +290,10 @@ void GUI_DRAW_Fill(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iD
         ) {
         return;
     }
+        
+    if (width <= 0 || height <= 0) {
+        return;
+    }
     
     /* We are in region */
     if (x < disp->X1) {
@@ -496,9 +500,13 @@ void GUI_DRAW_FilledRoundedRectangle(const GUI_Display_t* disp, GUI_iDim_t x, GU
         r = width / 2 - 1;
     }
     if (r) {
-        GUI_DRAW_FilledRectangle(disp, x + r,         y,     width - 2 * r, height,         color);
-        GUI_DRAW_FilledRectangle(disp, x,             y + r, r,             height - 2 * r, color);
-        GUI_DRAW_FilledRectangle(disp, x + width - r, y + r, r,             height - 2 * r, color);
+        if ((GUI_iDim_t)(width - 2 * r) > 0) {
+            GUI_DRAW_FilledRectangle(disp, x + r,         y,     width - 2 * r, height,         color);
+        }
+        if ((GUI_iDim_t)(height - 2 * r) > 0) {
+            GUI_DRAW_FilledRectangle(disp, x,             y + r, r,             height - 2 * r, color);
+            GUI_DRAW_FilledRectangle(disp, x + width - r, y + r, r,             height - 2 * r, color);
+        }
         
         GUI_DRAW_FilledCircleCorner(disp, x + r,             y + r,              r, GUI_DRAW_CIRCLE_TL, color);
         GUI_DRAW_FilledCircleCorner(disp, x + width - r - 1, y + r,              r, GUI_DRAW_CIRCLE_TR, color);
@@ -683,7 +691,7 @@ void GUI_DRAW_Image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_I
     GUI_iDim_t width, height;
     GUI_iDim_t offlineSrc, offlineDst;
     
-    if (!__GUI_RECT_MATCH(
+    if (!img || !__GUI_RECT_MATCH(
         disp->X1, disp->Y1, disp->X2, disp->Y2,
         x, y, x + img->xSize, y + img->ySize
     )) {

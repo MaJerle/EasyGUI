@@ -252,6 +252,8 @@ typedef struct __GUI_TouchData_t {
     GUI_TouchData_t TS;                     /*!< Touch structure from outside */
     GUI_iDim_t RelX[GUI_TOUCH_MAX_PRESSES]; /*!< Relative X position to current widget */
     GUI_iDim_t RelY[GUI_TOUCH_MAX_PRESSES]; /*!< Relative Y position to current widget */
+    GUI_Dim_t WidgetWidth;                  /*!< Save widget width value */
+    GUI_Dim_t WidgetHeight;                 /*!< Save widget height value */
 #if GUI_TOUCH_MAX_PRESSES > 1 || defined(DOXYGEN)
     float Distance;                         /*!< Distance between 2 points when 2 touch elements are detected */
     float DistanceOld;                      /*!< Old distance between 2 points */
@@ -289,12 +291,23 @@ typedef enum __GUI_KeyboardStatus_t {
 } __GUI_KeyboardStatus_t;
 
 /**
+ * \brief           GUI clipping management
+ */
+typedef struct GUI_Display_t {
+    GUI_iDim_t X1;                          /*!< Clipping area start X */
+    GUI_iDim_t Y1;                          /*!< Clipping area start Y */
+    GUI_iDim_t X2;                          /*!< Clipping area end X */
+    GUI_iDim_t Y2;                          /*!< Clipping area end Y */
+} GUI_Display_t;
+
+/**
  * \brief           LCD layer structure
  */
 typedef struct GUI_Layer_t {
     uint8_t Num;                            /*!< Layer number */
     uint32_t StartAddress;                  /*!< Start address in memory if it exists */
     volatile uint8_t Pending;               /*!< Layer pending for redrawing operation */
+    GUI_Display_t Display;                  /*!< Display setup for clipping regions */
 } GUI_Layer_t;
 
 /**
@@ -310,16 +323,6 @@ typedef struct GUI_LCD_t {
     GUI_Layer_t* Layers;                    /*!< Pointer to layers */
     uint32_t Flags;                         /*!< List of flags */
 } GUI_LCD_t;
-
-/**
- * \brief           GUI clipping management
- */
-typedef struct GUI_Display_t {
-    GUI_iDim_t X1;                          /*!< Clipping area start X */
-    GUI_iDim_t Y1;                          /*!< Clipping area start Y */
-    GUI_iDim_t X2;                          /*!< Clipping area end X */
-    GUI_iDim_t Y2;                          /*!< Clipping area end Y */
-} GUI_Display_t;
 
 /**
  * \addtogroup      GUI_IMAGE
@@ -719,12 +722,20 @@ typedef GUI_TIMER_t* GUI_TIMER_p;
  */
 typedef enum GUI_WC_t {
     /**
-     * \brief       Widget has been just created and ready to init for future setup
+     * \brief       Called just after widget has been created. Used for internal widget purpose only
      *
      * \param[in]   *param: None
      * \param[out]  *result: None
      */
-    GUI_WC_Init = 0x01,
+    GUI_WC_PreInit = 0x01,
+    
+    /**
+     * \brief       Widget has been created and ready to init for future setup
+     *
+     * \param[in]   *param: None
+     * \param[out]  *result: None
+     */
+    GUI_WC_Init,
     
     /**
      * \brief       Draw widget on screen
@@ -928,6 +939,7 @@ typedef enum GUI_WC_t {
 
 #define GUI_FLAG_WIDGET_ALLOW_CHILDREN      ((uint16_t)0x0001)  /*!< Widget allows children widgets */
 #define GUI_FLAG_WIDGET_DIALOG_BASE         ((uint16_t)0x0002)  /*!< Widget is dialog base. When it is active, no other widget around dialog can be pressed */
+#define GUI_FLAG_WIDGET_INVALIDATE_PARENT   ((uint16_t)0x0004)  /*!< Anytime widget is invalidated, parent should be invalidated too */
 
 /**
  * \}

@@ -70,6 +70,7 @@ CTS         PA3                 RTS from ST to CTS from GSM
 #include "gui_dropdown.h"
 #include "gui_dialog.h"
 #include "gui_image.h"
+#include "gui_slider.h"
 
 #include "math.h"
 
@@ -102,6 +103,7 @@ GUI_HANDLE_p dialog1;
 #define ID_WIN_DIALOG           (ID_BASE_WIN + 0x0B)
 #define ID_WIN_LISTVIEW         (ID_BASE_WIN + 0x0C)
 #define ID_WIN_IMAGE            (ID_BASE_WIN + 0x0D)
+#define ID_WIN_SLIDER           (ID_BASE_WIN + 0x0E)
 
 /* List of base buttons IDs */
 #define ID_BTN_WIN_BTN          (ID_BASE_BTN + 0x01)
@@ -117,9 +119,10 @@ GUI_HANDLE_p dialog1;
 #define ID_BTN_WIN_DIALOG       (ID_BASE_BTN + 0x0B)
 #define ID_BTN_WIN_LISTVIEW     (ID_BASE_BTN + 0x0C)
 #define ID_BTN_WIN_IMAGE        (ID_BASE_BTN + 0x0D)
+#define ID_BTN_WIN_SLIDER       (ID_BASE_BTN + 0x0E)
 
-#define ID_BTN_DIALOG_CONFIRM   (ID_BASE_BTN + 0x0E)
-#define ID_BTN_DIALOG_CANCEL    (ID_BASE_BTN + 0x0F)
+#define ID_BTN_DIALOG_CONFIRM   (ID_BASE_BTN + 0x20)
+#define ID_BTN_DIALOG_CANCEL    (ID_BASE_BTN + 0x21)
 
 #define ID_TEXTVIEW_1           (ID_BASE_TEXTWIEW + 0x01)
 
@@ -155,9 +158,10 @@ bulk_init_t buttons[] = {
     {ID_BTN_WIN_LED,        _T("Led"),          {ID_WIN_LED, _T("Led")}},
     {ID_BTN_WIN_TEXTVIEW,   _T("Text view"),    {ID_WIN_TEXTVIEW, _T("Text view")}},
     {ID_BTN_WIN_DROPDOWN,   _T("Dropdown"),     {ID_WIN_DROPDOWN, _T("Dropdown")}},
-//    {ID_BTN_WIN_DIALOG,     _T("Dialog"),       {ID_WIN_DIALOG, _T("Dialog")}},
+    {ID_BTN_WIN_DIALOG,     _T("Dialog"),       {ID_WIN_DIALOG, _T("Dialog")}},
     {ID_BTN_WIN_LISTVIEW,   _T("Listview"),     {ID_WIN_LISTVIEW, _T("Listview")}},
     {ID_BTN_WIN_IMAGE,      _T("Image"),        {ID_WIN_IMAGE, _T("Image")}},
+    {ID_BTN_WIN_SLIDER,     _T("Slider"),       {ID_WIN_SLIDER, _T("Slider")}},
 };
 
 char str[100];
@@ -194,6 +198,7 @@ uint8_t checkbox_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* resul
 uint8_t led_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 uint8_t dialog_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 uint8_t listview_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
+uint8_t slider_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 
 #define PI      3.14159265359f
 
@@ -705,16 +710,27 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 break;
             }
             case ID_WIN_IMAGE: {
-                handle = GUI_BUTTON_Create(0, 10, 10, 300, 50, h, 0, 0);
-                GUI_WIDGET_SetText(handle, _T("Button"));
-                handle = GUI_IMAGE_Create(0, 2, 2, bmimage_brand.xSize, bmimage_brand.ySize, h, 0, 0);
-                GUI_IMAGE_SetSource(handle, &bmimage_brand);
-                handle = GUI_IMAGE_Create(0, 200, 40, bmimage_voyo.xSize, bmimage_voyo.ySize, h, 0, 0);
-                GUI_IMAGE_SetSource(handle, &bmimage_voyo);
+//                handle = GUI_BUTTON_Create(0, 10, 10, 300, 50, h, 0, 0);
+//                GUI_WIDGET_SetText(handle, _T("Button"));
+//                handle = GUI_IMAGE_Create(0, 2, 2, bmimage_brand.xSize, bmimage_brand.ySize, h, 0, 0);
+//                GUI_IMAGE_SetSource(handle, &bmimage_brand);
+//                handle = GUI_IMAGE_Create(0, 200, 40, bmimage_voyo.xSize, bmimage_voyo.ySize, h, 0, 0);
+//                GUI_IMAGE_SetSource(handle, &bmimage_voyo);
 //                handle = GUI_IMAGE_Create(0, 350, 10, bmimage_voyo565.xSize, bmimage_voyo565.ySize, h, 0, 0);
 //                GUI_IMAGE_SetSource(handle, &bmimage_voyo565);
-                handle = GUI_IMAGE_Create(0, 250, 10, maskImg.xSize, maskImg.ySize, h, 0, 0);
-                GUI_IMAGE_SetSource(handle, &maskImg);
+//                handle = GUI_IMAGE_Create(0, 250, 10, maskImg.xSize, maskImg.ySize, h, 0, 0);
+//                GUI_IMAGE_SetSource(handle, &maskImg);
+                break;
+            }
+            case ID_WIN_SLIDER: {
+                handle = GUI_SLIDER_Create(0, 10, 10, 400, 50, h, slider_callback, 0);
+                GUI_SLIDER_SetMode(handle, GUI_SLIDER_MODE_RIGHT_LEFT);
+                handle = GUI_SLIDER_Create(0, 10, 70, 400, 15, h, slider_callback, 0);
+                GUI_SLIDER_SetMode(handle, GUI_SLIDER_MODE_LEFT_RIGHT);
+                handle = GUI_SLIDER_Create(0, 450, 10, 80, 400, h, slider_callback, 0);
+                GUI_SLIDER_SetMode(handle, GUI_SLIDER_MODE_BOTTOM_TOP);
+                handle = GUI_SLIDER_Create(0, 550, 10, 80, 400, h, slider_callback, 0);
+                GUI_SLIDER_SetMode(handle, GUI_SLIDER_MODE_TOP_BOTTOM);
                 break;
             }
             default:
@@ -790,7 +806,8 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 case ID_BTN_WIN_LISTVIEW:
                 case ID_BTN_WIN_PROGBAR:
                 case ID_BTN_WIN_RADIO:
-                case ID_BTN_WIN_TEXTVIEW: {
+                case ID_BTN_WIN_TEXTVIEW:
+                case ID_BTN_WIN_SLIDER: {
                     btn_user_data_t* data = GUI_WIDGET_GetUserData(h);
                     if (data) {
                         GUI_HANDLE_p tmp;
@@ -845,6 +862,27 @@ uint8_t dialog_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
             break;
         }
         case GUI_WC_Draw: {
+            break;
+        }
+        default:
+            break;
+    }
+    return res;
+}
+
+uint8_t slider_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
+    uint8_t res = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    switch (cmd) {
+        case GUI_WC_Init: {
+            GUI_SLIDER_SetMin(h, 0);
+            GUI_SLIDER_SetMax(h, 1000);
+            GUI_SLIDER_SetValue(h, 212);
+            break;
+        }
+        case GUI_WC_ValueChanged: {
+            int32_t value = GUI_SLIDER_GetValue(h); /* Get widget handle */
+            __GUI_DEBUG("V: %d\r\n", value);
+            //Set timer PWM
             break;
         }
         default:

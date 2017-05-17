@@ -272,6 +272,8 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
         if (touch->TS.X[0] >= GUI.DisplayTemp.X1 && touch->TS.X[0] <= GUI.DisplayTemp.X2 && touch->TS.Y[0] >= GUI.DisplayTemp.Y1 && touch->TS.Y[0] <= GUI.DisplayTemp.Y2) {
             __SetRelativeCoordinate(touch, __GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h)); /* Set relative coordinate */
 
+            touch->WidgetWidth = __GUI_WIDGET_GetWidth(h);  /* Get widget width */
+            touch->WidgetHeight = __GUI_WIDGET_GetHeight(h);    /* Get widget height */
             __GUI_WIDGET_Callback(h, GUI_WC_TouchStart, touch, &tStat);
             if (tStat == touchCONTINUE) {           /* Check result status */
                 tStat = touchHANDLED;               /* If command is processed, touchCONTINUE can't work */
@@ -332,21 +334,18 @@ GUI_Result_t GUI_Init(void) {
     GUI_LL_Control(&GUI.LCD, GUI_LL_Command_Init, &GUI.LL, &result);    /* Call low-level initialization */
     GUI.LL.Init(&GUI.LCD);                          /* Call user LCD driver function */
     
-    /* Draw LCD with default color */
-    
     /* Check situation with layers */
-    if (GUI.LCD.LayersCount == 1) {
+    if (GUI.LCD.LayersCount >= 1) {
         GUI.LCD.ActiveLayer = 0;
         GUI.LCD.DrawingLayer = 0;
         GUI.LL.Fill(&GUI.LCD, GUI.LCD.DrawingLayer, (void *)GUI.LCD.Layers[GUI.LCD.DrawingLayer].StartAddress, GUI.LCD.Width, GUI.LCD.Height, 0, 0xFFFFFFFF);
-    } else if (GUI.LCD.LayersCount > 1) {
-        GUI.LCD.ActiveLayer = 0;
-        GUI.LCD.DrawingLayer = 0;
-        GUI.LL.Fill(&GUI.LCD, GUI.LCD.DrawingLayer, (void *)GUI.LCD.Layers[GUI.LCD.DrawingLayer].StartAddress, GUI.LCD.Width, GUI.LCD.Height, 0, 0xFFFFFFFF);
-        GUI.LCD.DrawingLayer = 1;
+        if (GUI.LCD.LayersCount > 1) {
+            GUI.LCD.DrawingLayer = 1;
+        }
     } else {
         return guiERROR;
     }
+    
     
     /* Init input devices */
     __GUI_INPUT_Init();
@@ -447,7 +446,8 @@ int32_t GUI_Process(void) {
                         h = 0;
                     }
                     if (!h) {                       /* There is no next widget */
-                        for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)__GH(GUI.FocusedWidget)->Parent, NULL); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
+                        for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)__GH(GUI.FocusedWidget)->Parent, 0); 
+                            h; h = __GUI_LINKEDLIST_WidgetGetNext(0, h)) {
                             if (__GUI_WIDGET_IsVisible(h)) {    /* Check if widget is visible */
                                 break;
                             }
@@ -478,27 +478,39 @@ int32_t GUI_Process(void) {
     /**
      * Redrawing operations
      */
-    if (!(GUI.LCD.Flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM) && __GetNumberOfPendingWidgets(NULL)) {  /* Check if anything to draw first */
+    if (!(GUI.LCD.Flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM) && (GUI.Flags & GUI_FLAG_REDRAW)) {  /* Check if anything to draw first */
         uint32_t time;
         uint8_t active = GUI.LCD.ActiveLayer;
         uint8_t drawing = GUI.LCD.DrawingLayer;
         uint8_t result = 1;
+        GUI_Display_t* dispA = &GUI.LCD.Layers[active].Display;
+        
+        GUI.Flags &= ~GUI_FLAG_REDRAW;              /* Clear redraw flag */
         
         time = TM_GENERAL_DWTCounterGetValue();
-        /* Copy current status from one layer to another */
-        GUI.LL.Copy(&GUI.LCD, drawing, (void *)GUI.LCD.Layers[active].StartAddress, (void *)GUI.LCD.Layers[drawing].StartAddress, GUI.LCD.Width, GUI.LCD.Height, 0, 0);
+        
+        /* Copy from currently active layer to drawing layer only changes on layer */
+        GUI.LL.Copy(&GUI.LCD, drawing, 
+            (void *)(GUI.LCD.Layers[active].StartAddress + GUI.LCD.PixelSize * (dispA->Y1 * GUI.LCD.Width + dispA->X1)), 
+            (void *)(GUI.LCD.Layers[drawing].StartAddress + GUI.LCD.PixelSize * (dispA->Y1 * GUI.LCD.Width + dispA->X1)), 
+            dispA->X2 - dispA->X1,   
+            dispA->Y2 - dispA->Y1,
+            GUI.LCD.Width - (dispA->X2 - dispA->X1),
+            GUI.LCD.Width - (dispA->X2 - dispA->X1)
+        );
             
         /* Actually draw new screen based on setup */
         cnt = __RedrawWidgets(NULL);                /* Redraw all widgets now */
-        //__GUI_DEBUG("T: %d\r\n", TM_GENERAL_DWTCounterGetValue() - time);
-        
-        //GUI_DRAW_Rectangle(& GUI.Display, GUI.Display.X1, GUI.Display.Y1, GUI.Display.X2 - GUI.Display.X1, GUI.Display.Y2 - GUI.Display.Y1, GUI_COLOR_CYAN);
-        
-        /* Invalid clipping region */
-        GUI.Display.X1 = 0x7FFF;
-        GUI.Display.Y1 = 0x7FFF;
-        GUI.Display.X2 = 0x8000;
-        GUI.Display.Y2 = 0x8000;
+            
+        /* Get cycles for drawing */
+        time = TM_GENERAL_DWTCounterGetValue() - time;
+            
+//        __GUI_DEBUG("Copy: x: %d, y: %d, w: %d, h: %d, t: %d\r\n",
+//            dispA->X1, dispA->Y1,
+//            dispA->X2 - dispA->X1,
+//            dispA->Y2 - dispA->Y1,
+//            time
+//        );
         
         /* Set drawing layer as pending */
         GUI.LCD.Layers[drawing].Pending = 1;
@@ -511,6 +523,17 @@ int32_t GUI_Process(void) {
         /* New drawings won't be affected until confirmation from low-level is not received */
         GUI.LCD.ActiveLayer = drawing;
         GUI.LCD.DrawingLayer = active;
+        
+        /* Copy clipping data to region */
+        memcpy(&GUI.LCD.Layers[GUI.LCD.ActiveLayer].Display, &GUI.Display, sizeof(GUI.Display));
+        
+        /* Invalid clipping regions for next drawing process */
+        GUI.Display.X1 = 0x7FFF;
+        GUI.Display.Y1 = 0x7FFF;
+        GUI.Display.X2 = 0x8000;
+        GUI.Display.Y2 = 0x8000;
+        
+        __GUI_UNUSED(time);                         /* Prevent compiler warnings */
     }
     
     return cnt;                                     /* Return number of elements updated on GUI */

@@ -51,7 +51,7 @@ extern "C" {
 /**
  * \brief           List of radio colors
  */
-typedef enum {
+typedef enum GUI_RADIO_COLOR_t {
     GUI_RADIO_COLOR_BG = 0x00,              /*!< Background color index */
     GUI_RADIO_COLOR_FG,                     /*!< Foreground color index */
     GUI_RADIO_COLOR_BORDER,                 /*!< Border color index */

@@ -160,6 +160,7 @@ uint8_t __GUI_WIDGET_InvalidatePrivate(GUI_HANDLE_p h, uint8_t setclipping) {
         return 0;                                   /* Ignore invalidate process */
     }
     __GH(h1)->Flags |= GUI_FLAG_REDRAW;             /* Redraw widget */
+    GUI.Flags |= GUI_FLAG_REDRAW;                   /* Notify stack about redraw operations */
     
     if (setclipping) {
         __GUI_WIDGET_SetClippingRegion(h);          /* Set clipping region for widget redrawing operation */
@@ -387,6 +388,9 @@ GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h) {
 
 uint8_t __GUI_WIDGET_Invalidate(GUI_HANDLE_p h) {
     uint8_t ret = __GUI_WIDGET_InvalidatePrivate(h, 1); /* Invalidate widget with clipping */
+    if (__GH(h)->Widget->Flags & GUI_FLAG_WIDGET_INVALIDATE_PARENT && __GH(h)->Parent) {
+        __GUI_WIDGET_InvalidatePrivate(__GH(h)->Parent, 0); /* Invalidate parent object too */
+    }
     return ret;
 }
 
@@ -612,6 +616,7 @@ GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iD
         if (!result) {                              /* Check if widget should be added to linked list */
             __GUI_LINKEDLIST_WidgetAdd((GUI_HANDLE_ROOT_t *)__GH(h)->Parent, h);    /* Add entry to linkedlist of parent widget */
         }
+        __GUI_WIDGET_Callback(h, GUI_WC_PreInit, NULL, NULL);   /* Notify internal widget library about init successful */
         __GUI_WIDGET_Callback(h, GUI_WC_Init, NULL, NULL);  /* Notify user about init successful */
         __GUI_WIDGET_Invalidate(h);                 /* Invalidate object */
     } else {
