@@ -210,6 +210,16 @@ uint8_t __GUI_WIDGET_Invalidate(GUI_HANDLE_p h);
 uint8_t __GUI_WIDGET_InvalidateWithParent(GUI_HANDLE_p h);
 
 /**
+ * \brief           Set if parent widget should be invalidated when we invalidate primary widget
+ * \note            Useful for widgets where there is no background: Transparent images, textview, slider, etc
+ * \param[in]       h: Widget handle
+ * \param[in]       value: Value either to enable or disable. 0 = disable, > 0 = enable
+ * \retval          1: Value was set ok
+ * \retval          0: Value was not set
+ */
+uint8_t __GUI_WIDGET_SetInvalidateWithParent(GUI_HANDLE_p h, uint8_t value);
+
+/**
  * \brief           Set X and Y coordinates relative to parent object
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
@@ -287,9 +297,7 @@ uint8_t __GUI_WIDGET_SetText(GUI_HANDLE_p h, const GUI_Char* text);
  * \param[in]       size: Number of bytes to allocate
  * \retval          1: Successful
  * \retval          0: Failed
- * \sa              __GUI_WIDGET_FreeTextMemory
- * \sa              GUI_WIDGET_AllocTextMemory
- * \sa              GUI_WIDGET_FreeTextMemory
+ * \sa              __GUI_WIDGET_FreeTextMemory, GUI_WIDGET_AllocTextMemory, GUI_WIDGET_FreeTextMemory
  * \hideinitializer
  */
 uint8_t __GUI_WIDGET_AllocTextMemory(GUI_HANDLE_p h, uint32_t size);
@@ -300,9 +308,7 @@ uint8_t __GUI_WIDGET_AllocTextMemory(GUI_HANDLE_p h, uint32_t size);
  * \param[in,out]   h: Widget handle
  * \retval          1: Successful
  * \retval          0: Failed
- * \sa              __GUI_WIDGET_AllocTextMemory
- * \sa              GUI_WIDGET_AllocTextMemory
- * \sa              GUI_WIDGET_FreeTextMemory
+ * \sa              __GUI_WIDGET_AllocTextMemory, GUI_WIDGET_AllocTextMemory, GUI_WIDGET_FreeTextMemory
  * \hideinitializer
  */
 uint8_t __GUI_WIDGET_FreeTextMemory(GUI_HANDLE_p h);
@@ -398,9 +404,7 @@ uint8_t __GUI_WIDGET_SetWidth(GUI_HANDLE_p h, GUI_Dim_t width);
  * \param[in]       height: Height in units of pixels
  * \retval          1: Successful
  * \retval          1: Failed
- * \sa              GUI_WIDGET_SetWidth
- * \sa              GUI_WIDGET_SetWidthPercent
- * \sa              GUI_WIDGET_SetHeightPercent
+ * \sa              GUI_WIDGET_SetWidth, GUI_WIDGET_SetWidthPercent, GUI_WIDGET_SetHeightPercent
  */
 uint8_t __GUI_WIDGET_SetHeight(GUI_HANDLE_p h, GUI_Dim_t height);
 
@@ -411,9 +415,7 @@ uint8_t __GUI_WIDGET_SetHeight(GUI_HANDLE_p h, GUI_Dim_t height);
  * \param[in]       width: Width in percentage
  * \retval          1: Successful
  * \retval          1: Failed
- * \sa              GUI_WIDGET_SetWidth
- * \sa              GUI_WIDGET_SetHeight
- * \sa              GUI_WIDGET_SetHeightPercent
+ * \sa              GUI_WIDGET_SetWidth, GUI_WIDGET_SetHeight, GUI_WIDGET_SetHeightPercent
  */
 uint8_t __GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width);
 
@@ -424,9 +426,7 @@ uint8_t __GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width);
  * \param[in]       height: Height in percentage
  * \retval          1: Successful
  * \retval          1: Failed
- * \sa              GUI_WIDGET_SetWidth
- * \sa              GUI_WIDGET_SetHeight
- * \sa              GUI_WIDGET_SetWidthPercent
+ * \sa              GUI_WIDGET_SetWidth, GUI_WIDGET_SetHeight, GUI_WIDGET_SetWidthPercent
  */
 uint8_t __GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, GUI_Dim_t height);
 
@@ -771,11 +771,7 @@ uint8_t GUI_WIDGET_FreeTextMemory(GUI_HANDLE_p h);
  * \param[in]       *text: Pointer to text to set to widget
  * \retval          1: Text was set ok
  * \retval          0: Text was not set
- * \sa              GUI_WIDGET_AllocTextMemory
- * \sa              GUI_WIDGET_FreeTextMemory
- * \sa              GUI_WIDGET_SetFont
- * \sa              GUI_WIDGET_GetText
- * \sa              GUI_WIDGET_GetTextCopy
+ * \sa              GUI_WIDGET_AllocTextMemory, GUI_WIDGET_FreeTextMemory, GUI_WIDGET_SetFont, GUI_WIDGET_GetText, GUI_WIDGET_GetTextCopy
  */
 uint8_t GUI_WIDGET_SetText(GUI_HANDLE_p h, const GUI_Char* text);
 
@@ -783,8 +779,7 @@ uint8_t GUI_WIDGET_SetText(GUI_HANDLE_p h, const GUI_Char* text);
  * \brief           Get text from widget
  * \param[in,out]   h: Widget handle
  * \retval          Pointer to text from widget
- * \sa              GUI_WIDGET_SetText
- * \sa              GUI_WIDGET_GetTextCopy
+ * \sa              GUI_WIDGET_SetText, GUI_WIDGET_GetTextCopy
  */
 const GUI_Char* GUI_WIDGET_GetText(GUI_HANDLE_p h);
 
@@ -795,8 +790,7 @@ const GUI_Char* GUI_WIDGET_GetText(GUI_HANDLE_p h);
  * \param[out]      *dst: Destination pointer
  * \param[in]       len: Size of output buffer in units of \ref GUI_Char
  * \retval          Pointer to text from widget
- * \sa              GUI_WIDGET_SetText
- * \sa              GUI_WIDGET_GetText
+ * \sa              GUI_WIDGET_SetText, GUI_WIDGET_GetText
  */
 const GUI_Char* GUI_WIDGET_GetTextCopy(GUI_HANDLE_p h, GUI_Char* dst, uint32_t len);
 
@@ -806,7 +800,7 @@ const GUI_Char* GUI_WIDGET_GetTextCopy(GUI_HANDLE_p h, GUI_Char* dst, uint32_t l
  * \param[in]       *font: Pointer to \ref GUI_FONT_t object for font
  * \retval          1: Font was set ok
  * \retval          0: Font was not set
- * \sa              GUI_WIDGET_SetText
+ * \sa              GUI_WIDGET_SetText, GUI_WIDGET_GetText
  */
 uint8_t GUI_WIDGET_SetFont(GUI_HANDLE_p h, GUI_Const GUI_FONT_t* font);
 
@@ -827,9 +821,7 @@ uint8_t GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t width, GUI_Dim_t height);
  * \param[in]       width: Width in units of pixels
  * \retval          1: Width was set ok
  * \retval          0: Width was not set
- * \sa              GUI_WIDGET_SetHeight
- * \sa              GUI_WIDGET_SetWidthPercent
- * \sa              GUI_WIDGET_SetHeightPercent
+ * \sa              GUI_WIDGET_SetHeight, GUI_WIDGET_SetWidthPercent, GUI_WIDGET_SetHeightPercent
  */
 uint8_t GUI_WIDGET_SetWidth(GUI_HANDLE_p h, GUI_Dim_t width);
 
@@ -839,9 +831,7 @@ uint8_t GUI_WIDGET_SetWidth(GUI_HANDLE_p h, GUI_Dim_t width);
  * \param[in]       height: Height in units of pixels
  * \retval          1: Height was set ok
  * \retval          0: Height was not set
- * \sa              GUI_WIDGET_SetWidth
- * \sa              GUI_WIDGET_SetWidthPercent
- * \sa              GUI_WIDGET_SetHeightPercent
+ * \sa              GUI_WIDGET_SetWidth, GUI_WIDGET_SetWidthPercent, GUI_WIDGET_SetHeightPercent
  */
 uint8_t GUI_WIDGET_SetHeight(GUI_HANDLE_p h, GUI_Dim_t height);
 
@@ -851,9 +841,7 @@ uint8_t GUI_WIDGET_SetHeight(GUI_HANDLE_p h, GUI_Dim_t height);
  * \param[in]       width: Width in percentage
  * \retval          1: Width was set ok
  * \retval          0: Width was not set
- * \sa              GUI_WIDGET_SetWidth
- * \sa              GUI_WIDGET_SetHeight
- * \sa              GUI_WIDGET_SetHeightPercent
+ * \sa              GUI_WIDGET_SetWidth, GUI_WIDGET_SetHeight, GUI_WIDGET_SetHeightPercent
  */
 uint8_t GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width);
 
@@ -863,9 +851,7 @@ uint8_t GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width);
  * \param[in]       height: Height in percentage
  * \retval          1: Height was set ok
  * \retval          0: Height was not set
- * \sa              GUI_WIDGET_SetWidth
- * \sa              GUI_WIDGET_SetHeight
- * \sa              GUI_WIDGET_SetWidthPercent
+ * \sa              GUI_WIDGET_SetWidth, GUI_WIDGET_SetHeight, GUI_WIDGET_SetWidthPercent
  */
 uint8_t GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, GUI_Dim_t height);
 
@@ -875,8 +861,7 @@ uint8_t GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, GUI_Dim_t height);
  * \note            Even if percentage width is used, function will always return value in pixels
  * \param[in]       h: Pointer to \ref GUI_HANDLE_p structure
  * \retval          Total width in units of pixels
- * \sa              GUI_WIDGET_GetHeight
- * \sa              GUI_WIDGET_SetWidth
+ * \sa              GUI_WIDGET_GetHeight, GUI_WIDGET_SetWidth
  */
 GUI_Dim_t GUI_WIDGET_GetWidth(GUI_HANDLE_p h);
 
@@ -887,8 +872,7 @@ GUI_Dim_t GUI_WIDGET_GetWidth(GUI_HANDLE_p h);
  * \note            Even if percentage height is used, function will always return value in pixels
  * \param[in]       h: Pointer to \ref GUI_HANDLE_p structure
  * \retval          Total height in units of pixels
- * \sa              GUI_WIDGET_GetWidth
- * \sa              GUI_WIDGET_SetHeight
+ * \sa              GUI_WIDGET_GetWidth, GUI_WIDGET_SetHeight
  * \hideinitializer
  */
 GUI_Dim_t GUI_WIDGET_GetHeight(GUI_HANDLE_p h);

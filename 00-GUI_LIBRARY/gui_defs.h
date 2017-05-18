@@ -74,6 +74,21 @@ extern "C" {
 
 #define GUI_FLAG_LCD_WAIT_LAYER_CONFIRM ((uint32_t)0x00000001)  /*!< Indicates waiting for layer change confirmation */
 
+
+/**
+ * \defgroup        GUI_WIDGETS_CORE_FLAGS Widget type flags
+ * \brief           Flags used for widget type description
+ * \{
+ */
+
+#define GUI_FLAG_WIDGET_ALLOW_CHILDREN      ((uint32_t)0x00100000)  /*!< Widget allows children widgets */
+#define GUI_FLAG_WIDGET_DIALOG_BASE         ((uint32_t)0x00200000)  /*!< Widget is dialog base. When it is active, no other widget around dialog can be pressed */
+#define GUI_FLAG_WIDGET_INVALIDATE_PARENT   ((uint32_t)0x00400000)  /*!< Anytime widget is invalidated, parent should be invalidated too */
+
+/**
+ * \}
+ */
+
 /**
  * \}
  */
@@ -932,20 +947,6 @@ typedef enum GUI_WC_t {
 } GUI_WC_t;
 
 /**
- * \defgroup        GUI_WIDGETS_CORE_FLAGS Widget type flags
- * \brief           Flags used for widget type description
- * \{
- */
-
-#define GUI_FLAG_WIDGET_ALLOW_CHILDREN      ((uint16_t)0x0001)  /*!< Widget allows children widgets */
-#define GUI_FLAG_WIDGET_DIALOG_BASE         ((uint16_t)0x0002)  /*!< Widget is dialog base. When it is active, no other widget around dialog can be pressed */
-#define GUI_FLAG_WIDGET_INVALIDATE_PARENT   ((uint16_t)0x0004)  /*!< Anytime widget is invalidated, parent should be invalidated too */
-
-/**
- * \}
- */
-
-/**
  * \brief           Structure declaration
  */
 struct GUI_HANDLE;
@@ -972,7 +973,7 @@ typedef uint8_t (*GUI_WIDGET_CALLBACK_t) (GUI_HANDLE_p h, GUI_WC_t cmd, void* pa
 typedef struct GUI_WIDGET_t {
     const GUI_Char* Name;                   /*!< Widget name for display purpose */
     uint16_t Size;                          /*!< Bytes required for widget memory allocation */
-    uint8_t Flags;                          /*!< List of flags for widget setup. This field can use \ref GUI_WIDGETS_CORE_FLAGS flags */
+    uint32_t Flags;                         /*!< List of flags for widget setup. This field can use \ref GUI_WIDGETS_CORE_FLAGS flags */
     
     GUI_WIDGET_CALLBACK_t Callback;         /*!< Pointer to control function, returns 1 if command handled or 0 if not */
     const GUI_Color_t* Colors;              /*!< Pointer to list of colors as default values for widget */

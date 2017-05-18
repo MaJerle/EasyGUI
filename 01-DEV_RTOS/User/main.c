@@ -710,16 +710,16 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 break;
             }
             case ID_WIN_IMAGE: {
-//                handle = GUI_BUTTON_Create(0, 10, 10, 300, 50, h, 0, 0);
-//                GUI_WIDGET_SetText(handle, _T("Button"));
-//                handle = GUI_IMAGE_Create(0, 2, 2, bmimage_brand.xSize, bmimage_brand.ySize, h, 0, 0);
-//                GUI_IMAGE_SetSource(handle, &bmimage_brand);
-//                handle = GUI_IMAGE_Create(0, 200, 40, bmimage_voyo.xSize, bmimage_voyo.ySize, h, 0, 0);
-//                GUI_IMAGE_SetSource(handle, &bmimage_voyo);
-//                handle = GUI_IMAGE_Create(0, 350, 10, bmimage_voyo565.xSize, bmimage_voyo565.ySize, h, 0, 0);
-//                GUI_IMAGE_SetSource(handle, &bmimage_voyo565);
-//                handle = GUI_IMAGE_Create(0, 250, 10, maskImg.xSize, maskImg.ySize, h, 0, 0);
-//                GUI_IMAGE_SetSource(handle, &maskImg);
+                handle = GUI_BUTTON_Create(0, 10, 10, 300, 50, h, 0, 0);
+                GUI_WIDGET_SetText(handle, _T("Button"));
+                handle = GUI_IMAGE_Create(0, 2, 2, bmimage_brand.xSize, bmimage_brand.ySize, h, 0, 0);
+                GUI_IMAGE_SetSource(handle, &bmimage_brand);
+                handle = GUI_IMAGE_Create(0, 200, 40, bmimage_voyo.xSize, bmimage_voyo.ySize, h, 0, 0);
+                GUI_IMAGE_SetSource(handle, &bmimage_voyo);
+                handle = GUI_IMAGE_Create(0, 350, 10, bmimage_voyo565.xSize, bmimage_voyo565.ySize, h, 0, 0);
+                GUI_IMAGE_SetSource(handle, &bmimage_voyo565);
+                handle = GUI_IMAGE_Create(0, 250, 10, maskImg.xSize, maskImg.ySize, h, 0, 0);
+                GUI_IMAGE_SetSource(handle, &maskImg);
                 break;
             }
             case ID_WIN_SLIDER: {

@@ -50,7 +50,7 @@ uint8_t GUI_IMAGE_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
 const static GUI_WIDGET_t Widget = {
     .Name = _T("IMAGE"),                            /*!< Widget name */
     .Size = sizeof(GUI_IMAGE_t),                    /*!< Size of widget for memory allocation */
-    .Flags = GUI_FLAG_WIDGET_INVALIDATE_PARENT,     /*!< List of widget flags */
+    .Flags = 0,                                     /*!< List of widget flags */
     .Callback = GUI_IMAGE_Callback,                 /*!< Callback function */
     .Colors = 0,                                    /*!< List of default colors */
     .ColorsCount = 0,                               /*!< Define number of colors */
@@ -106,6 +106,7 @@ uint8_t GUI_IMAGE_SetSource(GUI_HANDLE_p h, const GUI_IMAGE_DESC_t* img) {
     __GUI_ENTER();                                  /* Enter GUI */
     
     __GI(h)->Image = img;                           /* Set image */
+    __GUI_WIDGET_SetInvalidateWithParent(h, img && img->BPP == 32); /* Set how invalidation functon hebaves */
     __GUI_WIDGET_InvalidateWithParent(h);           /* Invalidate widget */
 
     __GUI_LEAVE();                                  /* Leave GUI */

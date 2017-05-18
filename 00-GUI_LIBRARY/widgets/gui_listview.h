@@ -73,6 +73,10 @@ typedef struct GUI_LISTVIEW_ROW_t {
     GUI_LinkedListRoot_t Root;              /*!< Linked list root entry for \ref GUI_LISTVIEW_ITEM_t column data entries */
 } GUI_LISTVIEW_ROW_t;
 
+/**
+ * \brief           Listview row object
+ * \hideinitializer
+ */
 #define __GLR(x)            ((GUI_LISTVIEW_ROW_t *)(x))
 
 /**
@@ -102,7 +106,7 @@ typedef struct GUI_LISTVIEW_t {
      * Use colums as pointer to array for faster data access
      */
     GUI_LISTVIEW_COL_t** Cols;              /*!< Pointer to pointers of column elements */
-    uint16_t ColsCount;
+    uint16_t ColsCount;                     /*!< Number of columns in listview package */
     
     /**
      * Use linked list for rows
@@ -118,6 +122,9 @@ typedef struct GUI_LISTVIEW_t {
 } GUI_LISTVIEW_t;
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
+/**
+ * \brief           Typedef for row for public usage
+ */
 typedef void* GUI_LISTVIEW_ROW_p;
     
 /**
@@ -145,10 +152,41 @@ GUI_HANDLE_p GUI_LISTVIEW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Di
  */
 uint8_t GUI_LISTVIEW_SetColor(GUI_HANDLE_p h, GUI_LISTVIEW_COLOR_t index, GUI_Color_t color);
 
-
+/**
+ * \brief           Add new column to listview
+ * \param[in]       h: Widget handle
+ * \param[in]       *text: Text to display on top
+ * \retval          1: Column was added
+ * \retval          0: Column was not added
+ */
 uint8_t GUI_LISTVIEW_AddColumn(GUI_HANDLE_p h, const GUI_Char* text);
+
+/**
+ * \brief           Set column width in units of pixels
+ * \param[in]       h: Widget handle
+ * \param[in]       index: Index for column number. First column has index 0
+ * \param[in]       width: Width of column in units of pixels
+ * \retval          1: Column was added
+ * \retval          0: Column was not added
+ */
 uint8_t GUI_LISTVIEW_SetColumnWidth(GUI_HANDLE_p h, uint16_t index, GUI_Dim_t width);
+
+/**
+ * \brief           Add new empty row
+ * \param[in]       h: Widget handle
+ * \retval          Row object handle
+ */
 GUI_LISTVIEW_ROW_p GUI_LISTVIEW_AddRow(GUI_HANDLE_p h);
+
+/**
+ * \brief           Set item string for specific row and column
+ * \param[in]       h: Widget handle
+ * \param[in]       row: Row object handle, previously returned with \ref GUI_LISTVIEW_AddRow function
+ * \param[in]       col: Column number to set. First column is on index = 0
+ * \param[in]       *text: Text to use for item
+ * \retval          1: Item string was set ok
+ * \retval          0: Item string was not set
+ */
 uint8_t GUI_LISTVIEW_SetItemString(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row, uint16_t col, const GUI_Char* text);
 
 /**

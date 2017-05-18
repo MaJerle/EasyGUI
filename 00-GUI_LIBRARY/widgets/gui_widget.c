@@ -388,7 +388,9 @@ GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h) {
 
 uint8_t __GUI_WIDGET_Invalidate(GUI_HANDLE_p h) {
     uint8_t ret = __GUI_WIDGET_InvalidatePrivate(h, 1); /* Invalidate widget with clipping */
-    if (__GH(h)->Widget->Flags & GUI_FLAG_WIDGET_INVALIDATE_PARENT && __GH(h)->Parent) {
+    
+    if ((__GH(h)->Flags & GUI_FLAG_WIDGET_INVALIDATE_PARENT || __GH(h)->Widget->Flags & GUI_FLAG_WIDGET_INVALIDATE_PARENT)
+        && __GH(h)->Parent) {
         __GUI_WIDGET_InvalidatePrivate(__GH(h)->Parent, 0); /* Invalidate parent object too */
     }
     return ret;
@@ -398,6 +400,15 @@ uint8_t __GUI_WIDGET_InvalidateWithParent(GUI_HANDLE_p h) {
     __GUI_WIDGET_InvalidatePrivate(h, 1);           /* Invalidate object */
     if (__GH(h)->Parent) {                          /* If parent exists, invalid only parent */
         __GUI_WIDGET_InvalidatePrivate(__GH(h)->Parent, 0); /* Invalidate parent object */
+    }
+    return 1;
+}
+
+uint8_t __GUI_WIDGET_SetInvalidateWithParent(GUI_HANDLE_p h, uint8_t value) {
+    if (value) {                                    /* On positive value */
+        __GH(h)->Flags |= GUI_FLAG_WIDGET_INVALIDATE_PARENT;    /* Enable auto invalidation of parent widget */
+    } else {                                        /* On zero */
+        __GH(h)->Flags &= ~GUI_FLAG_WIDGET_INVALIDATE_PARENT;   /* Disable auto invalidation of parent widget */
     }
     return 1;
 }

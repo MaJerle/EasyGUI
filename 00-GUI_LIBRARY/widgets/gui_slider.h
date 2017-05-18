@@ -111,7 +111,13 @@ GUI_HANDLE_p GUI_SLIDER_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
  */
 uint8_t GUI_SLIDER_SetColor(GUI_HANDLE_p h, GUI_SLIDER_COLOR_t index, GUI_Color_t color);
 
-
+/**
+ * \brief           Set slider mode (orientation)
+ * \param[in]       h: Widget handle
+ * \param[in]       mode: Slider mode. This parameter can be a value of \ref GUI_SLIDER_MODE_t enumeration
+ * \retval          1: Mode was set ok
+ * \retval          0: Mode was not set
+ */
 uint8_t GUI_SLIDER_SetMode(GUI_HANDLE_p h, GUI_SLIDER_MODE_t mode);
 
 /**
