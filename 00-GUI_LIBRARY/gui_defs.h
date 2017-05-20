@@ -397,6 +397,7 @@ typedef struct GUI_LL_t {
     void            (*DrawImage16)  (GUI_LCD_t *, uint8_t, const GUI_IMAGE_DESC_t *, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t); /*!< Pointer to function for drawing 16BPP (RGB565) images */
     void            (*DrawImage24)  (GUI_LCD_t *, uint8_t, const GUI_IMAGE_DESC_t *, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t); /*!< Pointer to function for drawing 24BPP (RGB888) images */
     void            (*DrawImage32)  (GUI_LCD_t *, uint8_t, const GUI_IMAGE_DESC_t *, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t); /*!< Pointer to function for drawing 32BPP (ARGB8888) images */
+    void            (*CopyChar)     (GUI_LCD_t *, uint8_t, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);  /*!< Pointer to copy char function with alpha only as source */
 } GUI_LL_t;
 
 /**
@@ -432,6 +433,14 @@ typedef struct {
 #define GUI_FLAG_FONT_AA                0x01/*!< Indicates anti-alliasing on font */
 #define GUI_FLAG_FONT_RIGHTALIGN        0x02/*!< Indicates right align text if string length is too wide for rectangle */
 #define GUI_FLAG_FONT_MULTILINE         0x04/*!< Indicates multi line support on widget */
+
+#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+typedef struct GUI_FONT_CharEntry_t {
+    GUI_LinkedList_t List;                  /*!< Linked list entry. Must always be first on the list */
+    const GUI_FONT_CharInfo_t* Ch;          /*!< Character value */
+    const GUI_FONT_t* Font;                 /*!< Pointer to font structure */
+} GUI_FONT_CharEntry_t;
+#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 #if !defined(DOXYGEN)
 #define ________                        0x00
@@ -736,13 +745,15 @@ typedef GUI_TIMER_t* GUI_TIMER_p;
  * \note            Must always start with number 1
  */
 typedef enum GUI_WC_t {
+#if defined(GUI_INTERNAL) || defined(DOXYGEN)
     /**
      * \brief       Called just after widget has been created. Used for internal widget purpose only
      *
      * \param[in]   *param: None
-     * \param[out]  *result: None
+     * \param[out]  *result: Pointer to uint8_t variable with result. If set to 0 by user, widget will be deleted
      */
     GUI_WC_PreInit = 0x01,
+#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
     
     /**
      * \brief       Widget has been created and ready to init for future setup
@@ -750,7 +761,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: None
      * \param[out]  *result: None
      */
-    GUI_WC_Init,
+    GUI_WC_Init = 0x02,
     
     /**
      * \brief       Draw widget on screen
@@ -758,7 +769,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: Pointer to \ref GUI_Display_t structure
      * \param[out]  *result: None
      */
-    GUI_WC_Draw,
+    GUI_WC_Draw = 0x03,
     
     /**
      * \brief       Check if widget should not be added to linked list after creation
@@ -766,7 +777,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: None
      * \param[out]  *result: Pointer to uint8_t variable type to store result to [1 = exclude, 0 = do not exclude]
      */
-    GUI_WC_ExcludeLinkedList,
+    GUI_WC_ExcludeLinkedList = 0x04,
     
     /**
      * \brief       Check if widget can be removed. User can perform check if for example widget needs save or similar operation
@@ -775,7 +786,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: Pointer to uint8_t variable type to store result to [1 = remove, 0 = do not remove]
      * \sa          GUI_WC_Remove
      */
-    GUI_WC_CanRemove,
+    GUI_WC_CanRemove = 0x05,
     
     /**
      * \brief       Notification before widget delete will actually happen.
@@ -785,7 +796,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: None
      * \sa          GUI_WC_CanRemove
      */
-    GUI_WC_Remove,
+    GUI_WC_Remove = 0x06,
     
     /**
      * \brief       Notification called when widget becomes focused
@@ -794,7 +805,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: None
      * \sa          GUI_WC_FocusOut
      */
-    GUI_WC_FocusIn,
+    GUI_WC_FocusIn = 0x07,
     
     /**
      * \brief       Notification called when widget clears widget state
@@ -803,7 +814,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: None
      * \sa          GUI_WC_FocusIn
      */
-    GUI_WC_FocusOut,
+    GUI_WC_FocusOut = 0x08,
     
     /**
      * \brief       Notification for active status on widget
@@ -814,7 +825,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: None
      * \sa          GUI_WC_ActiveOut
      */
-    GUI_WC_ActiveIn,
+    GUI_WC_ActiveIn = 0x09,
     
     /**
      * \brief       Notification for cleared active status on widget
@@ -825,7 +836,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: None
      * \sa          GUI_WC_ActiveIn
      */
-    GUI_WC_ActiveOut,
+    GUI_WC_ActiveOut = 0x0A,
     
     /**
      * \brief       Notification when touch down event occurs on widget
@@ -835,7 +846,7 @@ typedef enum GUI_WC_t {
      * \sa          GUI_WC_TouchMove
      * \sa          GUI_WC_TouchEnd
      */
-    GUI_WC_TouchStart,
+    GUI_WC_TouchStart = 0x0B,
     
     /**
      * \brief       Notification when touch move event occurs on widget
@@ -845,7 +856,7 @@ typedef enum GUI_WC_t {
      * \sa          GUI_WC_TouchStart
      * \sa          GUI_WC_TouchEnd
      */
-    GUI_WC_TouchMove,
+    GUI_WC_TouchMove = 0x0C,
     
     /**
      * \brief       Notification when touch up event occurs on widget
@@ -855,7 +866,7 @@ typedef enum GUI_WC_t {
      * \sa          GUI_WC_TouchStart
      * \sa          GUI_WC_TouchMove
      */
-    GUI_WC_TouchEnd,
+    GUI_WC_TouchEnd = 0x0D,
     
     /**
      * \brief       Notification when key has been pushed to this widget
@@ -863,7 +874,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: Pointer to \ref __GUI_KeyboardData_t structure
      * \param[out]  *result: Value of \ref __GUI_KeyboardStatus_t enumeration
      */
-    GUI_WC_KeyPress,
+    GUI_WC_KeyPress = 0x0E,
     
     /**
      * \brief       Notification when click event has been detected
@@ -871,7 +882,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure with valid touch press location
      * \param[out]  *result: None
      */
-    GUI_WC_Click,
+    GUI_WC_Click = 0x0F,
     
     /**
      * \brief       Notification when long press has been detected
@@ -879,7 +890,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure with valid touch press location
      * \param[out]  *result: None
      */
-    GUI_WC_LongClick,
+    GUI_WC_LongClick = 0x10,
     
     /**
      * \brief       Notification when double click has been detected
@@ -887,7 +898,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure with valid touch press location
      * \param[out]  *result: None
      */
-    GUI_WC_DblClick,
+    GUI_WC_DblClick = 0x11,
     
     /**     
      * \brief       Notification when widget selection has changed
@@ -899,7 +910,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: None
      * \param[out]  *result: None
      */
-    GUI_WC_SelectionChanged,
+    GUI_WC_SelectionChanged = 0x12,
     
     /**     
      * \brief       Value of widget has been changed
@@ -911,7 +922,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: None
      * \param[out]  *result: None
      */
-    GUI_WC_ValueChanged,
+    GUI_WC_ValueChanged = 0x13,
     
     /**     
      * \brief       Widget text value has been changed
@@ -921,7 +932,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: None
      * \param[out]  *result: None
      */
-    GUI_WC_TextChanged,
+    GUI_WC_TextChanged = 0x14,
     
     /**     
      * \brief       Widget should increase/decrease selection
@@ -932,7 +943,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: Pointer to \ref int16_t variable for amount of increase/decrease value
      * \param[out]  *result: Pointer to output \ref uint8_t variable to save status of increase/decrease operation
      */
-    GUI_WC_IncSelection,
+    GUI_WC_IncSelection = 0x15,
     
     
     /**     
@@ -943,7 +954,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: Pointer to int variable passed to dismiss function
      * \param[out]  *result: None
      */
-    GUI_WC_OnDismiss,
+    GUI_WC_OnDismiss = 0x16,
 } GUI_WC_t;
 
 /**

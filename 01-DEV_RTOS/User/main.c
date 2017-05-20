@@ -54,7 +54,7 @@ CTS         PA3                 RTS from ST to CTS from GSM
 #include "tm_stm32_general.h"
 #include "main.h"
 #include "tm_stm32_sdram.h"
-
+#define GUI_INTERNAL
 #include "gui.h"
 #include "gui_window.h"
 #include "gui_button.h"
@@ -212,7 +212,7 @@ extern GUI_t GUI;
 #define IMG_WIDTH       64
 #define IMG_HEIGHT      64
 
-uint32_t Mask[IMG_WIDTH * IMG_HEIGHT];
+uint8_t Mask[IMG_WIDTH * IMG_HEIGHT];
 
 #define __ABS(x)        ((uint32_t)((int32_t)(x) < 0 ? -(x) : (x)))
 void CreateMask(void) {
@@ -220,7 +220,7 @@ void CreateMask(void) {
     uint32_t midX = IMG_WIDTH >> 1;
     uint32_t midY = IMG_HEIGHT >> 1;
     uint32_t alphaX, alphaY;
-    uint32_t* ptr = Mask;
+    uint8_t* ptr = Mask;
     uint32_t multX = 256 / midX;
     uint32_t multY = 256 / midY;
     
@@ -229,13 +229,32 @@ void CreateMask(void) {
         for (x = 0; x < IMG_WIDTH; x++) {
             alphaX = (__ABS((int16_t)x - (int16_t)midX) << 2) * multX;
             
-            *ptr = ((((alphaX * alphaY) >> 8) & 0xFF) << 24) | 0x0000FF00;
-            if (*ptr == 0x00000000 || *ptr == 0xFF000000) {
-                *ptr = *ptr;
-            }
+            *ptr = ((alphaX * alphaY) >> 8) & 0xFF;
             ptr++;
         }
     }
+}
+
+void DMA2D_Transfer(void) {
+    uint32_t dst;
+    
+    dst = GUI.LCD.Layers[GUI.LCD.ActiveLayer].StartAddress;
+    
+    while (DMA2D->CR & DMA2D_CR_START);             /* Wait finished */
+    
+    DMA2D->CR = DMA2D_M2M_BLEND;                    /* Memory to memory with blending */
+    DMA2D->FGMAR = (uint32_t)Mask;
+    DMA2D->BGMAR = (uint32_t)dst;                       
+    DMA2D->OMAR = (uint32_t)dst;
+    DMA2D->FGOR = 0;
+    DMA2D->BGOR = GUI.LCD.Width - IMG_WIDTH * 2;
+    DMA2D->FGCOLR = 0x80FF0000;
+    DMA2D->OOR = GUI.LCD.Width - IMG_WIDTH * 2;  
+    DMA2D->FGPFCCR = DMA2D_INPUT_A4;                   /* Foreground PFC Control Register */
+    DMA2D->BGPFCCR = DMA2D_OUTPUT_RGB565;                   /* Background PFC Control Register (Defines the BG pixel format) */
+    DMA2D->OPFCCR  = DMA2D_OUTPUT_RGB565;                   /* Output     PFC Control Register (Defines the output pixel format) */
+    DMA2D->NLR = (uint32_t)(IMG_WIDTH << 17) | (uint16_t)IMG_HEIGHT; 
+    DMA2D->CR |= DMA2D_CR_START;
 }
 
 int main(void) {
@@ -305,13 +324,14 @@ int main(void) {
         }
         
         if (pressed) {
-            pressed = GUI_DIALOG_CreateBlocking(ID_WIN_DIALOG, 50, 10, 300, 150, 0, dialog_callback, 0);
-            if (pressed == 1) {
-                __GUI_DEBUG("Confirmed\r\n");
-                TM_DISCO_LedToggle(LED_GREEN);
-            } else if (pressed == 0) {
-                __GUI_DEBUG("Canceled\r\n");
-            }
+            DMA2D_Transfer();
+//            pressed = GUI_DIALOG_CreateBlocking(ID_WIN_DIALOG, 50, 10, 300, 150, 0, dialog_callback, 0);
+//            if (pressed == 1) {
+//                __GUI_DEBUG("Confirmed\r\n");
+//                TM_DISCO_LedToggle(LED_GREEN);
+//            } else if (pressed == 0) {
+//                __GUI_DEBUG("Canceled\r\n");
+//            }
             pressed = 0;
         }
         
@@ -710,26 +730,26 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 break;
             }
             case ID_WIN_IMAGE: {
-                handle = GUI_BUTTON_Create(0, 10, 10, 300, 50, h, 0, 0);
-                GUI_WIDGET_SetText(handle, _T("Button"));
-                handle = GUI_IMAGE_Create(0, 2, 2, bmimage_brand.xSize, bmimage_brand.ySize, h, 0, 0);
-                GUI_IMAGE_SetSource(handle, &bmimage_brand);
-                handle = GUI_IMAGE_Create(0, 200, 40, bmimage_voyo.xSize, bmimage_voyo.ySize, h, 0, 0);
-                GUI_IMAGE_SetSource(handle, &bmimage_voyo);
-                handle = GUI_IMAGE_Create(0, 350, 10, bmimage_voyo565.xSize, bmimage_voyo565.ySize, h, 0, 0);
-                GUI_IMAGE_SetSource(handle, &bmimage_voyo565);
-                handle = GUI_IMAGE_Create(0, 250, 10, maskImg.xSize, maskImg.ySize, h, 0, 0);
-                GUI_IMAGE_SetSource(handle, &maskImg);
+//                handle = GUI_BUTTON_Create(0, 10, 10, 300, 50, h, 0, 0);
+//                GUI_WIDGET_SetText(handle, _T("Button"));
+//                handle = GUI_IMAGE_Create(0, 2, 2, bmimage_brand.xSize, bmimage_brand.ySize, h, 0, 0);
+//                GUI_IMAGE_SetSource(handle, &bmimage_brand);
+//                handle = GUI_IMAGE_Create(0, 200, 40, bmimage_voyo.xSize, bmimage_voyo.ySize, h, 0, 0);
+//                GUI_IMAGE_SetSource(handle, &bmimage_voyo);
+//                handle = GUI_IMAGE_Create(0, 350, 10, bmimage_voyo565.xSize, bmimage_voyo565.ySize, h, 0, 0);
+//                GUI_IMAGE_SetSource(handle, &bmimage_voyo565);
+//                handle = GUI_IMAGE_Create(0, 250, 10, maskImg.xSize, maskImg.ySize, h, 0, 0);
+//                GUI_IMAGE_SetSource(handle, &maskImg);
                 break;
             }
             case ID_WIN_SLIDER: {
-                handle = GUI_SLIDER_Create(0, 10, 10, 400, 50, h, slider_callback, 0);
+                handle = GUI_SLIDER_Create(0, 5, 5, 400, 50, h, slider_callback, 0);
                 GUI_SLIDER_SetMode(handle, GUI_SLIDER_MODE_RIGHT_LEFT);
-                handle = GUI_SLIDER_Create(0, 10, 70, 400, 15, h, slider_callback, 0);
+                handle = GUI_SLIDER_Create(0, 5, 70, 400, 15, h, slider_callback, 0);
                 GUI_SLIDER_SetMode(handle, GUI_SLIDER_MODE_LEFT_RIGHT);
-                handle = GUI_SLIDER_Create(0, 450, 10, 80, 400, h, slider_callback, 0);
+                handle = GUI_SLIDER_Create(0, 430, 10, 10, 230, h, slider_callback, 0);
                 GUI_SLIDER_SetMode(handle, GUI_SLIDER_MODE_BOTTOM_TOP);
-                handle = GUI_SLIDER_Create(0, 550, 10, 80, 400, h, slider_callback, 0);
+                handle = GUI_SLIDER_Create(0, 450, 10, 20, 230, h, slider_callback, 0);
                 GUI_SLIDER_SetMode(handle, GUI_SLIDER_MODE_TOP_BOTTOM);
                 break;
             }

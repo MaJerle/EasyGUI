@@ -86,7 +86,7 @@ void _LCD_Init(void) {
     layer_cfg.WindowX1 = LCD_WIDTH;
     layer_cfg.WindowY0 = 0;
     layer_cfg.WindowY1 = LCD_HEIGHT; 
-#if LCD_PIXEL_SIZE == 2
+#if defined(LCD_COLOR_FORMAT_RGB565)
     layer_cfg.PixelFormat = LTDC_PIXEL_FORMAT_RGB565;
 #else
     layer_cfg.PixelFormat = LTDC_PIXEL_FORMAT_ARGB8888;
@@ -125,7 +125,6 @@ void HAL_LTDC_LineEvenCallback(LTDC_HandleTypeDef *hltdc) {
     uint8_t i = 0;
     for (i = 0; i < GUI_LAYERS; i++) {
         if (Layers[i].Pending) {                /* Is layer waiting for redraw operation */
-            //LTDC_LAYER(hltdc, 0)->CFBAR = Layers[i].StartAddress;
             LTDC_LAYER(hltdc, !!i)->CACR &= ~(LTDC_LxCACR_CONSTA);
             LTDC_LAYER(hltdc, !!i)->CACR = (255);
             LTDC_LAYER(hltdc, !i)->CACR &= ~(LTDC_LxCACR_CONSTA);

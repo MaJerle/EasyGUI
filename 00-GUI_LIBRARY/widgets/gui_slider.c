@@ -138,7 +138,26 @@ void __TouchHandle(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
     }
     
     __SetValue(h, value);                           /* Set new value */
-    __GUI_WIDGET_Invalidate(h);           /* Invalidate with parent */
+    __GUI_WIDGET_Invalidate(h);                     /* Invalidate with parent */
+}
+
+/* Timer callback function for slider widget */
+static
+void __TimerCallback(GUI_TIMER_t* timer) {
+    GUI_HANDLE_p h = (GUI_HANDLE_p)__GUI_TIMER_GetParams(timer);    /* Get user parameters */
+    if (__GUI_WIDGET_IsActive(h)) {                 /* Timer is in focus */
+        if (__GS(h)->CurrentSize < __GS(h)->MaxSize) {
+            __GS(h)->CurrentSize++;                 /* Increase size */
+            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
+        }
+    } else {
+        if (__GS(h)->CurrentSize > 0) {
+            __GS(h)->CurrentSize--;
+            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
+        } else {
+            __GUI_TIMER_Stop(timer);                /* Stop timer execution */
+        }
+    }
 }
 
 /* Callback function */
@@ -150,12 +169,21 @@ uint8_t GUI_SLIDER_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
             o->Min = 0;                             /* Set default minimal value */
             o->Max = 100;                           /* Set default maximal value */
             o->Value = 50;                          /* Set default value */
+            
+            o->MaxSize = 4;
+            o->CurrentSize = 0;
+            o->C.Timer = __GUI_TIMER_Create(30, __TimerCallback, o);    /* Create timer for widget */
+            if (!o->C.Timer) {                      /* Check if timer created */
+                *(uint8_t *)result = 0;             /* Failed, widget will be deleted */
+                return 1;
+            }
             return 1;
         }
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
             GUI_Dim_t x, y, width, height, delta, deltaH, recParam, offset;
             GUI_Color_t c1, c2;
+            GUI_Dim_t circleSize;
 
             x = __GUI_WIDGET_GetAbsoluteX(h);       /* Get absolute X coordinate */
             y = __GUI_WIDGET_GetAbsoluteY(h);       /* Get absolute Y coordinate */
@@ -178,6 +206,8 @@ uint8_t GUI_SLIDER_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
                 c2 = __GUI_WIDGET_GetColor(h, GUI_SLIDER_COLOR_BG_NONACTIVE);
             }
             
+            circleSize = (deltaH >> 2) + o->CurrentSize * (deltaH - (deltaH >> 2)) / o->MaxSize;    /* Get circle size */
+            
             /* Draw bottom rectangle */
             if (__IsHorizontal(h)) {                /* Horizontal slider */
                 offset = 0;                         /* Make start offset */
@@ -191,8 +221,8 @@ uint8_t GUI_SLIDER_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
                 GUI_DRAW_FilledRoundedRectangle(disp, x, y + ((delta - recParam) >> 1), offset, recParam, (recParam >> 1), c1);   
                 GUI_DRAW_FilledRoundedRectangle(disp, x + offset, y + ((delta - recParam) >> 1), width - offset, recParam, (recParam >> 1), c2);
                 GUI_DRAW_RoundedRectangle(disp, x, y + ((delta - recParam) >> 1), width, recParam, (recParam >> 1), __GUI_WIDGET_GetColor(h, GUI_SLIDER_COLOR_BORDER));
-                GUI_DRAW_FilledCircle(disp, x + offset, y + deltaH, deltaH, __GUI_WIDGET_GetColor(h, GUI_SLIDER_COLOR_FG));
-                GUI_DRAW_Circle(disp, x + offset, y + deltaH, deltaH, __GUI_WIDGET_GetColor(h, GUI_SLIDER_COLOR_BORDER));
+                GUI_DRAW_FilledCircle(disp, x + offset, y + deltaH, circleSize, __GUI_WIDGET_GetColor(h, GUI_SLIDER_COLOR_FG));
+                GUI_DRAW_Circle(disp, x + offset, y + deltaH, circleSize, __GUI_WIDGET_GetColor(h, GUI_SLIDER_COLOR_BORDER));
             } else {                                /* Vertical slider */
                 offset = 0;                         /* Make start offset */
                 height -= delta;
@@ -205,8 +235,8 @@ uint8_t GUI_SLIDER_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
                 GUI_DRAW_FilledRoundedRectangle(disp, x + ((delta - recParam) >> 1), y, recParam, offset, (recParam >> 1), c1);   
                 GUI_DRAW_FilledRoundedRectangle(disp, x + ((delta - recParam) >> 1), y + offset, recParam, height - offset, (recParam >> 1), c2);
                 GUI_DRAW_RoundedRectangle(disp, x + ((delta - recParam) >> 1), y, recParam, height, (recParam >> 1), __GUI_WIDGET_GetColor(h, GUI_SLIDER_COLOR_BORDER)); 
-                GUI_DRAW_FilledCircle(disp, x + deltaH, y + offset, deltaH, __GUI_WIDGET_GetColor(h, GUI_SLIDER_COLOR_FG));
-                GUI_DRAW_Circle(disp, x + deltaH, y + offset, deltaH, __GUI_WIDGET_GetColor(h, GUI_SLIDER_COLOR_BORDER));
+                GUI_DRAW_FilledCircle(disp, x + deltaH, y + offset, circleSize, __GUI_WIDGET_GetColor(h, GUI_SLIDER_COLOR_FG));
+                GUI_DRAW_Circle(disp, x + deltaH, y + offset, circleSize, __GUI_WIDGET_GetColor(h, GUI_SLIDER_COLOR_BORDER));
             }
             
             return 1;
@@ -225,6 +255,14 @@ uint8_t GUI_SLIDER_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
         case GUI_WC_TouchEnd:
             return 1;
 #endif /* GUI_USE_TOUCH */
+        case GUI_WC_ActiveIn: {
+            __GUI_TIMER_StartPeriodic(o->C.Timer);  /* Start animation timer */
+            return 1;
+        }
+        case GUI_WC_ActiveOut: {
+            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
+            return 1;
+        }
         default:                                    /* Handle default option */
             __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */

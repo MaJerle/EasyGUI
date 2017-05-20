@@ -704,13 +704,22 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
 #define __GUI_WIDGET_IsDialogBase(h)                (__GH(h)->Widget->Flags & GUI_FLAG_WIDGET_DIALOG_BASE)
 
 /**
- * \brief           Checks if Widget handle is currently in focus
+ * \brief           Checks if widget handle is currently in focus
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
  * \retval          Status whether widget is in focus or not
  * \hideinitializer
  */
 #define __GUI_WIDGET_IsFocused(h)                   (__GH(h)->Flags & GUI_FLAG_FOCUS)
+
+/**
+ * \brief           Checks if widget handle is currently active
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          Status whether widget is active or not
+ * \hideinitializer
+ */
+#define __GUI_WIDGET_IsActive(h)                    (__GH(h)->Flags & GUI_FLAG_ACTIVE)
 
 /**
  * \}

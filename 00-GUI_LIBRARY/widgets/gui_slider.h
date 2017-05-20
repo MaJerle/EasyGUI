@@ -82,6 +82,9 @@ typedef struct GUI_SLIDER_t {
     int32_t Value;                          /*!< Current value for slider */
     GUI_SLIDER_MODE_t Mode;                 /*!< Slider mode */
     
+    uint8_t MaxSize;                        /*!< Max size for animation */
+    uint8_t CurrentSize;                    /*!< Current size for animation */
+    
     uint8_t Flags;                          /*!< Widget flags */
 } GUI_SLIDER_t;
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */

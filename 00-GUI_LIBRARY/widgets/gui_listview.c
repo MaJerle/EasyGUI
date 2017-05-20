@@ -94,9 +94,7 @@ GUI_LISTVIEW_ROW_t* __GetRow(GUI_HANDLE_p h, uint16_t r) {
 /* Get item pointer from row pointer and column index */
 static
 GUI_LISTVIEW_ITEM_t* __GetItemFromRow(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_t* row, uint8_t c) {
-    uint8_t i;
-    
-    if (!row) {
+    if (!row) {                                     /* Check input value if exists */
         return NULL;
     }
     
@@ -668,4 +666,25 @@ int16_t GUI_LISTVIEW_GetSelection(GUI_HANDLE_p h) {
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return selection;
+}
+
+uint8_t GUI_LISTVIEW_GetItemValue(GUI_HANDLE_p h, uint16_t rindex, uint16_t cindex, GUI_Char* dst, uint32_t length) {
+    int16_t ret = 0;
+    GUI_LISTVIEW_ROW_t* row;
+    
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget && dst && length > 1);   /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    *dst = 0;
+    row = (GUI_LISTVIEW_ROW_t *)__GetRow(h, rindex);    /* Get row pointer */
+    if (row) {
+        GUI_LISTVIEW_ITEM_t* item = __GetItemFromRow(h, row, cindex);   /* Get item from column */
+        if (item) {                                 /* In case of valid index */
+            GUI_STRING_CopyN(dst, item->Text, length - 1);  /* Copy text to destination */
+            ret = 1;
+        }
+    }
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
 }

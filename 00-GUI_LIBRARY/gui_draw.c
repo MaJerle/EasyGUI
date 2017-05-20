@@ -63,7 +63,7 @@ static
 void __StringGetCharSize(const GUI_FONT_t* font, uint32_t ch, GUI_iDim_t* width, GUI_iDim_t* height) {
     const GUI_FONT_CharInfo_t* c = 0;
     
-    c = __StringGetCharPtr(font, ch);
+    c = __StringGetCharPtr(font, ch);               /* Get character from font */
     if (c) {
         *width = c->xSize + c->xMargin;
         *height = c->ySize;
@@ -146,17 +146,149 @@ uint16_t __StringRectangle(const GUI_FONT_t* font, const GUI_Char* str, const GU
     return cnt;                                     /* Return number of characters processed */
 }
 
+/* Get font char object from memory with alpha values */
+static
+GUI_FONT_CharEntry_t* __GetCharEntryFromFont(const GUI_FONT_t* font, const GUI_FONT_CharInfo_t* c) {
+    GUI_FONT_CharEntry_t* entry;
+    for (entry = (GUI_FONT_CharEntry_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&GUI.RootFonts, 0); entry;
+        entry = (GUI_FONT_CharEntry_t *)__GUI_LINKEDLIST_GETNEXT_GEN(0, (GUI_LinkedList_t *)entry)) {
+        if (entry->Font == font && entry->Ch == c) {
+            return entry;
+        }
+    }
+    return 0;
+}
+
+/* Create char and put it to RAM for fast drawing with memory to memory copy */
+static
+GUI_FONT_CharEntry_t* __CreateCharEntryFromFont(const GUI_FONT_t* font, const GUI_FONT_CharInfo_t* c) {
+    GUI_FONT_CharEntry_t* entry;
+    uint16_t columns;
+    uint16_t memsize = sizeof(*entry);              /* Get size of entry */
+    uint16_t memDataSize;
+    
+    /* Calculate memory size for data */
+    memDataSize = c->xSize * c->ySize;
+    if ((c->xPos * c->yPos) % 2) {
+        memDataSize++;
+    }
+    
+    memsize += memDataSize;
+    entry = (GUI_FONT_CharEntry_t *)__GUI_MEMALLOC(memsize);    /* Allocate memory for entry */
+    if (entry) {                                    /* Allocation was successful */
+        uint16_t i, x;
+        uint8_t b, k, t;
+        uint8_t* ptr = (uint8_t *)entry;            /* Go to memory size */
+        ptr += sizeof(*entry);                      /* Go to start of data */
+        
+        entry->Ch = c;                              /* Set pointer to character */
+        entry->Font = font;                         /* Set pointer to font structure */
+        
+        if (font->Flags & GUI_FLAG_FONT_AA) {       /* Anti-alliased font */
+            columns = c->xSize / 4;                 /* Calculate number of bytes used for single character line */
+            if (c->xSize % 4) {                     /* If only 1 column used */
+                columns++;
+            }
+            x = 0;
+            for (i = 0; i < c->ySize * columns; i++) {  /* Inspect all vertical lines */
+                b = c->Data[i];                     /* Get byte of data */
+                for (k = 0; k < 4; k++) {           /* Scan each bit in byte */
+                    t = (b >> (6 - 2 * k)) & 0x03;  /* Get temporary bits on bottom */
+                    switch (t) {
+                        case 0:
+                            *ptr |= 0x00;// << (4 * (k % 2));
+                            break;
+                        case 1:
+                            *ptr |= 0x55;// << (4 * (k % 2));
+                            break;
+                        case 2:
+                            *ptr |= 0xAA;// << (4 * (k % 2));
+                            break;
+                        default:
+                            *ptr |= 0xFF;// << (4 * (k % 2));
+                    }
+                    if (k % 1) {                    /* Increase pointer to next byte */
+                        //ptr++;
+                    }
+                    ptr++;
+                    x++;
+                    if (x == c->xSize) {
+                        x = 0;
+                        break;
+                    }
+                }
+            }
+        }
+        
+        __GUI_LINKEDLIST_ADD_GEN(&GUI.RootFonts, (GUI_LinkedList_t *)entry);    /* Add entry to linked list */
+    }
+    
+    return entry;                                   /* Return new created entry */
+}
+
 /* Draw character to screen */
 /* X and Y coordinates are TOP LEFT coordinates for character */
-void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, GUI_DRAW_FONT_t* draw, GUI_iDim_t x, GUI_iDim_t y, const GUI_FONT_CharInfo_t* c) {
+void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DRAW_FONT_t* draw, GUI_iDim_t x, GUI_iDim_t y, const GUI_FONT_CharInfo_t* c) {
     GUI_Byte i, b;
     GUI_iDim_t x1;
     GUI_iByte k;
     GUI_Byte columns;
     
+    while (!GUI.LL.IsReady(&GUI.LCD));              /* Wait till ready */
+    
     y += c->yPos;                                   /* Set Y position */
     
-    while (!GUI.LL.IsReady(&GUI.LCD));              /* Wait till ready */
+    if (!__GUI_RECT_MATCH(
+        disp->X1, disp->Y1, disp->X2, disp->Y2,
+        x, y, x + c->xSize, y + c->ySize
+    )) {
+        return;
+    }
+    
+    if (GUI.LL.CopyChar) {                          /* If copying character function exists in low-level part */
+        GUI_FONT_CharEntry_t* entry = __GetCharEntryFromFont(font, c);  /* Get char entry from font and character for fast alpha drawing operations */
+        if (!entry) {
+            entry = __CreateCharEntryFromFont(font, c); /* Create new entry */
+        }
+        if (entry) {                                /* We have valid data */
+            GUI_Dim_t width, height, offlineSrc, offlineDst;
+            uint8_t* dst = 0;
+            uint8_t* ptr = (uint8_t *)entry;        /* Get pointer */
+            
+            ptr += sizeof(*entry);                  /* Go to start of data array */
+            dst += GUI.LCD.Layers[GUI.LCD.DrawingLayer].StartAddress;
+            dst += (y * GUI.LCD.Width + x) * GUI.LCD.PixelSize;
+            
+            width = c->xSize;                       /* Get X size */
+            height = c->ySize;                      /* Get Y size */
+            
+            if (y < disp->Y1) {
+                ptr += (disp->Y1 - y) * c->xSize;   /* Set offset for number of lines */
+                dst += (disp->Y1 - y) * GUI.LCD.Width * GUI.LCD.PixelSize;  /* Set offset for number of LCD lines */
+                height -= disp->Y1 - y;
+            }
+            if ((y + c->ySize) > disp->Y2) {
+                height -= y + c->ySize - disp->Y2;  /* Decrease effective height */
+            }
+            if (x < disp->X1) {                     /* Set offset start address if required */
+                ptr += (disp->X1 - x);              /* Set offset of start address in X direction */
+                dst += (disp->X1 - x) * GUI.LCD.PixelSize;  /* Set offset of start address in X direction */
+                width -= disp->X1 - x;              /* Increase source offline */
+            }
+            if ((x + c->xSize) > disp->X2) {
+                width -= x + c->xSize - disp->X2;   /* Decrease effective width */
+            }
+            
+            offlineSrc = c->xSize - width;        /* Set offline source */
+            offlineDst = GUI.LCD.Width - width;     /* Set offline destination */
+            
+            //TODO: Handle double colors on single character
+            GUI.LL.CopyChar(&GUI.LCD, GUI.LCD.DrawingLayer, ptr, dst, 
+                width, height,
+                offlineSrc, offlineDst, (draw->X + draw->Color1Width) > x ? draw->Color1 : draw->Color2);
+            return;
+        }
+    }
     
     if (font->Flags & GUI_FLAG_FONT_AA) {           /* Font has anti alliasing enabled */
         GUI_Color_t color;                          /* Temporary color for AA */
@@ -165,7 +297,7 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, GUI_DRAW_FON
         columns = c->xSize / 4;                     /* Calculate number of bytes used for single character line */
         if (c->xSize % 4) {                         /* If only 1 column used */
             columns++;
-        }   
+        }
         
         for (i = 0; i < columns * c->ySize; i++) {  /* Go through all data bytes */
             if (y >= disp->Y1 && y <= disp->Y2 && y < (draw->Y + draw->Height)) {   /* Do not draw when we are outside clipping are */            
@@ -283,11 +415,8 @@ void GUI_DRAW_FillScreen(const GUI_Display_t* disp, GUI_Color_t color) {
 
 void GUI_DRAW_Fill(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_Color_t color) {
     if (                                            /* Check if redraw is inside area */
-        x >= disp->X2 ||                            /* Too right */
-        y >= disp->Y2 ||                            /* Too bottom */
-        (x + width) < disp->X1 ||                   /* Too left */
-        (y + height) < disp->Y1                     /* Too top */
-        ) {
+        !__GUI_RECT_MATCH(  x, y, x + width, y + width,
+                            disp->X1, disp->Y1, disp->X2, disp->Y2)) {
         return;
     }
         
@@ -312,7 +441,9 @@ void GUI_DRAW_Fill(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iD
     if ((y + height) > disp->Y2) {
         height = disp->Y2 - y;
     }
-    GUI.LL.FillRect(&GUI.LCD, GUI.LCD.DrawingLayer, x, y, width, height, color);
+    if (width > 0 && height > 0) {
+        GUI.LL.FillRect(&GUI.LCD, GUI.LCD.DrawingLayer, x, y, width, height, color);
+    }
 }
 
 void GUI_DRAW_SetPixel(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_Color_t color) {

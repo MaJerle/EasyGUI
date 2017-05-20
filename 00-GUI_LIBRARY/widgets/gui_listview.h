@@ -237,6 +237,18 @@ uint8_t GUI_LISTVIEW_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible);
 uint8_t GUI_LISTVIEW_Scroll(GUI_HANDLE_p h, int16_t step);
 
 /**
+ * \brief           Get item text value from row index and column index
+ * \param[in,out]   h: Widget handle
+ * \param[in]       rindex: Row index
+ * \param[in]       cindex: Column index
+ * \param[in]       *dst: Pointer to \ref GUI_Char variable to save text to it
+ * \param[in]       length: Length of destination array
+ * \retval          1: Text was found and copied
+ * \retval          0: Text was not found
+ */
+uint8_t GUI_LISTVIEW_GetItemValue(GUI_HANDLE_p h, uint16_t rindex, uint16_t cindex, GUI_Char* dst, uint32_t length);
+
+/**
  * \}
  */
 

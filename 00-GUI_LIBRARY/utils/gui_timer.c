@@ -37,6 +37,9 @@
 /***                           Private definitions                           **/
 /******************************************************************************/
 /******************************************************************************/
+#define GUI_FLAG_TIMER_ACTIVE           ((uint16_t)(1 << 0UL))  /*!< Timer is active */
+#define GUI_FLAG_TIMER_PERIODIC         ((uint16_t)(1 << 1UL))  /*!< Timer will start from beginning after reach end */ 
+#define GUI_FLAG_TIMER_CALL             ((uint16_t)(1 << 2UL))  /*!< Call callback function on timer */
 
 /******************************************************************************/
 /******************************************************************************/
@@ -55,7 +58,7 @@
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_TIMER_t* __GUI_TIMER_Create(uint16_t period, void (*callback)(GUI_TIMER_t *), void* params, uint8_t flags) {
+GUI_TIMER_t* __GUI_TIMER_Create(uint16_t period, void (*callback)(GUI_TIMER_t *), void* params) {
     GUI_TIMER_t* ptr;
     
     ptr = (GUI_TIMER_t *)__GUI_MEMALLOC(sizeof(GUI_TIMER_t));  /* Allocate memory for timer */
@@ -66,7 +69,7 @@ GUI_TIMER_t* __GUI_TIMER_Create(uint16_t period, void (*callback)(GUI_TIMER_t *)
         ptr->Counter = period;                      /* Set current counter value */
         ptr->Callback = callback;                   /* Set callback */
         ptr->Params = params;                       /* Timer custom parameters */
-        ptr->Flags = flags;                         /* Timer flags management */
+        ptr->Flags = 0;                             /* Timer flags management */
         
         __GUI_LINKEDLIST_ADD_GEN(&GUI.Timers.List, &ptr->List); /* Add timer to linked list */
     }
@@ -85,7 +88,16 @@ uint8_t __GUI_TIMER_Remove(GUI_TIMER_t** t) {
 uint8_t __GUI_TIMER_Start(GUI_TIMER_t* t) {
     __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
     t->Counter = t->Period;                         /* Reset counter to top value */
+    t->Flags &= ~GUI_FLAG_TIMER_PERIODIC;           /* Clear periodic flag */
     t->Flags |= GUI_FLAG_TIMER_ACTIVE;              /* Set active flag */
+    
+    return 1;
+}
+
+uint8_t __GUI_TIMER_StartPeriodic(GUI_TIMER_t* t) {
+    __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
+    t->Counter = t->Period;                         /* Reset counter to top value */
+    t->Flags |= GUI_FLAG_TIMER_ACTIVE | GUI_FLAG_TIMER_PERIODIC;    /* Set active flag */
     
     return 1;
 }

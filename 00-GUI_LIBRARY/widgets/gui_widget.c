@@ -613,6 +613,15 @@ GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iD
             }
         }
         
+        result = 1;                                 /* We are OK at starting point */
+        __GUI_WIDGET_Callback(h, GUI_WC_PreInit, NULL, &result);    /* Notify internal widget library about init successful */
+        
+        if (!result) {                              /* Check result */
+            __GUI_MEMFREE(h);                       /* Clear widget memory */
+            h = 0;                                  /* Reset handle */
+            return 0;                               /* Stop execution at this point */
+        }
+        
         /* Set widget default values */
         __GH(h)->Font = WIDGET_Default.Font;        /* Set default font */
         
@@ -627,7 +636,6 @@ GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iD
         if (!result) {                              /* Check if widget should be added to linked list */
             __GUI_LINKEDLIST_WidgetAdd((GUI_HANDLE_ROOT_t *)__GH(h)->Parent, h);    /* Add entry to linkedlist of parent widget */
         }
-        __GUI_WIDGET_Callback(h, GUI_WC_PreInit, NULL, NULL);   /* Notify internal widget library about init successful */
         __GUI_WIDGET_Callback(h, GUI_WC_Init, NULL, NULL);  /* Notify user about init successful */
         __GUI_WIDGET_Invalidate(h);                 /* Invalidate object */
     } else {

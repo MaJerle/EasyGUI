@@ -1309,8 +1309,8 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_21_006b[48] = {
 };
 
 GUI_Const GUI_Byte Font_Arial_Narrow_Italic_21_006c[32] = {
-    ______XX, X_______, 
-    _____X_X, X_______, 
+    XXXXXXXX, X_______, 
+    XXXXXX_X, X_______, 
     _____XXX, ________, 
     _____XX_, X_______, 
     _____XX_, X_______, 

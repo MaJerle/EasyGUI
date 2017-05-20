@@ -50,10 +50,6 @@ extern "C" {
  */
 
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)
-    
-#define GUI_FLAG_TIMER_ACTIVE           ((uint16_t)(1 << 0UL))  /*!< Timer is active */
-#define GUI_FLAG_TIMER_PERIODIC         ((uint16_t)(1 << 1UL))  /*!< Timer will start from beginning after reach end */ 
-#define GUI_FLAG_TIMER_CALL             ((uint16_t)(1 << 2UL))  /*!< Call callback function on timer */
 
 /**
  * \brief           Create new software timer
@@ -61,11 +57,10 @@ extern "C" {
  * \param[in]       period: Timer period in units of milliseconds
  * \param[in]       *callback: Pointer to timer callback
  * \param[in]       *param: Pointer to user parameters used in callback
- * \param[in]       flags: List of flags for timer
  * \retval          > 0: Timer created
  * \retval          0: Timer creation failed
  */
-GUI_TIMER_t* __GUI_TIMER_Create(uint16_t period, void (*callback)(GUI_TIMER_t *), void* param, uint8_t flags);
+GUI_TIMER_t* __GUI_TIMER_Create(uint16_t period, void (*callback)(GUI_TIMER_t *), void* param);
 
 /**
  * \brief           Remove timer
@@ -85,6 +80,15 @@ uint8_t __GUI_TIMER_Remove(GUI_TIMER_t** t);
  * \retval          0: Timer was not started
  */
 uint8_t __GUI_TIMER_Start(GUI_TIMER_t* t);
+
+/**
+ * \brief           Start timer periodically. It will start again when callback is called
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in]       *t: Pointer to \ref GUI_TIMER_t structure
+ * \retval          1: Timer was started ok
+ * \retval          0: Timer was not started
+ */
+uint8_t __GUI_TIMER_StartPeriodic(GUI_TIMER_t* t);
 
 /**
  * \brief           Stop timer

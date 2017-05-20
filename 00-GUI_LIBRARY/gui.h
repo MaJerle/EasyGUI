@@ -231,6 +231,8 @@ typedef struct GUI_t {
     GUI_LinkedListRoot_t Root;              /*!< Root linked list of widgets */
     GUI_TIMER_CORE_t Timers;                /*!< Software structure management */
     
+    GUI_LinkedListRoot_t RootFonts;         /*!< Root linked list of font widgets */
+    
 #if GUI_USE_TOUCH || defined(DOXYGEN)
     __GUI_TouchData_t TouchOld;             /*!< Old touch data, used for event management */
     __GUI_TouchData_t Touch;                /*!< Current touch data and processing tool */

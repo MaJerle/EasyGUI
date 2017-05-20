@@ -20,8 +20,7 @@
 #define LCD_VBP                     2
 #define LCD_VFP                     2
 
-#define LCD_COLOR_FORMAT_ARGB8888
-#define LCD_PIXEL_SIZE              4
+#define LCD_COLOR_FORMAT_RGB565
 #endif /* defined(STM32F7_DISCOVERY) */
 
 /*****************************/
@@ -33,10 +32,15 @@
 #define LCD_WIDTH                   800
 #define LCD_HEIGHT                  480
 
-#define LCD_COLOR_FORMAT_RGB565         /* Color format is RGB565 */
-#define LCD_PIXEL_SIZE              2
+#define LCD_COLOR_FORMAT_RGB565
 
 #endif /* defined(STM32F769_DISCOVERY) */
+
+#if defined(LCD_COLOR_FORMAT_RGB565)
+#define LCD_PIXEL_SIZE              2
+#else
+#define LCD_PIXEL_SIZE              4
+#endif
 
 /*****************************/
 /*       Common setup        */
