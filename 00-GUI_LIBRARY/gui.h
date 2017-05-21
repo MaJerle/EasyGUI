@@ -113,7 +113,7 @@ extern "C" {
  * \hideinitializer
  */
 #define __GUI_MEMWIDFREE(p)         do {            \
-    __GUI_DEBUG("Memory free: 0x%08X; Type: %s\r\n", (uint32_t)__GH(p), __GH(p)->Widget->Name);  \
+/*    __GUI_DEBUG("Memory free: 0x%08X; Type: %s\r\n", (uint32_t)__GH(p), __GH(p)->Widget->Name); */ \
     memset(p, 0x00, __GH(p)->Widget->Size);         \
     free(p);                                        \
     (p) = 0;                                        \

@@ -169,9 +169,6 @@ GUI_FONT_CharEntry_t* __CreateCharEntryFromFont(const GUI_FONT_t* font, const GU
     
     /* Calculate memory size for data */
     memDataSize = c->xSize * c->ySize;
-    if ((c->xPos * c->yPos) % 2) {
-        memDataSize++;
-    }
     
     memsize += memDataSize;
     entry = (GUI_FONT_CharEntry_t *)__GUI_MEMALLOC(memsize);    /* Allocate memory for entry */
@@ -185,7 +182,7 @@ GUI_FONT_CharEntry_t* __CreateCharEntryFromFont(const GUI_FONT_t* font, const GU
         entry->Font = font;                         /* Set pointer to font structure */
         
         if (font->Flags & GUI_FLAG_FONT_AA) {       /* Anti-alliased font */
-            columns = c->xSize / 4;                 /* Calculate number of bytes used for single character line */
+            columns = c->xSize >> 2;                /* Calculate number of bytes used for single character line */
             if (c->xSize % 4) {                     /* If only 1 column used */
                 columns++;
             }
@@ -196,21 +193,39 @@ GUI_FONT_CharEntry_t* __CreateCharEntryFromFont(const GUI_FONT_t* font, const GU
                     t = (b >> (6 - 2 * k)) & 0x03;  /* Get temporary bits on bottom */
                     switch (t) {
                         case 0:
-                            *ptr |= 0x00;// << (4 * (k % 2));
+                            *ptr |= 0x00;
                             break;
                         case 1:
-                            *ptr |= 0x55;// << (4 * (k % 2));
+                            *ptr |= 0x55;
                             break;
                         case 2:
-                            *ptr |= 0xAA;// << (4 * (k % 2));
+                            *ptr |= 0xAA;
                             break;
                         default:
-                            *ptr |= 0xFF;// << (4 * (k % 2));
-                    }
-                    if (k % 1) {                    /* Increase pointer to next byte */
-                        //ptr++;
+                            *ptr |= 0xFF;
                     }
                     ptr++;
+                    x++;
+                    if (x == c->xSize) {
+                        x = 0;
+                        break;
+                    }
+                }
+            }
+        } else {
+            columns = c->xSize >> 3;                /* Calculate number of bytes used for single character line */
+            if (c->xSize % 8) {                     /* If only 1 column used */
+                columns++;
+            }
+            x = 0;
+            for (i = 0; i < c->ySize * columns; i++) {  /* Inspect all vertical lines */
+                b = c->Data[i];                     /* Get byte of data */
+                for (k = 0; k < 8; k++) {           /* Scan each bit in byte */
+                    if ((b >> (7 - k)) & 0x01) {
+                        *ptr++ = 0xFF;
+                    } else {
+                        *ptr++ = 0x00;
+                    }
                     x++;
                     if (x == c->xSize) {
                         x = 0;
@@ -222,7 +237,6 @@ GUI_FONT_CharEntry_t* __CreateCharEntryFromFont(const GUI_FONT_t* font, const GU
         
         __GUI_LINKEDLIST_ADD_GEN(&GUI.RootFonts, (GUI_LinkedList_t *)entry);    /* Add entry to linked list */
     }
-    
     return entry;                                   /* Return new created entry */
 }
 
@@ -249,11 +263,16 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DR
         GUI_FONT_CharEntry_t* entry = __GetCharEntryFromFont(font, c);  /* Get char entry from font and character for fast alpha drawing operations */
         if (!entry) {
             entry = __CreateCharEntryFromFont(font, c); /* Create new entry */
+            entry = __GetCharEntryFromFont(font, c);    /* Get entry */
         }
         if (entry) {                                /* We have valid data */
             GUI_Dim_t width, height, offlineSrc, offlineDst;
             uint8_t* dst = 0;
             uint8_t* ptr = (uint8_t *)entry;        /* Get pointer */
+            GUI_Dim_t tmpX, tmpY;
+            
+            tmpX = x;
+            tmpY = y;
             
             ptr += sizeof(*entry);                  /* Go to start of data array */
             dst += GUI.LCD.Layers[GUI.LCD.DrawingLayer].StartAddress;
@@ -266,6 +285,7 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DR
                 ptr += (disp->Y1 - y) * c->xSize;   /* Set offset for number of lines */
                 dst += (disp->Y1 - y) * GUI.LCD.Width * GUI.LCD.PixelSize;  /* Set offset for number of LCD lines */
                 height -= disp->Y1 - y;
+                tmpY += disp->Y1 - y;
             }
             if ((y + c->ySize) > disp->Y2) {
                 height -= y + c->ySize - disp->Y2;  /* Decrease effective height */
@@ -274,18 +294,36 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DR
                 ptr += (disp->X1 - x);              /* Set offset of start address in X direction */
                 dst += (disp->X1 - x) * GUI.LCD.PixelSize;  /* Set offset of start address in X direction */
                 width -= disp->X1 - x;              /* Increase source offline */
+                tmpX += disp->X1 - x;
             }
             if ((x + c->xSize) > disp->X2) {
                 width -= x + c->xSize - disp->X2;   /* Decrease effective width */
             }
             
-            offlineSrc = c->xSize - width;        /* Set offline source */
+            offlineSrc = c->xSize - width;          /* Set offline source */
             offlineDst = GUI.LCD.Width - width;     /* Set offline destination */
             
-            //TODO: Handle double colors on single character
-            GUI.LL.CopyChar(&GUI.LCD, GUI.LCD.DrawingLayer, ptr, dst, 
-                width, height,
-                offlineSrc, offlineDst, (draw->X + draw->Color1Width) > x ? draw->Color1 : draw->Color2);
+            /**
+             * Check if character must be drawn with 2 colors, on the middle of color switch
+             */
+            if (tmpX < (draw->X + draw->Color1Width) && (tmpX + width) > (draw->X + draw->Color1Width)) {
+                GUI_Dim_t firstWidth = (draw->X + draw->Color1Width) - tmpX;
+                
+                /* First part draw */
+                GUI.LL.CopyChar(&GUI.LCD, GUI.LCD.DrawingLayer, ptr, dst, 
+                    firstWidth, height,
+                    offlineSrc + width - firstWidth, offlineDst + width - firstWidth, draw->Color1);
+                
+                /* Second part draw */
+                GUI.LL.CopyChar(&GUI.LCD, GUI.LCD.DrawingLayer, ptr + firstWidth, dst + firstWidth * GUI.LCD.PixelSize, 
+                    width - firstWidth, height,
+                    offlineSrc + firstWidth, offlineDst + firstWidth, draw->Color2);
+            } else {
+                /* Draw entire character with single color */
+                GUI.LL.CopyChar(&GUI.LCD, GUI.LCD.DrawingLayer, ptr, dst, 
+                    width, height,
+                    offlineSrc, offlineDst, (draw->X + draw->Color1Width) > x ? draw->Color1 : draw->Color2);
+            }
             return;
         }
     }

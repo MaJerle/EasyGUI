@@ -49,7 +49,13 @@ uint16_t startAddress;
 /***                           Private definitions                           **/
 /******************************************************************************/
 /******************************************************************************/
-#define DMA2D_START() do { startAddress = __LINE__; DMA2D->CR |= DMA2D_CR_TCIE | DMA2D_CR_CEIE; DMA2D->CR |= DMA2D_CR_START; } while (0)
+#define DMA2D_START(type) do {                  \
+    startAddress = __LINE__;                    \
+    DMA2D->CR = (type);                         \
+    DMA2D->CR |= 0 | 0; \
+    DMA2D->CR |= DMA2D_CR_START;                \
+    while (DMA2D->CR & DMA2D_CR_START);         \
+} while (0)
 
 /******************************************************************************/
 /******************************************************************************/
@@ -104,8 +110,7 @@ GUI_Color_t LCD_GetPixel(GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t x, GUI_Dim_t y
     DMA2D->OPFCCR = LTDC_PIXEL_FORMAT_ARGB8888;     /* Set output pixel format */
     DMA2D->NLR = (uint32_t)(1 << 16) | (uint16_t)1; /* Set X and Y */
 
-    DMA2D->CR = DMA2D_M2M_PFC;                      /* Memory to memory with pixel conversion */
-    DMA2D_START();                                  /* Start DMA2D transfer */
+    DMA2D_START(DMA2D_M2M_PFC);                     /* Start DMA2D transfer */
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait till end */
     return 0xFF000000UL | color;
 #endif /* defined(LCD_COLOR_FORMAT_ARGB8888) */
@@ -129,17 +134,15 @@ void LCD_Fill(GUI_LCD_t* LCD, uint8_t layer, void* dst, GUI_Dim_t xSize, GUI_Dim
     DMA2D->OPFCCR = GetPixelFormat(layer);          /* Defines the number of pixels to be transfered */
     DMA2D->NLR = (uint32_t)(xSize << 16) | (uint16_t)ySize; /* Size configuration of area to be transfered */
     
-    DMA2D->CR = DMA2D_R2M;                          /* Register to memory */
-    DMA2D_START();                                  /* Start DMA2D transfer */
+    DMA2D_START(DMA2D_R2M);                         /* Start DMA2D transfer */
 }
 
 void LCD_Copy(GUI_LCD_t* LCD, uint8_t layer, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
     uint32_t PixelFormat = GetPixelFormat(layer);
     
-    if (xSize == 0 || ySize == 0) {
+    if (!xSize || !ySize) {
         return;
     }
-    
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait finished */
     DMA2D->FGMAR = (uint32_t)src;
     DMA2D->BGMAR = (uint32_t)dst;
@@ -152,8 +155,7 @@ void LCD_Copy(GUI_LCD_t* LCD, uint8_t layer, const void* src, void* dst, GUI_Dim
     DMA2D->OPFCCR = PixelFormat;
     DMA2D->NLR = (uint32_t)(xSize << 16) | (uint16_t)ySize;
     
-    DMA2D->CR = DMA2D_M2M;                          /* Memory to memory */
-    DMA2D_START();                                  /* Start DMA2D transfer */
+    DMA2D_START(DMA2D_M2M);                         /* Start DMA2D transfer */
 }
 
 void LCD_CopyBlending(GUI_LCD_t* LCD, uint8_t layer, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
@@ -170,12 +172,14 @@ void LCD_CopyBlending(GUI_LCD_t* LCD, uint8_t layer, const void* src, void* dst,
     DMA2D->OPFCCR  = PixelFormat;                   /* Output     PFC Control Register (Defines the output pixel format) */
     DMA2D->NLR = (uint32_t)(xSize << 16) | (uint16_t)ySize;
     
-    DMA2D->CR = DMA2D_M2M_BLEND;                    /* Memory to memory with blending */
-    DMA2D_START();                                  /* Start DMA2D transfer */
+    DMA2D_START(DMA2D_M2M_BLEND);                   /* Start DMA2D transfer */
 }
 
 void LCD_DrawImage16(GUI_LCD_t* LCD, uint8_t layer, const GUI_IMAGE_DESC_t* img, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
     uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
+    if (!xSize || !ySize) {
+        return;
+    }
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait finished */
     DMA2D->FGMAR = (uint32_t)src;
     DMA2D->BGMAR = (uint32_t)dst;                       
@@ -193,32 +197,7 @@ void LCD_DrawImage16(GUI_LCD_t* LCD, uint8_t layer, const GUI_IMAGE_DESC_t* img,
 #endif  /* defined(DMA2D_FGPFCCR_AM_1) */
     DMA2D->NLR = (uint32_t)(xSize << 16) | (uint16_t)ySize; 
     
-    DMA2D->CR = DMA2D_M2M_BLEND;                    /* Memory to memory with blending */
-    DMA2D_START();                                  /* Start DMA2D transfer */
-}
-
-void LCD_CopyChar(GUI_LCD_t* LCD, uint8_t layer, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst, GUI_Color_t color) {
-    uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
-    if (!xSize || !ySize) {
-        return;
-    }
-    
-    while (DMA2D->CR & DMA2D_CR_START);             /* Wait finished */
-    
-    DMA2D->FGMAR = (uint32_t)src;
-    DMA2D->BGMAR = (uint32_t)dst;                       
-    DMA2D->OMAR = (uint32_t)dst;
-    DMA2D->FGOR = offLineSrc;
-    DMA2D->BGOR = offLineDst;
-    DMA2D->OOR = offLineDst;  
-    DMA2D->FGCOLR = color;                          /* Since foreground input color is A4, value in this register will be used for blending purpose */
-    DMA2D->FGPFCCR = DMA2D_INPUT_A8;                /* Foreground PFC Control Register */
-    DMA2D->BGPFCCR = PixelFormat;                   /* Background PFC Control Register (Defines the BG pixel format) */
-    DMA2D->OPFCCR  = PixelFormat;                   /* Output     PFC Control Register (Defines the output pixel format) */
-    DMA2D->NLR = (uint32_t)(xSize << 16) | (uint16_t)ySize; 
-    
-    DMA2D->CR = DMA2D_M2M_BLEND;                    /* Memory to memory with blending */
-    DMA2D_START();                                  /* Start DMA2D transfer */
+    DMA2D_START(DMA2D_M2M_BLEND);                   /* Start DMA2D transfer */
 }
 
 void LCD_DrawImage24(GUI_LCD_t* LCD, uint8_t layer, const GUI_IMAGE_DESC_t* img, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
@@ -240,8 +219,7 @@ void LCD_DrawImage24(GUI_LCD_t* LCD, uint8_t layer, const GUI_IMAGE_DESC_t* img,
 #endif  /* defined(DMA2D_FGPFCCR_AM_1) */
     DMA2D->NLR = (uint32_t)(xSize << 16) | (uint16_t)ySize;
     
-    DMA2D->CR = DMA2D_M2M_BLEND;                    /* Memory to memory with blending */
-    DMA2D_START();                                  /* Start DMA2D transfer */
+    DMA2D_START(DMA2D_M2M_BLEND);                   /* Start DMA2D transfer */
 }
 
 void LCD_DrawImage32(GUI_LCD_t* LCD, uint8_t layer, const GUI_IMAGE_DESC_t* img, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
@@ -263,8 +241,28 @@ void LCD_DrawImage32(GUI_LCD_t* LCD, uint8_t layer, const GUI_IMAGE_DESC_t* img,
 #endif  /* defined(DMA2D_FGPFCCR_AM_1) */
     DMA2D->NLR = (uint32_t)(xSize << 16) | (uint16_t)ySize;
     
-    DMA2D->CR = DMA2D_M2M_BLEND;                    /* Memory to memory with blending */
-    DMA2D_START();                                  /* Start DMA2D transfer */
+    DMA2D_START(DMA2D_M2M_BLEND);                   /* Start DMA2D transfer */
+}
+
+void LCD_CopyChar(GUI_LCD_t* LCD, uint8_t layer, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst, GUI_Color_t color) {
+    uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
+    if (!xSize || !ySize) {
+        return;
+    }
+    while (DMA2D->CR & DMA2D_CR_START);             /* Wait finished */
+    DMA2D->FGMAR = (uint32_t)src;
+    DMA2D->BGMAR = (uint32_t)dst;                       
+    DMA2D->OMAR = (uint32_t)dst;
+    DMA2D->FGOR = offLineSrc;
+    DMA2D->BGOR = offLineDst;
+    DMA2D->OOR = offLineDst;  
+    DMA2D->FGCOLR = color & 0x00FFFFFFUL;           /* Since foreground input color is A4, value in this register will be used for blending purpose */
+    DMA2D->FGPFCCR = DMA2D_INPUT_A8;                /* Foreground PFC Control Register */
+    DMA2D->BGPFCCR = PixelFormat;                   /* Background PFC Control Register (Defines the BG pixel format) */
+    DMA2D->OPFCCR  = PixelFormat;                   /* Output     PFC Control Register (Defines the output pixel format) */
+    DMA2D->NLR = (uint32_t)(xSize << 16) | (uint16_t)ySize; 
+    
+    DMA2D_START(DMA2D_M2M_BLEND);                   /* Start DMA2D transfer */
 }
 
 void LCD_DrawHLine(GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t length, GUI_Color_t color) {
@@ -297,7 +295,7 @@ void DMA2D_IRQHandler(void) {
 }
 
 void TransferErrorCallback(DMA2D_HandleTypeDef* hdma2d) {
-    while (1);
+     while (1);
 }
 
 /******************************************************************************/

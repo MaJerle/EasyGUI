@@ -278,6 +278,7 @@ int main(void) {
     GUI_Init();
     
     GUI_WIDGET_SetFontDefault(&GUI_Font_Arial_Narrow_Italic_21_AA); /* Set default font for widgets */
+    GUI_WIDGET_SetFontDefault(&GUI_Font_Comic_Sans_MS_Regular_22); /* Set default font for widgets */
     
     win1 = GUI_WINDOW_GetDesktop();                         /* Get desktop window */
     
@@ -288,7 +289,7 @@ int main(void) {
     }
     
     handle = GUI_WIDGET_GetById(buttons[COUNT_OF(buttons) - 1].id);
-    GUI_WIDGET_Callback(handle, GUI_WC_Click, 0, 0);
+    //GUI_WIDGET_Callback(handle, GUI_WC_Click, 0, 0);
     
     __GUI_LINKEDLIST_PrintList(NULL);
 
@@ -369,10 +370,11 @@ int main(void) {
         }
 	}
 }
+
 const GUI_IMAGE_DESC_t maskImg = {
     .xSize = IMG_WIDTH,
     .ySize = IMG_HEIGHT,
-    .BPP = 32,
+    .BPP = 8,
     .Image = (uint8_t *)Mask
 };
 
@@ -730,8 +732,8 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 break;
             }
             case ID_WIN_IMAGE: {
-//                handle = GUI_BUTTON_Create(0, 10, 10, 300, 50, h, 0, 0);
-//                GUI_WIDGET_SetText(handle, _T("Button"));
+                handle = GUI_BUTTON_Create(0, 10, 10, 300, 50, h, 0, 0);
+                GUI_WIDGET_SetText(handle, _T("Button"));
 //                handle = GUI_IMAGE_Create(0, 2, 2, bmimage_brand.xSize, bmimage_brand.ySize, h, 0, 0);
 //                GUI_IMAGE_SetSource(handle, &bmimage_brand);
 //                handle = GUI_IMAGE_Create(0, 200, 40, bmimage_voyo.xSize, bmimage_voyo.ySize, h, 0, 0);

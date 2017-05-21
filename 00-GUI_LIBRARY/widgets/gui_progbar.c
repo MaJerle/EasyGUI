@@ -92,7 +92,7 @@ uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
             width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
             height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
            
-            w = ((width - 2) * (p->Value - p->Min)) / (p->Max - p->Min);   /* Get width for active part */
+            w = ((width - 4) * (p->Value - p->Min)) / (p->Max - p->Min);   /* Get width for active part */
             
             GUI_DRAW_FilledRectangle(disp, x + w + 2, y + 2, width - w - 4, height - 4, __GUI_WIDGET_GetColor(h, GUI_PROGBAR_COLOR_BG));
             GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, w, height - 4, __GUI_WIDGET_GetColor(h, GUI_PROGBAR_COLOR_FG));
@@ -114,10 +114,10 @@ uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                     GUI_DRAW_FONT_t f;
                     GUI_DRAW_FONT_Init(&f);         /* Init structure */
                     
-                    f.X = x + 1;
-                    f.Y = y + 1;
-                    f.Width = width;
-                    f.Height = height - 2;
+                    f.X = x + 2;
+                    f.Y = y + 2;
+                    f.Width = width - 4;
+                    f.Height = height - 4;
                     f.Align = GUI_HALIGN_CENTER | GUI_VALIGN_CENTER;
                     f.Color1Width = w ? w - 1 : 0;
                     f.Color1 = __GUI_WIDGET_GetColor(h, GUI_PROGBAR_COLOR_BG);

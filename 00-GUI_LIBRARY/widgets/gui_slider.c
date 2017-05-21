@@ -172,7 +172,7 @@ uint8_t GUI_SLIDER_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
             
             o->MaxSize = 4;
             o->CurrentSize = 0;
-            o->C.Timer = __GUI_TIMER_Create(30, __TimerCallback, o);    /* Create timer for widget */
+            o->C.Timer = __GUI_TIMER_Create(30, __TimerCallback, o);    /* Create timer for widget, when widget is deleted, timer will be automatically deleted too */
             if (!o->C.Timer) {                      /* Check if timer created */
                 *(uint8_t *)result = 0;             /* Failed, widget will be deleted */
                 return 1;
