@@ -183,7 +183,7 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
         if (v) {                                    /* New touch event occurred */
             if (!ts->TS.Status) {                   /* We received released state */
                 if (i) {                            /* Try to get second click, check difference for double click */
-                    if (__GUI_ABS(x[0] - x[1]) > 20 || __GUI_ABS(y[0] - y[1]) > 20) {
+                    if (__GUI_ABS(x[0] - x[1]) > 30 || __GUI_ABS(y[0] - y[1]) > 30) {
                         i = 0;                      /* Difference was too big, reset and act like normal click */
                     }
                 }
@@ -491,12 +491,12 @@ int32_t GUI_Process(void) {
         
         /* Copy from currently active layer to drawing layer only changes on layer */
         GUI.LL.Copy(&GUI.LCD, drawing, 
-            (void *)(GUI.LCD.Layers[active].StartAddress + GUI.LCD.PixelSize * (dispA->Y1 * GUI.LCD.Width + dispA->X1)), 
-            (void *)(GUI.LCD.Layers[drawing].StartAddress + GUI.LCD.PixelSize * (dispA->Y1 * GUI.LCD.Width + dispA->X1)), 
-            dispA->X2 - dispA->X1,   
-            dispA->Y2 - dispA->Y1,
-            GUI.LCD.Width - (dispA->X2 - dispA->X1),
-            GUI.LCD.Width - (dispA->X2 - dispA->X1)
+            (void *)(GUI.LCD.Layers[active].StartAddress + GUI.LCD.PixelSize * (dispA->Y1 * GUI.LCD.Width + dispA->X1)),    /* Source address */
+            (void *)(GUI.LCD.Layers[drawing].StartAddress + GUI.LCD.PixelSize * (dispA->Y1 * GUI.LCD.Width + dispA->X1)),   /* Destination address */
+            dispA->X2 - dispA->X1,                  /* Area width */
+            dispA->Y2 - dispA->Y1,                  /* Area height */
+            GUI.LCD.Width - (dispA->X2 - dispA->X1),/* Offline source */
+            GUI.LCD.Width - (dispA->X2 - dispA->X1) /* Offline destination */
         );
             
         /* Actually draw new screen based on setup */
@@ -527,7 +527,7 @@ int32_t GUI_Process(void) {
         /* Copy clipping data to region */
         memcpy(&GUI.LCD.Layers[GUI.LCD.ActiveLayer].Display, &GUI.Display, sizeof(GUI.Display));
         
-        /* Invalid clipping regions for next drawing process */
+        /* Invalid clipping region(s) for next drawing process */
         GUI.Display.X1 = 0x7FFF;
         GUI.Display.Y1 = 0x7FFF;
         GUI.Display.X2 = 0x8000;

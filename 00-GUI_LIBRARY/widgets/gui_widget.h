@@ -530,6 +530,7 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
  * \retval          Widget ID
+ * \hideinitializer
  */
 #define __GUI_WIDGET_GetId(h)               (__GH(h)->Id)
 
@@ -539,6 +540,7 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
  * \param[in,out]   h: Widget handle
  * \retval          1: Widget is expandend
  * \retval          0: Widget is not expanded
+ * \hideinitializer
  */
 #define __GUI_WIDGET_IsExpanded(h)          (!!(__GH(h)->Flags & GUI_FLAG_EXPANDED))
 
@@ -547,6 +549,7 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
  * \retval          Pointer to parent widget
+ * \hideinitializer
  */
 #define __GUI_WIDGET_GetParent(h)           (__GH(h)->Parent)
 
@@ -559,6 +562,7 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
  * \param[out]      result: Pointer to result pointer where calback can store result
  * \retval          1: Command processed by widget
  * \retval          0: Command was not processed by widget
+ * \hideinitializer
  */
 #define __GUI_WIDGET_Callback(h, cmd, param, result)    (__GH(h)->Callback ? __GH(h)->Callback(h, cmd, param, result) : __GH(h)->Widget->Callback(h, cmd, param, result))
 
@@ -569,6 +573,7 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index from color array for specific widget
  * \retval          Color index
+ * \hideinitializer
  */
 #define __GUI_WIDGET_GetColor(h, index)     (__GH(h)->Colors ? __GH(h)->Colors[(uint8_t)(index)] : (__GH(h)->Widget->Colors ? __GH(h)->Widget->Colors[(uint8_t)(index)] : GUI_COLOR_BLACK))
 
@@ -708,6 +713,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
  * \retval          Status whether widget is in focus or not
+ * \sa              __GUI_WIDGET_IsActive
  * \hideinitializer
  */
 #define __GUI_WIDGET_IsFocused(h)                   (__GH(h)->Flags & GUI_FLAG_FOCUS)
@@ -717,6 +723,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
  * \retval          Status whether widget is active or not
+ * \sa              __GUI_WIDGET_IsFocused
  * \hideinitializer
  */
 #define __GUI_WIDGET_IsActive(h)                    (__GH(h)->Flags & GUI_FLAG_ACTIVE)

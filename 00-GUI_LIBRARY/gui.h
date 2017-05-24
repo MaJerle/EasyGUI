@@ -64,8 +64,10 @@ extern "C" {
 /* GUI Low-Level drivers */
 #include "gui_ll.h"
 
+//#if defined(GUI_INTERNAL) || defined(DOXYGEN)
 /**
  * \defgroup        GUI_Internal Internal macros 
+ * \brief           List of internal macros which can be used only inside GUI library and are not visible by user
  * \{
  */
 #define __GUI_ENTER()
@@ -210,6 +212,7 @@ extern "C" {
 /**
  * \}
  */
+//#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 /**
  * \brief           GUI main object structure
@@ -261,9 +264,19 @@ GUI_Result_t GUI_Init(void);
  * \retval          Number of jobs done in current call
  */
 int32_t GUI_Process(void);
+
+/**
+ * \brief           Updates current time in GUI interface for amount of milliseconds
+ * \param[in]       millis: Number of milliseconds to add to current time, value depends on number of function calls from user space
+ * \retval          None
+ */
 void GUI_UpdateTime(uint32_t millis);
 
-//Notify GUI from low-level that layer is in use
+/**
+ * \brief           Notify GUI stack from low-level layer which layer is currently used as display layer
+ * \param[in]       layer_num: Layer number used as display layer
+ * \retval          None
+ */
 void GUI_LCD_ConfirmActiveLayer(GUI_Byte layer_num);
  
 /**

@@ -263,16 +263,15 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DR
         GUI_FONT_CharEntry_t* entry = __GetCharEntryFromFont(font, c);  /* Get char entry from font and character for fast alpha drawing operations */
         if (!entry) {
             entry = __CreateCharEntryFromFont(font, c); /* Create new entry */
-            entry = __GetCharEntryFromFont(font, c);    /* Get entry */
+            //entry = __GetCharEntryFromFont(font, c);    /* Get entry again, maybe here is a problem? */
         }
         if (entry) {                                /* We have valid data */
             GUI_Dim_t width, height, offlineSrc, offlineDst;
             uint8_t* dst = 0;
             uint8_t* ptr = (uint8_t *)entry;        /* Get pointer */
-            GUI_Dim_t tmpX, tmpY;
+            GUI_Dim_t tmpX;
             
-            tmpX = x;
-            tmpY = y;
+            tmpX = x;                               /* Start X */
             
             ptr += sizeof(*entry);                  /* Go to start of data array */
             dst += GUI.LCD.Layers[GUI.LCD.DrawingLayer].StartAddress;
@@ -281,11 +280,10 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DR
             width = c->xSize;                       /* Get X size */
             height = c->ySize;                      /* Get Y size */
             
-            if (y < disp->Y1) {
+            if (y < disp->Y1) {                     /* Start Y position if outside visible area */
                 ptr += (disp->Y1 - y) * c->xSize;   /* Set offset for number of lines */
                 dst += (disp->Y1 - y) * GUI.LCD.Width * GUI.LCD.PixelSize;  /* Set offset for number of LCD lines */
-                height -= disp->Y1 - y;
-                tmpY += disp->Y1 - y;
+                height -= disp->Y1 - y;             /* Decrease effective height */
             }
             if ((y + c->ySize) > disp->Y2) {
                 height -= y + c->ySize - disp->Y2;  /* Decrease effective height */
@@ -294,7 +292,7 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DR
                 ptr += (disp->X1 - x);              /* Set offset of start address in X direction */
                 dst += (disp->X1 - x) * GUI.LCD.PixelSize;  /* Set offset of start address in X direction */
                 width -= disp->X1 - x;              /* Increase source offline */
-                tmpX += disp->X1 - x;
+                tmpX += disp->X1 - x;               /* Increase effective start X position */
             }
             if ((x + c->xSize) > disp->X2) {
                 width -= x + c->xSize - disp->X2;   /* Decrease effective width */
@@ -401,13 +399,14 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DR
     }
 }
 
+/* Get string pointer start address for specific width of rectangle */
+static
 const GUI_Char* __StringGetPointerForWidth(const GUI_FONT_t* font, const GUI_Char* str, GUI_DRAW_FONT_t* draw) {
     const GUI_Char* tmp = str;
     GUI_iDim_t tot = 0, w, h;
     uint8_t i;
     uint32_t ch;
     
-    //TODO: UTF-8 support!
     while (*tmp) {                                  /* Go to the end of string */
         tmp++;
     }
@@ -453,7 +452,7 @@ void GUI_DRAW_FillScreen(const GUI_Display_t* disp, GUI_Color_t color) {
 
 void GUI_DRAW_Fill(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_Color_t color) {
     if (                                            /* Check if redraw is inside area */
-        !__GUI_RECT_MATCH(  x, y, x + width, y + width,
+        !__GUI_RECT_MATCH(  x, y, x + width, y + height,
                             disp->X1, disp->Y1, disp->X2, disp->Y2)) {
         return;
     }
@@ -534,12 +533,9 @@ void GUI_DRAW_Line(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_
     curpixel = 0;
     
     /* Check if coordinates are inside drawing region */
-    if (
-        (x1 < disp->X1 && x2 < disp->X1) ||         /* X coordinates outside left of display */
-        (x1 > disp->X2 && x2 > disp->X2) ||         /* X coordinates outside right of display */
-        (y1 < disp->Y1 && y2 < disp->Y1) ||         /* Y coordinates outside top of display */
-        (y1 > disp->Y2 && y2 > disp->Y2)            /* Y coordinates outside bottom of display */
-    ) {
+    if (                                            /* Check if redraw is inside area */
+        !__GUI_RECT_MATCH(  x1, y1, x2, y2,
+                            disp->X1, disp->Y1, disp->X2, disp->Y2)) {
         return;
     }
 
@@ -770,8 +766,8 @@ void GUI_DRAW_CircleCorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t 
     GUI_iDim_t y = r;
     
     if (!__GUI_RECT_MATCH(
-        disp->X1, disp->Y1, disp->X2, disp->Y2,
-        x0 - r, y0 - r, x0 + r, y0 + r
+        x0 - r, y0 - r, x0 + r, y0 + r,
+        disp->X1, disp->Y1, disp->X2, disp->Y2
     )) {
         return;
     }

@@ -54,6 +54,7 @@ uint16_t startAddress;
     DMA2D->CR = (type);                         \
     DMA2D->CR |= 0 | 0; \
     DMA2D->CR |= DMA2D_CR_START;                \
+    DMA2D->AMTCR = ((0xFF << 8) & DMA2D_AMTCR_DT) | DMA2D_AMTCR_EN;   \
     while (DMA2D->CR & DMA2D_CR_START);         \
 } while (0)
 
