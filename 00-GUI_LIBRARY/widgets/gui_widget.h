@@ -535,6 +535,15 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
 #define __GUI_WIDGET_GetId(h)               (__GH(h)->Id)
 
 /**
+ * \brief           Get widget flag
+ * \param[in,out]   h: Widget handle
+ * \param[in]       flag: Flag value to check
+ * \retval          0: Flag is not set
+ * \retval          > 0: Flag is set
+ */
+#define __GUI_WIDGET_GetFlag(h, flag)       (__GH(h)->Flags & (flag))
+
+/**
  * \brief           Checks if widget is expanded to maximum relative to parent widget
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle

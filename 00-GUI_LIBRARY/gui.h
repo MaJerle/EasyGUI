@@ -67,12 +67,32 @@ extern "C" {
 //#if defined(GUI_INTERNAL) || defined(DOXYGEN)
 /**
  * \defgroup        GUI_Internal Internal macros 
- * \brief           List of internal macros which can be used only inside GUI library and are not visible by user
+ * \brief           List of internal macros which can be used only inside GUI library and are not visible by user outside GUI library
  * \{
  */
+
+/**
+ * \brief           Enter to GUI library. When using RTOS, this macro is used for mutex lock
+ * \note            When RTOS is not used, this macro has no meaning
+ * \hideinitializer
+ */
 #define __GUI_ENTER()
+
+/**
+ * \brief           Leave from GUI library. When using RTOS, this macro is used for mutex release
+ * \note            When RTOS is not used, this macro has no meaning
+ * \hideinitializer
+ */
 #define __GUI_LEAVE()
 
+
+/**
+ * \brief           Debugging macro for inside GUI
+ * \param[in]       fmt: Pointer to string with modifiers
+ * \param[in]       ...: List of parameters for all the modifiers in fmt pointer
+ * \note            When RTOS is not used, this macro has no meaning
+ * \hideinitializer
+ */
 #define __GUI_DEBUG(fmt, ...)       printf(fmt, ##__VA_ARGS__)
 
 /**
@@ -91,6 +111,7 @@ extern "C" {
 
 /**
  * \brief           Allocate memory with specific size in bytes
+ * \note            This function must take care of reseting memory to zero
  * \hideinitializer
  */
 #define __GUI_MEMALLOC(size)        calloc(size, 1)

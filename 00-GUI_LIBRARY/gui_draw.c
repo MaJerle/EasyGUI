@@ -162,10 +162,12 @@ GUI_FONT_CharEntry_t* __GetCharEntryFromFont(const GUI_FONT_t* font, const GUI_F
 /* Create char and put it to RAM for fast drawing with memory to memory copy */
 static
 GUI_FONT_CharEntry_t* __CreateCharEntryFromFont(const GUI_FONT_t* font, const GUI_FONT_CharInfo_t* c) {
-    GUI_FONT_CharEntry_t* entry;
+    GUI_FONT_CharEntry_t* entry = NULL;
     uint16_t columns;
     uint16_t memsize = sizeof(*entry);              /* Get size of entry */
     uint16_t memDataSize;
+    
+    return entry;
     
     /* Calculate memory size for data */
     memDataSize = c->xSize * c->ySize;
@@ -874,7 +876,7 @@ void GUI_DRAW_Image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_I
     if (y < disp->Y1) {
         src += (disp->Y1 - y) * img->xSize * bytes; /* Set offset for number of image lines */
         dst += (disp->Y1 - y) * GUI.LCD.Width * GUI.LCD.PixelSize;  /* Set offset for number of LCD lines */
-        height -= disp->Y1 - y;
+        height -= disp->Y1 - y;                     /* Decrease effective height */
     }
     if ((y + img->ySize) > disp->Y2) {
         height -= y + img->ySize - disp->Y2;        /* Decrease effective height */
@@ -882,7 +884,7 @@ void GUI_DRAW_Image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_I
     if (x < disp->X1) {                             /* Set offset start address if required */
         src += (disp->X1 - x) * bytes;              /* Set offset of start address in X direction */
         dst += (disp->X1 - x) * GUI.LCD.PixelSize;  /* Set offset of start address in X direction */
-        width -= disp->X1 - x;                      /* Increase source offline */
+        width -= disp->X1 - x;                      /* Decrease effective width */
     }
     if ((x + img->xSize) > disp->X2) {
         width -= x + img->xSize - disp->X2;         /* Decrease effective width */

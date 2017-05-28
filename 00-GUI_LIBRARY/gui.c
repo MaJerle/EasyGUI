@@ -159,23 +159,45 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
     
     *result = (GUI_WC_t)0;                          
     
-    PT_BEGIN(&ts->pt);
+    PT_BEGIN(&ts->pt);                              /* Start thread execution */
     
-    for (i = 0; i < 2;) {
+    memset(x, 0x00, sizeof(x));                     /* Reset X values */
+    memset(y, 0x00, sizeof(x));                     /* Reset Y values */
+    for (i = 0; i < 2;) {                           /* Allow up to 2 touch presses */
         /**
          * Wait for valid input with pressed state
          */
         PT_WAIT_UNTIL(&ts->pt, v && ts->TS.Status && !old->TS.Status && ts->TS.Count == 1);
         
         Time = ts->TS.Time;                         /* Get start time of this touch */
-        x[i] = ts->TS.X[0];                         /* Save X value */
-        y[i] = ts->TS.Y[0];                         /* Save Y value */
-        PT_YIELD(&ts->pt);                          /* Stop thread for now and wait next call */
+        x[i] = ts->RelX[0];                         /* Save X value */
+        y[i] = ts->RelY[0];                         /* Save Y value */
         
         /**
          * Either wait for released status or timeout
          */
-        PT_WAIT_UNTIL(&ts->pt, v || (GUI.Time - Time) > 2000); /* Wait touch with released state */
+        do {
+            PT_YIELD(&ts->pt);                      /* Stop thread for now and wait next call */
+            PT_WAIT_UNTIL(&ts->pt, v || (GUI.Time - Time) > 2000); /* Wait touch with released state or timeout */
+            
+            if (v) {                                /* New valid touch entry received */
+                /**
+                 * If touch is still pressed (touch move) and we have active widget and touch move event was no processed
+                 * then we can use click events also after touch move (for example, button is that widget) where in
+                 * some cases, click event should not be processed after touch move (slider, dropdown, etc)
+                 */
+                if (ts->TS.Status && GUI.ActiveWidget && !__GUI_WIDGET_GetFlag(GUI.ActiveWidget, GUI_FLAG_TOUCH_MOVE)) {
+                    Time = ts->TS.Time;             /* Get start time of this touch */
+                    x[i] = ts->RelX[0];             /* Update X value */
+                    y[i] = ts->RelY[0];             /* Update Y value */
+                    continue;                       /* Continue and wait for next (released) event */
+                } else {                            /* Released status received */
+                    break;                          /* Stop execution, continue later */
+                }
+            } else {
+                break;                              /* Stop while loop execution */
+            }
+        } while (1);
         
         /**
          * Check what was the reason for thread to continue
@@ -186,6 +208,14 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
                     if (__GUI_ABS(x[0] - x[1]) > 30 || __GUI_ABS(y[0] - y[1]) > 30) {
                         i = 0;                      /* Difference was too big, reset and act like normal click */
                     }
+                }
+                if (
+                    x[0] < 0 || x[0] > ts->WidgetWidth ||
+                    y[0] < 0 || y[0] > ts->WidgetHeight ||
+                    x[1] < 0 || x[1] > ts->WidgetWidth ||
+                    y[1] < 0 || y[1] > ts->WidgetHeight
+                ) {
+                    PT_EXIT(&ts->pt);           /* Exit thread */
                 }
                 if (!i) {                           /* On first call, this is click event */
                     *result = GUI_WC_Click;         /* Click event occurred */
@@ -213,17 +243,18 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
         }
         i++;
     }
-
-    
-    PT_END(&ts->pt);
+    PT_END(&ts->pt);                                /* Stop thread execution */
 }
 
-void __SetRelativeCoordinate(__GUI_TouchData_t* ts, GUI_iDim_t x, GUI_iDim_t y) {
+void __SetRelativeCoordinate(__GUI_TouchData_t* ts, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height) {
     uint8_t i = 0;
     for (i = 0; i < ts->TS.Count; i++) {
         ts->RelX[i] = ts->TS.X[i] - x;              /* Get relative coordinate on widget */
         ts->RelY[i] = ts->TS.Y[i] - y;              /* Get relative coordinate on widget */
     }
+    
+    ts->WidgetWidth = width;                        /* Get widget width */
+    ts->WidgetHeight = height;                      /* Get widget height */
 
 #if GUI_TOUCH_MAX_PRESSES > 1
     if (ts->TS.Count == 2) {                        /* 2 points detected */
@@ -270,10 +301,11 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
         
         /* Check if widget is in touch area */
         if (touch->TS.X[0] >= GUI.DisplayTemp.X1 && touch->TS.X[0] <= GUI.DisplayTemp.X2 && touch->TS.Y[0] >= GUI.DisplayTemp.Y1 && touch->TS.Y[0] <= GUI.DisplayTemp.Y2) {
-            __SetRelativeCoordinate(touch, __GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h)); /* Set relative coordinate */
-
-            touch->WidgetWidth = __GUI_WIDGET_GetWidth(h);  /* Get widget width */
-            touch->WidgetHeight = __GUI_WIDGET_GetHeight(h);    /* Get widget height */
+            __SetRelativeCoordinate(touch,          /* Set relative coordinate */
+                __GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h), 
+                __GUI_WIDGET_GetWidth(h), __GUI_WIDGET_GetHeight(h)
+            ); 
+        
             __GUI_WIDGET_Callback(h, GUI_WC_TouchStart, touch, &tStat);
             if (tStat == touchCONTINUE) {           /* Check result status */
                 tStat = touchHANDLED;               /* If command is processed, touchCONTINUE can't work */
@@ -371,7 +403,10 @@ int32_t GUI_Process(void) {
     if (__GUI_INPUT_TouchAvailable()) {             /* Check if any touch available */
         while (__GUI_INPUT_TouchRead(&GUI.Touch.TS)) {  /* Process all touch events possible */
             if (GUI.ActiveWidget && GUI.Touch.TS.Status) {  /* Check active widget for touch and pressed status */
-                __SetRelativeCoordinate(&GUI.Touch, __GUI_WIDGET_GetAbsoluteX(GUI.ActiveWidget), __GUI_WIDGET_GetAbsoluteY(GUI.ActiveWidget));  /* Set relative touch (for widget) from current touch */
+                __SetRelativeCoordinate(&GUI.Touch, /* Set relative touch (for widget) from current touch */
+                    __GUI_WIDGET_GetAbsoluteX(GUI.ActiveWidget), __GUI_WIDGET_GetAbsoluteY(GUI.ActiveWidget), 
+                    __GUI_WIDGET_GetWidth(GUI.ActiveWidget), __GUI_WIDGET_GetHeight(GUI.ActiveWidget)
+                );
             }
             
             if (GUI.Touch.TS.Status && GUI.TouchOld.TS.Status) {
@@ -382,7 +417,12 @@ int32_t GUI_Process(void) {
                  */
                 if (GUI.ActiveWidget) {             /* If active widget exists */
                     if (GUI.Touch.TS.Count == GUI.TouchOld.TS.Count) {
-                        __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchMove, &GUI.Touch, &tStat);  /* The same amount of touch events currently */
+                        uint8_t result = __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchMove, &GUI.Touch, &tStat); /* The same amount of touch events currently */
+                        if (result) {               /* Check if touch move processed */
+                            __GH(GUI.ActiveWidget)->Flags |= GUI_FLAG_TOUCH_MOVE;   /* Touch move has been processed */
+                        } else {
+                            __GH(GUI.ActiveWidget)->Flags &= ~GUI_FLAG_TOUCH_MOVE;  /* Touch move has not been processed */
+                        }
                     } else {
                         __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchStart, &GUI.Touch, &tStat); /* New amount of touch elements happened */
                     }

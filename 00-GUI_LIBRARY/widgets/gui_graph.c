@@ -496,20 +496,12 @@ GUI_GRAPH_DATA_p GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_t type, uint16_t length) {
 
     data = (GUI_GRAPH_DATA_p)__GUI_MEMALLOC(sizeof(GUI_GRAPH_DATA_t));  /* Allocate memory for basic widget */
     if (data) {
-        memset((void *)data, 0x00, sizeof(GUI_GRAPH_DATA_t));   /* Reset memory */
-        
         data->Type = type;
         data->Length = length;
         if (type == GUI_GRAPH_TYPE_YT) {            /* Only Y values are stored */
             data->Data = __GUI_MEMALLOC(length * sizeof(int16_t));
-            if (data->Data) {
-                memset(data->Data, 0x00, length * sizeof(int16_t));
-            }
         } else {
             data->Data = __GUI_MEMALLOC(length * 2 * sizeof(int16_t));  /* Store X and Y value for plot */
-            if (data->Data) {
-                memset(data->Data, 0x00, length * 2 * sizeof(int16_t));
-            }
         }
         if (!data->Data) {
             __GUI_MEMFREE(data);                    /* Remove widget because data memory could not be allocated */

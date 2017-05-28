@@ -465,7 +465,6 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             } else {                                /* Widget opened, process data */
                 __ProcessClick(h, ts);              /* Process click event */
             }
-            
             return 1;
         }
         case GUI_WC_FocusOut: {

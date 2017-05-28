@@ -891,7 +891,7 @@ void __GUI_WIDGET_FOCUS_SET(GUI_HANDLE_p h) {
 /* Clear active widget status */
 void __GUI_WIDGET_ACTIVE_CLEAR(void) {
     if (GUI.ActiveWidget) {
-        __GH(GUI.ActiveWidget)->Flags &= ~GUI_FLAG_ACTIVE;
+        __GH(GUI.ActiveWidget)->Flags &= ~(GUI_FLAG_ACTIVE | GUI_FLAG_TOUCH_MOVE);  /* Clear all widget based flags */
         __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_ActiveOut, NULL, NULL);
         GUI.ActiveWidgetPrev = GUI.ActiveWidget;
         GUI.ActiveWidget = 0;
