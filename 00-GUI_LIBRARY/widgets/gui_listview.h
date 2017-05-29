@@ -246,7 +246,7 @@ uint8_t GUI_LISTVIEW_Scroll(GUI_HANDLE_p h, int16_t step);
  * \retval          1: Text was found and copied
  * \retval          0: Text was not found
  */
-uint8_t GUI_LISTVIEW_GetItemValue(GUI_HANDLE_p h, uint16_t rindex, uint16_t cindex, GUI_Char* dst, uint32_t length);
+uint8_t GUI_LISTVIEW_GetItemValue(GUI_HANDLE_p h, uint16_t rindex, uint16_t cindex, GUI_Char* dst, size_t length);
 
 /**
  * \}

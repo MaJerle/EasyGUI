@@ -535,7 +535,7 @@ uint8_t __GUI_WIDGET_IsFontAndTextSet(GUI_HANDLE_p h) {
 }
 
 uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
-    uint16_t len, tlen;
+    size_t len, tlen;
     uint32_t ch;
     uint8_t l;
     const GUI_Char* str = kb->KB.Keys;
@@ -1268,6 +1268,18 @@ uint8_t GUI_WIDGET_SetExpanded(GUI_HANDLE_p h, uint8_t state) {
     __GUI_ENTER();                                  /* Enter GUI */
     
     ret = __GUI_WIDGET_SetExpanded(h, state);       /* Set expanded mode */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
+}
+
+uint8_t GUI_WIDGET_IsExpanded(GUI_HANDLE_p h) {
+    uint8_t ret;
+    
+    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    ret = __GUI_WIDGET_IsExpanded(h);               /* Check expanded mode */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;

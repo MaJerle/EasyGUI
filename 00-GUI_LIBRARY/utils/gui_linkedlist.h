@@ -82,9 +82,7 @@ extern "C" {
  * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to add to base linked list
  * \retval          None
- * \sa              __GUI_LINKEDLIST_REMOVE_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_ADD_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_REMOVE_GEN
+ * \sa              __GUI_LINKEDLIST_REMOVE_GEN, __GUI_LINKEDLIST_MULTI_ADD_GEN, __GUI_LINKEDLIST_MULTI_REMOVE_GEN
  */
 void __GUI_LINKEDLIST_ADD_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
     
@@ -94,9 +92,7 @@ void __GUI_LINKEDLIST_ADD_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* elem
  * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to remove from base linked list
  * \retval          Pointer to removed \ref GUI_LinkedList_t element
- * \sa              __GUI_LINKEDLIST_ADD_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_ADD_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_REMOVE_GEN
+ * \sa              __GUI_LINKEDLIST_ADD_GEN, __GUI_LINKEDLIST_MULTI_ADD_GEN, __GUI_LINKEDLIST_MULTI_REMOVE_GEN
  */
 GUI_LinkedList_t* __GUI_LINKEDLIST_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 
@@ -116,9 +112,7 @@ GUI_LinkedList_t* __GUI_LINKEDLIST_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_Li
  * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to get next element of
  * \retval          > 0: Pointer to next element
  * \retval          0: No elements anymore in list
- * \sa              __GUI_LINKEDLIST_GETPREV_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_GETNEXT_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_GETPREV_GEN
+ * \sa              __GUI_LINKEDLIST_GETPREV_GEN, __GUI_LINKEDLIST_MULTI_GETNEXT_GEN, __GUI_LINKEDLIST_MULTI_GETPREV_GEN
  */
 GUI_LinkedList_t* __GUI_LINKEDLIST_GETNEXT_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 
@@ -138,9 +132,7 @@ GUI_LinkedList_t* __GUI_LINKEDLIST_GETNEXT_GEN(GUI_LinkedListRoot_t* root, GUI_L
  * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to get next element of
  * \retval          > 0: Pointer to previous element
  * \retval          0: No elements anymore in list
- * \sa              __GUI_LINKEDLIST_GETNEXT_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_GETNEXT_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_GETPREV_GEN
+ * \sa              __GUI_LINKEDLIST_GETNEXT_GEN, __GUI_LINKEDLIST_MULTI_GETNEXT_GEN, __GUI_LINKEDLIST_MULTI_GETPREV_GEN
  */
 GUI_LinkedList_t* __GUI_LINKEDLIST_GETPREV_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 
@@ -161,9 +153,7 @@ GUI_LinkedList_t* __GUI_LINKEDLIST_GETNEXT_BYINDEX_GEN(GUI_LinkedListRoot_t* roo
  * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to move down on base linked list
  * \retval          1: Element moved down
  * \retval          0: Element was not moved down as it is already on bottom
- * \sa              __GUI_LINKEDLIST_MOVEUP_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_MOVEUP_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_MOVEDOWN_GEN
+ * \sa              __GUI_LINKEDLIST_MOVEUP_GEN, __GUI_LINKEDLIST_MULTI_MOVEUP_GEN, __GUI_LINKEDLIST_MULTI_MOVEDOWN_GEN
  */
 uint8_t __GUI_LINKEDLIST_MOVEDOWN_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 
@@ -174,9 +164,7 @@ uint8_t __GUI_LINKEDLIST_MOVEDOWN_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList
  * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to move up on base linked list
  * \retval          1: Element moved up
  * \retval          0: Element was not moved up as it is already on bottom
- * \sa              __GUI_LINKEDLIST_MOVEDOWN_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_MOVEUP_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_MOVEDOWN_GEN
+ * \sa              __GUI_LINKEDLIST_MOVEDOWN_GEN, __GUI_LINKEDLIST_MULTI_MOVEUP_GEN, __GUI_LINKEDLIST_MULTI_MOVEDOWN_GEN
  */
 uint8_t __GUI_LINKEDLIST_MOVEUP_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 
@@ -189,9 +177,7 @@ uint8_t __GUI_LINKEDLIST_MOVEUP_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t
  * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to add to base linked list
  * \retval          > 0: Pointer to allocated \ref GUI_LinkedListMulti_t structure with linked list entries
  * \retval          0: Failed to allocate memory for \ref GUI_LinkedListMulti_t structure
- * \sa              __GUI_LINKEDLIST_ADD_GEN
- * \sa              __GUI_LINKEDLIST_REMOVE_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_REMOVE_GEN
+ * \sa              __GUI_LINKEDLIST_ADD_GEN, __GUI_LINKEDLIST_REMOVE_GEN, __GUI_LINKEDLIST_MULTI_REMOVE_GEN
  */
 GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_ADD_GEN(GUI_LinkedListRoot_t* root, void* element);
     
@@ -202,9 +188,7 @@ GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_ADD_GEN(GUI_LinkedListRoot_t* root
  * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to remove from base linked list
  * \retval          1: Element removed and memory deallocated
  * \retval          0: Failed to remove element
- * \sa              __GUI_LINKEDLIST_ADD_GEN
- * \sa              __GUI_LINKEDLIST_REMOVE_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_ADD_GEN
+ * \sa              __GUI_LINKEDLIST_ADD_GEN, __GUI_LINKEDLIST_REMOVE_GEN, __GUI_LINKEDLIST_MULTI_ADD_GEN
  */
 uint8_t __GUI_LINKEDLIST_MULTI_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element);
 
@@ -224,9 +208,7 @@ uint8_t __GUI_LINKEDLIST_MULTI_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_Linked
  * \param[in]       *element: Pointer to \ref GUI_LinkedListMulti_t element to get next element of
  * \retval          > 0: Pointer to next element
  * \retval          0: No elements anymore in list
- * \sa              __GUI_LINKEDLIST_GETNEXT_GEN
- * \sa              __GUI_LINKEDLIST_GETPREV_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_GETPREV_GEN
+ * \sa              __GUI_LINKEDLIST_GETNEXT_GEN, __GUI_LINKEDLIST_GETPREV_GEN, __GUI_LINKEDLIST_MULTI_GETPREV_GEN
  */
 GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element);
 
@@ -246,9 +228,7 @@ GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(GUI_LinkedListRoot_t* 
  * \param[in]       *element: Pointer to \ref GUI_LinkedListMulti_t element to get next element of
  * \retval          > 0: Pointer to previous element
  * \retval          0: No elements anymore in list
- * \sa              __GUI_LINKEDLIST_GETNEXT_GEN
- * \sa              __GUI_LINKEDLIST_GETPREV_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_GETNEXT_GEN
+ * \sa              __GUI_LINKEDLIST_GETNEXT_GEN, __GUI_LINKEDLIST_GETPREV_GEN, __GUI_LINKEDLIST_MULTI_GETNEXT_GEN
  */
 GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_GETPREV_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element);
 
@@ -259,9 +239,7 @@ GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_GETPREV_GEN(GUI_LinkedListRoot_t* 
  * \param[in]       *element: Pointer to \ref GUI_LinkedListMulti_t element to move down on base linked list
  * \retval          1: Element moved down
  * \retval          0: Element was not moved down as it is already on bottom
- * \sa              __GUI_LINKEDLIST_MOVEUP_GEN
- * \sa              __GUI_LINKEDLIST_MOVEDOWN_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_MOVEUP_GEN
+ * \sa              __GUI_LINKEDLIST_MOVEUP_GEN, __GUI_LINKEDLIST_MOVEDOWN_GEN, __GUI_LINKEDLIST_MULTI_MOVEUP_GEN
  */
 uint8_t __GUI_LINKEDLIST_MULTI_MOVEDOWN_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element);
 
@@ -272,9 +250,7 @@ uint8_t __GUI_LINKEDLIST_MULTI_MOVEDOWN_GEN(GUI_LinkedListRoot_t* root, GUI_Link
  * \param[in]       *element: Pointer to \ref GUI_LinkedListMulti_t element to move up on base linked list
  * \retval          1: Element moved up
  * \retval          0: Element was not moved up as it is already on bottom
- * \sa              __GUI_LINKEDLIST_MOVEUP_GEN
- * \sa              __GUI_LINKEDLIST_MOVEDOWN_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_MOVEDOWN_GEN
+ * \sa              __GUI_LINKEDLIST_MOVEUP_GEN, __GUI_LINKEDLIST_MOVEDOWN_GEN, __GUI_LINKEDLIST_MULTI_MOVEDOWN_GEN
  */
 uint8_t __GUI_LINKEDLIST_MULTI_MOVEUP_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element);
     
@@ -287,8 +263,7 @@ uint8_t __GUI_LINKEDLIST_MULTI_MOVEUP_GEN(GUI_LinkedListRoot_t* root, GUI_Linked
  * \param[in]       *element: Memory address in data part of linked list entry
  * \retval          1: Element removed and memory deallocated
  * \retval          0: Failed to remove element
- * \sa              __GUI_LINKEDLIST_REMOVE_GEN
- * \sa              __GUI_LINKEDLIST_MULTI_REMOVE_GEN
+ * \sa              __GUI_LINKEDLIST_REMOVE_GEN, __GUI_LINKEDLIST_MULTI_REMOVE_GEN
  */
 uint8_t __GUI_LINKEDLIST_MULTI_FIND_REMOVE(GUI_LinkedListRoot_t* root, void* element);
     

@@ -146,8 +146,7 @@ uint8_t GUI_DROPDOWN_AddString(GUI_HANDLE_p h, const GUI_Char* text);
  * \param[in,out]   h: Widget handle
  * \retval          1: String deleted
  * \retval          0: String not deleted
- * \sa              GUI_DROPDOWN_DeleteString
- * \sa              GUI_DROPDOWN_DeleteLastString
+ * \sa              GUI_DROPDOWN_DeleteString, GUI_DROPDOWN_DeleteLastString
  */
 uint8_t GUI_DROPDOWN_DeleteFirstString(GUI_HANDLE_p h);
 
@@ -156,8 +155,7 @@ uint8_t GUI_DROPDOWN_DeleteFirstString(GUI_HANDLE_p h);
  * \param[in,out]   h: Widget handle
  * \retval          1: String deleted
  * \retval          0: String not deleted
- * \sa              GUI_DROPDOWN_DeleteString
- * \sa              GUI_DROPDOWN_DeleteFirstString
+ * \sa              GUI_DROPDOWN_DeleteString, GUI_DROPDOWN_DeleteFirstString
  */
 uint8_t GUI_DROPDOWN_DeleteLastString(GUI_HANDLE_p h);
 
@@ -167,8 +165,7 @@ uint8_t GUI_DROPDOWN_DeleteLastString(GUI_HANDLE_p h);
  * \param[in]       index: List index (position) to delete
  * \retval          1: String deleted
  * \retval          0: String not deleted
- * \sa              GUI_DROPDOWN_DeleteFirstString
- * \sa              GUI_DROPDOWN_DeleteLastString
+ * \sa              GUI_DROPDOWN_DeleteFirstString, GUI_DROPDOWN_DeleteLastString
  */
 uint8_t GUI_DROPDOWN_DeleteString(GUI_HANDLE_p h, uint16_t index);
 
@@ -188,6 +185,7 @@ uint8_t GUI_DROPDOWN_SetString(GUI_HANDLE_p h, uint16_t index, const GUI_Char* t
  * \param[in]       selection: Set to -1 to invalidate selection or 0 - count-1 for specific selection 
  * \retval          1: Selection changed
  * \retval          0: Selection not changed
+ * \sa              GUI_DROPDOWN_GetSelection
  */
 uint8_t GUI_DROPDOWN_SetSelection(GUI_HANDLE_p h, int16_t selection);
 
@@ -195,6 +193,7 @@ uint8_t GUI_DROPDOWN_SetSelection(GUI_HANDLE_p h, int16_t selection);
  * \brief           Get selected value
  * \param[in,out]   h: Widget handle
  * \retval          Selection number or -1 if no selection
+ * \sa              GUI_DROPDOWN_SetSelection
  */
 int16_t GUI_DROPDOWN_GetSelection(GUI_HANDLE_p h);
 

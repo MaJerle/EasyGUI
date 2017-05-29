@@ -67,7 +67,8 @@ uint32_t __GetNumberOfPendingWidgets(GUI_HANDLE_p parent) {
         }
         if (__GUI_WIDGET_AllowChildren(h)) {        /* If this widget has children elements */
             cnt += __GetNumberOfPendingWidgets(h);  /* Redraw this widget and all its children if required */
-        } else if (__GH(h)->Flags & GUI_FLAG_REDRAW) {  /* Check if we need redraw */
+        }
+        if (__GH(h)->Flags & GUI_FLAG_REDRAW) {     /* Check if we need redraw */
             cnt++;                                  /* Increase number of elements to redraw */
         }
     }
@@ -132,6 +133,7 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
     /* Go through all elements of parent */
     for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, 0); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
         if (!__GUI_WIDGET_IsVisible(h)) {           /* Check if visible */
+            __GH(h)->Flags &= ~GUI_FLAG_REDRAW;     /* Clear flag to be sure */
             continue;                               /* Ignore hidden elements */
         }
         if (__GUI_WIDGET_AllowChildren(h)) {        /* If this widget allows children widgets */
@@ -152,6 +154,37 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
 }
 
 #if GUI_USE_TOUCH
+/**
+ * How touch events works
+ *
+ * When using touch, 3 events are supported on widget:
+ *  - TouchStart: Triggered when touch is going from released status to pressed status (touch just pressed)
+ *  - TouchMove: Triggered when touch is in pressed status and new pressed event is received (finger is moving on widget pressed on touch panel)
+ *  - TouchEnd: Triggered when touch is going from pressed status to released. Finger has been just released from touch panel
+ *
+ * Besides, with these 3 basic touch events, it is possible to handle 3 more events, which may not be just used with touch but can also be used with mouse
+ *  - Click: Triggered when pressed state is detected and after that released state, still on widget coordinates
+ *  - LongClick: Triggered when pressed state is detected for x amount of time (usually 2 seconds)
+ *  - DblClick: Triggered when 2 Click events are detected in range of 300ms
+ *
+ * To be able to detect DblClick, 2 Click events must be valid in certain time.
+ *
+ * Since second events are based on first 3 events for touch, first events must be respected for proper handling second ones.
+ *
+ * Each widget receives a callback for TouchStart, TouchMove and TouchEnd events.
+ * Callback function can return status if event is processed or not. On the returned value 2 things are possible.
+ *
+ * Consider using button and dropdown. In button, everything what matters is TouchStart and TouchEnd. If TouchMove happens, it is not necessary to handle because only press is needed for detect.
+ * In this case, if TouchStart happen and TouchMove too (finger moved inside widget), click event will happen after TouchEnd event, because TouchMove command was ignored and 0 was returned on callback.
+ *
+ * In dropdown mode it is different because TouchMove is required to detect sliding on items. If TouchMove is detected and 1 is returned from callback,
+ * Click event won't be called after TouchEnd event, even if release was inside widget. This is not valid Click because TouchMove was required for something.
+ * If Click event would be also triggered in this case, after sliding, item value would be automatically selected which is wrong.
+ * In this case, Click event is detected only if TouchMove is not detected (TouchStart and after immediatelly TouchEnd).
+ *
+ * This is all handled by this "thread" function
+ */
+static
 PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, uint8_t v, GUI_WC_t* result)) {
     static volatile uint32_t Time;
     static uint8_t i = 0;
@@ -162,7 +195,7 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
     PT_BEGIN(&ts->pt);                              /* Start thread execution */
     
     memset(x, 0x00, sizeof(x));                     /* Reset X values */
-    memset(y, 0x00, sizeof(x));                     /* Reset Y values */
+    memset(y, 0x00, sizeof(y));                     /* Reset Y values */
     for (i = 0; i < 2;) {                           /* Allow up to 2 touch presses */
         /**
          * Wait for valid input with pressed state
@@ -180,9 +213,9 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
             PT_YIELD(&ts->pt);                      /* Stop thread for now and wait next call */
             PT_WAIT_UNTIL(&ts->pt, v || (GUI.Time - Time) > 2000); /* Wait touch with released state or timeout */
             
-            if (v) {                                /* New valid touch entry received */
+            if (v) {                                /* New valid touch entry received, either released or pressed again */
                 /**
-                 * If touch is still pressed (touch move) and we have active widget and touch move event was no processed
+                 * If touch is still pressed (touch move) and we have active widget and touch move event was not processed
                  * then we can use click events also after touch move (for example, button is that widget) where in
                  * some cases, click event should not be processed after touch move (slider, dropdown, etc)
                  */

@@ -77,6 +77,10 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
+        case GUI_WC_PreInit: {                      /* Called immediatelly after widget is created */
+            GUI_WINDOW_SetActive(h);                /* Set active window */
+            return 1;
+        }
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
             GUI_iDim_t x, y, wi, hi, pt, topH;
@@ -272,9 +276,7 @@ GUI_HANDLE_p GUI_WINDOW_CreateDesktop(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb) {
     __GUI_ENTER();                                  /* Enter GUI */
     
     ptr = (GUI_WINDOW_t *)__GUI_WIDGET_Create(&Widget, id, 0, 0, GUI.LCD.Width, GUI.LCD.Height, 0, cb, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);  /* Allocate memory for basic widget */
-    if (ptr) {
-        GUI_WINDOW_SetActive(__GH(ptr));            /* Set active window */
-    }
+
     __GUI_LEAVE();                                  /* Leave GUI */
     return __GH(ptr);
 }
@@ -293,8 +295,6 @@ GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
         __GUI_WIDGET_SetPaddingRight(ptr, 2);
         __GUI_WIDGET_SetPaddingBottom(ptr, 2);
         __GUI_WIDGET_SetPaddingLeft(ptr, 2);
-        
-        GUI_WINDOW_SetActive(__GH(ptr));            /* Set active window */
     }
     __GUI_LEAVE();                                  /* Leave GUI */
     return __GH(ptr);

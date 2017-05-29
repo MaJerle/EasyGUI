@@ -458,6 +458,15 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
 void GUI_DRAW_Rectangle3D(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_DRAW_3D_State_t state);
 
 /**
+ * \brief           Draw polygon lines
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       *points: Pointer to array of \ref GUI_DRAW_Poly_t points to draw lines between
+ * \param[in]       len: Number of points in array. There must be at least 2 points
+ * \param[in]       color: Color to use for drawing
+ */
+void GUI_DRAW_Poly(const GUI_Display_t* disp, const GUI_DRAW_Poly_t* points, size_t len, GUI_Color_t color);
+
+/**
  * \brief           Initializes \ref GUI_DRAW_SB_t structure for drawing operations
  * \param[in]       *sb: Pointer to \ref GUI_DRAW_SB_t to initialize to default values
  * \retval          None

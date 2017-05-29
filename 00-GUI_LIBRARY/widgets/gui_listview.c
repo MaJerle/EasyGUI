@@ -668,7 +668,7 @@ int16_t GUI_LISTVIEW_GetSelection(GUI_HANDLE_p h) {
     return selection;
 }
 
-uint8_t GUI_LISTVIEW_GetItemValue(GUI_HANDLE_p h, uint16_t rindex, uint16_t cindex, GUI_Char* dst, uint32_t length) {
+uint8_t GUI_LISTVIEW_GetItemValue(GUI_HANDLE_p h, uint16_t rindex, uint16_t cindex, GUI_Char* dst, size_t length) {
     int16_t ret = 0;
     GUI_LISTVIEW_ROW_t* row;
     

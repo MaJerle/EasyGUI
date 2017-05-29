@@ -490,11 +490,11 @@ uint8_t GUI_GRAPH_Zoom(GUI_HANDLE_p h, float zoom, float x, float y) {
 /*************************/
 /* GRAPH DATA functions  */
 /*************************/
-GUI_GRAPH_DATA_p GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_t type, uint16_t length) {
-    GUI_GRAPH_DATA_p data;
+GUI_GRAPH_DATA_p GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_t type, size_t length) {
+    GUI_GRAPH_DATA_t* data;
     __GUI_ENTER();                                  /* Enter GUI */
 
-    data = (GUI_GRAPH_DATA_p)__GUI_MEMALLOC(sizeof(GUI_GRAPH_DATA_t));  /* Allocate memory for basic widget */
+    data = (GUI_GRAPH_DATA_p)__GUI_MEMALLOC(sizeof(*data)); /* Allocate memory for basic widget */
     if (data) {
         data->Type = type;
         data->Length = length;
@@ -509,7 +509,7 @@ GUI_GRAPH_DATA_p GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_t type, uint16_t length) {
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return data;
+    return (GUI_GRAPH_DATA_p)data;
 }
 
 uint8_t GUI_GRAPH_DATA_AddValue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y) {

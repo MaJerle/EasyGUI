@@ -391,9 +391,7 @@ uint8_t __GUI_WIDGET_SetExpanded(GUI_HANDLE_p h, uint8_t state);
  * \param[in]       width: Width in units of pixels
  * \retval          1: Successful
  * \retval          1: Failed
- * \sa              GUI_WIDGET_SetHeight
- * \sa              GUI_WIDGET_SetWidthPercent
- * \sa              GUI_WIDGET_SetHeightPercent
+ * \sa              GUI_WIDGET_SetHeight, GUI_WIDGET_SetWidthPercent, GUI_WIDGET_SetHeightPercent
  */
 uint8_t __GUI_WIDGET_SetWidth(GUI_HANDLE_p h, GUI_Dim_t width);
 
@@ -948,8 +946,7 @@ uint8_t GUI_WIDGET_Show(GUI_HANDLE_p h);
  * \param[in,out]   h: Widget handle
  * \retval          1: Widget was hidden ok
  * \retval          0: Widget was not hidden
- * \sa              GUI_WIDGET_Show
- * \sa              GUI_WIDGET_PutOnFront
+ * \sa              GUI_WIDGET_Show, GUI_WIDGET_PutOnFront
  */
 uint8_t GUI_WIDGET_Hide(GUI_HANDLE_p h);
 
@@ -976,6 +973,7 @@ uint8_t GUI_WIDGET_Invalidate(GUI_HANDLE_p h);
  * \param[in]       callback: Callback function for widget
  * \retval          1: Callback was set ok
  * \retval          1: Callback was not set
+ * \sa              GUI_WIDGET_ProcessDefaultCallback, GUI_WIDGET_Callback
  */
 uint8_t GUI_WIDGET_SetCallback(GUI_HANDLE_p h, GUI_WIDGET_CALLBACK_t callback);
 
@@ -994,7 +992,7 @@ uint8_t GUI_WIDGET_SetUserData(GUI_HANDLE_p h, void* data);
  * \brief           Get custom user data from widget previously set with \ref GUI_WIDGET_SetUserData
  * \param[in,out]   h: Widget handle
  * \retval          Pointer to user data
- * \sa              GUI_WIDGET_GetUserData
+ * \sa              GUI_WIDGET_SetUserData
  */
 void* GUI_WIDGET_GetUserData(GUI_HANDLE_p h);
 
@@ -1025,6 +1023,7 @@ uint8_t GUI_WIDGET_ProcessDefaultCallback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* p
  * \param[out]      *result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
  * \retval          1: Command has been processed
  * \retval          0: Command has not been processed
+ * \sa              GUI_WIDGET_SetCallback
  */
 uint8_t GUI_WIDGET_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
@@ -1054,6 +1053,7 @@ uint8_t GUI_WIDGET_IncSelection(GUI_HANDLE_p h, int16_t dir);
  * \param[in]       scroll: Scroll value for X direction
  * \retval          1: Scroll was set ok
  * \retval          0: Scroll was not set
+ * \sa              GUI_WIDGET_SetScrollY
  */
 uint8_t GUI_WIDGET_SetScrollX(GUI_HANDLE_p h, GUI_iDim_t scroll);
 
@@ -1064,6 +1064,7 @@ uint8_t GUI_WIDGET_SetScrollX(GUI_HANDLE_p h, GUI_iDim_t scroll);
  * \param[in]       scroll: Scroll value for Y direction
  * \retval          1: Scroll was set ok
  * \retval          0: Scroll was not set
+ * \sa              GUI_WIDGET_SetScrollX
  */
 uint8_t GUI_WIDGET_SetScrollY(GUI_HANDLE_p h, GUI_iDim_t scroll);
 
@@ -1089,8 +1090,18 @@ uint8_t GUI_WIDGET_SetFontDefault(const GUI_FONT_t* font);
  * \param[in]       state: State for expanded mode
  * \retval          1: Widget expandend status set ok
  * \retval          0: Widget expandend status was not set
+ * \sa              GUI_WIDGET_IsExpanded
  */
 uint8_t GUI_WIDGET_SetExpanded(GUI_HANDLE_p h, uint8_t state);
+
+/**
+ * \brief           Get widget expanded status
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget is expanded
+ * \retval          0: Widget is not expanded
+ * \sa              GUI_WIDGET_SetExpanded
+ */
+uint8_t GUI_WIDGET_IsExpanded(GUI_HANDLE_p h);
 
 /**
  * \brief           Set z-Index for widgets on the same level. This feature applies on widgets which are not dialogs

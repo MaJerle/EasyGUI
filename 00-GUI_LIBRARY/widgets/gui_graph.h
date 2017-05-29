@@ -86,8 +86,8 @@ typedef struct GUI_GRAPH_DATA_p {
 #endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     
     int16_t* Data;                          /*!< Pointer to actual data object */
-    uint32_t Length;                        /*!< Size of data array */
-    uint32_t Ptr;                           /*!< Read/Write start pointer */
+    size_t Length;                          /*!< Size of data array */
+    size_t Ptr;                             /*!< Read/Write start pointer */
     
     GUI_Color_t Color;                      /*!< Curve color */
     GUI_GRAPH_TYPE_t Type;                  /*!< Plot data type */
@@ -148,9 +148,7 @@ uint8_t GUI_GRAPH_SetColor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t 
  * \param[in]       v: New minimal X value
  * \retval          1: Value was set ok
  * \retval          0: Value was not set
- * \sa              GUI_GRAPH_SetMaxX
- * \sa              GUI_GRAPH_SetMinY
- * \sa              GUI_GRAPH_SetMaxY
+ * \sa              GUI_GRAPH_SetMaxX, GUI_GRAPH_SetMinY, GUI_GRAPH_SetMaxY
  */
 uint8_t GUI_GRAPH_SetMinX(GUI_HANDLE_p h, float v);
 
@@ -160,9 +158,7 @@ uint8_t GUI_GRAPH_SetMinX(GUI_HANDLE_p h, float v);
  * \param[in]       v: New maximal X value
  * \retval          1: Value was set ok
  * \retval          0: Value was not set
- * \sa              GUI_GRAPH_SetMinX
- * \sa              GUI_GRAPH_SetMinY
- * \sa              GUI_GRAPH_SetMaxY
+ * \sa              GUI_GRAPH_SetMinX, GUI_GRAPH_SetMinY, GUI_GRAPH_SetMaxY
  */
 uint8_t GUI_GRAPH_SetMaxX(GUI_HANDLE_p h, float v);
 
@@ -172,9 +168,7 @@ uint8_t GUI_GRAPH_SetMaxX(GUI_HANDLE_p h, float v);
  * \param[in]       v: New minimal Y value
  * \retval          1: Value was set ok
  * \retval          0: Value was not set
- * \sa              GUI_GRAPH_SetMinX
- * \sa              GUI_GRAPH_SetMaxX
- * \sa              GUI_GRAPH_SetMaxY
+ * \sa              GUI_GRAPH_SetMinX, GUI_GRAPH_SetMaxX, GUI_GRAPH_SetMaxY
  */
 uint8_t GUI_GRAPH_SetMinY(GUI_HANDLE_p h, float v);
 
@@ -184,9 +178,7 @@ uint8_t GUI_GRAPH_SetMinY(GUI_HANDLE_p h, float v);
  * \param[in]       v: New maximal Y value
  * \retval          1: Value was set ok
  * \retval          0: Value was not set
- * \sa              GUI_GRAPH_SetMinX
- * \sa              GUI_GRAPH_SetMaxX
- * \sa              GUI_GRAPH_SetMinY
+ * \sa              GUI_GRAPH_SetMinX, GUI_GRAPH_SetMaxX, GUI_GRAPH_SetMinY
  */
 uint8_t GUI_GRAPH_SetMaxY(GUI_HANDLE_p h, float v);
 
@@ -215,6 +207,7 @@ uint8_t GUI_GRAPH_Zoom(GUI_HANDLE_p h, float zoom, float x, float y);
  * \param[in]       data: Data object handle
  * \retval          1: Attaching was successful
  * \retval          0: Attaching failed
+ * \sa              GUI_GRAPH_DetachData
  */
 uint8_t GUI_GRAPH_AttachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
 
@@ -224,6 +217,7 @@ uint8_t GUI_GRAPH_AttachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
  * \param[in]       data: Data object handle
  * \retval          1: Detaching was successful
  * \retval          0: Detaching failed
+ * \sa              GUI_GRAPH_AttachData
  */
 uint8_t GUI_GRAPH_DetachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
 
@@ -237,7 +231,7 @@ uint8_t GUI_GRAPH_DetachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
  * \retval          > 0: \ref GUI_GRAPH_DATA_p object of created widget
  * \retval          0: Data creation failed
  */
-GUI_GRAPH_DATA_p GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_t type, uint16_t length);
+GUI_GRAPH_DATA_p GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_t type, size_t length);
 
 /**
  * \brief           Add new value to the end of data object

@@ -105,6 +105,7 @@ GUI_HANDLE_p dialog1;
 #define ID_WIN_LISTVIEW         (ID_BASE_WIN + 0x0C)
 #define ID_WIN_IMAGE            (ID_BASE_WIN + 0x0D)
 #define ID_WIN_SLIDER           (ID_BASE_WIN + 0x0E)
+#define ID_WIN_ZINDEX           (ID_BASE_WIN + 0x0F)
 
 /* List of base buttons IDs */
 #define ID_BTN_WIN_BTN          (ID_BASE_BTN + 0x01)
@@ -121,6 +122,7 @@ GUI_HANDLE_p dialog1;
 #define ID_BTN_WIN_LISTVIEW     (ID_BASE_BTN + 0x0C)
 #define ID_BTN_WIN_IMAGE        (ID_BASE_BTN + 0x0D)
 #define ID_BTN_WIN_SLIDER       (ID_BASE_BTN + 0x0E)
+#define ID_BTN_WIN_ZINDEX       (ID_BASE_BTN + 0x0F)
 
 #define ID_BTN_DIALOG_CONFIRM   (ID_BASE_BTN + 0x20)
 #define ID_BTN_DIALOG_CANCEL    (ID_BASE_BTN + 0x21)
@@ -166,6 +168,7 @@ bulk_init_t buttons[] = {
     {ID_BTN_WIN_LISTVIEW,   _T("Listview"),     {ID_WIN_LISTVIEW, _T("Listview")}},
     {ID_BTN_WIN_IMAGE,      _T("Image"),        {ID_WIN_IMAGE, _T("Image")}},
     {ID_BTN_WIN_SLIDER,     _T("Slider"),       {ID_WIN_SLIDER, _T("Slider")}},
+    {ID_BTN_WIN_ZINDEX,     _T("z-index"),      {ID_WIN_ZINDEX, _T("z-index test page")}},
 };
 
 char str[100];
@@ -654,6 +657,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 GUI_WIDGET_SetText(handle, _T("SetExpanded"));
                 GUI_WIDGET_SetZIndex(handle, 1);
                 GUI_CHECKBOX_SetColor(handle, GUI_CHECKBOX_COLOR_TEXT, GUI_COLOR_WHITE);
+                GUI_CHECKBOX_SetChecked(handle, GUI_WIDGET_IsExpanded(GUI_WIDGET_GetById(ID_GRAPH_MAIN)));
                 break;
             }
             case ID_WIN_EDIT: {         /* Edit text */
@@ -767,6 +771,32 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 GUI_SLIDER_SetMode(handle, GUI_SLIDER_MODE_TOP_BOTTOM);
                 break;
             }
+            case ID_WIN_ZINDEX: {
+                handle = GUI_TEXTVIEW_Create(0, 10, 10, 180, 100, 0, 0, 0);
+                GUI_WIDGET_SetText(handle, _T("All buttons with same z-index. Auto z-index is allowed."));
+                
+                /* Create button group with the same index */
+                handle = GUI_BUTTON_Create(0, 200, 10, 150, 40, h, 0, 0);
+                GUI_WIDGET_SetText(handle, _T("Button1 z-i: 0"));
+                handle = GUI_BUTTON_Create(0, 300, 20, 150, 40, h, 0, 0);
+                GUI_WIDGET_SetText(handle, _T("Button2 z-i: 0"));
+                handle = GUI_BUTTON_Create(0, 250, 30, 150, 40, h, 0, 0);
+                GUI_WIDGET_SetText(handle, _T("Button3 z-i: 0"));
+                
+                
+                handle = GUI_TEXTVIEW_Create(0, 10, 120, 180, 100, 0, 0, 0);
+                GUI_WIDGET_SetText(handle, _T("Each button has dedicated z-index. Auto z-index is not allowed."));
+                handle = GUI_BUTTON_Create(0, 200, 120, 150, 40, h, 0, 0);
+                GUI_WIDGET_SetText(handle, _T("Button4 z-i: 1"));
+                GUI_WIDGET_SetZIndex(handle, 1);
+                handle = GUI_BUTTON_Create(0, 300, 130, 150, 40, h, 0, 0);
+                GUI_WIDGET_SetText(handle, _T("Button5 z-i: 3"));
+                GUI_WIDGET_SetZIndex(handle, 3);
+                handle = GUI_BUTTON_Create(0, 250, 140, 150, 40, h, 0, 0);
+                GUI_WIDGET_SetText(handle, _T("Button6 z-i: 2"));
+                GUI_WIDGET_SetZIndex(handle, 2);
+                break;
+            }
             default:
                 break;  
         }
@@ -798,9 +828,16 @@ uint8_t led_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
 }
 
 uint8_t checkbox_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
+    GUI_ID_t id;
     uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
-    if (cmd == GUI_WC_ValueChanged) {
-        switch (GUI_WIDGET_GetId(h)) {
+    
+    id = GUI_WIDGET_GetId(h);
+    if (cmd == GUI_WC_Init) {
+        if (id == ID_CHECKBOX_LED) {
+            GUI_CHECKBOX_SetChecked(h, TM_DISCO_LedIsOn(LED_GREEN));
+        }
+    } else if (cmd == GUI_WC_ValueChanged) {
+        switch (id) {
             case ID_CHECKBOX_LED: {
                 if (GUI_CHECKBOX_IsChecked(h)) {
                     TM_DISCO_LedOn(LED_ALL);
@@ -851,7 +888,8 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 case ID_BTN_WIN_PROGBAR:
                 case ID_BTN_WIN_RADIO:
                 case ID_BTN_WIN_TEXTVIEW:
-                case ID_BTN_WIN_SLIDER: {
+                case ID_BTN_WIN_SLIDER:
+                case ID_BTN_WIN_ZINDEX: {
                     btn_user_data_t* data = GUI_WIDGET_GetUserData(h);
                     uint32_t diff = id - ID_BTN_WIN_BTN;
                     if (data) {

@@ -910,7 +910,7 @@ void GUI_DRAW_Image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_I
     }
 }
 
-void GUI_DRAW_Poly(const GUI_Display_t* disp, const GUI_DRAW_Poly_t* points, GUI_Byte len, GUI_Color_t color) {
+void GUI_DRAW_Poly(const GUI_Display_t* disp, const GUI_DRAW_Poly_t* points, size_t len, GUI_Color_t color) {
     GUI_iDim_t x = 0, y = 0;
 
     if (len < 2) {

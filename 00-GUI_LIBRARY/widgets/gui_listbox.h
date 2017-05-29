@@ -129,8 +129,7 @@ uint8_t GUI_LISTBOX_AddString(GUI_HANDLE_p h, const GUI_Char* text);
  * \param[in,out]   h: Widget handle
  * \retval          1: String deleted
  * \retval          0: String not deleted
- * \sa              GUI_LISTBOX_DeleteString
- * \sa              GUI_LISTBOX_DeleteLastString
+ * \sa              GUI_LISTBOX_DeleteString, GUI_LISTBOX_DeleteLastString
  */
 uint8_t GUI_LISTBOX_DeleteFirstString(GUI_HANDLE_p h);
 
@@ -139,8 +138,7 @@ uint8_t GUI_LISTBOX_DeleteFirstString(GUI_HANDLE_p h);
  * \param[in,out]   h: Widget handle
  * \retval          1: String deleted
  * \retval          0: String not deleted
- * \sa              GUI_LISTBOX_DeleteString
- * \sa              GUI_LISTBOX_DeleteFirstString
+ * \sa              GUI_LISTBOX_DeleteString, GUI_LISTBOX_DeleteFirstString
  */
 uint8_t GUI_LISTBOX_DeleteLastString(GUI_HANDLE_p h);
 
@@ -150,8 +148,7 @@ uint8_t GUI_LISTBOX_DeleteLastString(GUI_HANDLE_p h);
  * \param[in]       index: List index (position) to delete
  * \retval          1: String deleted
  * \retval          0: String not deleted
- * \sa              GUI_LISTBOX_DeleteFirstString
- * \sa              GUI_LISTBOX_DeleteLastString
+ * \sa              GUI_LISTBOX_DeleteFirstString, GUI_LISTBOX_DeleteLastString
  */
 uint8_t GUI_LISTBOX_DeleteString(GUI_HANDLE_p h, uint16_t index);
 
@@ -171,6 +168,7 @@ uint8_t GUI_LISTBOX_SetString(GUI_HANDLE_p h, uint16_t index, const GUI_Char* te
  * \param[in]       selection: Set to -1 to invalidate selection or 0 - count-1 for specific selection 
  * \retval          1: Selection changed
  * \retval          0: Selection not changed
+ * \sa              GUI_LISTBOX_GetSelection
  */
 uint8_t GUI_LISTBOX_SetSelection(GUI_HANDLE_p h, int16_t selection);
 
@@ -178,6 +176,7 @@ uint8_t GUI_LISTBOX_SetSelection(GUI_HANDLE_p h, int16_t selection);
  * \brief           Get selected value
  * \param[in,out]   h: Widget handle
  * \retval          Selection number or -1 if no selection
+ * \sa              GUI_LISTBOX_SetSelection
  */
 int16_t GUI_LISTBOX_GetSelection(GUI_HANDLE_p h);
 

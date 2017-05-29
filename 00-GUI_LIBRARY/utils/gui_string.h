@@ -95,8 +95,7 @@ typedef enum GUI_STRING_UNICODE_Result_t {
  * \brief           Initialize unicode processing structure
  * \param[in]       *s: Pointer to \ref GUI_STRING_UNICODE_t to initialize to default values
  * \retval          None
- * \sa              GUI_STRING_UNICODE_Decode
- * \sa              GUI_STRING_UNICODE_Encode
+ * \sa              GUI_STRING_UNICODE_Decode, GUI_STRING_UNICODE_Encode
  */
 void GUI_STRING_UNICODE_Init(GUI_STRING_UNICODE_t* s);
 
@@ -105,8 +104,7 @@ void GUI_STRING_UNICODE_Init(GUI_STRING_UNICODE_t* s);
  * \param[in,out]   *s: Pointer to working \ref GUI_STRING_UNICODE_t structure for processing
  * \param[in]       c: Character to be used for decoding
  * \retval          Member of \ref GUI_STRING_UNICODE_Result_t indicating decoding status
- * \sa              GUI_STRING_UNICODE_Init
- * \sa              GUI_STRING_UNICODE_Encode
+ * \sa              GUI_STRING_UNICODE_Init, GUI_STRING_UNICODE_Encode
  */
 GUI_STRING_UNICODE_Result_t GUI_STRING_UNICODE_Decode(GUI_STRING_UNICODE_t* s, const GUI_Char c);
 
@@ -115,8 +113,7 @@ GUI_STRING_UNICODE_Result_t GUI_STRING_UNICODE_Decode(GUI_STRING_UNICODE_t* s, c
  * \param[in]       c: Character to encode to UNICODE sequence
  * \param[out]      *out: Pointer to 4-bytes long array to store UNICODE information to
  * \retval          Number of bytes required for character encoding
- * \sa              GUI_STRING_UNICODE_Init
- * \sa              GUI_STRING_UNICODE_Decode
+ * \sa              GUI_STRING_UNICODE_Init, GUI_STRING_UNICODE_Decode
  */
 uint8_t GUI_STRING_UNICODE_Encode(const uint32_t c, GUI_Char* out);
 
@@ -172,9 +169,9 @@ GUI_Char* GUI_STRING_CopyN(GUI_Char* dst, const GUI_Char* src, size_t len);
 
 /**
  * \brief           Compare 2 strings
- * \param[in]       *s1: First memory address
- * \param[in]       *s2: Second memory address
- * \retval          0: Strings the same
+ * \param[in]       *s1: First string address
+ * \param[in]       *s2: Second string address
+ * \retval          0: Strings are the same
  * \retval          !=0: Strings are not the same
  */
 int GUI_STRING_Compare(const GUI_Char* s1, const GUI_Char* s2);

@@ -844,18 +844,19 @@ typedef enum GUI_WC_t {
      *
      * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure
      * \param[out]  *result: Value of \ref __GUI_TouchStatus_t enumeration
-     * \sa          GUI_WC_TouchMove
-     * \sa          GUI_WC_TouchEnd
+     * \sa          GUI_WC_TouchMove, GUI_WC_TouchEnd
      */
     GUI_WC_TouchStart = 0x0B,
     
     /**
      * \brief       Notification when touch move event occurs on widget
      *
+     * \note        If return value from function on this parameter is 1, then \ref GUI_WC_Click event won't be called after released status
+     *              to prevent collisions between widget events (sliding on widget and click at the same time can cause unknown behaviour on user)
+     *
      * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure
      * \param[out]  *result: Value of \ref __GUI_TouchStatus_t enumeration
-     * \sa          GUI_WC_TouchStart
-     * \sa          GUI_WC_TouchEnd
+     * \sa          GUI_WC_TouchStart, GUI_WC_TouchEnd
      */
     GUI_WC_TouchMove = 0x0C,
     
@@ -864,8 +865,7 @@ typedef enum GUI_WC_t {
      *
      * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure
      * \param[out]  *result: Value of \ref __GUI_TouchStatus_t enumeration
-     * \sa          GUI_WC_TouchStart
-     * \sa          GUI_WC_TouchMove
+     * \sa          GUI_WC_TouchStart, GUI_WC_TouchMove
      */
     GUI_WC_TouchEnd = 0x0D,
     
@@ -910,6 +910,7 @@ typedef enum GUI_WC_t {
      *
      * \param[in]   *param: None
      * \param[out]  *result: None
+     * \sa          GUI_WC_ValueChanged
      */
     GUI_WC_SelectionChanged = 0x12,
     
@@ -922,6 +923,7 @@ typedef enum GUI_WC_t {
      *
      * \param[in]   *param: None
      * \param[out]  *result: None
+     * \sa          GUI_WC_SelectionChanged
      */
     GUI_WC_ValueChanged = 0x13,
     
