@@ -286,8 +286,8 @@ void __GUI_LINKEDLIST_WidgetAdd(GUI_HANDLE_ROOT_t* root, GUI_HANDLE_p h) {
     } else {
         __GUI_LINKEDLIST_ADD_GEN(&GUI.Root, (GUI_LinkedList_t *)h);
     }
-    __GUI_LINKEDLIST_WidgetMoveToTop(h);
-    __GUI_LINKEDLIST_WidgetMoveToBottom(h);
+    __GUI_LINKEDLIST_WidgetMoveToTop(h);            /* Reset by moving to top */
+    __GUI_LINKEDLIST_WidgetMoveToBottom(h);         /* Reset by moving to bottom with reorder */
 }
 
 void __GUI_LINKEDLIST_WidgetRemove(GUI_HANDLE_p h) {    
@@ -352,16 +352,24 @@ GUI_Byte __GUI_LINKEDLIST_WidgetMoveToBottom(GUI_HANDLE_p h) {
             }
         } else if (__GUI_WIDGET_AllowChildren(h)) { /* Widget supports children widgets, go to the end of the list if necessary */
             if (!__GUI_WIDGET_IsDialogBase(__GH(__GH(h)->List.Next))) { /* Go down till dialog base is reached */
-                if (!__GUI_LINKEDLIST_WidgetMoveDown(h)) {  /* Move down */
-                    return 0;
+                if (__GH(h)->ZIndex >= __GH(__GH(h)->List.Next)->ZIndex) {  /* Check if z-index allows move */
+                    if (!__GUI_LINKEDLIST_WidgetMoveDown(h)) {  /* Move down */
+                        return 0;
+                    }
+                } else {
+                    break;
                 }
             } else {
                 break;
             }
         } else {                                    /* Our widget does not allow sub widgets */
             if (!__GUI_WIDGET_AllowChildren(__GH(__GH(h)->List.Next))) {    /* Allow moving down only if next widget does not allow sub widgets */
-                if (!__GUI_LINKEDLIST_WidgetMoveDown(h)) {  /* Move down */
-                    return 0;
+                if (__GH(h)->ZIndex >= __GH(__GH(h)->List.Next)->ZIndex) {  /* Check if z-index allows move */
+                    if (!__GUI_LINKEDLIST_WidgetMoveDown(h)) {  /* Move down */
+                        return 0;
+                    }
+                } else {
+                    break;
                 }
             } else {
                 break;
@@ -386,15 +394,23 @@ GUI_Byte __GUI_LINKEDLIST_WidgetMoveToTop(GUI_HANDLE_p h) {
             }
         } else if (__GUI_WIDGET_AllowChildren(h)) { /* If moving widget allows children elements */
             if (__GUI_WIDGET_AllowChildren(__GH(__GH(h)->List.Prev))) { /* If previous widget allows children too */
-                if (!__GUI_LINKEDLIST_WidgetMoveUp(h)) {    /* Move up widget */
-                    return 0;
+                if (__GH(h)->ZIndex <= __GH(__GH(h)->List.Prev)->ZIndex) {  /* Check if z-index allows move */
+                    if (!__GUI_LINKEDLIST_WidgetMoveUp(h)) {    /* Move up */
+                        return 0;
+                    }
+                } else {
+                    break;
                 }
             } else {
                 break;                              /* Stop execution */
             }
-        } else {
-            if (!__GUI_LINKEDLIST_WidgetMoveUp(h)) {  /* Move up widget */
-                return 0;
+        } else {                                    /* Normal widget */
+            if (__GH(h)->ZIndex <= __GH(__GH(h)->List.Prev)->ZIndex) {  /* Check if z-index allows move */
+                if (!__GUI_LINKEDLIST_WidgetMoveUp(h)) {    /* Move up */
+                    return 0;
+                }
+            } else {
+                break;
             }
         }
     }

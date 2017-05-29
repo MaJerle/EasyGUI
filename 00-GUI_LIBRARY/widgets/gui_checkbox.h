@@ -56,6 +56,7 @@ typedef enum GUI_CHECKBOX_COLOR_t {
     GUI_CHECKBOX_COLOR_FG,                  /*!< Foreground color index */
     GUI_CHECKBOX_COLOR_BORDER,              /*!< Border color index */
     GUI_CHECKBOX_COLOR_DISABLED_BG,         /*!< Background color index when disabled */
+    GUI_CHECKBOX_COLOR_TEXT,                /*!< Text color index */
 } GUI_CHECKBOX_COLOR_t;
 
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)

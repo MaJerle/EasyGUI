@@ -167,8 +167,6 @@ GUI_FONT_CharEntry_t* __CreateCharEntryFromFont(const GUI_FONT_t* font, const GU
     uint16_t memsize = sizeof(*entry);              /* Get size of entry */
     uint16_t memDataSize;
     
-    return entry;
-    
     /* Calculate memory size for data */
     memDataSize = c->xSize * c->ySize;
     
@@ -262,11 +260,12 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DR
     }
     
     if (GUI.LL.CopyChar) {                          /* If copying character function exists in low-level part */
-        GUI_FONT_CharEntry_t* entry = __GetCharEntryFromFont(font, c);  /* Get char entry from font and character for fast alpha drawing operations */
-        if (!entry) {
-            entry = __CreateCharEntryFromFont(font, c); /* Create new entry */
-            //entry = __GetCharEntryFromFont(font, c);    /* Get entry again, maybe here is a problem? */
-        }
+        GUI_FONT_CharEntry_t* entry = NULL;
+        
+//        entry = __GetCharEntryFromFont(font, c);    /* Get char entry from font and character for fast alpha drawing operations */
+//        if (!entry) {
+//            entry = __CreateCharEntryFromFont(font, c); /* Create new entry */
+//        }
         if (entry) {                                /* We have valid data */
             GUI_Dim_t width, height, offlineSrc, offlineDst;
             uint8_t* dst = 0;
@@ -535,11 +534,11 @@ void GUI_DRAW_Line(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_
     curpixel = 0;
     
     /* Check if coordinates are inside drawing region */
-    if (                                            /* Check if redraw is inside area */
-        !__GUI_RECT_MATCH(  x1, y1, x2, y2,
-                            disp->X1, disp->Y1, disp->X2, disp->Y2)) {
-        return;
-    }
+//    if (                                            /* Check if redraw is inside area */
+//        !__GUI_RECT_MATCH(  x1, y1, x2, y2,
+//                            disp->X1, disp->Y1, disp->X2, disp->Y2)) {
+//        return;
+//    }
 
 	deltax = __GUI_ABS(x2 - x1);
 	deltay = __GUI_ABS(y2 - y1);

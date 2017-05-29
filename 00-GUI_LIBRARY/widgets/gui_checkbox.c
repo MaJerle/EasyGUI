@@ -52,6 +52,7 @@ const static GUI_Color_t Colors[] = {
     GUI_COLOR_DARKGRAY,                             /*!< Default freground color */
     GUI_COLOR_BLACK,                                /*!< Default border color */
     GUI_COLOR_GRAY,                                 /*!< Default background color when disabled */
+    GUI_COLOR_BLACK,                                /*!< Default text color for widget */
 };
 
 const static GUI_WIDGET_t Widget = {
@@ -154,7 +155,7 @@ uint8_t GUI_CHECKBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 f.Height = height - 2;
                 f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.Color1Width = f.Width;
-                f.Color1 = __GUI_WIDGET_GetColor(h, GUI_CHECKBOX_COLOR_FG);
+                f.Color1 = __GUI_WIDGET_GetColor(h, GUI_CHECKBOX_COLOR_TEXT);
                 GUI_DRAW_WriteText(disp, __GH(h)->Font, __GH(h)->Text, &f);
             }
             

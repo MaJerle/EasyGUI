@@ -215,7 +215,7 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
                     x[1] < 0 || x[1] > ts->WidgetWidth ||
                     y[1] < 0 || y[1] > ts->WidgetHeight
                 ) {
-                    PT_EXIT(&ts->pt);           /* Exit thread */
+                    PT_EXIT(&ts->pt);               /* Exit thread, invalid coordinate for touch click or double click */
                 }
                 if (!i) {                           /* On first call, this is click event */
                     *result = GUI_WC_Click;         /* Click event occurred */

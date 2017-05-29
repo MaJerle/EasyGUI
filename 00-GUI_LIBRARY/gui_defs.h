@@ -1008,6 +1008,7 @@ typedef struct GUI_HANDLE {
     GUI_Dim_t Height;                       /*!< Object height in units of pixels or percentages */
     uint32_t Padding;                       /*!< 4-bytes long padding, each byte of one side, MSB = top padding, LSB = left padding.
                                                     Used for children widgets if virtual padding should be used */
+    int32_t ZIndex;                         /*!< Z-Index value of widget, which can be set by user. All widgets with same z-index are changeable when active on visible area */
     uint32_t Flags;                         /*!< All possible flags for specific widget */
     GUI_Const GUI_FONT_t* Font;             /*!< Font used for widget drawings */
     GUI_Char* Text;                         /*!< Pointer to widget text if exists */

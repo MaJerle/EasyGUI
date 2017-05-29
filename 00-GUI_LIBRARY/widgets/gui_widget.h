@@ -738,6 +738,27 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
 #define __GUI_WIDGET_IsActive(h)                    (__GH(h)->Flags & GUI_FLAG_ACTIVE)
 
 /**
+ * \brief           Set z-Index for widgets on the same level. This feature applies on widgets which are not dialogs
+ * \note            Larger z-index value means greater position on screen. In case of multiple widgets on same z-index level, they are automatically modified for correct display
+ *
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       zindex: Z-Index value for widget. Any value can be used
+ * \retval          1: New value is different than previous and modification has been done
+ * \retval          0: New value was not set
+ */
+uint8_t __GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex);
+
+/**
+ * \brief           Get z-index value from widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          z-index value
+ * \hideinitializer
+ */
+#define __GUI_WIDGET_GetZIndex(h)                   (__GH(h)->ZIndex)
+
+/**
  * \}
  */
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
@@ -1070,6 +1091,23 @@ uint8_t GUI_WIDGET_SetFontDefault(const GUI_FONT_t* font);
  * \retval          0: Widget expandend status was not set
  */
 uint8_t GUI_WIDGET_SetExpanded(GUI_HANDLE_p h, uint8_t state);
+
+/**
+ * \brief           Set z-Index for widgets on the same level. This feature applies on widgets which are not dialogs
+ * \note            Larger z-index value means greater position on screen. In case of multiple widgets on same z-index level, they are automatically modified for correct display
+ * \param[in,out]   h: Widget handle
+ * \param[in]       zindex: Z-Index value for widget. Any value can be used
+ * \retval          1: New value is different than previous and modification has been done
+ * \retval          0: New value was not set
+ */
+uint8_t GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex);
+
+/**
+ * \brief           Get z-index value from widget
+ * \param[in,out]   h: Widget handle
+ * \retval          z-index value
+ */
+uint32_t GUI_WIDGET_GetZIndex(GUI_HANDLE_p h);
 
 #if defined(GUI_INTERNAL) && !defined(DOXYGEN)
 //Strictly private functions by GUI

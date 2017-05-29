@@ -88,6 +88,7 @@ GUI_HANDLE_p dialog1;
 #define ID_BASE_TEXTWIEW        (ID_BASE_BTN + 0x0100)
 #define ID_BASE_CHECKBOX        (ID_BASE_TEXTWIEW + 0x0100)
 #define ID_BASE_LED             (ID_BASE_CHECKBOX + 0x0100)
+#define ID_BASE_GRAPH           (ID_BASE_LED + 0x0100)
 
 /* List of window widget IDs */
 #define ID_WIN_BTN              (ID_BASE_WIN + 0x01)
@@ -127,11 +128,14 @@ GUI_HANDLE_p dialog1;
 #define ID_TEXTVIEW_1           (ID_BASE_TEXTWIEW + 0x01)
 
 #define ID_CHECKBOX_LED         (ID_BASE_CHECKBOX + 0x01)
+#define ID_CHECKBOX_GRAPH       (ID_BASE_CHECKBOX + 0x02)
 
 #define ID_LED_1                (ID_BASE_LED + 0x01)
 #define ID_LED_2                (ID_BASE_LED + 0x02)
 #define ID_LED_3                (ID_BASE_LED + 0x03)
 #define ID_LED_4                (ID_BASE_LED + 0x04)
+
+#define ID_GRAPH_MAIN           (ID_BASE_GRAPH + 0x01)
 
 typedef struct {
     GUI_ID_t win_id;
@@ -616,7 +620,8 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
             }
             case ID_WIN_GRAPH: {        /* Graph window */
                 uint16_t i;
-                handle = GUI_GRAPH_Create(0, 10, 10, 400, 220, h, 0, 0);
+                handle = GUI_GRAPH_Create(ID_GRAPH_MAIN, 10, 10, 400, 220, h, 0, 0);
+                GUI_WIDGET_SetExpanded(handle, 1);
 
                 GUI_GRAPH_SetMinX(handle, -100);
                 GUI_GRAPH_SetMaxX(handle, 100);
@@ -643,6 +648,12 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 }
                 GUI_GRAPH_AttachData(handle, graphdata1);
                 GUI_GRAPH_AttachData(handle, graphdata2);
+                
+                /* Create checkbox handle for graph */
+                handle = GUI_CHECKBOX_Create(ID_CHECKBOX_GRAPH, 17, 15, 200, 30, h, checkbox_callback, 0);
+                GUI_WIDGET_SetText(handle, _T("SetExpanded"));
+                GUI_WIDGET_SetZIndex(handle, 1);
+                GUI_CHECKBOX_SetColor(handle, GUI_CHECKBOX_COLOR_TEXT, GUI_COLOR_WHITE);
                 break;
             }
             case ID_WIN_EDIT: {         /* Edit text */
@@ -682,6 +693,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 handle = GUI_TEXTVIEW_Create(ID_TEXTVIEW_1, 10, 10, 300, 180, h, 0, 0);
                 GUI_WIDGET_SetText(handle, _T("Text view with automatic new line detector and support for different aligns.\r\n\r\nHowever, I can also manually jump to new line! Just like Word works ;)"));
                 GUI_WIDGET_SetExpanded(handle, 1);
+                GUI_WIDGET_SetZIndex(handle, -1);
                 
                 handle = GUI_RADIO_Create(0, 10, 200, 150, 30, h, radio_callback, 0);
                 GUI_RADIO_SetGroup(handle, RADIO_GROUP_HALIGN);
@@ -788,11 +800,21 @@ uint8_t led_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
 uint8_t checkbox_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
     uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
     if (cmd == GUI_WC_ValueChanged) {
-        if (GUI_WIDGET_GetId(h) == ID_CHECKBOX_LED) {
-            if (GUI_CHECKBOX_IsChecked(h)) {
-                TM_DISCO_LedOn(LED_ALL);
-            } else {
-                TM_DISCO_LedOff(LED_ALL);
+        switch (GUI_WIDGET_GetId(h)) {
+            case ID_CHECKBOX_LED: {
+                if (GUI_CHECKBOX_IsChecked(h)) {
+                    TM_DISCO_LedOn(LED_ALL);
+                } else {
+                    TM_DISCO_LedOff(LED_ALL);
+                }
+                break;
+            }
+            case ID_CHECKBOX_GRAPH: {
+                GUI_HANDLE_p handle = GUI_WIDGET_GetById(ID_GRAPH_MAIN); /* Find graph widget if exists */
+                if (handle) {
+                    GUI_WIDGET_SetExpanded(handle, GUI_CHECKBOX_IsChecked(h));
+                }
+                break;
             }
         }
     }
@@ -831,6 +853,7 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 case ID_BTN_WIN_TEXTVIEW:
                 case ID_BTN_WIN_SLIDER: {
                     btn_user_data_t* data = GUI_WIDGET_GetUserData(h);
+                    uint32_t diff = id - ID_BTN_WIN_BTN;
                     if (data) {
                         GUI_HANDLE_p tmp;
                         if ((tmp = GUI_WIDGET_GetById(data->win_id)) != 0) {
@@ -841,6 +864,7 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                             tmp = GUI_WINDOW_Create(data->win_id, 40, 20, 300, 200, GUI_WINDOW_GetDesktop(), window_callback, NULL);
                             GUI_WIDGET_SetExpanded(tmp, 1);
                             GUI_WIDGET_SetText(tmp, data->win_text);
+                            GUI_WIDGET_SetZIndex(tmp, diff);
                             GUI_WIDGET_PutOnFront(tmp);
                         }
                     }

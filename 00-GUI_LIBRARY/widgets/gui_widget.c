@@ -779,6 +779,20 @@ uint8_t __GUI_WIDGET_IsChildOf(GUI_HANDLE_p h, GUI_HANDLE_p parent) {
     return 0;
 }
 
+uint8_t __GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex) {
+    uint8_t ret = 1;
+    if (__GH(h)->ZIndex != zindex) {                /* There was a change in z-index value */
+        int32_t current = __GH(h)->ZIndex;
+        __GH(h)->ZIndex = zindex;                   /* Set new index */
+        if (zindex < current) {                     /* New index value is less important than before = move widget to top */
+            __GUI_LINKEDLIST_WidgetMoveToTop(h);    /* Move widget to top on linked list = less important and less visible */
+        } else {
+            __GUI_LINKEDLIST_WidgetMoveToBottom(h); /* Move widget to bottom on linked list = most important and most visible */
+        }
+    }
+    return ret;
+}
+
 uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color) {
     uint8_t ret = 1;
     if (!__GH(h)->Colors) {                         /* Do we need to allocate color memory? */
@@ -1271,6 +1285,18 @@ uint8_t GUI_WIDGET_IncSelection(GUI_HANDLE_p h, int16_t dir) {
     __GUI_ENTER();                                  /* Enter GUI */
     
     ret = __GUI_WIDGET_Callback(h, GUI_WC_IncSelection, &dir, &ret);    /* Increase selection for specific amount */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
+}
+
+uint8_t GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex) {
+    uint8_t ret;
+    
+    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    ret = __GUI_WIDGET_SetZIndex(h, zindex);        /* Set z-index value */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
