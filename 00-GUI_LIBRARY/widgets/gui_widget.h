@@ -674,7 +674,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
 #define __GUI_WIDGET_GetParentInnerHeight(h)        (__GH(h)->Parent ? __GUI_WIDGET_GetInnerHeight(__GH(h)->Parent) : GUI.LCD.Height)
 
 /**
- * \brief           Check if widget is visible
+ * \brief           Check if widget is visible in any way, either with transparency or hidden flag
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
  * \retval          1: Widget is visible
@@ -682,7 +682,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \sa              __GUI_WIDGET_IsHidden
  * \hideinitializer
  */
-#define __GUI_WIDGET_IsVisible(h)                   (!(__GH(h)->Flags & GUI_FLAG_HIDDEN))
+#define __GUI_WIDGET_IsVisible(h)                   (!(__GH(h)->Flags & GUI_FLAG_HIDDEN) && __GH(h)->Transparency)
 
 /**
  * \brief           Check if widget is hidden
@@ -693,7 +693,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \sa              __GUI_WIDGET_IsVisible
  * \hideinitializer
  */
-#define __GUI_WIDGET_IsHidden(h)                    (__GH(h)->Flags & GUI_FLAG_HIDDEN)
+#define __GUI_WIDGET_IsHidden(h)                    (!__GUI_WIDGET_IsVisible(h))
 
 /**
  * \brief           Check if widget allows children widgets
@@ -736,6 +736,30 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
 #define __GUI_WIDGET_IsActive(h)                    (__GH(h)->Flags & GUI_FLAG_ACTIVE)
 
 /**
+ * \brief           Check is widget has transparency
+ * \note            Check if widget is visible and transparency is not set to 1 (full view)
+ *
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget is visible and has transparency
+ * \retval          0: Widget is either hidden or with no transparency
+ */
+#define __GUI_WIDGET_IsTransparent(h)               (__GUI_WIDGET_IsVisible(h) && __GH(h)->Transparency < 0xFF)
+
+/**
+ * \brief           Get widget transparency value
+ * \note            Value between 0 and 0xFF is used:
+ *                      - 0x00: Widget is hidden
+ *                      - 0xFF: Widget is fully hidden
+ *                      - between: Widget has transparency value
+ *
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          Trasparency value
+ */
+#define __GUI_WIDGET_GetTransparency(h)             (__GH(h)->Transparency)
+
+/**
  * \brief           Set z-Index for widgets on the same level. This feature applies on widgets which are not dialogs
  * \note            Larger z-index value means greater position on screen. In case of multiple widgets on same z-index level, they are automatically modified for correct display
  *
@@ -760,7 +784,6 @@ uint8_t __GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex);
  * \}
  */
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
-
 
 /**
  * \brief           Get widget ID

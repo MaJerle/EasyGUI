@@ -1,5 +1,5 @@
 /**
- * Keil project example for GSM SIM800/900 for SMS and RTOS support
+ * Keil project example for Graphical User Interface software
  *
  * @note      Check defines.h file for configuration settings!
  * @note      When using Nucleo F411 board, example has set 8MHz external HSE clock!
@@ -89,6 +89,7 @@ GUI_HANDLE_p dialog1;
 #define ID_BASE_CHECKBOX        (ID_BASE_TEXTWIEW + 0x0100)
 #define ID_BASE_LED             (ID_BASE_CHECKBOX + 0x0100)
 #define ID_BASE_GRAPH           (ID_BASE_LED + 0x0100)
+#define ID_BASE_SLIDER          (ID_BASE_GRAPH + 0x0100)
 
 /* List of window widget IDs */
 #define ID_WIN_BTN              (ID_BASE_WIN + 0x01)
@@ -138,6 +139,10 @@ GUI_HANDLE_p dialog1;
 #define ID_LED_4                (ID_BASE_LED + 0x04)
 
 #define ID_GRAPH_MAIN           (ID_BASE_GRAPH + 0x01)
+
+#define ID_SLIDER_0             (ID_BASE_SLIDER + 0x01)
+
+#define ID_BUTTON_0             (ID_BASE_BTN + 0x040)
 
 typedef struct {
     GUI_ID_t win_id;
@@ -386,7 +391,7 @@ const GUI_IMAGE_DESC_t maskImg = {
 };
 
 uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
-    uint8_t res = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
     if (cmd == GUI_WC_Init) {           /* Window has been just initialized */
         switch (GUI_WIDGET_GetId(h)) {  /* Button callbacks */
             case ID_WIN_BTN: {
@@ -761,10 +766,16 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 break;
             }
             case ID_WIN_SLIDER: {
-                handle = GUI_SLIDER_Create(0, 5, 5, 400, 50, h, slider_callback, 0);
-                GUI_SLIDER_SetMode(handle, GUI_SLIDER_MODE_RIGHT_LEFT);
-                handle = GUI_SLIDER_Create(0, 5, 70, 400, 15, h, slider_callback, 0);
+                GUI_BUTTON_Create(ID_BUTTON_0, 5, 100, 100, 30, h, 0, 0);
+               
+                handle = GUI_SLIDER_Create(ID_SLIDER_0, 5, 5, 400, 50, h, slider_callback, 0);
                 GUI_SLIDER_SetMode(handle, GUI_SLIDER_MODE_LEFT_RIGHT);
+                GUI_SLIDER_SetMin(handle, 100);
+                GUI_SLIDER_SetMax(handle, 300);
+                GUI_SLIDER_SetValue(handle, 200);
+                
+                handle = GUI_SLIDER_Create(0, 5, 70, 400, 15, h, slider_callback, 0);
+                GUI_SLIDER_SetMode(handle, GUI_SLIDER_MODE_RIGHT_LEFT);
                 handle = GUI_SLIDER_Create(0, 430, 10, 10, 230, h, slider_callback, 0);
                 GUI_SLIDER_SetMode(handle, GUI_SLIDER_MODE_BOTTOM_TOP);
                 handle = GUI_SLIDER_Create(0, 450, 10, 20, 230, h, slider_callback, 0);
@@ -801,7 +812,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 break;  
         }
     }
-    return res;
+    return ret;
 }
 
 uint8_t radio_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
@@ -868,7 +879,7 @@ uint8_t listview_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* resul
 
 uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
     GUI_ID_t id;
-    uint8_t res = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
     switch (cmd) {
         case GUI_WC_Init: {
             break;
@@ -925,11 +936,11 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
         default:
             break;
     }
-    return res;
+    return ret;
 }
 
 uint8_t dialog_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
-    uint8_t res = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
     switch (cmd) {
         case GUI_WC_Init: {
             handle = GUI_TEXTVIEW_Create(0, 10, 10, GUI_WIDGET_GetWidth(h) - 20, GUI_WIDGET_GetHeight(h) - 52, h, 0, 0);
@@ -951,28 +962,34 @@ uint8_t dialog_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
         default:
             break;
     }
-    return res;
+    return ret;
 }
 
 uint8_t slider_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
-    uint8_t res = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
     switch (cmd) {
         case GUI_WC_Init: {
             GUI_SLIDER_SetMin(h, 0);
-            GUI_SLIDER_SetMax(h, 1000);
+            GUI_SLIDER_SetMax(h, 300);
             GUI_SLIDER_SetValue(h, 212);
             break;
         }
         case GUI_WC_ValueChanged: {
             int32_t value = GUI_SLIDER_GetValue(h); /* Get widget handle */
-            __GUI_DEBUG("V: %d\r\n", value);
+            if (GUI_WIDGET_GetId(h) == ID_SLIDER_0) {
+                GUI_HANDLE_p tmp;
+                tmp = GUI_WIDGET_GetById(ID_BUTTON_0);
+                if (tmp) {
+                    GUI_WIDGET_SetSize(tmp, value, value / 4);
+                }
+            }
             //Set timer PWM
             break;
         }
         default:
             break;
     }
-    return res;
+    return ret;
 }
 
 /* 1ms handler */

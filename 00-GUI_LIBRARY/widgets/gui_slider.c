@@ -175,7 +175,6 @@ uint8_t GUI_SLIDER_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
             o->C.Timer = __GUI_TIMER_Create(30, __TimerCallback, o);    /* Create timer for widget, when widget is deleted, timer will be automatically deleted too */
             if (!o->C.Timer) {                      /* Check if timer created */
                 *(uint8_t *)result = 0;             /* Failed, widget will be deleted */
-                return 1;
             }
             return 1;
         }
@@ -213,9 +212,9 @@ uint8_t GUI_SLIDER_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
                 offset = 0;                         /* Make start offset */
                 width -= delta;
                 if (o->Mode == GUI_SLIDER_MODE_RIGHT_LEFT) {/* Right left version */
-                    offset = width - (GUI_Dim_t)(((float)(width) * (float)o->Value) / (float)(o->Max - o->Min));
+                    offset = width - (GUI_Dim_t)(((float)(width) * (float)(o->Value - o->Min)) / (float)(o->Max - o->Min));
                 } else {                            /* Left right version */
-                    offset = (GUI_Dim_t)(((float)(width) * (float)o->Value) / (float)(o->Max - o->Min));
+                    offset = (GUI_Dim_t)(((float)(width) * (float)(o->Value - o->Min)) / (float)(o->Max - o->Min));
                 }
                 x += deltaH;
                 GUI_DRAW_FilledRoundedRectangle(disp, x, y + ((delta - recParam) >> 1), offset, recParam, (recParam >> 1), c1);   

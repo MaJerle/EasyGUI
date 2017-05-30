@@ -218,6 +218,7 @@ GUI_HANDLE_p __GetWidgetById(GUI_HANDLE_p parent, GUI_ID_t id, uint8_t deep) {
     return 0;
 }
 
+/* Returns first common widget between 2 widgets */
 static
 GUI_HANDLE_p __GetCommonParentWidget(GUI_HANDLE_p h1, GUI_HANDLE_p h2) {
     GUI_HANDLE_p tmp;
@@ -266,6 +267,7 @@ uint8_t __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(GUI_HANDLE_p h, GUI_iDim_
     return 1;
 }
 
+/* Check if widget is inside LCD invalidate region */
 uint8_t __GUI_WIDGET_IsInsideClippingRegion(GUI_HANDLE_p h) {
     GUI_iDim_t x1, y1, x2, y2;
     __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(h, &x1, &y1, &x2, &y2);
@@ -325,18 +327,19 @@ GUI_iDim_t __GUI_WIDGET_GetAbsoluteX(GUI_HANDLE_p h) {
     GUI_HANDLE_p w = 0;
     GUI_Dim_t out = 0;
     
-    if (h) {
-        w = __GH(h)->Parent;
-        /* If window is expanded, use zero value */
-        if (!__GUI_WIDGET_IsExpanded(h)) {          /* When window is not expanded to maximum */
-            out = __GH(h)->X;                       /* Our X value */
-        }
+    if (!h) {                                       /* Check input value */
+        return 0;                                   /* At left value */
     }
     
-    while (w) {                                     /* Go through all parent windows */
+    /* If widget is not expanded, use actual value */
+    if (!__GUI_WIDGET_IsExpanded(h)) {
+        out = __GH(h)->X;                           /* Actual widget X value */
+    }
+    
+    /* Process all parent widgets to get real absolute screen value */
+    for (w = __GH(h)->Parent; w; w = __GH(w)->Parent) { /* Go through all parent windows */
         out += __GUI_WIDGET_GetRelativeX(w) + __GUI_WIDGET_GetPaddingLeft(w);   /* Add X offset from parent and left padding of parent */
         out -= __GHR(w)->ScrollX;                   /* Decrease by scroll value */
-        w = __GH(w)->Parent;                        /* Get next parent */
     }
     return out;
 }
@@ -345,17 +348,19 @@ GUI_iDim_t __GUI_WIDGET_GetAbsoluteY(GUI_HANDLE_p h) {
     GUI_HANDLE_p w = 0;
     GUI_Dim_t out = 0;
     
-    if (h) {
-        w = __GH(h)->Parent;
-        if (!__GUI_WIDGET_IsExpanded(h)) {          /* When window is not expanded to maximum */
-            out = __GH(h)->Y;                       /* Our Y value */
-        }
+    if (!h) {                                       /* Check input value */
+        return 0;                                   /* At top value */
     }
     
-    while (w) {                                     /* Go through all parent windows */
-        out += __GUI_WIDGET_GetRelativeY(w) + __GUI_WIDGET_GetPaddingTop(w);    /* Add Y offset from parent + parent top padding */
-        out -= __GHR(w)->ScrollY;                   /* Decrease by scroll value */
-        w = __GH(w)->Parent;                        /* Get next parent */
+    /* If widget is not expanded, use actual value */
+    if (!__GUI_WIDGET_IsExpanded(h)) {
+        out = __GH(h)->Y;                           /* Actual widget X value */
+    }
+    
+    /* Process all parent widgets to get real absolute screen value */
+    for (w = __GH(h)->Parent; w; w = __GH(w)->Parent) { /* Go through all parent windows */
+        out += __GUI_WIDGET_GetRelativeY(w) + __GUI_WIDGET_GetPaddingTop(w);    /* Add X offset from parent and left padding of parent */
+        out -= __GHR(w)->ScrollX;                   /* Decrease by scroll value */
     }
     return out;
 }
@@ -363,7 +368,7 @@ GUI_iDim_t __GUI_WIDGET_GetAbsoluteY(GUI_HANDLE_p h) {
 GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteX(GUI_HANDLE_p h) {
     GUI_Dim_t out = 0;
     
-    if (h) {                                        /** Check valid widget */
+    if (h) {                                        /* Check valid widget */
         h = __GH(h)->Parent;                        /* Get parent of widget */
         if (h) {                                    /* Save left padding */
             out = __GUI_WIDGET_GetPaddingLeft(h);   /* Get left padding from parent widget */
@@ -376,7 +381,7 @@ GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteX(GUI_HANDLE_p h) {
 GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h) {
     GUI_Dim_t out = 0;
     
-    if (h) {                                        /** Check valid widget */
+    if (h) {                                        /* Check valid widget */
         h = __GH(h)->Parent;                        /* Get parent of widget */
         if (h) {                                    /* Save left padding */
             out = __GUI_WIDGET_GetPaddingTop(h);    /* Get top padding from parent widget */
@@ -391,15 +396,15 @@ uint8_t __GUI_WIDGET_Invalidate(GUI_HANDLE_p h) {
     
     if ((__GH(h)->Flags & GUI_FLAG_WIDGET_INVALIDATE_PARENT || __GH(h)->Widget->Flags & GUI_FLAG_WIDGET_INVALIDATE_PARENT)
         && __GH(h)->Parent) {
-        __GUI_WIDGET_InvalidatePrivate(__GH(h)->Parent, 0); /* Invalidate parent object too */
+        __GUI_WIDGET_InvalidatePrivate(__GH(h)->Parent, 0); /* Invalidate parent object too but without clipping */
     }
     return ret;
 }
 
 uint8_t __GUI_WIDGET_InvalidateWithParent(GUI_HANDLE_p h) {
-    __GUI_WIDGET_InvalidatePrivate(h, 1);           /* Invalidate object */
+    __GUI_WIDGET_InvalidatePrivate(h, 1);           /* Invalidate object with clipping */
     if (__GH(h)->Parent) {                          /* If parent exists, invalid only parent */
-        __GUI_WIDGET_InvalidatePrivate(__GH(h)->Parent, 0); /* Invalidate parent object */
+        __GUI_WIDGET_InvalidatePrivate(__GH(h)->Parent, 0); /* Invalidate parent object without clipping */
     }
     return 1;
 }
@@ -593,6 +598,17 @@ GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iD
     
     __GUI_ASSERTPARAMS(widget && widget->Callback); /* Check input parameters */
     
+    /**
+     * Allocation size check:
+     * 
+     * - Size must be at least for widget size
+     * - If widget supports children widgets, size must be for at least parent handle structure
+     */
+    if (widget->Size < sizeof(GUI_HANDLE) ||
+        ((widget->Flags & GUI_FLAG_WIDGET_ALLOW_CHILDREN) && widget->Size < sizeof(GUI_HANDLE_ROOT_t))) { 
+        return 0;
+    }
+    
     h = (GUI_HANDLE_p)__GUI_MEMALLOC(widget->Size); /* Allocate memory for widget */
     if (h) {
         memset(h, 0x00, widget->Size);              /* Set memory to 0 */
@@ -601,9 +617,16 @@ GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iD
         __GH(h)->Widget = widget;                   /* Widget object structure */
         __GH(h)->Footprint = GUI_WIDGET_FOOTPRINT;  /* Set widget footprint */
         __GH(h)->Callback = cb;                     /* Set widget callback */
-        if (__GUI_WIDGET_IsDialogBase(h)) {         /* Dialogs do not have parent widget */
-            __GH(h)->Parent = GUI_WINDOW_GetDesktop();  /* Set parent object */
-        } else if (flags & GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP) {
+        __GH(h)->Transparency = 0xFF;               /* Set full transparency by default */
+        
+        /**
+         * Parent window check
+         *
+         * - Dialog's parent widget is desktop widget
+         * - If flag for parent desktop is set, parent widget is also desktop
+         * - Otherwise parent widget passed as parameter is used if it supports children widgets
+         */
+        if (__GUI_WIDGET_IsDialogBase(h) || flags & GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP) {/* Dialogs do not have parent widget */
             __GH(h)->Parent = GUI_WINDOW_GetDesktop();  /* Set parent object */
         } else {
             if (parent && __GUI_WIDGET_AllowChildren(parent)) {
@@ -871,7 +894,7 @@ void __GUI_WIDGET_FOCUS_SET(GUI_HANDLE_p h) {
     /**
      * Step 1:
      *
-     * Identiy common parent from new and old focused widget
+     * Identify common parent from new and old focused widget
      * Remove focused flag on widget which are not in tree between old and new widgets
      */
     if (GUI.FocusedWidget) {                        /* We already have one widget in focus */

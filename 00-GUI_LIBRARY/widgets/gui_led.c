@@ -83,7 +83,6 @@ uint8_t GUI_LED_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* resul
             width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
             height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
             
-            
             /* Get drawing colors */
             if (l->Flags & GUI_LED_FLAG_ON) {       /* If LED is on */
                 c1 = __GUI_WIDGET_GetColor(h, GUI_LED_COLOR_ON);
@@ -100,6 +99,7 @@ uint8_t GUI_LED_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* resul
                 GUI_DRAW_FilledCircle(disp, x + width / 2, y + height / 2, width / 2, c1);
                 GUI_DRAW_Circle(disp, x + width / 2, y + height / 2, width / 2, c2);
             }
+            return 1;                               /* */
         }
         default:                                    /* Handle default option */
             __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */

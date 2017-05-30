@@ -750,27 +750,12 @@ typedef enum GUI_WC_t {
     /**
      * \brief       Called just after widget has been created. Used for internal widget purpose only
      *
+     * \note        This field is only visible inside GUI library and can't be used in custom widget callback
+     *
      * \param[in]   *param: None
      * \param[out]  *result: Pointer to uint8_t variable with result. If set to 0 by user, widget will be deleted
      */
     GUI_WC_PreInit = 0x01,
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
-    
-    /**
-     * \brief       Widget has been created and ready to init for future setup
-     *
-     * \param[in]   *param: None
-     * \param[out]  *result: None
-     */
-    GUI_WC_Init = 0x02,
-    
-    /**
-     * \brief       Draw widget on screen
-     *
-     * \param[in]   *param: Pointer to \ref GUI_Display_t structure
-     * \param[out]  *result: None
-     */
-    GUI_WC_Draw = 0x03,
     
     /**
      * \brief       Check if widget should not be added to linked list after creation
@@ -778,7 +763,27 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: None
      * \param[out]  *result: Pointer to uint8_t variable type to store result to [1 = exclude, 0 = do not exclude]
      */
-    GUI_WC_ExcludeLinkedList = 0x04,
+    GUI_WC_ExcludeLinkedList = 0x02,
+#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+    
+    /**
+     * \brief       Widget has been created and ready to init for future setup
+     *
+     * \note        Default values for widget can be set here.
+     *              Example: CHeckbox check can be made and default checkbox value should be set if required
+     *
+     * \param[in]   *param: None
+     * \param[out]  *result: None
+     */
+    GUI_WC_Init = 0x03,
+    
+    /**
+     * \brief       Draw widget on screen
+     *
+     * \param[in]   *param: Pointer to \ref GUI_Display_t structure
+     * \param[out]  *result: None
+     */
+    GUI_WC_Draw = 0x04,
     
     /**
      * \brief       Check if widget can be removed. User can perform check if for example widget needs save or similar operation
@@ -870,20 +875,12 @@ typedef enum GUI_WC_t {
     GUI_WC_TouchEnd = 0x0D,
     
     /**
-     * \brief       Notification when key has been pushed to this widget
-     *
-     * \param[in]   *param: Pointer to \ref __GUI_KeyboardData_t structure
-     * \param[out]  *result: Value of \ref __GUI_KeyboardStatus_t enumeration
-     */
-    GUI_WC_KeyPress = 0x0E,
-    
-    /**
      * \brief       Notification when click event has been detected
      *
      * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure with valid touch press location
      * \param[out]  *result: None
      */
-    GUI_WC_Click = 0x0F,
+    GUI_WC_Click = 0x0E,
     
     /**
      * \brief       Notification when long press has been detected
@@ -891,7 +888,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure with valid touch press location
      * \param[out]  *result: None
      */
-    GUI_WC_LongClick = 0x10,
+    GUI_WC_LongClick = 0x0F,
     
     /**
      * \brief       Notification when double click has been detected
@@ -899,7 +896,15 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure with valid touch press location
      * \param[out]  *result: None
      */
-    GUI_WC_DblClick = 0x11,
+    GUI_WC_DblClick = 0x10,
+    
+    /**
+     * \brief       Notification when key has been pushed to this widget
+     *
+     * \param[in]   *param: Pointer to \ref __GUI_KeyboardData_t structure
+     * \param[out]  *result: Value of \ref __GUI_KeyboardStatus_t enumeration
+     */
+    GUI_WC_KeyPress = 0x11,
     
     /**     
      * \brief       Notification when widget selection has changed
@@ -948,11 +953,11 @@ typedef enum GUI_WC_t {
      */
     GUI_WC_IncSelection = 0x15,
     
-    
     /**     
      * \brief       Called when dialog is dismissed
      *
-     * \note        Callback is activated when dismiss function is called
+     * \note        Callback is activated when dismiss function is called on dialog widget.
+     *              Notification can be used to proceed with function call
      *
      * \param[in]   *param: Pointer to int variable passed to dismiss function
      * \param[out]  *result: None
@@ -971,13 +976,15 @@ struct GUI_HANDLE;
 typedef void* GUI_HANDLE_p;
 
 /**
- * \brief       Callback function for widget
+ * \brief           Callback function for widget
  * 
- *              Handles everything related to widget. 
- *                  - Draw widget
- *                  - Touch handling
- *                  - Key presses
- *                  - Value change, selection change
+ *                  Handles everything related to widget. 
+ *                      - Initialization
+ *                      - Drawing
+ *                      - Touch handling
+ *                      - Key presses
+ *                      - Value change, selection change
+ *                      - and more
  */
 typedef uint8_t (*GUI_WIDGET_CALLBACK_t) (GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 
@@ -988,7 +995,6 @@ typedef struct GUI_WIDGET_t {
     const GUI_Char* Name;                   /*!< Widget name for display purpose */
     uint16_t Size;                          /*!< Bytes required for widget memory allocation */
     uint32_t Flags;                         /*!< List of flags for widget setup. This field can use \ref GUI_WIDGETS_CORE_FLAGS flags */
-    
     GUI_WIDGET_CALLBACK_t Callback;         /*!< Pointer to control function, returns 1 if command handled or 0 if not */
     const GUI_Color_t* Colors;              /*!< Pointer to list of colors as default values for widget */
     uint8_t ColorsCount;                    /*!< Number of colors used in widget */
@@ -1011,13 +1017,14 @@ typedef struct GUI_HANDLE {
     uint32_t Padding;                       /*!< 4-bytes long padding, each byte of one side, MSB = top padding, LSB = left padding.
                                                     Used for children widgets if virtual padding should be used */
     int32_t ZIndex;                         /*!< Z-Index value of widget, which can be set by user. All widgets with same z-index are changeable when active on visible area */
+    uint8_t Transparency;                   /*!< Transparency of widget relative to parent widget */
     uint32_t Flags;                         /*!< All possible flags for specific widget */
     GUI_Const GUI_FONT_t* Font;             /*!< Font used for widget drawings */
     GUI_Char* Text;                         /*!< Pointer to widget text if exists */
     uint32_t TextMemSize;                   /*!< Number of bytes for text when dynamically allocated */
     uint32_t TextCursor;                    /*!< Text cursor position */
     GUI_TIMER_t* Timer;                     /*!< Software timer pointer */
-    GUI_Color_t* Colors;                    /*!< Pointer to allocated color memory when used */
+    GUI_Color_t* Colors;                    /*!< Pointer to allocated color memory when custom colors are used */
     void* UserData;                         /*!< Pointer to optional user data */
 } GUI_HANDLE;
 
