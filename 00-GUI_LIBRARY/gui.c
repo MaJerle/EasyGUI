@@ -115,41 +115,67 @@ void __CheckDispClipping(GUI_HANDLE_p h) {
 uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;
     uint32_t cnt = 0;
-    
-    if (parent && (__GH(parent)->Flags & GUI_FLAG_REDRAW)) {  /* Check if parent window should redraw operation */
-        if (!__GUI_WIDGET_IsVisible(parent)) {      /* Check if visible */
-            return 0;                               /* Stop execution if parent is hidden */
-        }
-        __GH(parent)->Flags &= ~GUI_FLAG_REDRAW;    /* Clear flag */
-        for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, 0); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
-            __GH(h)->Flags |= GUI_FLAG_REDRAW;      /* Set redraw bit to all children elements */
-        }
-        if (__GUI_WIDGET_IsInsideClippingRegion(parent)) {  /* If draw function is set and drawing is inside clipping region */
-            __CheckDispClipping(parent);            /* Check coordinates for drawings */
-            __GUI_WIDGET_Callback(parent, GUI_WC_Draw, &GUI.DisplayTemp, NULL);
-        }
-    }
 
     /* Go through all elements of parent */
-    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, 0); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
+    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, 0); h; 
+            h = __GUI_LINKEDLIST_WidgetGetNext(0, h)) {
         if (!__GUI_WIDGET_IsVisible(h)) {           /* Check if visible */
             __GH(h)->Flags &= ~GUI_FLAG_REDRAW;     /* Clear flag to be sure */
             continue;                               /* Ignore hidden elements */
         }
-        if (__GUI_WIDGET_AllowChildren(h)) {        /* If this widget allows children widgets */
-            cnt += __RedrawWidgets(h);              /* Redraw this widget and all its children if required */
-        } else {
+        if (__GUI_WIDGET_IsInsideClippingRegion(h)) {   /* If draw function is set and drawing is inside clipping region */
+            /* Draw main widget if required */
             if (__GH(h)->Flags & GUI_FLAG_REDRAW) { /* Check if redraw required */
                 __GH(h)->Flags &= ~GUI_FLAG_REDRAW; /* Clear flag */
-                if (__GUI_WIDGET_IsInsideClippingRegion(h)) {   /* If draw function is set and drawing is inside clipping region */
-                    __CheckDispClipping(h);         /* Check coordinates for drawings */
-                    __GUI_WIDGET_Callback(h, GUI_WC_Draw, &GUI.DisplayTemp, NULL);  /* Draw widget */
+                
+                /**
+                 * TODO: If widget has transparency set temporary layer for drawing
+                 */
+                
+                __CheckDispClipping(h);             /* Check coordinates for drawings */
+                __GUI_WIDGET_Callback(h, GUI_WC_Draw, &GUI.DisplayTemp, NULL);  /* Draw widget */
+                
+                /* Check if there are children widgets in this widget */
+                if (__GUI_WIDGET_AllowChildren(h)) {
+                    GUI_HANDLE_p tmp;
+                    
+                    /* Set drawing flag to all widgets  first... */
+                    for (tmp = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)h, 0); tmp; 
+                            tmp = __GUI_LINKEDLIST_WidgetGetNext(0, tmp)) {
+                        __GH(tmp)->Flags |= GUI_FLAG_REDRAW;    /* Set redraw bit to all children elements */
+                    }
+                    /* ...now call function for redrawing process */
+                    cnt += __RedrawWidgets(h);      /* Redraw children widgets */
                 }
-                cnt++;
+                
+                /**
+                 * TODO: If widget has transparency, 
+                 * copy drawed area back to main drawing layer with blending
+                 * between layers
+                 */
+            /**
+             * Check if any widget from children should be redrawn
+             */
+            } else if (__GUI_WIDGET_AllowChildren(h)) {
+                cnt += __RedrawWidgets(h);          /* Redraw children widgets */
             }
         }
+        
+//        /**
+//         * TODO: If widget has transparency, 
+//         * draw it first on separate layer and then copy blending new layer with parent layer
+//         *
+//         * Drawback: More deep you go with children widgets, 
+//         * more layers you need if all of parent have transparency.
+//         */
+//        if (__GUI_WIDGET_GetTransparency(h) < 0xFF) {
+//            //TODO: Find proper layer to use first
+//        }
+//                
+//        if (__GUI_WIDGET_GetTransparency(h) < 0xFF) {
+//            //TODO: Merge layers and reset everything
+//        }
     }
-    
     return cnt;                                     /* Return number of redrawn objects */
 }
 
@@ -333,7 +359,8 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
         __CheckDispClipping(h);                     /* Check display region where widget is placed */
         
         /* Check if widget is in touch area */
-        if (touch->TS.X[0] >= GUI.DisplayTemp.X1 && touch->TS.X[0] <= GUI.DisplayTemp.X2 && touch->TS.Y[0] >= GUI.DisplayTemp.Y1 && touch->TS.Y[0] <= GUI.DisplayTemp.Y2) {
+        if (touch->TS.X[0] >= GUI.DisplayTemp.X1 && touch->TS.X[0] <= GUI.DisplayTemp.X2 && 
+            touch->TS.Y[0] >= GUI.DisplayTemp.Y1 && touch->TS.Y[0] <= GUI.DisplayTemp.Y2) {
             __SetRelativeCoordinate(touch,          /* Set relative coordinate */
                 __GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h), 
                 __GUI_WIDGET_GetWidth(h), __GUI_WIDGET_GetHeight(h)
