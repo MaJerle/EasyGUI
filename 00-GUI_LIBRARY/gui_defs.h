@@ -323,7 +323,12 @@ typedef struct GUI_Layer_t {
     uint8_t Num;                            /*!< Layer number */
     uint32_t StartAddress;                  /*!< Start address in memory if it exists */
     volatile uint8_t Pending;               /*!< Layer pending for redrawing operation */
-    GUI_Display_t Display;                  /*!< Display setup for clipping regions */
+    GUI_Display_t Display;                  /*!< Display setup for clipping regions for main layers (no virtual) */
+    
+    GUI_iDim_t Width;                       /*!< Layer width, used for virtual layers mainly */
+    GUI_iDim_t Height;                      /*!< Layer height, used for virtual layers mainly */
+    GUI_iDim_t OffsetX;                     /*!< Offset value for pixel position calculation in X direction, used for virtual layers */
+    GUI_iDim_t OffsetY;                     /*!< Offset value for pixel position calculation in Y direction, used for virtual layers */
 } GUI_Layer_t;
 
 /**
@@ -333,9 +338,9 @@ typedef struct GUI_LCD_t {
     GUI_Dim_t Width;                        /*!< LCD width in units of pixels */
     GUI_Dim_t Height;                       /*!< LCD height in units of pixels */
     uint8_t PixelSize;                      /*!< Number of bytes per pixel */
-    GUI_Byte ActiveLayer;                   /*!< Active layer number currently shown to LCD */
-    GUI_Byte DrawingLayer;                  /*!< Currently active drawing layer */
-    GUI_Byte LayersCount;                   /*!< Number of layers used for LCD and drawings */
+    GUI_Layer_t* ActiveLayer;               /*!< Active layer number currently shown to LCD */
+    GUI_Layer_t* DrawingLayer;              /*!< Currently active drawing layer */
+    size_t LayersCount;                     /*!< Number of layers used for LCD and drawings */
     GUI_Layer_t* Layers;                    /*!< Pointer to layers */
     uint32_t Flags;                         /*!< List of flags */
 } GUI_LCD_t;
@@ -387,18 +392,18 @@ typedef enum GUI_LL_Command_t {
 typedef struct GUI_LL_t {
     void            (*Init)         (GUI_LCD_t *);                                                                      /*!< Pointer to LCD initialization function */
     uint8_t         (*IsReady)      (GUI_LCD_t *);                                                                      /*!< Pointer to LCD is ready function */
-    void            (*SetPixel)     (GUI_LCD_t *, uint8_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);                          /*!< Pointer to LCD set pixel function */
-    GUI_Color_t     (*GetPixel)     (GUI_LCD_t *, uint8_t, GUI_Dim_t, GUI_Dim_t);                                       /*!< Pointer to read pixel from LCD */
-    void            (*Fill)         (GUI_LCD_t *, uint8_t, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);       /*!< Pointer to LCD fill screen or rectangle function */
-    void            (*Copy)         (GUI_LCD_t *, uint8_t, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t);   /*!< Pointer to LCD copy data from source to destination */
-    void            (*CopyBlend)    (GUI_LCD_t *, uint8_t, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t);   /*!< Pointer to function for copying with blending support */
-    void            (*DrawHLine)    (GUI_LCD_t *, uint8_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);               /*!< Pointer to horizontal line drawing. Set to 0 if you do not have optimized version */
-    void            (*DrawVLine)    (GUI_LCD_t *, uint8_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);               /*!< Pointer to vertical line drawing. Set to 0 if you do not have optimized version */
-    void            (*FillRect)     (GUI_LCD_t *, uint8_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);    /*!< Pointer to function for filling rectangle on LCD */
-    void            (*DrawImage16)  (GUI_LCD_t *, uint8_t, const GUI_IMAGE_DESC_t *, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t); /*!< Pointer to function for drawing 16BPP (RGB565) images */
-    void            (*DrawImage24)  (GUI_LCD_t *, uint8_t, const GUI_IMAGE_DESC_t *, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t); /*!< Pointer to function for drawing 24BPP (RGB888) images */
-    void            (*DrawImage32)  (GUI_LCD_t *, uint8_t, const GUI_IMAGE_DESC_t *, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t); /*!< Pointer to function for drawing 32BPP (ARGB8888) images */
-    void            (*CopyChar)     (GUI_LCD_t *, uint8_t, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);  /*!< Pointer to copy char function with alpha only as source */
+    void            (*SetPixel)     (GUI_LCD_t *, GUI_Layer_t *, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);                    /*!< Pointer to LCD set pixel function */
+    GUI_Color_t     (*GetPixel)     (GUI_LCD_t *, GUI_Layer_t *, GUI_Dim_t, GUI_Dim_t);                                 /*!< Pointer to read pixel from LCD */
+    void            (*Fill)         (GUI_LCD_t *, GUI_Layer_t *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t); /*!< Pointer to LCD fill screen or rectangle function */
+    void            (*Copy)         (GUI_LCD_t *, GUI_Layer_t *, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t);   /*!< Pointer to LCD copy data from source to destination */
+    void            (*CopyBlend)    (GUI_LCD_t *, GUI_Layer_t *, const void *, void *, uint8_t, uint8_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t);   /*!< Pointer to function to copy layers together (blending) with support to set overall layer transparency */
+    void            (*DrawHLine)    (GUI_LCD_t *, GUI_Layer_t *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);         /*!< Pointer to horizontal line drawing. Set to 0 if you do not have optimized version */
+    void            (*DrawVLine)    (GUI_LCD_t *, GUI_Layer_t *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);         /*!< Pointer to vertical line drawing. Set to 0 if you do not have optimized version */
+    void            (*FillRect)     (GUI_LCD_t *, GUI_Layer_t *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);  /*!< Pointer to function for filling rectangle on LCD */
+    void            (*DrawImage16)  (GUI_LCD_t *, GUI_Layer_t *, const GUI_IMAGE_DESC_t *, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t);   /*!< Pointer to function for drawing 16BPP (RGB565) images */
+    void            (*DrawImage24)  (GUI_LCD_t *, GUI_Layer_t *, const GUI_IMAGE_DESC_t *, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t);   /*!< Pointer to function for drawing 24BPP (RGB888) images */
+    void            (*DrawImage32)  (GUI_LCD_t *, GUI_Layer_t *, const GUI_IMAGE_DESC_t *, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t);   /*!< Pointer to function for drawing 32BPP (ARGB8888) images */
+    void            (*CopyChar)     (GUI_LCD_t *, GUI_Layer_t *, const void *, void *, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Dim_t, GUI_Color_t);                /*!< Pointer to copy char function with alpha only as source */
 } GUI_LL_t;
 
 /**

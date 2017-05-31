@@ -103,7 +103,7 @@ void __RemoveWidget(GUI_HANDLE_p h) {
         __GUI_MEMFREE(__GH(h)->Colors);
     }
     __GUI_LINKEDLIST_WidgetRemove(h);               /* Remove entry from linked list */
-    __GUI_MEMWIDFREE(h);                            /* Free memory for widget */
+    __GUI_MEMFREE(h);                               /* Free memory for widget */
 }
 
 /* Recursive function to delete all widgets with checking for flag */
@@ -394,8 +394,12 @@ GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h) {
 uint8_t __GUI_WIDGET_Invalidate(GUI_HANDLE_p h) {
     uint8_t ret = __GUI_WIDGET_InvalidatePrivate(h, 1); /* Invalidate widget with clipping */
     
-    if ((__GH(h)->Flags & GUI_FLAG_WIDGET_INVALIDATE_PARENT || __GH(h)->Widget->Flags & GUI_FLAG_WIDGET_INVALIDATE_PARENT)
-        && __GH(h)->Parent) {
+    if (
+        (
+            __GH(h)->Flags & GUI_FLAG_WIDGET_INVALIDATE_PARENT || 
+            __GH(h)->Widget->Flags & GUI_FLAG_WIDGET_INVALIDATE_PARENT ||
+            __GUI_WIDGET_GetTransparency(h) < 0xFF
+        ) && __GH(h)->Parent) {
         __GUI_WIDGET_InvalidatePrivate(__GH(h)->Parent, 0); /* Invalidate parent object too but without clipping */
     }
     return ret;
@@ -816,6 +820,15 @@ uint8_t __GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex) {
     return ret;
 }
 
+uint8_t __GUI_WIDGET_SetTransparency(GUI_HANDLE_p h, uint8_t trans) {
+    if (__GH(h)->Transparency != trans) {           /* Check transparency match */
+        __GH(h)->Transparency = trans;              /* Set new transparency level */
+        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
+    }
+    
+    return 1;
+}
+
 uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color) {
     uint8_t ret = 1;
     if (!__GH(h)->Colors) {                         /* Do we need to allocate color memory? */
@@ -945,7 +958,7 @@ void __GUI_WIDGET_ACTIVE_SET(GUI_HANDLE_p h) {
 
 /******************************************************************************/
 /******************************************************************************/
-/***               Public API, can be used by user for any widget            **/
+/***                  Thread safe version of public API                      **/
 /******************************************************************************/
 /******************************************************************************/
 uint8_t GUI_WIDGET_Remove(GUI_HANDLE_p* h) {
@@ -1335,4 +1348,40 @@ uint8_t GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex) {
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
+}
+
+int32_t GUI_WIDGET_GetZIndex(GUI_HANDLE_p h) {
+    int32_t ret;
+    
+    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    ret = __GUI_WIDGET_GetZIndex(h);                /* Set z-index value */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
+}
+
+uint8_t GUI_WIDGET_SetTransparency(GUI_HANDLE_p h, uint8_t trans) {
+    uint8_t ret;
+    
+    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    ret = __GUI_WIDGET_SetTransparency(h, trans);   /* Set widget transparency */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
+}
+
+uint8_t GUI_WIDGET_GetTransparency(GUI_HANDLE_p h) {
+    uint8_t trans;
+    
+    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    trans = __GUI_WIDGET_GetTransparency(h);        /* Get widget transparency */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return trans;
 }

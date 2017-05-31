@@ -85,7 +85,7 @@ void LCD_Init(GUI_LCD_t* LCD) {
 }
 
 static
-uint32_t GetPixelFormat(uint8_t index) {
+uint32_t GetPixelFormat(GUI_Layer_t* layer) {
 #if defined(LCD_COLOR_FORMAT_ARGB8888)
     return DMA2D_OUTPUT_ARGB8888;                   /* ARGB8888 format */
 #else
@@ -99,14 +99,14 @@ uint8_t LCD_Ready(GUI_LCD_t* LCD) {
 }
 
 static
-GUI_Color_t LCD_GetPixel(GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t x, GUI_Dim_t y) {
+GUI_Color_t LCD_GetPixel(GUI_LCD_t* LCD, GUI_Layer_t* layer, GUI_Dim_t x, GUI_Dim_t y) {
 #if defined(LCD_COLOR_FORMAT_ARGB8888)
-    return *(GUI_Color_t *)(GUI.LCD.Layers[layer].StartAddress + LCD_PIXEL_SIZE * (LCD_WIDTH * y + x));
+    return *(GUI_Color_t *)(layer->StartAddress + GUI.LCD.PixelSize * (layer->Width * y + x));
 #else
     GUI_Color_t color;
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait till end */
     
-    DMA2D->FGMAR = (uint32_t)(GUI.LCD.Layers[layer].StartAddress + LCD_PIXEL_SIZE * (LCD_WIDTH * y + x));
+    DMA2D->FGMAR = (uint32_t)(layer->StartAddress + GUI.LCD.PixelSize * (layer->Width * y + x));
     DMA2D->OMAR = (uint32_t)&color;                 /* Set output address */
     DMA2D->FGOR = 0;                                /* Set foreground offline */    
     DMA2D->OOR = 0;                                 /* Set output offline */
@@ -121,9 +121,13 @@ GUI_Color_t LCD_GetPixel(GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t x, GUI_Dim_t y
 }
 
 static
-void LCD_Fill(GUI_LCD_t* LCD, uint8_t layer, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t OffLine, GUI_Color_t color) {
+void LCD_Fill(GUI_LCD_t* LCD, GUI_Layer_t* layer, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t OffLine, GUI_Color_t color) {
 #if LCD_PIXEL_SIZE == 2
     uint8_t r, g, b;
+//    r = (color >> 20) & 0x0F;
+//    g = (color >> 12) & 0x0F;
+//    b = (color >>  4) & 0x0F;
+//    color = 0x0000F000UL | (r << 8) | (g << 4) | b;
     r = (color >> 19) & 0x1F;
     g = (color >> 10) & 0x3F;
     b = (color >>  3) & 0x1F;
@@ -143,7 +147,7 @@ void LCD_Fill(GUI_LCD_t* LCD, uint8_t layer, void* dst, GUI_Dim_t xSize, GUI_Dim
 }
 
 static
-void LCD_Copy(GUI_LCD_t* LCD, uint8_t layer, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
+void LCD_Copy(GUI_LCD_t* LCD, GUI_Layer_t* layer, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
     uint32_t PixelFormat = GetPixelFormat(layer);
     
     if (!xSize || !ySize) {
@@ -164,8 +168,9 @@ void LCD_Copy(GUI_LCD_t* LCD, uint8_t layer, const void* src, void* dst, GUI_Dim
     DMA2D_START(DMA2D_M2M);                         /* Start DMA2D transfer */
 }
 
+/* Copy layers with blending with alpha combine */
 static
-void LCD_CopyBlending(GUI_LCD_t* LCD, uint8_t layer, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
+void LCD_CopyBlending(GUI_LCD_t* LCD, GUI_Layer_t* layer, const void* src, void* dst, uint8_t alphaSrc, uint8_t alphaDst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
     uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait finished */
     DMA2D->FGMAR = (uint32_t)src;
@@ -173,17 +178,21 @@ void LCD_CopyBlending(GUI_LCD_t* LCD, uint8_t layer, const void* src, void* dst,
     DMA2D->OMAR = (uint32_t)dst;
     DMA2D->FGOR = offLineSrc;
     DMA2D->BGOR = offLineDst;
-    DMA2D->OOR = offLineDst;  
+    DMA2D->OOR = offLineDst;
     DMA2D->FGPFCCR = PixelFormat;                   /* Foreground PFC Control Register */
     DMA2D->BGPFCCR = PixelFormat;                   /* Background PFC Control Register (Defines the BG pixel format) */
     DMA2D->OPFCCR  = PixelFormat;                   /* Output     PFC Control Register (Defines the output pixel format) */
+    
+    DMA2D->FGPFCCR |= DMA2D_FGPFCCR_AM_0 | alphaSrc << 24;               /* Set alpha for source */
+    DMA2D->BGPFCCR |= alphaDst << 24;               /* Set alpha for destination */
+    
     DMA2D->NLR = (uint32_t)(xSize << 16) | (uint16_t)ySize;
     
     DMA2D_START(DMA2D_M2M_BLEND);                   /* Start DMA2D transfer */
 }
 
 static
-void LCD_DrawImage16(GUI_LCD_t* LCD, uint8_t layer, const GUI_IMAGE_DESC_t* img, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
+void LCD_DrawImage16(GUI_LCD_t* LCD, GUI_Layer_t* layer, const GUI_IMAGE_DESC_t* img, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
     uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
     if (!xSize || !ySize) {
         return;
@@ -195,7 +204,7 @@ void LCD_DrawImage16(GUI_LCD_t* LCD, uint8_t layer, const GUI_IMAGE_DESC_t* img,
     DMA2D->FGOR = offLineSrc;
     DMA2D->BGOR = offLineDst;
     DMA2D->OOR = offLineDst;
-    DMA2D->FGPFCCR = LTDC_PIXEL_FORMAT_RGB565;      /* Foreground PFC Control Register */
+    DMA2D->FGPFCCR = DMA2D_INPUT_RGB565;            /* Foreground PFC Control Register */
     DMA2D->BGPFCCR = PixelFormat;                   /* Background PFC Control Register (Defines the BG pixel format) */
     DMA2D->OPFCCR  = PixelFormat;                   /* Output     PFC Control Register (Defines the output pixel format) */
     
@@ -209,7 +218,7 @@ void LCD_DrawImage16(GUI_LCD_t* LCD, uint8_t layer, const GUI_IMAGE_DESC_t* img,
 }
 
 static
-void LCD_DrawImage24(GUI_LCD_t* LCD, uint8_t layer, const GUI_IMAGE_DESC_t* img, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
+void LCD_DrawImage24(GUI_LCD_t* LCD, GUI_Layer_t* layer, const GUI_IMAGE_DESC_t* img, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
     uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait finished */
     DMA2D->FGMAR = (uint32_t)src;
@@ -232,7 +241,7 @@ void LCD_DrawImage24(GUI_LCD_t* LCD, uint8_t layer, const GUI_IMAGE_DESC_t* img,
 }
 
 static
-void LCD_DrawImage32(GUI_LCD_t* LCD, uint8_t layer, const GUI_IMAGE_DESC_t* img, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
+void LCD_DrawImage32(GUI_LCD_t* LCD, GUI_Layer_t* layer, const GUI_IMAGE_DESC_t* img, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
     uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait finished */
     DMA2D->FGMAR = (uint32_t)src;
@@ -255,7 +264,7 @@ void LCD_DrawImage32(GUI_LCD_t* LCD, uint8_t layer, const GUI_IMAGE_DESC_t* img,
 }
 
 static
-void LCD_CopyChar(GUI_LCD_t* LCD, uint8_t layer, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst, GUI_Color_t color) {
+void LCD_CopyChar(GUI_LCD_t* LCD, GUI_Layer_t* layer, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst, GUI_Color_t color) {
     uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
     
     if (!xSize || !ySize) {
@@ -292,30 +301,28 @@ void LCD_CopyChar(GUI_LCD_t* LCD, uint8_t layer, const void* src, void* dst, GUI
 }
 
 static
-void LCD_DrawHLine(GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t length, GUI_Color_t color) {
-    uint32_t addr = Layers[layer].StartAddress + (LCD->PixelSize * (LCD->Width * y + x));
+void LCD_DrawHLine(GUI_LCD_t* LCD, GUI_Layer_t* layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t length, GUI_Color_t color) {
+    uint32_t addr = layer->StartAddress + (LCD->PixelSize * (layer->Width * y + x));
     
-    LCD_Fill(LCD, layer, (void *)addr, length, 1, LCD->Width - length, color);
+    LCD_Fill(LCD, layer, (void *)addr, length, 1, layer->Width - length, color);
 }
 
 static
-void LCD_DrawVLine(GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t length, GUI_Color_t color) {
-    uint32_t addr = Layers[layer].StartAddress + (LCD->PixelSize * (LCD->Width * y + x));
+void LCD_DrawVLine(GUI_LCD_t* LCD, GUI_Layer_t* layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t length, GUI_Color_t color) {
+    uint32_t addr = layer->StartAddress + (LCD->PixelSize * (layer->Width * y + x));
     
-    LCD_Fill(LCD, layer, (void *)addr, 1, length, LCD->Width - 1, color);
+    LCD_Fill(LCD, layer, (void *)addr, 1, length, layer->Width - 1, color);
 }
 
 static
-void LCD_FillRect(GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Color_t color) {
-    uint32_t addr = Layers[layer].StartAddress + (LCD->PixelSize * (LCD->Width * y + x));
+void LCD_FillRect(GUI_LCD_t* LCD, GUI_Layer_t* layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Color_t color) {
+    uint32_t addr = layer->StartAddress + (LCD->PixelSize * (layer->Width * y + x));
     
-    LCD_Fill(LCD, layer, (void *)addr, xSize, ySize, LCD->Width - xSize, color);
+    LCD_Fill(LCD, layer, (void *)addr, xSize, ySize, layer->Width - xSize, color);
 }
 
 static
-void LCD_SetPixel(GUI_LCD_t* LCD, uint8_t layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Color_t color) {
-//    uint32_t addr = LCD_FRAME_BUFFER + (layer * LCD_FRAME_BUFFER_SIZE) + LCD_PIXEL_SIZE * (LCD_WIDTH * y + x);
-//    *(volatile uint32_t *)(addr) = color;
+void LCD_SetPixel(GUI_LCD_t* LCD, GUI_Layer_t* layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Color_t color) {
     LCD_DrawHLine(LCD, layer, x, y, 1, color);
 }
 
@@ -338,6 +345,15 @@ uint8_t GUI_LL_Control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* 
         case GUI_LL_Command_Init: {
             uint8_t i = 0;
             GUI_LL_t* LL = (GUI_LL_t *)param;
+            
+            /*******************************/
+            /* Assign memory to GUI        */
+            /*******************************/
+            TM_SDRAM_Init();
+            do {
+                static uint32_t Memory[0x40000] __attribute__((at(SDRAM_START_ADR + 0x00400000)));
+                GUI_MEM_AssignMemory(Memory, sizeof(Memory));
+            } while (0);
             
             /*******************************/
             /* Set up LCD data             */

@@ -1436,6 +1436,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_math.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_mem.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1482,12 +1487,12 @@
       <TargetName>STM32F7_DISCOVERY</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060422::V5.06 update 4 (build 422)::ARMCC</pCCUsed>
+      <pCCUsed>5060528::V5.06 update 5 (build 528)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F746NGHx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F7xx_DFP.2.9.0</PackID>
+          <PackID>Keil.STM32F7xx_DFP.2.8.0</PackID>
           <PackURL>http://www.keil.com/pack</PackURL>
           <Cpu>IROM(0x08000000,0x100000) IROM2(0x00200000,0x100000) IRAM(0x20010000,0x40000) IRAM2(0x20000000,0x10000) CPUTYPE("Cortex-M7") FPU3(SFPU) CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -2780,6 +2785,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_math.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_mem.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2831,7 +2841,7 @@
         <TargetCommonOption>
           <Device>STM32F769NIHx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F7xx_DFP.2.9.0</PackID>
+          <PackID>Keil.STM32F7xx_DFP.2.8.0</PackID>
           <PackURL>http://www.keil.com/pack</PackURL>
           <Cpu>IRAM(0x20020000,0x60000) IRAM2(0x20000000,0x20000) IROM(0x08000000,0x200000) IROM2(0x00200000,0x200000) CPUTYPE("Cortex-M7") FPU3(DFPU) CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -4123,6 +4133,11 @@
               <FileName>gui_math.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_math.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_mem.c</FilePath>
             </File>
           </Files>
         </Group>

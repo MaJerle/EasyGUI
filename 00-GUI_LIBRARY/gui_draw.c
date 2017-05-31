@@ -275,7 +275,7 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DR
             tmpX = x;                               /* Start X */
             
             ptr += sizeof(*entry);                  /* Go to start of data array */
-            dst += GUI.LCD.Layers[GUI.LCD.DrawingLayer].StartAddress;
+            dst += GUI.LCD.DrawingLayer->StartAddress;
             dst += (y * GUI.LCD.Width + x) * GUI.LCD.PixelSize;
             
             width = c->xSize;                       /* Get X size */
@@ -448,7 +448,7 @@ void GUI_DRAW_FONT_Init(GUI_DRAW_FONT_t* f) {
 /******************************************************************************/
 /******************************************************************************/
 void GUI_DRAW_FillScreen(const GUI_Display_t* disp, GUI_Color_t color) {
-    GUI.LL.Fill(&GUI.LCD, GUI.LCD.DrawingLayer, 0, GUI.LCD.Width, GUI.LCD.Height, 0, color);
+    GUI.LL.Fill(&GUI.LCD, GUI.LCD.DrawingLayer, 0, GUI.LCD.DrawingLayer->Width, GUI.LCD.DrawingLayer->Height, 0, color);
 }
 
 void GUI_DRAW_Fill(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_Color_t color) {
@@ -480,7 +480,7 @@ void GUI_DRAW_Fill(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iD
         height = disp->Y2 - y;
     }
     if (width > 0 && height > 0) {
-        GUI.LL.FillRect(&GUI.LCD, GUI.LCD.DrawingLayer, x, y, width, height, color);
+        GUI.LL.FillRect(&GUI.LCD, GUI.LCD.DrawingLayer, x - GUI.LCD.DrawingLayer->OffsetX, y - GUI.LCD.DrawingLayer->OffsetY, width, height, color);
     }
 }
 
@@ -488,11 +488,11 @@ void GUI_DRAW_SetPixel(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GU
     if (y < disp->Y1 || y >= disp->Y2 || x < disp->X1 || x >= disp->X2) {
         return;
     }
-    GUI.LL.SetPixel(&GUI.LCD, GUI.LCD.DrawingLayer, x, y, color);
+    GUI.LL.SetPixel(&GUI.LCD, GUI.LCD.DrawingLayer, x - GUI.LCD.DrawingLayer->OffsetX, y - GUI.LCD.DrawingLayer->OffsetY, color);
 }
 
 GUI_Color_t GUI_DRAW_GetPixel(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y) {
-    return GUI.LL.GetPixel(&GUI.LCD, GUI.LCD.DrawingLayer, x, y);
+    return GUI.LL.GetPixel(&GUI.LCD, GUI.LCD.DrawingLayer, x - GUI.LCD.DrawingLayer->OffsetX, y - GUI.LCD.DrawingLayer->OffsetY);
 }
 
 void GUI_DRAW_VLine(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t length, GUI_Color_t color) {
@@ -506,7 +506,7 @@ void GUI_DRAW_VLine(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_i
     if ((y + length) > disp->Y2) {
         length = disp->Y2 - y;
     }
-    GUI.LL.DrawVLine(&GUI.LCD, GUI.LCD.DrawingLayer, x, y, length, color);
+    GUI.LL.DrawVLine(&GUI.LCD, GUI.LCD.DrawingLayer, x - GUI.LCD.DrawingLayer->OffsetX, y - GUI.LCD.DrawingLayer->OffsetY, length, color);
 }
 
 void GUI_DRAW_HLine(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t length, GUI_Color_t color) {
@@ -520,7 +520,7 @@ void GUI_DRAW_HLine(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_i
     if ((x + length) > disp->X2) {
         length = disp->X2 - x;
     }
-    GUI.LL.DrawHLine(&GUI.LCD, GUI.LCD.DrawingLayer, x, y, length, color);
+    GUI.LL.DrawHLine(&GUI.LCD, GUI.LCD.DrawingLayer, x - GUI.LCD.DrawingLayer->OffsetX, y - GUI.LCD.DrawingLayer->OffsetY, length, color);
 }
 
 /******************************************************************************/
@@ -864,14 +864,15 @@ void GUI_DRAW_Image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_I
         return;
     }
     
-    layer = &GUI.LCD.Layers[GUI.LCD.DrawingLayer];  /* Set layer pointer */
+    layer = GUI.LCD.DrawingLayer;                   /* Set layer pointer */
     
     width = img->xSize;                             /* Set default width */
     height = img->ySize;                            /* Set default height */
     
     src = (uint8_t *)(img->Image);                  /* Set source address */
-    dst = (uint8_t *)(layer->StartAddress + GUI.LCD.PixelSize * (y * GUI.LCD.Width + x));   /* Set destination start address */
+    dst = (uint8_t *)(layer->StartAddress + GUI.LCD.PixelSize * ((y - layer->OffsetY) * layer->Width + (x - layer->OffsetX)));
     
+    //TODO: Check proper coordinates for memory!
     if (y < disp->Y1) {
         src += (disp->Y1 - y) * img->xSize * bytes; /* Set offset for number of image lines */
         dst += (disp->Y1 - y) * GUI.LCD.Width * GUI.LCD.PixelSize;  /* Set offset for number of LCD lines */
@@ -890,7 +891,7 @@ void GUI_DRAW_Image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_I
     }
     
     offlineSrc = img->xSize - width;                /* Set offline source */
-    offlineDst = GUI.LCD.Width - width;             /* Set offline destination */
+    offlineDst = layer->Width - width;              /* Set offline destination */
     
     /*******************/
     /*    Draw image   */

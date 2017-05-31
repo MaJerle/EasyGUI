@@ -750,14 +750,17 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \brief           Get widget transparency value
  * \note            Value between 0 and 0xFF is used:
  *                      - 0x00: Widget is hidden
- *                      - 0xFF: Widget is fully hidden
+ *                      - 0xFF: Widget is fully visible
  *                      - between: Widget has transparency value
  *
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
  * \retval          Trasparency value
  */
-#define __GUI_WIDGET_GetTransparency(h)             (__GH(h)->Transparency)
+#define __GUI_WIDGET_GetTransparency(h)             ((uint8_t)(__GH(h)->Transparency))
+
+
+uint8_t GUI_WIDGET_SetTransparency(GUI_HANDLE_p h, uint8_t trans);
 
 /**
  * \brief           Set z-Index for widgets on the same level. This feature applies on widgets which are not dialogs
@@ -778,7 +781,7 @@ uint8_t __GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex);
  * \retval          z-index value
  * \hideinitializer
  */
-#define __GUI_WIDGET_GetZIndex(h)                   (__GH(h)->ZIndex)
+#define __GUI_WIDGET_GetZIndex(h)                   ((int32_t)(__GH(h)->ZIndex))
 
 /**
  * \}
@@ -1133,6 +1136,7 @@ uint8_t GUI_WIDGET_IsExpanded(GUI_HANDLE_p h);
  * \param[in]       zindex: Z-Index value for widget. Any value can be used
  * \retval          1: New value is different than previous and modification has been done
  * \retval          0: New value was not set
+ * \sa              GUI_WIDGET_GetZIndex
  */
 uint8_t GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex);
 
@@ -1140,8 +1144,12 @@ uint8_t GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex);
  * \brief           Get z-index value from widget
  * \param[in,out]   h: Widget handle
  * \retval          z-index value
+ * \sa              GUI_WIDGET_SetZIndex
  */
-uint32_t GUI_WIDGET_GetZIndex(GUI_HANDLE_p h);
+int32_t GUI_WIDGET_GetZIndex(GUI_HANDLE_p h);
+
+uint8_t GUI_WIDGET_SetTransparency(GUI_HANDLE_p h, uint8_t trans);
+uint8_t GUI_WIDGET_GetTransparency(GUI_HANDLE_p h);
 
 #if defined(GUI_INTERNAL) && !defined(DOXYGEN)
 //Strictly private functions by GUI

@@ -320,7 +320,7 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
         case GUI_WC_Remove: {
             GUI_LISTVIEW_ROW_t* row;
             GUI_LISTVIEW_ITEM_t* item;
-            uint16_t i;
+            uint16_t i = 0;
             
             /**
              * Remove all rows
@@ -331,8 +331,10 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                  */
                 while ((item = (GUI_LISTVIEW_ITEM_t *)__GUI_LINKEDLIST_REMOVE_GEN(&row->Root, (GUI_LinkedList_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&row->Root, 0))) != NULL) {
                     __GUI_MEMFREE(item);
+                    
                 }
                 __GUI_MEMFREE(row);                 /* Remove actual row entry */
+                i++;
             }
             
             /**

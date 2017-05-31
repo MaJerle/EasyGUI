@@ -60,6 +60,7 @@ extern "C" {
 #include "utils/gui_string.h"
 #include "utils/gui_timer.h"
 #include "utils/gui_math.h"
+#include "utils/gui_mem.h"
 
 /* GUI Low-Level drivers */
 #include "gui_ll.h"
@@ -114,33 +115,22 @@ extern "C" {
  * \note            This function must take care of reseting memory to zero
  * \hideinitializer
  */
-#define __GUI_MEMALLOC(size)        calloc(size, 1)
+#define __GUI_MEMALLOC(size)        __GUI_MEM_Calloc(size, 1)
 
 /**
  * \brief           Reallocate memory with specific size in bytes
  * \hideinitializer
  */
-#define __GUI_MEMREALLOC(ptr, size) realloc(ptr, size)
+#define __GUI_MEMREALLOC(ptr, size) __GUI_MEM_Realloc(ptr, size)
 
 /**
  * \brief           Free memory from specific address previously allocated with \ref __GUI_MEMALLOC
  * \hideinitializer
  */
 #define __GUI_MEMFREE(p)            do {            \
-    free(p);                                        \
+    __GUI_MEM_Free(p);                              \
     (p) = NULL;                                     \
 } while (0);
-
-/**
- * \brief           Free memory for widget which was just deleted
- * \hideinitializer
- */
-#define __GUI_MEMWIDFREE(p)         do {            \
-/*    __GUI_DEBUG("Memory free: 0x%08X; Type: %s\r\n", (uint32_t)__GH(p), __GH(p)->Widget->Name); */ \
-    memset(p, 0x00, __GH(p)->Widget->Size);         \
-    free(p);                                        \
-    (p) = 0;                                        \
-} while (0)
 
 /**
  * \brief           Check input parameters and return value on failure

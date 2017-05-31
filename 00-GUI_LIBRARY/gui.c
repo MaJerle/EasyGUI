@@ -126,13 +126,43 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
         if (__GUI_WIDGET_IsInsideClippingRegion(h)) {   /* If draw function is set and drawing is inside clipping region */
             /* Draw main widget if required */
             if (__GH(h)->Flags & GUI_FLAG_REDRAW) { /* Check if redraw required */
-                __GH(h)->Flags &= ~GUI_FLAG_REDRAW; /* Clear flag */
+                GUI_Layer_t* layerPrev = GUI.LCD.DrawingLayer;  /* Save drawing layer */
+                uint8_t transparent = 0;
+                
+                __GH(h)->Flags &= ~GUI_FLAG_REDRAW; /* Clear flag for drawing on widget */
+                
+                /**
+                 * Prepare clipping region for this widget drawing
+                 */
+                __CheckDispClipping(h);             /* Check coordinates for drawings */
                 
                 /**
                  * TODO: If widget has transparency set temporary layer for drawing
                  */
+                if (__GUI_WIDGET_GetTransparency(h) < 0xFF) {
+                    GUI_iDim_t width = GUI.DisplayTemp.X2 - GUI.DisplayTemp.X1;
+                    GUI_iDim_t height = GUI.DisplayTemp.Y2 - GUI.DisplayTemp.Y1;
+                    
+                    /**
+                     * Try to allocate memory for new virtual layer for temporary usage
+                     */
+                    GUI.LCD.DrawingLayer = (GUI_Layer_t *)__GUI_MEMALLOC(sizeof(*GUI.LCD.DrawingLayer) + width * height * GUI.LCD.PixelSize);
+                    
+                    if (GUI.LCD.DrawingLayer) {     /* Check if allocation was successful */
+                        GUI.LCD.DrawingLayer->Width = width;
+                        GUI.LCD.DrawingLayer->Height = height;
+                        GUI.LCD.DrawingLayer->OffsetX = GUI.DisplayTemp.X1;
+                        GUI.LCD.DrawingLayer->OffsetY = GUI.DisplayTemp.Y1;
+                        GUI.LCD.DrawingLayer->StartAddress = (uint32_t)((char *)GUI.LCD.DrawingLayer) + sizeof(*GUI.LCD.DrawingLayer);
+                        transparent = 1;            /* We are going to transparent drawing mode */
+                    } else {
+                        GUI.LCD.DrawingLayer = layerPrev;   /* Reset layer back */
+                    }
+                }
                 
-                __CheckDispClipping(h);             /* Check coordinates for drawings */
+                /**
+                 * Draw widget itself normally, don't care on layer offset and size
+                 */
                 __GUI_WIDGET_Callback(h, GUI_WC_Draw, &GUI.DisplayTemp, NULL);  /* Draw widget */
                 
                 /* Check if there are children widgets in this widget */
@@ -153,6 +183,21 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
                  * copy drawed area back to main drawing layer with blending
                  * between layers
                  */
+                if (transparent) {                  /* If we were in transparent mode */
+                    /* Copy layers with blending */
+                    GUI.LL.CopyBlend(&GUI.LCD, GUI.LCD.DrawingLayer,
+                        (void *)GUI.LCD.DrawingLayer->StartAddress, 
+                        (void *)(layerPrev->StartAddress + 
+                            GUI.LCD.PixelSize * (layerPrev->Width * (GUI.LCD.DrawingLayer->OffsetY - layerPrev->OffsetY) + (GUI.LCD.DrawingLayer->OffsetX - layerPrev->OffsetX))),
+                        __GUI_WIDGET_GetTransparency(h), 0xFF,
+                        GUI.LCD.DrawingLayer->Width, GUI.LCD.DrawingLayer->Height,
+                        0, layerPrev->Width - GUI.LCD.DrawingLayer->Width
+                    );
+                    
+                    __GUI_MEMFREE(GUI.LCD.DrawingLayer);    /* Free memory for virtual layer */
+                    GUI.LCD.DrawingLayer = layerPrev;   /* Reset layer pointer */
+                }
+                
             /**
              * Check if any widget from children should be redrawn
              */
@@ -160,21 +205,6 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
                 cnt += __RedrawWidgets(h);          /* Redraw children widgets */
             }
         }
-        
-//        /**
-//         * TODO: If widget has transparency, 
-//         * draw it first on separate layer and then copy blending new layer with parent layer
-//         *
-//         * Drawback: More deep you go with children widgets, 
-//         * more layers you need if all of parent have transparency.
-//         */
-//        if (__GUI_WIDGET_GetTransparency(h) < 0xFF) {
-//            //TODO: Find proper layer to use first
-//        }
-//                
-//        if (__GUI_WIDGET_GetTransparency(h) < 0xFF) {
-//            //TODO: Merge layers and reset everything
-//        }
     }
     return cnt;                                     /* Return number of redrawn objects */
 }
@@ -428,11 +458,19 @@ GUI_Result_t GUI_Init(void) {
     
     /* Check situation with layers */
     if (GUI.LCD.LayersCount >= 1) {
-        GUI.LCD.ActiveLayer = 0;
-        GUI.LCD.DrawingLayer = 0;
-        GUI.LL.Fill(&GUI.LCD, GUI.LCD.DrawingLayer, (void *)GUI.LCD.Layers[GUI.LCD.DrawingLayer].StartAddress, GUI.LCD.Width, GUI.LCD.Height, 0, 0xFFFFFFFF);
+        size_t i;
+        /* Set default values for all layers */
+        for (i = 0; i < GUI.LCD.LayersCount; i++) {
+            GUI.LCD.Layers[i].OffsetX = 0;
+            GUI.LCD.Layers[i].OffsetY = 0;
+            GUI.LCD.Layers[i].Width = GUI.LCD.Width;
+            GUI.LCD.Layers[i].Height = GUI.LCD.Height;
+        }
+        GUI.LCD.ActiveLayer = &GUI.LCD.Layers[0];
+        GUI.LCD.DrawingLayer = &GUI.LCD.Layers[0];
+        GUI.LL.Fill(&GUI.LCD, GUI.LCD.DrawingLayer, (void *)GUI.LCD.DrawingLayer->StartAddress, GUI.LCD.Width, GUI.LCD.Height, 0, 0xFFFFFFFF);
         if (GUI.LCD.LayersCount > 1) {
-            GUI.LCD.DrawingLayer = 1;
+            GUI.LCD.DrawingLayer = &GUI.LCD.Layers[1];
         }
     } else {
         return guiERROR;
@@ -580,10 +618,10 @@ int32_t GUI_Process(void) {
      */
     if (!(GUI.LCD.Flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM) && (GUI.Flags & GUI_FLAG_REDRAW)) {  /* Check if anything to draw first */
         uint32_t time;
-        uint8_t active = GUI.LCD.ActiveLayer;
-        uint8_t drawing = GUI.LCD.DrawingLayer;
+        GUI_Layer_t* active = GUI.LCD.ActiveLayer;
+        GUI_Layer_t* drawing = GUI.LCD.DrawingLayer;
         uint8_t result = 1;
-        GUI_Display_t* dispA = &GUI.LCD.Layers[active].Display;
+        GUI_Display_t* dispA = &active->Display;
         
         GUI.Flags &= ~GUI_FLAG_REDRAW;              /* Clear redraw flag */
         
@@ -591,12 +629,12 @@ int32_t GUI_Process(void) {
         
         /* Copy from currently active layer to drawing layer only changes on layer */
         GUI.LL.Copy(&GUI.LCD, drawing, 
-            (void *)(GUI.LCD.Layers[active].StartAddress + GUI.LCD.PixelSize * (dispA->Y1 * GUI.LCD.Width + dispA->X1)),    /* Source address */
-            (void *)(GUI.LCD.Layers[drawing].StartAddress + GUI.LCD.PixelSize * (dispA->Y1 * GUI.LCD.Width + dispA->X1)),   /* Destination address */
+            (void *)(active->StartAddress + GUI.LCD.PixelSize * (dispA->Y1 * active->Width + dispA->X1)),    /* Source address */
+            (void *)(drawing->StartAddress + GUI.LCD.PixelSize * (dispA->Y1 * drawing->Width + dispA->X1)),   /* Destination address */
             dispA->X2 - dispA->X1,                  /* Area width */
             dispA->Y2 - dispA->Y1,                  /* Area height */
-            GUI.LCD.Width - (dispA->X2 - dispA->X1),/* Offline source */
-            GUI.LCD.Width - (dispA->X2 - dispA->X1) /* Offline destination */
+            active->Width - (dispA->X2 - dispA->X1),    /* Offline source */
+            drawing->Width - (dispA->X2 - dispA->X1)    /* Offline destination */
         );
             
         /* Actually draw new screen based on setup */
@@ -613,7 +651,7 @@ int32_t GUI_Process(void) {
 //        );
         
         /* Set drawing layer as pending */
-        GUI.LCD.Layers[drawing].Pending = 1;
+        drawing->Pending = 1;
         
         /* Notify low-level about layer change */
         GUI.LCD.Flags |= GUI_FLAG_LCD_WAIT_LAYER_CONFIRM;
@@ -625,7 +663,7 @@ int32_t GUI_Process(void) {
         GUI.LCD.DrawingLayer = active;
         
         /* Copy clipping data to region */
-        memcpy(&GUI.LCD.Layers[GUI.LCD.ActiveLayer].Display, &GUI.Display, sizeof(GUI.Display));
+        memcpy(&GUI.LCD.ActiveLayer->Display, &GUI.Display, sizeof(GUI.Display));
         
         /* Invalid clipping region(s) for next drawing process */
         GUI.Display.X1 = 0x7FFF;

@@ -107,6 +107,7 @@ GUI_HANDLE_p dialog1;
 #define ID_WIN_IMAGE            (ID_BASE_WIN + 0x0D)
 #define ID_WIN_SLIDER           (ID_BASE_WIN + 0x0E)
 #define ID_WIN_ZINDEX           (ID_BASE_WIN + 0x0F)
+#define ID_WIN_TRANSP           (ID_BASE_WIN + 0x10)
 
 /* List of base buttons IDs */
 #define ID_BTN_WIN_BTN          (ID_BASE_BTN + 0x01)
@@ -124,6 +125,7 @@ GUI_HANDLE_p dialog1;
 #define ID_BTN_WIN_IMAGE        (ID_BASE_BTN + 0x0D)
 #define ID_BTN_WIN_SLIDER       (ID_BASE_BTN + 0x0E)
 #define ID_BTN_WIN_ZINDEX       (ID_BASE_BTN + 0x0F)
+#define ID_BTN_WIN_TRANSP       (ID_BASE_BTN + 0x10)
 
 #define ID_BTN_DIALOG_CONFIRM   (ID_BASE_BTN + 0x20)
 #define ID_BTN_DIALOG_CANCEL    (ID_BASE_BTN + 0x21)
@@ -141,8 +143,12 @@ GUI_HANDLE_p dialog1;
 #define ID_GRAPH_MAIN           (ID_BASE_GRAPH + 0x01)
 
 #define ID_SLIDER_0             (ID_BASE_SLIDER + 0x01)
+#define ID_SLIDER_1             (ID_BASE_SLIDER + 0x02)
 
 #define ID_BUTTON_0             (ID_BASE_BTN + 0x040)
+#define ID_BUTTON_1             (ID_BASE_BTN + 0x041)
+#define ID_BUTTON_2             (ID_BASE_BTN + 0x042)
+#define ID_BUTTON_3             (ID_BASE_BTN + 0x043)
 
 typedef struct {
     GUI_ID_t win_id;
@@ -174,6 +180,7 @@ bulk_init_t buttons[] = {
     {ID_BTN_WIN_IMAGE,      _T("Image"),        {ID_WIN_IMAGE, _T("Image")}},
     {ID_BTN_WIN_SLIDER,     _T("Slider"),       {ID_WIN_SLIDER, _T("Slider")}},
     {ID_BTN_WIN_ZINDEX,     _T("z-index"),      {ID_WIN_ZINDEX, _T("z-index test page")}},
+    {ID_BTN_WIN_TRANSP,     _T("Transparency"), {ID_WIN_TRANSP, _T("Transparency presentation")}},
 };
 
 char str[100];
@@ -250,7 +257,7 @@ void CreateMask(void) {
 void DMA2D_Transfer(void) {
     uint32_t dst;
     
-    dst = GUI.LCD.Layers[GUI.LCD.ActiveLayer].StartAddress;
+    dst = GUI.LCD.ActiveLayer->StartAddress;
     
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait finished */
     
@@ -295,7 +302,7 @@ int main(void) {
     win1 = GUI_WINDOW_GetDesktop();                         /* Get desktop window */
     
     for (state = 0; state < GUI_COUNT_OF(buttons); state++) {
-        handle = GUI_BUTTON_Create(buttons[state].id, 5 + (state % 3) * 160, 5 + (state / 3) * 50, 150, 40, win1, button_callback, 0);
+        handle = GUI_BUTTON_Create(buttons[state].id, 5 + (state % 3) * 160, 5 + (state / 3) * 40, 150, 35, win1, button_callback, 0);
         GUI_WIDGET_SetText(handle, buttons[state].text);
         GUI_WIDGET_SetUserData(handle, &buttons[state].data);
     }
@@ -522,108 +529,6 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
                 GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
                 GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
                 break;
             }
             case ID_WIN_GRAPH: {        /* Graph window */
@@ -808,6 +713,23 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 GUI_WIDGET_SetZIndex(handle, 2);
                 break;
             }
+            case ID_WIN_TRANSP: {
+                handle = GUI_BUTTON_Create(ID_BUTTON_1, 10, 10, 300, 35, 0, 0, 0);
+                GUI_WIDGET_SetText(handle, _T("Transparent 0x80"));
+                GUI_WIDGET_SetTransparency(handle, 0x80);
+                handle = GUI_BUTTON_Create(ID_BUTTON_2, 10, 50, 300, 35, 0, 0, 0);
+                GUI_WIDGET_SetText(handle, _T("Transparent 0x20"));
+                GUI_WIDGET_SetTransparency(handle, 0x20);
+                handle = GUI_BUTTON_Create(ID_BUTTON_3, 10, 90, 300, 35, 0, 0, 0);
+                GUI_WIDGET_SetText(handle, _T("Transparent 0xC0"));
+                GUI_WIDGET_SetTransparency(handle, 0xC0);
+                
+                handle = GUI_SLIDER_Create(ID_SLIDER_1, 10, 150, 400, 50, 0, slider_callback, 0);
+                GUI_SLIDER_SetMin(handle, 0);
+                GUI_SLIDER_SetMax(handle, 0xFF);
+                GUI_SLIDER_SetValue(handle, 0x80);
+                break;
+            }
             default:
                 break;  
         }
@@ -900,7 +822,8 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 case ID_BTN_WIN_RADIO:
                 case ID_BTN_WIN_TEXTVIEW:
                 case ID_BTN_WIN_SLIDER:
-                case ID_BTN_WIN_ZINDEX: {
+                case ID_BTN_WIN_ZINDEX:
+                case ID_BTN_WIN_TRANSP: {
                     btn_user_data_t* data = GUI_WIDGET_GetUserData(h);
                     uint32_t diff = id - ID_BTN_WIN_BTN;
                     if (data) {
@@ -915,6 +838,9 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                             GUI_WIDGET_SetText(tmp, data->win_text);
                             GUI_WIDGET_SetZIndex(tmp, diff);
                             GUI_WIDGET_PutOnFront(tmp);
+                            if (data->win_id == ID_WIN_TRANSP) {
+                                //GUI_WIDGET_SetTransparency(tmp, 0x80);
+                            }
                         }
                     }
                     break;
@@ -976,12 +902,26 @@ uint8_t slider_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
         }
         case GUI_WC_ValueChanged: {
             int32_t value = GUI_SLIDER_GetValue(h); /* Get widget handle */
-            if (GUI_WIDGET_GetId(h) == ID_SLIDER_0) {
-                GUI_HANDLE_p tmp;
-                tmp = GUI_WIDGET_GetById(ID_BUTTON_0);
-                if (tmp) {
-                    GUI_WIDGET_SetSize(tmp, value, value / 4);
+            switch (GUI_WIDGET_GetId(h)) {
+                case ID_SLIDER_0: {
+                    GUI_HANDLE_p tmp;
+                    tmp = GUI_WIDGET_GetById(ID_BUTTON_0);
+                    if (tmp) {
+                        GUI_WIDGET_SetSize(tmp, value, value / 4);
+                    }
+                    break;
                 }
+                case ID_SLIDER_1: {
+                    GUI_HANDLE_p tmp;
+                    tmp = GUI_WIDGET_GetById(ID_BUTTON_1);
+                    if (tmp) {
+                        GUI_WIDGET_SetTransparency(tmp, value);
+                    }
+                    break;
+                }
+            }
+            if (GUI_WIDGET_GetId(h) == ID_SLIDER_0) {
+                
             }
             //Set timer PWM
             break;
