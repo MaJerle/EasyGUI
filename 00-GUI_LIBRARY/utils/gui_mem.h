@@ -48,6 +48,27 @@ extern "C" {
  * \{
  */
 
+/**
+ * \brief           Single memory region descriptor
+ */
+typedef struct mem_region_t {
+    void* StartAddress;                 /*!< Start address of region */
+    size_t Size;                        /*!< Size in units of bytes of region */
+} mem_region_t;
+
+/**
+ * \brief           Wrapper for memory region for GUI
+ */
+typedef mem_region_t GUI_MEM_Region_t;
+    
+/**
+ * \defgroup        GUI_MEM_Int Internal functions
+ * \note            Internal functions are not thread safe but since GUI API is thread safe,
+ *                  they can be easily used inside API for fast processing without locking check
+ * \brief           Internal functions API which is not thread safe
+ * \{
+ */
+
 void* __GUI_MEM_Alloc(uint32_t size);
 void* __GUI_MEM_Realloc(void* ptr, size_t size);
 void* __GUI_MEM_Calloc(size_t num, size_t size);
@@ -55,8 +76,12 @@ void __GUI_MEM_Free(void* ptr);
 size_t __GUI_MEM_GetFree(void);
 size_t __GUI_MEM_GetFull(void);
 size_t __GUI_MEM_GetMinFree(void);
-    
-uint8_t GUI_MEM_AssignMemory(void* memory, size_t size);
+  
+/**
+ * \}
+ */
+ 
+uint8_t GUI_MEM_AssignMemory(const GUI_MEM_Region_t* memory, size_t size);
 void* GUI_MEM_Alloc(uint32_t size);
 void* GUI_MEM_Realloc(void* ptr, size_t size);
 void* GUI_MEM_Calloc(size_t num, size_t size);

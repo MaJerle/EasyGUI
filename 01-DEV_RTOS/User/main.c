@@ -444,91 +444,24 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 break;
             }
             case ID_WIN_LISTVIEW: {     /* Listview */
+                size_t len;
                 GUI_LISTVIEW_ROW_p row;
                 handle = GUI_LISTVIEW_Create(0, 10, 10, 100, 40, h, listview_callback, 0);
                 GUI_WIDGET_SetExpanded(handle, 1);
                 
-                GUI_LISTVIEW_AddColumn(handle, _T("Name"));
-                GUI_LISTVIEW_AddColumn(handle, _T("LastName"));
-                GUI_LISTVIEW_AddColumn(handle, _T("Email"));
-                GUI_LISTVIEW_AddColumn(handle, _T("Phone"));
+                GUI_LISTVIEW_AddColumn(handle, _T("Name"), 120);
+                GUI_LISTVIEW_AddColumn(handle, _T("LastName"), 150);
+                GUI_LISTVIEW_AddColumn(handle, _T("Email"), 220);
+                GUI_LISTVIEW_AddColumn(handle, _T("Phone"), 160);
+//                
+//                for (len = 0; len < 10; len++) {
+//                    row = GUI_LISTVIEW_AddRow(handle);
+//                    GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Tilen"));
+//                    GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Majerle"));
+//                    GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@majerle.eu"));
+//                    GUI_LISTVIEW_SetItemString(handle, row, 3, _T("040167724"));
+//                }
                 
-                GUI_LISTVIEW_SetColumnWidth(handle, 0, 120);
-                GUI_LISTVIEW_SetColumnWidth(handle, 1, 150);
-                GUI_LISTVIEW_SetColumnWidth(handle, 2, 220);
-                GUI_LISTVIEW_SetColumnWidth(handle, 3, 160);
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Tilen"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Majerle"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@majerle.eu"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("040167724"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Nekdo"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Nekje"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("til@erle.eu"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("123456789"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Tilen"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Majerle"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@majerle.eu"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("040167724"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Nekdo"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Nekje"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("til@erle.eu"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("123456789"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Tilen"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Majerle"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@majerle.eu"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("040167724"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Nekdo"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Nekje"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("til@erle.eu"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("123456789"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Tilen"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Majerle"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@majerle.eu"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("040167724"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Nekdo"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Nekje"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("til@erle.eu"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("123456789"));
-                
-                row = GUI_LISTVIEW_AddRow(handle);
-                GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Olala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Ulalala"));
-                GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@gmail.com"));
-                GUI_LISTVIEW_SetItemString(handle, row, 3, _T("987654321"));
                 break;
             }
             case ID_WIN_GRAPH: {        /* Graph window */

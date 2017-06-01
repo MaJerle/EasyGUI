@@ -156,10 +156,11 @@ uint8_t GUI_LISTVIEW_SetColor(GUI_HANDLE_p h, GUI_LISTVIEW_COLOR_t index, GUI_Co
  * \brief           Add new column to listview
  * \param[in]       h: Widget handle
  * \param[in]       *text: Text to display on top
+ * \param[in]       width: Width of column in units of pixels
  * \retval          1: Column was added
  * \retval          0: Column was not added
  */
-uint8_t GUI_LISTVIEW_AddColumn(GUI_HANDLE_p h, const GUI_Char* text);
+uint8_t GUI_LISTVIEW_AddColumn(GUI_HANDLE_p h, const GUI_Char* text, GUI_Dim_t width);
 
 /**
  * \brief           Set column width in units of pixels

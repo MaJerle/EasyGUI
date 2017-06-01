@@ -208,6 +208,12 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 #endif /* GUI_USE_TOUCH */
     
     switch (ctrl) {                                 /* Handle control function if required */
+        case GUI_WC_PreInit: {
+            __GL(h)->Selected = -1;                 /* Invalidate selection */
+            __GL(h)->SliderWidth = 30;              /* Set slider width */
+            __GL(h)->Flags |= GUI_FLAG_LISTVIEW_SLIDER_AUTO;    /* Enable auto mode for slider */
+            return 1;
+        }
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
             GUI_Dim_t x, y, width, height;
@@ -331,7 +337,6 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                  */
                 while ((item = (GUI_LISTVIEW_ITEM_t *)__GUI_LINKEDLIST_REMOVE_GEN(&row->Root, (GUI_LinkedList_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&row->Root, 0))) != NULL) {
                     __GUI_MEMFREE(item);
-                    
                 }
                 __GUI_MEMFREE(row);                 /* Remove actual row entry */
                 i++;
@@ -476,11 +481,6 @@ GUI_HANDLE_p GUI_LISTVIEW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Di
     __GUI_ENTER();                                  /* Enter GUI */
     
     ptr = (GUI_LISTVIEW_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);    /* Allocate memory for basic widget */
-    if (ptr) {        
-        ptr->Selected = -1;                         /*!< Invalidate selection */
-        ptr->SliderWidth = 30;                      /*!< Set slider width */
-        ptr->Flags |= GUI_FLAG_LISTVIEW_SLIDER_AUTO;
-    }
     __GUI_LEAVE();                                  /* Leave GUI */
     
     return (GUI_HANDLE_p)ptr;
@@ -498,7 +498,7 @@ uint8_t GUI_LISTVIEW_SetColor(GUI_HANDLE_p h, GUI_LISTVIEW_COLOR_t index, GUI_Co
     return ret;
 }
 
-uint8_t GUI_LISTVIEW_AddColumn(GUI_HANDLE_p h, const GUI_Char* text) {
+uint8_t GUI_LISTVIEW_AddColumn(GUI_HANDLE_p h, const GUI_Char* text, GUI_Dim_t width) {
     uint8_t ret = 0;
     GUI_LISTVIEW_COL_t* col;
     GUI_LISTVIEW_COL_t** cols;
@@ -512,10 +512,10 @@ uint8_t GUI_LISTVIEW_AddColumn(GUI_HANDLE_p h, const GUI_Char* text) {
         col = (GUI_LISTVIEW_COL_t *)__GUI_MEMALLOC(sizeof(*col));   /* Allocate memory for new column structure */
         if (col) {
             __GL(h)->Cols[__GL(h)->ColsCount++] = col;  /* Add column to array list */
-            __GL(h)->Cols[__GL(h)->ColsCount + 1] = 0;  /* Add zero to the end of array */
+            __GL(h)->Cols[__GL(h)->ColsCount] = 0;  /* Add zero to the end of array */
             
             col->Text = (GUI_Char *)text;
-            col->Width = 100;
+            col->Width = width > 0 ? width : 100;
             ret = 1;
         }
     }
@@ -546,7 +546,7 @@ GUI_LISTVIEW_ROW_p GUI_LISTVIEW_AddRow(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);   /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
-    row = __GUI_MEMALLOC(sizeof(*row));             /* Allocate memory for new row(s) */
+    row = (GUI_LISTVIEW_ROW_t *)__GUI_MEMALLOC(sizeof(*row));   /* Allocate memory for new row(s) */
     if (row) {
         __GUI_LINKEDLIST_ADD_GEN(&__GL(h)->Root, (GUI_LinkedList_t *)row);  /* Add new row to linked list */
         __GL(h)->Count++;                           /* Increase number of rows */

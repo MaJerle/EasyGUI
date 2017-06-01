@@ -32,11 +32,19 @@
 /******************************************************************************/
 /******************************************************************************/
 typedef struct MemBlock {
-    struct MemBlock* NextFreeBlock;                         /*!< Pointer to next free block */
-    size_t Size;                                            /*!< Size of block */
+    struct MemBlock* NextFreeBlock;                 /*!< Pointer to next free block */
+    size_t Size;                                    /*!< Size of block */
 } MemBlock_t;
 
-#define MEMBLOCK_METASIZE               sizeof(MemBlock_t)
+#define MEMBLOCK_METASIZE           sizeof(MemBlock_t)
+
+
+#define GUI_USE_MEM     1
+
+/**
+ * \brief           Memory alignment bits
+ */
+#define MEM_ALIGN_BITS              ((size_t)0x03)
 
 /******************************************************************************/
 /******************************************************************************/
@@ -58,6 +66,8 @@ static size_t MemAllocBit = 0;
 static size_t MemTotalSize = 0;                     /* Size of memory in units of bytes */
 static uint8_t* HeapMem = 0;                        /* Array holding HEAP memory */
 
+size_t mem_getusersize(void* ptr);
+
 /******************************************************************************/
 /******************************************************************************/
 /***                            Private functions                            **/
@@ -73,6 +83,10 @@ void __mem_init(void) {
         return;
     }
 
+    /**
+     * TODO: Memory alignment bits check
+     */
+    
     MemStartAddr = (void *)HeapMem;                 /* Actual heap memory address*/
 
     /**
@@ -156,13 +170,16 @@ void __mem_insertfreeblock(MemBlock_t* newBlock) {
     }
 }
 
-uint8_t mem_assignmem(void* ptr, size_t size) {
+uint8_t mem_assignmem(const mem_region_t* regions, size_t len) {
     /**
      * TODO: Before memory change, check if entire memory is free
+     *
+     * TODO: Allow multiple regions
      */
     if (!HeapMem || !MemTotalSize) {
-        HeapMem = ptr;                              /* Set pointer to memory */
-        MemTotalSize = size;                        /* Set total memory size */
+        HeapMem = regions->StartAddress;            /* Set pointer to memory */
+        MemTotalSize = regions->Size;               /* Set total memory size */
+        EndBlock = 0;                               /* Reset end block to unknown value */
         __mem_init();                               /* Reinit memory */
         return 1;
     }
@@ -175,13 +192,22 @@ void* mem_alloc(size_t size) {
 
     if (!EndBlock) {                                /* If end block is not yet defined */
         __mem_init();                               /* Init library for first time */
+        if (!EndBlock) {                            /* Check if still not initialized */
+            return 0;
+        }
     }
     
+    /**
+     * TODO: Check alignment maybe?
+     */    
     if (!size || size >= MemAllocBit) {             /* Check input parameters */
         return 0;
     }
 
     size += MEMBLOCK_METASIZE;                      /* Increase allocation size for meta data */
+    if ((size & MEM_ALIGN_BITS)) {
+        size = (size + MEM_ALIGN_BITS) & ~MEM_ALIGN_BITS;
+    }
     if (size > MemAvailableBytes) {                 /* Check if we have enough memory available */
         return 0;
     }
@@ -196,6 +222,9 @@ void* mem_alloc(size_t size) {
     while ((Curr->Size < size) && (Curr->NextFreeBlock)) {
         Prev = Curr;
         Curr = Curr->NextFreeBlock;
+        if ((uint32_t)Curr < 1000) {
+            __nop();
+        }
     }
     
     /**
@@ -245,6 +274,8 @@ void mem_free(void* ptr) {
     if (!ptr) {                                     /* To be in compliance with C free function */
         return;
     }
+    
+    __GUI_DEBUG("Calc size: %d\r\n", mem_getusersize(ptr));
 
     block = (MemBlock_t *)(((uint8_t *)ptr) - MEMBLOCK_METASIZE);   /* Get block data pointer from input pointer */
 
@@ -270,7 +301,7 @@ size_t mem_getusersize(void* ptr) {
     if (!ptr) {
         return 0;
     }
-    block = (MemBlock_t *)((uint8_t *)ptr - MEMBLOCK_METASIZE); /* Get block meta data pointer */
+    block = (MemBlock_t *)(((uint8_t *)ptr) - MEMBLOCK_METASIZE);   /* Get block meta data pointer */
     if (block->Size & MemAllocBit) {                /* Memory is actually allocated */
         return (block->Size & ~MemAllocBit) - MEMBLOCK_METASIZE;    /* return size of block */
     }
@@ -280,10 +311,10 @@ size_t mem_getusersize(void* ptr) {
 /* Allocate memory and set it to 0 */
 void* mem_calloc(size_t num, size_t size) {
     void* ptr;
+    size_t tot_len = num * size;
     
-    ptr = __GUI_MEM_Alloc(num * size);              /* Try to allocate memory */
-    if (ptr) {
-        memset(ptr, 0x00, num * size);              /* Reset entire memory */
+    if ((ptr = mem_alloc(tot_len)) != NULL) {       /* Try to allocate memory */
+        memset(ptr, 0x00, tot_len);                 /* Reset entire memory */
     }
     return ptr;
 }
@@ -299,6 +330,7 @@ void* mem_realloc(void* ptr, size_t size) {
     
     oldSize = mem_getusersize(ptr);                 /* Get size of old pointer */
     newPtr = mem_alloc(size);                       /* Try to allocate new memory block */
+    __GUI_DEBUG("OldSize: %d\r\n", oldSize);
     if (newPtr) {                                   /* Check success */
         memcpy(newPtr, ptr, size > oldSize ? oldSize : size);   /* Copy old data to new array */
         mem_free(ptr);                              /* Free old pointer */
@@ -325,19 +357,35 @@ size_t mem_getminfree(void) {
 /******************************************************************************/
 /******************************************************************************/
 void* __GUI_MEM_Alloc(uint32_t size) {
-    return mem_alloc(size);                         /* Allocate memory and return pointer */                                   
+#if GUI_USE_MEM
+    return mem_alloc(size);                         /* Allocate memory and return pointer */ 
+#else
+    return malloc(size);
+#endif    
 }
 
 void* __GUI_MEM_Realloc(void* ptr, size_t size) {
+#if GUI_USE_MEM
     return mem_realloc(ptr, size);                  /* Reallocate and return pointer */
+#else
+    return realloc(ptr, size);
+#endif    
 }
 
 void* __GUI_MEM_Calloc(size_t num, size_t size) {
+#if GUI_USE_MEM
     return mem_calloc(num, size);                   /* Allocate memory and clear it to 0. Then return pointer */
+#else
+    return calloc(num, size);
+#endif    
 }
 
 void __GUI_MEM_Free(void* ptr) {
+#if GUI_USE_MEM
     mem_free(ptr);                                  /* Free already allocated memory */
+#else
+    free(ptr);
+#endif    
 }
 
 size_t __GUI_MEM_GetFree(void) {
@@ -357,10 +405,10 @@ size_t __GUI_MEM_GetMinFree(void) {
 /***                  Thread safe version of public API                      **/
 /******************************************************************************/
 /******************************************************************************/
-uint8_t GUI_MEM_AssignMemory(void* memory, size_t size) {
+uint8_t GUI_MEM_AssignMemory(const GUI_MEM_Region_t* regions, size_t len) {
     uint8_t ret;
     __GUI_ENTER();                                  /* Enter GUI */
-    ret = mem_assignmem(memory, size);              /* Assign memory */
+    ret = mem_assignmem(regions, len);              /* Assign memory */
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;                                     
 }
