@@ -66,8 +66,6 @@ static size_t MemAllocBit = 0;
 static size_t MemTotalSize = 0;                     /* Size of memory in units of bytes */
 static uint8_t* HeapMem = 0;                        /* Array holding HEAP memory */
 
-size_t mem_getusersize(void* ptr);
-
 /******************************************************************************/
 /******************************************************************************/
 /***                            Private functions                            **/
@@ -274,8 +272,6 @@ void mem_free(void* ptr) {
     if (!ptr) {                                     /* To be in compliance with C free function */
         return;
     }
-    
-    __GUI_DEBUG("Calc size: %d\r\n", mem_getusersize(ptr));
 
     block = (MemBlock_t *)(((uint8_t *)ptr) - MEMBLOCK_METASIZE);   /* Get block data pointer from input pointer */
 
@@ -330,7 +326,6 @@ void* mem_realloc(void* ptr, size_t size) {
     
     oldSize = mem_getusersize(ptr);                 /* Get size of old pointer */
     newPtr = mem_alloc(size);                       /* Try to allocate new memory block */
-    __GUI_DEBUG("OldSize: %d\r\n", oldSize);
     if (newPtr) {                                   /* Check success */
         memcpy(newPtr, ptr, size > oldSize ? oldSize : size);   /* Copy old data to new array */
         mem_free(ptr);                              /* Free old pointer */
