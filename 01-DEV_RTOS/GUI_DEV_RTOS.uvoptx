@@ -870,7 +870,7 @@
           <Type>0</Type>
           <LineNumber>872</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134288728</Address>
+          <Address>134291956</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -886,7 +886,7 @@
           <Type>0</Type>
           <LineNumber>65</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134259190</Address>
+          <Address>134261058</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -900,34 +900,18 @@
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>170</LineNumber>
+          <LineNumber>892</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134223568</Address>
+          <Address>134292138</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\00-GUI_LIBRARY\widgets\gui_checkbox.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\project\../00-GUI_LIBRARY/widgets/gui_checkbox.c\170</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>892</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
           <Filename>.\User\main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\project\User/main.c\892</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -2329,7 +2313,7 @@
 
   <Group>
     <GroupName>GUI</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
