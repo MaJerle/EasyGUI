@@ -172,10 +172,16 @@ uint8_t __GUI_WIDGET_InvalidatePrivate(GUI_HANDLE_p h, uint8_t setclipping) {
      * If widget should be redrawn, then any widget above it should be redrawn too, otherwise z-index match will fail
      *
      * Widget may not need redraw operation if positions don't match
+     *
+     * If widget is transparent, check all widgets, even those which are below current widget in list
+     * Get first element of parent linked list for checking
      */
-    for (; h1; h1 = __GUI_LINKEDLIST_WidgetGetNext(NULL, h1)) {
+    if (__GUI_WIDGET_IsTransparent(h1)) {
+        __GUI_WIDGET_InvalidatePrivate(__GH(h1)->Parent, 0);    /* Invalidate parent widget */
+    }
+    for (; h1; h1 = __GUI_LINKEDLIST_WidgetGetNext(0, h1)) {
         __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(h1, &h1x1, &h1y1, &h1x2, &h1y2);
-        for (h2 = __GUI_LINKEDLIST_WidgetGetNext(NULL, h1); h2; h2 = __GUI_LINKEDLIST_WidgetGetNext(NULL, h2)) {
+        for (h2 = __GUI_LINKEDLIST_WidgetGetNext(0, h1); h2; h2 = __GUI_LINKEDLIST_WidgetGetNext(0, h2)) {
             __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(h2, &h2x1, &h2y1, &h2x2, &h2y2);
             if (
                 __GH(h2)->Flags & GUI_FLAG_REDRAW ||    /* Bit is already set */
@@ -196,6 +202,18 @@ uint8_t __GUI_WIDGET_InvalidatePrivate(GUI_HANDLE_p h, uint8_t setclipping) {
      */
     if (__GH(h)->Parent && !__GUI_LINKEDLIST_IsWidgetLast(__GH(h)->Parent)) {
         __GUI_WIDGET_InvalidatePrivate(__GH(h)->Parent, 0);
+    }
+    
+    /**
+     * Check if any of parent widgets has transparency = should be invalidated too
+     *
+     * Since recursion is used, call function only once and recursion will take care for upper level of parent widgets
+     */
+    for (h = __GH(h)->Parent; h; h = __GH(h)->Parent) {
+        if (__GUI_WIDGET_IsTransparent(h)) {
+            __GUI_WIDGET_InvalidatePrivate(h, 0);
+            break;
+        }
     }
     
     return 1;
@@ -398,7 +416,7 @@ uint8_t __GUI_WIDGET_Invalidate(GUI_HANDLE_p h) {
         (
             __GH(h)->Flags & GUI_FLAG_WIDGET_INVALIDATE_PARENT || 
             __GH(h)->Widget->Flags & GUI_FLAG_WIDGET_INVALIDATE_PARENT ||
-            __GUI_WIDGET_GetTransparency(h) < 0xFF
+            __GUI_WIDGET_IsTransparent(h)           /* At least little transparent */
         ) && __GH(h)->Parent) {
         __GUI_WIDGET_InvalidatePrivate(__GH(h)->Parent, 0); /* Invalidate parent object too but without clipping */
     }

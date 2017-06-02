@@ -744,7 +744,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \retval          1: Widget is visible and has transparency
  * \retval          0: Widget is either hidden or with no transparency
  */
-#define __GUI_WIDGET_IsTransparent(h)               (__GUI_WIDGET_IsVisible(h) && __GH(h)->Transparency < 0xFF)
+#define __GUI_WIDGET_IsTransparent(h)               (__GUI_WIDGET_IsVisible(h) && __GUI_WIDGET_GetTransparency(h) < 0xFF)
 
 /**
  * \brief           Get widget transparency value

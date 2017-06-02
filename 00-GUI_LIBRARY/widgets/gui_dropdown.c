@@ -319,6 +319,12 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 #endif /* GUI_USE_TOUCH */
     
     switch (ctrl) {                                 /* Handle control function if required */
+        case GUI_WC_PreInit: {
+            __GD(h)->Selected = -1;                 /* Invalidate selection */
+            __GD(h)->SliderWidth = 30;              /* Set slider width */
+            __GD(h)->Flags |= GUI_FLAG_DROPDOWN_SLIDER_AUTO;    /* Enable slider auto mode */
+            return 1;
+        }
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
             GUI_iDim_t x, y, width, height;
@@ -502,17 +508,11 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /******************************************************************************/
 GUI_HANDLE_p GUI_DROPDOWN_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_DROPDOWN_t* ptr;
-    
     __GUI_ENTER();                                  /* Enter GUI */
     
     ptr = (GUI_DROPDOWN_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);   /* Allocate memory for basic widget */
-    if (ptr) {        
-        ptr->Selected = -1;                         /*!< Invalidate selection */
-        ptr->SliderWidth = 30;                      /*!< Set slider width */
-        ptr->Flags |= GUI_FLAG_DROPDOWN_SLIDER_AUTO;
-    }
+
     __GUI_LEAVE();                                  /* Leave GUI */
-    
     return (GUI_HANDLE_p)ptr;
 }
 

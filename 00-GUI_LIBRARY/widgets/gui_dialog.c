@@ -69,15 +69,6 @@ const static GUI_WIDGET_t Widget = {
 /***                            Private functions                            **/
 /******************************************************************************/
 /******************************************************************************/
-static
-uint8_t GUI_DIALOG_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    switch (ctrl) {                                 /* Handle control function if required */
-        default:                                    /* Handle default option */
-            __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
-            return 0;                               /* Command was not processed */
-    }
-}
 
 /* Check if dialog with specific ID is dismissed */
 static
@@ -107,7 +98,24 @@ int __GUI_DIALOG_GetDismissedStatus(GUI_ID_t id) {
         return status;                              /* Return dismissed status */
     }
     return -1;
-}    
+}
+
+static
+uint8_t GUI_DIALOG_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    switch (ctrl) {                                 /* Handle control function if required */
+        case GUI_WC_PreInit: {
+            GUI_ID_t id = __GUI_WIDGET_GetId(h);
+            while (__GUI_DIALOG_IsDismissed(id)) {  /* Clear dismissed status first */
+                __GUI_DIALOG_GetDismissedStatus(id);    /* Make dummy read */
+            }
+            return 1;
+        }
+        default:                                    /* Handle default option */
+            __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
+            return 0;                               /* Command was not processed */
+    }
+}
 
 /******************************************************************************/
 /******************************************************************************/
@@ -116,14 +124,9 @@ int __GUI_DIALOG_GetDismissedStatus(GUI_ID_t id) {
 /******************************************************************************/
 GUI_HANDLE_p GUI_DIALOG_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_DIALOG_t* ptr;
-    
     __GUI_ENTER();                                  /* Enter GUI */
     
     ptr = (GUI_DIALOG_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags | GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP); /* Allocate memory for basic widget */
-
-    while (__GUI_DIALOG_IsDismissed(id)) {          /* Clear dismissed status first */
-        __GUI_DIALOG_GetDismissedStatus(id);        /* Make dummy read */
-    }
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return __GH(ptr);

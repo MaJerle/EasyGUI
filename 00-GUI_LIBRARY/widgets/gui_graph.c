@@ -101,6 +101,22 @@ uint8_t GUI_GRAPH_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
 static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
 #endif /* GUI_USE_TOUCH */    
     switch (ctrl) {                                 /* Handle control function if required */
+        case GUI_WC_PreInit: {
+            __GG(h)->Border[GUI_GRAPH_BORDER_TOP] = 5;  /* Set borders */
+            __GG(h)->Border[GUI_GRAPH_BORDER_RIGHT] = 5;
+            __GG(h)->Border[GUI_GRAPH_BORDER_BOTTOM] = 5;
+            __GG(h)->Border[GUI_GRAPH_BORDER_LEFT] = 5;
+
+            __GG(h)->MaxX = 10;
+            __GG(h)->MinX = -10;
+            __GG(h)->MaxY = 10;
+            __GG(h)->MinY = -20;
+            __GUI_GRAPH_Reset(h);                   /* Reset plot */
+
+            __GG(h)->Rows = 8;                      /* Number of rows */
+            __GG(h)->Columns = 10;                  /* Number of columns */
+            return 1;
+        }
         case GUI_WC_Draw: {                         /* Draw widget */
             GUI_GRAPH_DATA_p data;
             GUI_LinkedListMulti_t* link;
@@ -334,27 +350,11 @@ static void InvalidateGraphs(GUI_GRAPH_DATA_p data) {
 /******************************************************************************/
 GUI_HANDLE_p GUI_GRAPH_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_GRAPH_t* ptr;
-    
     __GUI_ENTER();                                  /* Enter GUI */
     
     ptr = (GUI_GRAPH_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
-    if (ptr) {        
-        ptr->Border[GUI_GRAPH_BORDER_TOP] = 5;      /* Set borders */
-        ptr->Border[GUI_GRAPH_BORDER_RIGHT] = 5;
-        ptr->Border[GUI_GRAPH_BORDER_BOTTOM] = 5;
-        ptr->Border[GUI_GRAPH_BORDER_LEFT] = 5;
-        
-        ptr->MaxX = 10;
-        ptr->MinX = -10;
-        ptr->MaxY = 10;
-        ptr->MinY = -20;
-        __GUI_GRAPH_Reset((GUI_HANDLE_p)ptr);       /* Reset plot */
-        
-        ptr->Rows = 8;                              /* Number of rows */
-        ptr->Columns = 10;                          /* Number of columns */
-    }
+
     __GUI_LEAVE();                                  /* Leave GUI */
-    
     return (GUI_HANDLE_p)ptr;
 }
 
@@ -499,9 +499,9 @@ GUI_GRAPH_DATA_p GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_t type, size_t length) {
         data->Type = type;
         data->Length = length;
         if (type == GUI_GRAPH_TYPE_YT) {            /* Only Y values are stored */
-            data->Data = __GUI_MEMALLOC(length * sizeof(int16_t));
+            data->Data = __GUI_MEMALLOC(length * sizeof(*data->Data));
         } else {
-            data->Data = __GUI_MEMALLOC(length * 2 * sizeof(int16_t));  /* Store X and Y value for plot */
+            data->Data = __GUI_MEMALLOC(length * 2 * sizeof(*data->Data));  /* Store X and Y value for plot */
         }
         if (!data->Data) {
             __GUI_MEMFREE(data);                    /* Remove widget because data memory could not be allocated */

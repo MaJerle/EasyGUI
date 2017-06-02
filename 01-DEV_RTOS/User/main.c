@@ -453,14 +453,14 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 GUI_LISTVIEW_AddColumn(handle, _T("LastName"), 150);
                 GUI_LISTVIEW_AddColumn(handle, _T("Email"), 220);
                 GUI_LISTVIEW_AddColumn(handle, _T("Phone"), 160);
-//                
-//                for (len = 0; len < 10; len++) {
-//                    row = GUI_LISTVIEW_AddRow(handle);
-//                    GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Tilen"));
-//                    GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Majerle"));
-//                    GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@majerle.eu"));
-//                    GUI_LISTVIEW_SetItemString(handle, row, 3, _T("040167724"));
-//                }
+                
+                for (len = 0; len < 10; len++) {
+                    row = GUI_LISTVIEW_AddRow(handle);
+                    GUI_LISTVIEW_SetItemString(handle, row, 0, _T("Tilen"));
+                    GUI_LISTVIEW_SetItemString(handle, row, 1, _T("Majerle"));
+                    GUI_LISTVIEW_SetItemString(handle, row, 2, _T("tilen@majerle.eu"));
+                    GUI_LISTVIEW_SetItemString(handle, row, 3, _T("040167724"));
+                }
                 
                 break;
             }
@@ -468,6 +468,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 uint16_t i;
                 handle = GUI_GRAPH_Create(ID_GRAPH_MAIN, 10, 10, 400, 220, h, 0, 0);
                 GUI_WIDGET_SetExpanded(handle, 1);
+                GUI_WIDGET_SetTransparency(handle, 0x60);
 
                 GUI_GRAPH_SetMinX(handle, -100);
                 GUI_GRAPH_SetMaxX(handle, 100);
@@ -501,6 +502,10 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 GUI_WIDGET_SetZIndex(handle, 1);
                 GUI_CHECKBOX_SetColor(handle, GUI_CHECKBOX_COLOR_TEXT, GUI_COLOR_WHITE);
                 GUI_CHECKBOX_SetChecked(handle, GUI_WIDGET_IsExpanded(GUI_WIDGET_GetById(ID_GRAPH_MAIN)));
+                
+                handle = GUI_BUTTON_Create(0, 30, 100, 300, 30, 0, 0, 0);
+                GUI_WIDGET_SetText(handle, _T("Button my btn"));
+                GUI_WIDGET_SetZIndex(handle, -1);
                 break;
             }
             case ID_WIN_EDIT: {         /* Edit text */
@@ -647,15 +652,18 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 break;
             }
             case ID_WIN_TRANSP: {
-                handle = GUI_BUTTON_Create(ID_BUTTON_1, 10, 10, 300, 35, 0, 0, 0);
-                GUI_WIDGET_SetText(handle, _T("Transparent 0x80"));
-                GUI_WIDGET_SetTransparency(handle, 0x80);
+                //GUI_WIDGET_SetTransparency(h, 0x80);
+                
                 handle = GUI_BUTTON_Create(ID_BUTTON_2, 10, 50, 300, 35, 0, 0, 0);
                 GUI_WIDGET_SetText(handle, _T("Transparent 0x20"));
-                GUI_WIDGET_SetTransparency(handle, 0x20);
+                GUI_WIDGET_SetTransparency(handle, 0xFF);
                 handle = GUI_BUTTON_Create(ID_BUTTON_3, 10, 90, 300, 35, 0, 0, 0);
                 GUI_WIDGET_SetText(handle, _T("Transparent 0xC0"));
                 GUI_WIDGET_SetTransparency(handle, 0xC0);
+                
+                handle = GUI_BUTTON_Create(ID_BUTTON_1, 5, 30, 300, 35, 0, 0, 0);
+                GUI_WIDGET_SetText(handle, _T("Transparent 0x80"));
+                GUI_WIDGET_SetTransparency(handle, 0x80);
                 
                 handle = GUI_SLIDER_Create(ID_SLIDER_1, 10, 150, 400, 50, 0, slider_callback, 0);
                 GUI_SLIDER_SetMin(handle, 0);

@@ -42,9 +42,10 @@ typedef struct MemBlock {
 #define GUI_USE_MEM     1
 
 /**
- * \brief           Memory alignment bits
+ * \brief           Memory alignment bits and absolute number
  */
 #define MEM_ALIGN_BITS              ((size_t)0x03)
+#define MEM_ALIGN_NUM               ((size_t)MEM_ALIGN_BITS + (size_t)1)
 
 /******************************************************************************/
 /******************************************************************************/
@@ -64,63 +65,12 @@ static size_t MemMinAvailableBytes = 0;
 static size_t MemAllocBit = 0;
 
 static size_t MemTotalSize = 0;                     /* Size of memory in units of bytes */
-static uint8_t* HeapMem = 0;                        /* Array holding HEAP memory */
 
 /******************************************************************************/
 /******************************************************************************/
 /***                            Private functions                            **/
 /******************************************************************************/
 /******************************************************************************/
-/* Initialize memory for first use */
-static
-void __mem_init(void) {
-    void* MemStartAddr;
-    MemBlock_t* FirstBlock;
-    
-    if (!HeapMem || !MemTotalSize) {                /* Check if memory assigned */
-        return;
-    }
-
-    /**
-     * TODO: Memory alignment bits check
-     */
-    
-    MemStartAddr = (void *)HeapMem;                 /* Actual heap memory address*/
-
-    /**
-     * StartBlock is fixed variable for start list of free blocks
-     *
-     * Set free blocks linked list on initialized
-     */
-    StartBlock.NextFreeBlock = (MemBlock_t *)MemStartAddr;
-    StartBlock.Size = 0;
-
-    /**
-     * Set pointer to end of free memory
-     */
-    EndBlock = (MemBlock_t *)((uint8_t *)MemStartAddr + MemTotalSize - MEMBLOCK_METASIZE);
-    EndBlock->NextFreeBlock = 0;                    /* No more free blocks after end is reached */
-    EndBlock->Size = 0;                             /* Empty block */
-
-    /**
-     * Initialize start of memory. On start, entire block is free
-     */
-    FirstBlock = (MemBlock_t *)MemStartAddr;
-    FirstBlock->Size = MemTotalSize - MEMBLOCK_METASIZE;    /* Exclude end block in chain */
-    FirstBlock->NextFreeBlock = EndBlock;           /* Last block is next free in chain */
-
-    /**
-     * Set number of free bytes available to allocate
-     */
-    MemAvailableBytes = FirstBlock->Size;
-    MemMinAvailableBytes = MemAvailableBytes;
-    
-    /**
-     * Set upper bit in memory allocation bit
-     */
-    MemAllocBit = 1 << (sizeof(uint8_t) * 8 - 1);
-}
-
 /* Insert block to list of free blocks */
 static
 void __mem_insertfreeblock(MemBlock_t* newBlock) {
@@ -169,19 +119,108 @@ void __mem_insertfreeblock(MemBlock_t* newBlock) {
 }
 
 uint8_t mem_assignmem(const mem_region_t* regions, size_t len) {
-    /**
-     * TODO: Before memory change, check if entire memory is free
-     *
-     * TODO: Allow multiple regions
-     */
-    if (!HeapMem || !MemTotalSize) {
-        HeapMem = regions->StartAddress;            /* Set pointer to memory */
-        MemTotalSize = regions->Size;               /* Set total memory size */
-        EndBlock = 0;                               /* Reset end block to unknown value */
-        __mem_init();                               /* Reinit memory */
-        return 1;
+    uint8_t* MemStartAddr;
+    size_t MemSize;
+    MemBlock_t* FirstBlock;
+    MemBlock_t* PreviousEndBlock = 0;
+    size_t i;
+    
+    if (EndBlock) {                                 /* Regions already defined */
+        return 0;
     }
-    return 0;
+    
+    /**
+     * Check if region address are linear and rising
+     */
+    MemStartAddr = (uint8_t *)0;
+    for (i = 0; i < len; i++) {
+        if (MemStartAddr >= (uint8_t *)regions[i].StartAddress) {   /* Check if previous greater than current */
+            return 0;                               /* Return as invalid and failed */
+        }
+        MemStartAddr = (uint8_t *)regions[i].StartAddress;  /* Save as previous address */
+    }
+
+    while (len--) {
+        /**
+         * Check minimum region size
+         */
+        MemSize = regions->Size;
+        if (MemSize < (MEM_ALIGN_NUM + MEMBLOCK_METASIZE)) {
+            continue;
+        }
+        /**
+         * Get start address and check memory alignment
+         * if necessary, decrease memory region size
+         */
+        MemStartAddr = (uint8_t *)regions->StartAddress;    /* Actual heap memory address */
+        if ((size_t)MemStartAddr & MEM_ALIGN_BITS) {    /* Check alignment boundary */
+            MemStartAddr += MEM_ALIGN_NUM - ((size_t)MemStartAddr & MEM_ALIGN_BITS);
+            MemSize -= MemStartAddr - (uint8_t *)regions->StartAddress;
+        }
+        
+        /**
+         * Check memory size alignment if match
+         */
+        if (MemSize & MEM_ALIGN_BITS) {
+            MemSize &= ~MEM_ALIGN_BITS;             /* Clear lower bits of memory size only */
+        }
+
+        /**
+         * StartBlock is fixed variable for start list of free blocks
+         *
+         * Set free blocks linked list on initialized
+         *
+         * Set Start block only if end block is not yet defined = first run
+         */
+        if (!EndBlock) {
+            StartBlock.NextFreeBlock = (MemBlock_t *)MemStartAddr;
+            StartBlock.Size = 0;
+        }
+        
+        PreviousEndBlock = EndBlock;                /* Save previous end block to set next block later */
+        
+        /**
+         * Set pointer to end of free memory - block region memory
+         * Calculate new end block in region
+         */
+        EndBlock = (MemBlock_t *)((uint8_t *)MemStartAddr + MemSize - MEMBLOCK_METASIZE);
+        EndBlock->NextFreeBlock = 0;                /* No more free blocks after end is reached */
+        EndBlock->Size = 0;                         /* Empty block */
+
+        /**
+         * Initialize start of region memory
+         * Create first block in region
+         */
+        FirstBlock = (MemBlock_t *)MemStartAddr;
+        FirstBlock->Size = MemSize - MEMBLOCK_METASIZE; /* Exclude end block in chain */
+        FirstBlock->NextFreeBlock = EndBlock;       /* Last block is next free in chain */
+
+        /**
+         * If we have previous end block
+         * End block of previous region
+         *
+         * Set previous end block to start of next region
+         */
+        if (PreviousEndBlock) {
+            PreviousEndBlock->NextFreeBlock = FirstBlock;
+        }
+        
+        /**
+         * Set number of free bytes available to allocate in region
+         */
+        MemAvailableBytes += FirstBlock->Size;
+        
+        regions++;                                  /* Go to next region */
+    }
+    
+    MemMinAvailableBytes = MemAvailableBytes;       /* Save minimum ever available bytes in region */
+    
+    /**
+     * Set upper bit in memory allocation bit
+     */
+    MemAllocBit = (size_t)((size_t)1 << ((sizeof(size_t) * 8 - 1)));
+    
+    return 1;                                       /* Regions set as expected */
 }
 
 void* mem_alloc(size_t size) {
@@ -189,10 +228,7 @@ void* mem_alloc(size_t size) {
     void* retval = 0;
 
     if (!EndBlock) {                                /* If end block is not yet defined */
-        __mem_init();                               /* Init library for first time */
-        if (!EndBlock) {                            /* Check if still not initialized */
-            return 0;
-        }
+        return 0;                                   /* Invalid, not initialized */
     }
     
     /**

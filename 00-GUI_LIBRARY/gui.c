@@ -115,6 +115,7 @@ void __CheckDispClipping(GUI_HANDLE_p h) {
 uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;
     uint32_t cnt = 0;
+    static uint32_t level = 0;
 
     /* Go through all elements of parent */
     for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, 0); h; 
@@ -139,7 +140,7 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
                 /**
                  * TODO: If widget has transparency set temporary layer for drawing
                  */
-                if (__GUI_WIDGET_GetTransparency(h) < 0xFF) {
+                if (__GUI_WIDGET_IsTransparent(h)) {
                     GUI_iDim_t width = GUI.DisplayTemp.X2 - GUI.DisplayTemp.X1;
                     GUI_iDim_t height = GUI.DisplayTemp.Y2 - GUI.DisplayTemp.Y1;
                     
@@ -175,7 +176,9 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
                         __GH(tmp)->Flags |= GUI_FLAG_REDRAW;    /* Set redraw bit to all children elements */
                     }
                     /* ...now call function for redrawing process */
+                    level++;
                     cnt += __RedrawWidgets(h);      /* Redraw children widgets */
+                    level--;
                 }
                 
                 /**

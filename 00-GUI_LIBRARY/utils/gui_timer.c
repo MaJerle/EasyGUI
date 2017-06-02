@@ -41,6 +41,8 @@
 #define GUI_FLAG_TIMER_PERIODIC         ((uint16_t)(1 << 1UL))  /*!< Timer will start from beginning after reach end */ 
 #define GUI_FLAG_TIMER_CALL             ((uint16_t)(1 << 2UL))  /*!< Call callback function on timer */
 
+#define __GUI_TIMER_IsPeriodic(t)       ((t)->Flags & GUI_FLAG_TIMER_PERIODIC)
+
 /******************************************************************************/
 /******************************************************************************/
 /***                            Private variables                            **/
@@ -61,7 +63,7 @@
 GUI_TIMER_t* __GUI_TIMER_Create(uint16_t period, void (*callback)(GUI_TIMER_t *), void* params) {
     GUI_TIMER_t* ptr;
     
-    ptr = (GUI_TIMER_t *)__GUI_MEMALLOC(sizeof(GUI_TIMER_t));  /* Allocate memory for timer */
+    ptr = (GUI_TIMER_t *)__GUI_MEMALLOC(sizeof(*ptr));  /* Allocate memory for timer */
     if (ptr) {
         memset(ptr, 0x00, sizeof(GUI_TIMER_t));     /* Reset memory */
         
@@ -71,14 +73,14 @@ GUI_TIMER_t* __GUI_TIMER_Create(uint16_t period, void (*callback)(GUI_TIMER_t *)
         ptr->Params = params;                       /* Timer custom parameters */
         ptr->Flags = 0;                             /* Timer flags management */
         
-        __GUI_LINKEDLIST_ADD_GEN(&GUI.Timers.List, &ptr->List); /* Add timer to linked list */
+        __GUI_LINKEDLIST_ADD_GEN(&GUI.Timers.List, (GUI_LinkedList_t *)ptr);    /* Add timer to linked list */
     }
     return ptr;
 }
 
 uint8_t __GUI_TIMER_Remove(GUI_TIMER_t** t) {  
     __GUI_ASSERTPARAMS(t && *t);                    /* Check input parameters */  
-    __GUI_LINKEDLIST_REMOVE_GEN(&GUI.Timers.List, &(*t)->List); /* Remove timer from linked list */
+    __GUI_LINKEDLIST_REMOVE_GEN(&GUI.Timers.List, (GUI_LinkedList_t *)(*t));    /* Remove timer from linked list */
     __GUI_MEMFREE(*t);                              /* Free memory for timer */
     *t = 0;                                         /* Restore pointer */
     
@@ -134,8 +136,8 @@ void __GUI_TIMER_Process(void) {
             if (t->Callback) {
                 t->Callback(t);                     /* Call user function */
             }
-            if (!(t->Flags & GUI_FLAG_TIMER_PERIODIC)) {    /* If timer is not periodic */
-                t->Flags &= ~GUI_FLAG_TIMER_ACTIVE; /* Stop timer */
+            if (!__GUI_TIMER_IsPeriodic(t)) {       /* If timer is not periodic */
+                __GUI_TIMER_Stop(t);                /* Stop timer */
             }
         }
         
@@ -149,7 +151,7 @@ void __GUI_TIMER_Process(void) {
                 t->Flags |= GUI_FLAG_TIMER_CALL;    /* Set flag for timer callback next time */
             }
         } else {                                    /* Overflow mode */
-            t->Counter = t->Period - diff;          /* Set new counter value */
+            t->Counter = 0;                         /* Set new counter value */
             t->Flags |= GUI_FLAG_TIMER_CALL;        /* Set callback flag in next check */
         }
     }

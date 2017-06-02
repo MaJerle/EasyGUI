@@ -72,6 +72,10 @@ static
 uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
+        case GUI_WC_PreInit: {
+            __GUI_WIDGET_Enable3DStyle(h);          /* By default set 3D */
+            return 1;
+        }
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
             GUI_Color_t c1, c2;
@@ -150,16 +154,11 @@ uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
 /******************************************************************************/
 GUI_HANDLE_p GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_BUTTON_t* ptr;
-    
     __GUI_ENTER();                                  /* Enter GUI */
     
     ptr = (GUI_BUTTON_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
-    if (ptr) {
-        __GUI_WIDGET_Enable3DStyle(__GH(ptr));      /* By default set 3D */
-    }
 
     __GUI_LEAVE();                                  /* Leave GUI */
-    
     return (GUI_HANDLE_p)ptr;
 }
 

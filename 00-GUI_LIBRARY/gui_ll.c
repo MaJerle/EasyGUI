@@ -351,10 +351,10 @@ uint8_t GUI_LL_Control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* 
             /*******************************/
             TM_SDRAM_Init();
             do {
-                static uint32_t DTCMMemory[0x4000] __attribute__((at(0x20000000)));    /* TCM RAM */
-                static uint32_t SDRAMMemory[0x40000] __attribute__((at(SDRAM_START_ADR + 0x00800000))); /* SDRAM memory */
+                static uint8_t DTCMMemory1[0x4000] __attribute__((at(0x20000000)));    /* TCM RAM */
+                static uint8_t SDRAMMemory[SDRAM_HEAP_SIZE] __attribute__((at(SDRAM_START_ADR + SDRAM_MEMORY_SIZE - SDRAM_HEAP_SIZE))); /* SDRAM heap memory */
                 static GUI_MEM_Region_t const regions[] = {
-                    {DTCMMemory, sizeof(DTCMMemory)},
+                    {DTCMMemory1, sizeof(DTCMMemory1)},
                     {SDRAMMemory, sizeof(SDRAMMemory)},
                 };
                 GUI_MEM_AssignMemory(regions, GUI_COUNT_OF(regions));
