@@ -75,14 +75,6 @@ extern "C" {
 #define GUI_BUFFER_INITIALIZED      0x01    /*!< Buffer initialized flag */
 #define GUI_BUFFER_MALLOC           0x02    /*!< Buffer uses malloc for memory */
 
-/* Custom allocation and free functions if needed */
-#ifndef LIB_ALLOC_FUNC
-#define LIB_ALLOC_FUNC              malloc
-#endif
-#ifndef LIB_FREE_FUNC
-#define LIB_FREE_FUNC               free
-#endif
-
 #ifndef GUI_BUFFER_FAST
 #define GUI_BUFFER_FAST             1
 #endif
@@ -105,7 +97,7 @@ typedef struct _GUI_BUFFER_t {
  * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure to initialize
  * \param  Size: Size of buffer in units of bytes
  * \param  *BufferPtr: Pointer to array for buffer storage. Its length should be equal to \param Size parameter.
- *           If NULL is passed as parameter, \ref malloc will be used to allocate memory on heap.
+ *           If NULL is passed as parameter, internal memory management will be used to allocate memory
  * \retval Buffer initialization status:
  *            - 0: Buffer initialized OK
  *            - > 0: Buffer initialization error. Malloc has failed with allocation
@@ -113,8 +105,8 @@ typedef struct _GUI_BUFFER_t {
 uint8_t GUI_BUFFER_Init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr);
 
 /**
- * \brief  Free memory for buffer allocated using \ref malloc
- * \note   This function has sense only if malloc was used for dynamic allocation
+ * \brief  Free memory for buffer allocated using dynamic memory allocation
+ * \note   This function has sense only if dynamic allocation was used for memory buffer
  * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \retval None
  */
@@ -161,6 +153,12 @@ uint32_t GUI_BUFFER_GetFree(GUI_BUFFER_t* Buffer);
  * \retval Number of elements in buffer
  */
 uint32_t GUI_BUFFER_GetFull(GUI_BUFFER_t* Buffer);
+
+/**
+ * \brief  Gets number of elements in buffer in fast way
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
+ * \retval Number of elements in buffer
+ */
 uint32_t GUI_BUFFER_GetFullFast(GUI_BUFFER_t* Buffer);
 
 /**

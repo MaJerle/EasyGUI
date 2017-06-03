@@ -262,10 +262,10 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DR
     if (GUI.LL.CopyChar) {                          /* If copying character function exists in low-level part */
         GUI_FONT_CharEntry_t* entry = NULL;
         
-//        entry = __GetCharEntryFromFont(font, c);    /* Get char entry from font and character for fast alpha drawing operations */
-//        if (!entry) {
-//            entry = __CreateCharEntryFromFont(font, c); /* Create new entry */
-//        }
+        entry = __GetCharEntryFromFont(font, c);    /* Get char entry from font and character for fast alpha drawing operations */
+        if (!entry) {
+            entry = __CreateCharEntryFromFont(font, c); /* Create new entry */
+        }
         if (entry) {                                /* We have valid data */
             GUI_Dim_t width, height, offlineSrc, offlineDst;
             uint8_t* dst = 0;
@@ -275,15 +275,14 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DR
             tmpX = x;                               /* Start X */
             
             ptr += sizeof(*entry);                  /* Go to start of data array */
-            dst += GUI.LCD.DrawingLayer->StartAddress;
-            dst += (y * GUI.LCD.Width + x) * GUI.LCD.PixelSize;
+            dst = (uint8_t *)(GUI.LCD.DrawingLayer->StartAddress + ((y - GUI.LCD.DrawingLayer->OffsetY) * GUI.LCD.DrawingLayer->Width + (x - GUI.LCD.DrawingLayer->OffsetX)) * GUI.LCD.PixelSize);
             
             width = c->xSize;                       /* Get X size */
             height = c->ySize;                      /* Get Y size */
             
             if (y < disp->Y1) {                     /* Start Y position if outside visible area */
                 ptr += (disp->Y1 - y) * c->xSize;   /* Set offset for number of lines */
-                dst += (disp->Y1 - y) * GUI.LCD.Width * GUI.LCD.PixelSize;  /* Set offset for number of LCD lines */
+                dst += (disp->Y1 - y) * GUI.LCD.DrawingLayer->Width * GUI.LCD.PixelSize;  /* Set offset for number of LCD lines */
                 height -= disp->Y1 - y;             /* Decrease effective height */
             }
             if ((y + c->ySize) > disp->Y2) {
@@ -300,7 +299,7 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DR
             }
             
             offlineSrc = c->xSize - width;          /* Set offline source */
-            offlineDst = GUI.LCD.Width - width;     /* Set offline destination */
+            offlineDst = GUI.LCD.DrawingLayer->Width - width;   /* Set offline destination */
             
             /**
              * Check if character must be drawn with 2 colors, on the middle of color switch

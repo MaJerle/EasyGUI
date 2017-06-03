@@ -45,10 +45,24 @@ extern "C" {
 /**
  * \defgroup        GUI_WIDGETS_CORE Core widget functions
  * \brief           Core functions for all widgets
+ * \{
  *
  * Use can use all function which do not start with <b>__GUI</b> which indicate private functions.
+ * 
+ * Core widget functions are common functions to all widgets. They can perform:
+ *  - Set text to widget (Static text from non-volatile memory)
+ *  - Preallocate memory for text on widget (dynamic text)
+ *  - Set font type for drawing
+ *  - Set dimentions and positions
+ *  - Get dimensions and positions relative to parent or absolute on screen
+ *  - Set or get Z index of widget
+ *  - Set transparency
+ *  - Set widget as visible or hidden
+ *  - Delete widget
+ *  - Manually widget invalidation
+ *  - ..and more
  *
- * \{
+ * In general, each widget also uses custom based functions. These are provided in widget specific section.
  */
 #include "gui.h"
 #include "gui_draw.h"
@@ -504,18 +518,101 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
  */
 #define __GUI_WIDGET_GetPaddingLeft(h)              (uint8_t)(((__GH(h)->Padding >>  0) & 0xFFUL))
 
+/**
+ * \brief           Set top padding on widget
+ * \note            Padding is used mainly for internal purpose only to set value for children widgets
+ *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
+ *
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: Padding in byte format
+ * \retval          None
+ * \hideinitializer
+ */
 #define __GUI_WIDGET_SetPaddingTop(h, x)            (__GH(h)->Padding = (uint32_t)((__GH(h)->Padding & 0x00FFFFFFUL) | (uint32_t)((uint8_t)(x)) << 24))
+
+/**
+ * \brief           Set right padding on widget
+ * \note            Padding is used mainly for internal purpose only to set value for children widgets
+ *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
+ *
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: Padding in byte format
+ * \retval          None
+ * \hideinitializer
+ */
 #define __GUI_WIDGET_SetPaddingRight(h, x)          (__GH(h)->Padding = (uint32_t)((__GH(h)->Padding & 0xFF00FFFFUL) | (uint32_t)((uint8_t)(x)) << 16))
+
+/**
+ * \brief           Set bottom padding on widget
+ * \note            Padding is used mainly for internal purpose only to set value for children widgets
+ *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
+ *
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: Padding in byte format
+ * \retval          None
+ * \hideinitializer
+ */
 #define __GUI_WIDGET_SetPaddingBottom(h, x)         (__GH(h)->Padding = (uint32_t)((__GH(h)->Padding & 0xFFFF00FFUL) | (uint32_t)((uint8_t)(x)) <<  8))
+
+/**
+ * \brief           Set left padding on widget
+ * \note            Padding is used mainly for internal purpose only to set value for children widgets
+ *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
+ *
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: Padding in byte format
+ * \retval          None
+ * \hideinitializer
+ */
 #define __GUI_WIDGET_SetPaddingLeft(h, x)           (__GH(h)->Padding = (uint32_t)((__GH(h)->Padding & 0xFFFFFF00UL) | (uint32_t)((uint8_t)(x)) <<  0))
+
+/**
+ * \brief           Set top and bottom paddings on widget
+ * \note            Padding is used mainly for internal purpose only to set value for children widgets
+ *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
+ *
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: Padding in byte format
+ * \retval          None
+ * \hideinitializer
+ */
 #define __GUI_WIDGET_SetPaddingTopBottom(h, x)  do {    \
     __GUI_WIDGET_SetPaddingTop(h, x);                   \
     __GUI_WIDGET_SetPaddingBottom(h, x);                \
 } while (0)
+
+/**
+ * \brief           Set left and right paddings on widget
+ * \note            Padding is used mainly for internal purpose only to set value for children widgets
+ *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
+ *
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: Padding in byte format
+ * \retval          None
+ * \hideinitializer
+ */
 #define __GUI_WIDGET_SetPaddingLeftRight(h, x)  do {    \
     __GUI_WIDGET_SetPaddingLeft(h, x);                  \
     __GUI_WIDGET_SetPaddingRight(h, x);                 \
 } while (0)
+
+/**
+ * \brief           Set all paddings on widget
+ * \note            Padding is used mainly for internal purpose only to set value for children widgets
+ *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
+ *
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: Padding in byte format
+ * \retval          None
+ * \hideinitializer
+ */
 #define __GUI_WIDGET_SetPadding(h, x)  do {             \
     __GUI_WIDGET_SetPaddingTop(h, x);                   \
     __GUI_WIDGET_SetPaddingLeft(h, x);                  \
@@ -756,11 +853,21 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
  * \retval          Trasparency value
+ * \sa              __GUI_WIDGET_SetTransparency
+ * \hideinitializer
  */
 #define __GUI_WIDGET_GetTransparency(h)             ((uint8_t)(__GH(h)->Transparency))
 
-
-uint8_t GUI_WIDGET_SetTransparency(GUI_HANDLE_p h, uint8_t trans);
+/**
+ * \brief           Set transparency level to widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       trans: Transparency level, where 0x00 means hidden and 0xFF means totally visible widget
+ * \retval          1: Transparency set ok
+ * \retval          0: Transparency was not set
+ * \sa              __GUI_WIDGET_SetTransparency
+ */
+uint8_t __GUI_WIDGET_SetTransparency(GUI_HANDLE_p h, uint8_t trans);
 
 /**
  * \brief           Set z-Index for widgets on the same level. This feature applies on widgets which are not dialogs
@@ -1148,8 +1255,27 @@ uint8_t GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex);
  */
 int32_t GUI_WIDGET_GetZIndex(GUI_HANDLE_p h);
 
-uint8_t GUI_WIDGET_SetTransparency(GUI_HANDLE_p h, uint8_t trans);
+/**
+ * \brief           Get widget transparency value
+ * \note            Value between 0 and 0xFF is used:
+ *                      - 0x00: Widget is hidden
+ *                      - 0xFF: Widget is fully visible
+ *                      - between: Widget has transparency value
+ * \param[in,out]   h: Widget handle
+ * \retval          Trasparency value
+ * \sa              GUI_WIDGET_SetTransparency
+ */
 uint8_t GUI_WIDGET_GetTransparency(GUI_HANDLE_p h);
+
+/**
+ * \brief           Set transparency level to widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       trans: Transparency level, where 0x00 means hidden and 0xFF means totally visible widget
+ * \retval          1: Transparency set ok
+ * \retval          0: Transparency was not set
+ * \sa              GUI_WIDGET_GetTransparency
+ */
+uint8_t GUI_WIDGET_SetTransparency(GUI_HANDLE_p h, uint8_t trans);
 
 #if defined(GUI_INTERNAL) && !defined(DOXYGEN)
 //Strictly private functions by GUI

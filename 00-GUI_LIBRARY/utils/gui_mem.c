@@ -35,11 +35,10 @@ typedef struct MemBlock {
     struct MemBlock* NextFreeBlock;                 /*!< Pointer to next free block */
     size_t Size;                                    /*!< Size of block */
 } MemBlock_t;
-
 #define MEMBLOCK_METASIZE           sizeof(MemBlock_t)
 
 
-#define GUI_USE_MEM     1
+#define GUI_USE_MEM                 1               /*!< Use internal memory allocation */
 
 /**
  * \brief           Memory alignment bits and absolute number

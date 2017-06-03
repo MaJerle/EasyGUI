@@ -433,6 +433,14 @@ void GUI_DRAW_Triangle(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, 
  */
 void GUI_DRAW_FilledTriangle(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_iDim_t x2, GUI_iDim_t y2, GUI_iDim_t x3, GUI_iDim_t y3, GUI_Color_t color);
 
+/**
+ * \brief           Draw image to display of any depth and size
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: Top left X position
+ * \param[in]       y: Top left Y position
+ * \param[in]       *img: Pointer to \ref GUI_IMAGE_DESC_t structure with image description
+ * \retval          None
+ */
 void GUI_DRAW_Image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_IMAGE_DESC_t* img);
 
 /**

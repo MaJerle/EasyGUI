@@ -138,9 +138,9 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
                 __CheckDispClipping(h);             /* Check coordinates for drawings */
                 
                 /**
-                 * TODO: If widget has transparency set temporary layer for drawing
+                 * Check transparency and check if blending function exists to merge layers later together
                  */
-                if (__GUI_WIDGET_IsTransparent(h)) {
+                if (__GUI_WIDGET_IsTransparent(h) && GUI.LL.CopyBlend) {
                     GUI_iDim_t width = GUI.DisplayTemp.X2 - GUI.DisplayTemp.X1;
                     GUI_iDim_t height = GUI.DisplayTemp.Y2 - GUI.DisplayTemp.Y1;
                     

@@ -30,22 +30,22 @@ uint8_t GUI_BUFFER_Init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr) {
 	if (Buffer == NULL) {									/* Check buffer structure */
 		return 1;
 	}
-	memset(Buffer, 0, sizeof(GUI_BUFFER_t));        			/* Set buffer values to all zeros */
+	memset(Buffer, 0, sizeof(Buffer));        		        /* Set buffer values to all zeros */
     
 	Buffer->Size = Size;                        			/* Set default values */
 	Buffer->Buffer = BufferPtr;
 	Buffer->StringDelimiter = '\n';
 	
 	if (!Buffer->Buffer) {                      			/* Check if malloc should be used */
-		Buffer->Buffer = (uint8_t *) LIB_ALLOC_FUNC(Size * sizeof(uint8_t));    /* Try to allocate */
+		Buffer->Buffer = (uint8_t *) __GUI_MEMALLOC(Size * sizeof(uint8_t));    /* Try to allocate memory for buffer */
 		if (!Buffer->Buffer) {                  			/* Check if allocated */    
 			Buffer->Size = 0;                   			/* Reset size */
 			return 1;                           			/* Return error */
 		} else {
-			Buffer->Flags |= GUI_BUFFER_MALLOC;     			/* Set flag for malloc */
+			Buffer->Flags |= GUI_BUFFER_MALLOC;     		/* Set flag for malloc */
 		}
 	}
-	Buffer->Flags |= GUI_BUFFER_INITIALIZED;					/* We are initialized */
+	Buffer->Flags |= GUI_BUFFER_INITIALIZED;				/* We are initialized */
 	
 	return 0;												/* Initialized OK */
 }
@@ -54,8 +54,8 @@ void GUI_BUFFER_Free(GUI_BUFFER_t* Buffer) {
 	if (Buffer == NULL) {									/* Check buffer structure */
 		return;
 	}
-	if (Buffer->Flags & GUI_BUFFER_MALLOC) {					/* If malloc was used for allocation */
-		LIB_FREE_FUNC(Buffer->Buffer);						/* Free memory */
+	if (Buffer->Flags & GUI_BUFFER_MALLOC) {			    /* If malloc was used for allocation */
+		__GUI_MEMFREE(Buffer->Buffer);						/* Free memory */
 	}
 	Buffer->Flags = 0;
 	Buffer->Size = 0;
