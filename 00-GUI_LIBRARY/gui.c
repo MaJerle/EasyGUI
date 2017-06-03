@@ -483,6 +483,9 @@ GUI_Result_t GUI_Init(void) {
     /* Init input devices */
     __GUI_INPUT_Init();
     
+    /* GUI is initialized */
+    GUI.Initialized = 1;
+    
     /* Init widgets */
     __GUI_WIDGET_Init();
     

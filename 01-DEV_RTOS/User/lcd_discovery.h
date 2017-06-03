@@ -13,12 +13,15 @@
 #define LCD_WIDTH                   480
 #define LCD_HEIGHT                  272
 
-#define LCD_HSYNC                   41
-#define LCD_HBP                     13
-#define LCD_HFP                     32
-#define LCD_VSYNC                   10
-#define LCD_VBP                     2
-#define LCD_VFP                     2
+#define LCD_COLOR_FORMAT_RGB565
+#endif /* defined(STM32F7_DISCOVERY) */
+
+/*****************************/
+/*       STM32F439-EVAL      */
+/*****************************/
+#if defined(STM32F439_EVAL)
+#define LCD_WIDTH                   640
+#define LCD_HEIGHT                  480
 
 #define LCD_COLOR_FORMAT_RGB565
 #endif /* defined(STM32F7_DISCOVERY) */

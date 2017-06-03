@@ -1,5 +1,12 @@
 #include "lcd_discovery.h"
 
+#define LCD_HSYNC                   41
+#define LCD_HBP                     13
+#define LCD_HFP                     32
+#define LCD_VSYNC                   10
+#define LCD_VBP                     2
+#define LCD_VFP                     2
+
 /* Variables */
 extern LTDC_HandleTypeDef LTDCHandle;
 extern GUI_Layer_t Layers[];

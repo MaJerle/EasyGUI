@@ -137,7 +137,7 @@ extern "C" {
  * \hideinitializer
  */
 #define __GUI_ASSERTPARAMS(c)       do {            \
-    if (!(c)) {                                     \
+    if (!(c) || !(GUI.Initialized)) {                                     \
         __GUI_DEBUG("Assert param failed in file %s and line %d\r\n", __FILE__, __LINE__);  \
         return 0;                                   \
     }                                               \
@@ -253,6 +253,8 @@ typedef struct GUI_t {
     GUI_HANDLE_p ActiveWidget;              /*!< Pointer to widget currently active by touch */
     GUI_HANDLE_p ActiveWidgetPrev;          /*!< Previously active widget */
 #endif /* GUI_USE_TOUCH */
+
+    uint8_t Initialized;                    /*!< Status indicating GUI is initialized */
 } GUI_t;
 #if defined(GUI_INTERNAL)
 extern GUI_t GUI;

@@ -78,6 +78,11 @@ TM_TOUCH_Result_t TM_TOUCH_Init(TM_TOUCH_DRIVER_t* Driver, TM_TOUCH_t* TS) {
 uint8_t TM_TOUCH_Read(TM_TOUCH_t* TS) {
 	uint8_t status, i;
 	uint16_t tmp;
+    
+    /* Check if read pointer exists */
+    if (!TouchDriver.Read) {
+        return 1;
+    }
 	
 	/* Read touch values from sensor */
 	status = TouchDriver.Read(TS);

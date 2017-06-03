@@ -312,7 +312,9 @@ int main(void) {
     
     __GUI_LINKEDLIST_PrintList(NULL);
 
+#if !defined(STM32F4xx)
     TM_EXTI_Attach(GPIOI, GPIO_PIN_13, TM_EXTI_Trigger_Rising);
+#endif
     TS.Orientation = TOUCH_ORIENT_DEFAULT;
 #if defined(STM32F769_DISCOVERY)
     TS.Orientation = TOUCH_ORIENT_INVERT_Y;
@@ -873,9 +875,50 @@ uint8_t slider_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
     return ret;
 }
 
+
+
+void read_touch(void) {
+    static GUI_TouchData_t p = {0}, t = {0};
+    uint8_t i, update = 0, diffx, diffy;
+    TM_TOUCH_Read(&TS);                         /* Read touch data */
+    
+    memset((void *)&t, 0x00, sizeof(t));
+    t.Status = TS.NumPresses ? GUI_TouchState_PRESSED : GUI_TouchState_RELEASED;
+    t.Count = TS.NumPresses > GUI_TOUCH_MAX_PRESSES ? GUI_TOUCH_MAX_PRESSES : TS.NumPresses;
+    for (i = 0; i < t.Count; i++) {
+        t.X[i] = TS.X[i];
+        t.Y[i] = TS.Y[i];
+    }
+    if (t.Count != p.Count) {
+        update = 1;
+    } else {
+        for (i = 0; i < t.Count; i++) {
+            diffx = __GUI_ABS(p.X[i] - t.X[i]);
+            diffy = __GUI_ABS(p.Y[i] - t.Y[i]);
+            if (diffx > 2 || diffy > 2) {
+                update = 1;
+                break;
+            }
+        }
+    }
+    
+    /* Check differences */
+    if (update || t.Status == GUI_TouchState_RELEASED) {
+        GUI_INPUT_TouchAdd(&t);
+        memcpy(&p, &t, sizeof(p));
+    }
+}
+
 /* 1ms handler */
 void TM_DELAY_1msHandler() {
     //osSystickHandler();                             /* Kernel systick handler processing */
+#if defined(STM32F439_EVAL)
+    static uint32_t Time = 0;
+    if (Time % 20 == 0) {
+        read_touch();
+    }
+    Time++;
+#endif
     
     GUI_UpdateTime(1);
 }
@@ -890,36 +933,8 @@ int fputc(int ch, FILE* fil) {
  * Handle EXTI interrupt routine
  */
 void TM_EXTI_Handler(uint16_t GPIO_Pin) {
-    static GUI_TouchData_t p = {0}, t = {0};
     if (GPIO_PIN_13 == GPIO_Pin) {
-        uint8_t i, update = 0, diffx, diffy;
-        TM_TOUCH_Read(&TS);                         /* Read touch data */
-        
-        memset((void *)&t, 0x00, sizeof(t));
-        t.Status = TS.NumPresses ? GUI_TouchState_PRESSED : GUI_TouchState_RELEASED;
-        t.Count = TS.NumPresses > GUI_TOUCH_MAX_PRESSES ? GUI_TOUCH_MAX_PRESSES : TS.NumPresses;
-        for (i = 0; i < t.Count; i++) {
-            t.X[i] = TS.X[i];
-            t.Y[i] = TS.Y[i];
-        }
-        if (t.Count != p.Count) {
-            update = 1;
-        } else {
-            for (i = 0; i < t.Count; i++) {
-                diffx = __GUI_ABS(p.X[i] - t.X[i]);
-                diffy = __GUI_ABS(p.Y[i] - t.Y[i]);
-                if (diffx > 2 || diffy > 2) {
-                    update = 1;
-                    break;
-                }
-            }
-        }
-        
-        /* Check differences */
-        if (update || t.Status == GUI_TouchState_RELEASED) {
-            GUI_INPUT_TouchAdd(&t);
-            memcpy(&p, &t, sizeof(p));
-        }
+        read_touch();
     } else if (DISCO_BUTTON_PIN == GPIO_Pin) {
         pressed = 1;
     }
