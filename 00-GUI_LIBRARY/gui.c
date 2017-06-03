@@ -648,13 +648,6 @@ int32_t GUI_Process(void) {
             
         /* Get cycles for drawing */
         time = TM_GENERAL_DWTCounterGetValue() - time;
-            
-//        __GUI_DEBUG("Copy: x: %d, y: %d, w: %d, h: %d, t: %d\r\n",
-//            dispA->X1, dispA->Y1,
-//            dispA->X2 - dispA->X1,
-//            dispA->Y2 - dispA->Y1,
-//            time
-//        );
         
         /* Set drawing layer as pending */
         drawing->Pending = 1;

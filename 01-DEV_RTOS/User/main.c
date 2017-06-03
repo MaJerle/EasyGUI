@@ -654,7 +654,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 break;
             }
             case ID_WIN_TRANSP: {
-                //GUI_WIDGET_SetTransparency(h, 0x80);
+                GUI_WIDGET_SetTransparency(h, 0xF0);
                 
                 handle = GUI_BUTTON_Create(ID_BUTTON_2, 10, 50, 300, 35, 0, 0, 0);
                 GUI_WIDGET_SetText(handle, _T("Transparent 0x20"));
@@ -737,7 +737,7 @@ uint8_t checkbox_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* resul
 uint8_t listview_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
     uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
     if (cmd == GUI_WC_SelectionChanged) {
-        __GUI_DEBUG("Selection changed!\r\n");
+        
     }
     return ret;
 }
@@ -863,10 +863,6 @@ uint8_t slider_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                     break;
                 }
             }
-            if (GUI_WIDGET_GetId(h) == ID_SLIDER_0) {
-                
-            }
-            //Set timer PWM
             break;
         }
         default:
