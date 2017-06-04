@@ -54,7 +54,7 @@ static const GUI_Color_t Colors[] = {
 };
 
 const static GUI_WIDGET_t Widget = {
-    .Name = _T("Button"),                           /*!< Widget name */
+    .Name = _GT("BUTTON"),                          /*!< Widget name */
     .Size = sizeof(GUI_BUTTON_t),                   /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
     .Callback = GUI_BUTTON_Callback,                /*!< Callback function */

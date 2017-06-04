@@ -43,9 +43,37 @@ extern "C" {
 #include "gui_widget.h"
 
 /**
- * \defgroup        GUI_LISTVIEW
+ * \defgroup        GUI_LISTVIEW List view
  * \brief           List view object
  * \{
+ *
+ * Listview widget can display multiple columns and multiple rows of data at the same time
+ *
+ * \image html image_widget_listview.png Listview object example
+ *
+ * Example code for image above
+ * \code{c}
+size_t len;
+GUI_LISTVIEW_ROW_p row;
+
+//Create widget
+handle = GUI_LISTVIEW_Create(0, 10, 10, 100, 40, 0, 0, 0);
+
+//Create columns
+GUI_LISTVIEW_AddColumn(handle, _GT("Name"), 120);
+GUI_LISTVIEW_AddColumn(handle, _GT("LastName"), 150);
+GUI_LISTVIEW_AddColumn(handle, _GT("Email"), 220);
+GUI_LISTVIEW_AddColumn(handle, _GT("Phone"), 160);
+
+//Create rows and add values for columns
+for (len = 0; len < 10; len++) {
+    row = GUI_LISTVIEW_AddRow(handle);
+    GUI_LISTVIEW_SetItemString(handle, row, 0, _GT("Name 1"));
+    GUI_LISTVIEW_SetItemString(handle, row, 1, _GT("Last name 2"));
+    GUI_LISTVIEW_SetItemString(handle, row, 2, _GT("info@example.com"));
+    GUI_LISTVIEW_SetItemString(handle, row, 3, _GT("0123456789"));
+}
+\endcode
  */
 
 /**

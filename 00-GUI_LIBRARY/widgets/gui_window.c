@@ -55,7 +55,7 @@ const static GUI_Color_t Colors[] = {
 };
 
 const static GUI_WIDGET_t Widget = {
-    .Name = _T("Window"),                           /*!< Widget name */
+    .Name = _GT("WINDOW"),                          /*!< Widget name */
     .Size = sizeof(GUI_WINDOW_t),                   /*!< Size of widget for memory allocation */
     .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
     .Callback = GUI_WINDOW_Callback,                /*!< Control function */

@@ -1,6 +1,5 @@
 EasyGUI for embedded systems
 --
---
 
 EasyGUI is lightweight, in general platform independent but highly optimized for STM32 Chrom-ART DMA2D peripherals for drawing operations.
 

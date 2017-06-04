@@ -57,7 +57,7 @@ const static GUI_Color_t Colors[] = {
 };
 
 const static GUI_WIDGET_t Widget = {
-    .Name = _T("Dropdown"),                         /*!< Widget name */
+    .Name = _GT("DROPDOWN"),                        /*!< Widget name */
     .Size = sizeof(GUI_DROPDOWN_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
     .Callback = GUI_DROPDOWN_Callback,              /*!< Callback function */

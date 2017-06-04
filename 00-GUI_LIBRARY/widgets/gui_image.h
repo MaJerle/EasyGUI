@@ -46,6 +46,26 @@ extern "C" {
  * \defgroup        GUI_IMAGE Image
  * \brief           Image display widget
  * \{
+ *
+ * Image widget can display images of different color depth (ARGB8888, RGB888 or RGB565)
+ *
+ * \image html image_widget_image.png Image widget of 3 images. On the left is ARGB8888 (TrueColor with alpha), middle one is RGB888 and right one format is RGB565
+ *
+ * \note            When image has transparent alpha channel then on each redraw, parent widget must be redrawn. 
+ *                  In other words, each image with alpha channel which is not maximum (fully visible) must use more resources to redraw image widget by redrawing parent first.
+ *                  On above image is clearly visible how left image has transparency (source data) over button.
+ *
+ * Example code for example above
+ * \code{c}
+handle = GUI_BUTTON_Create(0, 10, 10, 300, 50, 0, 0, 0);
+GUI_WIDGET_SetText(handle, _GT("Button"));
+handle = GUI_IMAGE_Create(0, 2, 2, bmimage_brand.xSize, bmimage_brand.ySize, 0, 0, 0);
+GUI_IMAGE_SetSource(handle, &bmimage_brand);
+handle = GUI_IMAGE_Create(0, 200, 40, bmimage_voyo.xSize, bmimage_voyo.ySize, 0, 0, 0);
+GUI_IMAGE_SetSource(handle, &bmimage_voyo);
+handle = GUI_IMAGE_Create(0, 350, 10, bmimage_voyo565.xSize, bmimage_voyo565.ySize, 0, 0, 0);
+GUI_IMAGE_SetSource(handle, &bmimage_voyo565);
+\endcode
  */
 
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)

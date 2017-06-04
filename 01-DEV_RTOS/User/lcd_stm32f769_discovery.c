@@ -177,7 +177,11 @@ void _LCD_Init(void) {
     CmdCfg.HSPolarity            = DSI_HSYNC_ACTIVE_HIGH;
     CmdCfg.VSPolarity            = DSI_VSYNC_ACTIVE_HIGH;
     CmdCfg.DEPolarity            = DSI_DATA_ENABLE_ACTIVE_HIGH;
+#if LCD_PIXEL_SIZE == 2
     CmdCfg.ColorCoding           = DSI_RGB565;
+#else
+    CmdCfg.ColorCoding           = DSI_RGB888;
+#endif
     CmdCfg.CommandSize           = HACT;
     CmdCfg.TearingEffectSource   = DSI_TE_EXTERNAL;
     CmdCfg.TearingEffectPolarity = DSI_TE_RISING_EDGE;
@@ -360,7 +364,6 @@ void _LCD_Init(void) {
 #else
     layer_cfg.PixelFormat = LTDC_PIXEL_FORMAT_ARGB8888;
 #endif
-    layer_cfg.PixelFormat = LTDC_PIXEL_FORMAT_RGB565;
     layer_cfg.Alpha0 = 0;
     layer_cfg.Backcolor.Blue = 0;
     layer_cfg.Backcolor.Green = 0;

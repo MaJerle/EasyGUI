@@ -57,7 +57,7 @@ const static GUI_Color_t Colors[] = {
 };
 
 const static GUI_WIDGET_t Widget = {
-    .Name = _T("LISTVIEW"),                         /*!< Widget name */
+    .Name = _GT("LISTVIEW"),                        /*!< Widget name */
     .Size = sizeof(GUI_LISTVIEW_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
     .Callback = GUI_LISTVIEW_Callback,              /*!< Callback function */

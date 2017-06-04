@@ -43,9 +43,34 @@ extern "C" {
 #include "gui_widget.h"
 
 /**
- * \defgroup        GUI_RADIO Radio
+ * \defgroup        GUI_RADIO Radio box
  * \brief           Radio box widget
  * \{
+ *
+ * Radiobox widget acts in a group of radio widgets to have support for single selection from multiple available choices
+ *
+ * \image html image_widget_radiobox.png Radiobox widgets in different states
+ *
+ * Sample code to create example image above
+ * \code{c}
+uint8_t i;
+for (i = 0; i < 4; i++) {
+    handle = GUI_RADIO_Create(10, 10, 10 + (i * 30), 300, 25, h, 0, 0);
+    switch (i) {
+        case 0: GUI_WIDGET_SetText(handle, _GT("Radio box default")); break;
+        case 1: GUI_WIDGET_SetText(handle, _GT("Radio box selected")); break;
+        case 2: GUI_WIDGET_SetText(handle, _GT("Radio box disabled")); break;
+        case 3: GUI_WIDGET_SetText(handle, _GT("Radio box disabled checked")); break;
+        default: break;
+    }
+    GUI_RADIO_SetGroup(handle, i < 2 ? 1 : 2);
+    GUI_RADIO_SetValue(handle, i);
+    if (i % 2) {
+        GUI_RADIO_SetSelected(handle);
+    }
+    GUI_RADIO_SetDisabled(handle, i / 2);
+}
+\endcode
  */
     
 /**
@@ -163,6 +188,14 @@ uint8_t GUI_RADIO_SetDisabled(GUI_HANDLE_p h, uint8_t disabled);
  * \retval          0: Radio is not disabled
  */
 uint8_t GUI_RADIO_IsDisabled(GUI_HANDLE_p h);
+
+/**
+ * \brief           Set radio widget selected in radio group
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget selected ok
+ * \retval          0: Widget was not selected
+ */
+uint8_t GUI_RADIO_SetSelected(GUI_HANDLE_p h);
     
 /**
  * \}

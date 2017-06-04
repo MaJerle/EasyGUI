@@ -47,6 +47,10 @@ extern "C" {
  * \defgroup        GUI_BUTTON Button
  * \brief           Button which can be pressed
  * \{
+ * 
+ * Button represents simple widget which can be pressed and can process events such as click, long click or double click.
+ * 
+ * \image html image_widget_button.png Default button state with text
  */
 
 /**

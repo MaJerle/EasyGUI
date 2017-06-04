@@ -56,7 +56,7 @@ const static GUI_Color_t Colors[] = {
 };
 
 const static GUI_WIDGET_t Widget = {
-    .Name = _T("Checkbox"),                         /*!< Widget name */
+    .Name = _GT("CHECKBOX"),                        /*!< Widget name */
     .Size = sizeof(GUI_CHECKBOX_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
     .Callback = GUI_CHECKBOX_Callback,              /*!< Callback function */

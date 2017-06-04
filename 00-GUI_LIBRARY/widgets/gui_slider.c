@@ -55,7 +55,7 @@ const static GUI_Color_t Colors[] = {
 };
 
 const static GUI_WIDGET_t Widget = {
-    .Name = _T("SLIDER"),                           /*!< Widget name */
+    .Name = _GT("SLIDER"),                          /*!< Widget name */
     .Size = sizeof(GUI_SLIDER_t),                   /*!< Size of widget for memory allocation */
     .Flags = GUI_FLAG_WIDGET_INVALIDATE_PARENT,     /*!< List of widget flags */
     .Callback = GUI_SLIDER_Callback,                /*!< Callback function */

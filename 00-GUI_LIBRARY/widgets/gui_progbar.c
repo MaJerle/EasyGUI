@@ -56,7 +56,7 @@ const static GUI_Color_t Colors[] = {
 };
 
 const static GUI_WIDGET_t Widget = {
-    .Name = _T("PROGBAR"),                          /*!< Widget name */
+    .Name = _GT("PROGBAR"),                         /*!< Widget name */
     .Size = sizeof(GUI_PROGBAR_t),                  /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
     .Callback = GUI_PROGBAR_Callback,               /*!< Callback function */

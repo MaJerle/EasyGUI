@@ -55,7 +55,7 @@ const static GUI_Color_t Colors[] = {
 };
 
 const static GUI_WIDGET_t Widget = {
-    .Name = _T("Radio"),                            /*!< Widget name */
+    .Name = _GT("RADIOBOX"),                        /*!< Widget name */
     .Size = sizeof(GUI_RADIO_t),                    /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
     .Callback = GUI_RADIO_Callback,                 /*!< Callback function */
@@ -70,11 +70,11 @@ const static GUI_WIDGET_t Widget = {
 /******************************************************************************/
 #define c                   ((GUI_RADIO_t *)(h))
 static
-void __GUI_RADIO_SetActive(GUI_HANDLE_p h) {
+uint8_t __GUI_RADIO_SetActive(GUI_HANDLE_p h) {
     GUI_HANDLE_p handle;
     
     if (__GR(h)->Flags & GUI_FLAG_RADIO_DISABLED) { /* Check if it can be enabled */
-        return;
+        return 0;
     }
     
     /**
@@ -97,6 +97,8 @@ void __GUI_RADIO_SetActive(GUI_HANDLE_p h) {
     __GR(h)->Flags |= GUI_FLAG_RADIO_CHECKED;       /* Set active flag */
     __GR(h)->SelectedValue = __GR(h)->Value;        /* Set selected value of this radio */
     __GUI_WIDGET_Callback(h, GUI_WC_SelectionChanged, NULL, NULL);  /* Call user function */
+    
+    return 1;
 }
 
 /* Set disabled status */
@@ -268,6 +270,18 @@ uint8_t GUI_RADIO_SetValue(GUI_HANDLE_p h, uint32_t value) {
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;
+}
+
+uint8_t GUI_RADIO_SetSelected(GUI_HANDLE_p h) {
+    uint8_t ret;
+    
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    ret = __GUI_RADIO_SetActive(h);                 /* Set radio active */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
 }
 
 uint32_t GUI_RADIO_GetValue(GUI_HANDLE_p h) {

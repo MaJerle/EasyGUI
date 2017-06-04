@@ -34383,7 +34383,7 @@ GUI_Const GUI_FONT_CharInfo_t Arial_Narrow_Italic_22_CharTable[] = {
 };
 
 GUI_Const GUI_FONT_t GUI_Font_Arial_Narrow_Italic_22 = {
-    _T("Arial Narrow Italic"),
+    _GT("Arial Narrow Italic"),
     22,
     0x0020,
     0x2c6f,

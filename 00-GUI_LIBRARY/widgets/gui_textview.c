@@ -53,7 +53,7 @@ const static GUI_Color_t Colors[] = {
 };
 
 const static GUI_WIDGET_t Widget = {
-    .Name = _T("Textview"),                         /*!< Widget name */
+    .Name = _GT("TEXTVIEW"),                        /*!< Widget name */
     .Size = sizeof(GUI_TEXTVIEW_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
     .Callback = GUI_TEXTVIEW_Callback,              /*!< Callback function */

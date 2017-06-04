@@ -46,6 +46,33 @@ extern "C" {
  * \defgroup        GUI_CHECKBOX Checkbox
  * \brief           Checkbox widget
  * \{
+ *
+ * Checkbox widget can hold state of checked or cleared value. On top of it, it can be disabled to make look and usage even more comparable to Windows applications
+ *
+ * \image html image_widget_checkbox.png Checkbox widgets in different states
+ *
+ * Sample code to create similar shape as on image above:
+ * \code{c}
+//First checkboc widget
+handle = GUI_CHECKBOX_Create(0, 10, 10, 400, 40, 0, 0, 0);
+GUI_WIDGET_SetText(handle, _GT("Check box default"));
+
+//Second checkboc widget
+handle = GUI_CHECKBOX_Create(0, 10, 50, 400, 40, 0, 0, 0);
+GUI_WIDGET_SetText(handle, _GT("Check box checked"));
+GUI_CHECKBOX_SetChecked(handle, 1);
+
+//Third checkboc widget
+handle = GUI_CHECKBOX_Create(0, 10, 90, 400, 40, 0, 0, 0);
+GUI_WIDGET_SetText(handle, _GT("Check box disabled"));
+GUI_CHECKBOX_SetDisabled(handle, 1);
+
+//Forth checkboc widget
+handle = GUI_CHECKBOX_Create(0, 10, 130, 400, 40, 0, 0, 0);
+GUI_WIDGET_SetText(handle, _GT("Check box checked disabled"));
+GUI_CHECKBOX_SetChecked(handle, 1);
+GUI_CHECKBOX_SetDisabled(handle, 1);
+\endcode
  */
     
 /**
