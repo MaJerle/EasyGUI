@@ -134,14 +134,14 @@ void __GUI_WIDGET_SetClippingRegion(GUI_HANDLE_p h) {
     if (GUI.Display.X1 > x1) {
         GUI.Display.X1 = x1;
     }
-    if (GUI.Display.X2 < (x2)) {
-        GUI.Display.X2 = (x2);
+    if (GUI.Display.X2 < x2) {
+        GUI.Display.X2 = x2;
     }
     if (GUI.Display.Y1 > y1) {
         GUI.Display.Y1 = y1;
     }
-    if (GUI.Display.Y2 < (y2)) {
-        GUI.Display.Y2 = (y2);
+    if (GUI.Display.Y2 < y2) {
+        GUI.Display.Y2 = y2;
     }
 }
 

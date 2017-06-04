@@ -1283,7 +1283,6 @@ uint8_t GUI_WIDGET_SetTransparency(GUI_HANDLE_p h, uint8_t trans);
 void __GUI_WIDGET_Init(void);
 
 //Clipping regions
-void __GUI_WIDGET_SetClippingRegion(GUI_HANDLE_p h);
 uint8_t __GUI_WIDGET_IsInsideClippingRegion(GUI_HANDLE_p h);
 uint8_t __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(GUI_HANDLE_p h, GUI_iDim_t* xOut, GUI_iDim_t* yOut, GUI_iDim_t* wOut, GUI_iDim_t* hOut);
 
