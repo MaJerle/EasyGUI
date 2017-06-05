@@ -73,7 +73,7 @@ uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
-            __GUI_WIDGET_Enable3DStyle(h);          /* By default set 3D */
+            __GUI_WIDGET_Set3DStyle(h, 1);          /* By default set 3D */
             return 1;
         }
         case GUI_WC_Draw: {

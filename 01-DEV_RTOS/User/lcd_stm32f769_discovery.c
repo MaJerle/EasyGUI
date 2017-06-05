@@ -137,7 +137,7 @@ void _LCD_Init(void) {
     uint32_t                   HSA; /*!< Horizontal start active time in units of lcdClk */
     uint32_t                   HBP; /*!< Horizontal Back Porch time in units of lcdClk */
     uint32_t                   HFP; /*!< Horizontal Front Porch time in units of lcdClk */
-    uint32_t                   HACT; /*!< Horizontal Active time in units of lcdClk = imageSize X in pixels to display */
+    uint32_t                   HACT = LCD_WIDTH; /*!< Horizontal Active time in units of lcdClk = imageSize X in pixels to display */
 
     /* Toggle Hardware Reset of the DSI LCD using
     * its XRES signal (active low) */

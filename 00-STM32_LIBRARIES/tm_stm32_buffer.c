@@ -159,15 +159,9 @@ uint16_t TM_BUFFER_GetFree(TM_BUFFER_t* Buffer) {
 	/* Check if the same */
 	if (in == out) {
 		size = Buffer->Size;
-	}
-
-	/* Check normal mode */
-	if (out > in) {
+	} else if (out > in) {
 		size = out - in;
-	}
-	
-	/* Check if overflow mode */
-	if (in > out) {
+	} else {
 		size = Buffer->Size - (in - out);
 	}
 	
@@ -190,16 +184,9 @@ uint16_t TM_BUFFER_GetFull(TM_BUFFER_t* Buffer) {
 	/* Pointer are same? */
 	if (in == out) {
 		size = 0;
-	}
-	
-	/* Check pointers and return values */
-	/* Buffer is not in overflow mode */
-	if (in > out) {
+	} else if (in > out) {
 		size = in - out;
-	}
-	
-	/* Buffer is in overflow mode */
-	if (out > in) {
+	} else {
 		size = Buffer->Size - (out - in);
 	}
 	

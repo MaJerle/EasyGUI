@@ -254,28 +254,6 @@ void CreateMask(void) {
     }
 }
 
-void DMA2D_Transfer(void) {
-    uint32_t dst;
-    
-    dst = GUI.LCD.ActiveLayer->StartAddress;
-    
-    while (DMA2D->CR & DMA2D_CR_START);             /* Wait finished */
-    
-    DMA2D->CR = DMA2D_M2M_BLEND;                    /* Memory to memory with blending */
-    DMA2D->FGMAR = (uint32_t)Mask;
-    DMA2D->BGMAR = (uint32_t)dst;                       
-    DMA2D->OMAR = (uint32_t)dst;
-    DMA2D->FGOR = 0;
-    DMA2D->BGOR = GUI.LCD.Width - IMG_WIDTH * 2;
-    DMA2D->FGCOLR = 0x80FF0000;
-    DMA2D->OOR = GUI.LCD.Width - IMG_WIDTH * 2;  
-    DMA2D->FGPFCCR = DMA2D_INPUT_A4;                   /* Foreground PFC Control Register */
-    DMA2D->BGPFCCR = DMA2D_OUTPUT_RGB565;                   /* Background PFC Control Register (Defines the BG pixel format) */
-    DMA2D->OPFCCR  = DMA2D_OUTPUT_RGB565;                   /* Output     PFC Control Register (Defines the output pixel format) */
-    DMA2D->NLR = (uint32_t)(IMG_WIDTH << 17) | (uint16_t)IMG_HEIGHT; 
-    DMA2D->CR |= DMA2D_CR_START;
-}
-
 int main(void) {
     GUI_STRING_UNICODE_t s;
     
@@ -297,7 +275,7 @@ int main(void) {
     GUI_Init();
     
     GUI_WIDGET_SetFontDefault(&GUI_Font_Arial_Narrow_Italic_21_AA); /* Set default font for widgets */
-    GUI_WIDGET_SetFontDefault(&GUI_Font_Comic_Sans_MS_Regular_22); /* Set default font for widgets */
+    //GUI_WIDGET_SetFontDefault(&GUI_Font_Comic_Sans_MS_Regular_22); /* Set default font for widgets */
     
     win1 = GUI_WINDOW_GetDesktop();                         /* Get desktop window */
     
@@ -305,10 +283,8 @@ int main(void) {
         handle = GUI_BUTTON_Create(buttons[state].id, 5 + (state % 3) * 160, 5 + (state / 3) * 40, 150, 35, win1, button_callback, 0);
         GUI_WIDGET_SetText(handle, buttons[state].text);
         GUI_WIDGET_SetUserData(handle, &buttons[state].data);
+        GUI_WIDGET_Set3DStyle(handle, 0);
     }
-    
-    handle = GUI_WIDGET_GetById(buttons[COUNT_OF(buttons) - 1].id);
-    //GUI_WIDGET_Callback(handle, GUI_WC_Click, 0, 0);
     
     __GUI_LINKEDLIST_PrintList(NULL);
 
@@ -345,15 +321,17 @@ int main(void) {
             }
         }
         
+        /**
+         * On pressed button, open dialog in blocking and wait for user press to continue
+         */
         if (pressed) {
-            DMA2D_Transfer();
-//            pressed = GUI_DIALOG_CreateBlocking(ID_WIN_DIALOG, 50, 10, 300, 150, 0, dialog_callback, 0);
-//            if (pressed == 1) {
-//                __GUI_DEBUG("Confirmed\r\n");
-//                TM_DISCO_LedToggle(LED_GREEN);
-//            } else if (pressed == 0) {
-//                __GUI_DEBUG("Canceled\r\n");
-//            }
+            pressed = GUI_DIALOG_CreateBlocking(ID_WIN_DIALOG, 50, 10, 300, 150, 0, dialog_callback, 0);
+            if (pressed == 1) {
+                __GUI_DEBUG("Confirmed\r\n");
+                TM_DISCO_LedToggle(LED_GREEN);
+            } else if (pressed == 0) {
+                __GUI_DEBUG("Canceled\r\n");
+            }
             pressed = 0;
         }
         
@@ -404,10 +382,13 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
     if (cmd == GUI_WC_Init) {           /* Window has been just initialized */
         switch (GUI_WIDGET_GetId(h)) {  /* Button callbacks */
             case ID_WIN_BTN: {
-                handle = GUI_BUTTON_Create(0, 10, 10, 100, 40, h, button_callback, 0);
+                handle = GUI_BUTTON_Create(0, 0, 0, 100, 40, h, button_callback, 0);
+                GUI_WIDGET_SetWidthPercent(handle, 50);
                 GUI_WIDGET_SetText(handle, _GT("Button 1"));
                 handle = GUI_BUTTON_Create(0, 10, 60, 100, 40, h, button_callback, 0);
                 GUI_WIDGET_SetText(handle, _GT("Button 2"));
+                GUI_WIDGET_SetPositionPercent(handle, 50, 50);
+                GUI_WIDGET_SetWidthPercent(handle, 50);
                 break;
             }
             case ID_WIN_CHECKBOX: {     /* Check box */
@@ -517,11 +498,11 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 GUI_GRAPH_AttachData(handle, graphdata2);
                 
                 /* Create checkbox handle for graph */
-//                handle = GUI_CHECKBOX_Create(ID_CHECKBOX_GRAPH, 17, 15, 200, 30, h, checkbox_callback, 0);
-//                GUI_WIDGET_SetText(handle, _GT("SetExpanded"));
-//                GUI_WIDGET_SetZIndex(handle, 1);
-//                GUI_CHECKBOX_SetColor(handle, GUI_CHECKBOX_COLOR_TEXT, GUI_COLOR_WHITE);
-//                GUI_CHECKBOX_SetChecked(handle, GUI_WIDGET_IsExpanded(GUI_WIDGET_GetById(ID_GRAPH_MAIN)));
+                handle = GUI_CHECKBOX_Create(ID_CHECKBOX_GRAPH, 17, 15, 200, 30, h, checkbox_callback, 0);
+                GUI_WIDGET_SetText(handle, _GT("SetExpanded"));
+                GUI_WIDGET_SetZIndex(handle, 1);
+                GUI_CHECKBOX_SetColor(handle, GUI_CHECKBOX_COLOR_TEXT, GUI_COLOR_WHITE);
+                GUI_CHECKBOX_SetChecked(handle, GUI_WIDGET_IsExpanded(GUI_WIDGET_GetById(ID_GRAPH_MAIN)));
                 break;
             }
             case ID_WIN_EDIT: {         /* Edit text */
@@ -612,14 +593,14 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 break;
             }
             case ID_WIN_IMAGE: {
-                handle = GUI_BUTTON_Create(0, 10, 10, 300, 50, h, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Button"));
-                handle = GUI_IMAGE_Create(0, 2, 2, bmimage_brand.xSize, bmimage_brand.ySize, h, 0, 0);
-                GUI_IMAGE_SetSource(handle, &bmimage_brand);
-                handle = GUI_IMAGE_Create(0, 200, 40, bmimage_voyo.xSize, bmimage_voyo.ySize, h, 0, 0);
-                GUI_IMAGE_SetSource(handle, &bmimage_voyo);
-                handle = GUI_IMAGE_Create(0, 350, 10, bmimage_voyo565.xSize, bmimage_voyo565.ySize, h, 0, 0);
-                GUI_IMAGE_SetSource(handle, &bmimage_voyo565);
+//                handle = GUI_BUTTON_Create(0, 10, 10, 300, 50, h, 0, 0);
+//                GUI_WIDGET_SetText(handle, _GT("Button"));
+//                handle = GUI_IMAGE_Create(0, 2, 2, bmimage_brand.xSize, bmimage_brand.ySize, h, 0, 0);
+//                GUI_IMAGE_SetSource(handle, &bmimage_brand);
+//                handle = GUI_IMAGE_Create(0, 200, 40, bmimage_voyo.xSize, bmimage_voyo.ySize, h, 0, 0);
+//                GUI_IMAGE_SetSource(handle, &bmimage_voyo);
+//                handle = GUI_IMAGE_Create(0, 350, 10, bmimage_voyo565.xSize, bmimage_voyo565.ySize, h, 0, 0);
+//                GUI_IMAGE_SetSource(handle, &bmimage_voyo565);
                 break;
             }
             case ID_WIN_SLIDER: {
@@ -666,17 +647,17 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 break;
             }
             case ID_WIN_TRANSP: {
-                GUI_WIDGET_SetTransparency(h, 0xF0);
+                //GUI_WIDGET_SetTransparency(h, 0xF0);
                 
                 handle = GUI_BUTTON_Create(ID_BUTTON_2, 10, 50, 300, 35, 0, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Transparent 0x20"));
+                GUI_WIDGET_SetText(handle, _GT("Opaque button"));
                 GUI_WIDGET_SetTransparency(handle, 0xFF);
                 handle = GUI_BUTTON_Create(ID_BUTTON_3, 10, 90, 300, 35, 0, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Transparent 0xC0"));
+                GUI_WIDGET_SetText(handle, _GT("Opaque button"));
                 GUI_WIDGET_SetTransparency(handle, 0xC0);
                 
                 handle = GUI_BUTTON_Create(ID_BUTTON_1, 5, 30, 300, 35, 0, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Transparent 0x80"));
+                GUI_WIDGET_SetText(handle, _GT("Transparent button"));
                 GUI_WIDGET_SetTransparency(handle, 0x80);
                 
                 handle = GUI_SLIDER_Create(ID_SLIDER_1, 10, 150, 400, 50, 0, slider_callback, 0);

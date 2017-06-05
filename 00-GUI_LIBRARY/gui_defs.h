@@ -72,6 +72,8 @@ extern "C" {
 #define GUI_FLAG_REMOVE                 ((uint32_t)0x00002000)  /*!< Indicates widget should be deleted */
 #define GUI_FLAG_IGNORE_INVALIDATE      ((uint32_t)0x00004000)  /*!< Indicates widget invalidation is ignored completely when invalidating it directly */
 #define GUI_FLAG_TOUCH_MOVE             ((uint32_t)0x00008000)  /*!< Indicates widget callback has processed touch move event. This parameter works in conjunction with \ref GUI_FLAG_ACTIVE flag */
+#define GUI_FLAG_XPOS_PERCENT           ((uint32_t)0x00010000)  /*!< Indicates widget X position is in percent relative to parent width */
+#define GUI_FLAG_YPOS_PERCENT           ((uint32_t)0x00020000)  /*!< Indicates widget Y position is in percent relative to parent height */
 
 #define GUI_FLAG_LCD_WAIT_LAYER_CONFIRM ((uint32_t)0x00000001)  /*!< Indicates waiting for layer change confirmation */
 

@@ -195,7 +195,7 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
                 GUI_iDim_t pX, pY;
                 pX = __GUI_WIDGET_GetParentAbsoluteX(__GH(h));
                 pY = __GUI_WIDGET_GetParentAbsoluteY(__GH(h));
-                __GUI_WIDGET_SetXY(h, ts->TS.X[0] - pX - tX, ts->TS.Y[0] - pY - tY);
+                __GUI_WIDGET_SetPosition(h, ts->TS.X[0] - pX - tX, ts->TS.Y[0] - pY - tY);
                 
                 if (__GUI_WIDGET_IsExpanded(h)) {   /* If it is expanded */
                     __GUI_WIDGET_SetExpanded(h, 0); /* Clear expanded mode */
@@ -243,16 +243,16 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
         case GUI_WC_KeyPress: {
             __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;
             if (kb->KB.Keys[0] == GUI_KEY_DOWN) {
-                __GUI_WIDGET_SetXY(h, __GH(h)->X, __GH(h)->Y + 1);
+                __GUI_WIDGET_SetPosition(h, __GH(h)->X, __GH(h)->Y + 1);
                 *(__GUI_KeyboardStatus_t *)result = keyHANDLED;
             } else if (kb->KB.Keys[0] == GUI_KEY_UP) {
-                __GUI_WIDGET_SetXY(h, __GH(h)->X, __GH(h)->Y - 1);
+                __GUI_WIDGET_SetPosition(h, __GH(h)->X, __GH(h)->Y - 1);
                 *(__GUI_KeyboardStatus_t *)result = keyHANDLED;
             } else if (kb->KB.Keys[0] == GUI_KEY_LEFT) {
-                __GUI_WIDGET_SetXY(h, __GH(h)->X - 1, __GH(h)->Y);
+                __GUI_WIDGET_SetPosition(h, __GH(h)->X - 1, __GH(h)->Y);
                 *(__GUI_KeyboardStatus_t *)result = keyHANDLED;
             } else if (kb->KB.Keys[0] == GUI_KEY_RIGHT) {
-                __GUI_WIDGET_SetXY(h, __GH(h)->X + 1, __GH(h)->Y);
+                __GUI_WIDGET_SetPosition(h, __GH(h)->X + 1, __GH(h)->Y);
                 *(__GUI_KeyboardStatus_t *)result = keyHANDLED;
             }
             return 1;

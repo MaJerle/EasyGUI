@@ -40,6 +40,11 @@ extern "C" {
  * \defgroup        GUI_WIDGETS Widgets
  * \brief           Group for visible widgets on screen
  * \{
+ *
+ * \section sect_widgets Widget organization
+ *
+ * Widgets are organized in multi depth linked list of parent widgets, illustrated below:
+ *
  */
     
 /**
@@ -192,7 +197,9 @@ GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h);
  * \retval          Relative X according to parent widget
  * \hideinitializer
  */
-#define __GUI_WIDGET_GetRelativeX(h)    (__GUI_WIDGET_IsExpanded(h) ? 0 : __GH(h)->X)
+#define __GUI_WIDGET_GetRelativeX(h)    (__GUI_WIDGET_IsExpanded(h) ? 0 : \
+                                            (__GUI_WIDGET_GetFlag(h, GUI_FLAG_XPOS_PERCENT) ? (GUI_iDim_t)((float)(__GH(h)->X * __GUI_WIDGET_GetParentInnerWidth(h)) / 100.0f) : __GH(h)->X) \
+                                        )
 
 /**
  * \brief           Get widget relative Y position according to parent widget
@@ -200,8 +207,9 @@ GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h);
  * \param[in,out]   h: Widget handle
  * \retval          Relative Y according to parent widget
  * \hideinitializer
- */
-#define __GUI_WIDGET_GetRelativeY(h)    (__GUI_WIDGET_IsExpanded(h) ? 0 : __GH(h)->Y)
+ */#define __GUI_WIDGET_GetRelativeY(h)    (__GUI_WIDGET_IsExpanded(h) ? 0 : \
+                                            (__GUI_WIDGET_GetFlag(h, GUI_FLAG_YPOS_PERCENT) ? (GUI_iDim_t)((float)(__GH(h)->Y * __GUI_WIDGET_GetParentInnerHeight(h)) / 100.0f) : __GH(h)->Y) \
+                                        )
 
 /**
  * \brief           Invalidate widget for redraw 
@@ -234,48 +242,91 @@ uint8_t __GUI_WIDGET_InvalidateWithParent(GUI_HANDLE_p h);
 uint8_t __GUI_WIDGET_SetInvalidateWithParent(GUI_HANDLE_p h, uint8_t value);
 
 /**
- * \brief           Set X and Y coordinates relative to parent object
+ * \brief           Set position (X and Y) coordinates relative to parent object
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
  * \param[in]       x: X position relative to parent
  * \param[in]       y: Y position relative to parent
  * \retval          1: Successful
  * \retval          0: Failed
- * \hideinitializer
  */
-uint8_t __GUI_WIDGET_SetXY(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y);
+uint8_t __GUI_WIDGET_SetPosition(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y);
 
 /**
- * \brief           Set widget size
+ * \brief           Set widget size in units of pixels
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
  * \param[in]       wi: Widget width
  * \param[in]       hi: Widget height
  * \retval          1: Successful
  * \retval          0: Failed
- * \hideinitializer
  */
 uint8_t __GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t hi);
 
 /**
- * \brief           Enable 3D mode on widget
+ * \brief           Set widget size in units of percent
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
+ * \param[in]       wi: Widget width
+ * \param[in]       hi: Widget height
  * \retval          1: Successful
  * \retval          0: Failed
- * \hideinitializer
  */
-uint8_t __GUI_WIDGET_Enable3DStyle(GUI_HANDLE_p h);
+uint8_t __GUI_WIDGET_SetSizePercent(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t hi);
 
 /**
- * \brief           Disable 3D mode on widget
+ * \brief           Set width of widget in units of pixels
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
+ * \param[in]       width: Width in units of pixels
+ * \retval          1: Successful
+ * \retval          1: Failed
+ * \sa              GUI_WIDGET_SetHeight, GUI_WIDGET_SetWidthPercent, GUI_WIDGET_SetHeightPercent
+ */
+uint8_t __GUI_WIDGET_SetWidth(GUI_HANDLE_p h, GUI_Dim_t width);
+
+/**
+ * \brief           Set height of widget in units of pixels
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       height: Height in units of pixels
+ * \retval          1: Successful
+ * \retval          1: Failed
+ * \sa              GUI_WIDGET_SetWidth, GUI_WIDGET_SetWidthPercent, GUI_WIDGET_SetHeightPercent
+ */
+uint8_t __GUI_WIDGET_SetHeight(GUI_HANDLE_p h, GUI_Dim_t height);
+
+/**
+ * \brief           Set width of widget in percentage relative to parent widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       width: Width in percentage
+ * \retval          1: Successful
+ * \retval          1: Failed
+ * \sa              GUI_WIDGET_SetWidth, GUI_WIDGET_SetHeight, GUI_WIDGET_SetHeightPercent
+ */
+uint8_t __GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width);
+
+/**
+ * \brief           Set height of widget in percentage relative to parent widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       height: Height in percentage
+ * \retval          1: Successful
+ * \retval          1: Failed
+ * \sa              GUI_WIDGET_SetWidth, GUI_WIDGET_SetHeight, GUI_WIDGET_SetWidthPercent
+ */
+uint8_t __GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, GUI_Dim_t height);
+
+/**
+ * \brief           Set 3D mode on widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       enable: Value to enable, either 1 or 0
  * \retval          1: Successful
  * \retval          0: Failed
- * \hideinitializer
  */
-uint8_t __GUI_WIDGET_Disable3DStyle(GUI_HANDLE_p h);
+uint8_t __GUI_WIDGET_Set3DStyle(GUI_HANDLE_p h, uint8_t enable);
 
 /**
  * \brief           Set font used for widget drawing
@@ -284,7 +335,6 @@ uint8_t __GUI_WIDGET_Disable3DStyle(GUI_HANDLE_p h);
  * \param[in]       *font: Pointer to \ref GUI_FONT_t structure with font information
  * \retval          1: Successful
  * \retval          0: Failed
- * \hideinitializer
  */
 uint8_t __GUI_WIDGET_SetFont(GUI_HANDLE_p h, const GUI_FONT_t* font);
 
@@ -300,7 +350,6 @@ uint8_t __GUI_WIDGET_SetFont(GUI_HANDLE_p h, const GUI_FONT_t* font);
  * \param[in]       *text: Pointer to text to set
  * \retval          1: Successful
  * \retval          0: Failed
- * \hideinitializer
  */
 uint8_t __GUI_WIDGET_SetText(GUI_HANDLE_p h, const GUI_Char* text);
 
@@ -355,7 +404,7 @@ GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iD
  * \param           *h: Widget handle to remove
  * \retval          0: Failed
  * \retval          1: Success
- * \sa              __GUI_WIDGET_Create
+ * \sa              __GUI_WIDGET_Create, GUI_WIDGET_Remove
  */
 uint8_t __GUI_WIDGET_Remove(GUI_HANDLE_p h);
 
@@ -397,50 +446,6 @@ uint8_t __GUI_WIDGET_ToggleExpanded(GUI_HANDLE_p h);
  * \retval          0: Widget expandend status was not set
  */
 uint8_t __GUI_WIDGET_SetExpanded(GUI_HANDLE_p h, uint8_t state);
-
-/**
- * \brief           Set width of widget in units of pixels
- * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in,out]   h: Widget handle
- * \param[in]       width: Width in units of pixels
- * \retval          1: Successful
- * \retval          1: Failed
- * \sa              GUI_WIDGET_SetHeight, GUI_WIDGET_SetWidthPercent, GUI_WIDGET_SetHeightPercent
- */
-uint8_t __GUI_WIDGET_SetWidth(GUI_HANDLE_p h, GUI_Dim_t width);
-
-/**
- * \brief           Set height of widget in units of pixels
- * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in,out]   h: Widget handle
- * \param[in]       height: Height in units of pixels
- * \retval          1: Successful
- * \retval          1: Failed
- * \sa              GUI_WIDGET_SetWidth, GUI_WIDGET_SetWidthPercent, GUI_WIDGET_SetHeightPercent
- */
-uint8_t __GUI_WIDGET_SetHeight(GUI_HANDLE_p h, GUI_Dim_t height);
-
-/**
- * \brief           Set width of widget in percentage relative to parent widget
- * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in,out]   h: Widget handle
- * \param[in]       width: Width in percentage
- * \retval          1: Successful
- * \retval          1: Failed
- * \sa              GUI_WIDGET_SetWidth, GUI_WIDGET_SetHeight, GUI_WIDGET_SetHeightPercent
- */
-uint8_t __GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width);
-
-/**
- * \brief           Set height of widget in percentage relative to parent widget
- * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in,out]   h: Widget handle
- * \param[in]       height: Height in percentage
- * \retval          1: Successful
- * \retval          1: Failed
- * \sa              GUI_WIDGET_SetWidth, GUI_WIDGET_SetHeight, GUI_WIDGET_SetWidthPercent
- */
-uint8_t __GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, GUI_Dim_t height);
 
 /**
  * \brief           Check if widget is children of parent
@@ -613,7 +618,7 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
  * \retval          None
  * \hideinitializer
  */
-#define __GUI_WIDGET_SetPadding(h, x)  do {             \
+#define __GUI_WIDGET_SetPadding(h, x)       do {        \
     __GUI_WIDGET_SetPaddingTop(h, x);                   \
     __GUI_WIDGET_SetPaddingLeft(h, x);                  \
     __GUI_WIDGET_SetPaddingBottom(h, x);                \
@@ -896,29 +901,10 @@ uint8_t __GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex);
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 /**
- * \brief           Get widget ID
- * \param[in,out]   h: Widget handle
- * \retval          Widget ID
+ * \defgroup        GUI_WIDGET_Text Text management
+ * \brief           Text and font management functions
+ * \{
  */
-GUI_ID_t GUI_WIDGET_GetId(GUI_HANDLE_p h);
-
-/**
- * \brief           Get first widget handle by ID
- * \note            If multiple widgets have the same ID, first found will be used
- * \param[in,out]   id: Widget ID to search for
- * \retval          > 0: Widget handle when widget found
- * \retval          0: Widget not found
- */
-GUI_HANDLE_p GUI_WIDGET_GetById(GUI_ID_t id);
-
-/**
- * \brief           Remove widget from memory
- * \note            If widget has child widgets, they will be removed too
- * \param[in,out]   *h: Pointer to widget handle. If removed, pointer will be invalidated and set to NULL
- * \retval          1: Widget deleted
- * \retval          0: Delete failed
- */
-uint8_t GUI_WIDGET_Remove(GUI_HANDLE_p* h);
 
 /**
  * \brief           Allocate memory for text operations if text will be dynamic
@@ -982,15 +968,45 @@ const GUI_Char* GUI_WIDGET_GetTextCopy(GUI_HANDLE_p h, GUI_Char* dst, uint32_t l
 uint8_t GUI_WIDGET_SetFont(GUI_HANDLE_p h, GUI_Const GUI_FONT_t* font);
 
 /**
+ * \brief           Set default font for widgets used on widget creation
+ * \param[in]       *font: Pointer to \ref GUI_FONT_t with font
+ * \retval          1: Font was set ok
+ * \retval          0: Font was not set
+ */
+uint8_t GUI_WIDGET_SetFontDefault(const GUI_FONT_t* font);
+
+
+/**
+ * \}
+ */
+
+/**
+ * \defgroup        GUI_WIDGET_Size Size management
+ * \brief           Size management functions
+ * \{
+ */
+
+/**
  * \brief           Set widget size in units of pixels
  * \param[in,out]   h: Widget handle
- * \param[in]       width: Width in units of pixels
- * \param[in]       height: Height in units of pixels
+ * \param[in]       width: Width value
+ * \param[in]       height: Height value
  * \retval          1: Size was set ok
  * \retval          0: Size was not set
- * \sa              GUI_WIDGET_SetXY
+ * \sa              GUI_WIDGET_SetSizePercent
  */
 uint8_t GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t width, GUI_Dim_t height);
+
+/**
+ * \brief           Set widget size in units of percent
+ * \param[in,out]   h: Widget handle
+ * \param[in]       width: Width value
+ * \param[in]       height: Height value
+ * \retval          1: Size was set ok
+ * \retval          0: Size was not set
+ * \sa              GUI_WIDGET_SetSize
+ */
+uint8_t GUI_WIDGET_SetSizePercent(GUI_HANDLE_p h, GUI_Dim_t width, GUI_Dim_t height);
 
 /**
  * \brief           Set width of widget in units of pixels
@@ -1055,15 +1071,164 @@ GUI_Dim_t GUI_WIDGET_GetWidth(GUI_HANDLE_p h);
 GUI_Dim_t GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
 
 /**
+ * \brief           Set expandend mode on widget. When enabled, widget will be at X,Y = 0,0 relative to parent and will have width,height = 100%,100%
+ * \param[in,out]   h: Widget handle
+ * \param[in]       state: State for expanded mode
+ * \retval          1: Widget expandend status set ok
+ * \retval          0: Widget expandend status was not set
+ * \sa              GUI_WIDGET_IsExpanded
+ */
+uint8_t GUI_WIDGET_SetExpanded(GUI_HANDLE_p h, uint8_t state);
+
+/**
+ * \brief           Get widget expanded status
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget is expanded
+ * \retval          0: Widget is not expanded
+ * \sa              GUI_WIDGET_SetExpanded
+ */
+uint8_t GUI_WIDGET_IsExpanded(GUI_HANDLE_p h);
+
+/**
+ * \}
+ */
+
+/**
+ * \defgroup        GUI_WIDGET_Position Position management
+ * \brief           Position management functions
+ * \{
+ */
+ 
+/**
  * \brief           Set widget position relative to parent object in units of pixels
  * \param[in,out]   h: Widget handle
  * \param[in]       x: X position relative to parent object
  * \param[in]       y: Y position relative to parent object
  * \retval          1: Position was set ok
  * \retval          0: Position was not set
- * \sa              GUI_WIDGET_SetSize
+ * \sa              GUI_WIDGET_SetPositionPercent
  */
-uint8_t GUI_WIDGET_SetXY(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y);
+uint8_t GUI_WIDGET_SetPosition(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y);
+ 
+/**
+ * \brief           Set widget position relative to parent object in units of percent
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: X position relative to parent object
+ * \param[in]       y: Y position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              GUI_WIDGET_SetPosition
+ */
+uint8_t GUI_WIDGET_SetPositionPercent(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y);
+ 
+/**
+ * \brief           Set widget X position relative to parent object in units of pixels
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: X position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              GUI_WIDGET_SetXPositionPercent
+ */
+uint8_t GUI_WIDGET_SetXPosition(GUI_HANDLE_p h, GUI_iDim_t x);
+ 
+/**
+ * \brief           Set widget X position relative to parent object in units of percent
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: X position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              GUI_WIDGET_SetXPosition
+ */
+uint8_t GUI_WIDGET_SetXPositionPercent(GUI_HANDLE_p h, GUI_iDim_t x);
+ 
+/**
+ * \brief           Set widget Y position relative to parent object in units of pixels
+ * \param[in,out]   h: Widget handle
+ * \param[in]       y: Y position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              GUI_WIDGET_SetYPositionPercent
+ */
+uint8_t GUI_WIDGET_SetYPosition(GUI_HANDLE_p h, GUI_iDim_t y);
+ 
+/**
+ * \brief           Set widget Y position relative to parent object in units of percent
+ * \param[in,out]   h: Widget handle
+ * \param[in]       y: Y position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              GUI_WIDGET_SetYPosition
+ */
+uint8_t GUI_WIDGET_SetYPositionPercent(GUI_HANDLE_p h, GUI_iDim_t y);
+
+/**
+ * \brief           Set widget scroll on X axis
+ * \note            This is possible on widgets with children support (windows) to have scroll on X and Y
+ * \param[in,out]   h: Widget handle
+ * \param[in]       scroll: Scroll value for X direction
+ * \retval          1: Scroll was set ok
+ * \retval          0: Scroll was not set
+ * \sa              GUI_WIDGET_SetScrollY
+ */
+uint8_t GUI_WIDGET_SetScrollX(GUI_HANDLE_p h, GUI_iDim_t scroll);
+
+/**
+ * \brief           Set widget scroll on Y axis
+ * \note            This is possible on widgets with children support (windows) to have scroll on X and Y
+ * \param[in,out]   h: Widget handle
+ * \param[in]       scroll: Scroll value for Y direction
+ * \retval          1: Scroll was set ok
+ * \retval          0: Scroll was not set
+ * \sa              GUI_WIDGET_SetScrollX
+ */
+uint8_t GUI_WIDGET_SetScrollY(GUI_HANDLE_p h, GUI_iDim_t scroll);
+
+/**
+ * \}
+ */
+ 
+/**
+ * \defgroup        GUI_WIDGET_Visibility Visibility management
+ * \brief           Visibility management functions
+ * \{
+ *
+ * \section sect_gui_widget_transparency Widget transparency
+ *
+ * Library support transparency setup on widget. For this, 
+ * special blending function must be enabled (best if support on hardware).
+ *
+ * \image html image_transparent_buttons.png Transparent of 0x80 on button over opaque button
+ *
+ * When transparency on widget should be used, additional RAM is used:
+ *
+ * \f$\ size=WidgetVisibleWidth*WidgetVisibleHeight*BytesPerPixel\f$
+ *
+ * The additional RAM usage is used if widget has transparency and its children has also custom transparency.
+ * In this case, RAM used is for each widget separatelly and depends on number of tree length of widgets of transparency values.
+ *
+ * \par Blending technique for transparency
+ *
+ * Imagine this setup:
+ *   - Desktop
+ *      - <b>Widget 1</b>, children of desktop
+ *         - <b>Widget 2</b>, children of Widget 1
+ *            - <b>Widget 3</b>, children of Widget 2
+ *
+ * At some time, Widget1 has transparency = 0x80 (0.5) and Widget 3 has transparency = 0x40 (0.25)
+ *
+ * Drawing process would go like this:
+ *
+ * 1. Draw desktop widget on default drawing frame buffer
+ * 2. Allocate memory for visible widget part for widget 1 and set RAM as drawing buffer
+ * 3. Draw widget 1 on drawing buffer (allocated RAM)
+ * 4. Draw widget 2 on drawing buffer (still allocated RAM of previous widget)
+ * 5. Allocate memory for visible widget part for widget 3 and set RAM as drawing buffer
+ * 6. Draw widget 3 on drawing buffer (latest allocated RAM of widget 3)
+ * 7. With blending technique, merge widget 3 frame buffer with widget 1 frame buffer
+ * 8. Set frame buffer back to widget 1 allocated RAM
+ * 9. With blending technique, merge widget 1 frame buffer with desktop frame buffer
+ * 10. Set frame buffer back to default drawing frame buffer
+ */
 
 /**
  * \brief           Show widget from visible area
@@ -1093,22 +1258,44 @@ uint8_t GUI_WIDGET_Hide(GUI_HANDLE_p h);
 uint8_t GUI_WIDGET_PutOnFront(GUI_HANDLE_p h);
 
 /**
+ * \brief           Get widget transparency value
+ * \note            Value between 0 and 0xFF is used:
+ *                      - 0x00: Widget is hidden
+ *                      - 0xFF: Widget is fully visible
+ *                      - between: Widget has transparency value
+ * \param[in,out]   h: Widget handle
+ * \retval          Trasparency value
+ * \sa              GUI_WIDGET_SetTransparency
+ */
+uint8_t GUI_WIDGET_GetTransparency(GUI_HANDLE_p h);
+
+/**
+ * \brief           Set transparency level to widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       trans: Transparency level, where 0x00 means hidden and 0xFF means totally visible widget
+ * \retval          1: Transparency set ok
+ * \retval          0: Transparency was not set
+ * \sa              GUI_WIDGET_GetTransparency
+ */
+uint8_t GUI_WIDGET_SetTransparency(GUI_HANDLE_p h, uint8_t trans);
+ 
+/**
+ * \}
+ */
+
+/**
+ * \defgroup        GUI_WIDGET_Misc Miscellaneous
+ * \brief           Miscellaneous functions
+ * \{
+ */
+
+/**
  * \brief           Invalidate widget object and prepare to new redraw
  * \param[in,out]   h: Widget handle
  * \retval          1: Widget was invalidated ok
  * \retval          0: Widget was not invalidated
  */
 uint8_t GUI_WIDGET_Invalidate(GUI_HANDLE_p h);
-
-/**
- * \brief           Set callback function to widget
- * \param[in,out]   h: Widget handle object
- * \param[in]       callback: Callback function for widget
- * \retval          1: Callback was set ok
- * \retval          1: Callback was not set
- * \sa              GUI_WIDGET_ProcessDefaultCallback, GUI_WIDGET_Callback
- */
-uint8_t GUI_WIDGET_SetCallback(GUI_HANDLE_p h, GUI_WIDGET_CALLBACK_t callback);
 
 /**
  * \brief           Set custom user data to widget
@@ -1128,6 +1315,106 @@ uint8_t GUI_WIDGET_SetUserData(GUI_HANDLE_p h, void* data);
  * \sa              GUI_WIDGET_SetUserData
  */
 void* GUI_WIDGET_GetUserData(GUI_HANDLE_p h);
+
+/**
+ * \brief           Check if widget is children of parent
+ * \param[in]       h: Widget handle to test
+ * \param[in]       parent: Parent widget handle to test if is parent
+ * \retval          1: Widget handle is in tree of parent handle
+ * \retval          0: Widget handle is not in tree of parent handle
+ */
+uint8_t GUI_WIDGET_IsChildOf(GUI_HANDLE_p h, GUI_HANDLE_p parent);
+
+/**
+ * \brief           Increase selection for widget
+ * \note            Widget must implement \ref GUI_WC_IncSelection command in callback function and process it
+ * \param[in,out]   h: Widget handle
+ * \param[in]       dir: Increase direction. Positive number means number of increases, negative is number of decreases
+ * \retval          1: Increase/Decrease was ok
+ * \retval          0: Increase/Decrease was not ok
+ */
+uint8_t GUI_WIDGET_IncSelection(GUI_HANDLE_p h, int16_t dir);
+
+/**
+ * \brief           Manually set widget in focus
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget set to focus
+ * \retval          0: Widget was not set to focus
+ */
+uint8_t GUI_WIDGET_SetFocus(GUI_HANDLE_p h);
+
+/**
+ * \brief           Set z-Index for widgets on the same level. This feature applies on widgets which are not dialogs
+ * \note            Larger z-index value means greater position on screen. In case of multiple widgets on same z-index level, they are automatically modified for correct display
+ * \param[in,out]   h: Widget handle
+ * \param[in]       zindex: Z-Index value for widget. Any value can be used
+ * \retval          1: New value is different than previous and modification has been done
+ * \retval          0: New value was not set
+ * \sa              GUI_WIDGET_GetZIndex
+ */
+uint8_t GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex);
+
+/**
+ * \brief           Get z-index value from widget
+ * \param[in,out]   h: Widget handle
+ * \retval          z-index value
+ * \sa              GUI_WIDGET_SetZIndex
+ */
+int32_t GUI_WIDGET_GetZIndex(GUI_HANDLE_p h);
+
+/**
+ * \brief           Set 3D mode on widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       enable: Value to enable, either 1 or 0
+ * \retval          1: Successful
+ * \retval          0: Failed
+ */
+uint8_t GUI_WIDGET_Set3DStyle(GUI_HANDLE_p h, uint8_t enable);
+
+/**
+ * \brief           Get widget ID
+ * \param[in,out]   h: Widget handle
+ * \retval          Widget ID
+ */
+GUI_ID_t GUI_WIDGET_GetId(GUI_HANDLE_p h);
+
+/**
+ * \brief           Get first widget handle by ID
+ * \note            If multiple widgets have the same ID, first found will be used
+ * \param[in,out]   id: Widget ID to search for
+ * \retval          > 0: Widget handle when widget found
+ * \retval          0: Widget not found
+ */
+GUI_HANDLE_p GUI_WIDGET_GetById(GUI_ID_t id);
+
+/**
+ * \brief           Remove widget from memory
+ * \note            If widget has child widgets, they will be removed too
+ * \param[in,out]   *h: Pointer to widget handle. If removed, pointer will be invalidated and set to NULL
+ * \retval          1: Widget deleted
+ * \retval          0: Delete failed
+ */
+uint8_t GUI_WIDGET_Remove(GUI_HANDLE_p* h);
+
+/**
+ * \}
+ */
+
+/**
+ * \defgroup        GUI_WIDGET_Callback Callback processing
+ * \brief           Callback based functions
+ * \{
+ */
+
+/**
+ * \brief           Set callback function to widget
+ * \param[in,out]   h: Widget handle object
+ * \param[in]       callback: Callback function for widget
+ * \retval          1: Callback was set ok
+ * \retval          1: Callback was not set
+ * \sa              GUI_WIDGET_ProcessDefaultCallback, GUI_WIDGET_Callback
+ */
+uint8_t GUI_WIDGET_SetCallback(GUI_HANDLE_p h, GUI_WIDGET_CALLBACK_t callback);
 
 /**
  * \brief           Widget callback function for all events
@@ -1161,122 +1448,9 @@ uint8_t GUI_WIDGET_ProcessDefaultCallback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* p
 uint8_t GUI_WIDGET_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /**
- * \brief           Check if widget is children of parent
- * \param[in]       h: Widget handle to test
- * \param[in]       parent: Parent widget handle to test if is parent
- * \retval          1: Widget handle is in tree of parent handle
- * \retval          0: Widget handle is not in tree of parent handle
+ * \}
  */
-uint8_t GUI_WIDGET_IsChildOf(GUI_HANDLE_p h, GUI_HANDLE_p parent);
-
-/**
- * \brief           Increase selection for widget
- * \note            Widget must implement \ref GUI_WC_IncSelection command in callback function and process it
- * \param[in,out]   h: Widget handle
- * \param[in]       dir: Increase direction. Positive number means number of increases, negative is number of decreases
- * \retval          1: Increase/Decrease was ok
- * \retval          0: Increase/Decrease was not ok
- */
-uint8_t GUI_WIDGET_IncSelection(GUI_HANDLE_p h, int16_t dir);
-
-/**
- * \brief           Set widget scroll on X axis
- * \note            This is possible on widgets with children support (windows) to have scroll on X and Y possibility
- * \param[in,out]   h: Widget handle
- * \param[in]       scroll: Scroll value for X direction
- * \retval          1: Scroll was set ok
- * \retval          0: Scroll was not set
- * \sa              GUI_WIDGET_SetScrollY
- */
-uint8_t GUI_WIDGET_SetScrollX(GUI_HANDLE_p h, GUI_iDim_t scroll);
-
-/**
- * \brief           Set widget scroll on Y axis
- * \note            This is possible on widgets with children support (windows) to have scroll on X and Y possibility
- * \param[in,out]   h: Widget handle
- * \param[in]       scroll: Scroll value for Y direction
- * \retval          1: Scroll was set ok
- * \retval          0: Scroll was not set
- * \sa              GUI_WIDGET_SetScrollX
- */
-uint8_t GUI_WIDGET_SetScrollY(GUI_HANDLE_p h, GUI_iDim_t scroll);
-
-/**
- * \brief           Manually set widget in focus
- * \param[in,out]   h: Widget handle
- * \retval          1: Widget set to focus
- * \retval          0: Widget was not set to focus
- */
-uint8_t GUI_WIDGET_SetFocus(GUI_HANDLE_p h);
-
-/**
- * \brief           Set default font for widgets used on widget creation
- * \param[in]       *font: Pointer to \ref GUI_FONT_t with font
- * \retval          1: Font was set ok
- * \retval          0: Font was not set
- */
-uint8_t GUI_WIDGET_SetFontDefault(const GUI_FONT_t* font);
-
-/**
- * \brief           Set expandend mode on widget. When enabled, widget will be at X,Y = 0,0 relative to parent and will have width,height = 100%,100%
- * \param[in,out]   h: Widget handle
- * \param[in]       state: State for expanded mode
- * \retval          1: Widget expandend status set ok
- * \retval          0: Widget expandend status was not set
- * \sa              GUI_WIDGET_IsExpanded
- */
-uint8_t GUI_WIDGET_SetExpanded(GUI_HANDLE_p h, uint8_t state);
-
-/**
- * \brief           Get widget expanded status
- * \param[in,out]   h: Widget handle
- * \retval          1: Widget is expanded
- * \retval          0: Widget is not expanded
- * \sa              GUI_WIDGET_SetExpanded
- */
-uint8_t GUI_WIDGET_IsExpanded(GUI_HANDLE_p h);
-
-/**
- * \brief           Set z-Index for widgets on the same level. This feature applies on widgets which are not dialogs
- * \note            Larger z-index value means greater position on screen. In case of multiple widgets on same z-index level, they are automatically modified for correct display
- * \param[in,out]   h: Widget handle
- * \param[in]       zindex: Z-Index value for widget. Any value can be used
- * \retval          1: New value is different than previous and modification has been done
- * \retval          0: New value was not set
- * \sa              GUI_WIDGET_GetZIndex
- */
-uint8_t GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex);
-
-/**
- * \brief           Get z-index value from widget
- * \param[in,out]   h: Widget handle
- * \retval          z-index value
- * \sa              GUI_WIDGET_SetZIndex
- */
-int32_t GUI_WIDGET_GetZIndex(GUI_HANDLE_p h);
-
-/**
- * \brief           Get widget transparency value
- * \note            Value between 0 and 0xFF is used:
- *                      - 0x00: Widget is hidden
- *                      - 0xFF: Widget is fully visible
- *                      - between: Widget has transparency value
- * \param[in,out]   h: Widget handle
- * \retval          Trasparency value
- * \sa              GUI_WIDGET_SetTransparency
- */
-uint8_t GUI_WIDGET_GetTransparency(GUI_HANDLE_p h);
-
-/**
- * \brief           Set transparency level to widget
- * \param[in,out]   h: Widget handle
- * \param[in]       trans: Transparency level, where 0x00 means hidden and 0xFF means totally visible widget
- * \retval          1: Transparency set ok
- * \retval          0: Transparency was not set
- * \sa              GUI_WIDGET_GetTransparency
- */
-uint8_t GUI_WIDGET_SetTransparency(GUI_HANDLE_p h, uint8_t trans);
-
+ 
 #if defined(GUI_INTERNAL) && !defined(DOXYGEN)
 //Strictly private functions by GUI
 //Widget initialization purpose
