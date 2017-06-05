@@ -30,7 +30,7 @@ uint8_t GUI_BUFFER_Init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr) {
 	if (Buffer == NULL) {									/* Check buffer structure */
 		return 1;
 	}
-	memset(Buffer, 0, sizeof(Buffer));        		        /* Set buffer values to all zeros */
+	memset(Buffer, 0, sizeof(*Buffer));        		        /* Set buffer values to all zeros */
     
 	Buffer->Size = Size;                        			/* Set default values */
 	Buffer->Buffer = BufferPtr;

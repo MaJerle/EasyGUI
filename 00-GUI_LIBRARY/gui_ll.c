@@ -352,11 +352,19 @@ uint8_t GUI_LL_Control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* 
             TM_SDRAM_Init();
             do {
 #if defined(STM32F7xx)
+#if defined(__GNUC__)
+                static uint8_t DTCMMemory1[0x10000];
+#else
                 static uint8_t DTCMMemory1[0x10000] __attribute__((at(0x20000000)));    /* TCM RAM */
+#endif
 #else
                 static uint8_t DTCMMemory1[0x10000] __attribute__((at(0x10000000)));    /* CCM RAM */
 #endif
+#if defined(__GNUC__)
+                static uint8_t SDRAMMemory[SDRAM_HEAP_SIZE] __attribute__((section(".sdram_data"))); /* SDRAM heap memory */
+#else
                 static uint8_t SDRAMMemory[SDRAM_HEAP_SIZE] __attribute__((at(SDRAM_START_ADR + SDRAM_MEMORY_SIZE - SDRAM_HEAP_SIZE))); /* SDRAM heap memory */
+#endif
                 static GUI_MEM_Region_t const regions[] = {
                     {DTCMMemory1, sizeof(DTCMMemory1)},
                     {SDRAMMemory, sizeof(SDRAMMemory)},

@@ -42,6 +42,7 @@ extern "C" {
  */
 #include "gui_utils.h"
 #include "math.h"
+#include "errno.h"
 
 /**
  * \defgroup        GUI_MATH Mathematical

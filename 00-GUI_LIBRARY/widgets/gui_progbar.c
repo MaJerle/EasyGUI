@@ -110,7 +110,7 @@ uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                 GUI_Char buff[5];
                 
                 if (p->Flags & GUI_PROGBAR_FLAG_PERCENT) {
-                    sprintf((char *)buff, "%d%%", ((p->Value - p->Min) * 100) / (p->Max - p->Min));
+                    sprintf((char *)buff, "%lu%%", (unsigned long)(((p->Value - p->Min) * 100) / (p->Max - p->Min)));
                     text = buff;
                 } else if (__GUI_WIDGET_IsFontAndTextSet(h)) {
                     text = __GH(h)->Text;

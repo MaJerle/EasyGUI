@@ -429,7 +429,7 @@ void __GUI_LINKEDLIST_PrintList(GUI_HANDLE_ROOT_t* root) {
         list = &GUI.Root;
     }
     for (h = (GUI_HANDLE_ROOT_t *)list->First; h; h = h->Handle.List.Next) {
-        __GUI_DEBUG("%*d: W: %s; A: 0x%08X; R: %d; D: %d\r\n", depth, depth, h->Handle.Widget->Name, (uint32_t)h, h->Handle.Flags & GUI_FLAG_REDRAW, h->Handle.Flags & GUI_FLAG_REMOVE);
+        __GUI_DEBUG("%*d: W: %s; A: 0x%08X; R: %lu; D: %lu\r\n", depth, depth, h->Handle.Widget->Name, (unsigned int)h, h->Handle.Flags & GUI_FLAG_REDRAW, h->Handle.Flags & GUI_FLAG_REMOVE);
         if (__GUI_WIDGET_AllowChildren(h)) {
             __GUI_LINKEDLIST_PrintList(h);
         }

@@ -56,7 +56,7 @@
 #define GUI_LAYERS                  2
 
 /* Set heap size on sdram memory */
-#define SDRAM_HEAP_SIZE             (SDRAM_MEMORY_SIZE - (LCD_WIDTH * LCD_HEIGHT * LCD_PIXEL_SIZE * GUI_LAYERS))
+#define SDRAM_HEAP_SIZE             0x600000
 
 void _LCD_Init(void);
 

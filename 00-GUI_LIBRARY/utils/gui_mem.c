@@ -255,9 +255,6 @@ void* mem_alloc(size_t size) {
     while ((Curr->Size < size) && (Curr->NextFreeBlock)) {
         Prev = Curr;
         Curr = Curr->NextFreeBlock;
-        if ((uint32_t)Curr < 1000) {
-            __nop();
-        }
     }
     
     /**

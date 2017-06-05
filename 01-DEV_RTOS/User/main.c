@@ -50,7 +50,7 @@ CTS         PA3                 RTS from ST to CTS from GSM
 #include "tm_stm32_usart.h"
 #include "tm_stm32_touch.h"
 #include "tm_stm32_exti.h"
-#include "cmsis_os.h"
+
 #include "tm_stm32_general.h"
 #include "main.h"
 #include "tm_stm32_sdram.h"
@@ -788,7 +788,7 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                             GUI_WIDGET_PutOnFront(tmp);
                         } else {
                             //tmp = GUI_WINDOW_CreateChild(data->win_id, 5, 5, 470, 262, GUI_WINDOW_GetDesktop(), window_callback, NULL);
-                            tmp = GUI_WINDOW_Create(data->win_id, 40, 20, 300, 200, GUI_WINDOW_GetDesktop(), window_callback, NULL);
+                            tmp = GUI_WINDOW_Create(data->win_id, 40, 20, 300, 200, GUI_WINDOW_GetDesktop(), window_callback, 0);
                             GUI_WIDGET_SetExpanded(tmp, 1);
                             GUI_WIDGET_SetText(tmp, data->win_text);
                             GUI_WIDGET_SetZIndex(tmp, diff);
