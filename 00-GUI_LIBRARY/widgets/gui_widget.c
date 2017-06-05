@@ -57,6 +57,9 @@ GUI_WIDGET_Def_t WIDGET_Default;
 /* Removes widget and children widgets */
 static 
 void __RemoveWidget(GUI_HANDLE_p h) {
+    if (!h) {
+        return;
+    }
     /**
      * Remove children widgets first
      */
@@ -99,10 +102,10 @@ void __RemoveWidget(GUI_HANDLE_p h) {
     if (__GH(h)->Timer) {                           /* Check timer memory */
         __GUI_TIMER_Remove(&__GH(h)->Timer);        /* Free timer memory */
     }
-    if (__GH(h)->Colors) {                          /* Free allocate colors if exists */
-        __GUI_MEMFREE(__GH(h)->Colors);
+    if (__GH(h)->Colors) {                          /* Check colors memory */
+        __GUI_MEMFREE(__GH(h)->Colors);             /* Free colors memory */
     }
-    __GUI_LINKEDLIST_WidgetRemove(h);               /* Remove entry from linked list */
+    __GUI_LINKEDLIST_WidgetRemove(h);               /* Remove entry from linked list of parent widget */
     __GUI_MEMFREE(h);                               /* Free memory for widget */
 }
 
