@@ -71,6 +71,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/01-DEV_RTOS/User/FontAwesome_Regular.c</locationURI>
 		</link>
 		<link>
+			<name>GUI FONTS/Roboto_Italic_14.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/01-DEV_RTOS/User/Roboto_Italic_14.c</locationURI>
+		</link>
+		<link>
 			<name>STM32F7/system_stm32f7xx.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/01-DEV_RTOS/User/system_stm32f7xx.c</locationURI>

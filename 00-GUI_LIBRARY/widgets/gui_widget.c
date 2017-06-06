@@ -60,19 +60,6 @@ void __RemoveWidget(GUI_HANDLE_p h) {
     if (!h) {
         return;
     }
-    /**
-     * Remove children widgets first
-     */
-    if (__GUI_WIDGET_AllowChildren(h)) {            /* Check if children widgets are allowed */
-        GUI_HANDLE_p h2;
-        do {
-            /* Always get first widget from list because linked lists are removed later */
-            /* And chain from current to next does not exists anymore */
-            if ((h2 = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)h, NULL)) != 0) {
-                __RemoveWidget(h2);
-            }
-        } while (h2);
-    }
     
     /* Check focus state */
     if (GUI.FocusedWidget == h) {
@@ -108,26 +95,42 @@ void __RemoveWidget(GUI_HANDLE_p h) {
 /* Recursive function to delete all widgets with checking for flag */
 static
 void __RemoveWidgets(GUI_HANDLE_p parent) {
-    GUI_HANDLE_p h;
+    GUI_HANDLE_p h, next;
     
     /**
-     * If parent widget should be deleted
-     * Delete all children widgets first
+     * Scan all widgets in system
      */
-    if (parent && __GUI_WIDGET_GetFlag(parent, GUI_FLAG_REMOVE)) {
-        __RemoveWidget(parent);                     /* Remove widgets and all children */
-        return;
-    }
-
-    /**
-     * TODO: Check detailed for memory leak possibility
-     */
-    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, NULL); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
-        if (__GUI_WIDGET_AllowChildren(h)) {        /* Check if widget supports children widgets */
-            __RemoveWidgets(h);                     /* Run recursive function check */
-        } else if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_REMOVE)) {
-            __RemoveWidget(h);                      /* Remove widget directly */
+    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, NULL); h; ) {        
+        if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_REMOVE)) { /* Widget should be deleted */
+            next = __GUI_LINKEDLIST_WidgetGetNext(NULL, h); /* Get next widget of current */
+            if (__GUI_WIDGET_AllowChildren(h)) {    /* Children widgets are supported */
+                GUI_HANDLE_p tmp;
+                
+                /* Set remove flag to all widgets first... */
+                for (tmp = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)h, NULL); tmp; 
+                        tmp = __GUI_LINKEDLIST_WidgetGetNext(NULL, tmp)) {
+                    __GUI_WIDGET_SetFlag(tmp, GUI_FLAG_REMOVE); /* Set remove bit to all children elements */
+                }
+                
+                /* ...process with children delete */
+                __RemoveWidgets(h);                 /* Remove children widgets directly */
+            }
+            
+            /**
+             * Removing widget will also remove linked list chain
+             * Therefore we have to save previous widget so we know next one
+             */
+            __RemoveWidget(h);                      /* Remove widget itself */
+            
+            /**
+             * Move widget pointer to next widget of already deleted and continue checking
+             */
+            h = next;                               /* Set current pointer to next one */
+            continue;                               /* Continue to prevent further execution */
+        } else if (__GUI_WIDGET_AllowChildren(h)) { /* Children widgets are supported */
+            __RemoveWidgets(h);                     /* Check children widgets if anything to remove */
         }
+        h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h);    /* Get next widget of current */
     }
 }
 

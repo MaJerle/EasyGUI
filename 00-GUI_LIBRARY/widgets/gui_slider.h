@@ -51,7 +51,7 @@ extern "C" {
  *
  * \image html image_widget_slider.png Slider widget in different states. On top is passive state (touch not active) and bottom is when touch is active
  *
- * Example code for slider widget
+ * Example code of image above:
  * \code{c}
 //Create basic slider
 handle = GUI_SLIDER_Create(0, 10, 10, 300, 50, 0, 0, 0);

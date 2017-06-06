@@ -1432,21 +1432,6 @@
           <GroupName>GUI FONTS</GroupName>
           <Files>
             <File>
-              <FileName>Comic_Sans_MS_Regular.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\User\Comic_Sans_MS_Regular.c</FilePath>
-            </File>
-            <File>
-              <FileName>Calibri_Bold.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\User\Calibri_Bold.c</FilePath>
-            </File>
-            <File>
-              <FileName>Arial_Bold_AA.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\User\Arial_Bold_AA.c</FilePath>
-            </File>
-            <File>
               <FileName>FontAwesome_Regular.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\FontAwesome_Regular.c</FilePath>
@@ -1460,6 +1445,16 @@
               <FileName>Arial_Narrow_Italic_AA.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\Arial_Narrow_Italic_AA.c</FilePath>
+            </File>
+            <File>
+              <FileName>Roboto_Italic_14.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Roboto_Italic_14.c</FilePath>
+            </File>
+            <File>
+              <FileName>Comic_Sans_MS_Regular.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Comic_Sans_MS_Regular.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2992,21 +2987,6 @@
           <GroupName>GUI FONTS</GroupName>
           <Files>
             <File>
-              <FileName>Comic_Sans_MS_Regular.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\User\Comic_Sans_MS_Regular.c</FilePath>
-            </File>
-            <File>
-              <FileName>Calibri_Bold.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\User\Calibri_Bold.c</FilePath>
-            </File>
-            <File>
-              <FileName>Arial_Bold_AA.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\User\Arial_Bold_AA.c</FilePath>
-            </File>
-            <File>
               <FileName>FontAwesome_Regular.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\FontAwesome_Regular.c</FilePath>
@@ -3020,6 +3000,16 @@
               <FileName>Arial_Narrow_Italic_AA.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\Arial_Narrow_Italic_AA.c</FilePath>
+            </File>
+            <File>
+              <FileName>Roboto_Italic_14.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Roboto_Italic_14.c</FilePath>
+            </File>
+            <File>
+              <FileName>Comic_Sans_MS_Regular.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Comic_Sans_MS_Regular.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4552,21 +4542,6 @@
           <GroupName>GUI FONTS</GroupName>
           <Files>
             <File>
-              <FileName>Comic_Sans_MS_Regular.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\User\Comic_Sans_MS_Regular.c</FilePath>
-            </File>
-            <File>
-              <FileName>Calibri_Bold.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\User\Calibri_Bold.c</FilePath>
-            </File>
-            <File>
-              <FileName>Arial_Bold_AA.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\User\Arial_Bold_AA.c</FilePath>
-            </File>
-            <File>
               <FileName>FontAwesome_Regular.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\FontAwesome_Regular.c</FilePath>
@@ -4580,6 +4555,16 @@
               <FileName>Arial_Narrow_Italic_AA.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\Arial_Narrow_Italic_AA.c</FilePath>
+            </File>
+            <File>
+              <FileName>Roboto_Italic_14.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Roboto_Italic_14.c</FilePath>
+            </File>
+            <File>
+              <FileName>Comic_Sans_MS_Regular.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Comic_Sans_MS_Regular.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -6150,21 +6135,6 @@
           <GroupName>GUI FONTS</GroupName>
           <Files>
             <File>
-              <FileName>Comic_Sans_MS_Regular.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\User\Comic_Sans_MS_Regular.c</FilePath>
-            </File>
-            <File>
-              <FileName>Calibri_Bold.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\User\Calibri_Bold.c</FilePath>
-            </File>
-            <File>
-              <FileName>Arial_Bold_AA.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\User\Arial_Bold_AA.c</FilePath>
-            </File>
-            <File>
               <FileName>FontAwesome_Regular.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\FontAwesome_Regular.c</FilePath>
@@ -6178,6 +6148,16 @@
               <FileName>Arial_Narrow_Italic_AA.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\Arial_Narrow_Italic_AA.c</FilePath>
+            </File>
+            <File>
+              <FileName>Roboto_Italic_14.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Roboto_Italic_14.c</FilePath>
+            </File>
+            <File>
+              <FileName>Comic_Sans_MS_Regular.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\Comic_Sans_MS_Regular.c</FilePath>
             </File>
           </Files>
         </Group>

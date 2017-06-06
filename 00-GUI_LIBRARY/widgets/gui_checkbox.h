@@ -51,23 +51,23 @@ extern "C" {
  *
  * \image html image_widget_checkbox.png Checkbox widgets in different states
  *
- * Sample code to create similar shape as on image above:
+ * Example code of image above:
  * \code{c}
-//First checkboc widget
+//First checkbox widget
 handle = GUI_CHECKBOX_Create(0, 10, 10, 400, 40, 0, 0, 0);
 GUI_WIDGET_SetText(handle, _GT("Check box default"));
 
-//Second checkboc widget
+//Second checkbox widget
 handle = GUI_CHECKBOX_Create(0, 10, 50, 400, 40, 0, 0, 0);
 GUI_WIDGET_SetText(handle, _GT("Check box checked"));
 GUI_CHECKBOX_SetChecked(handle, 1);
 
-//Third checkboc widget
+//Third checkbox widget
 handle = GUI_CHECKBOX_Create(0, 10, 90, 400, 40, 0, 0, 0);
 GUI_WIDGET_SetText(handle, _GT("Check box disabled"));
 GUI_CHECKBOX_SetDisabled(handle, 1);
 
-//Forth checkboc widget
+//Forth checkbox widget
 handle = GUI_CHECKBOX_Create(0, 10, 130, 400, 40, 0, 0, 0);
 GUI_WIDGET_SetText(handle, _GT("Check box checked disabled"));
 GUI_CHECKBOX_SetChecked(handle, 1);

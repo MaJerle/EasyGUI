@@ -69,7 +69,7 @@ extern "C" {
  *
  * \par Children first widget
  *
- * Children links are supported on widgets which implement \ref GUI_WIDGET_ROOT_t structure to handle children widgets (such as windows).
+ * Children links are supported on widgets which implement \ref GUI_HANDLE_ROOT_t structure to handle children widgets (such as windows).
  * It hold link to less important widget (drawed first, less visible in some cases)
  *
  * \par Children last widget
@@ -216,7 +216,6 @@ GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteX(GUI_HANDLE_p h);
  * \note            This function returns inner Y position in absolute form.
  *                     Imagine parent absolute Y is 10, and top padding is 2. Function returns 12.
  *
- 
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle for which parent should be calculated
  * \retval          Parent absolute inner Y position
@@ -240,7 +239,8 @@ GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h);
  * \param[in,out]   h: Widget handle
  * \retval          Relative Y according to parent widget
  * \hideinitializer
- */#define __GUI_WIDGET_GetRelativeY(h)    (__GUI_WIDGET_IsExpanded(h) ? 0 : \
+ */
+#define __GUI_WIDGET_GetRelativeY(h)    (__GUI_WIDGET_IsExpanded(h) ? 0 : \
                                             (__GUI_WIDGET_GetFlag(h, GUI_FLAG_YPOS_PERCENT) ? (GUI_iDim_t)((float)(__GH(h)->Y * __GUI_WIDGET_GetParentInnerHeight(h)) / 100.0f) : __GH(h)->Y) \
                                         )
 

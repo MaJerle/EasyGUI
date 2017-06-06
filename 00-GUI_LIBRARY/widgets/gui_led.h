@@ -43,9 +43,33 @@ extern "C" {
 #include "gui_widget.h"
 
 /**
- * \defgroup        GUI_LED LED
- * \brief           Simple LED to indicate active or disabled status
+ * \defgroup        GUI_LED Led
+ * \brief           Simple LED
  * \{
+ *
+ * Led widget is very simple widget used for indication purposes.
+ * It can only have <b>ON</b> or <b>OFF</b> status.
+ *
+ * Widget is supported in different shapes, defined by \ref GUI_LED_TYPE_t enumeration.
+ *
+ * \image html image_widget_led.png LED widgets from left: 1. circle ON, circle OFF, rectangle ON, rectangle OFF
+ *
+ * Example code of image above:
+ * \code{c}
+handle = GUI_LED_Create(0, 10, 80, 30, 30, 0, 0, 0);
+GUI_LED_SetType(handle, GUI_LED_TYPE_CIRCLE);
+GUI_LED_Set(handle, 1);
+
+handle = GUI_LED_Create(0, 50, 80, 30, 30, 0, 0, 0);
+GUI_LED_SetType(handle, GUI_LED_TYPE_CIRCLE);
+
+handle = GUI_LED_Create(0, 90, 80, 30, 30, 0, 0, 0);
+GUI_LED_SetType(handle, GUI_LED_TYPE_RECT);
+GUI_LED_Set(handle, 1);
+
+handle = GUI_LED_Create(0, 130, 80, 30, 30, 0, 0, 0);
+GUI_LED_SetType(handle, GUI_LED_TYPE_RECT);
+\endcode
  */
 
 /**

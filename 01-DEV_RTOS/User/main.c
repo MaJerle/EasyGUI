@@ -108,6 +108,7 @@ GUI_HANDLE_p dialog1;
 #define ID_WIN_SLIDER           (ID_BASE_WIN + 0x0E)
 #define ID_WIN_ZINDEX           (ID_BASE_WIN + 0x0F)
 #define ID_WIN_TRANSP           (ID_BASE_WIN + 0x10)
+#define ID_WIN_WINDOW           (ID_BASE_WIN + 0x11)
 
 /* List of base buttons IDs */
 #define ID_BTN_WIN_BTN          (ID_BASE_BTN + 0x01)
@@ -126,6 +127,7 @@ GUI_HANDLE_p dialog1;
 #define ID_BTN_WIN_SLIDER       (ID_BASE_BTN + 0x0E)
 #define ID_BTN_WIN_ZINDEX       (ID_BASE_BTN + 0x0F)
 #define ID_BTN_WIN_TRANSP       (ID_BASE_BTN + 0x10)
+#define ID_BTN_WIN_WINDOW       (ID_BASE_BTN + 0x11)
 
 #define ID_BTN_DIALOG_CONFIRM   (ID_BASE_BTN + 0x20)
 #define ID_BTN_DIALOG_CANCEL    (ID_BASE_BTN + 0x21)
@@ -181,16 +183,15 @@ bulk_init_t buttons[] = {
     {ID_BTN_WIN_SLIDER,     _GT("Slider"),       {ID_WIN_SLIDER, _GT("Slider")}},
     {ID_BTN_WIN_ZINDEX,     _GT("z-index"),      {ID_WIN_ZINDEX, _GT("z-index test page")}},
     {ID_BTN_WIN_TRANSP,     _GT("Transparency"), {ID_WIN_TRANSP, _GT("Transparency presentation")}},
+    {ID_BTN_WIN_WINDOW,     _GT("Window"),       {ID_WIN_WINDOW, _GT("Window")}},
 };
 
 char str[100];
 
-extern GUI_Const GUI_FONT_t GUI_Font_Comic_Sans_MS_Regular_22;
-extern GUI_Const GUI_FONT_t GUI_Font_Calibri_Bold_8;
-extern GUI_Const GUI_FONT_t GUI_Font_Arial_Bold_18;
+extern const GUI_FONT_t GUI_Font_Comic_Sans_MS_Regular_22;
 extern GUI_Const GUI_FONT_t GUI_Font_FontAwesome_Regular_30;
-extern GUI_Const GUI_FONT_t GUI_Font_Arial_Narrow_Italic_22;
 extern GUI_Const GUI_FONT_t GUI_Font_Arial_Narrow_Italic_21_AA;
+extern const GUI_FONT_t GUI_Font_Roboto_Italic_14;
 
 uint32_t time;
 
@@ -275,7 +276,8 @@ int main(void) {
     GUI_Init();
     
     GUI_WIDGET_SetFontDefault(&GUI_Font_Arial_Narrow_Italic_21_AA); /* Set default font for widgets */
-    //GUI_WIDGET_SetFontDefault(&GUI_Font_Comic_Sans_MS_Regular_22); /* Set default font for widgets */
+    GUI_WIDGET_SetFontDefault(&GUI_Font_Comic_Sans_MS_Regular_22); /* Set default font for widgets */
+    //GUI_WIDGET_SetFontDefault(&GUI_Font_Roboto_Italic_14); /* Set default font for widgets */
     
     win1 = GUI_WINDOW_GetDesktop();                         /* Get desktop window */
     
@@ -383,12 +385,24 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
         switch (GUI_WIDGET_GetId(h)) {  /* Button callbacks */
             case ID_WIN_BTN: {
                 handle = GUI_BUTTON_Create(0, 0, 0, 100, 40, h, button_callback, 0);
-                GUI_WIDGET_SetWidthPercent(handle, 50);
                 GUI_WIDGET_SetText(handle, _GT("Button 1"));
+                GUI_WIDGET_SetPositionPercent(handle, 0, 0);
+                GUI_WIDGET_SetSizePercent(handle, 50, 50);
+                
                 handle = GUI_BUTTON_Create(0, 10, 60, 100, 40, h, button_callback, 0);
                 GUI_WIDGET_SetText(handle, _GT("Button 2"));
+                GUI_WIDGET_SetPositionPercent(handle, 50, 0);
+                GUI_WIDGET_SetSizePercent(handle, 50, 50);
+                
+                handle = GUI_BUTTON_Create(0, 0, 0, 100, 40, h, button_callback, 0);
+                GUI_WIDGET_SetText(handle, _GT("Button 3"));
+                GUI_WIDGET_SetPositionPercent(handle, 0, 50);
+                GUI_WIDGET_SetSizePercent(handle, 50, 50);
+                
+                handle = GUI_BUTTON_Create(0, 10, 60, 100, 30, h, button_callback, 0);
+                GUI_WIDGET_SetText(handle, _GT("Button 4"));
                 GUI_WIDGET_SetPositionPercent(handle, 50, 50);
-                GUI_WIDGET_SetWidthPercent(handle, 50);
+                GUI_WIDGET_SetSizePercent(handle, 50, 50);
                 break;
             }
             case ID_WIN_CHECKBOX: {     /* Check box */
@@ -448,6 +462,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 GUI_LISTVIEW_ROW_p row;
                 handle = GUI_LISTVIEW_Create(0, 10, 10, 100, 40, h, listview_callback, 0);
                 GUI_WIDGET_SetExpanded(handle, 1);
+                GUI_WIDGET_SetFont(handle, &GUI_Font_Roboto_Italic_14);
                 
                 GUI_LISTVIEW_AddColumn(handle, _GT("Name"), 120);
                 GUI_LISTVIEW_AddColumn(handle, _GT("LastName"), 150);
@@ -513,67 +528,70 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
             }
             case ID_WIN_PROGBAR: {      /* Progress bar */
                 handle = GUI_PROGBAR_Create(2, 10, 10, 400, 40, h, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Progbar with custom text"));
+                GUI_WIDGET_SetText(handle, _GT("Progress bar with custom text"));
                 
-                handle = GUI_PROGBAR_Create(2, 10, 100, 400, 40, h, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Progbar with percentage"));
+                handle = GUI_PROGBAR_Create(2, 10, 60, 400, 40, h, 0, 0);
                 GUI_PROGBAR_EnablePercentages(handle);
+                GUI_PROGBAR_SetMin(handle, 20);
+                GUI_PROGBAR_SetMax(handle, 30);
+                GUI_PROGBAR_SetValue(handle, 22);
                 break;
             }
             case ID_WIN_LED: {          /* Leds */
-                handle = GUI_LED_Create(ID_LED_1, 10, 10, 20, 20, h, led_callback, 0);
-                GUI_LED_SetType(handle, GUI_LED_TYPE_CIRCLE);
-                GUI_LED_Set(handle, 1);
-                handle = GUI_LED_Create(ID_LED_2, 10, 40, 20, 20, h, led_callback, 0);
-                GUI_LED_SetType(handle, GUI_LED_TYPE_CIRCLE);
-                
-                handle = GUI_LED_Create(ID_LED_3, 10, 70, 20, 20, h, led_callback, 0);
-                GUI_LED_SetType(handle, GUI_LED_TYPE_RECT);
-                GUI_LED_Set(handle, 1);
-                handle = GUI_LED_Create(ID_LED_4, 10, 100, 20, 20, h, led_callback, 0);
-                GUI_LED_SetType(handle, GUI_LED_TYPE_RECT);
-                
                 handle = GUI_TEXTVIEW_Create(0, 40, 10, 400, 1000, h, 0, 0);
-                GUI_WIDGET_SetFont(handle, &GUI_Font_Arial_Bold_18);
+                GUI_WIDGET_SetFont(handle, &GUI_Font_Roboto_Italic_14);
                 GUI_WIDGET_SetText(handle, _GT("\"LED\" are widgets used to indicate some status or any other situation. Press blue button on discovery board to see LED in happen\r\n"));
+                
+                handle = GUI_LED_Create(ID_LED_1, 10, 80, 30, 30, 0, led_callback, 0);
+                GUI_LED_SetType(handle, GUI_LED_TYPE_CIRCLE);
+                GUI_LED_Set(handle, 1);
+                
+                handle = GUI_LED_Create(ID_LED_2, 50, 80, 30, 30, 0, led_callback, 0);
+                GUI_LED_SetType(handle, GUI_LED_TYPE_CIRCLE);
+                
+                handle = GUI_LED_Create(ID_LED_3, 90, 80, 30, 30, 0, led_callback, 0);
+                GUI_LED_SetType(handle, GUI_LED_TYPE_RECT);
+                GUI_LED_Set(handle, 1);
+                handle = GUI_LED_Create(ID_LED_4, 130, 80, 30, 30, 0, led_callback, 0);
+                GUI_LED_SetType(handle, GUI_LED_TYPE_RECT);
                 break;
             }
             case ID_WIN_TEXTVIEW: {     /* Text view */
-                handle = GUI_TEXTVIEW_Create(ID_TEXTVIEW_1, 10, 10, 300, 180, h, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Text view with automatic new line detector and support for different aligns.\r\n\r\nHowever, I can also manually jump to new line! Just like Word works ;)"));
-                GUI_WIDGET_SetExpanded(handle, 1);
-                GUI_WIDGET_SetZIndex(handle, -1);
-                
-                handle = GUI_RADIO_Create(0, 10, 200, 150, 30, h, radio_callback, 0);
-                GUI_RADIO_SetGroup(handle, RADIO_GROUP_HALIGN);
-                GUI_WIDGET_SetText(handle, _GT("Align left"));
-                GUI_RADIO_SetValue(handle, GUI_TEXTVIEW_HALIGN_LEFT);
-                
-                handle = GUI_RADIO_Create(0, 120, 200, 150, 30, h, radio_callback, 0);
-                GUI_RADIO_SetGroup(handle, RADIO_GROUP_HALIGN);
-                GUI_WIDGET_SetText(handle, _GT("Align center"));
-                GUI_RADIO_SetValue(handle, GUI_TEXTVIEW_HALIGN_CENTER);
-                
-                handle = GUI_RADIO_Create(0, 260, 200, 150, 30, h, radio_callback, 0);
-                GUI_RADIO_SetGroup(handle, RADIO_GROUP_HALIGN);
-                GUI_WIDGET_SetText(handle, _GT("Align right"));
-                GUI_RADIO_SetValue(handle, GUI_TEXTVIEW_HALIGN_RIGHT);
-                
-                
-                handle = GUI_RADIO_Create(0, 320, 10, 150, 30, h, radio_callback, 0);
-                GUI_RADIO_SetGroup(handle, RADIO_GROUP_VALIGN);
-                GUI_WIDGET_SetText(handle, _GT("Align top"));
-                GUI_RADIO_SetValue(handle, GUI_TEXTVIEW_VALIGN_TOP);
-                
-                handle = GUI_RADIO_Create(0, 320, 50, 150, 30, h, radio_callback, 0);
-                GUI_RADIO_SetGroup(handle, RADIO_GROUP_VALIGN);
-                GUI_WIDGET_SetText(handle, _GT("Align center"));
-                GUI_RADIO_SetValue(handle, GUI_TEXTVIEW_VALIGN_CENTER);
-                
-                handle = GUI_RADIO_Create(0, 320, 90, 150, 30, h, radio_callback, 0);
-                GUI_RADIO_SetGroup(handle, RADIO_GROUP_VALIGN);
-                GUI_WIDGET_SetText(handle, _GT("Align bottom"));
-                GUI_RADIO_SetValue(handle, GUI_TEXTVIEW_VALIGN_BOTTOM);
+                size_t i = 0;
+                static const GUI_Char* texts[] = {
+                    _GT("Text view with top left alignment on screen"),
+                    _GT("Text view with top center alignment on screen"),
+                    _GT("Text view with top right alignment on screen"),
+                    _GT("Text view with middle left alignment on screen"),
+                    _GT("Text view with middle center alignment on screen"),
+                    _GT("Text view with middle right alignment on screen"),
+                    _GT("Text view with bottom left alignment on screen"),
+                    _GT("Text view with bottom center alignment on screen"),
+                    _GT("Text view with bottom right alignment on screen"),
+                };
+                for (i = 0; i < 9; i++) {
+                    handle = GUI_TEXTVIEW_Create(0, 1, 1, 1, 1, 0, 0, 0);
+                    GUI_WIDGET_SetSizePercent(handle, 30, 30);
+                    GUI_WIDGET_SetPositionPercent(handle, 3 + (i % 3) * 33, 3 + (i / 3) * 33);
+                    GUI_WIDGET_SetText(handle, texts[i]);
+                    GUI_WIDGET_SetFont(handle, &GUI_Font_Roboto_Italic_14);
+                    switch (i % 4) {
+                        case 0: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_WHITE); break;
+                        case 1: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_YELLOW); break;
+                        case 2: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_GRAY); break;
+                        case 3: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_LIGHTGREEN); break;
+                    }
+                    switch (i % 3) {
+                        case 0: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_LEFT); break;
+                        case 1: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_CENTER); break;
+                        case 2: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_RIGHT); break;
+                    }
+                    switch (i / 3) {
+                        case 0: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_TOP); break;
+                        case 1: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_CENTER); break;
+                        case 2: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_BOTTOM); break;
+                    }
+                }
                 break;
             }
             case ID_WIN_DROPDOWN: {     /* Dropdown */
@@ -759,7 +777,8 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 case ID_BTN_WIN_TEXTVIEW:
                 case ID_BTN_WIN_SLIDER:
                 case ID_BTN_WIN_ZINDEX:
-                case ID_BTN_WIN_TRANSP: {
+                case ID_BTN_WIN_TRANSP: 
+                case ID_BTN_WIN_WINDOW: {
                     btn_user_data_t* data = GUI_WIDGET_GetUserData(h);
                     uint32_t diff = id - ID_BTN_WIN_BTN;
                     if (data) {

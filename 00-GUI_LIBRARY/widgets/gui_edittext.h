@@ -46,6 +46,18 @@ extern "C" {
  * \defgroup        GUI_EDITTEXT Edit text
  * \brief           Single-line edit text widget
  * \{
+ *
+ * Edit text widget can receive keyboard input in unicode format and display text in single line.
+ *
+ * \image html image_widget_edittext.png Text view in focused state ready to accept keyboard entries (unicode)
+ *
+ * Example code of image above:
+ * \code{c}                
+//Create widget and allocate memory for text edit process
+handle = GUI_EDITTEXT_Create(1, 10, 10, 400, 40, h, 0, 0);
+GUI_WIDGET_AllocTextMemory(handle, 255);
+GUI_WIDGET_SetText(handle, _GT("Edit text"));
+\endcode
  */
 
 /**
