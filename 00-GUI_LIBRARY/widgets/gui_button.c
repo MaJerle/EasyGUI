@@ -86,11 +86,11 @@ uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
             width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
             height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
             
-            if (__GH(h)->Flags & GUI_FLAG_3D) {
+            if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_3D)) {
                 c1 = __GUI_WIDGET_GetColor(h, GUI_BUTTON_COLOR_BG);
                 c2 = __GUI_WIDGET_GetColor(h, GUI_BUTTON_COLOR_FG);
             } else {
-                if (__GH(h)->Flags & GUI_FLAG_ACTIVE) { /* Set colors for button */
+                if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_ACTIVE)) { /* Set colors for button */
                     c1 = __GUI_WIDGET_GetColor(h, GUI_BUTTON_COLOR_FG);
                     c2 = __GUI_WIDGET_GetColor(h, GUI_BUTTON_COLOR_BG);
                 } else {
@@ -100,9 +100,9 @@ uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
             }
             
             /* Draw actual button structure */
-            if (__GH(h)->Flags & GUI_FLAG_3D) {
+            if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_3D)) {
                 GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, c1);
-                GUI_DRAW_Rectangle3D(disp, x, y, width, height, __GH(h)->Flags & GUI_FLAG_ACTIVE ? GUI_DRAW_3D_State_Lowered : GUI_DRAW_3D_State_Raised);
+                GUI_DRAW_Rectangle3D(disp, x, y, width, height, __GUI_WIDGET_GetFlag(h, GUI_FLAG_ACTIVE) ? GUI_DRAW_3D_State_Lowered : GUI_DRAW_3D_State_Raised);
             } else {
                 GUI_DRAW_FilledRoundedRectangle(disp, x, y, width, height, b->BorderRadius, c1);
                 GUI_DRAW_RoundedRectangle(disp, x, y, width, height, b->BorderRadius, c2);

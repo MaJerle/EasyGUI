@@ -94,7 +94,7 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
             hi = __GUI_WIDGET_GetHeight(h);
             
             GUI_DRAW_FilledRectangle(disp, x, y, wi, hi, __GUI_WIDGET_GetColor(h, GUI_WINDOW_COLOR_BG));
-            if (__GH(h)->Flags & GUI_FLAG_CHILD) {
+            if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_CHILD)) {
                 GUI_iDim_t tX, tY, tW;
                 
                 GUI_DRAW_Rectangle3D(disp, x, y, wi, hi, GUI_DRAW_3D_State_Lowered);
@@ -172,7 +172,7 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
         case GUI_WC_TouchStart: {
             __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param; /* Get touch parameters */
 
-            if (ts->TS.Count == 1 && __GH(h)->Flags & GUI_FLAG_CHILD) { /* For children widgets only on single touch */
+            if (ts->TS.Count == 1 && __GUI_WIDGET_GetFlag(h, GUI_FLAG_CHILD)) { /* For children widgets only on single touch */
                 GUI_iDim_t pt, wi;
                 pt = __GUI_WIDGET_GetPaddingTop(h); /* Get top padding */
                 wi = __GUI_WIDGET_GetWidth(h);      /* Get widget width */
@@ -289,7 +289,7 @@ GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
     ptr = (GUI_WINDOW_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
     if (ptr) {
         /* Control setup */
-        __GH(ptr)->Flags |= GUI_FLAG_CHILD;         /* This window is child window */
+        __GUI_WIDGET_SetFlag(ptr, GUI_FLAG_CHILD);  /* This window is child window */
         
         __GUI_WIDGET_SetPaddingTop(ptr, 30);
         __GUI_WIDGET_SetPaddingRight(ptr, 2);

@@ -366,7 +366,7 @@ GUI_Byte __GUI_LINKEDLIST_WidgetMoveDown(GUI_HANDLE_p h);
 void LoopWidgets(GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;         //Value holding widgets of parent
 
-    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, 0); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
+    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, NULL); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
         //Loop through each widget of parent
     }
 }

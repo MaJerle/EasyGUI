@@ -19,11 +19,5 @@ GUI/Input \
 GUI/Utils \
 GUI/Widgets \
 GUI \
-GUI\ FONTS \
-STM32F7/F769_DISCOVERY \
-STM32F7/HAL \
-STM32F7/Startup \
-STM32F7 \
-TM \
 User \
 

@@ -129,6 +129,7 @@ extern "C" {
  */
 #define __GUI_MEMFREE(p)            do {            \
     __GUI_MEM_Free(p);                              \
+    __GUI_DEBUG("Free: 0x%08X\r\n", (uint32_t)p);   \
     (p) = NULL;                                     \
 } while (0);
 

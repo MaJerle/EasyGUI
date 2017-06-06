@@ -1031,8 +1031,8 @@ typedef struct GUI_HANDLE {
     uint32_t Flags;                         /*!< All possible flags for specific widget */
     GUI_Const GUI_FONT_t* Font;             /*!< Font used for widget drawings */
     GUI_Char* Text;                         /*!< Pointer to widget text if exists */
-    uint32_t TextMemSize;                   /*!< Number of bytes for text when dynamically allocated */
-    uint32_t TextCursor;                    /*!< Text cursor position */
+    size_t TextMemSize;                     /*!< Number of bytes for text when dynamically allocated */
+    size_t TextCursor;                      /*!< Text cursor position */
     GUI_TIMER_t* Timer;                     /*!< Software timer pointer */
     GUI_Color_t* Colors;                    /*!< Pointer to allocated color memory when custom colors are used */
     void* UserData;                         /*!< Pointer to optional user data */

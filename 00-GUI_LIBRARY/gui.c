@@ -58,17 +58,17 @@ uint32_t __GetNumberOfPendingWidgets(GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;
     uint32_t cnt = 0;
     
-    if (parent && __GH(parent)->Flags & GUI_FLAG_REDRAW) {  /* Check for specific widget */
+    if (parent && __GUI_WIDGET_GetFlag(parent, GUI_FLAG_REDRAW)) {  /* Check for specific widget */
         return 1;                                   /* We have object to redraw */
     }
-    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, 0); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
+    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, NULL); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
         if (!__GUI_WIDGET_IsVisible(h)) {           /* Check if visible */
             continue;
         }
         if (__GUI_WIDGET_AllowChildren(h)) {        /* If this widget has children elements */
             cnt += __GetNumberOfPendingWidgets(h);  /* Redraw this widget and all its children if required */
         }
-        if (__GH(h)->Flags & GUI_FLAG_REDRAW) {     /* Check if we need redraw */
+        if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_REDRAW)) { /* Check if we need redraw */
             cnt++;                                  /* Increase number of elements to redraw */
         }
     }
@@ -118,19 +118,19 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
     static uint32_t level = 0;
 
     /* Go through all elements of parent */
-    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, 0); h; 
-            h = __GUI_LINKEDLIST_WidgetGetNext(0, h)) {
+    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, NULL); h; 
+            h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
         if (!__GUI_WIDGET_IsVisible(h)) {           /* Check if visible */
-            __GH(h)->Flags &= ~GUI_FLAG_REDRAW;     /* Clear flag to be sure */
+            __GUI_WIDGET_ClrFlag(h, GUI_FLAG_REDRAW);   /* Clear flag to be sure */
             continue;                               /* Ignore hidden elements */
         }
         if (__GUI_WIDGET_IsInsideClippingRegion(h)) {   /* If draw function is set and drawing is inside clipping region */
             /* Draw main widget if required */
-            if (__GH(h)->Flags & GUI_FLAG_REDRAW) { /* Check if redraw required */
+            if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_REDRAW)) { /* Check if redraw required */
                 GUI_Layer_t* layerPrev = GUI.LCD.DrawingLayer;  /* Save drawing layer */
                 uint8_t transparent = 0;
                 
-                __GH(h)->Flags &= ~GUI_FLAG_REDRAW; /* Clear flag for drawing on widget */
+                __GUI_WIDGET_ClrFlag(h, GUI_FLAG_REDRAW);   /* Clear flag for drawing on widget */
                 
                 /**
                  * Prepare clipping region for this widget drawing
@@ -171,9 +171,9 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
                     GUI_HANDLE_p tmp;
                     
                     /* Set drawing flag to all widgets  first... */
-                    for (tmp = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)h, 0); tmp; 
-                            tmp = __GUI_LINKEDLIST_WidgetGetNext(0, tmp)) {
-                        __GH(tmp)->Flags |= GUI_FLAG_REDRAW;    /* Set redraw bit to all children elements */
+                    for (tmp = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)h, NULL); tmp; 
+                            tmp = __GUI_LINKEDLIST_WidgetGetNext(NULL, tmp)) {
+                        __GUI_WIDGET_SetFlag(tmp, GUI_FLAG_REDRAW); /* Set redraw bit to all children elements */
                     }
                     /* ...now call function for redrawing process */
                     level++;
@@ -523,9 +523,9 @@ int32_t GUI_Process(void) {
                     if (GUI.Touch.TS.Count == GUI.TouchOld.TS.Count) {
                         uint8_t result = __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchMove, &GUI.Touch, &tStat); /* The same amount of touch events currently */
                         if (result) {               /* Check if touch move processed */
-                            __GH(GUI.ActiveWidget)->Flags |= GUI_FLAG_TOUCH_MOVE;   /* Touch move has been processed */
+                            __GUI_WIDGET_SetFlag(GUI.ActiveWidget, GUI_FLAG_TOUCH_MOVE);    /* Touch move has been processed */
                         } else {
-                            __GH(GUI.ActiveWidget)->Flags &= ~GUI_FLAG_TOUCH_MOVE;  /* Touch move has not been processed */
+                            __GUI_WIDGET_ClrFlag(GUI.ActiveWidget, GUI_FLAG_TOUCH_MOVE);    /* Touch move has not been processed */
                         }
                     } else {
                         __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchStart, &GUI.Touch, &tStat); /* New amount of touch elements happened */
@@ -590,8 +590,8 @@ int32_t GUI_Process(void) {
                         h = 0;
                     }
                     if (!h) {                       /* There is no next widget */
-                        for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)__GH(GUI.FocusedWidget)->Parent, 0); 
-                            h; h = __GUI_LINKEDLIST_WidgetGetNext(0, h)) {
+                        for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)__GH(GUI.FocusedWidget)->Parent, NULL); 
+                            h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
                             if (__GUI_WIDGET_IsVisible(h)) {    /* Check if widget is visible */
                                 break;
                             }

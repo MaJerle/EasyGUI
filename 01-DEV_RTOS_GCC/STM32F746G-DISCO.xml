@@ -3,8 +3,8 @@
   <board id="stm32f746g-disco">
     <name>STM32F746G-DISCO</name>
     <mcuId>stm32f746nghx</mcuId>
-    <dbgIF>JTAG</dbgIF>
     <dbgIF>SWD</dbgIF>
-    <dbgDEV>ST-LinkV2-1</dbgDEV>
+    <dbgIF>JTAG</dbgIF>
+    <dbgDEV>ST-Link</dbgDEV>
   </board>
 </targetDefinitions>

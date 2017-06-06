@@ -156,7 +156,6 @@ extern "C" {
  * \}
  */
 
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
 /**
  * \defgroup        WIDGET_Private Private functions
  * \brief           Private widget functions and enumerations.
@@ -620,7 +619,7 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
  * \retval          None
  * \hideinitializer
  */
-#define __GUI_WIDGET_SetPaddingTopBottom(h, x)  do {    \
+#define __GUI_WIDGET_SetPaddingTopBottom(h, x)      do {\
     __GUI_WIDGET_SetPaddingTop(h, x);                   \
     __GUI_WIDGET_SetPaddingBottom(h, x);                \
 } while (0)
@@ -636,7 +635,7 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
  * \retval          None
  * \hideinitializer
  */
-#define __GUI_WIDGET_SetPaddingLeftRight(h, x)  do {    \
+#define __GUI_WIDGET_SetPaddingLeftRight(h, x)      do {\
     __GUI_WIDGET_SetPaddingLeft(h, x);                  \
     __GUI_WIDGET_SetPaddingRight(h, x);                 \
 } while (0)
@@ -652,7 +651,7 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
  * \retval          None
  * \hideinitializer
  */
-#define __GUI_WIDGET_SetPadding(h, x)       do {        \
+#define __GUI_WIDGET_SetPadding(h, x)               do {\
     __GUI_WIDGET_SetPaddingTop(h, x);                   \
     __GUI_WIDGET_SetPaddingLeft(h, x);                  \
     __GUI_WIDGET_SetPaddingBottom(h, x);                \
@@ -666,16 +665,47 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
  * \retval          Widget ID
  * \hideinitializer
  */
-#define __GUI_WIDGET_GetId(h)               (__GH(h)->Id)
+#define __GUI_WIDGET_GetId(h)                       (__GH(h)->Id)
 
 /**
- * \brief           Get widget flag
+ * \brief           Get widget flag(s)
  * \param[in,out]   h: Widget handle
- * \param[in]       flag: Flag value to check
- * \retval          0: Flag is not set
- * \retval          > 0: Flag is set
+ * \param[in]       flag: Flag(s) to check
+ * \retval          0: None flag is set
+ * \retval          > 0: At least one flag is set
+ * \sa              __GUI_WIDGET_SetFlag, __GUI_WIDGET_ClrFlag
+ * \hideinitializer
  */
-#define __GUI_WIDGET_GetFlag(h, flag)       (__GH(h)->Flags & (flag))
+#define __GUI_WIDGET_GetFlag(h, flag)               (__GH(h)->Flags & (flag))
+
+/**
+ * \brief           Get widget core flag(s)
+ * \param[in,out]   h: Widget handle
+ * \param[in]       flag: Flag(s) to check
+ * \retval          0: None flag is set
+ * \retval          > 0: At least one flag is set
+ * \sa              __GUI_WIDGET_SetFlag, __GUI_WIDGET_ClrFlag
+ * \hideinitializer
+ */
+#define __GUI_WIDGET_GetCoreFlag(h, flag)           (__GH(h)->Widget->Flags & (flag))
+
+/**
+ * \brief           Set widget flag(s)
+ * \param[in,out]   h: Widget handle
+ * \param[in]       flag: Flag(s) to set
+ * \sa              __GUI_WIDGET_GetFlag, __GUI_WIDGET_ClrFlag
+ * \hideinitializer
+ */
+#define __GUI_WIDGET_SetFlag(h, flag)               (__GH(h)->Flags |= (flag))
+
+/**
+ * \brief           Clear widget flag(s)
+ * \param[in,out]   h: Widget handle
+ * \param[in]       flag: Flag(s) to clear
+ * \sa              __GUI_WIDGET_SetFlag, __GUI_WIDGET_GetFlag
+ * \hideinitializer
+ */
+#define __GUI_WIDGET_ClrFlag(h, flag)               (__GH(h)->Flags &= ~(flag))
 
 /**
  * \brief           Checks if widget is expanded to maximum relative to parent widget
@@ -685,7 +715,7 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
  * \retval          0: Widget is not expanded
  * \hideinitializer
  */
-#define __GUI_WIDGET_IsExpanded(h)          (!!(__GH(h)->Flags & GUI_FLAG_EXPANDED))
+#define __GUI_WIDGET_IsExpanded(h)                  (!!__GUI_WIDGET_GetFlag(h, GUI_FLAG_EXPANDED))
 
 /**
  * \brief           Get pointer to parent widget
@@ -694,7 +724,7 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
  * \retval          Pointer to parent widget
  * \hideinitializer
  */
-#define __GUI_WIDGET_GetParent(h)           (__GH(h)->Parent)
+#define __GUI_WIDGET_GetParent(h)                   (__GH(h)->Parent)
 
 /**
  * \brief           Process widget callback with command, parameters and result pointers
@@ -718,7 +748,7 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
  * \retval          Color index
  * \hideinitializer
  */
-#define __GUI_WIDGET_GetColor(h, index)     (__GH(h)->Colors ? __GH(h)->Colors[(uint8_t)(index)] : (__GH(h)->Widget->Colors ? __GH(h)->Widget->Colors[(uint8_t)(index)] : GUI_COLOR_BLACK))
+#define __GUI_WIDGET_GetColor(h, index)             (__GH(h)->Colors ? __GH(h)->Colors[(uint8_t)(index)] : (__GH(h)->Widget->Colors ? __GH(h)->Widget->Colors[(uint8_t)(index)] : GUI_COLOR_BLACK))
 
 /**
  * \brief           Get total width of widget in units of pixels
@@ -818,7 +848,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \sa              __GUI_WIDGET_IsHidden
  * \hideinitializer
  */
-#define __GUI_WIDGET_IsVisible(h)                   (!(__GH(h)->Flags & GUI_FLAG_HIDDEN) && __GH(h)->Transparency)
+#define __GUI_WIDGET_IsVisible(h)                   (!__GUI_WIDGET_GetFlag(h, GUI_FLAG_HIDDEN) && __GH(h)->Transparency)
 
 /**
  * \brief           Check if widget is hidden
@@ -859,7 +889,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \sa              __GUI_WIDGET_IsActive
  * \hideinitializer
  */
-#define __GUI_WIDGET_IsFocused(h)                   (__GH(h)->Flags & GUI_FLAG_FOCUS)
+#define __GUI_WIDGET_IsFocused(h)                   __GUI_WIDGET_GetFlag(h, GUI_FLAG_FOCUS)
 
 /**
  * \brief           Checks if widget handle is currently active
@@ -869,7 +899,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \sa              __GUI_WIDGET_IsFocused
  * \hideinitializer
  */
-#define __GUI_WIDGET_IsActive(h)                    (__GH(h)->Flags & GUI_FLAG_ACTIVE)
+#define __GUI_WIDGET_IsActive(h)                    __GUI_WIDGET_GetFlag(h, GUI_FLAG_ACTIVE)
 
 /**
  * \brief           Check is widget has transparency
@@ -932,7 +962,6 @@ uint8_t __GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex);
 /**
  * \}
  */
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 /**
  * \defgroup        GUI_WIDGET_Text Text management
@@ -1492,7 +1521,6 @@ void __GUI_WIDGET_Init(void);
 
 //Clipping regions
 uint8_t __GUI_WIDGET_IsInsideClippingRegion(GUI_HANDLE_p h);
-uint8_t __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(GUI_HANDLE_p h, GUI_iDim_t* xOut, GUI_iDim_t* yOut, GUI_iDim_t* wOut, GUI_iDim_t* hOut);
 
 //Move widget down and all its parents with it
 void __GUI_WIDGET_MoveDownTree(GUI_HANDLE_p h);
