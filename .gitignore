@@ -16,7 +16,6 @@
 *.html
 *.chm
 
-01-DEV_RTOS_GCC
 .metadata
 
 .gitignore
