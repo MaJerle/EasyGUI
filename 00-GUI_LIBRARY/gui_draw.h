@@ -78,6 +78,7 @@ extern "C" {
 #define GUI_COLOR_BLACK                 0xFF000000  /*!< ARGB8888 black color with 100% alpha channel */
 #define GUI_COLOR_BROWN                 0xFFA52A2A  /*!< ARGB8888 brown color with 100% alpha channel */
 #define GUI_COLOR_ORANGE                0xFFFFA500  /*!< ARGB8888 orange color with 100% alpha channel */
+#define GUI_COLOR_TRANS                 0x00000000  /*!< Transparent color */
 
 #define GUI_COLOR_ALPHA_0               0x00000000  /*!< 0% alpha. Color is transparent */
 #define GUI_COLOR_ALPHA_5               0x0C000000  /*!< 5% alpha of selected color */

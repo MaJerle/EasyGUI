@@ -74,6 +74,7 @@ uint8_t GUI_TEXTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
             GUI_Dim_t x, y, wi, hi;
+            GUI_Color_t bg;
             
             if (__GUI_WIDGET_IsFontAndTextSet(h)) { /* Check if font is prepared for drawing */
                 GUI_DRAW_FONT_t f;
@@ -83,8 +84,12 @@ uint8_t GUI_TEXTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 wi = __GUI_WIDGET_GetWidth(h);      /* Get widget width */
                 hi = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
                 
-                GUI_DRAW_FilledRectangle(disp, x, y, wi, hi, __GUI_WIDGET_GetColor(h, GUI_TEXTVIEW_COLOR_BG));
-            
+                /* Draw background if necessary */
+                bg = __GUI_WIDGET_GetColor(h, GUI_TEXTVIEW_COLOR_BG);
+                if (bg != GUI_COLOR_TRANS) {
+                    GUI_DRAW_FilledRectangle(disp, x, y, wi, hi, bg);
+                }
+                
                 GUI_DRAW_FONT_Init(&f);             /* Init structure */
                 
                 f.X = x + 1;
@@ -139,6 +144,12 @@ uint8_t GUI_TEXTVIEW_SetColor(GUI_HANDLE_p h, GUI_TEXTVIEW_COLOR_t index, GUI_Co
     __GUI_ENTER();                                  /* Enter GUI */
     
     ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set color */
+    
+    if (ret) {                                      /* Check success */
+        if (index == GUI_TEXTVIEW_COLOR_BG) {       /* If background is transparent */
+            __GUI_WIDGET_SetInvalidateWithParent(h, color == GUI_COLOR_TRANS);  /* When widget is invalidated, invalidate parent too */
+        }
+    }
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;

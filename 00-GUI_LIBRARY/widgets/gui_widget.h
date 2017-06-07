@@ -718,6 +718,16 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
 #define __GUI_WIDGET_IsExpanded(h)                  (!!__GUI_WIDGET_GetFlag(h, GUI_FLAG_EXPANDED))
 
 /**
+ * \brief           Checks if widget has enabled 3D mode
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget has 3D mode
+ * \retval          0: Widget doesn't have 3D mode
+ * \hideinitializer
+ */
+#define __GUI_WIDGET_Is3D(h)                        (!!__GUI_WIDGET_GetFlag(h, GUI_FLAG_3D))
+
+/**
  * \brief           Get pointer to parent widget
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
@@ -869,7 +879,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \retval          0: Widget does not allow children widgets
  * \hideinitializer
  */
-#define __GUI_WIDGET_AllowChildren(h)               (__GH(h)->Widget->Flags & GUI_FLAG_WIDGET_ALLOW_CHILDREN)
+#define __GUI_WIDGET_AllowChildren(h)               (!!__GUI_WIDGET_GetCoreFlag(h, GUI_FLAG_WIDGET_ALLOW_CHILDREN))
 
 /**
  * \brief           Check if widget is base for dialog
@@ -879,7 +889,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \retval          0: Widget is not dialog
  * \hideinitializer
  */
-#define __GUI_WIDGET_IsDialogBase(h)                (__GH(h)->Widget->Flags & GUI_FLAG_WIDGET_DIALOG_BASE)
+#define __GUI_WIDGET_IsDialogBase(h)                (!!__GUI_WIDGET_GetCoreFlag(h, GUI_FLAG_WIDGET_DIALOG_BASE))
 
 /**
  * \brief           Checks if widget handle is currently in focus
@@ -889,7 +899,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \sa              __GUI_WIDGET_IsActive
  * \hideinitializer
  */
-#define __GUI_WIDGET_IsFocused(h)                   __GUI_WIDGET_GetFlag(h, GUI_FLAG_FOCUS)
+#define __GUI_WIDGET_IsFocused(h)                   (!!__GUI_WIDGET_GetFlag(h, GUI_FLAG_FOCUS))
 
 /**
  * \brief           Checks if widget handle is currently active
@@ -899,7 +909,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \sa              __GUI_WIDGET_IsFocused
  * \hideinitializer
  */
-#define __GUI_WIDGET_IsActive(h)                    __GUI_WIDGET_GetFlag(h, GUI_FLAG_ACTIVE)
+#define __GUI_WIDGET_IsActive(h)                    (!!__GUI_WIDGET_GetFlag(h, GUI_FLAG_ACTIVE))
 
 /**
  * \brief           Check is widget has transparency

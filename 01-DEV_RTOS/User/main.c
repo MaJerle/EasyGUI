@@ -537,11 +537,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 GUI_PROGBAR_SetValue(handle, 22);
                 break;
             }
-            case ID_WIN_LED: {          /* Leds */
-                handle = GUI_TEXTVIEW_Create(0, 40, 10, 400, 1000, h, 0, 0);
-                GUI_WIDGET_SetFont(handle, &GUI_Font_Roboto_Italic_14);
-                GUI_WIDGET_SetText(handle, _GT("\"LED\" are widgets used to indicate some status or any other situation. Press blue button on discovery board to see LED in happen\r\n"));
-                
+            case ID_WIN_LED: {          /* Leds */                
                 handle = GUI_LED_Create(ID_LED_1, 10, 80, 30, 30, 0, led_callback, 0);
                 GUI_LED_SetType(handle, GUI_LED_TYPE_CIRCLE);
                 GUI_LED_Set(handle, 1);
@@ -554,6 +550,12 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 GUI_LED_Set(handle, 1);
                 handle = GUI_LED_Create(ID_LED_4, 130, 80, 30, 30, 0, led_callback, 0);
                 GUI_LED_SetType(handle, GUI_LED_TYPE_RECT);
+                
+                handle = GUI_TEXTVIEW_Create(0, 40, 10, 400, 1000, h, 0, 0);
+                GUI_WIDGET_SetFont(handle, &GUI_Font_Roboto_Italic_14);
+                GUI_WIDGET_SetText(handle, _GT("\"LEDs\" are widgets used to indicate some status or any other situation. Press blue button on discovery board to see LED in happen\r\n"));
+                GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_TRANS);
+                GUI_WIDGET_SetZIndex(handle, -1);
                 break;
             }
             case ID_WIN_TEXTVIEW: {     /* Text view */
@@ -711,6 +713,9 @@ uint8_t radio_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) 
 
 uint8_t led_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
     uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    if (cmd == GUI_WC_Click) {
+        GUI_LED_Toggle(h);              /* Toggle status */
+    }
     return ret;
 }
 

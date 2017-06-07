@@ -86,6 +86,7 @@ typedef enum GUI_LISTVIEW_COLOR_t {
     GUI_LISTVIEW_COLOR_SEL_NOFOC,           /*!< Text color of selected item when widget is not in focus */
     GUI_LISTVIEW_COLOR_SEL_FOC_BG,          /*!< Background color of selected item when widget is in focus */
     GUI_LISTVIEW_COLOR_SEL_NOFOC_BG,        /*!< Background color of selected item when widget is not in focus */
+    GUI_LISTVIEW_COLOR_BORDER,              /*!< Border color index for top line when not in 3D mode */
 } GUI_LISTVIEW_COLOR_t;
 
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)

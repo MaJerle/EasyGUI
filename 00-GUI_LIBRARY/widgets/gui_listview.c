@@ -53,7 +53,8 @@ const static GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_SEL_FOC,
     GUI_COLOR_WIN_SEL_NOFOC,
     GUI_COLOR_WIN_SEL_FOC_BG,
-    GUI_COLOR_WIN_SEL_NOFOC_BG
+    GUI_COLOR_WIN_SEL_NOFOC_BG,
+    GUI_COLOR_GRAY
 };
 
 const static GUI_WIDGET_t Widget = {
@@ -219,6 +220,7 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             GUI_Dim_t x, y, width, height;
             uint16_t i;
             GUI_Dim_t itemHeight;
+            uint8_t is3D = __GUI_WIDGET_Is3D(h);    /* Is 3D mode enabled */
             
             GUI_LISTVIEW_ROW_t* row;
             GUI_LISTVIEW_ITEM_t* item;
@@ -230,8 +232,14 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             
             __CheckValues(h);                       /* Check values if size changed */
             
-            GUI_DRAW_Rectangle3D(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
-            GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, __GUI_WIDGET_GetColor(h, GUI_LISTVIEW_COLOR_BG));
+            if (is3D) {
+                GUI_DRAW_Rectangle3D(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
+                GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, __GUI_WIDGET_GetColor(h, GUI_LISTVIEW_COLOR_BG));
+            } else {
+                GUI_DRAW_Rectangle(disp, x, y, width, height, __GUI_WIDGET_GetColor(h, GUI_LISTVIEW_COLOR_BORDER));
+                GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, width - 2, height - 2, __GUI_WIDGET_GetColor(h, GUI_LISTVIEW_COLOR_BG));
+            }
+
             
             /* Draw side scrollbar */
             if (o->Flags & GUI_FLAG_LISTVIEW_SLIDER_ON) {
@@ -275,9 +283,15 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 /* Draw header row with columns */
                 f.Y = y + 2;
                 for (i = 0; i < o->ColsCount; i++) {
-                    GUI_DRAW_Rectangle3D(disp, xTmp, f.Y, o->Cols[i]->Width, itemHeight, GUI_DRAW_3D_State_Raised);
-                    f.Width = o->Cols[i]->Width - 6;    /* Set width */
-                    f.X = xTmp + 3;                 /* Set offset */
+                    if (is3D) {
+                        GUI_DRAW_Rectangle3D(disp, xTmp, f.Y, o->Cols[i]->Width, itemHeight, GUI_DRAW_3D_State_Raised);
+                        f.Width = o->Cols[i]->Width - 4;    /* Set width */
+                        f.X = xTmp + 2;             /* Set offset */
+                    } else {
+                        GUI_DRAW_Rectangle(disp, xTmp, f.Y, o->Cols[i]->Width, itemHeight, GUI_COLOR_WIN_DARKGRAY);
+                        f.Width = o->Cols[i]->Width - 6;    /* Set width */
+                        f.X = xTmp + 3;             /* Set offset */
+                    }
                     GUI_DRAW_WriteText(disp, __GH(h)->Font, o->Cols[i]->Text, &f);
                     xTmp += o->Cols[i]->Width;      /* Increase X value */
                 }
