@@ -275,9 +275,9 @@ int main(void) {
     
     GUI_Init();
     
-    GUI_WIDGET_SetFontDefault(&GUI_Font_Arial_Narrow_Italic_21_AA); /* Set default font for widgets */
-    GUI_WIDGET_SetFontDefault(&GUI_Font_Comic_Sans_MS_Regular_22); /* Set default font for widgets */
-    //GUI_WIDGET_SetFontDefault(&GUI_Font_Roboto_Italic_14); /* Set default font for widgets */
+    //GUI_WIDGET_SetFontDefault(&GUI_Font_Arial_Narrow_Italic_21_AA); /* Set default font for widgets */
+    //GUI_WIDGET_SetFontDefault(&GUI_Font_Comic_Sans_MS_Regular_22); /* Set default font for widgets */
+    GUI_WIDGET_SetFontDefault(&GUI_Font_Roboto_Italic_14); /* Set default font for widgets */
     
     win1 = GUI_WINDOW_GetDesktop();                         /* Get desktop window */
     
@@ -291,19 +291,19 @@ int main(void) {
     } else {
         size_t i = 0;
         static const GUI_Char* texts[] = {
-            _GT("Text\nmajkemi\nmoje\neeeeeon\n\n\nscreen"),
-            _GT("Textmajkemi moje \n\n\n eeeeeon screen"),
-            _GT("Text majkemi moje\neeeeeon screen"),
-            _GT("Text majkemi moje\neeeeeon screen"),
-            _GT("Text majkemi moje\neeeeeon screen"),
-            _GT("Text majkemi moje\neeeeeon screen"),
+            _GT("AAAA AAAA\nAAAA AAAAAA AAAA AAAAAAAAA AA    AAAAAAAAAAAAAAAAAAAA"),
+            _GT("Text view\nwith middle left alignment on screen"),
+            _GT("Text view\nwith middle left alignment on screen"),
+            _GT("Text view\nwith middle left alignment\n on screen"),
+            _GT("Text view\nwith middle left alignment\n on screen"),
+            _GT("Text view\nwith middle left alignment\n on screen"),
             _GT("Text majkemi moje\neeeeeon screen"),
             _GT("Text majkemi moje\neeeeeon screen"),
             _GT("Text majkemi moje\neeeeeon screen"),
         };
         for (i = 0; i < 1; i++) {
             handle = GUI_TEXTVIEW_Create(0, 1, 1, 1, 1, 0, 0, 0);
-            GUI_WIDGET_SetSizePercent(handle, 30, 80);
+            GUI_WIDGET_SetSizePercent(handle, 30, 90);
             GUI_WIDGET_SetPositionPercent(handle, 3 + (i % 3) * 33, 3 + (i / 3) * 33);
             GUI_WIDGET_SetText(handle, texts[i]);
             GUI_WIDGET_SetFont(handle, &GUI_Font_Roboto_Italic_14);
