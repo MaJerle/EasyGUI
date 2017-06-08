@@ -276,6 +276,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/01-DEV_RTOS/User/lcd_stm32f7_discovery.c</locationURI>
 		</link>
 		<link>
+			<name>STM32F7/F746_DISCOVERY/startup_stm32f746xx.s</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/00-HAL_DRIVERS/CMSIS/Device/ST/STM32F7xx/Source/Templates/gcc/startup_stm32f746xx.s</locationURI>
+		</link>
+		<link>
 			<name>STM32F7/F769_DISCOVERY/lcd_stm32f769_discovery.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/01-DEV_RTOS/User/lcd_stm32f769_discovery.c</locationURI>
@@ -284,6 +289,11 @@
 			<name>STM32F7/F769_DISCOVERY/otm8009a.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/01-DEV_RTOS/User/otm8009a.c</locationURI>
+		</link>
+		<link>
+			<name>STM32F7/F769_DISCOVERY/startup_stm32f769xx.s</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/00-HAL_DRIVERS/CMSIS/Device/ST/STM32F7xx/Source/Templates/gcc/startup_stm32f769xx.s</locationURI>
 		</link>
 		<link>
 			<name>STM32F7/HAL/stm32f7xx_hal.c</name>
@@ -454,11 +464,6 @@
 			<name>STM32F7/HAL/stm32f7xx_ll_fmc.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/00-HAL_DRIVERS/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_fmc.c</locationURI>
-		</link>
-		<link>
-			<name>STM32F7/Startup/startup_stm32f746xx.s</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/00-HAL_DRIVERS/CMSIS/Device/ST/STM32F7xx/Source/Templates/gcc/startup_stm32f746xx.s</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

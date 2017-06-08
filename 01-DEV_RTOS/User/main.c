@@ -281,13 +281,50 @@ int main(void) {
     
     win1 = GUI_WINDOW_GetDesktop();                         /* Get desktop window */
     
-    for (state = 0; state < GUI_COUNT_OF(buttons); state++) {
-        handle = GUI_BUTTON_Create(buttons[state].id, 5 + (state % 3) * 160, 5 + (state / 3) * 40, 150, 35, win1, button_callback, 0);
-        GUI_WIDGET_SetText(handle, buttons[state].text);
-        GUI_WIDGET_SetUserData(handle, &buttons[state].data);
-        GUI_WIDGET_Set3DStyle(handle, 0);
+    if (1) {
+        for (state = 0; state < GUI_COUNT_OF(buttons); state++) {
+            handle = GUI_BUTTON_Create(buttons[state].id, 5 + (state % 3) * 160, 5 + (state / 3) * 40, 150, 35, win1, button_callback, 0);
+            GUI_WIDGET_SetText(handle, buttons[state].text);
+            GUI_WIDGET_SetUserData(handle, &buttons[state].data);
+            GUI_WIDGET_Set3DStyle(handle, 0);
+        }
+    } else {
+        size_t i = 0;
+        static const GUI_Char* texts[] = {
+            _GT("Text\nmajkemi\nmoje\neeeeeon\n\n\nscreen"),
+            _GT("Textmajkemi moje \n\n\n eeeeeon screen"),
+            _GT("Text majkemi moje\neeeeeon screen"),
+            _GT("Text majkemi moje\neeeeeon screen"),
+            _GT("Text majkemi moje\neeeeeon screen"),
+            _GT("Text majkemi moje\neeeeeon screen"),
+            _GT("Text majkemi moje\neeeeeon screen"),
+            _GT("Text majkemi moje\neeeeeon screen"),
+            _GT("Text majkemi moje\neeeeeon screen"),
+        };
+        for (i = 0; i < 1; i++) {
+            handle = GUI_TEXTVIEW_Create(0, 1, 1, 1, 1, 0, 0, 0);
+            GUI_WIDGET_SetSizePercent(handle, 30, 80);
+            GUI_WIDGET_SetPositionPercent(handle, 3 + (i % 3) * 33, 3 + (i / 3) * 33);
+            GUI_WIDGET_SetText(handle, texts[i]);
+            GUI_WIDGET_SetFont(handle, &GUI_Font_Roboto_Italic_14);
+            switch (i % 4) {
+                case 0: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_WHITE); break;
+                case 1: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_YELLOW); break;
+                case 2: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_GRAY); break;
+                case 3: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_LIGHTGREEN); break;
+            }
+            switch (i % 3) {
+                case 0: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_LEFT); break;
+                case 1: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_CENTER); break;
+                case 2: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_RIGHT); break;
+            }
+            switch (i / 3) {
+                case 0: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_TOP); break;
+                case 1: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_CENTER); break;
+                case 2: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_BOTTOM); break;
+            }
+        }
     }
-    
     __GUI_LINKEDLIST_PrintList(NULL);
 
 #if !defined(STM32F4xx)
@@ -561,15 +598,15 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
             case ID_WIN_TEXTVIEW: {     /* Text view */
                 size_t i = 0;
                 static const GUI_Char* texts[] = {
-                    _GT("Text view with top left alignment on screen"),
-                    _GT("Text view with top center alignment on screen"),
+                    _GT("Text majkemi moje\neeeeeon screen"),
+                    _GT("Text\nview with\ntop center alignment on screen"),
                     _GT("Text view with top right alignment on screen"),
-                    _GT("Text view with middle left alignment on screen"),
+                    _GT("Text view                          with middle left alignment on screen"),
                     _GT("Text view with middle center alignment on screen"),
-                    _GT("Text view with middle right alignment on screen"),
-                    _GT("Text view with bottom left alignment on screen"),
+                    _GT("Text view with                         middle right alignment on screen"),
+                    _GT("Text view                          with bottom left alignment on screen"),
                     _GT("Text view with bottom center alignment on screen"),
-                    _GT("Text view with bottom right alignment on screen"),
+                    _GT("Text view with bottom right                          alignment on screen koji kurac se to dogaja?"),
                 };
                 for (i = 0; i < 9; i++) {
                     handle = GUI_TEXTVIEW_Create(0, 1, 1, 1, 1, 0, 0, 0);
