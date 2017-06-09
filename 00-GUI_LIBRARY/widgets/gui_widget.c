@@ -708,7 +708,7 @@ uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
     
     tlen = GUI_STRING_LengthTotal(__GH(h)->Text);   /* Get total length of string */
     len = GUI_STRING_Length(__GH(h)->Text);         /* Get string length */
-    if ((ch == GUI_KEY_CR || ch == GUI_KEY_LF || ch >= 32) && ch != 127) {  /* Check valid character character */
+    if ((ch == GUI_KEY_LF || ch >= 32) && ch != 127) {  /* Check valid character character */
         if (len < (__GH(h)->TextMemSize - l)) {     /* Memory still available for new character */
             uint16_t pos;
             for (pos = tlen + l - 1; pos > __GH(h)->TextCursor; pos--) {    /* Shift characters down */

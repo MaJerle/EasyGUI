@@ -590,7 +590,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 
                 handle = GUI_TEXTVIEW_Create(0, 40, 10, 400, 1000, h, 0, 0);
                 GUI_WIDGET_SetFont(handle, &GUI_Font_Roboto_Italic_14);
-                GUI_WIDGET_SetText(handle, _GT("\"LEDs\" are widgets used to indicate some status or any other situation. Press blue button on discovery board to see LED in happen\r\n"));
+                GUI_WIDGET_SetText(handle, _GT("\"LEDs\" are widgets used to indicate some status or any other situation. Press blue button on discovery board to see LED in happen"));
                 GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_TRANS);
                 GUI_WIDGET_SetZIndex(handle, -1);
                 break;
@@ -612,6 +612,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                     handle = GUI_TEXTVIEW_Create(0, 1, 1, 1, 1, 0, 0, 0);
                     GUI_WIDGET_SetSizePercent(handle, 30, 30);
                     GUI_WIDGET_SetPositionPercent(handle, 3 + (i % 3) * 33, 3 + (i / 3) * 33);
+                    GUI_WIDGET_AllocTextMemory(handle, 255);
                     GUI_WIDGET_SetText(handle, texts[i]);
                     GUI_WIDGET_SetFont(handle, &GUI_Font_Roboto_Italic_14);
                     switch (i % 4) {

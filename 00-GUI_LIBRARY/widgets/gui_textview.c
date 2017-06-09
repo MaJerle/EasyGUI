@@ -110,10 +110,16 @@ uint8_t GUI_TEXTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             return 1;
         }
 #endif /* GUI_USE_TOUCH */
-        case GUI_WC_Click: {
+#if GUI_USE_KEYBOARD
+        case GUI_WC_KeyPress: {
+            __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;
+            if (__GUI_WIDGET_ProcessTextKey(h, kb)) {
+                *(__GUI_KeyboardStatus_t *)result = keyHANDLED; /* Key handled */
+            }
             return 1;
         }
-        case GUI_WC_KeyPress: {
+#endif /* GUI_USE_KEYBOARD */
+        case GUI_WC_Click: {
             return 1;
         }
         default:                                    /* Handle default option */
