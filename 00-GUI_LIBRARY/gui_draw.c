@@ -32,10 +32,11 @@
 /******************************************************************************/
 /******************************************************************************/
 typedef struct GUI_StringRect_t {
-    size_t Lines;
-    GUI_iDim_t Width;                               /*  */
-    GUI_iDim_t Height;
+    size_t Lines;                                   /*!< Number of lines processed */
+    GUI_iDim_t Width;                               /*!< Rectangle width */
+    GUI_iDim_t Height;                              /*!< Rectangle height */
 
+    size_t IsEditMode;                              /*!< Status whether text is in edit mode */
     size_t ReadTotal;                               /*!< Total number of characters to read */
     size_t ReadDraw;                                /*!< Total number of characters to actually draw after read */
 
@@ -44,22 +45,22 @@ typedef struct GUI_StringRect_t {
 } GUI_StringRect_t;
 
 typedef struct GUI_StringRectVars_t {
-    const GUI_Char* s;                          /* Pointer to input string */
-    uint32_t ch, lastCh;                        /* Current and previous characters */
-    GUI_iDim_t cW;                              /* Current line width */
-    size_t cnt;                                 /* Current count in line */
+    const GUI_Char* s;                              /*!< Pointer to input string */
+    uint32_t ch, lastCh;                            /*!< Current and previous characters */
+    GUI_iDim_t cW;                                  /*!< Current line width */
+    size_t cnt;                                     /*!< Current count in line */
 
-    size_t SpaceIndex;                          /* Index number of last space sequence start */
-    size_t SpaceCount;                          /* Number of spaces in last sequence */
-    GUI_iDim_t SpaceWidth;                      /* Width of last space sequence */
-    const GUI_Char* SpacePtr;                   /* Pointer to space start sequence */
-    size_t CharsIndex;                          /* Index number of non-space sequence start */
-    size_t CharsCount;                          /* Number of non-space characters in sequence */
-    GUI_iDim_t CharsWidth;                      /* Width of characters after last space detected */
-    const GUI_Char* CharsPtr;                   /* Pointer to chars start sequence */
-    uint8_t IsLineFeed;                             /* Status indicating character is line feed */
-    uint8_t Final;                                  /* Status indicating we should do line check and finish */
-    uint8_t IsBreak;                                /* Status indicating break occurred */
+    size_t SpaceIndex;                              /*!< Index number of last space sequence start */
+    size_t SpaceCount;                              /*!< Number of spaces in last sequence */
+    GUI_iDim_t SpaceWidth;                          /*!< Width of last space sequence */
+    const GUI_Char* SpacePtr;                       /*!< Pointer to space start sequence */
+    size_t CharsIndex;                              /*!< Index number of non-space sequence start */
+    size_t CharsCount;                              /*!< Number of non-space characters in sequence */
+    GUI_iDim_t CharsWidth;                          /*!< Width of characters after last space detected */
+    const GUI_Char* CharsPtr;                       /*!< Pointer to chars start sequence */
+    uint8_t IsLineFeed;                             /*!< Status indicating character is line feed */
+    uint8_t Final;                                  /*!< Status indicating we should do line check and finish */
+    uint8_t IsBreak;                                /*!< Status indicating break occurred */
 } GUI_StringRectVars_t;
 
 /******************************************************************************/
@@ -67,9 +68,9 @@ typedef struct GUI_StringRectVars_t {
 /***                           Private definitions                           **/
 /******************************************************************************/
 /******************************************************************************/
-#define CH_CR           ((uint32_t)'\r')
-#define CH_LF           ((uint32_t)'\n')
-#define CH_WS           ((uint32_t)' ')
+#define CH_CR           GUI_KEY_CR
+#define CH_LF           GUI_KEY_LF
+#define CH_WS           GUI_KEY_WS
 #define __GetCharFromValue(ch)      (uint32_t)((CH_CR == (ch) || CH_LF == (ch)) ? CH_WS : (ch))
 
 /******************************************************************************/
@@ -123,11 +124,17 @@ void __ProcessStringRectangleBeforeReturn(GUI_StringRectVars_t* var, GUI_StringR
     /**
      * If spaces are last elements
      */
-    rect->ReadDraw = var->cnt;
+    rect->ReadDraw = rect->ReadTotal = var->cnt;    /* Set number of total and drawing characters */
+    if (rect->IsEditMode) {                         /* Do not optimize strings if we are in edit mode */
+        if (var->IsLineFeed) {                      /* Line feed forced new line */
+            rect->ReadDraw--;                       /* Don't draw this character at all */
+        }
+        return;
+    }
     if (end) {                                      /* We received final line (end of string) */
         if (var->SpaceIndex > var->CharsIndex) {    /* When spaces are last characters */
             /**
-             * When last line received, flush only characters and ignore other check
+             * When last line received, flush only white spaces and ignore other check
              */
             var->cW -= var->SpaceWidth;             /* Decrease effective rectangle width */
             rect->ReadDraw -= var->SpaceCount;      /* Decrease number of drawing characters by removing spaces */
@@ -180,8 +187,8 @@ size_t __StringRectangle(GUI_StringRect_t* rect, const GUI_Char** str, uint8_t o
     var.s = *str;                                   /* Set string pointer */
     var.IsBreak = onlyToNextLine;                   /* Set for break */
 
-    tH = rect->StringDraw->LineHeight;              /* Set line height for first line */
-    if (rect->StringDraw->Flags & GUI_FLAG_FONT_MULTILINE) {    /* We want to know exact rectangle for drawing multi line texts including new lines and carriage return */
+    tH = 0;
+    if (1) {    /* We want to know exact rectangle for drawing multi line texts including new lines and carriage return */
         while (1) {                                 /* Unlimited execution */
             lastS = var.s;                          /* Save current string pointer */
             if (GUI_STRING_GetCh(&var.s, &var.ch, &i)) {    /* Get next character from string */
@@ -200,18 +207,20 @@ size_t __StringRectangle(GUI_StringRect_t* rect, const GUI_Char** str, uint8_t o
                 /* Check for white space character */
                 if (CH_WS == var.ch) {              /* We have white space character */
                     if (CH_WS != var.lastCh) {      /* Check if previous char was also white space */
-                        var.SpaceIndex = var.cnt;   /* Save index at which character sequence appear */
+                        var.SpaceIndex = var.cnt;   /* Save index at which space sequence start appear */
                         var.SpaceCount = 0;         /* Reset number of white spaces */
                         var.SpaceWidth = 0;         /* Reset white spaces width */
-                        var.SpacePtr = lastS;       /* Save pointer to last string entry */
+                        var.SpacePtr = lastS;       /* Save pointer to last string entry of spaces */
                     }
 
                     if (var.SpaceIndex == 0) {      /* If we are on beginning of line */
-                        if (!var.IsLineFeed) {      /* Do not increase pointer if line feed was detected = force new line*/
-                            if (onlyToNextLine) {   /* Increase input pointer only in single line mode */
-                                *str += 1;          /* Increase input pointer where it points to */
-                            }                       /* Otherwise just ignore character and don't touch input pointer */
-                            RECT_CONTINUE(0);       /* Continue to next character and don't increase cnt variable */
+                        if (!rect->IsEditMode) {    /* Do not ignore front spaces when in edit mode = show plain text as is */
+                            if (!var.IsLineFeed) {  /* Do not increase pointer if line feed was detected = force new line*/
+                                if (onlyToNextLine) {   /* Increase input pointer only in single line mode */
+                                    *str += 1;      /* Increase input pointer where it points to */
+                                }                   /* Otherwise just ignore character and don't touch input pointer */
+                                RECT_CONTINUE(0);   /* Continue to next character and don't increase cnt variable */
+                            }
                         }
                     }
                 } else {                            /* Non-space character */
@@ -253,6 +262,7 @@ size_t __StringRectangle(GUI_StringRect_t* rect, const GUI_Char** str, uint8_t o
                         mW = var.cW;                /* Set as new maximal width */
                     }
 
+                    tH += rect->StringDraw->LineHeight; /* Increase line height for next line processing */
                     if (onlyToNextLine) {           /* Read only single line? */
                         break;                      /* Stop execution at this point */
                     }
@@ -261,13 +271,13 @@ size_t __StringRectangle(GUI_StringRect_t* rect, const GUI_Char** str, uint8_t o
                     s = var.s;                      /* Temporary save current pointer */
                     memset(&var, 0x00, sizeof(var));    /* Reset everything now */
                     var.s = s;                      /* Set text back */
-                    tH += rect->StringDraw->LineHeight; /* Increase line height for next line processing */
                     continue;
                 } else {
                     RECT_CONTINUE(1);
                 }
             } else {                                /* Everything has been read and line may still be free */
                 __ProcessStringRectangleBeforeReturn(&var, rect, 1);    /* Process size before return */
+                tH += rect->StringDraw->LineHeight; /* Increase line height for next line processing */
                 if (mW < var.cW) {                  /* Current width check */
                     mW = var.cW;                    /* Save as max width currently */
                 }
@@ -275,7 +285,8 @@ size_t __StringRectangle(GUI_StringRect_t* rect, const GUI_Char** str, uint8_t o
             }
         }
         rect->Width = mW;                           /* Save rectangle width */
-    } else {
+    }
+    else {
         var.cW = 0;
         while (GUI_STRING_GetCh(&var.s, &var.ch, &i)) { /* Get next character from string */
             __StringGetCharSize(rect->Font, var.ch, &w, &h);/* Get character width and height */
@@ -1091,9 +1102,7 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
     
     rect.Font = font;
     rect.StringDraw = draw;
-    
-//    GUI_DRAW_Rectangle(disp, draw->X, draw->Y, draw->Width, draw->Height, GUI_COLOR_DARKGREEN);
-    
+      
     strTmp = str;
     __StringRectangle(&rect, &strTmp, 0);           /* Get string width for this box */
     if (rect.Width > draw->Width) {                 /* If string is wider than available rectangle */
@@ -1119,7 +1128,15 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
     
     y -= draw->ScrollY;                             /* Go scroll top */
     
+    /* Debug purpose only */
+//    x = draw->X;
+//    if (draw->Align & GUI_HALIGN_CENTER) {
+//        x += (draw->Width - rect.Width) / 2;
+//    } else if (draw->Align & GUI_HALIGN_RIGHT) {
+//        x += draw->Width - rect.Width;
+//    }
 //    GUI_DRAW_Rectangle(disp, x, y, rect.Width, rect.Height, GUI_COLOR_BLUE);
+    
     
     strTmp = str;                                   /* Save string pointer */
     while ((cnt = __StringRectangle(&rect, &str, 1)) > 0) {
@@ -1130,13 +1147,11 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
             x += draw->Width - rect.Width;          /* Align right of drawing area */
         }
 //        GUI_DRAW_Rectangle(disp, x, y, rect.Width, rect.Height, GUI_COLOR_RED);
-//        __GUI_DEBUG("[L: %3d; W: %3d; RT: %3d; RD: %3d] = |", cnt, rect.Width, rect.ReadTotal, rect.ReadDraw);
         while (cnt-- && GUI_STRING_GetCh(&str, &ch, &i)) {
             if (rect.ReadDraw == 0) {               /* Anything to draw? */
                 continue;
             }
             rect.ReadDraw--;                        /* Decrease number of drawn elements */
-            printf("%c", ch == CH_LF ? ' ' : ch);
             
             if (x > disp->X2) {                     /* Check if X over line */
                 continue;
@@ -1150,13 +1165,11 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
             
             x += c->xSize + c->xMargin;             /* Increase X position */
         }
-//        __GUI_DEBUG("|\r\n");
         y += draw->LineHeight;                      /* Go to next line */
         if (!(draw->Flags & GUI_FLAG_FONT_MULTILINE) || y > disp->Y2) { /* Not multiline or over visible Y area */
             break;
         }
     }
-//    __GUI_DEBUG("----");
 }
 
 void GUI_DRAW_ScrollBar_init(GUI_DRAW_SB_t* sb) {
