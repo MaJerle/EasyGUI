@@ -1092,7 +1092,7 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
     rect.Font = font;
     rect.StringDraw = draw;
     
-    GUI_DRAW_Rectangle(disp, draw->X, draw->Y, draw->Width, draw->Height, GUI_COLOR_DARKGREEN);
+//    GUI_DRAW_Rectangle(disp, draw->X, draw->Y, draw->Width, draw->Height, GUI_COLOR_DARKGREEN);
     
     strTmp = str;
     __StringRectangle(&rect, &strTmp, 0);           /* Get string width for this box */
@@ -1119,7 +1119,7 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
     
     y -= draw->ScrollY;                             /* Go scroll top */
     
-    GUI_DRAW_Rectangle(disp, x, y, rect.Width, rect.Height, GUI_COLOR_BLUE);
+//    GUI_DRAW_Rectangle(disp, x, y, rect.Width, rect.Height, GUI_COLOR_BLUE);
     
     strTmp = str;                                   /* Save string pointer */
     while ((cnt = __StringRectangle(&rect, &str, 1)) > 0) {
@@ -1129,8 +1129,8 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
         } else if (draw->Align & GUI_HALIGN_RIGHT) {/* Check for horizontal align right */
             x += draw->Width - rect.Width;          /* Align right of drawing area */
         }
-        GUI_DRAW_Rectangle(disp, x, y, rect.Width, rect.Height, GUI_COLOR_RED);
-        __GUI_DEBUG("[L: %3d; W: %3d; RT: %3d; RD: %3d] = |", cnt, rect.Width, rect.ReadTotal, rect.ReadDraw);
+//        GUI_DRAW_Rectangle(disp, x, y, rect.Width, rect.Height, GUI_COLOR_RED);
+//        __GUI_DEBUG("[L: %3d; W: %3d; RT: %3d; RD: %3d] = |", cnt, rect.Width, rect.ReadTotal, rect.ReadDraw);
         while (cnt-- && GUI_STRING_GetCh(&str, &ch, &i)) {
             if (rect.ReadDraw == 0) {               /* Anything to draw? */
                 continue;
@@ -1150,13 +1150,13 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
             
             x += c->xSize + c->xMargin;             /* Increase X position */
         }
-        printf("|\r\n");
+//        __GUI_DEBUG("|\r\n");
         y += draw->LineHeight;                      /* Go to next line */
         if (!(draw->Flags & GUI_FLAG_FONT_MULTILINE) || y > disp->Y2) { /* Not multiline or over visible Y area */
             break;
         }
     }
-    printf("----");
+//    __GUI_DEBUG("----");
 }
 
 void GUI_DRAW_ScrollBar_init(GUI_DRAW_SB_t* sb) {
