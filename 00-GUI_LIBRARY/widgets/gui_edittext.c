@@ -74,10 +74,19 @@ void TimerCallback(GUI_TIMER_t* timer) {
 }
 
 #define e          ((GUI_EDITTEXT_t *)h)
+/* Check if edit text is multiline */
+#define __IsMultiline(h)            (__GE(h)->Flags & GUI_EDITTEXT_FLAG_MULTILINE)
+
+/* Widget callback */
 static
 uint8_t GUI_EDITTEXT_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
+        case GUI_WC_PreInit: {
+            __GE(h)->VAlign = GUI_EDITTEXT_VALIGN_CENTER;
+            __GE(h)->HAlign = GUI_EDITTEXT_HALIGN_LEFT;
+            return 1;
+        }
         case GUI_WC_Draw: {
             GUI_Dim_t x, y, width, height;
             GUI_Display_t* disp = (GUI_Display_t *)param;
@@ -102,10 +111,15 @@ uint8_t GUI_EDITTEXT_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 f.Y = y + 5;
                 f.Width = width - 10;
                 f.Height = height - 10;
-                f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
+                f.Align = (uint8_t)__GE(h)->HAlign | (uint8_t)__GE(h)->VAlign;
                 f.Color1Width = f.Width;
                 f.Color1 = __GUI_WIDGET_GetColor(h, GUI_EDITTEXT_COLOR_FG);
-                f.Flags |= GUI_FLAG_FONT_RIGHTALIGN;
+                f.Flags |= GUI_FLAG_FONT_RIGHTALIGN | GUI_FLAG_FONT_EDITMODE;
+                
+                if (__IsMultiline(h)) {
+                    f.Flags |= GUI_FLAG_FONT_MULTILINE; /* Set multiline flag for widget */
+                }
+                
                 GUI_DRAW_WriteText(disp, __GH(h)->Font, __GH(h)->Text, &f);
             }
             return 1;
@@ -162,4 +176,46 @@ uint8_t GUI_EDITTEXT_SetColor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Co
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
+}
+
+uint8_t GUI_EDITTEXT_SetMultiline(GUI_HANDLE_p h, uint8_t multiline) {
+    uint8_t ret = 1;
+    
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    if (multiline && !__IsMultiline(h)) {           /* Check to set multiline */
+        __GE(h)->Flags |= GUI_EDITTEXT_FLAG_MULTILINE;  /* Enable multiline */
+    } else if (!multiline && __IsMultiline(h)) {    /* Check to clear multiline */
+        __GE(h)->Flags &= ~GUI_EDITTEXT_FLAG_MULTILINE; /* Enable multiline */
+    }
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
+}
+
+uint8_t GUI_EDITTEXT_SetVAlign(GUI_HANDLE_p h, GUI_EDITTEXT_VALIGN_t align) {
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    if (__GE(h)->VAlign != align) {
+        __GE(h)->VAlign = align;                    /* Set new parameter */
+        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate widget */
+    }
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
+}
+
+uint8_t GUI_EDITTEXT_SetHAlign(GUI_HANDLE_p h, GUI_EDITTEXT_HALIGN_t align) {
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    if (__GE(h)->HAlign != align) {
+        __GE(h)->HAlign = align;                    /* Set new parameter */
+        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate widget */
+    }
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
 }

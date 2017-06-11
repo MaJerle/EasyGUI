@@ -113,30 +113,12 @@ extern "C" {
  */  
     
 #define GUI_ID_WINDOW_BASE          ((GUI_ID_t)0x0000)                          /*!< Window base ID */
-#define GUI_ID_WINDOW_1             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0001))   /*!< Window object ID 1 */
-#define GUI_ID_WINDOW_2             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0002))   /*!< Window object ID 2 */
-#define GUI_ID_WINDOW_3             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0003))   /*!< Window object ID 3 */
-#define GUI_ID_WINDOW_4             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0004))   /*!< Window object ID 4 */
-#define GUI_ID_WINDOW_5             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0005))   /*!< Window object ID 5 */
-#define GUI_ID_WINDOW_6             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0006))   /*!< Window object ID 6 */
-#define GUI_ID_WINDOW_7             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0007))   /*!< Window object ID 7 */
-#define GUI_ID_WINDOW_8             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0008))   /*!< Window object ID 8 */
-#define GUI_ID_WINDOW_9             ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x0009))   /*!< Window object ID 9 */
-#define GUI_ID_WINDOW_10            ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x000A))   /*!< Window object ID 10 */
-    
-#define GUI_ID_BUTTON_BASE          ((GUI_ID_t)0x0100)                          /*!< Button base ID */
-#define GUI_ID_BUTTON_1             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0001))   /*!< Button object ID 1 */
-#define GUI_ID_BUTTON_2             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0002))   /*!< Button object ID 2 */
-#define GUI_ID_BUTTON_3             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0003))   /*!< Button object ID 3 */
-#define GUI_ID_BUTTON_4             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0004))   /*!< Button object ID 4 */
-#define GUI_ID_BUTTON_5             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0005))   /*!< Button object ID 5 */
-#define GUI_ID_BUTTON_6             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0006))   /*!< Button object ID 6 */
-#define GUI_ID_BUTTON_7             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0007))   /*!< Button object ID 7 */
-#define GUI_ID_BUTTON_8             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0008))   /*!< Button object ID 8 */
-#define GUI_ID_BUTTON_9             ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x0009))   /*!< Button object ID 9 */
-#define GUI_ID_BUTTON_10            ((GUI_ID_t)(GUI_ID_BUTTON_BASE + 0x000A))   /*!< Button object ID 10 */
+#define GUI_ID_KEYBOARD_BASE        ((GUI_ID_t)(GUI_ID_WINDOW_BASE + 0x1000))   /*!< Keyboard based ID */
 
 #define GUI_ID_USER                 ((GUI_ID_t)(0x10000))                       /*!< Start number of user based ID values for widgets */
+
+#define GUI_WIDGET_ZINDEX_MAX       (int32_t)(0x7FFFFFFF)                       /*!< Maximal allowed z-index value */
+#define GUI_WIDGET_ZINDEX_MIN       (int32_t)(0x80000000)                       /*!< Maximal allowed z-index value */
     
 /**
  * \}
@@ -230,7 +212,7 @@ GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h);
  * \hideinitializer
  */
 #define __GUI_WIDGET_GetRelativeX(h)    (__GUI_WIDGET_IsExpanded(h) ? 0 : \
-                                            (__GUI_WIDGET_GetFlag(h, GUI_FLAG_XPOS_PERCENT) ? (GUI_iDim_t)((float)(__GH(h)->X * __GUI_WIDGET_GetParentInnerWidth(h)) / 100.0f) : __GH(h)->X) \
+                                            (__GUI_WIDGET_GetFlag(h, GUI_FLAG_XPOS_PERCENT) ? (GUI_iDim_t)((float)GUI_ROUND(__GH(h)->X * __GUI_WIDGET_GetParentInnerWidth(h)) / 100.0f) : __GH(h)->X) \
                                         )
 
 /**
@@ -241,7 +223,7 @@ GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h);
  * \hideinitializer
  */
 #define __GUI_WIDGET_GetRelativeY(h)    (__GUI_WIDGET_IsExpanded(h) ? 0 : \
-                                            (__GUI_WIDGET_GetFlag(h, GUI_FLAG_YPOS_PERCENT) ? (GUI_iDim_t)((float)(__GH(h)->Y * __GUI_WIDGET_GetParentInnerHeight(h)) / 100.0f) : __GH(h)->Y) \
+                                            (__GUI_WIDGET_GetFlag(h, GUI_FLAG_YPOS_PERCENT) ? (GUI_iDim_t)((float)GUI_ROUND(__GH(h)->Y * __GUI_WIDGET_GetParentInnerHeight(h)) / 100.0f) : __GH(h)->Y) \
                                         )
 
 /**
@@ -285,6 +267,12 @@ uint8_t __GUI_WIDGET_SetInvalidateWithParent(GUI_HANDLE_p h, uint8_t value);
  */
 uint8_t __GUI_WIDGET_SetPosition(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y);
 
+uint8_t __GUI_WIDGET_SetPositionPercent(GUI_HANDLE_p h, float x, float y);
+uint8_t __GUI_WIDGET_SetXPosition(GUI_HANDLE_p h, GUI_iDim_t x);
+uint8_t __GUI_WIDGET_SetXPositionPercent(GUI_HANDLE_p h, float x);
+uint8_t __GUI_WIDGET_SetYPosition(GUI_HANDLE_p h, GUI_iDim_t y);
+uint8_t __GUI_WIDGET_SetYPositionPercent(GUI_HANDLE_p h, float y);
+
 /**
  * \brief           Set widget size in units of pixels
  * \note            Since this function is private, it can only be used by user inside GUI library
@@ -305,7 +293,7 @@ uint8_t __GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t hi);
  * \retval          1: Successful
  * \retval          0: Failed
  */
-uint8_t __GUI_WIDGET_SetSizePercent(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t hi);
+uint8_t __GUI_WIDGET_SetSizePercent(GUI_HANDLE_p h, float wi, float hi);
 
 /**
  * \brief           Set width of widget in units of pixels
@@ -338,7 +326,7 @@ uint8_t __GUI_WIDGET_SetHeight(GUI_HANDLE_p h, GUI_Dim_t height);
  * \retval          1: Failed
  * \sa              GUI_WIDGET_SetWidth, GUI_WIDGET_SetHeight, GUI_WIDGET_SetHeightPercent
  */
-uint8_t __GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width);
+uint8_t __GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, float width);
 
 /**
  * \brief           Set height of widget in percentage relative to parent widget
@@ -349,7 +337,7 @@ uint8_t __GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width);
  * \retval          1: Failed
  * \sa              GUI_WIDGET_SetWidth, GUI_WIDGET_SetHeight, GUI_WIDGET_SetWidthPercent
  */
-uint8_t __GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, GUI_Dim_t height);
+uint8_t __GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, float height);
 
 /**
  * \brief           Set 3D mode on widget
@@ -667,6 +655,8 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
  */
 #define __GUI_WIDGET_GetId(h)                       (__GH(h)->Id)
 
+GUI_HANDLE_p __GUI_WIDGET_GetById(GUI_ID_t id);
+
 /**
  * \brief           Get widget flag(s)
  * \param[in,out]   h: Widget handle
@@ -969,6 +959,10 @@ uint8_t __GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex);
  */
 #define __GUI_WIDGET_GetZIndex(h)                   ((int32_t)(__GH(h)->ZIndex))
 
+
+#define __GUI_WIDGET_SetUserData GUI_WIDGET_SetUserData
+#define __GUI_WIDGET_GetUserData GUI_WIDGET_GetUserData
+
 /**
  * \}
  */
@@ -1079,7 +1073,7 @@ uint8_t GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t width, GUI_Dim_t height);
  * \retval          0: Size was not set
  * \sa              GUI_WIDGET_SetSize
  */
-uint8_t GUI_WIDGET_SetSizePercent(GUI_HANDLE_p h, GUI_Dim_t width, GUI_Dim_t height);
+uint8_t GUI_WIDGET_SetSizePercent(GUI_HANDLE_p h, float width, float height);
 
 /**
  * \brief           Set width of widget in units of pixels
@@ -1109,7 +1103,7 @@ uint8_t GUI_WIDGET_SetHeight(GUI_HANDLE_p h, GUI_Dim_t height);
  * \retval          0: Width was not set
  * \sa              GUI_WIDGET_SetWidth, GUI_WIDGET_SetHeight, GUI_WIDGET_SetHeightPercent
  */
-uint8_t GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width);
+uint8_t GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, float width);
 
 /**
  * \brief           Set height of widget in percentage relative to parent widget
@@ -1119,7 +1113,7 @@ uint8_t GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width);
  * \retval          0: Height was not set
  * \sa              GUI_WIDGET_SetWidth, GUI_WIDGET_SetHeight, GUI_WIDGET_SetWidthPercent
  */
-uint8_t GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, GUI_Dim_t height);
+uint8_t GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, float height);
 
 /**
  * \brief           Get total width of widget effective on screen in units of pixels
@@ -1192,7 +1186,7 @@ uint8_t GUI_WIDGET_SetPosition(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y);
  * \retval          0: Position was not set
  * \sa              GUI_WIDGET_SetPosition
  */
-uint8_t GUI_WIDGET_SetPositionPercent(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y);
+uint8_t GUI_WIDGET_SetPositionPercent(GUI_HANDLE_p h, float x, float y);
  
 /**
  * \brief           Set widget X position relative to parent object in units of pixels
@@ -1212,7 +1206,7 @@ uint8_t GUI_WIDGET_SetXPosition(GUI_HANDLE_p h, GUI_iDim_t x);
  * \retval          0: Position was not set
  * \sa              GUI_WIDGET_SetXPosition
  */
-uint8_t GUI_WIDGET_SetXPositionPercent(GUI_HANDLE_p h, GUI_iDim_t x);
+uint8_t GUI_WIDGET_SetXPositionPercent(GUI_HANDLE_p h, float x);
  
 /**
  * \brief           Set widget Y position relative to parent object in units of pixels
@@ -1232,7 +1226,7 @@ uint8_t GUI_WIDGET_SetYPosition(GUI_HANDLE_p h, GUI_iDim_t y);
  * \retval          0: Position was not set
  * \sa              GUI_WIDGET_SetYPosition
  */
-uint8_t GUI_WIDGET_SetYPositionPercent(GUI_HANDLE_p h, GUI_iDim_t y);
+uint8_t GUI_WIDGET_SetYPositionPercent(GUI_HANDLE_p h, float y);
 
 /**
  * \brief           Set widget scroll on X axis

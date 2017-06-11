@@ -71,6 +71,7 @@ CTS         PA3                 RTS from ST to CTS from GSM
 #include "gui_dialog.h"
 #include "gui_image.h"
 #include "gui_slider.h"
+#include "gui_keyboard.h"
 
 #include "math.h"
 
@@ -86,6 +87,7 @@ GUI_HANDLE_p dialog1;
 #define ID_BASE_WIN             (ID_BASE + 0x0100)
 #define ID_BASE_BTN             (ID_BASE_WIN + 0x0100)
 #define ID_BASE_TEXTWIEW        (ID_BASE_BTN + 0x0100)
+#define ID_BASE_EDITTEXT        (ID_BASE_TEXTWIEW + 0x0100)
 #define ID_BASE_CHECKBOX        (ID_BASE_TEXTWIEW + 0x0100)
 #define ID_BASE_LED             (ID_BASE_CHECKBOX + 0x0100)
 #define ID_BASE_GRAPH           (ID_BASE_LED + 0x0100)
@@ -133,6 +135,7 @@ GUI_HANDLE_p dialog1;
 #define ID_BTN_DIALOG_CANCEL    (ID_BASE_BTN + 0x21)
 
 #define ID_TEXTVIEW_1           (ID_BASE_TEXTWIEW + 0x01)
+#define ID_TEXTVIEW_2           (ID_BASE_TEXTWIEW + 0x02)
 
 #define ID_CHECKBOX_LED         (ID_BASE_CHECKBOX + 0x01)
 #define ID_CHECKBOX_GRAPH       (ID_BASE_CHECKBOX + 0x02)
@@ -151,6 +154,8 @@ GUI_HANDLE_p dialog1;
 #define ID_BUTTON_1             (ID_BASE_BTN + 0x041)
 #define ID_BUTTON_2             (ID_BASE_BTN + 0x042)
 #define ID_BUTTON_3             (ID_BASE_BTN + 0x043)
+
+#define ID_EDITTEXT_1           (ID_BASE_EDITTEXT + 0x01)
 
 typedef struct {
     GUI_ID_t win_id;
@@ -219,6 +224,7 @@ uint8_t led_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 uint8_t dialog_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 uint8_t listview_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 uint8_t slider_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
+uint8_t edittext_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 
 #define PI      3.14159265359f
 
@@ -325,8 +331,12 @@ int main(void) {
             }
         }
     }
-    __GUI_LINKEDLIST_PrintList(NULL);
+    
+    GUI_KEYBOARD_Create();
 
+    
+    __GUI_LINKEDLIST_PrintList(NULL);
+    
 #if !defined(STM32F4xx)
     TM_EXTI_Attach(GPIOI, GPIO_PIN_13, TM_EXTI_Trigger_Rising);
 #endif
@@ -394,6 +404,8 @@ int main(void) {
                         ch = GUI_KEY_LEFT;
                     } else if (ch == 'd') {
                         ch = GUI_KEY_RIGHT;
+                    } else if (ch == GUI_KEY_CR) {
+                        ch = GUI_KEY_LF;
                     }
                     key.Keys[s.t - 1] = ch;
                     GUI_INPUT_KeyAdd(&key);
@@ -561,6 +573,16 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 handle = GUI_EDITTEXT_Create(1, 10, 10, 400, 40, h, 0, 0);
                 GUI_WIDGET_AllocTextMemory(handle, 255);
                 GUI_WIDGET_SetText(handle, _GT("Edit text"));
+                
+                /* Create text field first to hold view of edit text*/
+                handle = GUI_TEXTVIEW_Create(ID_TEXTVIEW_2, 10, 210, 400, 150, h, 0, 0);
+                
+                /* edittext_callback is responsible to set display text from edit text to text view */
+                handle = GUI_EDITTEXT_Create(ID_EDITTEXT_1, 10, 60, 400, 150, h, edittext_callback, 0);
+                GUI_WIDGET_AllocTextMemory(handle, 255);
+                GUI_EDITTEXT_SetMultiline(handle, 1);
+                GUI_EDITTEXT_SetVAlign(handle, GUI_EDITTEXT_VALIGN_TOP);
+                GUI_WIDGET_SetText(handle, _GT("Edit\ntext\nmultiline\n\n\n\nTextText\nTexttttt\nOLAAA\nOLAAAAAAA\n\nEvenMoreText\nMoreee\n"));
                 break;
             }
             case ID_WIN_PROGBAR: {      /* Progress bar */
@@ -926,7 +948,23 @@ uint8_t slider_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
     return ret;
 }
 
-
+uint8_t edittext_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
+    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    if (cmd == GUI_WC_TextChanged) {
+        GUI_ID_t id = GUI_WIDGET_GetId(h);          /* Get widget ID */
+        switch (id) {
+            case ID_EDITTEXT_1: {
+                GUI_HANDLE_p tmp = GUI_WIDGET_GetById(ID_TEXTVIEW_2);
+                if (tmp) {
+                    GUI_WIDGET_SetText(tmp, GUI_WIDGET_GetText(h));
+                    GUI_WIDGET_Invalidate(tmp);
+                }
+                break;
+            }
+        }
+    }
+    return ret;
+}
 
 void read_touch(void) {
     static GUI_TouchData_t p = {0}, t = {0};

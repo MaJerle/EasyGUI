@@ -113,9 +113,10 @@ extern "C" {
 #define GUI_KEY_PG_DOWN                 ((uint32_t)0x0007)  /*!< Keyboard page down button */
 #define GUI_KEY_BACKSPACE               ((uint32_t)0x0008)  /*!< Keyboard backspace button = ASCII 0x08 */
 #define GUI_KEY_TAB                     ((uint32_t)0x0009)  /*!< Keyboard TAB button */
-#define GUI_KEY_LF                      ((uint32_t)0x000D)  /*!< Keyboard line feed = ASCII 0x0A */
-#define GUI_KEY_CR                      ((uint32_t)0x000A)  /*!< Keyboard carriage return = ASCII 0x0D */
-#define GUI_KEY_WS                      ((uint32_t)0x0020)  /*!< Keyboard white space */
+#define GUI_KEY_LF                      ((uint32_t)'\n')    /*!< Keyboard line feed = ASCII 0x0A */
+#define GUI_KEY_CR                      ((uint32_t)'\r')    /*!< Keyboard carriage return = ASCII 0x0D */
+#define GUI_KEY_WS                      ((uint32_t)' ')     /*!< Keyboard white space */
+#define GUI_KEY_SHIFT                   ((uint32_t)0x0015)  /*!< Keyboard shift key */
 
 /**
  * \}
@@ -367,7 +368,6 @@ typedef struct GUI_IMAGE_DESC_t {
  * \}
  */
 
-
 /**
  * \brief           Low-level LCD command enumeration
  */
@@ -442,6 +442,7 @@ typedef struct {
 #define GUI_FLAG_FONT_AA                ((uint8_t)0x01) /*!< Indicates anti-alliasing on font */
 #define GUI_FLAG_FONT_RIGHTALIGN        ((uint8_t)0x02) /*!< Indicates right align text if string length is too wide for rectangle */
 #define GUI_FLAG_FONT_MULTILINE         ((uint8_t)0x04) /*!< Indicates multi line support on widget */
+#define GUI_FLAG_FONT_EDITMODE          ((uint8_t)0x08) /*!< Edit mode is enabled on text */
 
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)
 /**
@@ -1021,10 +1022,10 @@ typedef struct GUI_HANDLE {
     const GUI_WIDGET_t* Widget;             /*!< Widget parameters with callback functions */
     GUI_WIDGET_CALLBACK_t Callback;         /*!< Callback function prototype */
     struct GUI_HANDLE* Parent;              /*!< Pointer to parent widget */
-    GUI_iDim_t X;                           /*!< Object X position relative to parent window in units of pixels */
-    GUI_iDim_t Y;                           /*!< Object Y position relative to parent window in units of pixels */
-    GUI_Dim_t Width;                        /*!< Object width in units of pixels or percentages */
-    GUI_Dim_t Height;                       /*!< Object height in units of pixels or percentages */
+    float X;                                /*!< Object X position relative to parent window in units of pixels */
+    float Y;                                /*!< Object Y position relative to parent window in units of pixels */
+    float Width;                            /*!< Object width in units of pixels or percentages */
+    float Height;                           /*!< Object height in units of pixels or percentages */
     uint32_t Padding;                       /*!< 4-bytes long padding, each byte of one side, MSB = top padding, LSB = left padding.
                                                     Used for children widgets if virtual padding should be used */
     int32_t ZIndex;                         /*!< Z-Index value of widget, which can be set by user. All widgets with same z-index are changeable when active on visible area */

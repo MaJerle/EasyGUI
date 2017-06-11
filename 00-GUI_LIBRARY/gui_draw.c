@@ -129,6 +129,15 @@ void __ProcessStringRectangleBeforeReturn(GUI_StringRectVars_t* var, GUI_StringR
         if (var->IsLineFeed) {                      /* Line feed forced new line */
             rect->ReadDraw--;                       /* Don't draw this character at all */
         }
+        /**
+         * If there was a word which was too long for single line, put it to next line
+         */
+        if (var->CharsIndex > var->SpaceIndex && !end) {    /* If characters are the last values */
+            var->cW -= var->CharsWidth;             /* Decrease effective width for characters */
+            var->cnt -= var->CharsCount;            /* Decrease number of total count */
+            rect->ReadDraw -= var->CharsCount;      /* Decrease number of characters to read and draw */
+            rect->ReadTotal -= var->CharsCount;     /* Decrease number of characters to read */
+        }
         return;
     }
     if (end) {                                      /* We received final line (end of string) */
@@ -188,7 +197,7 @@ size_t __StringRectangle(GUI_StringRect_t* rect, const GUI_Char** str, uint8_t o
     var.IsBreak = onlyToNextLine;                   /* Set for break */
 
     tH = 0;
-    if (1) {    /* We want to know exact rectangle for drawing multi line texts including new lines and carriage return */
+    if (rect->StringDraw->Flags & GUI_FLAG_FONT_MULTILINE) {    /* We want to know exact rectangle for drawing multi line texts including new lines and carriage return */
         while (1) {                                 /* Unlimited execution */
             lastS = var.s;                          /* Save current string pointer */
             if (GUI_STRING_GetCh(&var.s, &var.ch, &i)) {    /* Get next character from string */
@@ -199,7 +208,7 @@ size_t __StringRectangle(GUI_StringRect_t* rect, const GUI_Char** str, uint8_t o
 
                 /* Check for LF character */
                 var.IsLineFeed = 0;
-                if (CH_LF == var.ch) { /* LF is for new line */
+                if (CH_LF == var.ch) {              /* LF is for new line */
                     var.IsLineFeed = 1;             /* Character is line feed */
                     var.ch = CH_WS;                 /* Set it as space */
                 }
@@ -300,6 +309,7 @@ size_t __StringRectangle(GUI_StringRect_t* rect, const GUI_Char** str, uint8_t o
         }
         rect->ReadTotal = rect->ReadDraw = var.cnt; /* Set values for drawing and reading */
         rect->Width = var.cW;                       /* Save width value */
+        tH += rect->StringDraw->LineHeight;         /* Set line height */
     }
     rect->Height = tH;                              /* Save rectangle height value */
     return var.cnt;                                 /* Return number of characters to read in current line */
@@ -1100,8 +1110,9 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
         draw->LineHeight = font->Size;              /* Set font size */
     }
     
-    rect.Font = font;
-    rect.StringDraw = draw;
+    rect.Font = font;                               /* Save font structure */
+    rect.StringDraw = draw;                         /* Set drawing pointer */
+    rect.IsEditMode = !!(draw->Flags & GUI_FLAG_FONT_EDITMODE); /* Check if in edit mode */
       
     strTmp = str;
     __StringRectangle(&rect, &strTmp, 0);           /* Get string width for this box */
@@ -1125,8 +1136,16 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
     if (y < draw->Y) {                              /* Check situation first */
         y = draw->Y;
     }
-    
     y -= draw->ScrollY;                             /* Go scroll top */
+    
+    /**
+     * Check Y start value in case of edit mode = allow always on bottom
+     */
+    if (draw->Flags & GUI_FLAG_FONT_MULTILINE && rect.IsEditMode) { /* In multi-line and edit mode */
+        if (rect.Height > draw->Height) {           /* If text is greater than visible area in edit mode, set it to bottom align */
+            y = draw->Y + draw->Height - rect.Height;
+        }
+    }
     
     /* Debug purpose only */
 //    x = draw->X;
@@ -1147,7 +1166,7 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
             x += draw->Width - rect.Width;          /* Align right of drawing area */
         }
 //        GUI_DRAW_Rectangle(disp, x, y, rect.Width, rect.Height, GUI_COLOR_RED);
-        while (cnt-- && GUI_STRING_GetCh(&str, &ch, &i)) {
+        while (cnt-- && GUI_STRING_GetCh(&str, &ch, &i)) {  /* Read character by character */
             if (rect.ReadDraw == 0) {               /* Anything to draw? */
                 continue;
             }

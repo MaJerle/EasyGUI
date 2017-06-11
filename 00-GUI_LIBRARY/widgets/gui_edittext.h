@@ -68,16 +68,40 @@ typedef enum GUI_EDITTEXT_COLOR_t {
     GUI_EDITTEXT_COLOR_FG,                  /*!< Foreground color index */
     GUI_EDITTEXT_COLOR_BORDER,              /*!< Border color index */
 } GUI_EDITTEXT_COLOR_t;
+
+/**
+ * \brief           Vertical align for edit text inside box
+ */
+typedef enum GUI_EDITTEXT_VALIGN_t {        
+    GUI_EDITTEXT_VALIGN_TOP = GUI_VALIGN_TOP,       /*!< Vertical align top, default value */
+    GUI_EDITTEXT_VALIGN_CENTER = GUI_VALIGN_CENTER, /*!< Vertical align center */
+    GUI_EDITTEXT_VALIGN_BOTTOM = GUI_VALIGN_BOTTOM  /*!< Vertical align bottom */
+} GUI_EDITTEXT_VALIGN_t;
+
+/**
+ * \brief           Horizontal align for edit text inside box
+ */
+typedef enum GUI_EDITTEXT_HALIGN_t {        
+    GUI_EDITTEXT_HALIGN_LEFT = GUI_HALIGN_LEFT,     /*!< Horizontal align left, default value */
+    GUI_EDITTEXT_HALIGN_CENTER = GUI_HALIGN_CENTER, /*!< Horizontal align center */
+    GUI_EDITTEXT_HALIGN_RIGHT = GUI_HALIGN_RIGHT    /*!< Horizontal align right */
+} GUI_EDITTEXT_HALIGN_t;
     
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)
+
+#define GUI_EDITTEXT_FLAG_MULTILINE         ((uint8_t)0x01) /*!< Defines widget as multi-line edit */
+
 /**
  * \brief           GUI EDIT TEXT widget structure
  */
 typedef struct GUI_EDITTEXT_t {
     GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
+    
+    uint8_t Flags;                          /*!< List of widget flags */
+    GUI_EDITTEXT_VALIGN_t VAlign;           /*!< Vertical align setup */
+    GUI_EDITTEXT_HALIGN_t HAlign;           /*!< Horizontal align setup */
 } GUI_EDITTEXT_t;
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
-
 
 /**
  * \brief           Create new edit text widget
@@ -103,6 +127,26 @@ GUI_HANDLE_p GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Di
  * \retval          0: Color was not set
  */
 uint8_t GUI_EDITTEXT_SetColor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color);
+
+uint8_t GUI_EDITTEXT_SetMultiline(GUI_HANDLE_p h, uint8_t multiline);
+
+/**
+ * \brief           Set vertical align for text inside text box
+ * \param[in,out]   h: Widget handle
+ * \param[in]       align: Vertical align. This parameter can be a value of \ref GUI_EDITTEXT_VALIGN_t enumeration
+ * \retval          1: Align was set ok
+ * \retval          0: Align was not set
+ */
+uint8_t GUI_EDITTEXT_SetVAlign(GUI_HANDLE_p h, GUI_EDITTEXT_VALIGN_t align);
+
+/**
+ * \brief           Set horizontal align for text inside text box
+ * \param[in,out]   h: Widget handle
+ * \param[in]       align: Vertical align. This parameter can be a value of \ref GUI_EDITTEXT_HALIGN_t enumeration
+ * \retval          1: Align was set ok
+ * \retval          0: Align was not set
+ */
+uint8_t GUI_EDITTEXT_SetHAlign(GUI_HANDLE_p h, GUI_EDITTEXT_HALIGN_t align);
 
 /**
  * \}

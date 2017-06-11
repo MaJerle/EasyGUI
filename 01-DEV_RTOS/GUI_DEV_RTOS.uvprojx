@@ -1381,6 +1381,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_slider.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_container.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_container.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1390,6 +1395,11 @@
               <FileName>gui_input.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\input\gui_input.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_keyboard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\input\gui_keyboard.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2936,6 +2946,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_slider.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_container.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_container.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2945,6 +2960,11 @@
               <FileName>gui_input.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\input\gui_input.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_keyboard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\input\gui_keyboard.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4491,6 +4511,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_slider.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_container.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_container.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4500,6 +4525,11 @@
               <FileName>gui_input.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\input\gui_input.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_keyboard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\input\gui_keyboard.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -6084,6 +6114,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\widgets\gui_slider.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_container.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\widgets\gui_container.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -6093,6 +6128,11 @@
               <FileName>gui_input.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\input\gui_input.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_keyboard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\input\gui_keyboard.c</FilePath>
             </File>
           </Files>
         </Group>

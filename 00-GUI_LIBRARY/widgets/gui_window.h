@@ -76,8 +76,6 @@ typedef enum GUI_WINDOW_COLOR_t {
 typedef struct GUI_WINDOW_t {
     GUI_HANDLE_ROOT_t C;                    /*!< GUI handle object, must always be first on list */
     
-    GUI_TIMER_t* Timer;                     /*!< Pointer to timer structure */
-    
     uint32_t Number;                        /*!< Window number */
     
     GUI_Dim_t BorderRadius;                 /*!< Radius in units of pixels for children windows */

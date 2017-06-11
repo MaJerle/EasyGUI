@@ -221,6 +221,13 @@ extern "C" {
 #define __GUI_UNUSED4(x, y, z, k)   { __GUI_UNUSED(x); __GUI_UNUSED(y); __GUI_UNUSED(z); __GUI_UNUSED(k); }
 
 /**
+ * \brief           Round value to the nearest integer and return it as float (can be casted to int without problems)
+ * \param[in]       x: Value to round
+ * \retval          Rounded value
+ */
+#define GUI_ROUND(x)                ((float)(x) + 0.5f)
+
+/**
  * \}
  */
 //#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */

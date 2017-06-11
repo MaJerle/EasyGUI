@@ -295,7 +295,7 @@ GUI_HANDLE_p __GetCommonParentWidget(GUI_HANDLE_p h1, GUI_HANDLE_p h2) {
 
 /* Set widget size */
 static
-uint8_t __SetWidgetSize(GUI_HANDLE_p h, GUI_iDim_t wi, GUI_iDim_t hi) {
+uint8_t __SetWidgetSize(GUI_HANDLE_p h, float wi, float hi) {
     if (wi != __GH(h)->Width || hi != __GH(h)->Height) {
         uint8_t invalidateSecond = 0;
         if (!__GUI_WIDGET_IsExpanded(h)) {
@@ -315,7 +315,7 @@ uint8_t __SetWidgetSize(GUI_HANDLE_p h, GUI_iDim_t wi, GUI_iDim_t hi) {
 
 /* Set widget position */
 static
-uint8_t __SetWidgetPosition(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
+uint8_t __SetWidgetPosition(GUI_HANDLE_p h, float x, float y) {
     if (__GH(h)->X != x || __GH(h)->Y != y) {
         if (!__GUI_WIDGET_IsExpanded(h)) {
             __GUI_WIDGET_InvalidateWithParent(h);   /* Set old clipping region first */
@@ -397,7 +397,7 @@ GUI_Dim_t __GUI_WIDGET_GetWidth(GUI_HANDLE_p h) {
         }
     } else if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_WIDTH_PERCENT)) {   /* Percentage width */
         GUI_Dim_t parent = __GUI_WIDGET_GetParentInnerWidth(h);
-        return __GH(h)->Width * parent / 100;
+        return GUI_ROUND(__GH(h)->Width * parent / 100);
     } else {                                        /* Normal width */
         return __GH(h)->Width;
     }
@@ -413,7 +413,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h) {
             return parent - __GUI_WIDGET_GetRelativeY(h);   /* Return widget width */
         }
     } else if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_HEIGHT_PERCENT)) {  /* Percentage height */
-        return __GH(h)->Height * __GUI_WIDGET_GetParentInnerHeight(h) / 100;
+        return GUI_ROUND(__GH(h)->Height * __GUI_WIDGET_GetParentInnerHeight(h) / 100);
     } else {                                        /* Normal height */
         return __GH(h)->Height;
     }
@@ -640,7 +640,7 @@ uint8_t __GUI_WIDGET_SetText(GUI_HANDLE_p h, const GUI_Char* text) {
         }
     } else {                                        /* Memory allocated by user */
         if (__GH(h)->Text && __GH(h)->Text == text) {   /* In case the same pointer is passed to WIDGET */
-            if (GUI_STRING_Compare(__GH(h)->Text, text)) {/* If strings does not match, source string updated? */
+            if (GUI_STRING_Compare(__GH(h)->Text, text)) {  /* If strings does not match, source string updated? */
                 __GUI_WIDGET_Invalidate(h);         /* Redraw object */
                 __GUI_WIDGET_Callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
             }
@@ -689,7 +689,7 @@ uint8_t __GUI_WIDGET_FreeTextMemory(GUI_HANDLE_p h) {
 }
 
 uint8_t __GUI_WIDGET_IsFontAndTextSet(GUI_HANDLE_p h) {
-    return __GH(h)->Text && __GH(h)->Font && GUI_STRING_Length(__GH(h)->Text);  /* Check if conditions are met for drawing string */
+    return __GH(h)->Text && __GH(h)->Text[0] && __GH(h)->Font && GUI_STRING_Length(__GH(h)->Text);  /* Check if conditions are met for drawing string */
 }
 
 uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
@@ -764,7 +764,7 @@ uint8_t __GUI_WIDGET_SetHeight(GUI_HANDLE_p h, GUI_Dim_t height) {
     return __SetWidgetSize(h, __GH(h)->Width, height);  /* Set new height */
 }
 
-uint8_t __GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width) {
+uint8_t __GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, float width) {
     if (!__GUI_WIDGET_GetFlag(h, GUI_FLAG_WIDTH_PERCENT)) { /* Invalidate if percent not yet enabled to force invalidation */
         __GUI_WIDGET_SetFlag(h, GUI_FLAG_WIDTH_PERCENT);    /* Set percentage flag */
         __GH(h)->Width = width + 1;                 /* Invalidate widget */
@@ -772,7 +772,7 @@ uint8_t __GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width) {
     return __SetWidgetSize(h, width, __GH(h)->Height);  /* Set new width */
 }
 
-uint8_t __GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, GUI_Dim_t height) {
+uint8_t __GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, float height) {
     if (!__GUI_WIDGET_GetFlag(h, GUI_FLAG_HEIGHT_PERCENT)) {    /* Invalidate if percent not yet enabled to force invalidation */
         __GUI_WIDGET_SetFlag(h, GUI_FLAG_HEIGHT_PERCENT);   /* Set percentage flag */
         __GH(h)->Height = height + 1;               /* Invalidate height */
@@ -790,7 +790,7 @@ uint8_t __GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t hi) {
     return __SetWidgetSize(h, wi, hi);              /* Set widget size */
 }
 
-uint8_t __GUI_WIDGET_SetSizePercent(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t hi) {
+uint8_t __GUI_WIDGET_SetSizePercent(GUI_HANDLE_p h, float wi, float hi) {
     /* If percentage not enable on width or height */
     if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_WIDTH_PERCENT | GUI_FLAG_HEIGHT_PERCENT) != (GUI_FLAG_WIDTH_PERCENT | GUI_FLAG_HEIGHT_PERCENT)) {
         __GUI_WIDGET_SetFlag(h, GUI_FLAG_WIDTH_PERCENT | GUI_FLAG_HEIGHT_PERCENT);  /* Set both flags */
@@ -828,7 +828,7 @@ uint8_t __GUI_WIDGET_SetPosition(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
     return __SetWidgetPosition(h, x, y);            /* Set widget position */
 }
 
-uint8_t __GUI_WIDGET_SetPositionPercent(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {     
+uint8_t __GUI_WIDGET_SetPositionPercent(GUI_HANDLE_p h, float x, float y) {     
     /* If percent not set on both, enable to force invalidation */
     if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_XPOS_PERCENT | GUI_FLAG_YPOS_PERCENT) != (GUI_FLAG_XPOS_PERCENT | GUI_FLAG_YPOS_PERCENT)) {
         __GUI_WIDGET_SetFlag(h, GUI_FLAG_XPOS_PERCENT | GUI_FLAG_YPOS_PERCENT); /* Enable percent on X and Y position */
@@ -846,7 +846,7 @@ uint8_t __GUI_WIDGET_SetXPosition(GUI_HANDLE_p h, GUI_iDim_t x) {
     return __SetWidgetPosition(h, x, __GH(h)->Y);   /* Set widget position */
 }
 
-uint8_t __GUI_WIDGET_SetXPositionPercent(GUI_HANDLE_p h, GUI_iDim_t x) {
+uint8_t __GUI_WIDGET_SetXPositionPercent(GUI_HANDLE_p h, float x) {
     if (!__GUI_WIDGET_GetFlag(h, GUI_FLAG_XPOS_PERCENT)) {  /* if percent not enabled */
         __GUI_WIDGET_SetFlag(h, GUI_FLAG_XPOS_PERCENT); /* Set it to force invalidation */
         __GH(h)->X = x + 1;                         /* Invalidate position */
@@ -862,13 +862,14 @@ uint8_t __GUI_WIDGET_SetYPosition(GUI_HANDLE_p h, GUI_iDim_t y) {
     return __SetWidgetPosition(h, __GH(h)->X, y);   /* Set widget position */
 }
 
-uint8_t __GUI_WIDGET_SetYPositionPercent(GUI_HANDLE_p h, GUI_iDim_t y) {
+uint8_t __GUI_WIDGET_SetYPositionPercent(GUI_HANDLE_p h, float y) {
     if (!__GUI_WIDGET_GetFlag(h, GUI_FLAG_YPOS_PERCENT)) {  /* if percent not enabled */
         __GUI_WIDGET_SetFlag(h, GUI_FLAG_YPOS_PERCENT); /* Set it to force invalidation */
         __GH(h)->X = y + 1;                         /* Invalidate position */
     }
     return __SetWidgetPosition(h, __GH(h)->X, y);   /* Set widget position */
 }
+
 /*******************************************/
 /**                  .....                **/
 /*******************************************/
@@ -957,6 +958,10 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color) 
         }
     }
     return ret;
+}
+
+GUI_HANDLE_p __GUI_WIDGET_GetById(GUI_ID_t id) {
+    return __GetWidgetById(NULL, id, 1);            /* Find widget by ID */ 
 }
 
 void __GUI_WIDGET_MoveDownTree(GUI_HANDLE_p h) {              
@@ -1166,7 +1171,7 @@ uint8_t GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t width, GUI_Dim_t height) {
     return res;
 }
 
-uint8_t GUI_WIDGET_SetSizePercent(GUI_HANDLE_p h, GUI_Dim_t width, GUI_Dim_t height) {
+uint8_t GUI_WIDGET_SetSizePercent(GUI_HANDLE_p h, float width, float height) {
     uint8_t res;
     
     __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
@@ -1202,7 +1207,7 @@ uint8_t GUI_WIDGET_SetHeight(GUI_HANDLE_p h, GUI_Dim_t height) {
     return res;
 }
 
-uint8_t GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width) {
+uint8_t GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, float width) {
     uint8_t res;
     __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
@@ -1213,7 +1218,7 @@ uint8_t GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, GUI_Dim_t width) {
     return res;
 }
 
-uint8_t GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, GUI_Dim_t height) {
+uint8_t GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, float height) {
     uint8_t res;
     __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
@@ -1284,7 +1289,7 @@ uint8_t GUI_WIDGET_SetPosition(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
     return res;
 }
 
-uint8_t GUI_WIDGET_SetPositionPercent(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
+uint8_t GUI_WIDGET_SetPositionPercent(GUI_HANDLE_p h, float x, float y) {
     uint8_t res;
     __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
@@ -1306,7 +1311,7 @@ uint8_t GUI_WIDGET_SetXPosition(GUI_HANDLE_p h, GUI_iDim_t x) {
     return res;
 }
 
-uint8_t GUI_WIDGET_SetXPositionPercent(GUI_HANDLE_p h, GUI_iDim_t x) {
+uint8_t GUI_WIDGET_SetXPositionPercent(GUI_HANDLE_p h, float x) {
     uint8_t res;
     __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
@@ -1328,7 +1333,7 @@ uint8_t GUI_WIDGET_SetYPosition(GUI_HANDLE_p h, GUI_iDim_t y) {
     return res;
 }
 
-uint8_t GUI_WIDGET_SetYPositionPercent(GUI_HANDLE_p h, GUI_iDim_t y) {
+uint8_t GUI_WIDGET_SetYPositionPercent(GUI_HANDLE_p h, float y) {
     uint8_t res;
     __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
