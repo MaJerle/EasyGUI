@@ -49,7 +49,12 @@ extern "C" {
  * \{
  */
 
+uint8_t __GUI_KEYBOARD_Hide(void);
+uint8_t __GUI_KEYBOARD_Show(void);
+    
 GUI_HANDLE_p GUI_KEYBOARD_Create(void);
+uint8_t GUI_KEYBOARD_Hide(void);
+uint8_t GUI_KEYBOARD_Show(void);
     
 /**
  * \}

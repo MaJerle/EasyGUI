@@ -332,8 +332,7 @@ int main(void) {
         }
     }
     
-    GUI_KEYBOARD_Create();
-
+    //GUI_KEYBOARD_Create();
     
     __GUI_LINKEDLIST_PrintList(NULL);
     

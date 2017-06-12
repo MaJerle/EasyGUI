@@ -125,8 +125,14 @@ uint8_t GUI_EDITTEXT_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             return 1;
         }
         case GUI_WC_FocusIn:
+#if GUI_USE_KEYBOARD
+//            __GUI_KEYBOARD_Show();                  /* Show keyboard */
+#endif /* GUI_USE_KEYBOARD */
             return 1;
         case GUI_WC_FocusOut:
+#if GUI_USE_KEYBOARD
+//            __GUI_KEYBOARD_Hide();                  /* Hide keyboard */
+#endif /* GUI_USE_KEYBOARD */
             return 1;
 #if GUI_USE_TOUCH
         case GUI_WC_TouchStart: {

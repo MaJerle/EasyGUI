@@ -54,26 +54,26 @@ GUI_t GUI;
 /******************************************************************************/
 
 /* Gets number of widgets waiting for redraw */
-uint32_t __GetNumberOfPendingWidgets(GUI_HANDLE_p parent) {
-    GUI_HANDLE_p h;
-    uint32_t cnt = 0;
-    
-    if (parent && __GUI_WIDGET_GetFlag(parent, GUI_FLAG_REDRAW)) {  /* Check for specific widget */
-        return 1;                                   /* We have object to redraw */
-    }
-    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, NULL); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
-        if (!__GUI_WIDGET_IsVisible(h)) {           /* Check if visible */
-            continue;
-        }
-        if (__GUI_WIDGET_AllowChildren(h)) {        /* If this widget has children elements */
-            cnt += __GetNumberOfPendingWidgets(h);  /* Redraw this widget and all its children if required */
-        }
-        if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_REDRAW)) { /* Check if we need redraw */
-            cnt++;                                  /* Increase number of elements to redraw */
-        }
-    }
-    return cnt;
-}
+//uint32_t __GetNumberOfPendingWidgets(GUI_HANDLE_p parent) {
+//    GUI_HANDLE_p h;
+//    uint32_t cnt = 0;
+//    
+//    if (parent && __GUI_WIDGET_GetFlag(parent, GUI_FLAG_REDRAW)) {  /* Check for specific widget */
+//        return 1;                                   /* We have object to redraw */
+//    }
+//    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, NULL); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
+//        if (!__GUI_WIDGET_IsVisible(h)) {           /* Check if visible */
+//            continue;
+//        }
+//        if (__GUI_WIDGET_AllowChildren(h)) {        /* If this widget has children elements */
+//            cnt += __GetNumberOfPendingWidgets(h);  /* Redraw this widget and all its children if required */
+//        }
+//        if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_REDRAW)) { /* Check if we need redraw */
+//            cnt++;                                  /* Increase number of elements to redraw */
+//        }
+//    }
+//    return cnt;
+//}
 
 /* Clip widget before draw/touch operation */
 static
@@ -100,10 +100,10 @@ void __CheckDispClipping(GUI_HANDLE_p h) {
     
     /* Check that widget is not drawn over any of parent widgets because of scrolling */
     for (; h; h = __GH(h)->Parent) {
-        x = __GUI_WIDGET_GetParentAbsoluteX(h);         /* Parent absolute X position for inner widgets */
-        y = __GUI_WIDGET_GetParentAbsoluteY(h);         /* Parent absolute Y position for inner widgets */
-        wi = __GUI_WIDGET_GetParentInnerWidth(h);       /* Get parent inner width */
-        hi = __GUI_WIDGET_GetParentInnerHeight(h);      /* Get parent inner height */
+        x = __GUI_WIDGET_GetParentAbsoluteX(h);     /* Parent absolute X position for inner widgets */
+        y = __GUI_WIDGET_GetParentAbsoluteY(h);     /* Parent absolute Y position for inner widgets */
+        wi = __GUI_WIDGET_GetParentInnerWidth(h);   /* Get parent inner width */
+        hi = __GUI_WIDGET_GetParentInnerHeight(h);  /* Get parent inner height */
         
         if (GUI.DisplayTemp.X1 < x)         { GUI.DisplayTemp.X1 = x; }
         if (GUI.DisplayTemp.X2 > x + wi)    { GUI.DisplayTemp.X2 = x + wi; }
@@ -112,6 +112,8 @@ void __CheckDispClipping(GUI_HANDLE_p h) {
     }
 }
 
+/* Redraw widgets */
+static
 uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;
     uint32_t cnt = 0;
@@ -224,7 +226,7 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
  * Besides, with these 3 basic touch events, it is possible to handle 3 more events, which may not be just used with touch but can also be used with mouse
  *  - Click: Triggered when pressed state is detected and after that released state, still on widget coordinates
  *  - LongClick: Triggered when pressed state is detected for x amount of time (usually 2 seconds)
- *  - DblClick: Triggered when 2 Click events are detected in range of 300ms
+ *  - DblClick: Triggered when 2 Click events are detected in range of some milliseconds
  *
  * To be able to detect DblClick, 2 Click events must be valid in certain time.
  *
@@ -319,7 +321,7 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
                      * Wait for valid input with pressed state
                      */
                     PT_WAIT_UNTIL(&ts->pt, (v && ts->TS.Status) || (GUI.Time - Time) > 300);
-                    if ((GUI.Time - Time) > 300) {  /* Check timeout for new pressed state */
+                    if ((GUI.Time - Time) > 200) {  /* Check timeout for new pressed state */
                         PT_EXIT(&ts->pt);           /* Exit protothread */
                     }
                 } else {
@@ -359,6 +361,7 @@ void __SetRelativeCoordinate(__GUI_TouchData_t* ts, GUI_iDim_t x, GUI_iDim_t y, 
 __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;
     static uint8_t deep = 0;
+    static uint8_t isKeyboard = 0;
     uint8_t dialogOnly = 0;
     __GUI_TouchStatus_t tStat = touchCONTINUE;
     
@@ -379,57 +382,78 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
             break;
         }
         
+        /* Check for keyboard mode */
+        if (__GUI_WIDGET_GetId(h) == GUI_ID_KEYBOARD_BASE) {
+            isKeyboard = 1;                         /* Set keyboard mode as 1 */
+        }
+        
         /* Check children elements first */
         if (__GUI_WIDGET_AllowChildren(h)) {        /* If children widgets are allowed */
             deep++;                                 /* Go deeper in level */
             tStat = __ProcessTouch(touch, h);       /* Process touch on widget elements first */
             deep--;                                 /* Go back to normal level */
-            if (tStat != touchCONTINUE) {           /* If we should not continue */
-                return tStat;
+        }
+        
+        /**
+         * Children widgets were not detected
+         */
+        if (tStat == touchCONTINUE) {               /* Do we still have to check this widget? */
+            __CheckDispClipping(h);                 /* Check display region where widget is placed */
+        
+            /* Check if widget is in touch area */
+            if (touch->TS.X[0] >= GUI.DisplayTemp.X1 && touch->TS.X[0] <= GUI.DisplayTemp.X2 && 
+                touch->TS.Y[0] >= GUI.DisplayTemp.Y1 && touch->TS.Y[0] <= GUI.DisplayTemp.Y2) {
+                __SetRelativeCoordinate(touch,      /* Set relative coordinate */
+                    __GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h), 
+                    __GUI_WIDGET_GetWidth(h), __GUI_WIDGET_GetHeight(h)
+                ); 
+            
+                __GUI_WIDGET_Callback(h, GUI_WC_TouchStart, touch, &tStat);
+                if (tStat == touchCONTINUE) {       /* Check result status */
+                    tStat = touchHANDLED;           /* If command is processed, touchCONTINUE can't work */
+                }
+                /**
+                 * Move widget down on parent linked list and do the same with all of its parents,
+                 * no matter of touch focus or not
+                 */
+                __GUI_WIDGET_MoveDownTree(h);
+                
+                if (tStat == touchHANDLED) {        /* Touch handled for widget completelly */
+                    /**
+                     * Set active widget and set flag for it
+                     * Set focus widget and set flag for it but only do this if widget is not related to keyboard
+                     *
+                     * This allows us to click keyboard items but not to lose focus on main widget
+                     */
+                    if (!isKeyboard) {
+                        __GUI_WIDGET_FOCUS_SET(h);
+                    }
+                    __GUI_WIDGET_ACTIVE_SET(h);
+                    
+                    /**
+                     * Invalidate actual handle object
+                     * Already invalidated in __GUI_ACTIVE_SET function
+                     */
+                    //__GUI_WIDGET_Invalidate(h);
+                } else {                            /* Touch handled with no focus */
+                    /**
+                     * When touch was handled without focus,
+                     * process only clearing currently focused and active widgets and clear them
+                     */
+                    if (!isKeyboard) {
+                        __GUI_WIDGET_FOCUS_CLEAR();
+                    }
+                    __GUI_WIDGET_ACTIVE_CLEAR();
+                }
             }
         }
         
-        __CheckDispClipping(h);                     /* Check display region where widget is placed */
+        /* Check for keyboard mode */
+        if (__GUI_WIDGET_GetId(h) == GUI_ID_KEYBOARD_BASE) {
+            isKeyboard = 0;                         /* Set keyboard mode as 1 */
+        }
         
-        /* Check if widget is in touch area */
-        if (touch->TS.X[0] >= GUI.DisplayTemp.X1 && touch->TS.X[0] <= GUI.DisplayTemp.X2 && 
-            touch->TS.Y[0] >= GUI.DisplayTemp.Y1 && touch->TS.Y[0] <= GUI.DisplayTemp.Y2) {
-            __SetRelativeCoordinate(touch,          /* Set relative coordinate */
-                __GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h), 
-                __GUI_WIDGET_GetWidth(h), __GUI_WIDGET_GetHeight(h)
-            ); 
-        
-            __GUI_WIDGET_Callback(h, GUI_WC_TouchStart, touch, &tStat);
-            if (tStat == touchCONTINUE) {           /* Check result status */
-                tStat = touchHANDLED;               /* If command is processed, touchCONTINUE can't work */
-            }
-            /**
-             * Move widget down on parent linked list and do the same with all of its parents,
-             * no matter of touch focus or not
-             */
-            __GUI_WIDGET_MoveDownTree(h);
-            
-            if (tStat == touchHANDLED) {            /* Touch handled for widget completelly */
-                /**
-                 * Set active widget and set flag for it
-                 * Set focus widget and set flag for iz
-                 */
-                __GUI_WIDGET_FOCUS_SET(h);
-                __GUI_WIDGET_ACTIVE_SET(h);
-                
-                /**
-                 * Invalidate actual handle object
-                 * Already invalidated in __GUI_ACTIVE_SET function
-                 */
-                //__GUI_WIDGET_Invalidate(h);
-            } else {                                /* Touch handled with no focus */
-                /**
-                 * When touch was handled without focus,
-                 * process only clearing currently focused and active widgets and clear them
-                 */
-                __GUI_WIDGET_FOCUS_CLEAR();
-                __GUI_WIDGET_ACTIVE_CLEAR();
-            }
+        if (tStat != touchCONTINUE) {               /* Return status if necessary */
             return tStat;
         }
     }

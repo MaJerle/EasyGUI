@@ -55,7 +55,11 @@ typedef struct {
 
 typedef struct {
     uint8_t IsShift;                                /*!< Status indicating shift mode is enabled */
+    GUI_HANDLE_p Handle;                            /*!< Pointer to keyboard handle */
     GUI_HANDLE_p MainLayoutHandle;                  /*!< Pointer to main keyboard layout */
+    
+    uint8_t Action;                                 /*!< Kbd show/hide action */
+    uint8_t ActionValue;                            /*!< Action custom value */
 } KeyboardInfo_t;
 
 /******************************************************************************/
@@ -63,12 +67,13 @@ typedef struct {
 /***                           Private definitions                           **/
 /******************************************************************************/
 /******************************************************************************/
-#define SPECIAL_123                     0x01
-#define SPECIAL_ABC                     0x02
-#define SPECIAL_CALC                    0x03
-#define SPECIAL_SHIFT                   0x04
-#define SPECIAL_BACKSPACE               0x05
-#define SPECIAL_ENTER                   0x06
+#define SPECIAL_123                     ((uint32_t)0x01)
+#define SPECIAL_ABC                     ((uint32_t)0x02)
+#define SPECIAL_CALC                    ((uint32_t)0x03)
+#define SPECIAL_SHIFT                   ((uint32_t)0x04)
+#define SPECIAL_BACKSPACE               ((uint32_t)0x05)
+#define SPECIAL_ENTER                   ((uint32_t)0x06)
+#define SPECIAL_HIDE                    ((uint32_t)0x07)
 
 #define GUI_ID_KEYBOARD_LAYOUT_ABC      (GUI_ID_KEYBOARD_BASE + 0x01UL)
 #define GUI_ID_KEYBOARD_LAYOUT_123      (GUI_ID_KEYBOARD_BASE + 0x02UL)
@@ -77,6 +82,9 @@ typedef struct {
 #define SHIFT_CLEARED                   0x00
 #define SHIFT_NORMAL                    0x01
 #define SHIFT_UPPERCASE                 0x02
+
+#define ACTION_HIDE                     0x01
+#define ACTION_SHOW                     0x02
 
 /******************************************************************************/
 /******************************************************************************/
@@ -128,10 +136,11 @@ const KeyboardBtn_t ButtonsL1R3[] = {
 
 static 
 const KeyboardBtn_t ButtonsL1R4[] = {
-    {.C = 0, .X = 0.5, .W = 9, .S = ((uint32_t)SPECIAL_123)},
-    {.C = ((uint32_t)' '), .X = 10.5, .W = 69},
-    {.C = ((uint32_t)'.'), .X = 80.5, .W = 9},
-    {.C = 0, .X = 90.5, .W = 9, .S = ((uint32_t)SPECIAL_ENTER)},
+    {.C = 0, .X = 0.5, .W = 9, .S = ((uint32_t)SPECIAL_ABC)},
+    {.C = ((uint32_t)' '), .X = 10.5, .W = 59},
+    {.C = ((uint32_t)'.'), .X = 70.5, .W = 9},
+    {.C = 0, .X = 80.5, .W = 9, .S = ((uint32_t)SPECIAL_ENTER)},
+    {.C = 0, .X = 90.5, .W = 9, .S = ((uint32_t)SPECIAL_HIDE)},
 };
 
 static
@@ -189,9 +198,10 @@ const KeyboardBtn_t ButtonsL2R3[] = {
 static 
 const KeyboardBtn_t ButtonsL2R4[] = {
     {.C = 0, .X = 0.5, .W = 9, .S = ((uint32_t)SPECIAL_ABC)},
-    {.C = ((uint32_t)' '), .X = 10.5, .W = 69},
-    {.C = ((uint32_t)'.'), .X = 80.5, .W = 9},
-    {.C = 0, .X = 90.5, .W = 9, .S = ((uint32_t)SPECIAL_ENTER)},
+    {.C = ((uint32_t)' '), .X = 10.5, .W = 59},
+    {.C = ((uint32_t)'.'), .X = 70.5, .W = 9},
+    {.C = 0, .X = 80.5, .W = 9, .S = ((uint32_t)SPECIAL_ENTER)},
+    {.C = 0, .X = 90.5, .W = 9, .S = ((uint32_t)SPECIAL_HIDE)},
 };
 
 static
@@ -247,9 +257,10 @@ const KeyboardBtn_t ButtonsL3R3[] = {
 static 
 const KeyboardBtn_t ButtonsL3R4[] = {
     {.C = 0, .X = 0.5, .W = 9, .S = ((uint32_t)SPECIAL_ABC)},
-    {.C = ((uint32_t)' '), .X = 10.5, .W = 69},
-    {.C = ((uint32_t)'.'), .X = 80.5, .W = 9},
-    {.C = 0, .X = 90.5, .W = 9, .S = ((uint32_t)SPECIAL_ENTER)},
+    {.C = ((uint32_t)' '), .X = 10.5, .W = 59},
+    {.C = ((uint32_t)'.'), .X = 70.5, .W = 9},
+    {.C = 0, .X = 80.5, .W = 9, .S = ((uint32_t)SPECIAL_ENTER)},
+    {.C = 0, .X = 90.5, .W = 9, .S = ((uint32_t)SPECIAL_HIDE)},
 };
 
 static
@@ -270,7 +281,7 @@ static const KeyboardLayout_t KeyboardLayouts[] = {
 };
 
 static
-KeyboardInfo_t Kbd = {0};
+KeyboardInfo_t Kbd = {.ActionValue = 10};   /* Set action value to max */
 
 #define SHIFT_DISABLE()     if (Kbd.IsShift) { Kbd.IsShift = 0; __GUI_WIDGET_Invalidate(Kbd.MainLayoutHandle); }
 #define SHIFT_ENABLE(mode)  do {                        \
@@ -319,6 +330,9 @@ uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* r
                 case SPECIAL_SHIFT: 
                     strcpy((char *)str, (char *)_GT("Shift"));
                     break;
+                case SPECIAL_HIDE: 
+                    strcpy((char *)str, (char *)_GT("Hide"));
+                    break;
                 default:
                     if (Kbd.IsShift && kbtn->CS) {  /* Character when shift is ON */
                         GUI_STRING_UNICODE_Encode(kbtn->CS, str);   /* Encode character to unicode */
@@ -335,6 +349,7 @@ uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* r
             GUI_HANDLE_p tmp1, tmp2, tmp3;
             const KeyboardBtn_t* kbtn;
             uint32_t ch;
+            GUI_KeyboardData_t kbd = {0};
             
             kbtn = __GUI_WIDGET_GetUserData(h);     /* Get data from widget */
             if (kbtn->S) {                          /* Is button special function? */
@@ -373,12 +388,27 @@ uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* r
                         SHIFT_TOGGLE();             /* Toggle shift mode */
                         break;
                     }
+                    case SPECIAL_BACKSPACE: {
+                        ch = GUI_KEY_BACKSPACE;     /* Fake backspace key */
+                        break;
+                    }
+                    case SPECIAL_HIDE: {            /* Hide button pressed */
+                        __GUI_KEYBOARD_Hide();      /* Hide keyboard */
+                        break;
+                    }
                 }
-            } else {
-                if (Kbd.IsShift && kbtn->CS) {      /* If shift mode enabled and character has shift mode character */
-                    ch = kbtn->CS;                  /* Use shift mode character */
-                } else {
-                    ch = kbtn->C;                   /* Use normal character */
+            }
+            
+            /**
+             * Check if we have to add key to input buffer
+             */
+            if (ch || !kbtn->S) {                   /* If character from special is set or normal key pressed */
+                if (!ch) {                          /* Only if char not yet set */
+                    if (Kbd.IsShift && kbtn->CS) {  /* If shift mode enabled and character has shift mode character */
+                        ch = kbtn->CS;              /* Use shift mode character */
+                    } else {
+                        ch = kbtn->C;               /* Use normal character */
+                    }
                 }
                 
                 /* Clear shift mode if necessary */
@@ -389,7 +419,10 @@ uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* r
                 /************************************/
                 /* Send character to focused widget */
                 /************************************/
-                
+                GUI_STRING_UNICODE_Encode(ch, kbd.Keys);    /* Decode key */
+                GUI_INPUT_KeyAdd(&kbd);             /* Add actual key */
+                kbd.Keys[0] = 0;                    /* Set key to 0 */
+                GUI_INPUT_KeyAdd(&kbd);             /* Add end key */
             }
             return 1;
         }
@@ -424,10 +457,39 @@ uint8_t keyboard_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* resul
     }
 }
 
+/* Timer callback for keyboard */
+static
+void keyboard_timer_callback(GUI_TIMER_t* timer) {
+    if (Kbd.Action == ACTION_HIDE) {                /* We should hide the keyboard */
+        if (Kbd.ActionValue < 10) {
+            Kbd.ActionValue++;
+            __GUI_WIDGET_SetPositionPercent(Kbd.Handle, 0, 50 + Kbd.ActionValue * 5);
+        } else {
+            __GUI_WIDGET_Hide(Kbd.Handle);          /* Hide keyboard */
+            __GUI_TIMER_Stop(timer);                /* Stop timer */
+        }
+    } else if (Kbd.Action == ACTION_SHOW) {         /* We should show the keyboard */
+        if (Kbd.ActionValue) {
+            if (Kbd.ActionValue == 10) {            /* At the bottom? */
+                __GUI_WIDGET_Show(Kbd.Handle);      /* First set keyboard as visible */
+            }
+            Kbd.ActionValue--;                      /* Decrease value */
+            __GUI_WIDGET_SetPositionPercent(Kbd.Handle, 0, 50 + Kbd.ActionValue * 5);
+        }
+    }
+}
+
 /* Callback function for base element of keyboard */
 static
 uint8_t keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
     switch (cmd) {
+        case GUI_WC_PreInit: {
+            __GH(h)->Timer = __GUI_TIMER_Create(30, keyboard_timer_callback, 0);    /* Create timer */
+            if (!__GH(h)->Timer) {
+                *(uint8_t *)result = 0;             /* Failed, stop and clear memory */
+            }
+            return 1;
+        }
         case GUI_WC_Init: {                         /* When base element is initialized */
             GUI_HANDLE_p handle, handleLayout;
             size_t i, k, z;
@@ -439,8 +501,9 @@ uint8_t keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* 
             /*   Configure keyboard    */
             /***************************/
             __GUI_WIDGET_SetSizePercent(h, 100, 50);    /* Set keyboard size */
-            __GUI_WIDGET_SetPositionPercent(h, 0, 50);  /* Set position of keyboard */
+            __GUI_WIDGET_SetPositionPercent(h, 0, 50); /* Set position of keyboard outside visible area */
             __GUI_WIDGET_SetZIndex(h, GUI_WIDGET_ZINDEX_MAX);   /* Set to maximal z-index */
+            //__GUI_WIDGET_Hide(h);                   /* Hide keyboard by default */
             
             /***************************/
             /* Create keyboard layouts */
@@ -490,10 +553,54 @@ uint8_t keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_KEYBOARD_Create(void) {
-    GUI_HANDLE_p kb = NULL;
+uint8_t __GUI_KEYBOARD_Hide(void) {
+    __GUI_ASSERTPARAMS(Kbd.Handle);
+    Kbd.Action = ACTION_HIDE;                       /* Set action to hide */
+    __GUI_TIMER_StartPeriodic(__GH(Kbd.Handle)->Timer); /* Start periodic timer */
     
-    kb = GUI_CONTAINER_Create(GUI_ID_KEYBOARD_BASE, 0, 0, 1, 1, 0, keyboard_base_callback, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);  /* Create keyboard base element with desktop as parent */
+    return 1;
+}
+
+uint8_t __GUI_KEYBOARD_Show(void) {
+    __GUI_ASSERTPARAMS(Kbd.Handle);
+    Kbd.Action = ACTION_SHOW;                       /* Set action to show */
+    __GUI_TIMER_StartPeriodic(__GH(Kbd.Handle)->Timer); /* Start periodic timer */
     
-    return kb;
+    return 1;
+}
+
+/******************************************************************************/
+/******************************************************************************/
+/***                         Thread safe public API                          **/
+/******************************************************************************/
+/******************************************************************************/
+GUI_HANDLE_p GUI_KEYBOARD_Create(void) {    
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    if (!Kbd.Handle) {
+        Kbd.Handle = GUI_CONTAINER_Create(GUI_ID_KEYBOARD_BASE, 0, 0, 1, 1, 0, keyboard_base_callback, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);  /* Create keyboard base element with desktop as parent */
+    }
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return Kbd.Handle;
+}
+
+uint8_t GUI_KEYBOARD_Hide(void) {
+    uint8_t ret;
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    ret = __GUI_KEYBOARD_Hide();                    /* Hide keyboard */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
+}
+
+uint8_t GUI_KEYBOARD_Show(void) {
+    uint8_t ret;
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    ret = __GUI_KEYBOARD_Show();                    /* Show keyboard */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
 }

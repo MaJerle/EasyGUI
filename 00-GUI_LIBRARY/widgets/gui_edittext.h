@@ -41,6 +41,9 @@ extern "C" {
  * \{
  */
 #include "gui_widget.h"
+#if GUI_USE_KEYBOARD
+#include "gui_keyboard.h"
+#endif
 
 /**
  * \defgroup        GUI_EDITTEXT Edit text
