@@ -238,34 +238,15 @@ extern GUI_t GUI;
 #define IMG_WIDTH       64
 #define IMG_HEIGHT      64
 
-uint8_t Mask[IMG_WIDTH * IMG_HEIGHT];
-
-#define __ABS(x)        ((uint32_t)((int32_t)(x) < 0 ? -(x) : (x)))
-void CreateMask(void) {
-    uint32_t x, y;
-    uint32_t midX = IMG_WIDTH >> 1;
-    uint32_t midY = IMG_HEIGHT >> 1;
-    uint32_t alphaX, alphaY;
-    uint8_t* ptr = Mask;
-    uint32_t multX = 256 / midX;
-    uint32_t multY = 256 / midY;
-    
-    for (y = 0; y < IMG_HEIGHT; y++) {
-        alphaY = (__ABS((int16_t)y - (int16_t)midY)) * multY;
-        for (x = 0; x < IMG_WIDTH; x++) {
-            alphaX = (__ABS((int16_t)x - (int16_t)midX) << 2) * multX;
-            
-            *ptr = ((alphaX * alphaY) >> 8) & 0xFF;
-            ptr++;
-        }
-    }
-}
-
 int main(void) {
     GUI_STRING_UNICODE_t s;
     
     GUI_KeyboardData_t key;
     uint32_t state;
+    
+    //hardfault debug code
+    SCB->CCR |= 0x10;
+    
     
     TM_RCC_InitSystem();                                    /* Init system */
     HAL_Init();                                             /* Init HAL layer */
@@ -332,7 +313,7 @@ int main(void) {
         }
     }
     
-    //GUI_KEYBOARD_Create();
+    GUI_KEYBOARD_Create();
     
     __GUI_LINKEDLIST_PrintList(NULL);
     
@@ -348,9 +329,6 @@ int main(void) {
     TM_EXTI_Attach(DISCO_BUTTON_PORT, DISCO_BUTTON_PIN, TM_EXTI_Trigger_Rising);
     
     GUI_STRING_UNICODE_Init(&s);
-    
-    /* Create mask software */
-    CreateMask();
   
 //    time = TM_DELAY_Time();
     state = 0;
@@ -419,13 +397,6 @@ int main(void) {
         }
 	}
 }
-
-const GUI_IMAGE_DESC_t maskImg = {
-    .xSize = IMG_WIDTH,
-    .ySize = IMG_HEIGHT,
-    .BPP = 8,
-    .Image = (uint8_t *)Mask
-};
 
 uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
     uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);

@@ -161,6 +161,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/00-GUI_LIBRARY/input/gui_input.c</locationURI>
 		</link>
 		<link>
+			<name>GUI/Input/gui_keyboard.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/00-GUI_LIBRARY/input/gui_keyboard.c</locationURI>
+		</link>
+		<link>
 			<name>GUI/Utils/gui_buffer.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/00-GUI_LIBRARY/utils/gui_buffer.c</locationURI>
@@ -199,6 +204,11 @@
 			<name>GUI/Widgets/gui_checkbox.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/00-GUI_LIBRARY/widgets/gui_checkbox.c</locationURI>
+		</link>
+		<link>
+			<name>GUI/Widgets/gui_container.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/00-GUI_LIBRARY/widgets/gui_container.c</locationURI>
 		</link>
 		<link>
 			<name>GUI/Widgets/gui_dialog.c</name>

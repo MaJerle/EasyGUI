@@ -348,7 +348,7 @@ uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* r
         case GUI_WC_Click: {                        /* Handle pressed button */
             GUI_HANDLE_p tmp1, tmp2, tmp3;
             const KeyboardBtn_t* kbtn;
-            uint32_t ch;
+            uint32_t ch = 0;
             GUI_KeyboardData_t kbd = {0};
             
             kbtn = __GUI_WIDGET_GetUserData(h);     /* Get data from widget */
@@ -484,7 +484,7 @@ static
 uint8_t keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
     switch (cmd) {
         case GUI_WC_PreInit: {
-            __GH(h)->Timer = __GUI_TIMER_Create(30, keyboard_timer_callback, 0);    /* Create timer */
+            __GH(h)->Timer = __GUI_TIMER_Create(60, keyboard_timer_callback, 0);    /* Create timer */
             if (!__GH(h)->Timer) {
                 *(uint8_t *)result = 0;             /* Failed, stop and clear memory */
             }
@@ -501,9 +501,9 @@ uint8_t keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* 
             /*   Configure keyboard    */
             /***************************/
             __GUI_WIDGET_SetSizePercent(h, 100, 50);    /* Set keyboard size */
-            __GUI_WIDGET_SetPositionPercent(h, 0, 50); /* Set position of keyboard outside visible area */
+            __GUI_WIDGET_SetPositionPercent(h, 0, 100); /* Set position of keyboard outside visible area */
             __GUI_WIDGET_SetZIndex(h, GUI_WIDGET_ZINDEX_MAX);   /* Set to maximal z-index */
-            //__GUI_WIDGET_Hide(h);                   /* Hide keyboard by default */
+            __GUI_WIDGET_Hide(h);                       /* Hide keyboard by default */
             
             /***************************/
             /* Create keyboard layouts */

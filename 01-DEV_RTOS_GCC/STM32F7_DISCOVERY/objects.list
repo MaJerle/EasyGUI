@@ -1,4 +1,5 @@
 "GUI/Input/gui_input.o"
+"GUI/Input/gui_keyboard.o"
 "GUI/Utils/gui_buffer.o"
 "GUI/Utils/gui_linkedlist.o"
 "GUI/Utils/gui_math.o"
@@ -7,6 +8,7 @@
 "GUI/Utils/gui_timer.o"
 "GUI/Widgets/gui_button.o"
 "GUI/Widgets/gui_checkbox.o"
+"GUI/Widgets/gui_container.o"
 "GUI/Widgets/gui_dialog.o"
 "GUI/Widgets/gui_dropdown.o"
 "GUI/Widgets/gui_edittext.o"
