@@ -248,6 +248,7 @@ uint8_t __GUI_WIDGET_InvalidateWithParent(GUI_HANDLE_p h);
 
 /**
  * \brief           Set if parent widget should be invalidated when we invalidate primary widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
  * \note            Useful for widgets where there is no background: Transparent images, textview, slider, etc
  * \param[in]       h: Widget handle
  * \param[in]       value: Value either to enable or disable. 0 = disable, > 0 = enable
@@ -257,20 +258,71 @@ uint8_t __GUI_WIDGET_InvalidateWithParent(GUI_HANDLE_p h);
 uint8_t __GUI_WIDGET_SetInvalidateWithParent(GUI_HANDLE_p h, uint8_t value);
 
 /**
- * \brief           Set position (X and Y) coordinates relative to parent object
+ * \brief           Set widget position relative to parent object in units of pixels
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
- * \param[in]       x: X position relative to parent
- * \param[in]       y: Y position relative to parent
- * \retval          1: Successful
- * \retval          0: Failed
+ * \param[in]       x: X position relative to parent object
+ * \param[in]       y: Y position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              GUI_WIDGET_SetPositionPercent
  */
 uint8_t __GUI_WIDGET_SetPosition(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y);
-
+ 
+/**
+ * \brief           Set widget position relative to parent object in units of percent
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: X position relative to parent object
+ * \param[in]       y: Y position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              GUI_WIDGET_SetPosition
+ */
 uint8_t __GUI_WIDGET_SetPositionPercent(GUI_HANDLE_p h, float x, float y);
+ 
+/**
+ * \brief           Set widget X position relative to parent object in units of pixels
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: X position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              GUI_WIDGET_SetXPositionPercent
+ */
 uint8_t __GUI_WIDGET_SetXPosition(GUI_HANDLE_p h, GUI_iDim_t x);
+ 
+/**
+ * \brief           Set widget X position relative to parent object in units of percent
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: X position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              GUI_WIDGET_SetXPosition
+ */
 uint8_t __GUI_WIDGET_SetXPositionPercent(GUI_HANDLE_p h, float x);
+ 
+/**
+ * \brief           Set widget Y position relative to parent object in units of pixels
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       y: Y position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              GUI_WIDGET_SetYPositionPercent
+ */
 uint8_t __GUI_WIDGET_SetYPosition(GUI_HANDLE_p h, GUI_iDim_t y);
+ 
+/**
+ * \brief           Set widget Y position relative to parent object in units of percent
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       y: Y position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              GUI_WIDGET_SetYPosition
+ */
 uint8_t __GUI_WIDGET_SetYPositionPercent(GUI_HANDLE_p h, float y);
 
 /**
@@ -959,9 +1011,27 @@ uint8_t __GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex);
  */
 #define __GUI_WIDGET_GetZIndex(h)                   ((int32_t)(__GH(h)->ZIndex))
 
+/**
+ * \brief           Set custom user data to widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ *
+ * \note            Specially useful in callback processing if required
+ * \param[in,out]   h: Widget handle
+ * \param[in]       data: Pointer to custom user data
+ * \retval          1: Data were set OK
+ * \retval          0: Data were not set
+ * \sa              __GUI_WIDGET_GetUserData
+ */
+uint8_t __GUI_WIDGET_SetUserData(GUI_HANDLE_p h, void* data);
 
-#define __GUI_WIDGET_SetUserData GUI_WIDGET_SetUserData
-#define __GUI_WIDGET_GetUserData GUI_WIDGET_GetUserData
+/**
+ * \brief           Get custom user data from widget previously set with \ref GUI_WIDGET_SetUserData
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          Pointer to user data
+ * \sa              __GUI_WIDGET_SetUserData
+ */
+void* __GUI_WIDGET_GetUserData(GUI_HANDLE_p h);
 
 /**
  * \}

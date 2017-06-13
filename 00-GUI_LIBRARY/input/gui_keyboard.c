@@ -554,7 +554,7 @@ uint8_t keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* 
 /******************************************************************************/
 /******************************************************************************/
 uint8_t __GUI_KEYBOARD_Hide(void) {
-    __GUI_ASSERTPARAMS(Kbd.Handle);
+    __GUI_ASSERTPARAMS(Kbd.Handle);                 /* Check parameters */
     Kbd.Action = ACTION_HIDE;                       /* Set action to hide */
     __GUI_TIMER_StartPeriodic(__GH(Kbd.Handle)->Timer); /* Start periodic timer */
     
@@ -562,7 +562,7 @@ uint8_t __GUI_KEYBOARD_Hide(void) {
 }
 
 uint8_t __GUI_KEYBOARD_Show(void) {
-    __GUI_ASSERTPARAMS(Kbd.Handle);
+    __GUI_ASSERTPARAMS(Kbd.Handle);                 /* Check parameters */
     Kbd.Action = ACTION_SHOW;                       /* Set action to show */
     __GUI_TIMER_StartPeriodic(__GH(Kbd.Handle)->Timer); /* Start periodic timer */
     

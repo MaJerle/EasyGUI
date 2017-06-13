@@ -48,12 +48,60 @@ extern "C" {
  * \brief           Virtual keyboard on screen
  * \{
  */
-
+    
+/**
+ * \defgroup        GUI_KEYBOARD_Private Private functions
+ * \brief           Private keyboard functions
+ *
+ * \note            Since they are not thread safe, they can only be used when inside GUI library.
+ *                  It means they can be used in custom widget implementations where thread safety is guaranteed
+ *
+ * \{
+ */
+ 
+/**
+ * \brief           Hide opened virtual keyboard
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \retval          1: Keyboard hide process started
+ * \retval          0: Keyboard hide process not started
+ * \sa              __GUI_KEYBOARD_Show
+ */
 uint8_t __GUI_KEYBOARD_Hide(void);
+
+/**
+ * \brief           Show hidden virtual keyboard
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \retval          1: Keyboard open process started
+ * \retval          0: Keyboard open process not started
+ * \sa              __GUI_KEYBOARD_Hide
+ */
 uint8_t __GUI_KEYBOARD_Show(void);
     
+/**
+ * \}
+ */
+    
+/**
+ * \brief           Creates virtual keyboard for user interaction.
+ * \note            This function must be called by user after \ref GUI_Init is called to use virtual keyboard
+ * \retval          Keyboard handle
+ */
 GUI_HANDLE_p GUI_KEYBOARD_Create(void);
+
+/**
+ * \brief           Hide opened virtual keyboard
+ * \retval          1: Keyboard hide process started
+ * \retval          0: Keyboard hide process not started
+ * \sa              GUI_KEYBOARD_Show
+ */
 uint8_t GUI_KEYBOARD_Hide(void);
+
+/**
+ * \brief           Show hidden virtual keyboard
+ * \retval          1: Keyboard open process started
+ * \retval          0: Keyboard open process not started
+ * \sa              GUI_KEYBOARD_Hide
+ */
 uint8_t GUI_KEYBOARD_Show(void);
     
 /**

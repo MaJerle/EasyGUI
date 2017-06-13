@@ -43,16 +43,20 @@ extern "C" {
 #include "gui_widget.h"
 
 /**
- * \defgroup        GUI_CONTAINER
+ * \defgroup        GUI_CONTAINER Container
  * \brief           Container widget holding widgets
  * \{
+ *
+ * Container is basic widget suitable for custom children widgets.
+ *
+ * It is similar to \ref GUI_WINDOW widget except it does not implement any controls like hide, maximize and minimize
  */
 
 /**
  * \brief           Container colors
  */    
 typedef enum {
-    GUI_CONTAINER_COLOR_BG = 0x00,
+    GUI_CONTAINER_COLOR_BG = 0x00,          /*!< Background color index */
 } GUI_CONTAINER_COLOR_t;
 
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)
