@@ -707,10 +707,20 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color);
  */
 #define __GUI_WIDGET_GetId(h)                       (__GH(h)->Id)
 
+/**
+ * \brief           Get first widget handle by ID
+ * \note            If multiple widgets have the same ID, first found will be used
+ *
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   id: Widget ID to search for
+ * \retval          > 0: Widget handle when widget found
+ * \retval          0: Widget not found
+ */
 GUI_HANDLE_p __GUI_WIDGET_GetById(GUI_ID_t id);
 
 /**
  * \brief           Get widget flag(s)
+ * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
  * \param[in]       flag: Flag(s) to check
  * \retval          0: None flag is set
@@ -722,6 +732,7 @@ GUI_HANDLE_p __GUI_WIDGET_GetById(GUI_ID_t id);
 
 /**
  * \brief           Get widget core flag(s)
+ * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
  * \param[in]       flag: Flag(s) to check
  * \retval          0: None flag is set
@@ -733,6 +744,7 @@ GUI_HANDLE_p __GUI_WIDGET_GetById(GUI_ID_t id);
 
 /**
  * \brief           Set widget flag(s)
+ * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
  * \param[in]       flag: Flag(s) to set
  * \sa              __GUI_WIDGET_GetFlag, __GUI_WIDGET_ClrFlag
@@ -742,6 +754,7 @@ GUI_HANDLE_p __GUI_WIDGET_GetById(GUI_ID_t id);
 
 /**
  * \brief           Clear widget flag(s)
+ * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
  * \param[in]       flag: Flag(s) to clear
  * \sa              __GUI_WIDGET_SetFlag, __GUI_WIDGET_GetFlag

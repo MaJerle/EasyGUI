@@ -131,6 +131,14 @@ GUI_HANDLE_p GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Di
  */
 uint8_t GUI_EDITTEXT_SetColor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color);
 
+/**
+ * \brief           Set edit text to multi line mode
+ * \note            When multiline is enabled, vertical text alignment is always top positioned
+ * \param[in,out]   h: Widget handle
+ * \param[in]       multiline: Set to 1 to enable multiline or 0 to disable
+ * \retval          1: Color was set ok
+ * \retval          0: Color was not set
+ */
 uint8_t GUI_EDITTEXT_SetMultiline(GUI_HANDLE_p h, uint8_t multiline);
 
 /**

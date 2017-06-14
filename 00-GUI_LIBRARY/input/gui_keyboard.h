@@ -62,8 +62,8 @@ extern "C" {
 /**
  * \brief           Hide opened virtual keyboard
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \retval          1: Keyboard hide process started
- * \retval          0: Keyboard hide process not started
+ * \retval          1: Keyboard hiding process started
+ * \retval          0: Keyboard hiding process not started
  * \sa              __GUI_KEYBOARD_Show
  */
 uint8_t __GUI_KEYBOARD_Hide(void);
@@ -71,8 +71,8 @@ uint8_t __GUI_KEYBOARD_Hide(void);
 /**
  * \brief           Show hidden virtual keyboard
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \retval          1: Keyboard open process started
- * \retval          0: Keyboard open process not started
+ * \retval          1: Keyboard opening process started
+ * \retval          0: Keyboard opening process not started
  * \sa              __GUI_KEYBOARD_Hide
  */
 uint8_t __GUI_KEYBOARD_Show(void);
@@ -90,16 +90,16 @@ GUI_HANDLE_p GUI_KEYBOARD_Create(void);
 
 /**
  * \brief           Hide opened virtual keyboard
- * \retval          1: Keyboard hide process started
- * \retval          0: Keyboard hide process not started
+ * \retval          1: Keyboard hiding process started
+ * \retval          0: Keyboard hiding process not started
  * \sa              GUI_KEYBOARD_Show
  */
 uint8_t GUI_KEYBOARD_Hide(void);
 
 /**
  * \brief           Show hidden virtual keyboard
- * \retval          1: Keyboard open process started
- * \retval          0: Keyboard open process not started
+ * \retval          1: Keyboard opening process started
+ * \retval          0: Keyboard opening process not started
  * \sa              GUI_KEYBOARD_Hide
  */
 uint8_t GUI_KEYBOARD_Show(void);
