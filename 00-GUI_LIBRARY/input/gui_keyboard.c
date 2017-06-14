@@ -58,6 +58,9 @@ typedef struct {
     GUI_HANDLE_p Handle;                            /*!< Pointer to keyboard handle */
     GUI_HANDLE_p MainLayoutHandle;                  /*!< Pointer to main keyboard layout */
     
+    const GUI_FONT_t* Font;                         /*!< Pointer to used font */
+    const GUI_FONT_t* DefaultFont;                  /*!< Pointer to default font */
+    
     uint8_t Action;                                 /*!< Kbd show/hide action */
     uint8_t ActionValue;                            /*!< Action custom value */
 } KeyboardInfo_t;
@@ -136,7 +139,7 @@ const KeyboardBtn_t ButtonsL1R3[] = {
 
 static 
 const KeyboardBtn_t ButtonsL1R4[] = {
-    {.C = 0, .X = 0.5, .W = 9, .S = ((uint32_t)SPECIAL_ABC)},
+    {.C = 0, .X = 0.5, .W = 9, .S = ((uint32_t)SPECIAL_123)},
     {.C = ((uint32_t)' '), .X = 10.5, .W = 59},
     {.C = ((uint32_t)'.'), .X = 70.5, .W = 9},
     {.C = 0, .X = 80.5, .W = 9, .S = ((uint32_t)SPECIAL_ENTER)},
@@ -150,8 +153,6 @@ const KeyboardRow_t KeyboardL1Rows[] = {
     {.xOffset = 1, .Btns = ButtonsL1R3, .BtnsCount = GUI_COUNT_OF(ButtonsL1R3)},
     {.xOffset = 1, .Btns = ButtonsL1R4, .BtnsCount = GUI_COUNT_OF(ButtonsL1R4)},
 };
-
-
                 
 /***************************/
 /*   Layout 2 descriptors  */
@@ -341,6 +342,12 @@ uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* r
                     }
             }
             
+            if (Kbd.Font) {                         /* Check if widget font is set */
+                __GUI_WIDGET_SetFont(h, Kbd.Font);  /* Set drawing font */
+            } else {
+                __GUI_WIDGET_SetFont(h, Kbd.DefaultFont);   /* Set drawing font */
+            }
+            
             __GUI_WIDGET_SetText(h, str);           /* Temporary set text */
             GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);   /* Process default callback with drawing */
             return 1;
@@ -505,6 +512,8 @@ uint8_t keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* 
             __GUI_WIDGET_SetZIndex(h, GUI_WIDGET_ZINDEX_MAX);   /* Set to maximal z-index */
             __GUI_WIDGET_Hide(h);                       /* Hide keyboard by default */
             
+            Kbd.DefaultFont = __GH(h)->Font;            /* Save current font */
+            
             /***************************/
             /* Create keyboard layouts */
             /***************************/
@@ -561,9 +570,13 @@ uint8_t __GUI_KEYBOARD_Hide(void) {
     return 1;
 }
 
-uint8_t __GUI_KEYBOARD_Show(void) {
+uint8_t __GUI_KEYBOARD_Show(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(Kbd.Handle);                 /* Check parameters */
     Kbd.Action = ACTION_SHOW;                       /* Set action to show */
+    if (h && __GH(h)->Font) {                       /* Check widget and font for it */
+        Kbd.Font = __GH(h)->Font;                   /* Save font as display font */
+        __GUI_WIDGET_Invalidate(Kbd.Handle);        /* Force invalidation */
+    }
     __GUI_TIMER_StartPeriodic(__GH(Kbd.Handle)->Timer); /* Start periodic timer */
     
     return 1;
@@ -595,11 +608,11 @@ uint8_t GUI_KEYBOARD_Hide(void) {
     return ret;
 }
 
-uint8_t GUI_KEYBOARD_Show(void) {
+uint8_t GUI_KEYBOARD_Show(GUI_HANDLE_p h) {
     uint8_t ret;
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __GUI_KEYBOARD_Show();                    /* Show keyboard */
+    ret = __GUI_KEYBOARD_Show(h);                   /* Show keyboard */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;

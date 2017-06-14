@@ -543,6 +543,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 handle = GUI_EDITTEXT_Create(1, 10, 10, 400, 40, h, 0, 0);
                 GUI_WIDGET_AllocTextMemory(handle, 255);
                 GUI_WIDGET_SetText(handle, _GT("Edit text"));
+                GUI_WIDGET_SetFont(handle, &GUI_Font_Arial_Narrow_Italic_21_AA);
                 
                 /* Create text field first to hold view of edit text*/
                 handle = GUI_TEXTVIEW_Create(ID_TEXTVIEW_2, 10, 210, 400, 150, h, 0, 0);

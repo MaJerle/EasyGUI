@@ -47,6 +47,18 @@ extern "C" {
  * \defgroup        GUI_KEYBOARD Virtual keyboard
  * \brief           Virtual keyboard on screen
  * \{
+ *
+ * \image html image_widget_keyboard_normal.png Characters layout
+ * \image html image_widget_keyboard_numbers.png Numbers layout
+ * \image html image_widget_keyboard_special.png Special characters layout
+ *
+ * Virtual keyboard consists of 2 types of widgets:
+ * - \ref GUI_CONTAINER widget as base element and
+ * - \ref GUI_BUTTON widget for each button
+ *
+ * Currently, it uses a lot of RAM as each button is separated widget.
+ *
+ * According to widget used by keyboard, it will choose the same font in keyboard.
  */
     
 /**
@@ -71,11 +83,12 @@ uint8_t __GUI_KEYBOARD_Hide(void);
 /**
  * \brief           Show hidden virtual keyboard
  * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in]       h: Widget handle for which keyboard will be opened
  * \retval          1: Keyboard opening process started
  * \retval          0: Keyboard opening process not started
  * \sa              __GUI_KEYBOARD_Hide
  */
-uint8_t __GUI_KEYBOARD_Show(void);
+uint8_t __GUI_KEYBOARD_Show(GUI_HANDLE_p h);
     
 /**
  * \}
@@ -98,11 +111,12 @@ uint8_t GUI_KEYBOARD_Hide(void);
 
 /**
  * \brief           Show hidden virtual keyboard
+ * \param[in]       h: Widget handle for which keyboard will be opened
  * \retval          1: Keyboard opening process started
  * \retval          0: Keyboard opening process not started
  * \sa              GUI_KEYBOARD_Hide
  */
-uint8_t GUI_KEYBOARD_Show(void);
+uint8_t GUI_KEYBOARD_Show(GUI_HANDLE_p h);
     
 /**
  * \}
