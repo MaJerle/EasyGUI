@@ -153,35 +153,36 @@ int GUI_STRING_Compare(const GUI_Char* s1, const GUI_Char* s2) {
     return strcmp((const char *)s1, (const char *)s2);
 }
 
-uint8_t GUI_STRING_GetCh(const GUI_Char** str, uint32_t* out, uint8_t* len) {
-    const GUI_Char* ch = *str;              /* Save character pointer */
+uint8_t GUI_STRING_Prepare(GUI_STRING_t* s, const GUI_Char* str) {
+    s->Str = str;                           /* Save string pointer */
 #if GUI_USE_UNICODE
-    GUI_STRING_UNICODE_t s;
+    GUI_STRING_UNICODE_Init(&s->S);         /* Prepare unicode structure */
+#endif /* GUI_USE_UNICODE */
+    return 1;
+}
+
+uint8_t GUI_STRING_GetCh(GUI_STRING_t* s, uint32_t* out, uint8_t* len) {
+#if GUI_USE_UNICODE
     GUI_STRING_UNICODE_Result_t r;
     
-    if (!*ch) {                             /* End of string check */
+    if (!*s->Str) {                         /* End of string check */
         return 0;
     }
     
-    GUI_STRING_UNICODE_Init(&s);            /* Init UTF-8 */
-    while (*ch) {
-        if (!*ch) {                         /* End of string check */
-            return 0;
-        }
-        r = GUI_STRING_UNICODE_Decode(&s, *ch++);   /* Try to decode */
-        *str += 1;                          /* Increase string pointer */
+    while (*s->Str) {                       /* Check all characters */
+        r = GUI_STRING_UNICODE_Decode(&s->S, *s->Str++);    /* Try to decode string */
         if (r == UNICODE_OK) {              /* Decode next character */
             break;
         }
     }
-    *out = s.res;                           /* Save character for output */
+    *out = s->S.res;                        /* Save character for output */
     if (len) {                              /* Save number of bytes in this character */
-        *len = s.t;                         /* Number of bytes according to UTF-8 encoding */
+        *len = s->S.t;                      /* Number of bytes according to UTF-8 encoding */
     }
     return 1;                               /* Return valid character sign */
 #else
-    *str += 1;                              /* Increase input pointer where it points to */
-    *out = (uint32_t)*ch;                   /* Save character for output */
+    *out = *s->Str;                         /* Save character for output */
+    s->Str++;                               /* Increase input pointer where it points to */
     if (!*out) {                            /* End of string check */
         return 0;                           /* Invalid character */
     }
@@ -192,31 +193,31 @@ uint8_t GUI_STRING_GetCh(const GUI_Char** str, uint32_t* out, uint8_t* len) {
 #endif /* GUI_USE_UNICODE */  
 }
 
-uint8_t GUI_STRING_GetChReverse(const GUI_Char** str, uint32_t* out, uint8_t* len) {
+uint8_t GUI_STRING_GetChReverse(GUI_STRING_t* str, uint32_t* out, uint8_t* len) {
 #if GUI_USE_UNICODE
-    const GUI_Char* ch = (*str) - 3;        /* Save character pointer, start 3 bytes before current active character */
+    const GUI_Char* ch = (str->Str) - 3;    /* Save character pointer, start 3 bytes before current active character */
     if (ch[3] < 0x80) {                     /* Normal ASCII character */
         *out = (uint32_t)ch[3];
-        *str -= 1;
+        str->Str -= 1;
         if (len) {
             *len = 1;
         }
     } else {                                /* UTF-8 sequence */
         if ((ch[2] & 0xE0) == 0xC0 && (ch[3] & 0xC0) == 0x80) {
             *out = (uint32_t)(((ch[2] & 0x1F) << 6) | ((ch[3] & 0x3F) << 0));
-            *str -= 2;
+            str->Str -= 2;
             if (len) {
                 *len = 2;
             }
         } else if ((ch[1] & 0xF0) == 0xE0 && (ch[2] & 0xC0) == 0x80 && (ch[3] & 0xC0) == 0x80) {
             *out = (uint32_t)(((ch[1] & 0x0F) << 12) | ((ch[2] & 0x3F) << 6) | ((ch[3] & 0x3F) << 0));
-            *str -= 3;
+            str->Str -= 3;
             if (len) {
                 *len = 3;
             }
         } else if ((ch[0] & 0xF8) == 0xF0 && (ch[1] & 0xC0) == 0x80 && (ch[2] & 0xC0) == 0x80 && (ch[3] & 0xC0) == 0x80) {
             *out = (uint32_t)(((ch[0] & 0x07) << 18) | ((ch[1] & 0x3F) << 12) | ((ch[2] & 0x3F) << 6) | ((ch[3] & 0x3F) << 0));
-            *str -= 4;
+            str->Str -= 4;
             if (len) {
                 *len = 4;
             }
@@ -227,9 +228,9 @@ uint8_t GUI_STRING_GetChReverse(const GUI_Char** str, uint32_t* out, uint8_t* le
     }
     return 1;                               /* Return valid character sign */
 #else
-    const GUI_Char* ch = *str;              /* Save character pointer */
-    *str -= 1;                              /* Decrease input pointer where it points to */
-    *out = (uint32_t)*ch;                   /* Save character for output */
+    const GUI_Char ch = *str->Str;          /* Save character pointer */
+    str->Str--;                             /* Decrease input pointer where it points to */
+    *out = (uint32_t)ch;                    /* Save character for output */
     if (!*out) {                            /* Check if valid character */
         return 0;
     }
@@ -238,6 +239,14 @@ uint8_t GUI_STRING_GetChReverse(const GUI_Char** str, uint32_t* out, uint8_t* le
     }
     return 1;                               /* Return valid character sign */
 #endif /* GUI_USE_UNICODE */  
+}
+
+uint8_t GUI_STRING_GoToEnd(GUI_STRING_t* str) {
+    while (*str->Str) {                     /* Check characters */
+        str->Str++;                         /* Go to next character */
+    }
+    str->Str--;                             /* Let's point to last character */
+    return 1;
 }
 
 uint8_t GUI_STRING_IsPrintable(uint32_t ch) {

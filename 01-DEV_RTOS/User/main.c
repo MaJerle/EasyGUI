@@ -238,15 +238,18 @@ extern GUI_t GUI;
 #define IMG_WIDTH       64
 #define IMG_HEIGHT      64
 
+const GUI_Char myStr[30] = "Hello world!\r\n";
+GUI_STRING_t ptr;
+
 int main(void) {
     GUI_STRING_UNICODE_t s;
     
     GUI_KeyboardData_t key;
     uint32_t state;
+    uint32_t ch;
     
     //hardfault debug code
     SCB->CCR |= 0x10;
-    
     
     TM_RCC_InitSystem();                                    /* Init system */
     HAL_Init();                                             /* Init HAL layer */
@@ -257,6 +260,11 @@ int main(void) {
     
     /* Print first screen message */
     printf("GUI; Compiled: %s %s\r\n", __DATE__, __TIME__);
+    
+    GUI_STRING_Prepare(&ptr, myStr);
+    while (GUI_STRING_GetCh(&ptr, &ch, NULL)) {
+        printf("ch: %c\r\n", ch);
+    }
     
     TM_GENERAL_DWTCounterEnable();
     
@@ -542,7 +550,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
             case ID_WIN_EDIT: {         /* Edit text */
                 handle = GUI_EDITTEXT_Create(1, 10, 10, 400, 40, h, 0, 0);
                 GUI_WIDGET_AllocTextMemory(handle, 255);
-                GUI_WIDGET_SetText(handle, _GT("Edit text"));
+                GUI_WIDGET_SetText(handle, _GT("Edit text very long text OLA CIKAS OLA CIKAS OLA CIKASS"));
                 GUI_WIDGET_SetFont(handle, &GUI_Font_Arial_Narrow_Italic_21_AA);
                 
                 /* Create text field first to hold view of edit text*/

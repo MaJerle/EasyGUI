@@ -45,7 +45,7 @@ typedef struct GUI_StringRect_t {
 } GUI_StringRect_t;
 
 typedef struct GUI_StringRectVars_t {
-    const GUI_Char* s;                              /*!< Pointer to input string */
+    GUI_STRING_t s;                                 /*!< Pointer to input string */
     uint32_t ch, lastCh;                            /*!< Current and previous characters */
     GUI_iDim_t cW;                                  /*!< Current line width */
     size_t cnt;                                     /*!< Current count in line */
@@ -165,7 +165,7 @@ void __ProcessStringRectangleBeforeReturn(GUI_StringRectVars_t* var, GUI_StringR
          */
         var->cnt -= var->CharsCount;
         if (!end) {                                 /* If not yet end string */
-            var->s = var->CharsPtr;                 /* Set string pointer to start of characters sequence */
+            var->s.Str = var->CharsPtr;             /* Set string pointer to start of characters sequence */
         }
         var->cW -= var->CharsWidth;
         rect->ReadDraw -= var->CharsCount;          /* Decrease number of drawing characters by removing spaces */
@@ -185,22 +185,23 @@ void __ProcessStringRectangleBeforeReturn(GUI_StringRectVars_t* var, GUI_StringR
 }
 
 static
-size_t __StringRectangle(GUI_StringRect_t* rect, const GUI_Char** str, uint8_t onlyToNextLine) {
+size_t __StringRectangle(GUI_StringRect_t* rect, GUI_STRING_t* str, uint8_t onlyToNextLine) {
     GUI_iDim_t w, h, mW = 0, tH = 0;                /* Maximal width and total height */
     uint8_t i;
-    const GUI_Char* s;
     const GUI_Char* lastS;
+    GUI_STRING_t tmpStr;
 
     memset(&var, 0x00, sizeof(var));                /* Reset structure */
+    memcpy(&var.s, str, sizeof(*str));              /* Copy memory */
+    memcpy(&tmpStr, str, sizeof(*str));              /* Copy memory */
 
-    var.s = *str;                                   /* Set string pointer */
     var.IsBreak = onlyToNextLine;                   /* Set for break */
 
     tH = 0;
     if (rect->StringDraw->Flags & GUI_FLAG_FONT_MULTILINE) {    /* We want to know exact rectangle for drawing multi line texts including new lines and carriage return */
         while (1) {                                 /* Unlimited execution */
-            lastS = var.s;                          /* Save current string pointer */
-            if (GUI_STRING_GetCh(&var.s, &var.ch, &i)) {    /* Get next character from string */
+            lastS = var.s.Str;                      /* Save current string pointer */
+            if (GUI_STRING_GetCh(&var.s, &var.ch, &i)) {/* Get next character from string */
                 /* Check for CR character */
                 if (CH_CR == var.ch) {              /* Check character */
                     var.ch = CH_WS;                 /* Set it as space and don't care for more */
@@ -226,7 +227,7 @@ size_t __StringRectangle(GUI_StringRect_t* rect, const GUI_Char** str, uint8_t o
                         if (!rect->IsEditMode) {    /* Do not ignore front spaces when in edit mode = show plain text as is */
                             if (!var.IsLineFeed) {  /* Do not increase pointer if line feed was detected = force new line*/
                                 if (onlyToNextLine) {   /* Increase input pointer only in single line mode */
-                                    *str += 1;      /* Increase input pointer where it points to */
+                                    str->Str += 1;  /* Increase input pointer where it points to */
                                 }                   /* Otherwise just ignore character and don't touch input pointer */
                                 RECT_CONTINUE(0);   /* Continue to next character and don't increase cnt variable */
                             }
@@ -277,9 +278,9 @@ size_t __StringRectangle(GUI_StringRect_t* rect, const GUI_Char** str, uint8_t o
                     }
 
                     /* Prepare for new line */
-                    s = var.s;                      /* Temporary save current pointer */
-                    memset(&var, 0x00, sizeof(var));    /* Reset everything now */
-                    var.s = s;                      /* Set text back */
+                    memcpy(&tmpStr, &var.s, sizeof(tmpStr));    /* Copy memory */
+                    memset(&var, 0x00, sizeof(var));/* Reset everything now */
+                    memcpy(&var.s, &tmpStr, sizeof(var.s)); /* Copy memory */
                     continue;
                 } else {
                     RECT_CONTINUE(1);
@@ -571,18 +572,16 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DR
 
 /* Get string pointer start address for specific width of rectangle */
 static
-const GUI_Char* __StringGetPointerForWidth(const GUI_FONT_t* font, const GUI_Char* str, GUI_DRAW_FONT_t* draw) {
-    const GUI_Char* tmp = str;
+const GUI_Char* __StringGetPointerForWidth(const GUI_FONT_t* font, GUI_STRING_t* str, GUI_DRAW_FONT_t* draw) {
     GUI_iDim_t tot = 0, w, h;
     uint8_t i;
     uint32_t ch;
+    const GUI_Char* tmp = str->Str;                 /* Set start of string */
     
-    while (*tmp) {                                  /* Go to the end of string */
-        tmp++;
-    }
-    tmp--;                                          /* Go to the last character */
-    while (str <= tmp) {
-        if (!GUI_STRING_GetChReverse(&tmp, &ch, &i)) {  /* Get character in reverse order */
+    GUI_STRING_GoToEnd(str);                        /* Go to the end of string */
+    
+    while (str->Str >= tmp) {
+        if (!GUI_STRING_GetChReverse(str, &ch, &i)) {   /* Get character in reverse order */
             break;
         }
         __StringGetCharSize(font, ch, &w, &h);
@@ -593,7 +592,7 @@ const GUI_Char* __StringGetPointerForWidth(const GUI_FONT_t* font, const GUI_Cha
             break;
         }
     }
-    return tmp + i + 1;
+    return str->Str + i + 1;
 }
 
 /******************************************************************************/
@@ -1103,8 +1102,8 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
     uint8_t i;
     size_t cnt;
     const GUI_FONT_CharInfo_t* c;
-    const GUI_Char* strTmp;
     GUI_StringRect_t rect = {0};                    /* Get string object */
+    GUI_STRING_t currStr;
     
     if (!draw->LineHeight) {                        /* When line height is not set */
         draw->LineHeight = font->Size;              /* Set font size */
@@ -1114,11 +1113,12 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
     rect.StringDraw = draw;                         /* Set drawing pointer */
     rect.IsEditMode = !!(draw->Flags & GUI_FLAG_FONT_EDITMODE); /* Check if in edit mode */
       
-    strTmp = str;
-    __StringRectangle(&rect, &strTmp, 0);           /* Get string width for this box */
+    GUI_STRING_Prepare(&currStr, str);              /* Prepare string */
+    __StringRectangle(&rect, &currStr, 0);          /* Get string width for this box */
     if (rect.Width > draw->Width) {                 /* If string is wider than available rectangle */
         if (draw->Flags & GUI_FLAG_FONT_RIGHTALIGN) {   /* Check right align text */
-            str = __StringGetPointerForWidth(font, str, draw);
+            GUI_STRING_Prepare(&currStr, str);      /* Prepare string */
+            str = __StringGetPointerForWidth(font, &currStr, draw); /* Get string pointer */
         } else {
             rect.Width = draw->Width;               /* Strip text width to available */
         }
@@ -1157,8 +1157,8 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
 //    GUI_DRAW_Rectangle(disp, x, y, rect.Width, rect.Height, GUI_COLOR_BLUE);
     
     
-    strTmp = str;                                   /* Save string pointer */
-    while ((cnt = __StringRectangle(&rect, &str, 1)) > 0) {
+    GUI_STRING_Prepare(&currStr, str);              /* Prepare string again */
+    while ((cnt = __StringRectangle(&rect, &currStr, 1)) > 0) {
         x = draw->X;                                       
         if (draw->Align & GUI_HALIGN_CENTER) {      /* Check for horizontal align center */
             x += (draw->Width - rect.Width) / 2;    /* Align center of drawing area */
@@ -1166,7 +1166,7 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
             x += draw->Width - rect.Width;          /* Align right of drawing area */
         }
 //        GUI_DRAW_Rectangle(disp, x, y, rect.Width, rect.Height, GUI_COLOR_RED);
-        while (cnt-- && GUI_STRING_GetCh(&str, &ch, &i)) {  /* Read character by character */
+        while (cnt-- && GUI_STRING_GetCh(&currStr, &ch, &i)) {  /* Read character by character */
             if (rect.ReadDraw == 0) {               /* Anything to draw? */
                 continue;
             }

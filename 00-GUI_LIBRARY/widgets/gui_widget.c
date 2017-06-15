@@ -730,7 +730,7 @@ uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
     size_t len, tlen;
     uint32_t ch;
     uint8_t l;
-    const GUI_Char* str = kb->KB.Keys;
+    GUI_STRING_t currStr;
     
     __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
     
@@ -738,7 +738,8 @@ uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
         return 0;
     }
     
-    if (!GUI_STRING_GetCh(&str, &ch, &l)) {         /* Get key from input data */
+    GUI_STRING_Prepare(&currStr, kb->KB.Keys);      /* Set string to process */
+    if (!GUI_STRING_GetCh(&currStr, &ch, &l)) {     /* Get key from input data */
         return 0;                                   /* Invalid input key */
     }
     
@@ -761,10 +762,11 @@ uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
         }
     } else if (ch == 8 || ch == 127) {              /* Backspace character */
         if (tlen && __GH(h)->TextCursor) {
-            const GUI_Char* end = (GUI_Char *)((uint32_t)__GH(h)->Text + __GH(h)->TextCursor - 1);  /* End of string pointer */
             uint16_t pos;
             
-            if (!GUI_STRING_GetChReverse(&end, &ch, &l)) {  /* Get last character */
+            GUI_STRING_Prepare(&currStr, (GUI_Char *)((uint32_t)__GH(h)->Text + __GH(h)->TextCursor - 1));  /* Set string to process */
+            GUI_STRING_GoToEnd(&currStr);           /* Go to the end of string */
+            if (!GUI_STRING_GetChReverse(&currStr, &ch, &l)) {  /* Get last character */
                 return 0;                           
             }
             for (pos = __GH(h)->TextCursor - l; pos < (tlen - l); pos++) {  /* Shift characters up */

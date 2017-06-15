@@ -272,8 +272,9 @@ uint8_t __GUI_LINKEDLIST_MULTI_FIND_REMOVE(GUI_LinkedListRoot_t* root, void* ele
  * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \retval          0: No entries
  * \retval          > 0: Has entries
+ * \hideinitializer
  */
-#define __GUI_LINKEDLIST_HasEntries(root)       ((root)->First)
+#define __GUI_LINKEDLIST_HasEntries(root)       (!!((root)->First))
 
 /**
  * \defgroup        GUI_LINKEDLIST_WIDGET Widget linked list

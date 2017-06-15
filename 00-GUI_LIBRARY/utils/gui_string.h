@@ -49,7 +49,7 @@ extern "C" {
  * \brief           String functions with UNICODE support
  * \{
  */
-
+    
 /**
  * \defgroup        GUI_STRING_UNICODE Unicode processing
  * \brief           Unicode processing functions with UTF-8 character encoding
@@ -120,6 +120,16 @@ uint8_t GUI_STRING_UNICODE_Encode(const uint32_t c, GUI_Char* out);
 /**
  * \}
  */
+ 
+/**
+ * \brief           String structure for parsing characters
+ */
+typedef struct GUI_STRING_t {
+    const GUI_Char* Str;                /*!< Pointer to source string */
+#if GUI_USE_UNICODE || defined(DOXYGEN)
+    GUI_STRING_UNICODE_t S;             /*!< Unicode processing structure */
+#endif /* GUI_USE_UNICODE || defined(DOXYGEN) */
+} GUI_STRING_t;
 
 /**
  * \brief           Return length of string
@@ -185,16 +195,26 @@ int GUI_STRING_Compare(const GUI_Char* s1, const GUI_Char* s2);
 uint8_t GUI_STRING_IsPrintable(uint32_t ch);
 
 /**
+ * \brief           Prepare string before it can be used with \ref GUI_STRING_GetCh or \ref GUI_STRING_GetChReverse functions
+ * \param[in,out]   *s: Pointer to \ref GUI_STRING_t as base string object
+ * \param[in]       *str: Pointer to \ref GUI_Char with string used for manupulation
+ * \retval          1: String prepared and ready to use
+ * \retval          0: String was tno prepared
+ */
+uint8_t GUI_STRING_Prepare(GUI_STRING_t* s, const GUI_Char* str);
+
+/**
  * \brief           Get next decoded character from source string
  *
- * \code{c}
+ * \code{c} 
 GUI_Char myStr[] = "EasyGUI\xDF\x8F\xDF\x8F";   //Source string to check
-GUI_Char* ptr = myStr;                          //Create pointer to source string so we can modify where it points to
+GUI_STRING_t s;                                 //Create string variable
 uint32_t ch;                                    //Output character
 uint8_t i;                                      //Number of bytes required for character generation
 
 //GUI_USE_UNICODE = 1: string length = 9;  Length total: 11
 //GUI_USE_UNICODE = 0: string length = 11; Length total: 11
+GUI_STRING_Prepare(&s, myStr);                  //Prepare string for reading
 while (GUI_STRING_GetCh(&ptr, &ch, &i)) {       //Go through entire string
     printf("I: %d, ch %c (%d)\r\n", i, ch, ch); //Print character by character
 }
@@ -211,7 +231,7 @@ while (GUI_STRING_GetCh(&ptr, &ch, &i)) {       //Go through entire string
  * \retval          0: Error with character decode process or string has reach the end
  * \sa              GUI_STRING_GetChReverse
  */
-uint8_t GUI_STRING_GetCh(const GUI_Char** str, uint32_t* out, uint8_t* len);
+uint8_t GUI_STRING_GetCh(GUI_STRING_t* str, uint32_t* out, uint8_t* len);
 
 /**
  * \brief           Get character by character from end of string up
@@ -220,18 +240,16 @@ uint8_t GUI_STRING_GetCh(const GUI_Char** str, uint32_t* out, uint8_t* len);
  * \note            String must be at the last character before function is first time called
  *
  * \code{c}
+ //TODO: Update code!
 GUI_Char myStr[] = "EasyGUI\xDF\x8F\xDF\x8F";   //Source string to check
-GUI_Char* ptr = myStr;                          //Create pointer to source string so we can modify where it points to
+GUI_STRING_t s;                                 //Create string variable
 uint32_t ch;                                    //Output character
 uint8_t i;                                      //Number of bytes required for character generation
 
-while (*ptr) {                                  //Go to the end of string
-    ptr++;
-}
-ptr--;                                          //Go to last character of string
-
 //GUI_USE_UNICODE = 1: string length = 9;  Length total: 11
 //GUI_USE_UNICODE = 0: string length = 11; Length total: 11
+GUI_STRING_Prepare(&s, myStr);                  //Prepare string for reading
+GUI_STRING_GoToEnd(&ptr);                       //Go to last character of string
 while (GUI_STRING_GetChReverse(&ptr, &ch, &i)) {       //Go through entire string
     printf("I: %d, ch %c (%d)\r\n", i, ch, ch); //Print character by character
 }
@@ -243,9 +261,19 @@ while (GUI_STRING_GetChReverse(&ptr, &ch, &i)) {       //Go through entire strin
  * \param[out]      *len: Pointer to output memory where number of bytes for string will be saved
  * \retval          1: Character decoded OK
  * \retval          0: Error with character decode process or string has reach the start
- * \sa              GUI_STRING_GetCh
+ * \sa              GUI_STRING_GetCh, GUI_STRING_GoToEnd
  */
-uint8_t GUI_STRING_GetChReverse(const GUI_Char** str, uint32_t* out, uint8_t* len);
+uint8_t GUI_STRING_GetChReverse(GUI_STRING_t* str, uint32_t* out, uint8_t* len);
+
+/**
+ *
+ * \brief           Set character pointer to the last character in sequence
+ * \param[in,out]   **str: Pointer to pointer to source string to modify pointing location
+ * \retval          1: Pointer set to last character
+ * \retval          0: Pointer was not set to last character
+ * \sa              GUI_STRING_GetChReverse
+ */
+uint8_t GUI_STRING_GoToEnd(GUI_STRING_t* str);
     
 /**
  * \}

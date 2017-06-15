@@ -184,8 +184,13 @@ typedef GUI_iByte   GUI_iByte_t;            /*!< GUI signed byte data type */
 typedef uint8_t     GUI_Char;               /*!< GUI char data type for all string operations */
 #define _GT(x)      (GUI_Char *)(x)         /*!< Macro to force strings to right format for processing */
 #define GUI_Const   const                   /*!< Macro for constant keyword */
-    
-#define GUI_COUNT_OF(x)         (sizeof(x) / sizeof((x)[0]))    /*!< Count number of elements in array */
+
+/**
+ * \brief           Count number of elements in array
+ * \warning         This does not work with pointers
+ * \hideinitializer
+ */
+#define GUI_COUNT_OF(x)         (sizeof(x) / sizeof((x)[0]))
     
 /**
  * \brief           Get container object from member
