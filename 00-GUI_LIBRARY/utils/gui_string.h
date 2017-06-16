@@ -215,16 +215,14 @@ uint8_t i;                                      //Number of bytes required for c
 //GUI_USE_UNICODE = 1: string length = 9;  Length total: 11
 //GUI_USE_UNICODE = 0: string length = 11; Length total: 11
 GUI_STRING_Prepare(&s, myStr);                  //Prepare string for reading
-while (GUI_STRING_GetCh(&ptr, &ch, &i)) {       //Go through entire string
+while (GUI_STRING_GetCh(&s, &ch, &i)) {         //Go through entire string
     printf("I: %d, ch %c (%d)\r\n", i, ch, ch); //Print character by character
 }
 \endcode
  * 
- *
- * 
  * \note            When \ref GUI_USE_UNICODE is set to 1, multiple bytes may be used for single character
- * \param[in,out]   **str: Pointer to pointer to source string. After decoding process,
- *                    function will change pointer where it points to next character
+ * \param[in,out]   *str: Pointer to \ref GUI_STRING_t structure with input string. 
+                        Function will internally change pointer of actual string where it points to to next character
  * \param[out]      *out: Pointer to output memory where output character will be saved
  * \param[out]      *len: Pointer to output memory where number of bytes for string will be saved
  * \retval          1: Character decoded OK
@@ -250,13 +248,14 @@ uint8_t i;                                      //Number of bytes required for c
 //GUI_USE_UNICODE = 0: string length = 11; Length total: 11
 GUI_STRING_Prepare(&s, myStr);                  //Prepare string for reading
 GUI_STRING_GoToEnd(&ptr);                       //Go to last character of string
-while (GUI_STRING_GetChReverse(&ptr, &ch, &i)) {       //Go through entire string
+while (GUI_STRING_GetChReverse(&s, &ch, &i)) {  //Go through entire string
     printf("I: %d, ch %c (%d)\r\n", i, ch, ch); //Print character by character
 }
 \endcode
  *
- * \param[in,out]   **str: Pointer to pointer to source string. After decoding process,
- *                    function will change pointer where it points to previous character
+ * \note            When \ref GUI_USE_UNICODE is set to 1, multiple bytes may be used for single character
+ * \param[in,out]   *str: Pointer to \ref GUI_STRING_t structure with input string. 
+                        Function will internally change pointer of actual string where it points to to next character
  * \param[out]      *out: Pointer to output memory where output character will be saved
  * \param[out]      *len: Pointer to output memory where number of bytes for string will be saved
  * \retval          1: Character decoded OK
