@@ -156,7 +156,7 @@ uint8_t GUI_CHECKBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.Color1Width = f.Width;
                 f.Color1 = __GUI_WIDGET_GetColor(h, GUI_CHECKBOX_COLOR_TEXT);
-                GUI_DRAW_WriteText(disp, __GH(h)->Font, __GH(h)->Text, &f);
+                GUI_DRAW_WriteText(disp, __GUI_WIDGET_GetFont(h), __GUI_WIDGET_GetText(h), &f);
             }
             
             return 1;

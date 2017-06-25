@@ -113,7 +113,7 @@ uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                     sprintf((char *)buff, "%lu%%", (unsigned long)(((p->Value - p->Min) * 100) / (p->Max - p->Min)));
                     text = buff;
                 } else if (__GUI_WIDGET_IsFontAndTextSet(h)) {
-                    text = __GH(h)->Text;
+                    text = __GUI_WIDGET_GetText(h);
                 }
                 
                 if (text) {                         /* If text is valid, print it */
@@ -128,7 +128,7 @@ uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                     f.Color1Width = w ? w - 1 : 0;
                     f.Color1 = __GUI_WIDGET_GetColor(h, GUI_PROGBAR_COLOR_BG);
                     f.Color2 = __GUI_WIDGET_GetColor(h, GUI_PROGBAR_COLOR_FG);
-                    GUI_DRAW_WriteText(disp, __GH(h)->Font, text, &f);
+                    GUI_DRAW_WriteText(disp, __GUI_WIDGET_GetFont(h), text, &f);
                 }
             }
         }

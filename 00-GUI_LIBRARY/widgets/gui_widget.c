@@ -783,6 +783,17 @@ uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
     return 0;
 }
 
+const GUI_Char* __GUI_WIDGET_GetText(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    /* Prepare for transpate support */
+    return __GH(h)->Text;                           /* Return text for widget */
+}
+
+const GUI_FONT_t* __GUI_WIDGET_GetFont(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    return __GH(h)->Font;                           /* Return font for widget */
+}
+
 /*******************************************/
 /**         Widget size management        **/
 /*******************************************/
@@ -1199,12 +1210,12 @@ uint8_t GUI_WIDGET_SetText(GUI_HANDLE_p h, const GUI_Char* text) {
 }
 
 const GUI_Char* GUI_WIDGET_GetText(GUI_HANDLE_p h) {
-    GUI_Char* t;
+    const GUI_Char* t;
     
     __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    t = __GH(h)->Text;                              /* Return text */
+    t = __GUI_WIDGET_GetText(h);                    /* Return text */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return t;
@@ -1223,7 +1234,7 @@ const GUI_Char* GUI_WIDGET_GetTextCopy(GUI_HANDLE_p h, GUI_Char* dst, uint32_t l
     return t;  
 }
 
-uint8_t GUI_WIDGET_SetFont(GUI_HANDLE_p h, GUI_Const GUI_FONT_t* font) {
+uint8_t GUI_WIDGET_SetFont(GUI_HANDLE_p h, const GUI_FONT_t* font) {
     uint8_t res;
     __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
@@ -1232,6 +1243,17 @@ uint8_t GUI_WIDGET_SetFont(GUI_HANDLE_p h, GUI_Const GUI_FONT_t* font) {
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
+}
+
+const GUI_FONT_t* GUI_WIDGET_GetFont(GUI_HANDLE_p h) {
+    const GUI_FONT_t* font;
+    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    font = __GUI_WIDGET_GetFont(h);                 /* Get widget font */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return font;
 }
 
 /*******************************************/

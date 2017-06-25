@@ -427,6 +427,22 @@ uint8_t __GUI_WIDGET_SetFont(GUI_HANDLE_p h, const GUI_FONT_t* font);
 uint8_t __GUI_WIDGET_SetText(GUI_HANDLE_p h, const GUI_Char* text);
 
 /**
+ * \brief           Get text from widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          Pointer to text from widget
+ */
+const GUI_Char* __GUI_WIDGET_GetText(GUI_HANDLE_p h);
+
+/**
+ * \brief           Get font from widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          Pointer to font used for widget
+ */
+const GUI_FONT_t* __GUI_WIDGET_GetFont(GUI_HANDLE_p h);
+
+/**
  * \brief           Allocate text memory for widget
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
@@ -1115,7 +1131,15 @@ const GUI_Char* GUI_WIDGET_GetTextCopy(GUI_HANDLE_p h, GUI_Char* dst, uint32_t l
  * \retval          0: Font was not set
  * \sa              GUI_WIDGET_SetText, GUI_WIDGET_GetText
  */
-uint8_t GUI_WIDGET_SetFont(GUI_HANDLE_p h, GUI_Const GUI_FONT_t* font);
+uint8_t GUI_WIDGET_SetFont(GUI_HANDLE_p h, const GUI_FONT_t* font);
+
+/**
+ * \brief           Get font from widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          Pointer to font used for widget
+ */
+const GUI_FONT_t* GUI_WIDGET_GetFont(GUI_HANDLE_p h);
 
 /**
  * \brief           Set default font for widgets used on widget creation

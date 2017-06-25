@@ -369,7 +369,7 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.Color1Width = f.Width;
                 f.Color1 = __GUI_WIDGET_GetColor(h, GUI_DROPDOWN_COLOR_TEXT);
-                GUI_DRAW_WriteText(disp, __GH(h)->Font, item->Text, &f);
+                GUI_DRAW_WriteText(disp, __GUI_WIDGET_GetFont(h), item->Text, &f);
             }
             
             if (__IsOpened(h) && __GD(h)->Flags & GUI_FLAG_DROPDOWN_SLIDER_ON) {
@@ -428,7 +428,7 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                     } else {
                         f.Color1 = __GUI_WIDGET_GetColor(h, GUI_DROPDOWN_COLOR_TEXT);
                     }
-                    GUI_DRAW_WriteText(disp, __GH(h)->Font, item->Text, &f);
+                    GUI_DRAW_WriteText(disp, __GUI_WIDGET_GetFont(h), item->Text, &f);
                     f.Y += itemHeight;
                 }
                 disp->Y2 = tmp;                     /* Set temporary value back */

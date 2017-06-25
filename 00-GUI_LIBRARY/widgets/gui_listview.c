@@ -292,7 +292,7 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                         f.Width = o->Cols[i]->Width - 6;    /* Set width */
                         f.X = xTmp + 3;             /* Set offset */
                     }
-                    GUI_DRAW_WriteText(disp, __GH(h)->Font, o->Cols[i]->Text, &f);
+                    GUI_DRAW_WriteText(disp, __GUI_WIDGET_GetFont(h), o->Cols[i]->Text, &f);
                     xTmp += o->Cols[i]->Width;      /* Increase X value */
                 }
                 f.Y += itemHeight;                  /* Go to next line */
@@ -324,7 +324,7 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                                 f.Width = o->Cols[i]->Width - 6;    /* Set width */
                                 f.Color1Width = GUI.LCD.Width;  /* Use the same color for entire width */
                                 f.X = xTmp + 3;     /* Set offset */
-                                GUI_DRAW_WriteText(disp, __GH(h)->Font, item->Text, &f);
+                                GUI_DRAW_WriteText(disp, __GUI_WIDGET_GetFont(h), item->Text, &f);
                             }
                             xTmp += o->Cols[i]->Width;  /* Increase X value */
                         }

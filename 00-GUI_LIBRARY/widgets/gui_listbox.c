@@ -295,7 +295,7 @@ uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                     } else {
                         f.Color1 = __GUI_WIDGET_GetColor(h, GUI_LISTBOX_COLOR_TEXT);
                     }
-                    GUI_DRAW_WriteText(disp, __GH(h)->Font, item->Text, &f);
+                    GUI_DRAW_WriteText(disp, __GUI_WIDGET_GetFont(h), item->Text, &f);
                     f.Y += itemHeight;
                 }
                 disp->Y2 = tmp;
