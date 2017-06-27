@@ -786,6 +786,12 @@ uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
 const GUI_Char* __GUI_WIDGET_GetText(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
     /* Prepare for transpate support */
+#if GUI_USE_TRANSLATE
+    /* For static texts only */
+    if (!__GUI_WIDGET_GetFlag(h, GUI_FLAG_DYNAMICTEXTALLOC) && __GH(h)->Text) {
+        return GUI_TRANSLATE_Get(__GH(h)->Text);    /* Get translation entry */
+    }
+#endif /* GUI_USE_TRANSLATE */
     return __GH(h)->Text;                           /* Return text for widget */
 }
 
@@ -1222,13 +1228,14 @@ const GUI_Char* GUI_WIDGET_GetText(GUI_HANDLE_p h) {
 }
 
 const GUI_Char* GUI_WIDGET_GetTextCopy(GUI_HANDLE_p h, GUI_Char* dst, uint32_t len) {
-    GUI_Char* t;
+    const GUI_Char* t;
     
     __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    t = __GH(h)->Text;                              /* Return text */
-    GUI_STRING_CopyN(dst, t, len);
+    t = __GUI_WIDGET_GetText(h);                    /* Return text */
+    GUI_STRING_CopyN(dst, t, len);                  /* Copy text after */
+    dst[len] = 0;                                   /* Set trailling zero */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return t;  

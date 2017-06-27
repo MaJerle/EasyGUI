@@ -1061,6 +1061,34 @@ typedef struct GUI_HANDLE_ROOT {
  */
 
 /**
+ * \addtogroup      GUI_TRANSLATE
+ */
+
+/**
+ * \brief           Translation language structure
+ */
+typedef struct GUI_TRANSLATE_Language_t {
+    const GUI_Char* Lang;                   /*!< Language code used to identify it later when setting active language */
+    const GUI_Char** Entries;               /*!< Pointer to list containing pointers to translated entries */
+    size_t Count;                           /*!< Number of entries in translated array */
+} GUI_TRANSLATE_Language_t;
+
+//#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+/**
+ * \brief           Basic translation structure for internal use
+ */
+typedef struct GUI_TRANSLATE_t {
+    const GUI_TRANSLATE_Language_t* Source; /*!< Pointer to source language table */
+    const GUI_TRANSLATE_Language_t* Active; /*!< Pointer to current language table */
+} GUI_TRANSLATE_t;
+
+//#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+
+/**
+ * \}
+ */
+
+/**
  * \}
  */
 

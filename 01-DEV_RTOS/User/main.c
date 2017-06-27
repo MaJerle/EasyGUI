@@ -241,6 +241,34 @@ extern GUI_t GUI;
 const GUI_Char myStr[30] = "Hello world!\r\n";
 GUI_STRING_t ptr;
 
+//Create table for English entries
+const GUI_Char* languageEnglishEntries[] = {
+    _GT("Button"),
+    _GT("Dropdown"),
+    _GT("Listview"),
+    _GT("Your string here without translate."),
+};
+
+//Create table for German entries
+const GUI_Char* languageGermanEntries[] = {
+    _GT("Taste"),           //Translate for "Button"
+    _GT("Dropdown-Liste"),  //Translate for "Dropdown"
+    _GT("Listenansicht"),   //Translate for "Listview"
+    //Missing translate for "Your string here without translate."
+};
+
+//Create English language table
+GUI_TRANSLATE_Language_t languageEnglish = {
+    .Entries = languageEnglishEntries,
+    .Count = GUI_COUNT_OF(languageEnglishEntries)
+};
+
+//Create German language structure
+GUI_TRANSLATE_Language_t languageGerman = {
+    .Entries = languageGermanEntries,
+    .Count = GUI_COUNT_OF(languageGermanEntries)
+};
+
 int main(void) {
     GUI_STRING_UNICODE_t s;
     
@@ -269,6 +297,9 @@ int main(void) {
     TM_GENERAL_DWTCounterEnable();
     
     GUI_Init();
+    
+    GUI_TRANSLATE_SetSourceLanguage(&languageEnglish);
+    GUI_TRANSLATE_SetActiveLanguage(&languageGerman);
     
     //GUI_WIDGET_SetFontDefault(&GUI_Font_Arial_Narrow_Italic_21_AA); /* Set default font for widgets */
     //GUI_WIDGET_SetFontDefault(&GUI_Font_Comic_Sans_MS_Regular_22); /* Set default font for widgets */

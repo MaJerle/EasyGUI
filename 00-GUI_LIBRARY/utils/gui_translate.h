@@ -47,9 +47,80 @@ extern "C" {
  * \defgroup        GUI_TRANSLATE Translation engine
  * \brief           String translation engine for widgets
  * \{
+ *
+ * Translation works between source and active languages
+ *
+ * Both languages must contain the same array for entries in different languages.
+ * When translate is performed, index from source table (if found) is used to return string from active table.
+ *
+ * \note            When translation language is changed, all widget must be manually redrawn to get effect
+ *
+ * \code{c}
+//Create table for English entries
+const GUI_Char* languageEnglishEntries[] = {
+    _GT("Button"),
+    _GT("Dropdown"),
+    _GT("Listview"),
+    _GT("Your string here without translate."),
+};
+
+//Create table for German entries
+const GUI_Char* languageGermanEntries[] = {
+    _GT("Taste"),           //Translate for "Button"
+    _GT("Dropdown-Liste"),  //Translate for "Dropdown"
+    _GT("Listenansicht"),   //Translate for "Listview"
+    //Missing translate for "Your string here without translate."
+};
+
+//Create English language table
+GUI_TRANSLATE_Language_t languageEnglish = {
+    .Entries = languageEnglishEntries,
+    .Count = GUI_COUNT_OF(languageEnglishEntries)
+};
+
+//Create German language structure
+GUI_TRANSLATE_Language_t languageGerman = {
+    .Entries = languageGermanEntries,
+    .Count = GUI_COUNT_OF(languageGermanEntries)
+};
+
+//Set source and active languages
+GUI_TRANSLATE_SetSourceLanguage(&languageEnglish); //Translate from this language
+GUI_TRANSLATE_SetActiveLanguage(&languageGerman);  //Translate to this language
+
+//Now try to translate
+printf("Button: %s\n", GUI_TRANSLATE_Get(_GT("Button"))); //Prints: "Button: Taste\n"
+printf("Dropdown: %s\n", GUI_TRANSLATE_Get(_GT("Dropdown"))); //Prints: "Button: Dropdown-Liste\n"
+printf("Listview: %s\n", GUI_TRANSLATE_Get(_GT("Listview"))); //Prints: "Button: Listenansicht\n"
+printf("Your string here without translate.: %s\n", GUI_TRANSLATE_Get(_GT("Your string here without translate."))); //Prints: "Your string here without translate.: Your string here without translate.\n"
+\endcode
  */
 
+/**
+ * \brief           Get translated entry from input string
+ * \param[in]       *src: Pointer to \ref GUI_Char string to translate
+ * \retval          Pointer to translated string or source string if translate not found
+ */
+const GUI_Char* GUI_TRANSLATE_Get(const GUI_Char* src);
 
+/**
+ * \brief           Set currently active language for translated entries
+ * \note            These entries are returned when index matches the source string from source language
+ * \param[in]       *lang: Pointer to \ref GUI_TRANSLATE_Language_t structure with translation entries
+ * \retval          1: Entries set ok
+ * \retval          0: Entries were not set
+ */
+uint8_t GUI_TRANSLATE_SetActiveLanguage(const GUI_TRANSLATE_Language_t* lang);
+
+/**
+ * \brief           Set source language for translated entries
+ * \note            These entries are compared with input string to get index for translated value
+ * \param[in]       *lang: Pointer to \ref GUI_TRANSLATE_Language_t structure with translation entries
+ * \retval          1: Entries set ok
+ * \retval          0: Entries were not set
+ */
+uint8_t GUI_TRANSLATE_SetSourceLanguage(const GUI_TRANSLATE_Language_t* lang); 
+    
 /**
  * \}
  */

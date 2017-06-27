@@ -338,7 +338,7 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             if (__IsOpened(h)) {
                 __GetOpenedPositions(h, &y, &height, &y1, &height1);
                 
-                GUI_DRAW_Rectangle3D(disp, x, y, width, height1, GUI_DRAW_3D_State_Lowered);
+                GUI_DRAW_Rectangle3D(disp, x, y1, width, height1, GUI_DRAW_3D_State_Lowered);
                 GUI_DRAW_FilledRectangle(disp, x + 2, y1 + 2, width - 4, height1 - 4, __GUI_WIDGET_GetColor(h, GUI_DROPDOWN_COLOR_BG));
                 
                 GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, __GUI_WIDGET_GetColor(h, GUI_DROPDOWN_COLOR_BG));

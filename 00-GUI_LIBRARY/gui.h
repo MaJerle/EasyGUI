@@ -61,6 +61,7 @@ extern "C" {
 #include "utils/gui_timer.h"
 #include "utils/gui_math.h"
 #include "utils/gui_mem.h"
+#include "utils/gui_translate.h"
 
 /* GUI Low-Level drivers */
 #include "gui_ll.h"
@@ -260,6 +261,10 @@ typedef struct GUI_t {
     GUI_HANDLE_p ActiveWidget;              /*!< Pointer to widget currently active by touch */
     GUI_HANDLE_p ActiveWidgetPrev;          /*!< Previously active widget */
 #endif /* GUI_USE_TOUCH */
+
+#if GUI_USE_TRANSLATE
+    GUI_TRANSLATE_t Translate;              /*!< Translation management structure */
+#endif /* GUI_USE_TRANSLATE */
 
     uint8_t Initialized;                    /*!< Status indicating GUI is initialized */
 } GUI_t;

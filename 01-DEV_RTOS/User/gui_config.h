@@ -87,11 +87,21 @@
 
 /**
  * \brief           Enables (1) or disables (0) widget mode inside parent only
- *                  When mode is enabled and widget is outside parent, it won't be visible
+ *                  
+ *                  When enabled, widget can only be inside parent widget's visible area,
+ *                  otherwise widget with width,height = 100,100 may be at x,y = -10,-10 relative to parent
+ *                  and only part of widget will be visible
  *
  * \note            This can be used for scrolling mode when necessary
  */
 #define GUI_WIDGET_INSIDE_PARENT        0
+
+/**
+ * \brief           Enables (1) or disables (0) automatic translations on widget text
+ *
+ * \note            When enabled, source and active languages must be set in \ref GUI_TRANSLATE module
+ */
+#define GUI_USE_TRANSLATE               1
 
 /**
  * \}
