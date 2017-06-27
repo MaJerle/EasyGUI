@@ -1436,6 +1436,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_mem.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_translate.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_translate.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3001,6 +3006,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_mem.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_translate.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_translate.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4565,6 +4575,11 @@
               <FileName>gui_mem.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_translate.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_translate.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -6168,6 +6183,11 @@
               <FileName>gui_mem.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\utils\gui_mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_translate.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\utils\gui_translate.c</FilePath>
             </File>
           </Files>
         </Group>

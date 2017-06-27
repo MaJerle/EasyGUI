@@ -447,9 +447,9 @@ void GUI_DRAW_Image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_I
 /**
  * \brief           Write text to screen
  * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
- * \param[in]       *font: Pointer to \ref GUI_FONT_t with font to use
- * \param[in]       *str: Pointer to string to draw
- * \param[in]       *draw: Pointer to \ref GUI_DRAW_FONT_t with specifications about drawing style
+ * \param[in]       *font: Pointer to \ref GUI_FONT_t structure with font to use
+ * \param[in]       *str: Pointer to string to draw on screen
+ * \param[in]       *draw: Pointer to \ref GUI_DRAW_FONT_t structure with specifications about drawing style
  * \retval          None
  */
 void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_Char* str, GUI_DRAW_FONT_t* draw);
