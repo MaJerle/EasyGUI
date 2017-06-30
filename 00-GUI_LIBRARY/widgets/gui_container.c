@@ -98,10 +98,10 @@ GUI_HANDLE_p GUI_CONTAINER_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_D
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_CONTAINER_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);   /* Allocate memory for basic widget */
+    ptr = __GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
 
     __GUI_LEAVE();                                  /* Leave GUI */
-    return __GH(ptr);
+    return (GUI_HANDLE_p)ptr;
 }
 
 uint8_t GUI_CONTAINER_SetColor(GUI_HANDLE_p h, GUI_CONTAINER_COLOR_t index, GUI_Color_t color) {

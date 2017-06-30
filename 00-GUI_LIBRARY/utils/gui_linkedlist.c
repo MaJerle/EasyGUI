@@ -210,7 +210,7 @@ GUI_LinkedList_t* __GUI_LINKEDLIST_GETNEXT_BYINDEX_GEN(GUI_LinkedListRoot_t* roo
 
 GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_ADD_GEN(GUI_LinkedListRoot_t* root, void* element) {
     GUI_LinkedListMulti_t* ptr;
-    ptr = (GUI_LinkedListMulti_t *)__GUI_MEMALLOC(sizeof(GUI_LinkedListMulti_t));   /* Create memory for linked list */
+    ptr = __GUI_MEMALLOC(sizeof(GUI_LinkedListMulti_t));    /* Create memory for linked list */
     if (!ptr) {
         return 0;
     }
@@ -417,7 +417,8 @@ GUI_Byte __GUI_LINKEDLIST_WidgetMoveToTop(GUI_HANDLE_p h) {
     return 1;
 }
 
-void __GUI_LINKEDLIST_PrintList(GUI_HANDLE_ROOT_t* root) {
+static
+void PrintList(GUI_HANDLE_ROOT_t* root) {
     static uint8_t depth = 0;
     GUI_HANDLE_ROOT_t* h;
     GUI_LinkedListRoot_t* list;
@@ -431,8 +432,12 @@ void __GUI_LINKEDLIST_PrintList(GUI_HANDLE_ROOT_t* root) {
     for (h = (GUI_HANDLE_ROOT_t *)list->First; h; h = h->Handle.List.Next) {
         __GUI_DEBUG("%*d: W: %s; A: 0x%08X; R: %lu; D: %lu\r\n", depth, depth, h->Handle.Widget->Name, (unsigned int)h, h->Handle.Flags & GUI_FLAG_REDRAW, h->Handle.Flags & GUI_FLAG_REMOVE);
         if (__GUI_WIDGET_AllowChildren(h)) {
-            __GUI_LINKEDLIST_PrintList(h);
+            PrintList(h);
         }
     }
     depth--;
+}
+
+void __GUI_LINKEDLIST_PrintList(void) {
+    PrintList(NULL);
 }

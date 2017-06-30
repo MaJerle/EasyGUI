@@ -156,7 +156,7 @@ GUI_HANDLE_p GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
     GUI_BUTTON_t* ptr;
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_BUTTON_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
+    ptr = __GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
 
     __GUI_LEAVE();                                  /* Leave GUI */
     return (GUI_HANDLE_p)ptr;

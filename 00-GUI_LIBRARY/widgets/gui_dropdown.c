@@ -510,7 +510,7 @@ GUI_HANDLE_p GUI_DROPDOWN_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Di
     GUI_DROPDOWN_t* ptr;
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_DROPDOWN_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);   /* Allocate memory for basic widget */
+    ptr = __GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
 
     __GUI_LEAVE();                                  /* Leave GUI */
     return (GUI_HANDLE_p)ptr;
@@ -535,7 +535,7 @@ uint8_t GUI_DROPDOWN_AddString(GUI_HANDLE_p h, const GUI_Char* text) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    item = (GUI_DROPDOWN_ITEM_t *)__GUI_MEMALLOC(sizeof(*item));    /* Allocate memory for entry */
+    item = __GUI_MEMALLOC(sizeof(*item));           /* Allocate memory for entry */
     if (item) {
         item->Text = (GUI_Char *)text;              /* Add text to entry */
         __GUI_LINKEDLIST_ADD_GEN(&__GD(h)->Root, &item->List);  /* Add to linked list */

@@ -54,7 +54,7 @@ CTS         PA3                 RTS from ST to CTS from GSM
 #include "tm_stm32_general.h"
 #include "main.h"
 #include "tm_stm32_sdram.h"
-#define GUI_INTERNAL
+//#define GUI_INTERNAL
 #include "gui.h"
 #include "gui_window.h"
 #include "gui_button.h"
@@ -354,7 +354,7 @@ int main(void) {
     
     GUI_KEYBOARD_Create();
     
-    __GUI_LINKEDLIST_PrintList(NULL);
+    __GUI_LINKEDLIST_PrintList();
     
 #if !defined(STM32F4xx)
     TM_EXTI_Attach(GPIOI, GPIO_PIN_13, TM_EXTI_Trigger_Rising);
@@ -405,7 +405,7 @@ int main(void) {
             switch (GUI_STRING_UNICODE_Decode(&s, ch)) {
                 case UNICODE_OK:
                     if (ch == 'l') {
-                        __GUI_LINKEDLIST_PrintList(NULL);
+                        __GUI_LINKEDLIST_PrintList();
                         break;
                     }
                     if (ch == 'b') {

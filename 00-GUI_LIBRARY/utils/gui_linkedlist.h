@@ -444,7 +444,7 @@ GUI_Byte __GUI_LINKEDLIST_WidgetMoveToTop(GUI_HANDLE_p h);
  *                     Set to NULL to use GUI root widget
  * \retval          None
  */
-void __GUI_LINKEDLIST_PrintList(GUI_HANDLE_ROOT_t* root);
+void __GUI_LINKEDLIST_PrintList(void);
 
 /**
  * \}

@@ -149,7 +149,7 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
                     /**
                      * Try to allocate memory for new virtual layer for temporary usage
                      */
-                    GUI.LCD.DrawingLayer = (GUI_Layer_t *)__GUI_MEMALLOC(sizeof(*GUI.LCD.DrawingLayer) + width * height * GUI.LCD.PixelSize);
+                    GUI.LCD.DrawingLayer = __GUI_MEMALLOC(sizeof(*GUI.LCD.DrawingLayer) + width * height * GUI.LCD.PixelSize);
                     
                     if (GUI.LCD.DrawingLayer) {     /* Check if allocation was successful */
                         GUI.LCD.DrawingLayer->Width = width;

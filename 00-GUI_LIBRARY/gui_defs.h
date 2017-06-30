@@ -990,7 +990,7 @@ struct GUI_HANDLE;
 /**
  * \brief           Handle object for GUI widget
  */
-typedef void* GUI_HANDLE_p;
+typedef struct GUI_HANDLE* GUI_HANDLE_p;
 
 /**
  * \brief           Callback function for widget
@@ -1016,6 +1016,8 @@ typedef struct GUI_WIDGET_t {
     const GUI_Color_t* Colors;              /*!< Pointer to list of colors as default values for widget */
     uint8_t ColorsCount;                    /*!< Number of colors used in widget */
 } GUI_WIDGET_t;
+
+#if defined(GUI_INTERNAL) || defined(DOXYGEN)
 
 /**
  * \brief           Common GUI values for widgets
@@ -1055,6 +1057,7 @@ typedef struct GUI_HANDLE_ROOT {
     GUI_iDim_t ScrollX;                     /*!< Scroll of widgets in horizontal direction in units of pixels */
     GUI_iDim_t ScrollY;                     /*!< Scroll of widgets in vertical direction in units of pixels */
 } GUI_HANDLE_ROOT_t;
+#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 /**
  * \}

@@ -352,7 +352,7 @@ GUI_HANDLE_p GUI_GRAPH_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
     GUI_GRAPH_t* ptr;
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_GRAPH_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+    ptr = __GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
 
     __GUI_LEAVE();                                  /* Leave GUI */
     return (GUI_HANDLE_p)ptr;
@@ -494,7 +494,7 @@ GUI_GRAPH_DATA_p GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_t type, size_t length) {
     GUI_GRAPH_DATA_t* data;
     __GUI_ENTER();                                  /* Enter GUI */
 
-    data = (GUI_GRAPH_DATA_p)__GUI_MEMALLOC(sizeof(*data)); /* Allocate memory for basic widget */
+    data = __GUI_MEMALLOC(sizeof(*data));           /* Allocate memory for basic widget */
     if (data) {
         data->Type = type;
         data->Length = length;

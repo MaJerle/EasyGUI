@@ -37,7 +37,7 @@ uint8_t GUI_BUFFER_Init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr) {
 	Buffer->StringDelimiter = '\n';
 	
 	if (!Buffer->Buffer) {                      			/* Check if malloc should be used */
-		Buffer->Buffer = (uint8_t *) __GUI_MEMALLOC(Size * sizeof(uint8_t));    /* Try to allocate memory for buffer */
+		Buffer->Buffer = __GUI_MEMALLOC(Size * sizeof(uint8_t));    /* Try to allocate memory for buffer */
 		if (!Buffer->Buffer) {                  			/* Check if allocated */    
 			Buffer->Size = 0;                   			/* Reset size */
 			return 1;                           			/* Return error */

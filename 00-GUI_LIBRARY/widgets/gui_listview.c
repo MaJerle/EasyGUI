@@ -493,7 +493,7 @@ GUI_HANDLE_p GUI_LISTVIEW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Di
     GUI_LISTVIEW_t* ptr;
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_LISTVIEW_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);    /* Allocate memory for basic widget */
+    ptr = __GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return (GUI_HANDLE_p)ptr;
@@ -519,10 +519,10 @@ uint8_t GUI_LISTVIEW_AddColumn(GUI_HANDLE_p h, const GUI_Char* text, GUI_Dim_t w
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    cols = (GUI_LISTVIEW_COL_t **)__GUI_MEMREALLOC(__GL(h)->Cols, sizeof(*__GL(h)->Cols) * (__GL(h)->ColsCount + 2));   /* Allocate new memory block for new pointers of columns */
+    cols = __GUI_MEMREALLOC(__GL(h)->Cols, sizeof(*__GL(h)->Cols) * (__GL(h)->ColsCount + 2));  /* Allocate new memory block for new pointers of columns */
     if (cols) {
         __GL(h)->Cols = cols;                       /* Save new pointer of memory */
-        col = (GUI_LISTVIEW_COL_t *)__GUI_MEMALLOC(sizeof(*col));   /* Allocate memory for new column structure */
+        col = __GUI_MEMALLOC(sizeof(*col));         /* Allocate memory for new column structure */
         if (col) {
             __GL(h)->Cols[__GL(h)->ColsCount++] = col;  /* Add column to array list */
             __GL(h)->Cols[__GL(h)->ColsCount] = 0;  /* Add zero to the end of array */
@@ -559,7 +559,7 @@ GUI_LISTVIEW_ROW_p GUI_LISTVIEW_AddRow(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);   /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
-    row = (GUI_LISTVIEW_ROW_t *)__GUI_MEMALLOC(sizeof(*row));   /* Allocate memory for new row(s) */
+    row = __GUI_MEMALLOC(sizeof(*row));             /* Allocate memory for new row(s) */
     if (row) {
         __GUI_LINKEDLIST_ADD_GEN(&__GL(h)->Root, (GUI_LinkedList_t *)row);  /* Add new row to linked list */
         __GL(h)->Count++;                           /* Increase number of rows */

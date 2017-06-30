@@ -477,11 +477,11 @@ uint8_t __GUI_WIDGET_FreeTextMemory(GUI_HANDLE_p h);
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Widget callback function. Set to NULL to use default widget specific callback
  * \param[in]       flags: Flags for create procedure
- * \retval          > 0: \ref GUI_HANDLE_p object of created widget
+ * \retval          > 0: Pointer to allocated memory for widget with default settings
  * \retval          0: Widget creation failed
  * \sa              __GUI_WIDGET_Remove
  */
-GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+void* __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Remove widget and all of its children widgets

@@ -557,7 +557,7 @@ uint8_t __GUI_WIDGET_Set3DStyle(GUI_HANDLE_p h, uint8_t enable) {
 /*******************************************/
 /**  Widget create and remove management  **/
 /*******************************************/
-GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+void* __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_HANDLE_p h;
     GUI_Byte result = 0;
     
@@ -574,7 +574,7 @@ GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iD
         return 0;
     }
     
-    h = (GUI_HANDLE_p)__GUI_MEMALLOC(widget->Size); /* Allocate memory for widget */
+    h = __GUI_MEMALLOC(widget->Size);               /* Allocate memory for widget */
     if (h) {
         memset(h, 0x00, widget->Size);              /* Set memory to 0 */
         
@@ -628,7 +628,7 @@ GUI_HANDLE_p __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iD
         __GUI_WIDGET_Invalidate(h);                 /* Invalidate object */
     }
     
-    return h;
+    return (void *)h;
 }
 
 uint8_t __GUI_WIDGET_Remove(GUI_HANDLE_p h) {
@@ -696,7 +696,7 @@ uint8_t __GUI_WIDGET_AllocateTextMemory(GUI_HANDLE_p h, uint32_t size) {
     __GH(h)->Text = 0;                              /* Reset pointer */
     
     __GH(h)->TextMemSize = size * sizeof(GUI_Char); /* Allocate text memory */
-    __GH(h)->Text = (GUI_Char *)__GUI_MEMALLOC(__GH(h)->TextMemSize);   /* Allocate memory for text */
+    __GH(h)->Text = __GUI_MEMALLOC(__GH(h)->TextMemSize);   /* Allocate memory for text */
     if (__GH(h)->Text) {                            /* Check if allocated */
         __GUI_WIDGET_SetFlag(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Dynamically allocated */
     } else {

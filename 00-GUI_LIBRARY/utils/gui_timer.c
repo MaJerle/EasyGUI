@@ -63,7 +63,7 @@
 GUI_TIMER_t* __GUI_TIMER_Create(uint16_t period, void (*callback)(GUI_TIMER_t *), void* params) {
     GUI_TIMER_t* ptr;
     
-    ptr = (GUI_TIMER_t *)__GUI_MEMALLOC(sizeof(*ptr));  /* Allocate memory for timer */
+    ptr = __GUI_MEMALLOC(sizeof(*ptr));             /* Allocate memory for timer */
     if (ptr) {
         memset(ptr, 0x00, sizeof(GUI_TIMER_t));     /* Reset memory */
         

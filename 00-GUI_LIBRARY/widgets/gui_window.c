@@ -275,10 +275,10 @@ GUI_HANDLE_p GUI_WINDOW_CreateDesktop(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb) {
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_WINDOW_t *)__GUI_WIDGET_Create(&Widget, id, 0, 0, GUI.LCD.Width, GUI.LCD.Height, 0, cb, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);  /* Allocate memory for basic widget */
+    ptr = __GUI_WIDGET_Create(&Widget, id, 0, 0, GUI.LCD.Width, GUI.LCD.Height, 0, cb, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);  /* Allocate memory for basic widget */
 
     __GUI_LEAVE();                                  /* Leave GUI */
-    return __GH(ptr);
+    return (GUI_HANDLE_p)ptr;
 }
 
 GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
@@ -286,18 +286,18 @@ GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_WINDOW_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
+    ptr = __GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
     if (ptr) {
         /* Control setup */
-        __GUI_WIDGET_SetFlag(ptr, GUI_FLAG_CHILD);  /* This window is child window */
+        __GUI_WIDGET_SetFlag(__GH(ptr), GUI_FLAG_CHILD);    /* This window is child window */
         
-        __GUI_WIDGET_SetPaddingTop(ptr, 30);
-        __GUI_WIDGET_SetPaddingRight(ptr, 2);
-        __GUI_WIDGET_SetPaddingBottom(ptr, 2);
-        __GUI_WIDGET_SetPaddingLeft(ptr, 2);
+        __GUI_WIDGET_SetPaddingTop(__GH(ptr), 30);
+        __GUI_WIDGET_SetPaddingRight(__GH(ptr), 2);
+        __GUI_WIDGET_SetPaddingBottom(__GH(ptr), 2);
+        __GUI_WIDGET_SetPaddingLeft(__GH(ptr), 2);
     }
     __GUI_LEAVE();                                  /* Leave GUI */
-    return __GH(ptr);
+    return (GUI_HANDLE_p)ptr;
 }
 
 uint8_t GUI_WINDOW_SetActive(GUI_HANDLE_p h) {

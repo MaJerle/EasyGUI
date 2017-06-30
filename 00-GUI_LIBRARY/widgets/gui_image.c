@@ -93,10 +93,10 @@ GUI_HANDLE_p GUI_IMAGE_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ptr = (GUI_IMAGE_t *)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+    ptr = __GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return __GH(ptr);
+    return (GUI_HANDLE_p)ptr;
 }
 
 uint8_t GUI_IMAGE_SetSource(GUI_HANDLE_p h, const GUI_IMAGE_DESC_t* img) {

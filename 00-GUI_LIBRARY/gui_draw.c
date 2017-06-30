@@ -341,7 +341,7 @@ GUI_FONT_CharEntry_t* __CreateCharEntryFromFont(const GUI_FONT_t* font, const GU
     memDataSize = c->xSize * c->ySize;
     
     memsize += memDataSize;
-    entry = (GUI_FONT_CharEntry_t *)__GUI_MEMALLOC(memsize);    /* Allocate memory for entry */
+    entry = __GUI_MEMALLOC(memsize);                /* Allocate memory for entry */
     if (entry) {                                    /* Allocation was successful */
         uint16_t i, x;
         uint8_t b, k, t;
