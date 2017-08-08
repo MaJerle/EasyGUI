@@ -47,11 +47,11 @@ uint8_t GUI_CONTAINER_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void*
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
-const static GUI_Color_t Colors[] = {
+static const GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_BLUE,                        /*!< Default background color */
 };
 
-const static GUI_WIDGET_t Widget = {
+static const GUI_WIDGET_t Widget = {
     .Name = _GT("CONTAINER"),                       /*!< Widget name */
     .Size = sizeof(GUI_CONTAINER_t),                /*!< Size of widget for memory allocation */
     .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */

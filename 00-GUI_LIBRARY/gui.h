@@ -139,7 +139,7 @@ extern "C" {
  */
 #define __GUI_ASSERTPARAMS(c)       do {            \
     if (!(c) || !(GUI.Initialized)) {                                     \
-        __GUI_DEBUG("Assert param failed in file %s and line %d\r\n", __FILE__, __LINE__);  \
+        __GUI_DEBUG("Assert param failed in file %s and line %d\r\n", (const char *)__FILE__, (unsigned)__LINE__);  \
         return 0;                                   \
     }                                               \
 } while (0)

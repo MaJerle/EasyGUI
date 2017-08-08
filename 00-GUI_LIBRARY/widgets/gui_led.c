@@ -47,14 +47,14 @@ uint8_t GUI_LED_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* resul
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
-const static GUI_Color_t Colors[] = {
+static const GUI_Color_t Colors[] = {
     GUI_COLOR_LIGHTBLUE,                            /*!< Default color when led is on */
     GUI_COLOR_DARKBLUE,                             /*!< Default color when led is off */
     GUI_COLOR_GRAY,                                 /*!< Default border color when led is on */
     GUI_COLOR_BLACK,                                /*!< Default border color when led is off */
 };
 
-const static GUI_WIDGET_t Widget = {
+static const GUI_WIDGET_t Widget = {
     .Name = _GT("LED"),                             /*!< Widget name */ 
     .Size = sizeof(GUI_LED_t),                      /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */

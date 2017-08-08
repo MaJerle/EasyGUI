@@ -47,7 +47,7 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
-const static GUI_Color_t Colors[] = {
+static const GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_BG,
     GUI_COLOR_WIN_TEXT,
     GUI_COLOR_WIN_SEL_FOC,
@@ -57,7 +57,7 @@ const static GUI_Color_t Colors[] = {
     GUI_COLOR_GRAY
 };
 
-const static GUI_WIDGET_t Widget = {
+static const GUI_WIDGET_t Widget = {
     .Name = _GT("LISTVIEW"),                        /*!< Widget name */
     .Size = sizeof(GUI_LISTVIEW_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */

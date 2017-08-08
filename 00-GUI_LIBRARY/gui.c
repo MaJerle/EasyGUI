@@ -126,7 +126,7 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
             __GUI_WIDGET_ClrFlag(h, GUI_FLAG_REDRAW);   /* Clear flag to be sure */
             continue;                               /* Ignore hidden elements */
         }
-        if (__GUI_WIDGET_IsInsideClippingRegion(h)) {   /* If draw function is set and drawing is inside clipping region */
+        if (__GUI_WIDGET_IsInsideClippingRegion(h)) {   /* If widget is inside clipping region */
             /* Draw main widget if required */
             if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_REDRAW)) { /* Check if redraw required */
                 GUI_Layer_t* layerPrev = GUI.LCD.DrawingLayer;  /* Save drawing layer */
@@ -137,7 +137,7 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
                 /**
                  * Prepare clipping region for this widget drawing
                  */
-                __CheckDispClipping(h);             /* Check coordinates for drawings */
+                __CheckDispClipping(h);             /* Check coordinates for drawings only particular widget */
                 
                 /**
                  * Check transparency and check if blending function exists to merge layers later together
@@ -149,7 +149,7 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
                     /**
                      * Try to allocate memory for new virtual layer for temporary usage
                      */
-                    GUI.LCD.DrawingLayer = __GUI_MEMALLOC(sizeof(*GUI.LCD.DrawingLayer) + width * height * GUI.LCD.PixelSize);
+                    GUI.LCD.DrawingLayer = __GUI_MEMALLOC(sizeof(*GUI.LCD.DrawingLayer) + (size_t)width * (size_t)height * (size_t)GUI.LCD.PixelSize);
                     
                     if (GUI.LCD.DrawingLayer) {     /* Check if allocation was successful */
                         GUI.LCD.DrawingLayer->Width = width;
@@ -177,16 +177,14 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
                             tmp = __GUI_LINKEDLIST_WidgetGetNext(NULL, tmp)) {
                         __GUI_WIDGET_SetFlag(tmp, GUI_FLAG_REDRAW); /* Set redraw bit to all children elements */
                     }
-                    /* ...now call function for redrawing process */
+                    /* ...now call function for actual redrawing process */
                     level++;
                     cnt += __RedrawWidgets(h);      /* Redraw children widgets */
                     level--;
                 }
                 
                 /**
-                 * TODO: If widget has transparency, 
-                 * copy drawed area back to main drawing layer with blending
-                 * between layers
+                 * If transparent mode is used on widget, copy content back
                  */
                 if (transparent) {                  /* If we were in transparent mode */
                     /* Copy layers with blending */

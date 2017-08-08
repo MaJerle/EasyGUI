@@ -35,7 +35,8 @@
 #define LCD_WIDTH                   800
 #define LCD_HEIGHT                  480
 
-#define LCD_COLOR_FORMAT_RGB565
+//#define LCD_COLOR_FORMAT_RGB565
+#define LCD_COLOR_FORMAT_ARGB8888
 
 #endif /* defined(STM32F769_DISCOVERY) */
 

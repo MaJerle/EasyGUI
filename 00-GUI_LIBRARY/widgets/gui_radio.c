@@ -47,14 +47,14 @@ uint8_t GUI_RADIO_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
-const static GUI_Color_t Colors[] = {
+static const GUI_Color_t Colors[] = {
     GUI_COLOR_WHITE,                                /*!< Default background color */
     GUI_COLOR_DARKGRAY,                             /*!< Default freground color */
     GUI_COLOR_BLACK,                                /*!< Default border color */
     GUI_COLOR_GRAY,                                 /*!< Default background color when disabled */
 };
 
-const static GUI_WIDGET_t Widget = {
+static const GUI_WIDGET_t Widget = {
     .Name = _GT("RADIOBOX"),                        /*!< Widget name */
     .Size = sizeof(GUI_RADIO_t),                    /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */

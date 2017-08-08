@@ -387,11 +387,6 @@ uint8_t GUI_LL_Control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* 
             for (i = 0; i < GUI_LAYERS; i++) {  /* Set each layer */
                 Layers[i].Num = i;
                 Layers[i].StartAddress = LCD_FRAME_BUFFER + (i * LCD_FRAME_BUFFER_SIZE);
-//                if (i == 0) {
-//                    Layers[i].StartAddress = 0xC0000000;
-//                } else {
-//                    Layers[i].StartAddress = 0xC0400000;
-//                }
             }
             
             /*******************************/

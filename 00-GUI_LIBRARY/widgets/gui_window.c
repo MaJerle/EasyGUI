@@ -47,14 +47,14 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
-const static GUI_Color_t Colors[] = {
+static const GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_LIGHTGRAY,                        /*!< Default background color */
     GUI_COLOR_WIN_TEXT_TITLE,                       /*!< Default text color */
     GUI_COLOR_WIN_BLUE,                             /*!< Default top background color when widget in focus */
     GUI_COLOR_WIN_BLUE,                             /*!< Default top background color when widget not in focus */
 };
 
-const static GUI_WIDGET_t Widget = {
+static const GUI_WIDGET_t Widget = {
     .Name = _GT("WINDOW"),                          /*!< Widget name */
     .Size = sizeof(GUI_WINDOW_t),                   /*!< Size of widget for memory allocation */
     .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */

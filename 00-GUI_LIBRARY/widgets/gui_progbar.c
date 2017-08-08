@@ -49,13 +49,13 @@ uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
-const static GUI_Color_t Colors[] = {
+static const GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_MIDDLEGRAY,                       /*!< Default background color */
     GUI_COLOR_WIN_DARKGRAY,                         /*!< Default freground color */
     GUI_COLOR_BLACK,                                /*!< Default border color */
 };
 
-const static GUI_WIDGET_t Widget = {
+static const GUI_WIDGET_t Widget = {
     .Name = _GT("PROGBAR"),                         /*!< Widget name */
     .Size = sizeof(GUI_PROGBAR_t),                  /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */

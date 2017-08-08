@@ -53,7 +53,7 @@ static const GUI_Color_t Colors[] = {
     GUI_COLOR_GRAY,                                 /*!< Default border color index in array */
 };
 
-const static GUI_WIDGET_t Widget = {
+static const GUI_WIDGET_t Widget = {
     .Name = _GT("BUTTON"),                          /*!< Widget name */
     .Size = sizeof(GUI_BUTTON_t),                   /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */

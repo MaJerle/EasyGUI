@@ -430,7 +430,7 @@ void PrintList(GUI_HANDLE_ROOT_t* root) {
         list = &GUI.Root;
     }
     for (h = (GUI_HANDLE_ROOT_t *)list->First; h; h = h->Handle.List.Next) {
-        __GUI_DEBUG("%*d: W: %s; A: 0x%08X; R: %lu; D: %lu\r\n", depth, depth, h->Handle.Widget->Name, (unsigned int)h, h->Handle.Flags & GUI_FLAG_REDRAW, h->Handle.Flags & GUI_FLAG_REMOVE);
+        __GUI_DEBUG("%*d: W: %s; A: 0x%08X; R: %lu; D: %lu\r\n", depth, depth, (const char *)h->Handle.Widget->Name, (unsigned int)h, (unsigned long)!!(h->Handle.Flags & GUI_FLAG_REDRAW), (unsigned long)!!(h->Handle.Flags & GUI_FLAG_REMOVE));
         if (__GUI_WIDGET_AllowChildren(h)) {
             PrintList(h);
         }

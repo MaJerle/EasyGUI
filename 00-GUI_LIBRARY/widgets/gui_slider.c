@@ -47,14 +47,14 @@ uint8_t GUI_SLIDER_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
-const static GUI_Color_t Colors[] = {
+static const GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_BG,                               /*!< Default background color on non-active part */
     GUI_COLOR_WIN_BLUE,                             /*!< Default background color on active part */
     GUI_COLOR_WIN_RED,                              /*!< Default circle (...) color */
     GUI_COLOR_WIN_DARKGRAY,                         /*!< Default border color */
 };
 
-const static GUI_WIDGET_t Widget = {
+static const GUI_WIDGET_t Widget = {
     .Name = _GT("SLIDER"),                          /*!< Widget name */
     .Size = sizeof(GUI_SLIDER_t),                   /*!< Size of widget for memory allocation */
     .Flags = GUI_FLAG_WIDGET_INVALIDATE_PARENT,     /*!< List of widget flags */

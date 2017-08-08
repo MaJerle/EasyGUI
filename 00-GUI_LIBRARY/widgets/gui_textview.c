@@ -47,12 +47,12 @@ uint8_t GUI_TEXTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
-const static GUI_Color_t Colors[] = {
+static const GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_LIGHTGRAY,                        /*!< Default background color */
     GUI_COLOR_WIN_TEXT,                             /*!< Default text color */
 };
 
-const static GUI_WIDGET_t Widget = {
+static const GUI_WIDGET_t Widget = {
     .Name = _GT("TEXTVIEW"),                        /*!< Widget name */
     .Size = sizeof(GUI_TEXTVIEW_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */

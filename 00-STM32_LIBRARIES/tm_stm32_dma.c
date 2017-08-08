@@ -30,10 +30,10 @@
 #define GET_STREAM_NUMBER_DMA2(stream)    (((uint32_t)(stream) - (uint32_t)DMA2_Stream0) / (0x18))
 
 /* Offsets for bits */
-const static uint8_t DMA_Flags_Bit_Pos[4] = {
+static const uint8_t DMA_Flags_Bit_Pos[4] = {
 	0, 6, 16, 22
 };
-const static IRQn_Type DMA_IRQs[2][8] = {
+static const IRQn_Type DMA_IRQs[2][8] = {
 	{
 		DMA1_Stream0_IRQn, DMA1_Stream1_IRQn, DMA1_Stream2_IRQn, DMA1_Stream3_IRQn,
 		DMA1_Stream4_IRQn, DMA1_Stream5_IRQn, DMA1_Stream6_IRQn, DMA1_Stream7_IRQn

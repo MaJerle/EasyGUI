@@ -47,7 +47,7 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
-const static GUI_Color_t Colors[] = {
+static const GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_BG,
     GUI_COLOR_WIN_TEXT,
     GUI_COLOR_WIN_SEL_FOC,
@@ -56,7 +56,7 @@ const static GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_SEL_NOFOC_BG
 };
 
-const static GUI_WIDGET_t Widget = {
+static const GUI_WIDGET_t Widget = {
     .Name = _GT("DROPDOWN"),                        /*!< Widget name */
     .Size = sizeof(GUI_DROPDOWN_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */

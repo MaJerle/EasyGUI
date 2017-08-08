@@ -55,7 +55,7 @@ GUI_LinkedListRoot_t DDList;                        /*!< List of dismissed dialo
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
-const static GUI_WIDGET_t Widget = {
+static const GUI_WIDGET_t Widget = {
     .Name = _GT("DIALOG"),                          /*!< Widget name */
     .Size = sizeof(GUI_DIALOG_t),                   /*!< Size of widget for memory allocation */
     .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN | GUI_FLAG_WIDGET_DIALOG_BASE,  /*!< List of widget flags */

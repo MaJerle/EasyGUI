@@ -47,7 +47,7 @@ uint8_t GUI_IMAGE_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
-const static GUI_WIDGET_t Widget = {
+static const GUI_WIDGET_t Widget = {
     .Name = _GT("IMAGE"),                           /*!< Widget name */
     .Size = sizeof(GUI_IMAGE_t),                    /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */

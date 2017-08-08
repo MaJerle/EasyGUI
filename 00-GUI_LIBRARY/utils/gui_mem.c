@@ -92,8 +92,8 @@ void __mem_insertfreeblock(MemBlock_t* newBlock) {
     }
 
     /**
-    * Check if new block and its size is the same address as next free block newBlock points to
-    */
+     * Check if new block and its size is the same address as next free block newBlock points to
+     */
     addr = (uint8_t *)newBlock;
     if ((uint8_t *)(addr + newBlock->Size) == (uint8_t *)ptr->NextFreeBlock) {
         if (ptr->NextFreeBlock == EndBlock) {       /* Does it points to the end? */
@@ -145,6 +145,7 @@ uint8_t mem_assignmem(const mem_region_t* regions, size_t len) {
          */
         MemSize = regions->Size;
         if (MemSize < (MEM_ALIGN_NUM + MEMBLOCK_METASIZE)) {
+            regions++;
             continue;
         }
         /**
@@ -331,7 +332,7 @@ size_t mem_getusersize(void* ptr) {
     }
     block = (MemBlock_t *)(((uint8_t *)ptr) - MEMBLOCK_METASIZE);   /* Get block meta data pointer */
     if (block->Size & MemAllocBit) {                /* Memory is actually allocated */
-        return (block->Size & ~MemAllocBit) - MEMBLOCK_METASIZE;    /* return size of block */
+        return (block->Size & ~MemAllocBit) - MEMBLOCK_METASIZE;    /* Return size of block */
     }
     return 0;
 }
@@ -353,7 +354,7 @@ void* mem_realloc(void* ptr, size_t size) {
     size_t oldSize;
     
     if (!ptr) {                                     /* If pointer is not valid */
-        return __GUI_MEM_Alloc(size);               /* Only allocate memory */
+        return mem_alloc(size);                     /* Only allocate memory */
     }
     
     oldSize = mem_getusersize(ptr);                 /* Get size of old pointer */

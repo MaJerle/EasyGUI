@@ -48,14 +48,14 @@ uint8_t GUI_GRAPH_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
-const static GUI_Color_t Colors[] = {
+static const GUI_Color_t Colors[] = {
     GUI_COLOR_GRAY,                                 /*!< Default background color */
     GUI_COLOR_BLACK,                                /*!< Default foreground color */
     GUI_COLOR_BLACK,                                /*!< Default border color */
     0xFF002F00,                                     /*!< Default grid color */
 };
 
-const static GUI_WIDGET_t Widget = {
+static const GUI_WIDGET_t Widget = {
     .Name = _GT("GRAPH"),                           /*!< Widget name */
     .Size = sizeof(GUI_GRAPH_t),                    /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */

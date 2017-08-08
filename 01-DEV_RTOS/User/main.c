@@ -79,7 +79,7 @@ CTS         PA3                 RTS from ST to CTS from GSM
 
 TM_TOUCH_t TS;
 
-GUI_HANDLE_p win1, handle;
+GUI_HANDLE_p win1, win2, handle;
 GUI_GRAPH_DATA_p graphdata1, graphdata2, graphdata3, graphdata4;
 GUI_HANDLE_p dialog1;
 
@@ -301,56 +301,68 @@ int main(void) {
     GUI_TRANSLATE_SetSourceLanguage(&languageEnglish);
     GUI_TRANSLATE_SetActiveLanguage(&languageGerman);
     
-    //GUI_WIDGET_SetFontDefault(&GUI_Font_Arial_Narrow_Italic_21_AA); /* Set default font for widgets */
+    GUI_WIDGET_SetFontDefault(&GUI_Font_Arial_Narrow_Italic_21_AA); /* Set default font for widgets */
     //GUI_WIDGET_SetFontDefault(&GUI_Font_Comic_Sans_MS_Regular_22); /* Set default font for widgets */
-    GUI_WIDGET_SetFontDefault(&GUI_Font_Roboto_Italic_14); /* Set default font for widgets */
+    //GUI_WIDGET_SetFontDefault(&GUI_Font_Roboto_Italic_14); /* Set default font for widgets */
     
     win1 = GUI_WINDOW_GetDesktop();                         /* Get desktop window */
     
-    if (1) {
-        for (state = 0; state < GUI_COUNT_OF(buttons); state++) {
-            handle = GUI_BUTTON_Create(buttons[state].id, 5 + (state % 3) * 160, 5 + (state / 3) * 40, 150, 35, win1, button_callback, 0);
-            GUI_WIDGET_SetText(handle, buttons[state].text);
-            GUI_WIDGET_SetUserData(handle, &buttons[state].data);
-            GUI_WIDGET_Set3DStyle(handle, 0);
-        }
-    } else {
-        size_t i = 0;
-        static const GUI_Char* texts[] = {
-            _GT("AAAA AAAA\nAAAA AAAAAA AAAA AAAAAAAAA AA    AAAAAAAAAAAAAAAAAAAA"),
-            _GT("Text view\nwith middle left alignment on screen"),
-            _GT("Text view\nwith middle left alignment on screen"),
-            _GT("Text view\nwith middle left alignment\n on screen"),
-            _GT("Text view\nwith middle left alignment\n on screen"),
-            _GT("Text view\nwith middle left alignment\n on screen"),
-            _GT("Text majkemi moje\neeeeeon screen"),
-            _GT("Text majkemi moje\neeeeeon screen"),
-            _GT("Text majkemi moje\neeeeeon screen"),
-        };
-        for (i = 0; i < 1; i++) {
-            handle = GUI_TEXTVIEW_Create(0, 1, 1, 1, 1, 0, 0, 0);
-            GUI_WIDGET_SetSizePercent(handle, 30, 90);
-            GUI_WIDGET_SetPositionPercent(handle, 3 + (i % 3) * 33, 3 + (i / 3) * 33);
-            GUI_WIDGET_SetText(handle, texts[i]);
-            GUI_WIDGET_SetFont(handle, &GUI_Font_Roboto_Italic_14);
-            switch (i % 4) {
-                case 0: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_WHITE); break;
-                case 1: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_YELLOW); break;
-                case 2: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_GRAY); break;
-                case 3: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_LIGHTGREEN); break;
-            }
-            switch (i % 3) {
-                case 0: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_LEFT); break;
-                case 1: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_CENTER); break;
-                case 2: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_RIGHT); break;
-            }
-            switch (i / 3) {
-                case 0: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_TOP); break;
-                case 1: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_CENTER); break;
-                case 2: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_BOTTOM); break;
-            }
-        }
-    }
+    handle = GUI_BUTTON_Create(0, 10, 10, 400, 70, win1, 0, 0);
+    GUI_WIDGET_SetText(handle, _GT("Gumb 1"));
+    handle = GUI_BUTTON_Create(0, 20, 70, 400, 70, win1, 0, 0);
+    GUI_WIDGET_SetText(handle, _GT("Gumb 2"));
+    
+    win2 = GUI_WINDOW_Create(0, 300, 100, 450, 200, win1, 0, 0);
+    GUI_WIDGET_SetText(win2, _GT("Okno 1"));
+    handle = GUI_BUTTON_Create(0, 10, 10, 200, 50, win2, 0, 0);
+    GUI_WIDGET_SetText(handle, _GT("Gumb 3"));
+    handle = GUI_BUTTON_Create(0, 10, 70, 200, 50, win2, 0, 0);
+    GUI_WIDGET_SetText(handle, _GT("Gumb 4"));
+    
+//    if (1) {
+//        for (state = 0; state < GUI_COUNT_OF(buttons); state++) {
+//            handle = GUI_BUTTON_Create(buttons[state].id, 5 + (state % 3) * 160, 5 + (state / 3) * 40, 150, 35, win1, button_callback, 0);
+//            GUI_WIDGET_SetText(handle, buttons[state].text);
+//            GUI_WIDGET_SetUserData(handle, &buttons[state].data);
+//            GUI_WIDGET_Set3DStyle(handle, 0);
+//        }
+//    } else {
+//        size_t i = 0;
+//        static const GUI_Char* texts[] = {
+//            _GT("AAAA AAAA\nAAAA AAAAAA AAAA AAAAAAAAA AA    AAAAAAAAAAAAAAAAAAAA"),
+//            _GT("Text view\nwith middle left alignment on screen"),
+//            _GT("Text view\nwith middle left alignment on screen"),
+//            _GT("Text view\nwith middle left alignment\n on screen"),
+//            _GT("Text view\nwith middle left alignment\n on screen"),
+//            _GT("Text view\nwith middle left alignment\n on screen"),
+//            _GT("Text majkemi moje\neeeeeon screen"),
+//            _GT("Text majkemi moje\neeeeeon screen"),
+//            _GT("Text majkemi moje\neeeeeon screen"),
+//        };
+//        for (i = 0; i < 1; i++) {
+//            handle = GUI_TEXTVIEW_Create(0, 1, 1, 1, 1, 0, 0, 0);
+//            GUI_WIDGET_SetSizePercent(handle, 30, 90);
+//            GUI_WIDGET_SetPositionPercent(handle, 3 + (i % 3) * 33, 3 + (i / 3) * 33);
+//            GUI_WIDGET_SetText(handle, texts[i]);
+//            GUI_WIDGET_SetFont(handle, &GUI_Font_Roboto_Italic_14);
+//            switch (i % 4) {
+//                case 0: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_WHITE); break;
+//                case 1: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_YELLOW); break;
+//                case 2: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_GRAY); break;
+//                case 3: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_LIGHTGREEN); break;
+//            }
+//            switch (i % 3) {
+//                case 0: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_LEFT); break;
+//                case 1: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_CENTER); break;
+//                case 2: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_RIGHT); break;
+//            }
+//            switch (i / 3) {
+//                case 0: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_TOP); break;
+//                case 1: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_CENTER); break;
+//                case 2: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_BOTTOM); break;
+//            }
+//        }
+//    }
     
     GUI_KEYBOARD_Create();
     
