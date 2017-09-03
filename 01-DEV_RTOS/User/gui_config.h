@@ -41,6 +41,11 @@
  * \brief           GUI configuration setup
  * \{
  */
+ 
+/**
+ * \brief           Enables (1) or disables (0) RTOS support
+ */
+#define GUI_RTOS                        1
 
 /**
  * \brief           Enables (1) or disables (0) touch support

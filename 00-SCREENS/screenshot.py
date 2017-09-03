@@ -8,7 +8,7 @@ By sending "b" character to serial you are able to read current screen from devi
 """
 
 PORT = "COM3"
-BAUD = 115200*2
+BAUD = 115200*4
 IMG_WIDTH = 800
 IMG_HEIGHT = 480
 DATA_SIZE = IMG_WIDTH * IMG_HEIGHT * 4

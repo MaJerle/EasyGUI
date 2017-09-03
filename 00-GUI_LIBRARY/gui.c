@@ -25,6 +25,7 @@
  */
 #define GUI_INTERNAL
 #include "gui.h"
+#include "gui_system.h"
 
 /******************************************************************************/
 /******************************************************************************/
@@ -32,6 +33,9 @@
 /******************************************************************************/
 /******************************************************************************/
 GUI_t GUI;
+#if GUI_RTOS
+GUI_OS_t GUI_OS;
+#endif /* GUI_RTOS */
 
 /******************************************************************************/
 /******************************************************************************/
@@ -52,32 +56,9 @@ GUI_t GUI;
 /***                            Private functions                            **/
 /******************************************************************************/
 /******************************************************************************/
-
-/* Gets number of widgets waiting for redraw */
-//uint32_t __GetNumberOfPendingWidgets(GUI_HANDLE_p parent) {
-//    GUI_HANDLE_p h;
-//    uint32_t cnt = 0;
-//    
-//    if (parent && __GUI_WIDGET_GetFlag(parent, GUI_FLAG_REDRAW)) {  /* Check for specific widget */
-//        return 1;                                   /* We have object to redraw */
-//    }
-//    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, NULL); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
-//        if (!__GUI_WIDGET_IsVisible(h)) {           /* Check if visible */
-//            continue;
-//        }
-//        if (__GUI_WIDGET_AllowChildren(h)) {        /* If this widget has children elements */
-//            cnt += __GetNumberOfPendingWidgets(h);  /* Redraw this widget and all its children if required */
-//        }
-//        if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_REDRAW)) { /* Check if we need redraw */
-//            cnt++;                                  /* Increase number of elements to redraw */
-//        }
-//    }
-//    return cnt;
-//}
-
 /* Clip widget before draw/touch operation */
-static
-void __CheckDispClipping(GUI_HANDLE_p h) {
+static void
+__CheckDispClipping(GUI_HANDLE_p h) {
     GUI_iDim_t x, y;
     GUI_Dim_t wi, hi;
     
@@ -249,7 +230,7 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
     static uint8_t i = 0;
     static GUI_iDim_t x[2], y[2];
     
-    *result = (GUI_WC_t)0;                          
+    *result = (GUI_WC_t)0;                          /* Reset widget control variable */          
     
     PT_BEGIN(&ts->pt);                              /* Start thread execution */
     
@@ -270,7 +251,7 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
          */
         do {
             PT_YIELD(&ts->pt);                      /* Stop thread for now and wait next call */
-            PT_WAIT_UNTIL(&ts->pt, v || (GUI.Time - Time) > 2000); /* Wait touch with released state or timeout */
+            PT_WAIT_UNTIL(&ts->pt, v || (gui_sys_now() - Time) > 2000); /* Wait touch with released state or timeout */
             
             if (v) {                                /* New valid touch entry received, either released or pressed again */
                 /**
@@ -318,8 +299,8 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
                     /**
                      * Wait for valid input with pressed state
                      */
-                    PT_WAIT_UNTIL(&ts->pt, (v && ts->TS.Status) || (GUI.Time - Time) > 300);
-                    if ((GUI.Time - Time) > 200) {  /* Check timeout for new pressed state */
+                    PT_WAIT_UNTIL(&ts->pt, (v && ts->TS.Status) || (gui_sys_now() - Time) > 300);
+                    if ((gui_sys_now() - Time) > 200) { /* Check timeout for new pressed state */
                         PT_EXIT(&ts->pt);           /* Exit protothread */
                     }
                 } else {
@@ -457,75 +438,15 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
     }
     return touchCONTINUE;                           /* Try with another widget */
 }
-#endif /* GUI_USE_TOUCH */
 
-/******************************************************************************/
-/******************************************************************************/
-/***                              Protothreads                               **/
-/******************************************************************************/
-/******************************************************************************/
-
-
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
-GUI_Result_t GUI_Init(void) {
-    uint8_t result;
-    
-    memset((void *)&GUI, 0x00, sizeof(GUI_t));      /* Reset GUI structure */
-    
-    /* Call LCD low-level function */
-    result = 1;
-    GUI_LL_Control(&GUI.LCD, GUI_LL_Command_Init, &GUI.LL, &result);    /* Call low-level initialization */
-    GUI.LL.Init(&GUI.LCD);                          /* Call user LCD driver function */
-    
-    /* Check situation with layers */
-    if (GUI.LCD.LayersCount >= 1) {
-        size_t i;
-        /* Set default values for all layers */
-        for (i = 0; i < GUI.LCD.LayersCount; i++) {
-            GUI.LCD.Layers[i].OffsetX = 0;
-            GUI.LCD.Layers[i].OffsetY = 0;
-            GUI.LCD.Layers[i].Width = GUI.LCD.Width;
-            GUI.LCD.Layers[i].Height = GUI.LCD.Height;
-        }
-        GUI.LCD.ActiveLayer = &GUI.LCD.Layers[0];
-        GUI.LCD.DrawingLayer = &GUI.LCD.Layers[0];
-        GUI.LL.Fill(&GUI.LCD, GUI.LCD.DrawingLayer, (void *)GUI.LCD.DrawingLayer->StartAddress, GUI.LCD.Width, GUI.LCD.Height, 0, 0xFFFFFFFF);
-        if (GUI.LCD.LayersCount > 1) {
-            GUI.LCD.DrawingLayer = &GUI.LCD.Layers[1];
-        }
-    } else {
-        return guiERROR;
-    }
-    
-    
-    /* Init input devices */
-    __GUI_INPUT_Init();
-    
-    /* GUI is initialized */
-    GUI.Initialized = 1;
-    
-    /* Init widgets */
-    __GUI_WIDGET_Init();
-    
-    return guiOK;
-}
-#include "tm_stm32_general.h"
-int32_t GUI_Process(void) {
-    int32_t cnt = 0;
-#if GUI_USE_TOUCH
+/**
+ * \brief           Process touch inputs
+ */
+static void
+__GUI_Process_Touch(void) {
     __GUI_TouchStatus_t tStat;
     GUI_WC_t result;
-#endif /* GUI_USE_TOUCH */
-#if GUI_USE_KEYBOARD
-    __GUI_KeyboardData_t key;
-    __GUI_KeyboardStatus_t kStat;
-#endif /* GUI_USE_KEYBOARD */
-
-#if GUI_USE_TOUCH
+    
     if (__GUI_INPUT_TouchAvailable()) {             /* Check if any touch available */
         while (__GUI_INPUT_TouchRead(&GUI.Touch.TS)) {  /* Process all touch events possible */
             if (GUI.ActiveWidget && GUI.Touch.TS.Status) {  /* Check active widget for touch and pressed status */
@@ -595,12 +516,18 @@ int32_t GUI_Process(void) {
             __GUI_WIDGET_Callback(GUI.ActiveWidget, result, &GUI.Touch, NULL);
         }
     }
+}
 #endif /* GUI_USE_TOUCH */
-    
+
 #if GUI_USE_KEYBOARD
-    /**
-     * Keyboard data reads
-     */
+/**
+ * \brief           Process reads of keyboard
+ */
+static void
+__GUI_Process_Keyboard(void) {
+    __GUI_KeyboardData_t key;
+    __GUI_KeyboardStatus_t kStat;
+    
     while (__GUI_INPUT_KeyRead(&key.KB)) {          /* Read all keyboard entires */
         if (GUI.FocusedWidget) {                    /* Check if any widget is in focus already */
             kStat = keyCONTINUE;
@@ -627,23 +554,15 @@ int32_t GUI_Process(void) {
             }
         }
     }
-#endif /* GUI_USE_KEYBOARD */
-    
-    /**
-     * Timer processing
-     */
-    __GUI_TIMER_Process();                          /* Process all timers */
-    
-    /**
-     * Check if anything to delete 
-     */
-    if (GUI.Flags & GUI_FLAG_REMOVE) {              /* Check if at least one widget should be deleted */
-        __GUI_WIDGET_ExecuteRemove();               /* Execute deletion */
-    }
-    
-    /**
-     * Redrawing operations
-     */
+}
+#endif
+
+#include "tm_stm32_general.h"
+/**
+ * \brief           Process redraw of all widgets
+ */
+static void
+__GUI_Process_Redraw(void) {
     if (!(GUI.LCD.Flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM) && (GUI.Flags & GUI_FLAG_REDRAW)) {  /* Check if anything to draw first */
         uint32_t time;
         GUI_Layer_t* active = GUI.LCD.ActiveLayer;
@@ -666,7 +585,7 @@ int32_t GUI_Process(void) {
         );
             
         /* Actually draw new screen based on setup */
-        cnt = __RedrawWidgets(NULL);                /* Redraw all widgets now */
+        __RedrawWidgets(NULL);                      /* Redraw all widgets now */
             
         /* Get cycles for drawing */
         time = TM_GENERAL_DWTCounterGetValue() - time;
@@ -694,12 +613,126 @@ int32_t GUI_Process(void) {
         
         __GUI_UNUSED(time);                         /* Prevent compiler warnings */
     }
-    
-    return cnt;                                     /* Return number of elements updated on GUI */
 }
 
-void GUI_UpdateTime(uint32_t millis) {
-    GUI.Time += millis;                             /* Increase GUI time for amount of milliseconds */
+#if GUI_RTOS
+/**
+ * \brief           GUI main thread for RTOS
+ * \param[in]       *argument: Pointer to user specific argument
+ */
+static void
+gui_thread(void * const argument) {
+    
+    while (1) {
+        GUI_Process();                              /* Process graphical update */
+    }
+}
+#endif
+
+/******************************************************************************/
+/******************************************************************************/
+/***                              Protothreads                               **/
+/******************************************************************************/
+/******************************************************************************/
+
+
+/******************************************************************************/
+/******************************************************************************/
+/***                                Public API                               **/
+/******************************************************************************/
+/******************************************************************************/
+#if GUI_RTOS
+char buffer[1024];
+#endif /* GUI_RTOS */
+GUI_Result_t GUI_Init(void) {
+    uint8_t result;
+    
+    memset((void *)&GUI, 0x00, sizeof(GUI_t));      /* Reset GUI structure */
+    
+#if GUI_RTOS
+    /* Init system */
+    gui_sys_init();                                 /* Init low-level system */
+    gui_sys_mbox_create(&GUI_OS.mbox, 10);          /* Message box for 10 elements */
+    GUI_OS.thread_id = gui_sys_thread_create("gui_thread", gui_thread, NULL, SYS_THREAD_SS, SYS_THREAD_PRIO);
+#endif /* GUI_RTOS */
+    
+    /* Call LCD low-level function */
+    result = 1;
+    GUI_LL_Control(&GUI.LCD, GUI_LL_Command_Init, &GUI.LL, &result);    /* Call low-level initialization */
+    GUI.LL.Init(&GUI.LCD);                          /* Call user LCD driver function */
+    
+    /* Check situation with layers */
+    if (GUI.LCD.LayersCount >= 1) {
+        size_t i;
+        /* Set default values for all layers */
+        for (i = 0; i < GUI.LCD.LayersCount; i++) {
+            GUI.LCD.Layers[i].OffsetX = 0;
+            GUI.LCD.Layers[i].OffsetY = 0;
+            GUI.LCD.Layers[i].Width = GUI.LCD.Width;
+            GUI.LCD.Layers[i].Height = GUI.LCD.Height;
+        }
+        GUI.LCD.ActiveLayer = &GUI.LCD.Layers[0];
+        GUI.LCD.DrawingLayer = &GUI.LCD.Layers[0];
+        GUI.LL.Fill(&GUI.LCD, GUI.LCD.DrawingLayer, (void *)GUI.LCD.DrawingLayer->StartAddress, GUI.LCD.Width, GUI.LCD.Height, 0, 0xFFFFFFFF);
+        if (GUI.LCD.LayersCount > 1) {
+            GUI.LCD.DrawingLayer = &GUI.LCD.Layers[1];
+        }
+    } else {
+        return guiERROR;
+    }
+    
+    /* Init input devices */
+    __GUI_INPUT_Init();
+    
+    /* GUI is initialized */
+    GUI.Initialized = 1;
+    
+    /* Init widgets */
+    __GUI_WIDGET_Init();
+    
+    return guiOK;
+}
+int32_t GUI_Process(void) {
+#if GUI_RTOS
+    gui_mbox_msg_t* msg;
+    uint32_t time;
+    uint32_t tmr_cnt = __GUI_TIMER_GetActiveCount();    /* Get number of timers in system */
+    
+    time = gui_sys_mbox_get(&GUI_OS.mbox, (void **)&msg, tmr_cnt > 0 ? 5 : 50); /* Get value from message queue */
+    if (time != SYS_TIMEOUT) {
+        __GUI_DEBUG("mt: %d\r\n", (uint32_t)msg->type);
+        gui_sys_protect();                          /* Lock protection */
+        switch (msg->type) {                        /* Check about event */
+            case GUI_SYS_MBOX_TYPE_TOUCH:
+                __GUI_Process_Touch();              /* Process touch event */
+                break;
+            case GUI_SYS_MBOX_TYPE_KEYBOARD:
+                __GUI_Process_Keyboard();           /* Process keyboard event */
+                break;
+            case GUI_SYS_MBOX_TYPE_REMOVE:
+                __GUI_WIDGET_ExecuteRemove();       /* Process remove event */
+                break;
+            default: 
+                break;
+        }
+        gui_sys_unprotect();                        /* Release protection */
+    }
+    __GUI_TIMER_Process();                          /* Process timers only */
+    __GUI_Process_Redraw();                         /* Redraw widgets */
+    
+#else
+#if GUI_USE_TOUCH
+    __GUI_Process_Touch();                          /* Process touch inputs */
+#endif /* GUI_USE_TOUCH */
+#if GUI_USE_KEYBOARD
+    __GUI_Process_Keyboard();                       /* Process keyboard inputs */
+#endif /* GUI_USE_KEYBOARD */
+    __GUI_TIMER_Process();                          /* Process all timers */
+    __GUI_WIDGET_ExecuteRemove();                   /* Delete widgets */
+    __GUI_Process_Redraw();                         /* Redraw widgets */
+#endif /* GUI_RTOS */
+    
+    return 0;                                       /* Return number of elements updated on GUI */
 }
 
 void GUI_LCD_ConfirmActiveLayer(GUI_Byte layer_num) {

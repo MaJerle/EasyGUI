@@ -72,8 +72,12 @@ CTS         PA3                 RTS from ST to CTS from GSM
 #include "gui_image.h"
 #include "gui_slider.h"
 #include "gui_keyboard.h"
+#include "gui_container.h"
 
 #include "math.h"
+
+#include "cmsis_os.h"
+#include "cpu_utils.h"
 
 #define COUNT_OF(x)     (sizeof(x) / sizeof((x)[0]))
 
@@ -269,123 +273,80 @@ GUI_TRANSLATE_Language_t languageGerman = {
     .Count = GUI_COUNT_OF(languageGermanEntries)
 };
 
+size_t i;
+GUI_HANDLE_p h;
+
+void read_touch(void);
+
+void user_thread(void const * arg);
+void touch_thread(void const * arg);
+
+osThreadDef(user_thread, user_thread, osPriorityNormal, 0, 512);
+osThreadId user_thread_id;
+osThreadDef(touch_thread, touch_thread, osPriorityNormal, 0, 512);
+osThreadId user_thread_id, touch_thread_id;
+
 int main(void) {
+    //hardfault debug code
+    SCB->CCR |= 0x10;
+    
+    TM_RCC_InitSystem();                        /* Init system */
+    HAL_Init();                                 /* Init HAL layer */
+    TM_DISCO_LedInit();                         /* Init leds */
+    TM_DISCO_ButtonInit();                      /* Init button */
+    TM_DELAY_Init();                            /* Init delay */
+    TM_USART_Init(DISCO_USART, DISCO_USART_PP, 115200*4);   /* Init USART for debug purpose */
+    
+    /* Print first screen message */
+    printf("GUI; Compiled: %s %s\r\n", __DATE__, __TIME__);
+    TM_GENERAL_DWTCounterEnable();
+    
+    /* Main button as interrupt */
+    TM_EXTI_Attach(DISCO_BUTTON_PORT, DISCO_BUTTON_PIN, TM_EXTI_Trigger_Rising);
+    
+    /* Create thread for user */
+    user_thread_id = osThreadCreate(osThread(user_thread), NULL);
+    
+    osKernelStart();                            /* Start RTOS kernel */
+    
+	while (1) {        
+
+	}
+}
+
+/**
+ * \brief           User thread for GUI
+ * \param[in]       *arg: Pointer to argument for thread
+ */
+static void
+user_thread(void const * arg) {
     GUI_STRING_UNICODE_t s;
     
     GUI_KeyboardData_t key;
     uint32_t state;
-    uint32_t ch;
     
-    //hardfault debug code
-    SCB->CCR |= 0x10;
-    
-    TM_RCC_InitSystem();                                    /* Init system */
-    HAL_Init();                                             /* Init HAL layer */
-    TM_DISCO_LedInit();                                     /* Init leds */
-    TM_DISCO_ButtonInit();                                  /* Init button */
-    TM_DELAY_Init();                                        /* Init delay */
-    TM_USART_Init(DISCO_USART, DISCO_USART_PP, 115200*2);   /* Init USART for debug purpose */
-    
-    /* Print first screen message */
-    printf("GUI; Compiled: %s %s\r\n", __DATE__, __TIME__);
-    
-    GUI_STRING_Prepare(&ptr, myStr);
-    while (GUI_STRING_GetCh(&ptr, &ch, NULL)) {
-        printf("ch: %c\r\n", ch);
-    }
-    
-    TM_GENERAL_DWTCounterEnable();
-    
-    GUI_Init();
-    
-    GUI_TRANSLATE_SetSourceLanguage(&languageEnglish);
-    GUI_TRANSLATE_SetActiveLanguage(&languageGerman);
+    GUI_Init();                                 /* Initialize GUI as RTOS */
     
     GUI_WIDGET_SetFontDefault(&GUI_Font_Arial_Narrow_Italic_21_AA); /* Set default font for widgets */
     //GUI_WIDGET_SetFontDefault(&GUI_Font_Comic_Sans_MS_Regular_22); /* Set default font for widgets */
     //GUI_WIDGET_SetFontDefault(&GUI_Font_Roboto_Italic_14); /* Set default font for widgets */
     
-    win1 = GUI_WINDOW_GetDesktop();                         /* Get desktop window */
+    /* Create all widgets on screen */
+    win1 = GUI_WINDOW_GetDesktop();             /* Get desktop window */
+    for (state = 0; state < GUI_COUNT_OF(buttons); state++) {
+        handle = GUI_BUTTON_Create(buttons[state].id, 5 + (state % 3) * 160, 5 + (state / 3) * 40, 150, 35, win1, button_callback, 0);
+        GUI_WIDGET_SetText(handle, buttons[state].text);
+        GUI_WIDGET_SetUserData(handle, &buttons[state].data);
+        GUI_WIDGET_Set3DStyle(handle, 0);
+    }
     
-    handle = GUI_BUTTON_Create(0, 10, 10, 400, 70, win1, 0, 0);
-    GUI_WIDGET_SetText(handle, _GT("Gumb 1"));
-    handle = GUI_BUTTON_Create(0, 20, 70, 400, 70, win1, 0, 0);
-    GUI_WIDGET_SetText(handle, _GT("Gumb 2"));
+    GUI_KEYBOARD_Create();                      /* Create virtual keyboard */
     
-    win2 = GUI_WINDOW_Create(0, 300, 100, 450, 200, win1, 0, 0);
-    GUI_WIDGET_SetText(win2, _GT("Okno 1"));
-    handle = GUI_BUTTON_Create(0, 10, 10, 200, 50, win2, 0, 0);
-    GUI_WIDGET_SetText(handle, _GT("Gumb 3"));
-    handle = GUI_BUTTON_Create(0, 10, 70, 200, 50, win2, 0, 0);
-    GUI_WIDGET_SetText(handle, _GT("Gumb 4"));
+    touch_thread_id = osThreadCreate(osThread(touch_thread), NULL); /* Create touch thread */
     
-//    if (1) {
-//        for (state = 0; state < GUI_COUNT_OF(buttons); state++) {
-//            handle = GUI_BUTTON_Create(buttons[state].id, 5 + (state % 3) * 160, 5 + (state / 3) * 40, 150, 35, win1, button_callback, 0);
-//            GUI_WIDGET_SetText(handle, buttons[state].text);
-//            GUI_WIDGET_SetUserData(handle, &buttons[state].data);
-//            GUI_WIDGET_Set3DStyle(handle, 0);
-//        }
-//    } else {
-//        size_t i = 0;
-//        static const GUI_Char* texts[] = {
-//            _GT("AAAA AAAA\nAAAA AAAAAA AAAA AAAAAAAAA AA    AAAAAAAAAAAAAAAAAAAA"),
-//            _GT("Text view\nwith middle left alignment on screen"),
-//            _GT("Text view\nwith middle left alignment on screen"),
-//            _GT("Text view\nwith middle left alignment\n on screen"),
-//            _GT("Text view\nwith middle left alignment\n on screen"),
-//            _GT("Text view\nwith middle left alignment\n on screen"),
-//            _GT("Text majkemi moje\neeeeeon screen"),
-//            _GT("Text majkemi moje\neeeeeon screen"),
-//            _GT("Text majkemi moje\neeeeeon screen"),
-//        };
-//        for (i = 0; i < 1; i++) {
-//            handle = GUI_TEXTVIEW_Create(0, 1, 1, 1, 1, 0, 0, 0);
-//            GUI_WIDGET_SetSizePercent(handle, 30, 90);
-//            GUI_WIDGET_SetPositionPercent(handle, 3 + (i % 3) * 33, 3 + (i / 3) * 33);
-//            GUI_WIDGET_SetText(handle, texts[i]);
-//            GUI_WIDGET_SetFont(handle, &GUI_Font_Roboto_Italic_14);
-//            switch (i % 4) {
-//                case 0: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_WHITE); break;
-//                case 1: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_YELLOW); break;
-//                case 2: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_GRAY); break;
-//                case 3: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_LIGHTGREEN); break;
-//            }
-//            switch (i % 3) {
-//                case 0: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_LEFT); break;
-//                case 1: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_CENTER); break;
-//                case 2: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_RIGHT); break;
-//            }
-//            switch (i / 3) {
-//                case 0: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_TOP); break;
-//                case 1: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_CENTER); break;
-//                case 2: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_BOTTOM); break;
-//            }
-//        }
-//    }
-    
-    GUI_KEYBOARD_Create();
-    
-    __GUI_LINKEDLIST_PrintList();
-    
-#if !defined(STM32F4xx)
-    TM_EXTI_Attach(GPIOI, GPIO_PIN_13, TM_EXTI_Trigger_Rising);
-#endif
-    TS.Orientation = TOUCH_ORIENT_DEFAULT;
-#if defined(STM32F769_DISCOVERY)
-    TS.Orientation = TOUCH_ORIENT_INVERT_Y;
-#endif
-    TM_TOUCH_Init(NULL, &TS);
-    
-    TM_EXTI_Attach(DISCO_BUTTON_PORT, DISCO_BUTTON_PIN, TM_EXTI_Trigger_Rising);
-    
-    GUI_STRING_UNICODE_Init(&s);
-  
-//    time = TM_DELAY_Time();
-    state = 0;
-	while (1) {
-        GUI_Process();
-        
+    while (1) {                                 /* Start thread execution */
+        osDelay(1000);
+        //printf("CPU usage: %d\r\n", osGetCPUUsage());
         if ((TM_DELAY_Time() - time) >= 2000) {
             time = TM_DELAY_Time();
             
@@ -446,7 +407,37 @@ int main(void) {
                     break;
             }
         }
-	}
+    }
+}
+
+osSemaphoreId touch_semaphore;
+
+/**
+ * \brief           Read touch from controller
+ * \param[in]       *arg: Pointer to user argument
+ */
+static void
+touch_thread(void const * arg) {
+#if !defined(STM32F4xx)
+    TM_EXTI_Attach(GPIOI, GPIO_PIN_13, TM_EXTI_Trigger_Rising);
+#endif
+    TS.Orientation = TOUCH_ORIENT_DEFAULT;
+#if defined(STM32F769_DISCOVERY)
+    TS.Orientation = TOUCH_ORIENT_INVERT_Y;
+#endif
+    TM_TOUCH_Init(NULL, &TS);
+    
+    /* Create semaphore */
+    osSemaphoreDef(touch_semaphore);
+    touch_semaphore = osSemaphoreCreate(osSemaphore(touch_semaphore), 1);
+    
+    /* Take it immediatelly */
+    osSemaphoreWait(touch_semaphore, osWaitForever);    /* Wait for semaphore */
+    while (1) {
+        if (osSemaphoreWait(touch_semaphore, osWaitForever) == osOK) {
+            read_touch();                       /* Read touch and send to GUI stack */
+        }
+    }
 }
 
 uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
@@ -911,18 +902,23 @@ uint8_t dialog_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
     uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
     switch (cmd) {
         case GUI_WC_Init: {
-            handle = GUI_TEXTVIEW_Create(0, 10, 10, GUI_WIDGET_GetWidth(h) - 20, GUI_WIDGET_GetHeight(h) - 52, h, 0, 0);
-            if (TM_DISCO_LedIsOn(LED_GREEN)) {
-                GUI_WIDGET_SetText(handle, _GT("LED is ON. Do you want to turn it off?"));
-            } else  {
-                GUI_WIDGET_SetText(handle, _GT("LED is OFF. Do you want to turn it on?"));
+            GUI_HANDLE_p tmp;
+            switch (GUI_WIDGET_GetId(h)) {
+                case ID_WIN_DIALOG:
+                    tmp = GUI_CONTAINER_Create(0, 0, 0, GUI_WIDGET_GetWidth(h), GUI_WIDGET_GetHeight(h), h, 0, 0);
+                    handle = GUI_TEXTVIEW_Create(0, 10, 10, GUI_WIDGET_GetWidth(h) - 20, GUI_WIDGET_GetHeight(h) - 52, tmp, 0, 0);
+                    if (TM_DISCO_LedIsOn(LED_GREEN)) {
+                        GUI_WIDGET_SetText(handle, _GT("LED is ON. Do you want to turn it off?"));
+                    } else  {
+                        GUI_WIDGET_SetText(handle, _GT("LED is OFF. Do you want to turn it on?"));
+                    }
+                    handle = GUI_BUTTON_Create(ID_BTN_DIALOG_CONFIRM, 0,   118, 150, 32, tmp, button_callback, 0);
+                    GUI_WIDGET_SetText(handle, _GT("OK"));
+                    handle = GUI_BUTTON_Create(ID_BTN_DIALOG_CANCEL,  150, 118, 150, 32, tmp, button_callback, 0);
+                    GUI_WIDGET_SetText(handle, _GT("CANCEL"));
+                    GUI_WIDGET_SetFocus(handle);
+                    break;
             }
-            handle = GUI_BUTTON_Create(ID_BTN_DIALOG_CONFIRM, 0,   118, 150, 32, h, button_callback, 0);
-            GUI_WIDGET_SetText(handle, _GT("OK"));
-            handle = GUI_BUTTON_Create(ID_BTN_DIALOG_CANCEL,  150, 118, 150, 32, h, button_callback, 0);
-            GUI_WIDGET_SetText(handle, _GT("CANCEL"));
-            GUI_WIDGET_SetFocus(handle);
-            break;
         }
         case GUI_WC_Draw: {
             break;
@@ -1030,8 +1026,7 @@ void TM_DELAY_1msHandler() {
     }
     Time++;
 #endif
-    
-    GUI_UpdateTime(1);
+    osSystickHandler();
 }
 
 /* printf handler */
@@ -1046,6 +1041,9 @@ int fputc(int ch, FILE* fil) {
 void TM_EXTI_Handler(uint16_t GPIO_Pin) {
     if (GPIO_PIN_13 == GPIO_Pin) {
         read_touch();
+        if (touch_semaphore) {
+            //osSemaphoreRelease(touch_semaphore);
+        }
     } else if (DISCO_BUTTON_PIN == GPIO_Pin) {
         pressed = 1;
     }

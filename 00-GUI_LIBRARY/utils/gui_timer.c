@@ -48,6 +48,9 @@
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
+#if GUI_RTOS
+static gui_mbox_msg_t timer_msg = {GUI_SYS_MBOX_TYPE_TIMER};
+#endif /* GUI_RTOS */
 
 /******************************************************************************/
 /******************************************************************************/
@@ -74,6 +77,9 @@ GUI_TIMER_t* __GUI_TIMER_Create(uint16_t period, void (*callback)(GUI_TIMER_t *)
         ptr->Flags = 0;                             /* Timer flags management */
         
         __GUI_LINKEDLIST_ADD_GEN(&GUI.Timers.List, (GUI_LinkedList_t *)ptr);    /* Add timer to linked list */
+#if GUI_RTOS
+        gui_sys_mbox_putnow(&GUI_OS.mbox, &timer_msg);  /* Add new message to queue */
+#endif /* GUI_RTOS */
     }
     return ptr;
 }
@@ -92,6 +98,9 @@ uint8_t __GUI_TIMER_Start(GUI_TIMER_t* t) {
     t->Counter = t->Period;                         /* Reset counter to top value */
     t->Flags &= ~GUI_FLAG_TIMER_PERIODIC;           /* Clear periodic flag */
     t->Flags |= GUI_FLAG_TIMER_ACTIVE;              /* Set active flag */
+#if GUI_RTOS
+    gui_sys_mbox_putnow(&GUI_OS.mbox, &timer_msg);  /* Add new message to queue */
+#endif /* GUI_RTOS */
     
     return 1;
 }
@@ -121,7 +130,7 @@ uint8_t __GUI_TIMER_Reset(GUI_TIMER_t* t) {
 
 void __GUI_TIMER_Process(void) {
     GUI_TIMER_t* t;
-    volatile uint32_t time = GUI.Time;
+    volatile uint32_t time = gui_sys_now();         /* Get current time */
     volatile uint32_t lastTime = GUI.Timers.Time;
     uint32_t diff = time - lastTime;                /* Get difference in time */
     
@@ -157,4 +166,15 @@ void __GUI_TIMER_Process(void) {
     }
     
     GUI.Timers.Time = time;                         /* Reset time */
+}
+
+uint32_t __GUI_TIMER_GetActiveCount(void) {
+    uint32_t cnt = 0;
+    GUI_TIMER_t* t;
+    for (t = (GUI_TIMER_t *)GUI.Timers.List.First; t; t = (GUI_TIMER_t *)t->List.Next) {
+        if ((t->Flags & GUI_FLAG_TIMER_ACTIVE)) {
+            cnt++;
+        }
+    }
+    return cnt;
 }

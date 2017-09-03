@@ -1206,6 +1206,11 @@
                 </FileArmAds>
               </FileOption>
             </File>
+            <File>
+              <FileName>cpu_utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-STM32_LIBRARIES\FreeRTOS\CMSIS_RTOS\cpu_utils.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1295,6 +1300,11 @@
               <FileName>gui_draw.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\gui_draw.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_system.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\gui_system.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2640,6 +2650,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-STM32_LIBRARIES\FreeRTOS\portable\RVDS\ARM_CM7\port_cm7.c</FilePath>
             </File>
+            <File>
+              <FileName>cpu_utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-STM32_LIBRARIES\FreeRTOS\CMSIS_RTOS\cpu_utils.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2865,6 +2880,11 @@
               <FileName>gui_draw.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\gui_draw.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_system.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\gui_system.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4278,6 +4298,11 @@
               <FileType>1</FileType>
               <FilePath>..\00-STM32_LIBRARIES\FreeRTOS\portable\RVDS\ARM_CM7\port_cm7.c</FilePath>
             </File>
+            <File>
+              <FileName>cpu_utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-STM32_LIBRARIES\FreeRTOS\CMSIS_RTOS\cpu_utils.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4503,6 +4528,11 @@
               <FileName>gui_draw.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\gui_draw.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_system.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\gui_system.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5886,6 +5916,11 @@
                 </FileArmAds>
               </FileOption>
             </File>
+            <File>
+              <FileName>cpu_utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-STM32_LIBRARIES\FreeRTOS\CMSIS_RTOS\cpu_utils.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -6111,6 +6146,11 @@
               <FileName>gui_draw.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\gui_draw.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_system.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\gui_system.c</FilePath>
             </File>
           </Files>
         </Group>

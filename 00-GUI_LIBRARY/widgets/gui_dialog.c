@@ -144,7 +144,9 @@ int GUI_DIALOG_CreateBlocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
         }
         
         do {
+#if !GUI_RTOS
             GUI_Process();                          /* Process GUI */
+#endif
         } while (!__GUI_DIALOG_IsDismissed(id));    /* Wait dialog to be dismissed */
         resp = __GUI_DIALOG_GetDismissedStatus(id);     /* Get dismissed status */
     }

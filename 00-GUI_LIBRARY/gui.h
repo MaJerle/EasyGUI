@@ -237,7 +237,6 @@ extern "C" {
  * \brief           GUI main object structure
  */
 typedef struct GUI_t {
-    volatile uint32_t Time;                 /*!< Current time in units of milliseconds */
     GUI_LCD_t LCD;                          /*!< LCD low-level settings */
     GUI_LL_t LL;                            /*!< Low-level drawing routines for LCD */
     
@@ -265,11 +264,32 @@ typedef struct GUI_t {
 #if GUI_USE_TRANSLATE
     GUI_TRANSLATE_t Translate;              /*!< Translation management structure */
 #endif /* GUI_USE_TRANSLATE */
-
+    
     uint8_t Initialized;                    /*!< Status indicating GUI is initialized */
 } GUI_t;
 #if defined(GUI_INTERNAL)
 extern GUI_t GUI;
+#if GUI_RTOS
+#include "gui_system.h"
+
+#define GUI_SYS_MBOX_TYPE_TOUCH             0x01
+#define GUI_SYS_MBOX_TYPE_KEYBOARD          0x02
+#define GUI_SYS_MBOX_TYPE_REMOVE            0x03
+#define GUI_SYS_MBOX_TYPE_TIMER             0x04
+#define GUI_SYS_MBOX_TYPE_WIDGET_CREATED    0x05
+#define GUI_SYS_MBOX_TYPE_INVALIDATE        0x06
+
+typedef struct gui_mbox_msg_t {
+    uint32_t type;                          /*!< Message type */
+} gui_mbox_msg_t;
+
+typedef struct GUI_OS_t {
+    gui_sys_thread_t thread_id;             /*!< GUI thread ID */
+    gui_sys_mbox_t mbox;                    /*!< Operating system message box */
+} GUI_OS_t;
+
+extern GUI_OS_t GUI_OS;
+#endif /* GUI_RTOS */
 #endif /* defined(GUI_INTERNAL) */
 
 /* Include widget structure */

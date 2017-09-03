@@ -125,6 +125,8 @@ void __GUI_TIMER_Process(void);
  */
 #define __GUI_TIMER_GetParams(t)        (t)->Params
 
+uint32_t __GUI_TIMER_GetActiveCount(void);
+
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 /**

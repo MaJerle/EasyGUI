@@ -37,6 +37,11 @@ typedef struct {
 } GUI_WIDGET_Def_t;
 GUI_WIDGET_Def_t WIDGET_Default;
 
+#if GUI_RTOS
+static gui_mbox_msg_t msg_widget_remove = {GUI_SYS_MBOX_TYPE_REMOVE};
+static gui_mbox_msg_t msg_widget_invalidate = {GUI_SYS_MBOX_TYPE_INVALIDATE};
+#endif /* GUI_RTOS */
+
 /******************************************************************************/
 /******************************************************************************/
 /***                           Private definitions                           **/
@@ -96,6 +101,7 @@ uint8_t __RemoveWidget(GUI_HANDLE_p h) {
 static
 void __RemoveWidgets(GUI_HANDLE_p parent) {
     GUI_HANDLE_p h, next;
+    static uint32_t lvl = 0;
     
     /**
      * Scan all widgets in system
@@ -113,7 +119,9 @@ void __RemoveWidgets(GUI_HANDLE_p parent) {
                 }
                 
                 /* ...process with children delete */
+                lvl++;
                 __RemoveWidgets(h);                 /* Remove children widgets directly */
+                lvl--;
             }
             
             /**
@@ -131,6 +139,10 @@ void __RemoveWidgets(GUI_HANDLE_p parent) {
             __RemoveWidgets(h);                     /* Check children widgets if anything to remove */
         }
         h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h);    /* Get next widget of current */
+    }
+    
+    if (lvl == 0) {                                 /* Notify about remove execution */
+        gui_sys_mbox_putnow(&GUI_OS.mbox, &msg_widget_remove);
     }
 }
 
@@ -520,6 +532,9 @@ uint8_t __GUI_WIDGET_Invalidate(GUI_HANDLE_p h) {
         ) && __GH(h)->Parent) {
         __InvalidatePrivate(__GH(h)->Parent, 0); /* Invalidate parent object too but without clipping */
     }
+#if GUI_RTOS
+    gui_sys_mbox_putnow(&GUI_OS.mbox, &msg_widget_invalidate);
+#endif /* GUI_RTOS */
     return ret;
 }
 
@@ -626,6 +641,11 @@ void* __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x,
         }
         __GUI_WIDGET_Callback(h, GUI_WC_Init, NULL, NULL);  /* Notify user about init successful */
         __GUI_WIDGET_Invalidate(h);                 /* Invalidate object */
+        
+#if GUI_RTOS
+        static gui_mbox_msg_t msg = {GUI_SYS_MBOX_TYPE_WIDGET_CREATED};
+        gui_sys_mbox_putnow(&GUI_OS.mbox, &msg);    /* Post message queue */
+#endif /* GUI_RTOS */
     }
     
     return (void *)h;
@@ -633,6 +653,9 @@ void* __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x,
 
 uint8_t __GUI_WIDGET_Remove(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+#if GUI_RTOS
+    gui_sys_mbox_putnow(&GUI_OS.mbox, &msg_widget_remove);  /* Put message to queue */
+#endif /* GUI_RTOS */
     if (__CanRemoveWidget(h)) {                     /* Check if we can delete widget */
         __GUI_WIDGET_SetFlag(h, GUI_FLAG_REMOVE);   /* Set flag for widget delete */
         GUI.Flags |= GUI_FLAG_REMOVE;               /* Set flag for to remove at least one widget from tree */
@@ -972,7 +995,6 @@ uint8_t __GUI_WIDGET_Hide(GUI_HANDLE_p h) {
     }
     return 1;
 }
-
 
 uint8_t __GUI_WIDGET_IsChildOf(GUI_HANDLE_p h, GUI_HANDLE_p parent) {
     __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h) && __GUI_WIDGET_IsWidget(parent));  /* Check valid parameter */

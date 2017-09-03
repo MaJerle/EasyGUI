@@ -1,5 +1,5 @@
 /*
-    FreeRTOS V8.2.1 - Copyright (C) 2015 Real Time Engineers Ltd.
+    FreeRTOS V9.0.0 - Copyright (C) 2016 Real Time Engineers Ltd.
     All rights reserved
 
     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
@@ -8,7 +8,7 @@
 
     FreeRTOS is free software; you can redistribute it and/or modify it under
     the terms of the GNU General Public License (version 2) as published by the
-    Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
+    Free Software Foundation >>>> AND MODIFIED BY <<<< the FreeRTOS exception.
 
     ***************************************************************************
     >>!   NOTE: The modification to the GPL is included to allow you to     !<<
@@ -94,6 +94,14 @@ must be set in the compiler's include path. */
 	#include "portmacro.h"
 #endif
 
+#if portBYTE_ALIGNMENT == 32
+	#define portBYTE_ALIGNMENT_MASK ( 0x001f )
+#endif
+
+#if portBYTE_ALIGNMENT == 16
+	#define portBYTE_ALIGNMENT_MASK ( 0x000f )
+#endif
+
 #if portBYTE_ALIGNMENT == 8
 	#define portBYTE_ALIGNMENT_MASK ( 0x0007 )
 #endif
@@ -131,9 +139,9 @@ extern "C" {
  *
  */
 #if( portUSING_MPU_WRAPPERS == 1 )
-	StackType_t *pxPortInitialiseStack( StackType_t *pxTopOfStack, TaskFunction_t pxCode, void *pvParameters, BaseType_t xRunPrivileged ) PRIVILEGED_FUNCTION;
+	PRIVILEGED_FUNCTION StackType_t *pxPortInitialiseStack( StackType_t *pxTopOfStack, TaskFunction_t pxCode, void *pvParameters, BaseType_t xRunPrivileged ) ;
 #else
-	StackType_t *pxPortInitialiseStack( StackType_t *pxTopOfStack, TaskFunction_t pxCode, void *pvParameters ) PRIVILEGED_FUNCTION;
+	PRIVILEGED_FUNCTION StackType_t *pxPortInitialiseStack( StackType_t *pxTopOfStack, TaskFunction_t pxCode, void *pvParameters ) ;
 #endif
 
 /* Used by heap_5.c. */
@@ -154,30 +162,30 @@ typedef struct HeapRegion
  * terminated by a HeapRegions_t structure that has a size of 0.  The region
  * with the lowest start address must appear first in the array.
  */
-void vPortDefineHeapRegions( const HeapRegion_t * const pxHeapRegions );
+PRIVILEGED_FUNCTION void vPortDefineHeapRegions( const HeapRegion_t * const pxHeapRegions );
 
 
 /*
  * Map to the memory management routines required for the port.
  */
-void *pvPortMalloc( size_t xSize ) PRIVILEGED_FUNCTION;
-void vPortFree( void *pv ) PRIVILEGED_FUNCTION;
-void vPortInitialiseBlocks( void ) PRIVILEGED_FUNCTION;
-size_t xPortGetFreeHeapSize( void ) PRIVILEGED_FUNCTION;
-size_t xPortGetMinimumEverFreeHeapSize( void ) PRIVILEGED_FUNCTION;
+PRIVILEGED_FUNCTION void *pvPortMalloc( size_t xSize );
+PRIVILEGED_FUNCTION void vPortFree( void *pv );
+PRIVILEGED_FUNCTION void vPortInitialiseBlocks( void );
+PRIVILEGED_FUNCTION size_t xPortGetFreeHeapSize( void );
+PRIVILEGED_FUNCTION size_t xPortGetMinimumEverFreeHeapSize( void );
 
 /*
  * Setup the hardware ready for the scheduler to take control.  This generally
  * sets up a tick interrupt and sets timers for the correct tick frequency.
  */
-BaseType_t xPortStartScheduler( void ) PRIVILEGED_FUNCTION;
+PRIVILEGED_FUNCTION BaseType_t xPortStartScheduler( void );
 
 /*
  * Undo any hardware/ISR setup that was performed by xPortStartScheduler() so
  * the hardware is left in its original condition after the scheduler stops
  * executing.
  */
-void vPortEndScheduler( void ) PRIVILEGED_FUNCTION;
+PRIVILEGED_FUNCTION void vPortEndScheduler( void );
 
 /*
  * The structures and methods of manipulating the MPU are contained within the
@@ -188,7 +196,7 @@ void vPortEndScheduler( void ) PRIVILEGED_FUNCTION;
  */
 #if( portUSING_MPU_WRAPPERS == 1 )
 	struct xMEMORY_REGION;
-	void vPortStoreTaskMPUSettings( xMPU_SETTINGS *xMPUSettings, const struct xMEMORY_REGION * const xRegions, StackType_t *pxBottomOfStack, uint16_t usStackDepth ) PRIVILEGED_FUNCTION;
+	PRIVILEGED_FUNCTION void vPortStoreTaskMPUSettings( xMPU_SETTINGS *xMPUSettings, const struct xMEMORY_REGION * const xRegions, StackType_t *pxBottomOfStack, uint32_t ulStackDepth );
 #endif
 
 #ifdef __cplusplus

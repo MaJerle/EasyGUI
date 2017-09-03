@@ -25,6 +25,7 @@
  */
 #define GUI_INTERNAL
 #include "gui_input.h"
+#include "gui_system.h"
 
 /******************************************************************************/
 /******************************************************************************/
@@ -65,9 +66,15 @@ static GUI_Byte_t KBBufferData[GUI_TOUCH_BUFFER_SIZE * sizeof(GUI_KeyboardData_t
 /******************************************************************************/
 #if GUI_USE_TOUCH
 uint8_t GUI_INPUT_TouchAdd(GUI_TouchData_t* ts) {
+    uint8_t ret;
     __GUI_ASSERTPARAMS(ts);                         /* Check input parameters */
-    ts->Time = GUI.Time;                            /* Set event time */
-    return GUI_BUFFER_Write(&TSBuffer, ts, sizeof(*ts)) ? 1 : 0;    /* Write data to buffer */
+    ts->Time = gui_sys_now();                       /* Set event time */
+    ret = GUI_BUFFER_Write(&TSBuffer, ts, sizeof(*ts)) ? 1 : 0; /* Write data to buffer */
+#if GUI_RTOS
+    static gui_mbox_msg_t gui_touch_value = {GUI_SYS_MBOX_TYPE_TOUCH};  /* Enter some value, don't care about */
+    gui_sys_mbox_putnow(&GUI_OS.mbox, &gui_touch_value);    /* Notify stack about new key added */
+#endif /* GUI_RTOS */
+    return ret;
 }
 
 uint8_t __GUI_INPUT_TouchRead(GUI_TouchData_t* ts) {
@@ -84,10 +91,17 @@ uint8_t __GUI_INPUT_TouchAvailable(void) {
 
 
 #if GUI_USE_KEYBOARD
+
 uint8_t GUI_INPUT_KeyAdd(GUI_KeyboardData_t* kb) {
+    uint8_t ret;
     __GUI_ASSERTPARAMS(kb);                         /* Check input parameters */
-    kb->Time = GUI.Time;                            /* Set event time */
-    return GUI_BUFFER_Write(&KBBuffer, kb, sizeof(*kb)) ? 1 : 0;    /* Write data to buffer */
+    kb->Time = gui_sys_now();                       /* Set event time */
+    ret = GUI_BUFFER_Write(&KBBuffer, kb, sizeof(*kb)) ? 1 : 0; /* Write data to buffer */
+#if GUI_RTOS
+    static gui_mbox_msg_t gui_kbd_value = {GUI_SYS_MBOX_TYPE_KEYBOARD}; /* Enter some value, don't care about */
+    gui_sys_mbox_putnow(&GUI_OS.mbox, &gui_kbd_value);   /* Notify stack about new key added */
+#endif /* GUI_RTOS */
+    return ret;
 }
 
 uint8_t __GUI_INPUT_KeyRead(GUI_KeyboardData_t* kb) {

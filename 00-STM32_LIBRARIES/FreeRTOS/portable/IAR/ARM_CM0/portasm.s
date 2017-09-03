@@ -1,5 +1,5 @@
 /*
-    FreeRTOS V8.2.1 - Copyright (C) 2015 Real Time Engineers Ltd.
+    FreeRTOS V9.0.0 - Copyright (C) 2016 Real Time Engineers Ltd.
     All rights reserved
 
     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
@@ -8,7 +8,7 @@
 
     FreeRTOS is free software; you can redistribute it and/or modify it under
     the terms of the GNU General Public License (version 2) as published by the
-    Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
+    Free Software Foundation >>>> AND MODIFIED BY <<<< the FreeRTOS exception.
 
     ***************************************************************************
     >>!   NOTE: The modification to the GPL is included to allow you to     !<<
@@ -149,10 +149,13 @@ vPortStartFirstTask
 	msr psp, r0				/* This is now the new top of stack to use in the task. */
 	movs r0, #2				/* Switch to the psp stack. */
 	msr CONTROL, r0
+	isb
 	pop {r0-r5}				/* Pop the registers that are saved automatically. */
 	mov lr, r5				/* lr is now in r5. */
+	pop {r3}				/* The return address is now in r3. */
+	pop {r2}				/* Pop and discard the XPSR. */
 	cpsie i					/* The first task has its context and interrupts can be enabled. */
-	pop {pc}				/* Finally, pop the PC to jump to the user defined task code. */
+	bx r3					/* Jump to the user defined task code. */
 
 /*-----------------------------------------------------------*/
 
