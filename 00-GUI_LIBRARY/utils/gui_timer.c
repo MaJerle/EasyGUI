@@ -48,9 +48,9 @@
 /***                            Private variables                            **/
 /******************************************************************************/
 /******************************************************************************/
-#if GUI_RTOS
+#if GUI_OS
 static gui_mbox_msg_t timer_msg = {GUI_SYS_MBOX_TYPE_TIMER};
-#endif /* GUI_RTOS */
+#endif /* GUI_OS */
 
 /******************************************************************************/
 /******************************************************************************/
@@ -77,9 +77,9 @@ GUI_TIMER_t* __GUI_TIMER_Create(uint16_t period, void (*callback)(GUI_TIMER_t *)
         ptr->Flags = 0;                             /* Timer flags management */
         
         __GUI_LINKEDLIST_ADD_GEN(&GUI.Timers.List, (GUI_LinkedList_t *)ptr);    /* Add timer to linked list */
-#if GUI_RTOS
-        gui_sys_mbox_putnow(&GUI_OS.mbox, &timer_msg);  /* Add new message to queue */
-#endif /* GUI_RTOS */
+#if GUI_OS
+        gui_sys_mbox_putnow(&GUI.OS.mbox, &timer_msg);  /* Add new message to queue */
+#endif /* GUI_OS */
     }
     return ptr;
 }
@@ -98,9 +98,9 @@ uint8_t __GUI_TIMER_Start(GUI_TIMER_t* t) {
     t->Counter = t->Period;                         /* Reset counter to top value */
     t->Flags &= ~GUI_FLAG_TIMER_PERIODIC;           /* Clear periodic flag */
     t->Flags |= GUI_FLAG_TIMER_ACTIVE;              /* Set active flag */
-#if GUI_RTOS
-    gui_sys_mbox_putnow(&GUI_OS.mbox, &timer_msg);  /* Add new message to queue */
-#endif /* GUI_RTOS */
+#if GUI_OS
+    gui_sys_mbox_putnow(&GUI.OS.mbox, &timer_msg);  /* Add new message to queue */
+#endif /* GUI_OS */
     
     return 1;
 }

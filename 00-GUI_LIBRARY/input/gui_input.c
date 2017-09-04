@@ -70,10 +70,10 @@ uint8_t GUI_INPUT_TouchAdd(GUI_TouchData_t* ts) {
     __GUI_ASSERTPARAMS(ts);                         /* Check input parameters */
     ts->Time = gui_sys_now();                       /* Set event time */
     ret = GUI_BUFFER_Write(&TSBuffer, ts, sizeof(*ts)) ? 1 : 0; /* Write data to buffer */
-#if GUI_RTOS
+#if GUI_OS
     static gui_mbox_msg_t gui_touch_value = {GUI_SYS_MBOX_TYPE_TOUCH};  /* Enter some value, don't care about */
-    gui_sys_mbox_putnow(&GUI_OS.mbox, &gui_touch_value);    /* Notify stack about new key added */
-#endif /* GUI_RTOS */
+    gui_sys_mbox_putnow(&GUI.OS.mbox, &gui_touch_value);    /* Notify stack about new key added */
+#endif /* GUI_OS */
     return ret;
 }
 
@@ -97,10 +97,10 @@ uint8_t GUI_INPUT_KeyAdd(GUI_KeyboardData_t* kb) {
     __GUI_ASSERTPARAMS(kb);                         /* Check input parameters */
     kb->Time = gui_sys_now();                       /* Set event time */
     ret = GUI_BUFFER_Write(&KBBuffer, kb, sizeof(*kb)) ? 1 : 0; /* Write data to buffer */
-#if GUI_RTOS
+#if GUI_OS
     static gui_mbox_msg_t gui_kbd_value = {GUI_SYS_MBOX_TYPE_KEYBOARD}; /* Enter some value, don't care about */
-    gui_sys_mbox_putnow(&GUI_OS.mbox, &gui_kbd_value);   /* Notify stack about new key added */
-#endif /* GUI_RTOS */
+    gui_sys_mbox_putnow(&GUI.OS.mbox, &gui_kbd_value);   /* Notify stack about new key added */
+#endif /* GUI_OS */
     return ret;
 }
 

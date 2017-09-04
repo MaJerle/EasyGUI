@@ -43,9 +43,9 @@
  */
  
 /**
- * \brief           Enables (1) or disables (0) RTOS support
+ * \brief           Enables (1) or disables (0) OS support for library
  */
-#define GUI_RTOS                        1
+#define GUI_OS                          1
 
 /**
  * \brief           Enables (1) or disables (0) touch support

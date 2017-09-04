@@ -233,6 +233,32 @@ extern "C" {
  */
 //#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
+#if GUI_OS
+#include "gui_system.h"
+
+#define GUI_SYS_MBOX_TYPE_TOUCH             0x01
+#define GUI_SYS_MBOX_TYPE_KEYBOARD          0x02
+#define GUI_SYS_MBOX_TYPE_REMOVE            0x03
+#define GUI_SYS_MBOX_TYPE_TIMER             0x04
+#define GUI_SYS_MBOX_TYPE_WIDGET_CREATED    0x05
+#define GUI_SYS_MBOX_TYPE_INVALIDATE        0x06
+
+/**
+ * \brief           Message box data type
+ */
+typedef struct gui_mbox_msg_t {
+    uint32_t type;                          /*!< Message type */
+} gui_mbox_msg_t;
+
+/**
+ * \brief           OS dependant variables
+ */
+typedef struct GUI_OS_t {
+    gui_sys_thread_t thread_id;             /*!< GUI thread ID */
+    gui_sys_mbox_t mbox;                    /*!< Operating system message box */
+} GUI_OS_t;
+#endif /* GUI_OS */
+
 /**
  * \brief           GUI main object structure
  */
@@ -265,31 +291,15 @@ typedef struct GUI_t {
     GUI_TRANSLATE_t Translate;              /*!< Translation management structure */
 #endif /* GUI_USE_TRANSLATE */
     
+#if GUI_OS
+    GUI_OS_t OS;                            /*!< Operating system dependant structure */
+#endif /* GUI_OS */
+    
     uint8_t Initialized;                    /*!< Status indicating GUI is initialized */
 } GUI_t;
 #if defined(GUI_INTERNAL)
 extern GUI_t GUI;
-#if GUI_RTOS
-#include "gui_system.h"
 
-#define GUI_SYS_MBOX_TYPE_TOUCH             0x01
-#define GUI_SYS_MBOX_TYPE_KEYBOARD          0x02
-#define GUI_SYS_MBOX_TYPE_REMOVE            0x03
-#define GUI_SYS_MBOX_TYPE_TIMER             0x04
-#define GUI_SYS_MBOX_TYPE_WIDGET_CREATED    0x05
-#define GUI_SYS_MBOX_TYPE_INVALIDATE        0x06
-
-typedef struct gui_mbox_msg_t {
-    uint32_t type;                          /*!< Message type */
-} gui_mbox_msg_t;
-
-typedef struct GUI_OS_t {
-    gui_sys_thread_t thread_id;             /*!< GUI thread ID */
-    gui_sys_mbox_t mbox;                    /*!< Operating system message box */
-} GUI_OS_t;
-
-extern GUI_OS_t GUI_OS;
-#endif /* GUI_RTOS */
 #endif /* defined(GUI_INTERNAL) */
 
 /* Include widget structure */

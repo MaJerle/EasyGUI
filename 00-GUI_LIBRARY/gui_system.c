@@ -6,8 +6,8 @@
 #define VAL_SEM_INVALID             (osSemaphoreId)0
 #define VAL_MBOX_INVALID            (osMessageQId)0
 
-static osMutexId sys_mutex;                     /* Mutex ID for main protection */
 static osMutexDef(sys_mutex);                   /* Define a mutex structure */
+static osMutexId sys_mutex;                     /* Mutex ID for main protection */
 
 /**
  * \defgroup        SYS Port functions
@@ -16,26 +16,27 @@ static osMutexDef(sys_mutex);                   /* Define a mutex structure */
  */
  
 uint32_t
-PF(sys_now(void)) {
-    return HAL_GetTick();                       /* Get current tick from HAL driver */
+gui_sys_now(void) {
+    return HAL_GetTick();                       /* Get current tick in units of milliseconds */
 }
 
-#if GUI_RTOS || defined(DOXYGEN)
+#if GUI_OS || defined(DOXYGEN)
 uint8_t
-PF(sys_init(void)) {
+gui_sys_init(void) {
     sys_mutex = osMutexCreate(osMutex(sys_mutex));  /* Create main system mutex for protection */
     return 0;
 }
 
 uint8_t
-PF(sys_protect(void)) {
+gui_sys_protect(void) {
     return osMutexWait(sys_mutex, osWaitForever) != osOK;   /* Wait forever for mutex */
 }
 
 uint8_t
-PF(sys_unprotect(void)) {
+gui_sys_unprotect(void) {
     return osMutexRelease(sys_mutex) != osOK;   /* Release the mutex */
 }
+
 /**
  * \defgroup        SYS_MUTEX Mutexes
  * \brief           Port functions for mutexes
@@ -45,33 +46,33 @@ PF(sys_unprotect(void)) {
  */
 
 uint8_t
-PF(sys_mutex_create(PF(sys_mutex_t)* p)) {
+gui_sys_mutex_create(gui_sys_mutex_t* p) {
     osMutexDef(MUT);                            /* Define a mutex */
     return (*p = osMutexCreate(osMutex(MUT))) == 0; /* Create mutex from init */
 }
 
 uint8_t
-PF(sys_mutex_delete(PF(sys_mutex_t)* p)) {
+gui_sys_mutex_delete(gui_sys_mutex_t* p) {
     return osMutexDelete(*p) != osOK;           /* Delete mutex */
 }
   
 uint8_t
-PF(sys_mutex_lock(PF(sys_mutex_t)* p)) {
+gui_sys_mutex_lock(gui_sys_mutex_t* p) {
     return osMutexWait(*p, osWaitForever) != osOK;  /* Wait forever for mutex */
 }
   
 uint8_t
-PF(sys_mutex_unlock(PF(sys_mutex_t)* p)) {
+gui_sys_mutex_unlock(gui_sys_mutex_t* p) {
     return osMutexRelease(*p) != osOK;          /* Release mutex */
 }
 
 uint8_t
-PF(sys_mutex_isvalid(PF(sys_mutex_t)* p)) {
+gui_sys_mutex_isvalid(gui_sys_mutex_t* p) {
     return !*p;                                 /* Check if mutex is valid */
 }
 
 uint8_t
-PF(sys_mutex_invalid(PF(sys_mutex_t)* p)) {
+gui_sys_mutex_invalid(gui_sys_mutex_t* p) {
     *p = VAL_MUTEX_INVALID;                     /* Set mutex as invalid */
     return 0;
 }
@@ -89,7 +90,7 @@ PF(sys_mutex_invalid(PF(sys_mutex_t)* p)) {
  */
 
 uint8_t
-PF(sys_sem_create(PF(sys_sem_t)* p, uint8_t cnt)) {
+gui_sys_sem_create(gui_sys_sem_t* p, uint8_t cnt) {
     osSemaphoreDef(SEM);                        /* Define semaphore info */
     *p = osSemaphoreCreate(osSemaphore(SEM), 1);    /* Create semaphore with one token */
     
@@ -100,12 +101,12 @@ PF(sys_sem_create(PF(sys_sem_t)* p, uint8_t cnt)) {
 }
 
 uint8_t
-PF(sys_sem_delete(PF(sys_sem_t)* p)) {
+gui_sys_sem_delete(gui_sys_sem_t* p) {
     return osSemaphoreDelete(*p) != osOK;       /* Delete semaphore */
 }
 
 uint32_t
-PF(sys_sem_wait(PF(sys_sem_t)* p, uint32_t timeout)) {
+gui_sys_sem_wait(gui_sys_sem_t* p, uint32_t timeout) {
     uint32_t tick = osKernelSysTick();          /* Get start tick time */
     
     if (osSemaphoreWait(*p, !timeout ? osWaitForever : timeout) == osOK) {  /* Wait for semaphore with specific time */
@@ -115,17 +116,17 @@ PF(sys_sem_wait(PF(sys_sem_t)* p, uint32_t timeout)) {
 }
 
 uint8_t
-PF(sys_sem_release(PF(sys_sem_t)* p)) {
+gui_sys_sem_release(gui_sys_sem_t* p) {
     return osSemaphoreRelease(*p) == osOK;      /* Release semaphore */
 }
 
 uint8_t
-PF(sys_sem_isvalid(PF(sys_sem_t)* p)) {
+gui_sys_sem_isvalid(gui_sys_sem_t* p) {
     return !*p;                                 /* Check if valid */
 }
 
 uint8_t
-PF(sys_sem_invalid(PF(sys_sem_t)* p)) {
+gui_sys_sem_invalid(gui_sys_sem_t* p) {
     *p = VAL_SEM_INVALID;                       /* Invaldiate semaphore */
     return 0;
 }
@@ -143,13 +144,13 @@ PF(sys_sem_invalid(PF(sys_sem_t)* p)) {
  */
     
 uint8_t
-PF(sys_mbox_create(PF(sys_mbox_t)* b, size_t size)) {
+gui_sys_mbox_create(gui_sys_mbox_t* b, size_t size) {
     osMessageQDef(MBOX, size, void *);          /* Define new macro */
     return (*b = osMessageCreate(osMessageQ(MBOX), NULL)) == 0; /* Create message box */
 }
 
 uint8_t
-PF(sys_mbox_delete(PF(sys_mbox_t)* b)) {
+gui_sys_mbox_delete(gui_sys_mbox_t* b) {
     if (osMessageWaiting(*b)) {                 /* We still have messages in queue, should not delete queue */
         return 1;                               /* Return error */
     }
@@ -157,13 +158,13 @@ PF(sys_mbox_delete(PF(sys_mbox_t)* b)) {
 }
 
 uint32_t
-PF(sys_mbox_put(PF(sys_mbox_t)* b, void* m)) {
+gui_sys_mbox_put(gui_sys_mbox_t* b, void* m) {
     uint32_t tick = osKernelSysTick();          /* Get start time */
     return osMessagePut(*b, (uint32_t)m, osWaitForever) == osOK ? (osKernelSysTick() - tick) : SYS_TIMEOUT; /* Put new message with forever timeout */
 }
 
 uint32_t
-PF(sys_mbox_get(PF(sys_mbox_t)* b, void** m, uint32_t timeout)) {
+gui_sys_mbox_get(gui_sys_mbox_t* b, void** m, uint32_t timeout) {
     osEvent evt;
     uint32_t time = osKernelSysTick();          /* Get current time */
     
@@ -176,12 +177,12 @@ PF(sys_mbox_get(PF(sys_mbox_t)* b, void** m, uint32_t timeout)) {
 }
 
 uint8_t
-PF(sys_mbox_putnow(PF(sys_mbox_t)* b, void* m)) {
+gui_sys_mbox_putnow(gui_sys_mbox_t* b, void* m) {
     return osMessagePut(*b, (uint32_t)m, 0) != osOK;   /* Put new message without timeout */
 }
 
 uint8_t
-PF(sys_mbox_getnow(PF(sys_mbox_t)* b, void** m)) {
+gui_sys_mbox_getnow(gui_sys_mbox_t* b, void** m) {
     osEvent evt;
     
     evt = osMessageGet(*b, 0);                  /* Get message event */
@@ -193,12 +194,12 @@ PF(sys_mbox_getnow(PF(sys_mbox_t)* b, void** m)) {
 }
 
 uint8_t
-PF(sys_mbox_isvalid(PF(sys_mbox_t)* b)) {
+gui_sys_mbox_isvalid(gui_sys_mbox_t* b) {
     return !*b;                                 /* Return status if message box is valid */
 }
 
 uint8_t
-PF(sys_mbox_invalid(PF(sys_mbox_t)* b)) {
+gui_sys_mbox_invalid(gui_sys_mbox_t* b) {
     *b = VAL_MBOX_INVALID;                      /* Invalidate message box */
     return 0;
 }
@@ -213,13 +214,13 @@ PF(sys_mbox_invalid(PF(sys_mbox_t)* b)) {
  * \{
  */
     
-PF(sys_thread_t)
-PF(sys_thread_create(const char* name, void (*thread_func)(void *), void* const arg, size_t stack_size, PF(sys_thread_prio_t) prio)) {
+gui_sys_thread_t
+gui_sys_thread_create(const char* name, void (*thread_func)(void *), void* const arg, size_t stack_size, gui_sys_thread_prio_t prio) {
     const osThreadDef_t thread_def = {(char *)name, (os_pthread)thread_func, (osPriority)prio, 0, stack_size};  /* Create thread description */
     return osThreadCreate(&thread_def, arg);    /* Create thread */
 }
 
-#endif /* GUI_RTOS || defined(DOXYGEN) */
+#endif /* GUI_OS || defined(DOXYGEN) */
 
 /**
  * \}

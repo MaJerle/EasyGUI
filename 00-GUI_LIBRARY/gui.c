@@ -33,9 +33,6 @@
 /******************************************************************************/
 /******************************************************************************/
 GUI_t GUI;
-#if GUI_RTOS
-GUI_OS_t GUI_OS;
-#endif /* GUI_RTOS */
 
 /******************************************************************************/
 /******************************************************************************/
@@ -615,7 +612,7 @@ __GUI_Process_Redraw(void) {
     }
 }
 
-#if GUI_RTOS
+#if GUI_OS
 /**
  * \brief           GUI main thread for RTOS
  * \param[in]       *argument: Pointer to user specific argument
@@ -641,20 +638,20 @@ gui_thread(void * const argument) {
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-#if GUI_RTOS
+#if GUI_OS
 char buffer[1024];
-#endif /* GUI_RTOS */
+#endif /* GUI_OS */
 GUI_Result_t GUI_Init(void) {
     uint8_t result;
     
     memset((void *)&GUI, 0x00, sizeof(GUI_t));      /* Reset GUI structure */
     
-#if GUI_RTOS
+#if GUI_OS
     /* Init system */
     gui_sys_init();                                 /* Init low-level system */
-    gui_sys_mbox_create(&GUI_OS.mbox, 10);          /* Message box for 10 elements */
-    GUI_OS.thread_id = gui_sys_thread_create("gui_thread", gui_thread, NULL, SYS_THREAD_SS, SYS_THREAD_PRIO);
-#endif /* GUI_RTOS */
+    gui_sys_mbox_create(&GUI.OS.mbox, 10);          /* Message box for 10 elements */
+    GUI.OS.thread_id = gui_sys_thread_create("gui_thread", gui_thread, NULL, SYS_THREAD_SS, SYS_THREAD_PRIO);
+#endif /* GUI_OS */
     
     /* Call LCD low-level function */
     result = 1;
@@ -693,12 +690,12 @@ GUI_Result_t GUI_Init(void) {
     return guiOK;
 }
 int32_t GUI_Process(void) {
-#if GUI_RTOS
+#if GUI_OS
     gui_mbox_msg_t* msg;
     uint32_t time;
     uint32_t tmr_cnt = __GUI_TIMER_GetActiveCount();    /* Get number of timers in system */
     
-    time = gui_sys_mbox_get(&GUI_OS.mbox, (void **)&msg, tmr_cnt > 0 ? 5 : 50); /* Get value from message queue */
+    time = gui_sys_mbox_get(&GUI.OS.mbox, (void **)&msg, tmr_cnt > 0 ? 5 : 50); /* Get value from message queue */
     if (time != SYS_TIMEOUT) {
         __GUI_DEBUG("mt: %d\r\n", (uint32_t)msg->type);
         gui_sys_protect();                          /* Lock protection */
@@ -730,7 +727,7 @@ int32_t GUI_Process(void) {
     __GUI_TIMER_Process();                          /* Process all timers */
     __GUI_WIDGET_ExecuteRemove();                   /* Delete widgets */
     __GUI_Process_Redraw();                         /* Redraw widgets */
-#endif /* GUI_RTOS */
+#endif /* GUI_OS */
     
     return 0;                                       /* Return number of elements updated on GUI */
 }
