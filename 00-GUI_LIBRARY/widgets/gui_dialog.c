@@ -132,6 +132,7 @@ GUI_HANDLE_p GUI_DIALOG_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
     return (GUI_HANDLE_p)ptr;
 }
 
+#if GUI_OS
 int GUI_DIALOG_CreateBlocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     int resp = -1;                                  /* Dialog not created error */
     
@@ -143,16 +144,13 @@ int GUI_DIALOG_CreateBlocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
             __GUI_DIALOG_GetDismissedStatus(id);    /* Make dummy read */
         }
         
-        do {
-#if !GUI_RTOS
-            GUI_Process();                          /* Process GUI */
-#endif
-        } while (!__GUI_DIALOG_IsDismissed(id));    /* Wait dialog to be dismissed */
+        while (!__GUI_DIALOG_IsDismissed(id));      /* Wait dialog to be dismissed */
         resp = __GUI_DIALOG_GetDismissedStatus(id);     /* Get dismissed status */
     }
     __GUI_LEAVE();                                  /* Leave GUI */
     return resp;
 }
+#endif /* GUI_OS */
 
 uint8_t GUI_DIALOG_Dismiss(GUI_HANDLE_p h, int status) {
     DDList_t* ptr;
