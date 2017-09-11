@@ -23,14 +23,14 @@
  * | OTHER DEALINGS IN THE SOFTWARE.
  * |----------------------------------------------------------------------
  */
-#include "tm_stm32_touch_ts3510.h"
+#include "tm_stm32_touch_EXC7200.h"
 
-uint8_t TM_TOUCH_TS3510_Init(TM_TOUCH_t* TS) {
+uint8_t TM_TOUCH_EXC7200_Init(TM_TOUCH_t* TS) {
 	/* Init I2C */
-	TM_I2C_Init(TOUCH_TS3510_I2C, TOUCH_TS3510_I2C_PP, 100000);
+	TM_I2C_Init(TOUCH_EXC7200_I2C, TOUCH_EXC7200_I2C_PP, 100000);
     
     /* Check connected device */
-    if (TM_I2C_IsDeviceConnected(TOUCH_TS3510_I2C, TOUCH_TS3510_I2C_DEV) != TM_I2C_Result_Ok) {
+    if (TM_I2C_IsDeviceConnected(TOUCH_EXC7200_I2C, TOUCH_EXC7200_I2C_DEV) != TM_I2C_Result_Ok) {
         return 1;
     }
 	
@@ -42,43 +42,26 @@ uint8_t TM_TOUCH_TS3510_Init(TM_TOUCH_t* TS) {
 	return 0;
 }
 
-uint8_t TM_TOUCH_TS3510_Read(TM_TOUCH_t* TS) {
-	uint8_t DataSend[] = {0x81, 0x08};
+uint8_t TM_TOUCH_EXC7200_Read(TM_TOUCH_t* TS) {
 	uint8_t DataReceive[11];
-	uint16_t X1, Y1, X2, Y2;
+	uint16_t X1, Y1;
 	
 	/* Read data */
-	TM_I2C_WriteReadRepeatedStart(
-		TOUCH_TS3510_I2C,
-		TOUCH_TS3510_I2C_DEV,
-		0x00,
-		DataSend,
-		2,
-		0x8A,
-		DataReceive,
-		11
-	);
+	TM_I2C_ReadMultiNoRegister(TOUCH_EXC7200_I2C, TOUCH_EXC7200_I2C_DEV | 1, DataReceive, 10);
 	
 	/* Format data */
-	X1 = DataReceive[1] << 8 | DataReceive[2];
-	Y1 = DataReceive[3] << 8 | DataReceive[4];
-	X2 = DataReceive[5] << 8 | DataReceive[6];
-	Y2 = DataReceive[7] << 8 | DataReceive[8];
+	X1 = (((DataReceive[3] & 0xFF) << 4) | ((DataReceive[2] & 0xF0) >> 4)) << 1;
+	Y1 = (((DataReceive[5] & 0xFF) << 4) | ((DataReceive[4] & 0xF0) >> 4)) << 1;
 	
 	/* Check values */
-	if (X1 != 0xFFFF && Y1 != 0xFFFF) {
+	if (DataReceive[1] == 0x83) {
 		/* At least one is detected */
 		TS->NumPresses = 1;
-		TS->X[0] = X1;
-		TS->Y[0] = Y1;
-		
-		/* Check values */
-		if (X2 != 0xFFFF && Y2 != 0xFFFF) {
-			/* Second is also detected */
-			TS->NumPresses++;
-			TS->X[1] = X2;
-			TS->Y[1] = Y2;	
-		}
+		TS->X[0] = (X1 * TS->MaxX) >> 12;
+		TS->Y[0] = (Y1 * TS->MaxY) >> 12;
+        
+        /* Flush data again */
+        TM_I2C_ReadMultiNoRegister(TOUCH_EXC7200_I2C, TOUCH_EXC7200_I2C_DEV, DataReceive, 10);
 	} else {
 		/* No press detected */
 		TS->NumPresses = 0;

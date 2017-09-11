@@ -19,7 +19,7 @@
 /*****************************/
 /*       STM32F439-EVAL      */
 /*****************************/
-#if defined(STM32F439_EVAL)
+#if defined(STM32F439_EVAL) || defined(STM32F756_EVAL)
 #define LCD_WIDTH                   640
 #define LCD_HEIGHT                  480
 

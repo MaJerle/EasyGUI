@@ -440,10 +440,10 @@ uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* r
             switch (kbtn->S) {
                 case SPECIAL_SHIFT: {
                     SHIFT_ENABLE(SHIFT_UPPERCASE);  /* Enable shift upper case mode */
-                    break;
+                    return 1;
                 }
             }
-            return 1;
+            return 0;
         }
         default:
             __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */

@@ -1,6 +1,102 @@
 
 #include "gui.h"
 
+
+#define COUNT_OF(x)     (sizeof(x) / sizeof((x)[0]))
+
+#define ID_BASE                 (GUI_ID_USER)
+#define ID_BASE_WIN             (ID_BASE + 0x0100)
+#define ID_BASE_BTN             (ID_BASE_WIN + 0x0100)
+#define ID_BASE_TEXTWIEW        (ID_BASE_BTN + 0x0100)
+#define ID_BASE_EDITTEXT        (ID_BASE_TEXTWIEW + 0x0100)
+#define ID_BASE_CHECKBOX        (ID_BASE_TEXTWIEW + 0x0100)
+#define ID_BASE_LED             (ID_BASE_CHECKBOX + 0x0100)
+#define ID_BASE_GRAPH           (ID_BASE_LED + 0x0100)
+#define ID_BASE_SLIDER          (ID_BASE_GRAPH + 0x0100)
+#define ID_BASE_PROGBAR         (ID_BASE_SLIDER + 0x0100)
+
+/* List of window widget IDs */
+#define ID_WIN_BTN              (ID_BASE_WIN + 0x01)
+#define ID_WIN_EDIT             (ID_BASE_WIN + 0x02)
+#define ID_WIN_RADIO            (ID_BASE_WIN + 0x03)
+#define ID_WIN_CHECKBOX         (ID_BASE_WIN + 0x04)
+#define ID_WIN_PROGBAR          (ID_BASE_WIN + 0x05)
+#define ID_WIN_GRAPH            (ID_BASE_WIN + 0x06)
+#define ID_WIN_LISTBOX          (ID_BASE_WIN + 0x07)
+#define ID_WIN_LED              (ID_BASE_WIN + 0x08)
+#define ID_WIN_TEXTVIEW         (ID_BASE_WIN + 0x09)
+#define ID_WIN_DROPDOWN         (ID_BASE_WIN + 0x0A)
+#define ID_WIN_DIALOG           (ID_BASE_WIN + 0x0B)
+#define ID_WIN_LISTVIEW         (ID_BASE_WIN + 0x0C)
+#define ID_WIN_IMAGE            (ID_BASE_WIN + 0x0D)
+#define ID_WIN_SLIDER           (ID_BASE_WIN + 0x0E)
+#define ID_WIN_ZINDEX           (ID_BASE_WIN + 0x0F)
+#define ID_WIN_TRANSP           (ID_BASE_WIN + 0x10)
+#define ID_WIN_WINDOW           (ID_BASE_WIN + 0x11)
+
+/* List of base buttons IDs */
+#define ID_BTN_WIN_BTN          (ID_BASE_BTN + 0x01)
+#define ID_BTN_WIN_EDIT         (ID_BASE_BTN + 0x02)
+#define ID_BTN_WIN_RADIO        (ID_BASE_BTN + 0x03)
+#define ID_BTN_WIN_CHECKBOX     (ID_BASE_BTN + 0x04)
+#define ID_BTN_WIN_PROGBAR      (ID_BASE_BTN + 0x05)
+#define ID_BTN_WIN_GRAPH        (ID_BASE_BTN + 0x06)
+#define ID_BTN_WIN_LISTBOX      (ID_BASE_BTN + 0x07)
+#define ID_BTN_WIN_LED          (ID_BASE_BTN + 0x08)
+#define ID_BTN_WIN_TEXTVIEW     (ID_BASE_BTN + 0x09)
+#define ID_BTN_WIN_DROPDOWN     (ID_BASE_BTN + 0x0A)
+#define ID_BTN_WIN_DIALOG       (ID_BASE_BTN + 0x0B)
+#define ID_BTN_WIN_LISTVIEW     (ID_BASE_BTN + 0x0C)
+#define ID_BTN_WIN_IMAGE        (ID_BASE_BTN + 0x0D)
+#define ID_BTN_WIN_SLIDER       (ID_BASE_BTN + 0x0E)
+#define ID_BTN_WIN_ZINDEX       (ID_BASE_BTN + 0x0F)
+#define ID_BTN_WIN_TRANSP       (ID_BASE_BTN + 0x10)
+#define ID_BTN_WIN_WINDOW       (ID_BASE_BTN + 0x11)
+
+#define ID_BTN_DIALOG_CONFIRM   (ID_BASE_BTN + 0x20)
+#define ID_BTN_DIALOG_CANCEL    (ID_BASE_BTN + 0x21)
+
+#define ID_TEXTVIEW_1           (ID_BASE_TEXTWIEW + 0x01)
+#define ID_TEXTVIEW_2           (ID_BASE_TEXTWIEW + 0x02)
+
+#define ID_CHECKBOX_LED         (ID_BASE_CHECKBOX + 0x01)
+#define ID_CHECKBOX_GRAPH       (ID_BASE_CHECKBOX + 0x02)
+
+#define ID_LED_1                (ID_BASE_LED + 0x01)
+#define ID_LED_2                (ID_BASE_LED + 0x02)
+#define ID_LED_3                (ID_BASE_LED + 0x03)
+#define ID_LED_4                (ID_BASE_LED + 0x04)
+
+#define ID_GRAPH_MAIN           (ID_BASE_GRAPH + 0x01)
+
+#define ID_SLIDER_0             (ID_BASE_SLIDER + 0x01)
+#define ID_SLIDER_1             (ID_BASE_SLIDER + 0x02)
+
+#define ID_BUTTON_0             (ID_BASE_BTN + 0x040)
+#define ID_BUTTON_1             (ID_BASE_BTN + 0x041)
+#define ID_BUTTON_2             (ID_BASE_BTN + 0x042)
+#define ID_BUTTON_3             (ID_BASE_BTN + 0x043)
+
+#define ID_EDITTEXT_1           (ID_BASE_EDITTEXT + 0x01)
+
+#define ID_PROGBAR_CPUUSAGE     (ID_BASE_PROGBAR + 0x01)
+
+#define RADIO_GROUP_HALIGN  0x01
+#define RADIO_GROUP_VALIGN  0x02
+
+typedef struct {
+    GUI_ID_t win_id;
+    const GUI_Char* win_text;
+} btn_user_data_t;
+
+typedef struct {
+    GUI_ID_t id;
+    const GUI_Char* text;
+    GUI_WIDGET_CreateFunc_t createFunc;
+    GUI_WIDGET_CALLBACK_t cbFunc;
+    btn_user_data_t data;
+} bulk_init_t;
+
 const uint32_t _acimage_brand[] = {
   0x53CDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 
         0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 0x4DCDD3C8, 

@@ -30,6 +30,9 @@
 #if defined(STM32F439_EVAL) || defined(TOUCH_USE_STM32F439_EVAL)
 #include "tm_stm32_touch_ts3510.h"
 #endif
+#if  defined(STM32F756_EVAL) || defined(TOUCH_USE_STM32F756_EVAL)
+#include "tm_stm32_touch_exc7200.h"
+#endif
 #if defined(STM32F7_DISCOVERY) || defined(TOUCH_USE_STM32F7_DISCOVERY)
 #include "tm_stm32_touch_ft5336.h"
 #endif
@@ -53,6 +56,9 @@ TM_TOUCH_Result_t TM_TOUCH_Init(TM_TOUCH_DRIVER_t* Driver, TM_TOUCH_t* TS) {
 #if defined(STM32F439_EVAL) || defined(TOUCH_USE_STM32F439_EVAL)
 		TouchDriver.Init = TM_TOUCH_TS3510_Init;
 		TouchDriver.Read = TM_TOUCH_TS3510_Read;
+#elif defined(STM32F756_EVAL) || defined(TOUCH_USE_STM32F756_EVAL)
+		TouchDriver.Init = TM_TOUCH_EXC7200_Init;
+		TouchDriver.Read = TM_TOUCH_EXC7200_Read;
 #elif defined(STM32F7_DISCOVERY) || defined(TOUCH_USE_STM32F7_DISCOVERY)
 		TouchDriver.Init = TM_TOUCH_FT5336_Init;
 		TouchDriver.Read = TM_TOUCH_FT5336_Read;

@@ -62,7 +62,6 @@ extern "C" {
 #include "utils/gui_math.h"
 #include "utils/gui_mem.h"
 #include "utils/gui_translate.h"
-
 /* GUI Low-Level drivers */
 #include "gui_ll.h"
 

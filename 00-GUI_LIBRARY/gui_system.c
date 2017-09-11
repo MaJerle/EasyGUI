@@ -6,8 +6,10 @@
 #define VAL_SEM_INVALID             (osSemaphoreId)0
 #define VAL_MBOX_INVALID            (osMessageQId)0
 
+#if GUI_OS
 static osMutexDef(sys_mutex);                   /* Define a mutex structure */
 static osMutexId sys_mutex;                     /* Mutex ID for main protection */
+#endif /* GUI_OS */
 
 /**
  * \defgroup        SYS Port functions

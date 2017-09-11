@@ -1060,6 +1060,11 @@ typedef struct GUI_HANDLE_ROOT {
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 /**
+ * \brief           Widget create function footprint for structures as callbacks
+ */
+typedef GUI_HANDLE_p (*GUI_WIDGET_CreateFunc_t)(GUI_ID_t, GUI_iDim_t, GUI_iDim_t, GUI_iDim_t, GUI_iDim_t, GUI_HANDLE_p, GUI_WIDGET_CALLBACK_t, uint16_t);
+
+/**
  * \}
  */
 

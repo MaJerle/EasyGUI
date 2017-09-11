@@ -55,6 +55,7 @@ static DISCO_Led_t DISCO_Leds[] = {
 #endif
 		LED_RED,
 	},
+#if defined(DISCO_LED_ORANGE_PORT)
 	{
 #if defined(DISCO_LED_ORANGE_PORT)
 		DISCO_LED_ORANGE_PORT,
@@ -63,6 +64,8 @@ static DISCO_Led_t DISCO_Leds[] = {
 #endif
 		LED_ORANGE,
 	},
+#endif /* defined(DISCO_LED_ORANGE_PORT) */
+#if defined(DISCO_LED_BLUE_PORT)
 	{
 #if defined(DISCO_LED_BLUE_PORT)
 		DISCO_LED_BLUE_PORT,
@@ -70,7 +73,8 @@ static DISCO_Led_t DISCO_Leds[] = {
 		DISCO_LED_PORT,
 #endif
 		LED_BLUE,
-	}
+	},
+#endif /* defined(DISCO_LED_BLUE_PORT) */
 };
 
 #endif

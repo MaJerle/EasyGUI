@@ -179,7 +179,7 @@ PC3  <-> FMC_SDCKE0 | PD0  <-> FMC_D2   | PE0  <-> FMC_NBL0  | PF0  <-> FMC_A0  
  *
  * Library defines depends on board you use.
  */
-#if defined(SDRAM_USE_STM32F439_EVAL) || defined(STM32F439_EVAL)
+#if defined(SDRAM_USE_STM32F439_EVAL) || defined(STM32F439_EVAL) || defined(SDRAM_USE_STM32F756_EVAL) || defined(STM32F756_EVAL)
 /* Make define */
 #ifndef SDRAM_USE_STM32F439_EVAL
 #define SDRAM_USE_STM32F439_EVAL

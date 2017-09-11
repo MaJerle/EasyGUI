@@ -1,6 +1,6 @@
 /**
  * \author  Tilen Majerle <tilen@majerle.eu>
- * \brief   GUI template
+ * \brief   GUI DIALOG based widget element
  *  
 \verbatim
    ----------------------------------------------------------------------
@@ -28,8 +28,8 @@
    ----------------------------------------------------------------------
 \endverbatim
  */
-#ifndef GUI_TEMPLATE_H
-#define GUI_TEMPLATE_H
+#ifndef GUI_DIALOG_H
+#define GUI_DIALOG_H
 
 /* C++ detection */
 #ifdef __cplusplus

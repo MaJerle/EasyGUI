@@ -146,6 +146,7 @@ extern "C" {
 #define NUCLEO_F446
 #define NUCLEO_F091
 #define STM32F439_EVAL
+#define STM32F756_EVAL
 #define STM32F469_DISCOVERY
 #define STM32F7_DISCOVERY
 #define STM32F769_DISCOVERY
@@ -189,6 +190,25 @@ extern "C" {
 
 	#define DISCO_BUTTON_PORT			GPIOA
 	#define DISCO_BUTTON_PIN			0x0001U
+	#define DISCO_BUTTON_PRESSED		1
+	#define DISCO_BUTTON_PULL			TM_GPIO_PuPd_DOWN
+    
+    #define DISCO_USART                 USART1
+    #define DISCO_USART_PP              TM_USART_PinsPack_1
+#elif defined(STM32F756_EVAL)
+	#define LED_GREEN					GPIO_PIN_10
+	#define LED_RED						GPIO_PIN_7
+	#define LED_ALL						LED_GREEN | LED_RED
+	
+	#define DISCO_LED_GREEN_PORT		GPIOF
+	#define DISCO_LED_RED_PORT			GPIOB
+	#define DISCO_LED_PINS				LED_ALL
+    
+	#define DISCO_SWAP_LOGIC
+	#define DISCO_USE_FUNCTIONS
+
+	#define DISCO_BUTTON_PORT			GPIOC
+	#define DISCO_BUTTON_PIN			GPIO_PIN_13
 	#define DISCO_BUTTON_PRESSED		1
 	#define DISCO_BUTTON_PULL			TM_GPIO_PuPd_DOWN
     
@@ -261,13 +281,13 @@ extern "C" {
 	#define DISCO_LED_ORANGE_PORT		GPIOD
 	#define DISCO_LED_BLUE_PORT			GPIOK
 	#define DISCO_LED_PINS				LED_ALL
+	
+	#define DISCO_USE_FUNCTIONS
 
 	#define DISCO_BUTTON_PORT			GPIOI
 	#define DISCO_BUTTON_PIN			0x0800
 	#define DISCO_BUTTON_PRESSED		1
 	#define DISCO_BUTTON_PULL			TM_GPIO_PuPd_DOWN
-	
-	#define DISCO_USE_FUNCTIONS
     
     #define DISCO_USART                 USART3
     #define DISCO_USART_PP              TM_USART_PinsPack_1

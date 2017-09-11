@@ -1149,7 +1149,6 @@ const GUI_FONT_t* GUI_WIDGET_GetFont(GUI_HANDLE_p h);
  */
 uint8_t GUI_WIDGET_SetFontDefault(const GUI_FONT_t* font);
 
-
 /**
  * \}
  */

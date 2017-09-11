@@ -141,9 +141,11 @@ void __RemoveWidgets(GUI_HANDLE_p parent) {
         h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h);    /* Get next widget of current */
     }
     
+#if GUI_OS
     if (lvl == 0) {                                 /* Notify about remove execution */
         gui_sys_mbox_putnow(&GUI.OS.mbox, &msg_widget_remove);
     }
+#endif /* GUI_OS */
 }
 
 /* Get where on LCD is widget visible and what is visible width and height on screen */

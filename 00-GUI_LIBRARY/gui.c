@@ -297,7 +297,7 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
                      * Wait for valid input with pressed state
                      */
                     PT_WAIT_UNTIL(&ts->pt, (v && ts->TS.Status) || (gui_sys_now() - Time) > 300);
-                    if ((gui_sys_now() - Time) > 200) { /* Check timeout for new pressed state */
+                    if ((gui_sys_now() - Time) > 300) { /* Check timeout for new pressed state */
                         PT_EXIT(&ts->pt);           /* Exit protothread */
                     }
                 } else {
@@ -342,7 +342,7 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
     __GUI_TouchStatus_t tStat = touchCONTINUE;
     
     /* Check touches if any matches, go reverse on linked list */
-    for (h = __GUI_LINKEDLIST_WidgetGetPrev((GUI_HANDLE_ROOT_t *)parent, 0); h; h = __GUI_LINKEDLIST_WidgetGetPrev((GUI_HANDLE_ROOT_t *)parent, h)) {
+    for (h = __GUI_LINKEDLIST_WidgetGetPrev((GUI_HANDLE_ROOT_t *)parent, NULL); h; h = __GUI_LINKEDLIST_WidgetGetPrev(NULL, h)) {
         if (__GUI_WIDGET_IsHidden(h)) {             /* Ignore hidden widget */
             continue;
         }
@@ -384,17 +384,19 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
                     __GUI_WIDGET_GetWidth(h), __GUI_WIDGET_GetHeight(h)
                 ); 
             
+                /* Call touch start callback to see if widget accepts touches */
                 __GUI_WIDGET_Callback(h, GUI_WC_TouchStart, touch, &tStat);
                 if (tStat == touchCONTINUE) {       /* Check result status */
                     tStat = touchHANDLED;           /* If command is processed, touchCONTINUE can't work */
                 }
+                
                 /**
                  * Move widget down on parent linked list and do the same with all of its parents,
                  * no matter of touch focus or not
                  */
                 __GUI_WIDGET_MoveDownTree(h);
                 
-                if (tStat == touchHANDLED) {        /* Touch handled for widget completelly */
+                if (tStat == touchHANDLED) {        /* Touch handled for widget completely */
                     /**
                      * Set active widget and set flag for it
                      * Set focus widget and set flag for it but only do this if widget is not related to keyboard
@@ -436,6 +438,15 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
     return touchCONTINUE;                           /* Try with another widget */
 }
 
+#define __ProcessAfterTouchEventsThread() do {\
+    if (result != 0) {                  /* Valid event occurred */\
+        uint8_t ret = __GUI_WIDGET_Callback(GUI.ActiveWidget, result, &GUI.Touch, NULL);\
+        if (result == GUI_WC_DblClick && !ret) {    /* If double click was not recorded, proceed with normal click again */\
+            __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_Click, &GUI.Touch, NULL);    /* Check for normal click now */\
+        }\
+    }\
+} while (0)
+
 /**
  * \brief           Process touch inputs
  */
@@ -453,12 +464,12 @@ __GUI_Process_Touch(void) {
                 );
             }
             
+            /**
+             * Old status: pressed
+             * New status: pressed
+             * Action: Touch move on active element
+             */
             if (GUI.Touch.TS.Status && GUI.TouchOld.TS.Status) {
-                /**
-                 * Old status: pressed
-                 * New status: pressed
-                 * Action: Touch move on active element
-                 */
                 if (GUI.ActiveWidget) {             /* If active widget exists */
                     if (GUI.Touch.TS.Count == GUI.TouchOld.TS.Count) {
                         uint8_t result = __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchMove, &GUI.Touch, &tStat); /* The same amount of touch events currently */
@@ -471,34 +482,33 @@ __GUI_Process_Touch(void) {
                         __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchStart, &GUI.Touch, &tStat); /* New amount of touch elements happened */
                     }
                 }
-            } else if (GUI.Touch.TS.Status && !GUI.TouchOld.TS.Status) {
-                /**
-                 * Old status: released
-                 * New status: pressed
-                 * Action: Touch down on element, find element
-                 */
+            }
+            /**
+             * Old status: released
+             * New status: pressed
+             * Action: Touch down on element, find element
+             */
+            if (GUI.Touch.TS.Status && !GUI.TouchOld.TS.Status) {
                 __ProcessTouch(&GUI.Touch, NULL);
                 if (GUI.ActiveWidget != GUI.ActiveWidgetPrev) { /* If new active widget is not the same as previous */
                     PT_INIT(&GUI.Touch.pt)          /* Reset thread, otherwise process with double click event */
                 }
             }
             
+            /**
+             * Periodical check for events on active widget
+             */
             if (GUI.ActiveWidget) {
-                /**
-                 * Periodical check for events
-                 */
                 __TouchEvents_Thread(&GUI.Touch, &GUI.TouchOld, 1, &result);    /* Call thread for touch process */
-                if (result != 0) {                  /* Valid event occurred */
-                    __GUI_WIDGET_Callback(GUI.ActiveWidget, result, &GUI.Touch.TS, NULL);
-                }
+                __ProcessAfterTouchEventsThread();  /* Process after event macro */
             }
             
+            /**
+             * Old status: pressed
+             * New status: released
+             * Action: Touch up on active element
+             */
             if (!GUI.Touch.TS.Status && GUI.TouchOld.TS.Status) {
-                /**
-                 * Old status: pressed
-                 * New status: released
-                 * Action: Touch up on active element
-                 */
                 if (GUI.ActiveWidget) {             /* Check if active widget */
                     __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchEnd, &GUI.Touch, &tStat);   /* Process callback function */
                     __GUI_WIDGET_ACTIVE_CLEAR();    /* Clear active widget */
@@ -509,9 +519,7 @@ __GUI_Process_Touch(void) {
         }
     } else {                                        /* No new touch events, periodically call touch event thread */
         __TouchEvents_Thread(&GUI.Touch, &GUI.TouchOld, 0, &result);    /* Call thread for touch process periodically, handle long presses or timeouts */
-        if (result != 0) {                  /* Valid event occurred */
-            __GUI_WIDGET_Callback(GUI.ActiveWidget, result, &GUI.Touch, NULL);
-        }
+        __ProcessAfterTouchEventsThread();          /* Process after event macro */
     }
 }
 #endif /* GUI_USE_TOUCH */
@@ -560,56 +568,58 @@ __GUI_Process_Keyboard(void) {
  */
 static void
 __GUI_Process_Redraw(void) {
-    if (!(GUI.LCD.Flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM) && (GUI.Flags & GUI_FLAG_REDRAW)) {  /* Check if anything to draw first */
-        uint32_t time;
-        GUI_Layer_t* active = GUI.LCD.ActiveLayer;
-        GUI_Layer_t* drawing = GUI.LCD.DrawingLayer;
-        uint8_t result = 1;
-        GUI_Display_t* dispA = &active->Display;
-        
-        GUI.Flags &= ~GUI_FLAG_REDRAW;              /* Clear redraw flag */
-        
-        time = TM_GENERAL_DWTCounterGetValue();
-        
-        /* Copy from currently active layer to drawing layer only changes on layer */
-        GUI.LL.Copy(&GUI.LCD, drawing, 
-            (void *)(active->StartAddress + GUI.LCD.PixelSize * (dispA->Y1 * active->Width + dispA->X1)),    /* Source address */
-            (void *)(drawing->StartAddress + GUI.LCD.PixelSize * (dispA->Y1 * drawing->Width + dispA->X1)),   /* Destination address */
-            dispA->X2 - dispA->X1,                  /* Area width */
-            dispA->Y2 - dispA->Y1,                  /* Area height */
-            active->Width - (dispA->X2 - dispA->X1),    /* Offline source */
-            drawing->Width - (dispA->X2 - dispA->X1)    /* Offline destination */
-        );
-            
-        /* Actually draw new screen based on setup */
-        __RedrawWidgets(NULL);                      /* Redraw all widgets now */
-            
-        /* Get cycles for drawing */
-        time = TM_GENERAL_DWTCounterGetValue() - time;
-        
-        /* Set drawing layer as pending */
-        drawing->Pending = 1;
-        
-        /* Notify low-level about layer change */
-        GUI.LCD.Flags |= GUI_FLAG_LCD_WAIT_LAYER_CONFIRM;
-        GUI_LL_Control(&GUI.LCD, GUI_LL_Command_SetActiveLayer, &drawing, &result); /* Set new active layer to low-level driver */
-        
-        /* Swap active and drawing layers */
-        /* New drawings won't be affected until confirmation from low-level is not received */
-        GUI.LCD.ActiveLayer = drawing;
-        GUI.LCD.DrawingLayer = active;
-        
-        /* Copy clipping data to region */
-        memcpy(&GUI.LCD.ActiveLayer->Display, &GUI.Display, sizeof(GUI.Display));
-        
-        /* Invalid clipping region(s) for next drawing process */
-        GUI.Display.X1 = 0x7FFF;
-        GUI.Display.Y1 = 0x7FFF;
-        GUI.Display.X2 = 0x8000;
-        GUI.Display.Y2 = 0x8000;
-        
-        __GUI_UNUSED(time);                         /* Prevent compiler warnings */
+    uint32_t time;
+    GUI_Layer_t* active = GUI.LCD.ActiveLayer;
+    GUI_Layer_t* drawing = GUI.LCD.DrawingLayer;
+    uint8_t result = 1;
+    GUI_Display_t* dispA = &active->Display;
+    
+    if ((GUI.LCD.Flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM) || !(GUI.Flags & GUI_FLAG_REDRAW)) {  /* Check if anything to draw first */
+        return;
     }
+    
+    GUI.Flags &= ~GUI_FLAG_REDRAW;                  /* Clear redraw flag */
+    
+    time = TM_GENERAL_DWTCounterGetValue();
+    
+    /* Copy from currently active layer to drawing layer only changes on layer */
+    GUI.LL.Copy(&GUI.LCD, drawing, 
+        (void *)(active->StartAddress + GUI.LCD.PixelSize * (dispA->Y1 * active->Width + dispA->X1)),    /* Source address */
+        (void *)(drawing->StartAddress + GUI.LCD.PixelSize * (dispA->Y1 * drawing->Width + dispA->X1)),   /* Destination address */
+        dispA->X2 - dispA->X1,                      /* Area width */
+        dispA->Y2 - dispA->Y1,                      /* Area height */
+        active->Width - (dispA->X2 - dispA->X1),    /* Offline source */
+        drawing->Width - (dispA->X2 - dispA->X1)    /* Offline destination */
+    );
+        
+    /* Actually draw new screen based on setup */
+    __RedrawWidgets(NULL);                          /* Redraw all widgets now */
+        
+    /* Get cycles for drawing */
+    time = TM_GENERAL_DWTCounterGetValue() - time;
+    
+    /* Set drawing layer as pending */
+    drawing->Pending = 1;
+    
+    /* Notify low-level about layer change */
+    GUI.LCD.Flags |= GUI_FLAG_LCD_WAIT_LAYER_CONFIRM;
+    GUI_LL_Control(&GUI.LCD, GUI_LL_Command_SetActiveLayer, &drawing, &result); /* Set new active layer to low-level driver */
+    
+    /* Swap active and drawing layers */
+    /* New drawings won't be affected until confirmation from low-level is not received */
+    GUI.LCD.ActiveLayer = drawing;
+    GUI.LCD.DrawingLayer = active;
+    
+    /* Copy clipping data to region */
+    memcpy(&GUI.LCD.ActiveLayer->Display, &GUI.Display, sizeof(GUI.Display));
+    
+    /* Invalid clipping region(s) for next drawing process */
+    GUI.Display.X1 = 0x7FFF;
+    GUI.Display.Y1 = 0x7FFF;
+    GUI.Display.X2 = 0x8000;
+    GUI.Display.Y2 = 0x8000;
+    
+    __GUI_UNUSED(time);                             /* Prevent compiler warnings */
 }
 
 #if GUI_OS
@@ -678,14 +688,9 @@ GUI_Result_t GUI_Init(void) {
         return guiERROR;
     }
     
-    /* Init input devices */
-    __GUI_INPUT_Init();
-    
-    /* GUI is initialized */
-    GUI.Initialized = 1;
-    
-    /* Init widgets */
-    __GUI_WIDGET_Init();
+    __GUI_INPUT_Init();                             /* Init input devices */
+    GUI.Initialized = 1;                            /* GUI is initialized */
+    __GUI_WIDGET_Init();                            /* Init widgets */
     
     return guiOK;
 }
@@ -693,31 +698,13 @@ int32_t GUI_Process(void) {
 #if GUI_OS
     gui_mbox_msg_t* msg;
     uint32_t time;
-    uint32_t tmr_cnt = __GUI_TIMER_GetActiveCount();    /* Get number of timers in system */
+    uint32_t tmr_cnt = __GUI_TIMER_GetActiveCount();    /* Get number of active timers in system */
     
-    time = gui_sys_mbox_get(&GUI.OS.mbox, (void **)&msg, tmr_cnt > 0 ? 5 : 50); /* Get value from message queue */
-    if (time != SYS_TIMEOUT) {
-        __GUI_DEBUG("mt: %d\r\n", (uint32_t)msg->type);
-        gui_sys_protect();                          /* Lock protection */
-        switch (msg->type) {                        /* Check about event */
-            case GUI_SYS_MBOX_TYPE_TOUCH:
-                __GUI_Process_Touch();              /* Process touch event */
-                break;
-            case GUI_SYS_MBOX_TYPE_KEYBOARD:
-                __GUI_Process_Keyboard();           /* Process keyboard event */
-                break;
-            case GUI_SYS_MBOX_TYPE_REMOVE:
-                __GUI_WIDGET_ExecuteRemove();       /* Process remove event */
-                break;
-            default: 
-                break;
-        }
-        gui_sys_unprotect();                        /* Release protection */
-    }
-    __GUI_TIMER_Process();                          /* Process timers only */
-    __GUI_Process_Redraw();                         /* Redraw widgets */
-    
-#else
+    time = gui_sys_mbox_get(&GUI.OS.mbox, (void **)&msg, tmr_cnt ? 10 : 0); /* Get value from message queue */
+    gui_sys_protect();                              /* Lock protection */
+    __GUI_UNUSED(time);                             /* Unused variable */
+#endif /* GUI_OS */
+   
 #if GUI_USE_TOUCH
     __GUI_Process_Touch();                          /* Process touch inputs */
 #endif /* GUI_USE_TOUCH */
@@ -727,6 +714,10 @@ int32_t GUI_Process(void) {
     __GUI_TIMER_Process();                          /* Process all timers */
     __GUI_WIDGET_ExecuteRemove();                   /* Delete widgets */
     __GUI_Process_Redraw();                         /* Redraw widgets */
+    
+    
+#if GUI_OS
+    gui_sys_unprotect();                            /* Release protection */
 #endif /* GUI_OS */
     
     return 0;                                       /* Return number of elements updated on GUI */

@@ -76,124 +76,16 @@ CTS         PA3                 RTS from ST to CTS from GSM
 
 #include "math.h"
 
+#include "ff.h"
+
 #include "cmsis_os.h"
 #include "cpu_utils.h"
-
-#define COUNT_OF(x)     (sizeof(x) / sizeof((x)[0]))
 
 TM_TOUCH_t TS;
 
 GUI_HANDLE_p win1, win2, handle;
 GUI_GRAPH_DATA_p graphdata1, graphdata2, graphdata3, graphdata4;
 GUI_HANDLE_p dialog1;
-
-#define ID_BASE                 (GUI_ID_USER)
-#define ID_BASE_WIN             (ID_BASE + 0x0100)
-#define ID_BASE_BTN             (ID_BASE_WIN + 0x0100)
-#define ID_BASE_TEXTWIEW        (ID_BASE_BTN + 0x0100)
-#define ID_BASE_EDITTEXT        (ID_BASE_TEXTWIEW + 0x0100)
-#define ID_BASE_CHECKBOX        (ID_BASE_TEXTWIEW + 0x0100)
-#define ID_BASE_LED             (ID_BASE_CHECKBOX + 0x0100)
-#define ID_BASE_GRAPH           (ID_BASE_LED + 0x0100)
-#define ID_BASE_SLIDER          (ID_BASE_GRAPH + 0x0100)
-
-/* List of window widget IDs */
-#define ID_WIN_BTN              (ID_BASE_WIN + 0x01)
-#define ID_WIN_EDIT             (ID_BASE_WIN + 0x02)
-#define ID_WIN_RADIO            (ID_BASE_WIN + 0x03)
-#define ID_WIN_CHECKBOX         (ID_BASE_WIN + 0x04)
-#define ID_WIN_PROGBAR          (ID_BASE_WIN + 0x05)
-#define ID_WIN_GRAPH            (ID_BASE_WIN + 0x06)
-#define ID_WIN_LISTBOX          (ID_BASE_WIN + 0x07)
-#define ID_WIN_LED              (ID_BASE_WIN + 0x08)
-#define ID_WIN_TEXTVIEW         (ID_BASE_WIN + 0x09)
-#define ID_WIN_DROPDOWN         (ID_BASE_WIN + 0x0A)
-#define ID_WIN_DIALOG           (ID_BASE_WIN + 0x0B)
-#define ID_WIN_LISTVIEW         (ID_BASE_WIN + 0x0C)
-#define ID_WIN_IMAGE            (ID_BASE_WIN + 0x0D)
-#define ID_WIN_SLIDER           (ID_BASE_WIN + 0x0E)
-#define ID_WIN_ZINDEX           (ID_BASE_WIN + 0x0F)
-#define ID_WIN_TRANSP           (ID_BASE_WIN + 0x10)
-#define ID_WIN_WINDOW           (ID_BASE_WIN + 0x11)
-
-/* List of base buttons IDs */
-#define ID_BTN_WIN_BTN          (ID_BASE_BTN + 0x01)
-#define ID_BTN_WIN_EDIT         (ID_BASE_BTN + 0x02)
-#define ID_BTN_WIN_RADIO        (ID_BASE_BTN + 0x03)
-#define ID_BTN_WIN_CHECKBOX     (ID_BASE_BTN + 0x04)
-#define ID_BTN_WIN_PROGBAR      (ID_BASE_BTN + 0x05)
-#define ID_BTN_WIN_GRAPH        (ID_BASE_BTN + 0x06)
-#define ID_BTN_WIN_LISTBOX      (ID_BASE_BTN + 0x07)
-#define ID_BTN_WIN_LED          (ID_BASE_BTN + 0x08)
-#define ID_BTN_WIN_TEXTVIEW     (ID_BASE_BTN + 0x09)
-#define ID_BTN_WIN_DROPDOWN     (ID_BASE_BTN + 0x0A)
-#define ID_BTN_WIN_DIALOG       (ID_BASE_BTN + 0x0B)
-#define ID_BTN_WIN_LISTVIEW     (ID_BASE_BTN + 0x0C)
-#define ID_BTN_WIN_IMAGE        (ID_BASE_BTN + 0x0D)
-#define ID_BTN_WIN_SLIDER       (ID_BASE_BTN + 0x0E)
-#define ID_BTN_WIN_ZINDEX       (ID_BASE_BTN + 0x0F)
-#define ID_BTN_WIN_TRANSP       (ID_BASE_BTN + 0x10)
-#define ID_BTN_WIN_WINDOW       (ID_BASE_BTN + 0x11)
-
-#define ID_BTN_DIALOG_CONFIRM   (ID_BASE_BTN + 0x20)
-#define ID_BTN_DIALOG_CANCEL    (ID_BASE_BTN + 0x21)
-
-#define ID_TEXTVIEW_1           (ID_BASE_TEXTWIEW + 0x01)
-#define ID_TEXTVIEW_2           (ID_BASE_TEXTWIEW + 0x02)
-
-#define ID_CHECKBOX_LED         (ID_BASE_CHECKBOX + 0x01)
-#define ID_CHECKBOX_GRAPH       (ID_BASE_CHECKBOX + 0x02)
-
-#define ID_LED_1                (ID_BASE_LED + 0x01)
-#define ID_LED_2                (ID_BASE_LED + 0x02)
-#define ID_LED_3                (ID_BASE_LED + 0x03)
-#define ID_LED_4                (ID_BASE_LED + 0x04)
-
-#define ID_GRAPH_MAIN           (ID_BASE_GRAPH + 0x01)
-
-#define ID_SLIDER_0             (ID_BASE_SLIDER + 0x01)
-#define ID_SLIDER_1             (ID_BASE_SLIDER + 0x02)
-
-#define ID_BUTTON_0             (ID_BASE_BTN + 0x040)
-#define ID_BUTTON_1             (ID_BASE_BTN + 0x041)
-#define ID_BUTTON_2             (ID_BASE_BTN + 0x042)
-#define ID_BUTTON_3             (ID_BASE_BTN + 0x043)
-
-#define ID_EDITTEXT_1           (ID_BASE_EDITTEXT + 0x01)
-
-typedef struct {
-    GUI_ID_t win_id;
-    const GUI_Char* win_text;
-} btn_user_data_t;
-
-typedef struct {
-    GUI_ID_t id;
-    const GUI_Char* text;
-    btn_user_data_t data;
-} bulk_init_t;
-
-#define RADIO_GROUP_HALIGN  0x01
-#define RADIO_GROUP_VALIGN  0x02
-
-bulk_init_t buttons[] = {
-    {ID_BTN_WIN_BTN,        _GT("Buttons"),      {ID_WIN_BTN, _GT("Buttons")}},
-    {ID_BTN_WIN_EDIT,       _GT("Edit text"),    {ID_WIN_EDIT, _GT("Edit text")}},
-    {ID_BTN_WIN_RADIO,      _GT("Radio box"),    {ID_WIN_RADIO, _GT("Radio box")}},
-    {ID_BTN_WIN_CHECKBOX,   _GT("Check box"),    {ID_WIN_CHECKBOX, _GT("Check box")}},
-    {ID_BTN_WIN_PROGBAR,    _GT("Progress bar"), {ID_WIN_PROGBAR, _GT("Progress bar")}},
-    {ID_BTN_WIN_GRAPH,      _GT("Graph"),        {ID_WIN_GRAPH, _GT("Graph")}},
-    {ID_BTN_WIN_LISTBOX,    _GT("List box"),     {ID_WIN_LISTBOX, _GT("List box")}},
-    {ID_BTN_WIN_LED,        _GT("Led"),          {ID_WIN_LED, _GT("Led")}},
-    {ID_BTN_WIN_TEXTVIEW,   _GT("Text view"),    {ID_WIN_TEXTVIEW, _GT("Text view")}},
-    {ID_BTN_WIN_DROPDOWN,   _GT("Dropdown"),     {ID_WIN_DROPDOWN, _GT("Dropdown")}},
-    {ID_BTN_WIN_DIALOG,     _GT("Dialog"),       {ID_WIN_DIALOG, _GT("Dialog")}},
-    {ID_BTN_WIN_LISTVIEW,   _GT("Listview"),     {ID_WIN_LISTVIEW, _GT("Listview")}},
-    {ID_BTN_WIN_IMAGE,      _GT("Image"),        {ID_WIN_IMAGE, _GT("Image")}},
-    {ID_BTN_WIN_SLIDER,     _GT("Slider"),       {ID_WIN_SLIDER, _GT("Slider")}},
-    {ID_BTN_WIN_ZINDEX,     _GT("z-index"),      {ID_WIN_ZINDEX, _GT("z-index test page")}},
-    {ID_BTN_WIN_TRANSP,     _GT("Transparency"), {ID_WIN_TRANSP, _GT("Transparency presentation")}},
-    {ID_BTN_WIN_WINDOW,     _GT("Window"),       {ID_WIN_WINDOW, _GT("Window")}},
-};
 
 char str[100];
 
@@ -229,8 +121,40 @@ uint8_t dialog_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
 uint8_t listview_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 uint8_t slider_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
 uint8_t edittext_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
+uint8_t progbar_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
+
+/**
+ * \brief           
+ */
+bulk_init_t frontedWidgets[] = {
+    {ID_BTN_WIN_BTN,        _GT("Buttons"),         GUI_BUTTON_Create,      button_callback,    {ID_WIN_BTN, _GT("Buttons")}},
+    {ID_BTN_WIN_EDIT,       _GT("Edit text"),       GUI_BUTTON_Create,      button_callback,    {ID_WIN_EDIT, _GT("Edit text")}},
+    {ID_BTN_WIN_RADIO,      _GT("Radio box"),       GUI_BUTTON_Create,      button_callback,    {ID_WIN_RADIO, _GT("Radio box")}},
+    {ID_BTN_WIN_CHECKBOX,   _GT("Check box"),       GUI_BUTTON_Create,      button_callback,    {ID_WIN_CHECKBOX, _GT("Check box")}},
+    {ID_BTN_WIN_PROGBAR,    _GT("Progress bar"),    GUI_BUTTON_Create,      button_callback,    {ID_WIN_PROGBAR, _GT("Progress bar")}},
+    {ID_BTN_WIN_GRAPH,      _GT("Graph"),           GUI_BUTTON_Create,      button_callback,    {ID_WIN_GRAPH, _GT("Graph")}},
+    {ID_BTN_WIN_LISTBOX,    _GT("List box"),        GUI_BUTTON_Create,      button_callback,    {ID_WIN_LISTBOX, _GT("List box")}},
+    {ID_BTN_WIN_LED,        _GT("Led"),             GUI_BUTTON_Create,      button_callback,    {ID_WIN_LED, _GT("Led")}},
+    {ID_BTN_WIN_TEXTVIEW,   _GT("Text view"),       GUI_BUTTON_Create,      button_callback,    {ID_WIN_TEXTVIEW, _GT("Text view")}},
+    {ID_BTN_WIN_DROPDOWN,   _GT("Dropdown"),        GUI_BUTTON_Create,      button_callback,    {ID_WIN_DROPDOWN, _GT("Dropdown")}},
+    {ID_BTN_WIN_DIALOG,     _GT("Dialog"),          GUI_BUTTON_Create,      button_callback,    {ID_WIN_DIALOG, _GT("Dialog")}},
+    {ID_BTN_WIN_LISTVIEW,   _GT("Listview"),        GUI_BUTTON_Create,      button_callback,    {ID_WIN_LISTVIEW, _GT("Listview")}},
+    {ID_BTN_WIN_IMAGE,      _GT("Image"),           GUI_BUTTON_Create,      button_callback,    {ID_WIN_IMAGE, _GT("Image")}},
+    {ID_BTN_WIN_SLIDER,     _GT("Slider"),          GUI_BUTTON_Create,      button_callback,    {ID_WIN_SLIDER, _GT("Slider")}},
+    {ID_BTN_WIN_ZINDEX,     _GT("z-index"),         GUI_BUTTON_Create,      button_callback,    {ID_WIN_ZINDEX, _GT("z-index test page")}},
+    {ID_BTN_WIN_TRANSP,     _GT("Transparency"),    GUI_BUTTON_Create,      button_callback,    {ID_WIN_TRANSP, _GT("Transparency presentation")}},
+    {ID_BTN_WIN_WINDOW,     _GT("Window"),          GUI_BUTTON_Create,      button_callback,    {ID_WIN_WINDOW, _GT("Window")}},
+    {ID_PROGBAR_CPUUSAGE,   _GT("CPU Usage"),       GUI_PROGBAR_Create,     progbar_callback,   {0}},
+};
 
 #define PI      3.14159265359f
+
+/* Number of columns on LCD */
+#if defined(STM32F756_EVAL) || defined(STM32F439_EVAL)
+#define LCD_COLUMNS         4
+#else
+#define LCD_COLUMNS         3
+#endif
 
 static float len = 72, radius = 90;
 float x, y;
@@ -239,39 +163,11 @@ int pressed = 0;
 
 extern GUI_t GUI;
 
-#define IMG_WIDTH       64
-#define IMG_HEIGHT      64
+#define IMG_WIDTH           64
+#define IMG_HEIGHT          64
 
 const GUI_Char myStr[30] = "Hello world!\r\n";
 GUI_STRING_t ptr;
-
-//Create table for English entries
-const GUI_Char* languageEnglishEntries[] = {
-    _GT("Button"),
-    _GT("Dropdown"),
-    _GT("Listview"),
-    _GT("Your string here without translate."),
-};
-
-//Create table for German entries
-const GUI_Char* languageGermanEntries[] = {
-    _GT("Taste"),           //Translate for "Button"
-    _GT("Dropdown-Liste"),  //Translate for "Dropdown"
-    _GT("Listenansicht"),   //Translate for "Listview"
-    //Missing translate for "Your string here without translate."
-};
-
-//Create English language table
-GUI_TRANSLATE_Language_t languageEnglish = {
-    .Entries = languageEnglishEntries,
-    .Count = GUI_COUNT_OF(languageEnglishEntries)
-};
-
-//Create German language structure
-GUI_TRANSLATE_Language_t languageGerman = {
-    .Entries = languageGermanEntries,
-    .Count = GUI_COUNT_OF(languageGermanEntries)
-};
 
 size_t i;
 GUI_HANDLE_p h;
@@ -280,12 +176,19 @@ void read_touch(void);
 
 void user_thread(void const * arg);
 void touch_thread(void const * arg);
+void fat_thread(void const * arg);
 
 osThreadDef(user_thread, user_thread, osPriorityNormal, 0, 512);
-osThreadId user_thread_id;
 osThreadDef(touch_thread, touch_thread, osPriorityNormal, 0, 512);
-osThreadId user_thread_id, touch_thread_id;
+osThreadDef(fat_thread, fat_thread, osPriorityNormal, 0, 1024);
 
+osThreadId user_thread_id, touch_thread_id, fat_thread_id;
+
+FATFS fs;
+FRESULT fres;
+FIL fil;
+
+BYTE work[16 * _MAX_SS];                        /* Work area (larger is better for processing time) */
 int main(void) {
     //hardfault debug code
     SCB->CCR |= 0x10;
@@ -295,7 +198,7 @@ int main(void) {
     TM_DISCO_LedInit();                         /* Init leds */
     TM_DISCO_ButtonInit();                      /* Init button */
     TM_DELAY_Init();                            /* Init delay */
-    TM_USART_Init(DISCO_USART, DISCO_USART_PP, 115200*4);   /* Init USART for debug purpose */
+    TM_USART_Init(DISCO_USART, DISCO_USART_PP, 115200);   /* Init USART for debug purpose */
     
     /* Print first screen message */
     printf("GUI; Compiled: %s %s\r\n", __DATE__, __TIME__);
@@ -304,13 +207,16 @@ int main(void) {
     /* Main button as interrupt */
     TM_EXTI_Attach(DISCO_BUTTON_PORT, DISCO_BUTTON_PIN, TM_EXTI_Trigger_Rising);
     
+//    fres = f_mkfs("", FM_ANY, 0, work, sizeof(work));   /* Create FAT volume */
+//    f_mount(&fs, "", 0);                        /* Register work area */
+    
     /* Create thread for user */
     user_thread_id = osThreadCreate(osThread(user_thread), NULL);
     
     osKernelStart();                            /* Start RTOS kernel */
     
-	while (1) {        
-
+	while (1) {
+ 
 	}
 }
 
@@ -333,32 +239,29 @@ user_thread(void const * arg) {
     
     /* Create all widgets on screen */
     win1 = GUI_WINDOW_GetDesktop();             /* Get desktop window */
-    for (state = 0; state < GUI_COUNT_OF(buttons); state++) {
-        handle = GUI_BUTTON_Create(buttons[state].id, 5 + (state % 3) * 160, 5 + (state / 3) * 40, 150, 35, win1, button_callback, 0);
-        GUI_WIDGET_SetText(handle, buttons[state].text);
-        GUI_WIDGET_SetUserData(handle, &buttons[state].data);
+    for (state = 0; state < GUI_COUNT_OF(frontedWidgets); state++) {
+        handle = frontedWidgets[state].createFunc(frontedWidgets[state].id,
+            2 + (state % LCD_COLUMNS) * ((GUI.LCD.Width / LCD_COLUMNS)),
+            2 + (state / LCD_COLUMNS) * 40,
+            ((GUI.LCD.Width / LCD_COLUMNS) - 4),
+            36, 
+            win1, 
+            frontedWidgets[state].cbFunc, 0
+        );
+        GUI_WIDGET_SetText(handle, frontedWidgets[state].text);
+        GUI_WIDGET_SetUserData(handle, &frontedWidgets[state].data);
         GUI_WIDGET_Set3DStyle(handle, 0);
     }
     
-    GUI_KEYBOARD_Create();                      /* Create virtual keyboard */
+    //GUI_KEYBOARD_Create();                      /* Create virtual keyboard */
     
     touch_thread_id = osThreadCreate(osThread(touch_thread), NULL); /* Create touch thread */
+    fat_thread_id = osThreadCreate(osThread(fat_thread), NULL); /* Create FAT thread */
     
     while (1) {                                 /* Start thread execution */
-        osDelay(1000);
-        //printf("CPU usage: %d\r\n", osGetCPUUsage());
-        if ((TM_DELAY_Time() - time) >= 2000) {
-            time = TM_DELAY_Time();
-            
-            handle = GUI_WIDGET_GetById(buttons[state].id);
-            if (handle) {
-                //GUI_WIDGET_Callback(handle, GUI_WC_Click, 0, 0);
-            }
-            if (++state >= COUNT_OF(buttons)) {
-                state = 0;
-            }
-        }
-        
+        osDelay(100);
+        GUI_PROGBAR_SetValue(GUI_WIDGET_GetById(ID_PROGBAR_CPUUSAGE), osGetCPUUsage());
+
         /**
          * On pressed button, open dialog in blocking and wait for user press to continue
          */
@@ -407,6 +310,32 @@ user_thread(void const * arg) {
                     break;
             }
         }
+    }
+}
+
+
+uint8_t data[512 * 128];
+/**
+ * \brief           User thread for GUI
+ * \param[in]       *arg: Pointer to argument for thread
+ */
+static void
+fat_thread(void const * arg) {    
+    if ((fres = f_mount(&fs, "SD:", 1)) == FR_OK) {
+        printf("Mounted\r\n");
+        if ((fres = f_open(&fil, "SD:file.txt", FA_WRITE | FA_READ | FA_OPEN_ALWAYS)) == FR_OK) {
+            f_puts("String", &fil);
+            f_close(&fil);
+            printf("Written and closed\r\n");
+        } else {
+            printf("Open failed: %d\r\n", (int)fres);
+        }
+        f_mount(NULL, "SD:", 1);
+    } else {
+        printf("Mount failed: %d\r\n", (int)fres);
+    }
+    while (1) {
+        osDelay(1000);
     }
 }
 
@@ -966,6 +895,27 @@ uint8_t slider_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
     return ret;
 }
 
+uint8_t progbar_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
+    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    switch (cmd) {
+        case GUI_WC_Init: {
+            switch (GUI_WIDGET_GetId(h)) {
+                case ID_PROGBAR_CPUUSAGE:
+                    GUI_PROGBAR_SetMin(h, 0);
+                    GUI_PROGBAR_SetMax(h, 100);
+                    GUI_PROGBAR_EnablePercentages(h);
+                    break;
+                default:
+                    break;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    return ret;
+}
+
 uint8_t edittext_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
     uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
     if (cmd == GUI_WC_TextChanged) {
@@ -1010,18 +960,18 @@ void read_touch(void) {
     }
     
     /* Check differences */
-    if (update || t.Status == GUI_TouchState_RELEASED) {
+    if (update || (t.Status == GUI_TouchState_RELEASED && p.Status != GUI_TouchState_RELEASED)) {
         GUI_INPUT_TouchAdd(&t);
-        memcpy(&p, &t, sizeof(p));
     }
+    memcpy(&p, &t, sizeof(p));
 }
 
 /* 1ms handler */
 void TM_DELAY_1msHandler() {
     //osSystickHandler();                             /* Kernel systick handler processing */
-#if defined(STM32F439_EVAL)
+#if defined(STM32F439_EVAL) || defined(STM32F756_EVAL)
     static uint32_t Time = 0;
-    if (Time % 20 == 0) {
+    if (Time % 50 == 0) {
         read_touch();
     }
     Time++;
