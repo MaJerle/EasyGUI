@@ -134,30 +134,21 @@ uint8_t GUI_TEXTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /******************************************************************************/
 /******************************************************************************/
 GUI_HANDLE_p GUI_TEXTVIEW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
-    GUI_TEXTVIEW_t* ptr;
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    ptr = __GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
-
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return (GUI_HANDLE_p)ptr;
+    return (GUI_HANDLE_p)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
 uint8_t GUI_TEXTVIEW_SetColor(GUI_HANDLE_p h, GUI_TEXTVIEW_COLOR_t index, GUI_Color_t color) {
     uint8_t ret;
-    
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
     ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set color */
     
     if (ret) {                                      /* Check success */
         if (index == GUI_TEXTVIEW_COLOR_BG) {       /* If background is transparent */
+            __GUI_ENTER();
             __GUI_WIDGET_SetInvalidateWithParent(h, color == GUI_COLOR_TRANS);  /* When widget is invalidated, invalidate parent too */
+            __GUI_LEAVE();
         }
     }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
 }
 

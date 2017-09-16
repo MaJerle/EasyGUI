@@ -72,20 +72,21 @@ extern "C" {
  * \{
  */
 
-/**
- * \brief           Enter to GUI library. When using RTOS, this macro is used for mutex lock
- * \note            When RTOS is not used, this macro has no meaning
- * \hideinitializer
- */
+#if GUI_OS
+
+#define __GUI_SYS_PROTECT()     gui_sys_protect()
+#define __GUI_SYS_UNPROTECT()   gui_sys_unprotect()
+#define __GUI_ENTER()           __GUI_SYS_PROTECT()
+#define __GUI_LEAVE()           __GUI_SYS_UNPROTECT()
+
+#else
+
 #define __GUI_ENTER()
-
-/**
- * \brief           Leave from GUI library. When using RTOS, this macro is used for mutex release
- * \note            When RTOS is not used, this macro has no meaning
- * \hideinitializer
- */
 #define __GUI_LEAVE()
+#define __GUI_SYS_PROTECT()
+#define __GUI_SYS_UNPROTECT()
 
+#endif /* GUI_OS */
 
 /**
  * \brief           Debugging macro for inside GUI
@@ -334,7 +335,7 @@ void GUI_UpdateTime(uint32_t millis);
 void GUI_LCD_ConfirmActiveLayer(GUI_Byte layer_num);
  
 /**
- * \} GUI
+ * \}
  */
 
 /* C++ detection */

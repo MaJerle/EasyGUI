@@ -189,24 +189,13 @@ uint8_t GUI_CHECKBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /******************************************************************************/
 /******************************************************************************/
 GUI_HANDLE_p GUI_CHECKBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
-    GUI_CHECKBOX_t* ptr;
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    ptr = __GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
-
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return (GUI_HANDLE_p)ptr;
+    return (GUI_HANDLE_p)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
 uint8_t GUI_CHECKBOX_SetColor(GUI_HANDLE_p h, GUI_CHECKBOX_COLOR_t index, GUI_Color_t color) {
     uint8_t ret;
-    
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-
-    ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set colors */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
+    ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set color */
     return ret;
 }
 
@@ -228,7 +217,7 @@ uint8_t GUI_CHECKBOX_IsChecked(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
-    ret = __GC(h)->Flags & GUI_FLAG_CHECKBOX_CHECKED ? 1 : 0;
+    ret = !!(__GC(h)->Flags & GUI_FLAG_CHECKBOX_CHECKED);
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -252,7 +241,7 @@ uint8_t GUI_CHECKBOX_IsDisabled(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
-    ret = __GC(h)->Flags & GUI_FLAG_CHECKBOX_DISABLED ? 1 : 0;
+    ret = !!(__GC(h)->Flags & GUI_FLAG_CHECKBOX_DISABLED);
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;

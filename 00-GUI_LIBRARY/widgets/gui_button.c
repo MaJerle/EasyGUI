@@ -39,6 +39,8 @@
 /******************************************************************************/
 #define __GB(x)             ((GUI_BUTTON_t *)(x))
 
+#define CFG_BORDER_RADIUS   0x01
+
 static
 uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
     
@@ -74,6 +76,15 @@ uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
             __GUI_WIDGET_Set3DStyle(h, 1);          /* By default set 3D */
+            return 1;
+        }
+        case GUI_WC_SetParam: {                     /* Set parameter for widget */
+            GUI_WIDGET_Param_t* p = (GUI_WIDGET_Param_t *)param;
+            switch (p->Type) {
+                case CFG_BORDER_RADIUS: b->BorderRadius = *(GUI_Dim_t *)p->Data; break; /* Set max X value to widget */
+                default: break;
+            }
+            *(uint8_t *)result = 1;                 /* Save result */
             return 1;
         }
         case GUI_WC_Draw: {
@@ -153,36 +164,15 @@ uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
 /******************************************************************************/
 /******************************************************************************/
 GUI_HANDLE_p GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
-    GUI_BUTTON_t* ptr;
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    ptr = __GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
-
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return (GUI_HANDLE_p)ptr;
+    return (GUI_HANDLE_p)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
 uint8_t GUI_BUTTON_SetColor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color) {
-    uint8_t ret;
-    
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set color */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return ret;
+    return __GUI_WIDGET_SetColor(h, (uint8_t)index, color); /* Set color */
 }
 
 uint8_t GUI_BUTTON_SetBorderRadius(GUI_HANDLE_p h, GUI_Dim_t size) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    if (__GB(h)->BorderRadius != size) {            /* Any dimensions changed */
-        __GB(h)->BorderRadius = size;               /* Set parameter */
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Redraw object */
-    }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return 1;
+    return __GUI_WIDGET_SetParam(h, CFG_BORDER_RADIUS, &size, 1, 1);    /* Set parameter */
 }

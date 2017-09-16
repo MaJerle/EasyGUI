@@ -143,35 +143,41 @@ uint8_t GUI_DIALOG_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_DIALOG_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p GUI_DIALOG_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_HANDLE_p ptr;
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    ptr = __GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags | GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP); /* Allocate memory for basic widget */
-    if (ptr) {
-        __AddToActiveDialogs(ptr);                  /* Add this dialog to active dialogs */
+    if (!func) {                                    /* Check create function */
+        return NULL;
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    ptr = func(id, x, y, width, height, NULL, cb, flags | GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);   /* Create desired widget */
+    if (ptr) {
+        __GUI_ENTER();                              /* Enter GUI */
+        __GUI_WIDGET_SetFlag(ptr, GUI_FLAG_WIDGET_DIALOG_BASE); /* Add dialog base flag to widget */
+        __GUI_LINKEDLIST_WidgetMoveToBottom(ptr);   /* Move to bottom on linked list make it on top now with flag set as dialog */
+        __AddToActiveDialogs(ptr);                  /* Add this dialog to active dialogs */
+        __GUI_LEAVE();                              /* Leave GUI */
+    }
+    
     return (GUI_HANDLE_p)ptr;
 }
 
 #if GUI_OS
-int GUI_DIALOG_CreateBlocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+int GUI_DIALOG_CreateBlocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_HANDLE_p ptr;
     int resp = -1;                                  /* Dialog not created error */
     
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    ptr = GUI_DIALOG_Create(id, x, y, width, height, parent, cb, flags);    /* Create dialog first */
+    ptr = GUI_DIALOG_Create(id, x, y, width, height, func, cb, flags);  /* Create dialog first */
     if (ptr) {                                      /* Widget created */
         DDList_t* l;
+        
+        __GUI_ENTER();                              /* Enter GUI */
         l = __GetFromActiveDialogs(ptr);            /* Get entry from active dialogs */
         if (l) {                                    /* Check if successfully added widget to active dialogs */
             l->ib = 1;                              /* Blocking entry */
-            if (!gui_sys_sem_create(&l->sem, 0)) {  /* Create semaphore and lock it immediatelly */
+            if (gui_sys_sem_create(&l->sem, 0)) {   /* Create semaphore and lock it immediatelly */
+                __GUI_SYS_UNPROTECT();              /* Disable protection while waiting for semaphore */
                 gui_sys_sem_wait(&l->sem, 0);       /* Wait for semaphore again, should be released from dismiss function */
-                gui_sys_sem_release(&l->sem);       /* Release semaphore */
+                __GUI_SYS_PROTECT();                /* Protect back before continuing */
                 gui_sys_sem_delete(&l->sem);        /* Delete system semaphore */
                 resp = l->status;                   /* Get new status */
                 __RemoveFromActiveDialogs(l);       /* Remove from active dialogs */
@@ -181,9 +187,9 @@ int GUI_DIALOG_CreateBlocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
         } else {
             __GUI_WIDGET_Remove(ptr);               /* Remove widget */
         }
+        __GUI_LEAVE();                              /* Leave GUI */
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
     return resp;
 }
 #endif /* GUI_OS */
@@ -192,7 +198,8 @@ uint8_t GUI_DIALOG_Dismiss(GUI_HANDLE_p h, int status) {
     DDList_t* l;
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    /* Do not check widget type as it is not dialog type but create function widget type */
+    __GUI_ASSERTPARAMS(h);                          /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     l = __GetFromActiveDialogs(h);                  /* Get entry from list */
@@ -200,7 +207,7 @@ uint8_t GUI_DIALOG_Dismiss(GUI_HANDLE_p h, int status) {
         l->status = status;                         /* Save status for later */
         __GUI_WIDGET_Callback(h, GUI_WC_OnDismiss, (int *)&l->status, 0);   /* Process callback */
 #if GUI_OS
-        if (l->ib && !gui_sys_sem_isvalid(&l->sem)) {   /* Check if semaphore is valid */
+        if (l->ib && gui_sys_sem_isvalid(&l->sem)) {    /* Check if semaphore is valid */
             gui_sys_sem_release(&l->sem);           /* Release locked semaphore */
         } else 
 #endif /* GUI_OS */

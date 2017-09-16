@@ -271,33 +271,32 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
 /******************************************************************************/
 /******************************************************************************/
 GUI_HANDLE_p GUI_WINDOW_CreateDesktop(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb) {
-    GUI_WINDOW_t* ptr;
-    
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    ptr = __GUI_WIDGET_Create(&Widget, id, 0, 0, GUI.LCD.Width, GUI.LCD.Height, 0, cb, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);  /* Allocate memory for basic widget */
-
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return (GUI_HANDLE_p)ptr;
+    return (GUI_HANDLE_p)__GUI_WIDGET_Create(&Widget, id, 0, 0, GUI.LCD.Width, GUI.LCD.Height, 0, cb, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);   /* Allocate memory for basic widget */
 }
 
 GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_WINDOW_t* ptr;
-    
-    __GUI_ENTER();                                  /* Enter GUI */
-    
+
     ptr = __GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
     if (ptr) {
-        /* Control setup */
-        __GUI_WIDGET_SetFlag(__GH(ptr), GUI_FLAG_CHILD);    /* This window is child window */
+        __GUI_ENTER();                              /* Enter GUI */
         
+        __GUI_WIDGET_SetFlag(__GH(ptr), GUI_FLAG_CHILD);    /* This window is child window */
         __GUI_WIDGET_SetPaddingTop(__GH(ptr), 30);
         __GUI_WIDGET_SetPaddingRight(__GH(ptr), 2);
         __GUI_WIDGET_SetPaddingBottom(__GH(ptr), 2);
         __GUI_WIDGET_SetPaddingLeft(__GH(ptr), 2);
+        
+        __GUI_LEAVE();                              /* Leave GUI */
     }
-    __GUI_LEAVE();                                  /* Leave GUI */
     return (GUI_HANDLE_p)ptr;
+}
+
+uint8_t GUI_WINDOW_SetColor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color) {
+    uint8_t ret;
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set color */
+    return ret;
 }
 
 uint8_t GUI_WINDOW_SetActive(GUI_HANDLE_p h) {
@@ -312,17 +311,6 @@ uint8_t GUI_WINDOW_SetActive(GUI_HANDLE_p h) {
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;
-}
-
-uint8_t GUI_WINDOW_SetColor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color) {
-    uint8_t ret;
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set desired color */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return ret;
 }
 
 GUI_HANDLE_p GUI_WINDOW_GetDesktop(void) {

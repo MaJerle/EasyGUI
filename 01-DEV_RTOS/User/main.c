@@ -73,6 +73,7 @@ CTS         PA3                 RTS from ST to CTS from GSM
 #include "gui_slider.h"
 #include "gui_keyboard.h"
 #include "gui_container.h"
+#include "gui_lcd.h"
 
 #include "math.h"
 
@@ -241,9 +242,9 @@ user_thread(void const * arg) {
     win1 = GUI_WINDOW_GetDesktop();             /* Get desktop window */
     for (state = 0; state < GUI_COUNT_OF(frontedWidgets); state++) {
         handle = frontedWidgets[state].createFunc(frontedWidgets[state].id,
-            2 + (state % LCD_COLUMNS) * ((GUI.LCD.Width / LCD_COLUMNS)),
+            2 + (state % LCD_COLUMNS) * ((GUI_LCD_GetWidth() / LCD_COLUMNS)),
             2 + (state / LCD_COLUMNS) * 40,
-            ((GUI.LCD.Width / LCD_COLUMNS) - 4),
+            ((GUI_LCD_GetWidth() / LCD_COLUMNS) - 4),
             36, 
             win1, 
             frontedWidgets[state].cbFunc, 0
@@ -260,13 +261,12 @@ user_thread(void const * arg) {
     
     while (1) {                                 /* Start thread execution */
         osDelay(100);
-        GUI_PROGBAR_SetValue(GUI_WIDGET_GetById(ID_PROGBAR_CPUUSAGE), osGetCPUUsage());
 
         /**
          * On pressed button, open dialog in blocking and wait for user press to continue
          */
         if (pressed) {
-            pressed = GUI_DIALOG_CreateBlocking(ID_WIN_DIALOG, 50, 10, 300, 150, 0, dialog_callback, 0);
+            pressed = GUI_DIALOG_CreateBlocking(ID_WIN_DIALOG, 50, 10, 300, 150, GUI_CONTAINER_Create, dialog_callback, 0);
             if (pressed == 1) {
                 __GUI_DEBUG("Confirmed\r\n");
                 TM_DISCO_LedToggle(LED_GREEN);
@@ -320,23 +320,28 @@ uint8_t data[512 * 128];
  * \param[in]       *arg: Pointer to argument for thread
  */
 static void
-fat_thread(void const * arg) {    
-    if ((fres = f_mount(&fs, "SD:", 1)) == FR_OK) {
-        printf("Mounted\r\n");
-        if ((fres = f_open(&fil, "SD:file.txt", FA_WRITE | FA_READ | FA_OPEN_ALWAYS)) == FR_OK) {
-            f_puts("String", &fil);
-            f_close(&fil);
-            printf("Written and closed\r\n");
-        } else {
-            printf("Open failed: %d\r\n", (int)fres);
-        }
-        f_mount(NULL, "SD:", 1);
-    } else {
-        printf("Mount failed: %d\r\n", (int)fres);
-    }
+fat_thread(void const * arg) {
     while (1) {
-        osDelay(1000);
+        osDelay(100);
+        GUI_PROGBAR_SetValue(GUI_WIDGET_GetById(ID_PROGBAR_CPUUSAGE), osGetCPUUsage());
     }
+//    osThreadTerminate(NULL);
+//    if ((fres = f_mount(&fs, "SD:", 1)) == FR_OK) {
+//        printf("Mounted\r\n");
+//        if ((fres = f_open(&fil, "SD:file.txt", FA_WRITE | FA_READ | FA_OPEN_ALWAYS)) == FR_OK) {
+//            f_puts("String", &fil);
+//            f_close(&fil);
+//            printf("Written and closed\r\n");
+//        } else {
+//            printf("Open failed: %d\r\n", (int)fres);
+//        }
+//        f_mount(NULL, "SD:", 1);
+//    } else {
+//        printf("Mount failed: %d\r\n", (int)fres);
+//    }
+//    while (1) {
+//        osDelay(1000);
+//    }
 }
 
 osSemaphoreId touch_semaphore;
@@ -532,7 +537,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 GUI_WIDGET_SetText(handle, _GT("Progress bar with custom text"));
                 
                 handle = GUI_PROGBAR_Create(2, 10, 60, 400, 40, h, 0, 0);
-                GUI_PROGBAR_EnablePercentages(handle);
+                GUI_PROGBAR_SetPercentMode(handle, 1);
                 GUI_PROGBAR_SetMin(handle, 20);
                 GUI_PROGBAR_SetMax(handle, 30);
                 GUI_PROGBAR_SetValue(handle, 22);
@@ -808,7 +813,7 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                     break;
                 }
                 case ID_BTN_WIN_DIALOG: {
-                    GUI_DIALOG_Create(ID_WIN_DIALOG, 60, 20, 300, 150, 0, dialog_callback, 0);
+                    GUI_DIALOG_Create(ID_WIN_DIALOG, 60, 20, 300, 150, GUI_CONTAINER_Create, dialog_callback, 0);
                     break;
                 }
                 case ID_BTN_DIALOG_CONFIRM:
@@ -903,7 +908,7 @@ uint8_t progbar_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result
                 case ID_PROGBAR_CPUUSAGE:
                     GUI_PROGBAR_SetMin(h, 0);
                     GUI_PROGBAR_SetMax(h, 100);
-                    GUI_PROGBAR_EnablePercentages(h);
+                    GUI_PROGBAR_SetPercentMode(h, 1);
                     break;
                 default:
                     break;

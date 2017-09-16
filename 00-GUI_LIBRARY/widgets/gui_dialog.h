@@ -64,13 +64,13 @@ typedef struct GUI_DIALOG_t {
  * \param[in]       y: Widget Y position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
- * \param[in]       parent: Not used. Bottom widget (desktop) will be used as parent.
+ * \param[in]       func: Widget create function used as dialog base. In most cases \ref GUI_CONTAINER_Create will be used to create empty container
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_DIALOG_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p GUI_DIALOG_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Create new dialog base element without any "design" style and wait for dismiss status
@@ -81,13 +81,13 @@ GUI_HANDLE_p GUI_DIALOG_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
  * \param[in]       y: Widget Y position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
- * \param[in]       parent: Not used. Bottom widget (desktop) will be used as parent.
+ * \param[in]       func: Widget create function used as dialog base. In most cases \ref GUI_CONTAINER_Create will be used to create empty container
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
  * \retval          -1: Widget creation fail
  * \retval          int: Value passed to \ref GUI_DIALOG_Dismiss when dialog is dismissed
  */
-int GUI_DIALOG_CreateBlocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+int GUI_DIALOG_CreateBlocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Dismiss (close) dialog with status

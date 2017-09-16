@@ -140,22 +140,6 @@ uint8_t GUI_LED_SetColor(GUI_HANDLE_p h, GUI_LED_COLOR_t index, GUI_Color_t colo
 uint8_t GUI_LED_SetType(GUI_HANDLE_p h, GUI_LED_TYPE_t type);
 
 /**
- * \brief           Turn LED on
- * \param[in,out]   h: Widget handle
- * \retval          1: LED was turned on
- * \retval          0: LED was not turned on
- */
-uint8_t GUI_LED_On(GUI_HANDLE_p h);
-
-/**
- * \brief           Turn LED off
- * \param[in,out]   h: Widget handle
- * \retval          1: LED was turned off
- * \retval          0: LED was not turned off
- */
-uint8_t GUI_LED_Off(GUI_HANDLE_p h);
-
-/**
  * \brief           Toggle LED state
  * \param[in,out]   h: Widget handle
  * \retval          1: Led was toggled ok
@@ -164,7 +148,7 @@ uint8_t GUI_LED_Off(GUI_HANDLE_p h);
 uint8_t GUI_LED_Toggle(GUI_HANDLE_p h);
 
 /**
- * \brief           Set LED value either on or off
+ * \brief           Set LED value either on (turn on) or off (turn off)
  * \param[in,out]   h: Widget handle
  * \param[in]       state: LED state, either 1 or 0 according to selected state
  * \retval          1: Led state was set ok

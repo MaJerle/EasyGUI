@@ -1268,19 +1268,29 @@
               <FilePath>..\00-GUI_LIBRARY\gui.c</FilePath>
             </File>
             <File>
-              <FileName>gui_ll.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\gui_ll.c</FilePath>
-            </File>
-            <File>
               <FileName>gui_draw.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\gui_draw.c</FilePath>
             </File>
             <File>
-              <FileName>gui_system.c</FileName>
+              <FileName>gui_lcd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\gui_system.c</FilePath>
+              <FilePath>..\00-GUI_LIBRARY\gui_lcd.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>GUI SYS LL</GroupName>
+          <Files>
+            <File>
+              <FileName>gui_ll_stm32_dma2d.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\ports_ll\gui_ll_stm32_dma2d.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_system_cmsis_os.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\ports_system\gui_system_cmsis_os.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2892,19 +2902,29 @@
               <FilePath>..\00-GUI_LIBRARY\gui.c</FilePath>
             </File>
             <File>
-              <FileName>gui_ll.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\gui_ll.c</FilePath>
-            </File>
-            <File>
               <FileName>gui_draw.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\gui_draw.c</FilePath>
             </File>
             <File>
-              <FileName>gui_system.c</FileName>
+              <FileName>gui_lcd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\gui_system.c</FilePath>
+              <FilePath>..\00-GUI_LIBRARY\gui_lcd.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>GUI SYS LL</GroupName>
+          <Files>
+            <File>
+              <FileName>gui_ll_stm32_dma2d.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\ports_ll\gui_ll_stm32_dma2d.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_system_cmsis_os.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\ports_system\gui_system_cmsis_os.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4584,19 +4604,29 @@
               <FilePath>..\00-GUI_LIBRARY\gui.c</FilePath>
             </File>
             <File>
-              <FileName>gui_ll.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\gui_ll.c</FilePath>
-            </File>
-            <File>
               <FileName>gui_draw.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\gui_draw.c</FilePath>
             </File>
             <File>
-              <FileName>gui_system.c</FileName>
+              <FileName>gui_lcd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\gui_system.c</FilePath>
+              <FilePath>..\00-GUI_LIBRARY\gui_lcd.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>GUI SYS LL</GroupName>
+          <Files>
+            <File>
+              <FileName>gui_ll_stm32_dma2d.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\ports_ll\gui_ll_stm32_dma2d.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_system_cmsis_os.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\ports_system\gui_system_cmsis_os.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -6208,19 +6238,29 @@
               <FilePath>..\00-GUI_LIBRARY\gui.c</FilePath>
             </File>
             <File>
-              <FileName>gui_ll.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\gui_ll.c</FilePath>
-            </File>
-            <File>
               <FileName>gui_draw.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\gui_draw.c</FilePath>
             </File>
             <File>
-              <FileName>gui_system.c</FileName>
+              <FileName>gui_lcd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\gui_system.c</FilePath>
+              <FilePath>..\00-GUI_LIBRARY\gui_lcd.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>GUI SYS LL</GroupName>
+          <Files>
+            <File>
+              <FileName>gui_ll_stm32_dma2d.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\ports_ll\gui_ll_stm32_dma2d.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_system_cmsis_os.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\ports_system\gui_system_cmsis_os.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -8056,19 +8096,29 @@
               <FilePath>..\00-GUI_LIBRARY\gui.c</FilePath>
             </File>
             <File>
-              <FileName>gui_ll.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\gui_ll.c</FilePath>
-            </File>
-            <File>
               <FileName>gui_draw.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\00-GUI_LIBRARY\gui_draw.c</FilePath>
             </File>
             <File>
-              <FileName>gui_system.c</FileName>
+              <FileName>gui_lcd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\00-GUI_LIBRARY\gui_system.c</FilePath>
+              <FilePath>..\00-GUI_LIBRARY\gui_lcd.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>GUI SYS LL</GroupName>
+          <Files>
+            <File>
+              <FileName>gui_ll_stm32_dma2d.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\ports_ll\gui_ll_stm32_dma2d.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_system_cmsis_os.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\00-GUI_LIBRARY\ports_system\gui_system_cmsis_os.c</FilePath>
             </File>
           </Files>
         </Group>

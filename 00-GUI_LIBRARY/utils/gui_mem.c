@@ -385,35 +385,48 @@ size_t mem_getminfree(void) {
 /******************************************************************************/
 /******************************************************************************/
 void* __GUI_MEM_Alloc(uint32_t size) {
+    void* ptr;
+    __GUI_SYS_PROTECT();                            /* Lock system protection */
 #if GUI_USE_MEM
-    return mem_alloc(size);                         /* Allocate memory and return pointer */ 
+    ptr = mem_alloc(size);                          /* Allocate memory and return pointer */ 
 #else
-    return malloc(size);
-#endif    
+    ptr = malloc(size);
+#endif
+    __GUI_SYS_UNPROTECT();                          /* Unlock protection */
+    return ptr;
 }
 
 void* __GUI_MEM_Realloc(void* ptr, size_t size) {
+    __GUI_SYS_PROTECT();                            /* Lock system protection */
 #if GUI_USE_MEM
-    return mem_realloc(ptr, size);                  /* Reallocate and return pointer */
+    ptr = mem_realloc(ptr, size);                   /* Reallocate and return pointer */
 #else
-    return realloc(ptr, size);
-#endif    
+    ptr = realloc(ptr, size);
+#endif
+    __GUI_SYS_UNPROTECT();                          /* Unlock protection */
+    return ptr;
 }
 
 void* __GUI_MEM_Calloc(size_t num, size_t size) {
+    void* ptr;
+    __GUI_SYS_PROTECT();                            /* Lock system protection */
 #if GUI_USE_MEM
-    return mem_calloc(num, size);                   /* Allocate memory and clear it to 0. Then return pointer */
+    ptr = mem_calloc(num, size);                   /* Allocate memory and clear it to 0. Then return pointer */
 #else
-    return calloc(num, size);
-#endif    
+    ptr = calloc(num, size);
+#endif
+    __GUI_SYS_UNPROTECT();                          /* Unlock protection */
+    return ptr;
 }
 
 void __GUI_MEM_Free(void* ptr) {
+    __GUI_SYS_PROTECT();                            /* Lock system protection */
 #if GUI_USE_MEM
     mem_free(ptr);                                  /* Free already allocated memory */
 #else
     free(ptr);
-#endif    
+#endif
+    __GUI_SYS_UNPROTECT();                          /* Unlock protection */
 }
 
 size_t __GUI_MEM_GetFree(void) {
@@ -439,57 +452,4 @@ uint8_t GUI_MEM_AssignMemory(const GUI_MEM_Region_t* regions, size_t len) {
     ret = mem_assignmem(regions, len);              /* Assign memory */
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;                                     
-}
-
-void* GUI_MEM_Alloc(uint32_t size) {
-    void* ptr;
-    __GUI_ENTER();                                  /* Enter GUI */
-    ptr = __GUI_MEM_Alloc(size);                    /* Allocate memory for specific size */
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return ptr;                                     
-}
-
-void* GUI_MEM_Realloc(void* ptr, size_t size) {
-    __GUI_ENTER();                                  /* Enter GUI */
-    ptr = __GUI_MEM_Realloc(ptr, size);             /* Realloc to new size */
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return ptr;
-}
-
-void* GUI_MEM_Calloc(size_t num, size_t size) {
-    void* ptr;
-    __GUI_ENTER();                                  /* Enter GUI */
-    ptr = __GUI_MEM_Calloc(num, size);              /* Calloc to new size */
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return ptr;
-}
-
-void GUI_MEM_Free(void* ptr) {
-    __GUI_ENTER();                                  /* Enter GUI */
-    __GUI_MEM_Free(ptr);                            /* Free allocated memory */
-    __GUI_LEAVE();                                  /* Leave GUI */
-}
-
-size_t GUI_MEM_GetFree(void) {
-    size_t size;
-    __GUI_ENTER();                                  /* Enter GUI */
-    size = mem_getfree();                           /* Get free bytes available to allocate */
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return size;
-}
-
-size_t GUI_MEM_GetFull(void) {
-    size_t size;
-    __GUI_ENTER();                                  /* Enter GUI */
-    size = mem_getfull();                           /* Get number of bytes allocated already */
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return size;
-}
-
-size_t GUI_MEM_GetMinFree(void) {
-    size_t size;
-    __GUI_ENTER();                                  /* Enter GUI */
-    size = mem_getminfree();                        /* Get minimal number of bytes ever available for allocation */
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return size;
 }

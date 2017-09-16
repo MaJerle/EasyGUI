@@ -593,6 +593,7 @@ void* __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x,
     
     h = __GUI_MEMALLOC(widget->Size);               /* Allocate memory for widget */
     if (h) {
+        __GUI_ENTER();                              /* Enter GUI */
         memset(h, 0x00, widget->Size);              /* Set memory to 0 */
         
         __GH(h)->Id = id;                           /* Save ID */
@@ -648,6 +649,7 @@ void* __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x,
         static gui_mbox_msg_t msg = {GUI_SYS_MBOX_TYPE_WIDGET_CREATED};
         gui_sys_mbox_putnow(&GUI.OS.mbox, &msg);    /* Post message queue */
 #endif /* GUI_OS */
+        __GUI_LEAVE();                              /* Leave GUI */
     }
     
     return (void *)h;
@@ -655,18 +657,17 @@ void* __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x,
 
 uint8_t __GUI_WIDGET_Remove(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
-#if GUI_OS
-    gui_sys_mbox_putnow(&GUI.OS.mbox, &msg_widget_remove);  /* Put message to queue */
-#endif /* GUI_OS */
     if (__CanRemoveWidget(h)) {                     /* Check if we can delete widget */
         __GUI_WIDGET_SetFlag(h, GUI_FLAG_REMOVE);   /* Set flag for widget delete */
         GUI.Flags |= GUI_FLAG_REMOVE;               /* Set flag for to remove at least one widget from tree */
         if (__GUI_WIDGET_IsFocused(h)) {
             __GUI_WIDGET_FOCUS_SET(__GH(h)->Parent);
         }
+#if GUI_OS
+    gui_sys_mbox_putnow(&GUI.OS.mbox, &msg_widget_remove);  /* Put message to queue */
+#endif /* GUI_OS */
         return 1;                                   /* Widget will be deleted */
     }
-
     return 0;
 }
 
@@ -1040,7 +1041,7 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color) 
     uint8_t ret = 1;
     
     __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
-    
+    __GUI_ENTER();                                  /* Enter GUI context */
     if (!__GH(h)->Colors) {                         /* Do we need to allocate color memory? */
         if (__GH(h)->Widget->ColorsCount) {         /* Check if at least some colors should be used */
             __GH(h)->Colors = __GUI_MEMALLOC(__GH(h)->Widget->ColorsCount * sizeof(*__GH(h)->Colors));
@@ -1060,6 +1061,7 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color) 
             ret = 0;
         }
     }
+    __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
 }
 
@@ -1287,6 +1289,24 @@ const GUI_FONT_t* GUI_WIDGET_GetFont(GUI_HANDLE_p h) {
     return font;
 }
 
+uint8_t __GUI_WIDGET_SetParam(GUI_HANDLE_p h, uint16_t cfg, const void* data, uint8_t invalidate, uint8_t invalidateparent) {
+    GUI_WIDGET_Param_t p;
+    uint8_t result = 1;
+    
+    p.Type = cfg;
+    p.Data = (void *)data;
+    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_WIDGET_Callback(h, GUI_WC_SetParam, &p, &result); /* Process callback function */
+    if (invalidateparent) {
+        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate widget and parent */
+    } else if (invalidate) {
+        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget only */
+    }
+    __GUI_LEAVE();                                  /* Leave GUI */
+    
+    return 1;
+}
+
 /*******************************************/
 /**         Widget size management        **/
 /*******************************************/
@@ -1498,7 +1518,6 @@ uint8_t GUI_WIDGET_Show(GUI_HANDLE_p h) {
 }
 
 uint8_t GUI_WIDGET_PutOnFront(GUI_HANDLE_p h) {
-    uint8_t res;
     __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -1506,7 +1525,7 @@ uint8_t GUI_WIDGET_PutOnFront(GUI_HANDLE_p h) {
     __GUI_WIDGET_FOCUS_SET(h);                      /* Set widget to focused state */
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return res;
+    return 1;
 }
 
 uint8_t GUI_WIDGET_Hide(GUI_HANDLE_p h) {

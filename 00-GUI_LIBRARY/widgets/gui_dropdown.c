@@ -507,24 +507,13 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /******************************************************************************/
 /******************************************************************************/
 GUI_HANDLE_p GUI_DROPDOWN_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
-    GUI_DROPDOWN_t* ptr;
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    ptr = __GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
-
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return (GUI_HANDLE_p)ptr;
+    return (GUI_HANDLE_p)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
 uint8_t GUI_DROPDOWN_SetColor(GUI_HANDLE_p h, GUI_DROPDOWN_COLOR_t index, GUI_Color_t color) {
-    uint8_t ret = 0;
-    
+    uint8_t ret;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set new color */
-
-    __GUI_LEAVE();                                  /* Leave GUI */
+    ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set color */
     return ret;
 }
 

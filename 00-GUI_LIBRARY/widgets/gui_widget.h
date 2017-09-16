@@ -960,7 +960,7 @@ GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h);
  * \retval          0: Widget is not dialog
  * \hideinitializer
  */
-#define __GUI_WIDGET_IsDialogBase(h)                (!!__GUI_WIDGET_GetCoreFlag(h, GUI_FLAG_WIDGET_DIALOG_BASE))
+#define __GUI_WIDGET_IsDialogBase(h)                (!!__GUI_WIDGET_GetCoreFlag(h, GUI_FLAG_WIDGET_DIALOG_BASE) || !!__GUI_WIDGET_GetFlag(h, GUI_FLAG_WIDGET_DIALOG_BASE))
 
 /**
  * \brief           Checks if widget handle is currently in focus
@@ -1061,6 +1061,9 @@ uint8_t __GUI_WIDGET_SetUserData(GUI_HANDLE_p h, void* data);
  * \sa              __GUI_WIDGET_SetUserData
  */
 void* __GUI_WIDGET_GetUserData(GUI_HANDLE_p h);
+
+uint8_t __GUI_WIDGET_SetParam(GUI_HANDLE_p h, uint16_t cfg, const void* data, uint8_t invalidate, uint8_t invalidateparent);
+uint8_t __GUI_WIDGET_GetParam(GUI_HANDLE_p h, uint16_t cfg, void* data);
 
 /**
  * \}

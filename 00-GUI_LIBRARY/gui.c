@@ -648,9 +648,6 @@ gui_thread(void * const argument) {
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-#if GUI_OS
-char buffer[1024];
-#endif /* GUI_OS */
 GUI_Result_t GUI_Init(void) {
     uint8_t result;
     
@@ -660,7 +657,6 @@ GUI_Result_t GUI_Init(void) {
     /* Init system */
     gui_sys_init();                                 /* Init low-level system */
     gui_sys_mbox_create(&GUI.OS.mbox, 10);          /* Message box for 10 elements */
-    GUI.OS.thread_id = gui_sys_thread_create("gui_thread", gui_thread, NULL, SYS_THREAD_SS, SYS_THREAD_PRIO);
 #endif /* GUI_OS */
     
     /* Call LCD low-level function */
@@ -692,8 +688,14 @@ GUI_Result_t GUI_Init(void) {
     GUI.Initialized = 1;                            /* GUI is initialized */
     __GUI_WIDGET_Init();                            /* Init widgets */
     
+#if GUI_OS
+    /* Create graphical thread */
+    GUI.OS.thread_id = gui_sys_thread_create("gui_thread", gui_thread, NULL, SYS_THREAD_SS, SYS_THREAD_PRIO);
+#endif
+    
     return guiOK;
 }
+
 int32_t GUI_Process(void) {
 #if GUI_OS
     gui_mbox_msg_t* msg;
@@ -701,10 +703,14 @@ int32_t GUI_Process(void) {
     uint32_t tmr_cnt = __GUI_TIMER_GetActiveCount();    /* Get number of active timers in system */
     
     time = gui_sys_mbox_get(&GUI.OS.mbox, (void **)&msg, tmr_cnt ? 10 : 0); /* Get value from message queue */
-    gui_sys_protect();                              /* Lock protection */
     __GUI_UNUSED(time);                             /* Unused variable */
+    
+    __GUI_SYS_PROTECT();                            /* Release protection */
 #endif /* GUI_OS */
    
+    /**
+     * Periodically process everything
+     */
 #if GUI_USE_TOUCH
     __GUI_Process_Touch();                          /* Process touch inputs */
 #endif /* GUI_USE_TOUCH */
@@ -715,10 +721,7 @@ int32_t GUI_Process(void) {
     __GUI_WIDGET_ExecuteRemove();                   /* Delete widgets */
     __GUI_Process_Redraw();                         /* Redraw widgets */
     
-    
-#if GUI_OS
-    gui_sys_unprotect();                            /* Release protection */
-#endif /* GUI_OS */
+    __GUI_SYS_UNPROTECT();                          /* Release protection */
     
     return 0;                                       /* Return number of elements updated on GUI */
 }

@@ -167,22 +167,13 @@ int32_t GUI_PROGBAR_GetMax(GUI_HANDLE_p h);
 int32_t GUI_PROGBAR_GetValue(GUI_HANDLE_p h);
 
 /**
- * \brief           Enable progress bar percentages text
- * \note            This will show percentages as text according to current value
+ * \brief           Sets percent mode. When in this mode, widget text is in percent according to current value between minimum and maximum
  * \param[in,out]   h: Widget handle
- * \retval          1: Percentage mode was enabled ok
- * \retval          0: Percange mode was not enabled
- */
-uint8_t GUI_PROGBAR_EnablePercentages(GUI_HANDLE_p h);
-
-/**
- * \brief           Disable progress bar percentages text
- * \note            This will hide percentage text and will show user text input
- * \param[in,out]   h: Widget handle
+ * \param[in]       enable: Value either to enable or disable mode
  * \retval          1: Percentage mode was disabled ok
  * \retval          0: Percange mode was not disabled
  */
-uint8_t GUI_PROGBAR_DisablePercentages(GUI_HANDLE_p h);
+uint8_t GUI_PROGBAR_SetPercentMode(GUI_HANDLE_p h, uint8_t enable);
 
 /**
  * \}

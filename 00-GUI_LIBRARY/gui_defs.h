@@ -56,41 +56,37 @@ extern "C" {
  * \{
  */
 
-#define GUI_FLAG_REDRAW                 ((uint32_t)0x00000001)  /*!< Indicates widget should be redrawn */
-#define GUI_FLAG_CHILD                  ((uint32_t)0x00000002)  /*!< Indicates widget is child (window) */
-#define GUI_FLAG_DYNAMICTEXTALLOC       ((uint32_t)0x00000004)  /*!< Indicates memory for text has been dynamically allocated */
-#define GUI_FLAG_ACTIVE                 ((uint32_t)0x00000008)  /*!< Indicates widget is active by mouser or touch */
-#define GUI_FLAG_FOCUS                  ((uint32_t)0x00000010)  /*!< Indicates widget is currently in focus */
-#define GUI_FLAG_HIDDEN                 ((uint32_t)0x00000020)  /*!< Indicates widget is hidden */
-#define GUI_FLAG_DISABLED               ((uint32_t)0x00000040)  /*!< Indicates widget is disabled */
-#define GUI_FLAG_3D                     ((uint32_t)0x00000080)  /*!< Indicates widget has enabled 3D style */
-#define GUI_FLAG_WIDTH_PERCENT          ((uint32_t)0x00000100)  /*!< Indicates widget width is in units of percentage according to parent widget width */
-#define GUI_FLAG_HEIGHT_PERCENT         ((uint32_t)0x00000200)  /*!< Indicates widget height is in units of percentage according to parent widget height */
-#define GUI_FLAG_WIDTH_FILL             ((uint32_t)0x00000400)  /*!< Indicates widget width fills to the end of widget */
-#define GUI_FLAG_HEIGHT_FILL            ((uint32_t)0x00000800)  /*!< Indicates widget height fills to the end of widget */
-#define GUI_FLAG_EXPANDED               ((uint32_t)0x00001000)  /*!< Indicates children widget is set to (temporary) XY = 0,0 and width/height = parent width / parent height (maximize windows function) */
-#define GUI_FLAG_REMOVE                 ((uint32_t)0x00002000)  /*!< Indicates widget should be deleted */
-#define GUI_FLAG_IGNORE_INVALIDATE      ((uint32_t)0x00004000)  /*!< Indicates widget invalidation is ignored completely when invalidating it directly */
-#define GUI_FLAG_TOUCH_MOVE             ((uint32_t)0x00008000)  /*!< Indicates widget callback has processed touch move event. This parameter works in conjunction with \ref GUI_FLAG_ACTIVE flag */
-#define GUI_FLAG_XPOS_PERCENT           ((uint32_t)0x00010000)  /*!< Indicates widget X position is in percent relative to parent width */
-#define GUI_FLAG_YPOS_PERCENT           ((uint32_t)0x00020000)  /*!< Indicates widget Y position is in percent relative to parent height */
-
-#define GUI_FLAG_LCD_WAIT_LAYER_CONFIRM ((uint32_t)0x00000001)  /*!< Indicates waiting for layer change confirmation */
-
-
+#define GUI_FLAG_REDRAW                     ((uint32_t)0x00000001)  /*!< Indicates widget should be redrawn */
+#define GUI_FLAG_CHILD                      ((uint32_t)0x00000002)  /*!< Indicates widget is child (window) */
+#define GUI_FLAG_DYNAMICTEXTALLOC           ((uint32_t)0x00000004)  /*!< Indicates memory for text has been dynamically allocated */
+#define GUI_FLAG_ACTIVE                     ((uint32_t)0x00000008)  /*!< Indicates widget is active by mouser or touch */
+#define GUI_FLAG_FOCUS                      ((uint32_t)0x00000010)  /*!< Indicates widget is currently in focus */
+#define GUI_FLAG_HIDDEN                     ((uint32_t)0x00000020)  /*!< Indicates widget is hidden */
+#define GUI_FLAG_DISABLED                   ((uint32_t)0x00000040)  /*!< Indicates widget is disabled */
+#define GUI_FLAG_3D                         ((uint32_t)0x00000080)  /*!< Indicates widget has enabled 3D style */
+#define GUI_FLAG_WIDTH_PERCENT              ((uint32_t)0x00000100)  /*!< Indicates widget width is in units of percentage according to parent widget width */
+#define GUI_FLAG_HEIGHT_PERCENT             ((uint32_t)0x00000200)  /*!< Indicates widget height is in units of percentage according to parent widget height */
+#define GUI_FLAG_WIDTH_FILL                 ((uint32_t)0x00000400)  /*!< Indicates widget width fills to the end of widget */
+#define GUI_FLAG_HEIGHT_FILL                ((uint32_t)0x00000800)  /*!< Indicates widget height fills to the end of widget */
+#define GUI_FLAG_EXPANDED                   ((uint32_t)0x00001000)  /*!< Indicates children widget is set to (temporary) XY = 0,0 and width/height = parent width / parent height (maximize windows function) */
+#define GUI_FLAG_REMOVE                     ((uint32_t)0x00002000)  /*!< Indicates widget should be deleted */
+#define GUI_FLAG_IGNORE_INVALIDATE          ((uint32_t)0x00004000)  /*!< Indicates widget invalidation is ignored completely when invalidating it directly */
+#define GUI_FLAG_TOUCH_MOVE                 ((uint32_t)0x00008000)  /*!< Indicates widget callback has processed touch move event. This parameter works in conjunction with \ref GUI_FLAG_ACTIVE flag */
+#define GUI_FLAG_XPOS_PERCENT               ((uint32_t)0x00010000)  /*!< Indicates widget X position is in percent relative to parent width */
+#define GUI_FLAG_YPOS_PERCENT               ((uint32_t)0x00020000)  /*!< Indicates widget Y position is in percent relative to parent height */
 /**
  * \defgroup        GUI_WIDGETS_CORE_FLAGS Widget type flags
  * \brief           Flags used for widget type description
  * \{
  */
-
-#define GUI_FLAG_WIDGET_ALLOW_CHILDREN      ((uint32_t)0x00100000)  /*!< Widget allows children widgets */
-#define GUI_FLAG_WIDGET_DIALOG_BASE         ((uint32_t)0x00200000)  /*!< Widget is dialog base. When it is active, no other widget around dialog can be pressed */
-#define GUI_FLAG_WIDGET_INVALIDATE_PARENT   ((uint32_t)0x00400000)  /*!< Anytime widget is invalidated, parent should be invalidated too */
-
+#define GUI_FLAG_WIDGET_ALLOW_CHILDREN      ((uint32_t)0x00040000)  /*!< Widget allows children widgets */
+#define GUI_FLAG_WIDGET_DIALOG_BASE         ((uint32_t)0x00080000)  /*!< Widget is dialog base. When it is active, no other widget around dialog can be pressed */
+#define GUI_FLAG_WIDGET_INVALIDATE_PARENT   ((uint32_t)0x00100000)  /*!< Anytime widget is invalidated, parent should be invalidated too */
 /**
  * \}
  */
+
+#define GUI_FLAG_LCD_WAIT_LAYER_CONFIRM     ((uint32_t)0x00000001)  /*!< Indicates waiting for layer change confirmation */
 
 /**
  * \}
@@ -763,6 +759,7 @@ typedef GUI_TIMER_t* GUI_TIMER_p;
  * \note            Must always start with number 1
  */
 typedef enum GUI_WC_t {
+    GUI_WC_None = 0x00,
 #if defined(GUI_INTERNAL) || defined(DOXYGEN)
     /**
      * \brief       Called just after widget has been created. Used for internal widget purpose only
@@ -781,6 +778,22 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: Pointer to uint8_t variable type to store result to [1 = exclude, 0 = do not exclude]
      */
     GUI_WC_ExcludeLinkedList = 0x02,
+    
+    /**
+     * \brief       Set user parameter for widget
+     *
+     * \param[in]   *param: Pointer to \ref GUI_WIDGET_Param_t structure with custom user parameter for widget
+     * \param[out]  *result: None
+     */
+    GUI_WC_SetParam = 0x03,
+    
+    /**
+     * \brief       Get parameter fror widget
+     *
+     * \param[in]   *param: Pointer to \ref GUI_WIDGET_Param_t structure with identification and memory where to save parameter value
+     * \param[out]  *result: None
+     */
+    GUI_WC_GetParam = 0x04,
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
     
     /**
@@ -792,7 +805,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: None
      * \param[out]  *result: None
      */
-    GUI_WC_Init = 0x03,
+    GUI_WC_Init = 0x05,
     
     /**
      * \brief       Draw widget on screen
@@ -800,7 +813,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: Pointer to \ref GUI_Display_t structure
      * \param[out]  *result: None
      */
-    GUI_WC_Draw = 0x04,
+    GUI_WC_Draw,
     
     /**
      * \brief       Check if widget can be removed. User can perform check if for example widget needs save or similar operation
@@ -809,7 +822,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: Pointer to uint8_t variable type to store result to [1 = remove, 0 = do not remove]
      * \sa          GUI_WC_Remove
      */
-    GUI_WC_CanRemove = 0x05,
+    GUI_WC_CanRemove,
     
     /**
      * \brief       Notification before widget delete will actually happen.
@@ -819,7 +832,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: None
      * \sa          GUI_WC_CanRemove
      */
-    GUI_WC_Remove = 0x06,
+    GUI_WC_Remove,
     
     /**
      * \brief       Notification called when widget becomes focused
@@ -828,7 +841,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: None
      * \sa          GUI_WC_FocusOut
      */
-    GUI_WC_FocusIn = 0x07,
+    GUI_WC_FocusIn,
     
     /**
      * \brief       Notification called when widget clears widget state
@@ -837,7 +850,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: None
      * \sa          GUI_WC_FocusIn
      */
-    GUI_WC_FocusOut = 0x08,
+    GUI_WC_FocusOut,
     
     /**
      * \brief       Notification for active status on widget
@@ -848,7 +861,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: None
      * \sa          GUI_WC_ActiveOut
      */
-    GUI_WC_ActiveIn = 0x09,
+    GUI_WC_ActiveIn,
     
     /**
      * \brief       Notification for cleared active status on widget
@@ -859,7 +872,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: None
      * \sa          GUI_WC_ActiveIn
      */
-    GUI_WC_ActiveOut = 0x0A,
+    GUI_WC_ActiveOut,
     
     /**
      * \brief       Notification when touch down event occurs on widget
@@ -868,7 +881,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: Value of \ref __GUI_TouchStatus_t enumeration
      * \sa          GUI_WC_TouchMove, GUI_WC_TouchEnd
      */
-    GUI_WC_TouchStart = 0x0B,
+    GUI_WC_TouchStart,
     
     /**
      * \brief       Notification when touch move event occurs on widget
@@ -880,7 +893,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: Value of \ref __GUI_TouchStatus_t enumeration
      * \sa          GUI_WC_TouchStart, GUI_WC_TouchEnd
      */
-    GUI_WC_TouchMove = 0x0C,
+    GUI_WC_TouchMove,
     
     /**
      * \brief       Notification when touch up event occurs on widget
@@ -889,7 +902,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: Value of \ref __GUI_TouchStatus_t enumeration
      * \sa          GUI_WC_TouchStart, GUI_WC_TouchMove
      */
-    GUI_WC_TouchEnd = 0x0D,
+    GUI_WC_TouchEnd,
     
     /**
      * \brief       Notification when click event has been detected
@@ -897,7 +910,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure with valid touch press location
      * \param[out]  *result: None
      */
-    GUI_WC_Click = 0x0E,
+    GUI_WC_Click,
     
     /**
      * \brief       Notification when long press has been detected
@@ -905,7 +918,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure with valid touch press location
      * \param[out]  *result: None
      */
-    GUI_WC_LongClick = 0x0F,
+    GUI_WC_LongClick,
     
     /**
      * \brief       Notification when double click has been detected
@@ -913,7 +926,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: Pointer to \ref __GUI_TouchData_t structure with valid touch press location
      * \param[out]  *result: None
      */
-    GUI_WC_DblClick = 0x10,
+    GUI_WC_DblClick,
     
     /**
      * \brief       Notification when key has been pushed to this widget
@@ -921,7 +934,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: Pointer to \ref __GUI_KeyboardData_t structure
      * \param[out]  *result: Value of \ref __GUI_KeyboardStatus_t enumeration
      */
-    GUI_WC_KeyPress = 0x11,
+    GUI_WC_KeyPress,
     
     /**     
      * \brief       Notification when widget selection has changed
@@ -934,7 +947,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: None
      * \sa          GUI_WC_ValueChanged
      */
-    GUI_WC_SelectionChanged = 0x12,
+    GUI_WC_SelectionChanged,
     
     /**     
      * \brief       Value of widget has been changed
@@ -947,7 +960,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: None
      * \sa          GUI_WC_SelectionChanged
      */
-    GUI_WC_ValueChanged = 0x13,
+    GUI_WC_ValueChanged,
     
     /**     
      * \brief       Widget text value has been changed
@@ -957,7 +970,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: None
      * \param[out]  *result: None
      */
-    GUI_WC_TextChanged = 0x14,
+    GUI_WC_TextChanged,
     
     /**     
      * \brief       Widget should increase/decrease selection
@@ -968,7 +981,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: Pointer to \ref int16_t variable for amount of increase/decrease value
      * \param[out]  *result: Pointer to output \ref uint8_t variable to save status of increase/decrease operation
      */
-    GUI_WC_IncSelection = 0x15,
+    GUI_WC_IncSelection,
     
     /**     
      * \brief       Called when dialog is dismissed
@@ -979,7 +992,7 @@ typedef enum GUI_WC_t {
      * \param[in]   *param: Pointer to int variable passed to dismiss function
      * \param[out]  *result: None
      */
-    GUI_WC_OnDismiss = 0x16,
+    GUI_WC_OnDismiss,
 } GUI_WC_t;
 
 /**
@@ -1057,6 +1070,14 @@ typedef struct GUI_HANDLE_ROOT {
     GUI_iDim_t ScrollX;                     /*!< Scroll of widgets in horizontal direction in units of pixels */
     GUI_iDim_t ScrollY;                     /*!< Scroll of widgets in vertical direction in units of pixels */
 } GUI_HANDLE_ROOT_t;
+
+/**
+ * \brief           Structure used in setting and getting parameter values from widgets using callbacks
+ */
+typedef struct GUI_WIDGET_Param_t {
+    uint16_t Type;                          /*!< Type of command to set or get */
+    void* Data;                             /*!< Pointer to actual data to set or get to for specific widget */
+} GUI_WIDGET_Param_t;
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 /**
