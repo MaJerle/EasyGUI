@@ -143,11 +143,11 @@ void __GUI_TIMER_Process(void) {
     for (t = (GUI_TIMER_t *)GUI.Timers.List.First; t; t = (GUI_TIMER_t *)t->List.Next) {
         if (t->Flags & GUI_FLAG_TIMER_CALL) {       /* Counter is set to 0, process callback */
             t->Flags &= ~GUI_FLAG_TIMER_CALL;       /* Clear timer flag */
-            if (t->Callback) {
-                t->Callback(t);                     /* Call user function */
-            }
             if (!__GUI_TIMER_IsPeriodic(t)) {       /* If timer is not periodic */
                 __GUI_TIMER_Stop(t);                /* Stop timer */
+            }
+            if (t->Callback) {                      /* Process callback */
+                t->Callback(t);                     /* Call user function */
             }
         }
         

@@ -82,7 +82,8 @@ typedef struct GUI_PROGBAR_t {
     
     int32_t Min;                            /*!< Low value for progress bar */
     int32_t Max;                            /*!< High value for progress bar */
-    int32_t Value;                          /*!< Current value for progress bar */
+    int32_t CurrentValue;                   /*!< Current value for progress bar */
+    int32_t DesiredValue;                   /*!< Desired value, set by used */
     uint8_t Flags;                          /*!< Flags variable */
 } GUI_PROGBAR_t;
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
@@ -141,6 +142,15 @@ uint8_t GUI_PROGBAR_SetMax(GUI_HANDLE_p h, int32_t val);
  * \sa              GUI_PROGBAR_SetMin, GUI_PROGBAR_SetMax, GUI_PROGBAR_GetValue, GUI_PROGBAR_GetMin, GUI_PROGBAR_GetMax  
  */
 uint8_t GUI_PROGBAR_SetValue(GUI_HANDLE_p h, int32_t val);
+
+/**
+ * \brief           Set progress bar to animation mode
+ * \param[in,out]   h: Widget handle
+ * \param[in]       anim: New animation value either 1 (enable) or 0 (disable)
+ * \retval          1: Animation was set ok
+ * \retval          0: Animation vas not set
+ */
+uint8_t GUI_PROGBAR_SetAnimation(GUI_HANDLE_p h, uint8_t anim);
 
 /**
  * \brief           Get progress bar minimal value

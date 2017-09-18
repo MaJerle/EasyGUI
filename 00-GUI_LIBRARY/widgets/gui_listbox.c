@@ -223,7 +223,7 @@ uint8_t GUI_LISTBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
     
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
-            __GL(h)->Selected = -1;                 /* Invalidate selection */
+            __GL(h)->Selected = -1;                 /* No selection */
             __GL(h)->SliderWidth = 30;              /* Set slider width */
             __GL(h)->Flags |= GUI_FLAG_LISTBOX_SLIDER_AUTO;   /* Set auto mode for slider */
             return 1;
@@ -404,27 +404,26 @@ uint8_t GUI_LISTBOX_AddString(GUI_HANDLE_p h, const GUI_Char* text) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
     
     item = __GUI_MEMALLOC(sizeof(*item));           /* Allocate memory for entry */
     if (item) {
+        __GUI_ENTER();                              /* Enter GUI */
         item->Text = (GUI_Char *)text;              /* Add text to entry */
         __GUI_LINKEDLIST_ADD_GEN(&__GL(h)->Root, &item->List);  /* Add to linked list */
         __GL(h)->Count++;                           /* Increase number of strings */
         
         __CheckValues(h);                           /* Check values */
         __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
+        __GUI_LEAVE();                              /* Leave GUI */
         
         ret = 1;
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
 }
 
 uint8_t GUI_LISTBOX_SetString(GUI_HANDLE_p h, uint16_t index, const GUI_Char* text) {
     GUI_LISTBOX_ITEM_t* item;
-    uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
@@ -436,7 +435,7 @@ uint8_t GUI_LISTBOX_SetString(GUI_HANDLE_p h, uint16_t index, const GUI_Char* te
     }
 
     __GUI_LEAVE();                                  /* Leave GUI */
-    return ret;
+    return item ? 1 : 0;
 }
 
 uint8_t GUI_LISTBOX_DeleteFirstString(GUI_HANDLE_p h) {

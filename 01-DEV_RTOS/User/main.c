@@ -541,6 +541,14 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 GUI_PROGBAR_SetMin(handle, 20);
                 GUI_PROGBAR_SetMax(handle, 30);
                 GUI_PROGBAR_SetValue(handle, 22);
+                
+                handle = GUI_PROGBAR_Create(3, 10, 110, 400, 40, h, 0, 0);
+                GUI_PROGBAR_SetPercentMode(handle, 1);
+                GUI_PROGBAR_SetMin(handle, 0);
+                GUI_PROGBAR_SetMax(handle, 100);
+                GUI_PROGBAR_SetValue(handle, 0);
+                GUI_PROGBAR_SetAnimation(handle, 1);
+                GUI_PROGBAR_SetValue(handle, 80);
                 break;
             }
             case ID_WIN_LED: {          /* Leds */                
@@ -908,7 +916,9 @@ uint8_t progbar_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result
                 case ID_PROGBAR_CPUUSAGE:
                     GUI_PROGBAR_SetMin(h, 0);
                     GUI_PROGBAR_SetMax(h, 100);
+                    GUI_PROGBAR_SetValue(h, 0);
                     GUI_PROGBAR_SetPercentMode(h, 1);
+                    GUI_PROGBAR_SetAnimation(h, 1);
                     break;
                 default:
                     break;

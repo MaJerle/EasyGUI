@@ -39,6 +39,11 @@
 /******************************************************************************/
 #define __GS(x)             ((GUI_SLIDER_t *)(x))
 
+#define CFG_MODE            0x01
+#define CFG_VALUE           0x02
+#define CFG_MIN             0x03
+#define CFG_MAX             0x04
+
 static
 uint8_t GUI_SLIDER_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
@@ -178,6 +183,39 @@ uint8_t GUI_SLIDER_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
             }
             return 1;
         }
+        case GUI_WC_SetParam: {                     /* Set parameter for widget */
+            GUI_WIDGET_Param_t* v = (GUI_WIDGET_Param_t *)param;
+            int32_t tmp;
+            switch (v->Type) {
+                case CFG_MODE:                      /* Set current progress value */
+                    o->Mode = *(GUI_SLIDER_MODE_t *)v->Data;
+                    break;
+                case CFG_VALUE:                     /* Set current progress value */
+                    __SetValue(h, *(int32_t *)v->Data);
+                    break;
+                case CFG_MAX:                       /* Set maximal value */
+                    tmp = *(int32_t *)v->Data;
+                    if (tmp > o->Min) {
+                        o->Max = tmp;
+                        if (o->Value > o->Max) {
+                            __SetValue(h, tmp);
+                        }
+                    }
+                    break;
+                case CFG_MIN:                       /* Set minimal value */
+                    tmp = *(int32_t *)v->Data;
+                    if (tmp < o->Max) {
+                        o->Min = tmp;
+                        if (o->Value < o->Min) {
+                            __SetValue(h, tmp);
+                        }
+                    }
+                    break;
+                default: break;
+            }
+            *(uint8_t *)result = 1;                 /* Save result */
+            return 1;
+        }
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
             GUI_Dim_t x, y, width, height, delta, deltaH, recParam, offset;
@@ -279,67 +317,28 @@ GUI_HANDLE_p GUI_SLIDER_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
 }
 
 uint8_t GUI_SLIDER_SetColor(GUI_HANDLE_p h, GUI_SLIDER_COLOR_t index, GUI_Color_t color) {
-    uint8_t ret;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set color */
-    return ret;
+    return __GUI_WIDGET_SetColor(h, (uint8_t)index, color); /* Set color */
 }
 
 uint8_t GUI_SLIDER_SetMode(GUI_HANDLE_p h, GUI_SLIDER_MODE_t mode) {
-    uint8_t ret;
-    
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    if (__GS(h)->Mode != mode) {
-        __GS(h)->Mode = mode;                       /* Set mode */
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
-    }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return ret;
+    return __GUI_WIDGET_SetParam(h, CFG_MODE, &mode, 1, 0); /* Set parameter */
 }
 
 uint8_t GUI_SLIDER_SetValue(GUI_HANDLE_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-
-    __SetValue(h, val);                             /* Set value */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return 1;
+    return __GUI_WIDGET_SetParam(h, CFG_VALUE, &val, 1, 0); /* Set parameter */
 }
 
 uint8_t GUI_SLIDER_SetMin(GUI_HANDLE_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-
-    if (__GS(h)->Min != val && val < __GS(h)->Max) {
-        __GS(h)->Min = val;                         /* Set new parameter */
-        if (__GS(h)->Value < __GS(h)->Min) {        /* Check current value */
-            __GS(h)->Value = __GS(h)->Min;
-        }
-        __GUI_WIDGET_Invalidate(h);                 /* Redraw widget */
-    }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return 1;
+    return __GUI_WIDGET_SetParam(h, CFG_MIN, &val, 1, 0);   /* Set parameter */
 }
 
 uint8_t GUI_SLIDER_SetMax(GUI_HANDLE_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-
-    if (__GS(h)->Max != val && val > __GS(h)->Min) {
-        __GS(h)->Max = val;                         /* Set new parameter */
-        if (__GS(h)->Value > __GS(h)->Max) {        /* Check current value */
-            __GS(h)->Value = __GS(h)->Max;
-        }
-        __GUI_WIDGET_Invalidate(h);                 /* Redraw widget */
-    }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return 1;
+    return __GUI_WIDGET_SetParam(h, CFG_MAX, &val, 1, 0);   /* Set parameter */
 }
 
 int32_t GUI_SLIDER_GetMin(GUI_HANDLE_p h) {

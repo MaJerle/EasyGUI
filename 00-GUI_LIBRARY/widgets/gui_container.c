@@ -98,8 +98,6 @@ GUI_HANDLE_p GUI_CONTAINER_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_D
 }
 
 uint8_t GUI_CONTAINER_SetColor(GUI_HANDLE_p h, GUI_CONTAINER_COLOR_t index, GUI_Color_t color) {
-    uint8_t ret;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set color */
-    return ret;
+    return __GUI_WIDGET_SetColor(h, (uint8_t)index, color); /* Set color */
 }

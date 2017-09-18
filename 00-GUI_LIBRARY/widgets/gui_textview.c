@@ -39,6 +39,9 @@
 /******************************************************************************/
 #define __GT(x)             ((GUI_TEXTVIEW_t *)(x))
 
+#define CFG_VALIGN          0x01
+#define CFG_HALIGN          0x02
+
 static
 uint8_t GUI_TEXTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
@@ -71,6 +74,20 @@ static const GUI_WIDGET_t Widget = {
 static
 uint8_t GUI_TEXTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     switch (ctrl) {                                 /* Handle control function if required */
+        case GUI_WC_SetParam: {                     /* Set parameter for widget */
+            GUI_WIDGET_Param_t* p = (GUI_WIDGET_Param_t *)param;
+            switch (p->Type) {
+                case CFG_HALIGN: 
+                    o->HAlign = *(GUI_TEXTVIEW_HALIGN_t *)p->Data;
+                    break;
+                case CFG_VALIGN: 
+                    o->VAlign = *(GUI_TEXTVIEW_VALIGN_t *)p->Data;
+                    break;
+                default: break;
+            }
+            *(uint8_t *)result = 1;                 /* Save result */
+            return 1;
+        }
         case GUI_WC_Draw: {
             GUI_Display_t* disp = (GUI_Display_t *)param;
             GUI_Dim_t x, y, wi, hi;
@@ -154,26 +171,10 @@ uint8_t GUI_TEXTVIEW_SetColor(GUI_HANDLE_p h, GUI_TEXTVIEW_COLOR_t index, GUI_Co
 
 uint8_t GUI_TEXTVIEW_SetVAlign(GUI_HANDLE_p h, GUI_TEXTVIEW_VALIGN_t align) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    if (__GT(h)->VAlign != align) {
-        __GT(h)->VAlign = align;                    /* Set new parameter */
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate widget */
-    }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return 1;
+    return __GUI_WIDGET_SetParam(h, CFG_VALIGN, &align, 1, 1);  /* Set parameter */
 }
 
 uint8_t GUI_TEXTVIEW_SetHAlign(GUI_HANDLE_p h, GUI_TEXTVIEW_HALIGN_t align) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    if (__GT(h)->HAlign != align) {
-        __GT(h)->HAlign = align;                    /* Set new parameter */
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate widget */
-    }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return 1;
+    return __GUI_WIDGET_SetParam(h, CFG_HALIGN, &align, 1, 1);  /* Set parameter */
 }
