@@ -340,7 +340,7 @@ void TransferErrorCallback(DMA2D_HandleTypeDef* hdma2d) {
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-uint8_t GUI_LL_Control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* result) {
+uint8_t gui_ll_control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* result) {
     switch (cmd) {
         case GUI_LL_Command_Init: {
             uint8_t i = 0;
@@ -369,7 +369,7 @@ uint8_t GUI_LL_Control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* 
                     {DTCMMemory1, sizeof(DTCMMemory1)},
                     {SDRAMMemory, sizeof(SDRAMMemory)},
                 };
-                GUI_MEM_AssignMemory(regions, GUI_COUNT_OF(regions));
+                gui_mem_assignmemory(regions, GUI_COUNT_OF(regions));
             } while (0);
             
             /*******************************/

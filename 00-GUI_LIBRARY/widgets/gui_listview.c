@@ -40,7 +40,7 @@
 #define __GL(x)             ((GUI_LISTVIEW_t *)(x))
 
 static
-uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+uint8_t gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -61,7 +61,7 @@ static const GUI_WIDGET_t Widget = {
     .Name = _GT("LISTVIEW"),                        /*!< Widget name */
     .Size = sizeof(GUI_LISTVIEW_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = GUI_LISTVIEW_Callback,              /*!< Callback function */
+    .Callback = gui_listview_callback,              /*!< Callback function */
     .Colors = Colors,                               /*!< List of default colors */
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Define number of colors */
 };
@@ -83,11 +83,11 @@ GUI_LISTVIEW_ROW_t* __GetRow(GUI_HANDLE_p h, uint16_t r) {
     }
     
     if (r == 0) {                                 /* Check for first element */
-        row = (GUI_LISTVIEW_ROW_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&o->Root, 0);  /* Get first element */
+        row = (GUI_LISTVIEW_ROW_t *)gui_linkedlist_getnext_gen__(&o->Root, 0);  /* Get first element */
     } else if (r == o->Count - 1) {
-        row = (GUI_LISTVIEW_ROW_t *)__GUI_LINKEDLIST_GETPREV_GEN(&o->Root, 0);  /* Get last element */
+        row = (GUI_LISTVIEW_ROW_t *)gui_linkedlist_getprev_gen__(&o->Root, 0);  /* Get last element */
     } else {
-        row = (GUI_LISTVIEW_ROW_t *)__GUI_LINKEDLIST_GETNEXT_BYINDEX_GEN(&o->Root, r);  /* Get row by index */
+        row = (GUI_LISTVIEW_ROW_t *)gui_linkedlist_getnext_byindex_gen__(&o->Root, r);  /* Get row by index */
     }
     return row;
 }
@@ -99,7 +99,7 @@ GUI_LISTVIEW_ITEM_t* __GetItemFromRow(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_t* row, u
         return NULL;
     }
     
-    return (GUI_LISTVIEW_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_BYINDEX_GEN(&row->Root, c);  /* Get item by index value = column number */
+    return (GUI_LISTVIEW_ITEM_t *)gui_linkedlist_getnext_byindex_gen__(&row->Root, c);  /* Get item by index value = column number */
 }
 
 /* Get item height in LISTVIEW */
@@ -203,7 +203,7 @@ void __CheckValues(GUI_HANDLE_p h) {
 }
 
 static
-uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+uint8_t gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
 #if GUI_USE_TOUCH
     static GUI_iDim_t tX, tY;
 #endif /* GUI_USE_TOUCH */
@@ -233,18 +233,18 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             __CheckValues(h);                       /* Check values if size changed */
             
             if (is3D) {
-                GUI_DRAW_Rectangle3D(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
-                GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_BG));
+                gui_draw_rectangle3d(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
+                gui_draw_filledrectangle(disp, x + 2, y + 2, width - 4, height - 4, gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_BG));
             } else {
-                GUI_DRAW_Rectangle(disp, x, y, width, height, gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_BORDER));
-                GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, width - 2, height - 2, gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_BG));
+                gui_draw_rectangle(disp, x, y, width, height, gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_BORDER));
+                gui_draw_filledrectangle(disp, x + 1, y + 1, width - 2, height - 2, gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_BG));
             }
 
             
             /* Draw side scrollbar */
             if (o->Flags & GUI_FLAG_LISTVIEW_SLIDER_ON) {
                 GUI_DRAW_SB_t sb;
-                GUI_DRAW_ScrollBar_init(&sb);
+                gui_draw_scrollbar_init(&sb);
                 
                 width -= o->SliderWidth;            /* Decrease available width */
                 
@@ -257,19 +257,19 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 sb.EntriesTotal = o->Count;
                 sb.EntriesVisible = __NumberOfEntriesPerPage(h);
                 
-                GUI_DRAW_ScrollBar(disp, &sb);      /* Draw scroll bar */
+                gui_draw_scrollbar(disp, &sb);      /* Draw scroll bar */
             } else {
                 width--;                            /* Go one pixel down for alignment */
             }
             
             itemHeight = __ItemHeight(h, 0);        /* Calculate item height */
-            GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 3, itemHeight, GUI_COLOR_WIN_LIGHTGRAY);
+            gui_draw_filledrectangle(disp, x + 2, y + 2, width - 3, itemHeight, GUI_COLOR_WIN_LIGHTGRAY);
             if (o->Cols && o->Cols[0]) {            /* Draw all columns to screen */
                 GUI_Dim_t xTmp = x + 2;                
                 GUI_DRAW_FONT_t f;
                 GUI_iDim_t tmpX2;
                 
-                GUI_DRAW_FONT_Init(&f);             /* Init structure */
+                gui_draw_font_init(&f);             /* Init structure */
                 
                 f.Height = itemHeight;
                 f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
@@ -284,15 +284,15 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 f.Y = y + 2;
                 for (i = 0; i < o->ColsCount; i++) {
                     if (is3D) {
-                        GUI_DRAW_Rectangle3D(disp, xTmp, f.Y, o->Cols[i]->Width, itemHeight, GUI_DRAW_3D_State_Raised);
+                        gui_draw_rectangle3d(disp, xTmp, f.Y, o->Cols[i]->Width, itemHeight, GUI_DRAW_3D_State_Raised);
                         f.Width = o->Cols[i]->Width - 4;    /* Set width */
                         f.X = xTmp + 2;             /* Set offset */
                     } else {
-                        GUI_DRAW_Rectangle(disp, xTmp, f.Y, o->Cols[i]->Width, itemHeight, GUI_COLOR_WIN_DARKGRAY);
+                        gui_draw_rectangle(disp, xTmp, f.Y, o->Cols[i]->Width, itemHeight, GUI_COLOR_WIN_DARKGRAY);
                         f.Width = o->Cols[i]->Width - 6;    /* Set width */
                         f.X = xTmp + 3;             /* Set offset */
                     }
-                    GUI_DRAW_WriteText(disp, gui_widget_getfont__(h), o->Cols[i]->Text, &f);
+                    gui_draw_writetext(disp, gui_widget_getfont__(h), o->Cols[i]->Text, &f);
                     xTmp += o->Cols[i]->Width;      /* Increase X value */
                 }
                 f.Y += itemHeight;                  /* Go to next line */
@@ -308,23 +308,23 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                     }
                     
                     /* Try to process all strings */
-                    for (index = 0, row = (GUI_LISTVIEW_ROW_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&o->Root, 0); row && f.Y <= disp->Y2; row = (GUI_LISTVIEW_ROW_t *)__GUI_LINKEDLIST_GETNEXT_GEN(0, (GUI_LinkedList_t *)row), index++) {
+                    for (index = 0, row = (GUI_LISTVIEW_ROW_t *)gui_linkedlist_getnext_gen__(&o->Root, 0); row && f.Y <= disp->Y2; row = (GUI_LISTVIEW_ROW_t *)gui_linkedlist_getnext_gen__(0, (GUI_LinkedList_t *)row), index++) {
                         if (index < o->VisibleStartIndex) { /* Check for start visible */
                             continue;
                         }               
                         if (index == __GL(h)->Selected) {
-                            GUI_DRAW_FilledRectangle(disp, x + 2, f.Y, width - 2, __GUI_MIN(f.Height, itemHeight), gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_SEL_FOC_BG) : gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_SEL_NOFOC_BG));
+                            gui_draw_filledrectangle(disp, x + 2, f.Y, width - 2, __GUI_MIN(f.Height, itemHeight), gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_SEL_FOC_BG) : gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_SEL_NOFOC_BG));
                             f.Color1 = gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_SEL_FOC) : gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_SEL_NOFOC);
                         } else {
                             f.Color1 = gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_TEXT);
                         }
                         xTmp = x + 2;
-                        for (i = 0, item = (GUI_LISTVIEW_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&row->Root, 0); item && i < o->ColsCount; item = (GUI_LISTVIEW_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(0, (GUI_LinkedList_t *)item), i++) {
+                        for (i = 0, item = (GUI_LISTVIEW_ITEM_t *)gui_linkedlist_getnext_gen__(&row->Root, 0); item && i < o->ColsCount; item = (GUI_LISTVIEW_ITEM_t *)gui_linkedlist_getnext_gen__(0, (GUI_LinkedList_t *)item), i++) {
                             if (item->Text) {       /* Draw if text set */
                                 f.Width = o->Cols[i]->Width - 6;    /* Set width */
                                 f.Color1Width = GUI.LCD.Width;  /* Use the same color for entire width */
                                 f.X = xTmp + 3;     /* Set offset */
-                                GUI_DRAW_WriteText(disp, gui_widget_getfont__(h), item->Text, &f);
+                                gui_draw_writetext(disp, gui_widget_getfont__(h), item->Text, &f);
                             }
                             xTmp += o->Cols[i]->Width;  /* Increase X value */
                         }
@@ -345,11 +345,11 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             /**
              * Remove all rows
              */
-            while ((row = (GUI_LISTVIEW_ROW_t *)__GUI_LINKEDLIST_REMOVE_GEN(&o->Root, (GUI_LinkedList_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&o->Root, 0))) != NULL) {
+            while ((row = (GUI_LISTVIEW_ROW_t *)gui_linkedlist_remove_gen__(&o->Root, (GUI_LinkedList_t *)gui_linkedlist_getnext_gen__(&o->Root, 0))) != NULL) {
                 /**
                  * Remove all items in row first
                  */
-                while ((item = (GUI_LISTVIEW_ITEM_t *)__GUI_LINKEDLIST_REMOVE_GEN(&row->Root, (GUI_LinkedList_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&row->Root, 0))) != NULL) {
+                while ((item = (GUI_LISTVIEW_ITEM_t *)gui_linkedlist_remove_gen__(&row->Root, (GUI_LinkedList_t *)gui_linkedlist_getnext_gen__(&row->Root, 0))) != NULL) {
                     __GUI_MEMFREE(item);
                 }
                 __GUI_MEMFREE(row);                 /* Remove actual row entry */
@@ -489,18 +489,18 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_LISTVIEW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p gui_listview_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
-uint8_t GUI_LISTVIEW_SetColor(GUI_HANDLE_p h, GUI_LISTVIEW_COLOR_t index, GUI_Color_t color) {
+uint8_t gui_listview_setcolor(GUI_HANDLE_p h, GUI_LISTVIEW_COLOR_t index, GUI_Color_t color) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     ret = gui_widget_setcolor__(h, (uint8_t)index, color);  /* Set color */
     return ret;
 }
 
-uint8_t GUI_LISTVIEW_AddColumn(GUI_HANDLE_p h, const GUI_Char* text, GUI_Dim_t width) {
+uint8_t gui_listview_addcolumn(GUI_HANDLE_p h, const GUI_Char* text, GUI_Dim_t width) {
     uint8_t ret = 0;
     GUI_LISTVIEW_COL_t* col;
     GUI_LISTVIEW_COL_t** cols;
@@ -526,7 +526,7 @@ uint8_t GUI_LISTVIEW_AddColumn(GUI_HANDLE_p h, const GUI_Char* text, GUI_Dim_t w
     return ret;
 }
 
-uint8_t GUI_LISTVIEW_SetColumnWidth(GUI_HANDLE_p h, uint16_t index, GUI_Dim_t width) {
+uint8_t gui_listview_setcolumnwidth(GUI_HANDLE_p h, uint16_t index, GUI_Dim_t width) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -542,7 +542,7 @@ uint8_t GUI_LISTVIEW_SetColumnWidth(GUI_HANDLE_p h, uint16_t index, GUI_Dim_t wi
     return ret;
 }
 
-GUI_LISTVIEW_ROW_p GUI_LISTVIEW_AddRow(GUI_HANDLE_p h) {
+GUI_LISTVIEW_ROW_p gui_listview_addrow(GUI_HANDLE_p h) {
     GUI_LISTVIEW_ROW_t* row;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);   /* Check input parameters */
@@ -550,7 +550,7 @@ GUI_LISTVIEW_ROW_p GUI_LISTVIEW_AddRow(GUI_HANDLE_p h) {
 
     row = __GUI_MEMALLOC(sizeof(*row));             /* Allocate memory for new row(s) */
     if (row) {
-        __GUI_LINKEDLIST_ADD_GEN(&__GL(h)->Root, (GUI_LinkedList_t *)row);  /* Add new row to linked list */
+        gui_linkedlist_add_gen__(&__GL(h)->Root, (GUI_LinkedList_t *)row);  /* Add new row to linked list */
         __GL(h)->Count++;                           /* Increase number of rows */
         __CheckValues(h);                           /* Check values situation */
     }
@@ -559,14 +559,14 @@ GUI_LISTVIEW_ROW_p GUI_LISTVIEW_AddRow(GUI_HANDLE_p h) {
     return (GUI_LISTVIEW_ROW_p)row;
 }
 
-uint8_t GUI_LISTVIEW_SetItemString(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row, uint16_t col, const GUI_Char* text) {
+uint8_t gui_listview_setitemstring(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row, uint16_t col, const GUI_Char* text) {
     uint8_t ret = 0;
     GUI_LISTVIEW_ITEM_t* item = 0;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget && row); /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
-    item = (GUI_LISTVIEW_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&__GLR(row)->Root, 0);   /* Get first in linked list */
+    item = (GUI_LISTVIEW_ITEM_t *)gui_linkedlist_getnext_gen__(&__GLR(row)->Root, 0);   /* Get first in linked list */
     col++;
     while (col--) {                                 /* Find proper column */
         if (!item) {
@@ -574,10 +574,10 @@ uint8_t GUI_LISTVIEW_SetItemString(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row, uint1
             if (!item) {
                 break;
             }
-            __GUI_LINKEDLIST_ADD_GEN(&__GLR(row)->Root, (GUI_LinkedList_t *)item);  /* Add element to linked list */
+            gui_linkedlist_add_gen__(&__GLR(row)->Root, (GUI_LinkedList_t *)item);  /* Add element to linked list */
         }
         if (col) {
-            item = (GUI_LISTVIEW_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(0, (GUI_LinkedList_t *)item);    /* Get next in linked list */
+            item = (GUI_LISTVIEW_ITEM_t *)gui_linkedlist_getnext_gen__(0, (GUI_LinkedList_t *)item);    /* Get next in linked list */
         }
     }
     if (item) {
@@ -589,7 +589,7 @@ uint8_t GUI_LISTVIEW_SetItemString(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row, uint1
     return ret;
 }
 
-uint8_t GUI_LISTVIEW_SetSliderAuto(GUI_HANDLE_p h, uint8_t autoMode) {
+uint8_t gui_listview_setsliderauto(GUI_HANDLE_p h, uint8_t autoMode) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -605,7 +605,7 @@ uint8_t GUI_LISTVIEW_SetSliderAuto(GUI_HANDLE_p h, uint8_t autoMode) {
     return 1;
 }
 
-uint8_t GUI_LISTVIEW_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible) {
+uint8_t gui_listview_setslidervisibility(GUI_HANDLE_p h, uint8_t visible) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -627,7 +627,7 @@ uint8_t GUI_LISTVIEW_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible) {
     return ret;
 }
 
-uint8_t GUI_LISTVIEW_Scroll(GUI_HANDLE_p h, int16_t step) {
+uint8_t gui_listview_scroll(GUI_HANDLE_p h, int16_t step) {
     volatile int16_t start;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -648,7 +648,7 @@ uint8_t GUI_LISTVIEW_Scroll(GUI_HANDLE_p h, int16_t step) {
     return (uint8_t)start;
 }
 
-uint8_t GUI_LISTVIEW_SetSelection(GUI_HANDLE_p h, int16_t selection) {
+uint8_t gui_listview_setselection(GUI_HANDLE_p h, int16_t selection) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -660,7 +660,7 @@ uint8_t GUI_LISTVIEW_SetSelection(GUI_HANDLE_p h, int16_t selection) {
     return 1;
 }
 
-int16_t GUI_LISTVIEW_GetSelection(GUI_HANDLE_p h) {
+int16_t gui_listview_getselection(GUI_HANDLE_p h) {
     int16_t selection;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -672,7 +672,7 @@ int16_t GUI_LISTVIEW_GetSelection(GUI_HANDLE_p h) {
     return selection;
 }
 
-uint8_t GUI_LISTVIEW_GetItemValue(GUI_HANDLE_p h, uint16_t rindex, uint16_t cindex, GUI_Char* dst, size_t length) {
+uint8_t gui_listview_getitemvalue(GUI_HANDLE_p h, uint16_t rindex, uint16_t cindex, GUI_Char* dst, size_t length) {
     int16_t ret = 0;
     GUI_LISTVIEW_ROW_t* row;
     
@@ -684,7 +684,7 @@ uint8_t GUI_LISTVIEW_GetItemValue(GUI_HANDLE_p h, uint16_t rindex, uint16_t cind
     if (row) {
         GUI_LISTVIEW_ITEM_t* item = __GetItemFromRow(h, row, cindex);   /* Get item from column */
         if (item) {                                 /* In case of valid index */
-            GUI_STRING_CopyN(dst, item->Text, length - 1);  /* Copy text to destination */
+            gui_string_copyn(dst, item->Text, length - 1);  /* Copy text to destination */
             ret = 1;
         }
     }

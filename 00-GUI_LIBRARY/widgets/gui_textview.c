@@ -43,7 +43,7 @@
 #define CFG_HALIGN          0x02
 
 static
-uint8_t GUI_TEXTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+uint8_t gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -59,7 +59,7 @@ static const GUI_WIDGET_t Widget = {
     .Name = _GT("TEXTVIEW"),                        /*!< Widget name */
     .Size = sizeof(GUI_TEXTVIEW_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = GUI_TEXTVIEW_Callback,              /*!< Callback function */
+    .Callback = gui_textview_callback,              /*!< Callback function */
     .Colors = Colors,
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Define number of colors */
 };
@@ -72,7 +72,7 @@ static const GUI_WIDGET_t Widget = {
 #define o                   ((GUI_TEXTVIEW_t *)(h))
 
 static
-uint8_t GUI_TEXTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+uint8_t gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
             GUI_WIDGET_Param_t* p = (GUI_WIDGET_Param_t *)param;
@@ -104,10 +104,10 @@ uint8_t GUI_TEXTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 /* Draw background if necessary */
                 bg = gui_widget_getcolor__(h, GUI_TEXTVIEW_COLOR_BG);
                 if (bg != GUI_COLOR_TRANS) {
-                    GUI_DRAW_FilledRectangle(disp, x, y, wi, hi, bg);
+                    gui_draw_filledrectangle(disp, x, y, wi, hi, bg);
                 }
                 
-                GUI_DRAW_FONT_Init(&f);             /* Init structure */
+                gui_draw_font_init(&f);             /* Init structure */
                 
                 f.X = x + 1;
                 f.Y = y + 1;
@@ -117,7 +117,7 @@ uint8_t GUI_TEXTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 f.Flags |= GUI_FLAG_FONT_MULTILINE; /* Enable multiline */
                 f.Color1Width = f.Width;
                 f.Color1 = gui_widget_getcolor__(h, GUI_TEXTVIEW_COLOR_TEXT);
-                GUI_DRAW_WriteText(disp, gui_widget_getfont__(h), gui_widget_gettext__(h), &f);
+                gui_draw_writetext(disp, gui_widget_getfont__(h), gui_widget_gettext__(h), &f);
             }
             return 1;
         }
@@ -150,11 +150,11 @@ uint8_t GUI_TEXTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_TEXTVIEW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p gui_textview_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
-uint8_t GUI_TEXTVIEW_SetColor(GUI_HANDLE_p h, GUI_TEXTVIEW_COLOR_t index, GUI_Color_t color) {
+uint8_t gui_textview_setcolor(GUI_HANDLE_p h, GUI_TEXTVIEW_COLOR_t index, GUI_Color_t color) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     ret = gui_widget_setcolor__(h, (uint8_t)index, color);  /* Set color */
@@ -169,12 +169,12 @@ uint8_t GUI_TEXTVIEW_SetColor(GUI_HANDLE_p h, GUI_TEXTVIEW_COLOR_t index, GUI_Co
     return ret;
 }
 
-uint8_t GUI_TEXTVIEW_SetVAlign(GUI_HANDLE_p h, GUI_TEXTVIEW_VALIGN_t align) {
+uint8_t gui_textview_setvalign(GUI_HANDLE_p h, GUI_TEXTVIEW_VALIGN_t align) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_VALIGN, &align, 1, 1);  /* Set parameter */
 }
 
-uint8_t GUI_TEXTVIEW_SetHAlign(GUI_HANDLE_p h, GUI_TEXTVIEW_HALIGN_t align) {
+uint8_t gui_textview_sethalign(GUI_HANDLE_p h, GUI_TEXTVIEW_HALIGN_t align) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_HALIGN, &align, 1, 1);  /* Set parameter */
 }

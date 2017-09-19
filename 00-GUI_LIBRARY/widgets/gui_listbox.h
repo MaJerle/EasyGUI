@@ -72,21 +72,21 @@ GUI_Char* listboxtexts[] = {
 size_t i;
     
 //Create left listbox
-handle = GUI_LISTBOX_Create(1, 10, 10, 190, 195, h, 0, 0);
+handle = gui_listbox_create(1, 10, 10, 190, 195, h, 0, 0);
 for (i = 0; i < COUNT_OF(listboxtexts); i++) {
-    GUI_LISTBOX_AddString(handle, listboxtexts[i]);
+    gui_listbox_addstring(handle, listboxtexts[i]);
 }
 //Force visible slider
-GUI_LISTBOX_SetSliderAuto(handle, 0);
-GUI_LISTBOX_SetSliderVisibility(handle, 1);
+gui_listbox_setsliderauto(handle, 0);
+gui_listbox_setslidervisibility(handle, 1);
 
 //Create right list box
-handle = GUI_LISTBOX_Create(1, 210, 10, 200, 195, h, 0, 0);
+handle = gui_listbox_create(1, 210, 10, 200, 195, h, 0, 0);
 for (i = 0; i < COUNT_OF(listboxtexts); i++) {
-    GUI_LISTBOX_AddString(handle, listboxtexts[i]);
+    gui_listbox_addstring(handle, listboxtexts[i]);
 }
-GUI_LISTBOX_SetSliderAuto(handle, 0);
-GUI_LISTBOX_SetSliderVisibility(handle, 0);
+gui_listbox_setsliderauto(handle, 0);
+gui_listbox_setslidervisibility(handle, 0);
 \endcode
  */
     
@@ -145,7 +145,7 @@ typedef struct GUI_LISTBOX_t {
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_LISTBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_listbox_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Set color to listbox
@@ -155,7 +155,7 @@ GUI_HANDLE_p GUI_LISTBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim
  * \retval          1: Color was set ok
  * \retval          0: Color was not set
  */
-uint8_t GUI_LISTBOX_SetColor(GUI_HANDLE_p h, GUI_LISTBOX_COLOR_t index, GUI_Color_t color);
+uint8_t gui_listbox_setcolor(GUI_HANDLE_p h, GUI_LISTBOX_COLOR_t index, GUI_Color_t color);
 
 /**
  * \brief           Add a new string to list box
@@ -164,25 +164,25 @@ uint8_t GUI_LISTBOX_SetColor(GUI_HANDLE_p h, GUI_LISTBOX_COLOR_t index, GUI_Colo
  * \retval          1: String added to the end
  * \retval          0: String not added
  */
-uint8_t GUI_LISTBOX_AddString(GUI_HANDLE_p h, const GUI_Char* text);
+uint8_t gui_listbox_addstring(GUI_HANDLE_p h, const GUI_Char* text);
 
 /**
  * \brief           Delete first string from list
  * \param[in,out]   h: Widget handle
  * \retval          1: String deleted
  * \retval          0: String not deleted
- * \sa              GUI_LISTBOX_DeleteString, GUI_LISTBOX_DeleteLastString
+ * \sa              gui_listbox_deletestring, gui_listbox_deletelaststring
  */
-uint8_t GUI_LISTBOX_DeleteFirstString(GUI_HANDLE_p h);
+uint8_t gui_listbox_deletefirststring(GUI_HANDLE_p h);
 
 /**
  * \brief           Delete last string from list
  * \param[in,out]   h: Widget handle
  * \retval          1: String deleted
  * \retval          0: String not deleted
- * \sa              GUI_LISTBOX_DeleteString, GUI_LISTBOX_DeleteFirstString
+ * \sa              gui_listbox_deletestring, gui_listbox_deletefirststring
  */
-uint8_t GUI_LISTBOX_DeleteLastString(GUI_HANDLE_p h);
+uint8_t gui_listbox_deletelaststring(GUI_HANDLE_p h);
 
 /**
  * \brief           Delete specific entry from list
@@ -190,9 +190,9 @@ uint8_t GUI_LISTBOX_DeleteLastString(GUI_HANDLE_p h);
  * \param[in]       index: List index (position) to delete
  * \retval          1: String deleted
  * \retval          0: String not deleted
- * \sa              GUI_LISTBOX_DeleteFirstString, GUI_LISTBOX_DeleteLastString
+ * \sa              gui_listbox_deletefirststring, gui_listbox_deletelaststring
  */
-uint8_t GUI_LISTBOX_DeleteString(GUI_HANDLE_p h, uint16_t index);
+uint8_t gui_listbox_deletestring(GUI_HANDLE_p h, uint16_t index);
 
 /**
  * \brief           Set string value to already added string index
@@ -202,7 +202,7 @@ uint8_t GUI_LISTBOX_DeleteString(GUI_HANDLE_p h, uint16_t index);
  * \retval          1: String changed
  * \retval          0: String not changed
  */
-uint8_t GUI_LISTBOX_SetString(GUI_HANDLE_p h, uint16_t index, const GUI_Char* text);
+uint8_t gui_listbox_setstring(GUI_HANDLE_p h, uint16_t index, const GUI_Char* text);
 
 /**
  * \brief           Set selected value
@@ -210,17 +210,17 @@ uint8_t GUI_LISTBOX_SetString(GUI_HANDLE_p h, uint16_t index, const GUI_Char* te
  * \param[in]       selection: Set to -1 to invalidate selection or 0 - count-1 for specific selection 
  * \retval          1: Selection changed
  * \retval          0: Selection not changed
- * \sa              GUI_LISTBOX_GetSelection
+ * \sa              gui_listbox_getselection
  */
-uint8_t GUI_LISTBOX_SetSelection(GUI_HANDLE_p h, int16_t selection);
+uint8_t gui_listbox_setselection(GUI_HANDLE_p h, int16_t selection);
 
 /**
  * \brief           Get selected value
  * \param[in,out]   h: Widget handle
  * \retval          Selection number or -1 if no selection
- * \sa              GUI_LISTBOX_SetSelection
+ * \sa              gui_listbox_setselection
  */
-int16_t GUI_LISTBOX_GetSelection(GUI_HANDLE_p h);
+int16_t gui_listbox_getselection(GUI_HANDLE_p h);
 
 /**
  * \brief           Set auto mode for slider
@@ -229,9 +229,9 @@ int16_t GUI_LISTBOX_GetSelection(GUI_HANDLE_p h);
  * \param[in]       autoMode: Auto mode status. Set to 1 for auto mode or 0 for manual mode
  * \retval          1: Set OK
  * \retval          0: Set ERROR
- * \sa              GUI_LISTBOX_SetSliderVisibility
+ * \sa              gui_listbox_setslidervisibility
  */
-uint8_t GUI_LISTBOX_SetSliderAuto(GUI_HANDLE_p h, uint8_t autoMode);
+uint8_t gui_listbox_setsliderauto(GUI_HANDLE_p h, uint8_t autoMode);
 
 /**
  * \brief           Set manual visibility for slider
@@ -240,9 +240,9 @@ uint8_t GUI_LISTBOX_SetSliderAuto(GUI_HANDLE_p h, uint8_t autoMode);
  * \param[in]       visible: Slider visible status, 1 or 0
  * \retval          1: Set to desired value
  * \retval          0: Not set to desired value
- * \sa              GUI_LISTBOX_SetSliderAuto
+ * \sa              gui_listbox_setsliderauto
  */
-uint8_t GUI_LISTBOX_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible);
+uint8_t gui_listbox_setslidervisibility(GUI_HANDLE_p h, uint8_t visible);
 
 /**
  * \brief           Scroll list if possible
@@ -251,7 +251,7 @@ uint8_t GUI_LISTBOX_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible);
  * \retval          1: Scroll successful
  * \retval          0: Scroll not successful
  */
-uint8_t GUI_LISTBOX_Scroll(GUI_HANDLE_p h, int16_t step);
+uint8_t gui_listbox_scroll(GUI_HANDLE_p h, int16_t step);
 
 /**
  * \}

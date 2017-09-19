@@ -87,7 +87,7 @@ typedef struct GUI_BUTTON_t {
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_button_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Set color to specific part of widget
@@ -97,7 +97,7 @@ GUI_HANDLE_p GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
  * \retval          1: Color was set ok
  * \retval          0: Color was not set
  */
-uint8_t GUI_BUTTON_SetColor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color);
+uint8_t gui_button_setcolor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color);
 
 /**
  * \brief           Set border radius size
@@ -106,7 +106,7 @@ uint8_t GUI_BUTTON_SetColor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_
  * \retval          1: Border radius was set ok
  * \retval          0: Border radius was not set
  */
-uint8_t GUI_BUTTON_SetBorderRadius(GUI_HANDLE_p h, GUI_Dim_t size);
+uint8_t gui_button_setborderradius(GUI_HANDLE_p h, GUI_Dim_t size);
     
 /**
  * \}

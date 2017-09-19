@@ -70,7 +70,7 @@ typedef struct GUI_DIALOG_t {
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_DIALOG_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_dialog_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Create new dialog base element without any "design" style and wait for dismiss status
@@ -87,7 +87,7 @@ GUI_HANDLE_p GUI_DIALOG_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
  * \retval          -1: Widget creation fail
  * \retval          int: Value passed to \ref GUI_DIALOG_Dismiss when dialog is dismissed
  */
-int GUI_DIALOG_CreateBlocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+int gui_dialog_createblocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Dismiss (close) dialog with status
@@ -96,7 +96,7 @@ int GUI_DIALOG_CreateBlocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
  * \retval          1: Dialog was dismissed ok
  * \retval          0: Dialog was not dismissed
  */
-uint8_t GUI_DIALOG_Dismiss(GUI_HANDLE_p h, int status);
+uint8_t gui_dialog_dismiss(GUI_HANDLE_p h, int status);
 
 /**
  * \}

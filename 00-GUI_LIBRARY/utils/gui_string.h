@@ -95,27 +95,27 @@ typedef enum GUI_STRING_UNICODE_Result_t {
  * \brief           Initialize unicode processing structure
  * \param[in]       *s: Pointer to \ref GUI_STRING_UNICODE_t to initialize to default values
  * \retval          None
- * \sa              GUI_STRING_UNICODE_Decode, GUI_STRING_UNICODE_Encode
+ * \sa              gui_string_unicode_decode, gui_string_unicode_encode
  */
-void GUI_STRING_UNICODE_Init(GUI_STRING_UNICODE_t* s);
+void gui_string_unicode_init(GUI_STRING_UNICODE_t* s);
 
 /**
  * \brief           Decodes single input byte of unicode formatted text
  * \param[in,out]   *s: Pointer to working \ref GUI_STRING_UNICODE_t structure for processing
  * \param[in]       c: Character to be used for decoding
  * \retval          Member of \ref GUI_STRING_UNICODE_Result_t indicating decoding status
- * \sa              GUI_STRING_UNICODE_Init, GUI_STRING_UNICODE_Encode
+ * \sa              gui_string_unicode_init, gui_string_unicode_encode
  */
-GUI_STRING_UNICODE_Result_t GUI_STRING_UNICODE_Decode(GUI_STRING_UNICODE_t* s, const GUI_Char c);
+GUI_STRING_UNICODE_Result_t gui_string_unicode_decode(GUI_STRING_UNICODE_t* s, const GUI_Char c);
 
 /**
  * \brief           Encodes input character to UNICODE sequence of 1-4 bytes
  * \param[in]       c: Character to encode to UNICODE sequence
  * \param[out]      *out: Pointer to 4-bytes long array to store UNICODE information to
  * \retval          Number of bytes required for character encoding
- * \sa              GUI_STRING_UNICODE_Init, GUI_STRING_UNICODE_Decode
+ * \sa              gui_string_unicode_init, gui_string_unicode_decode
  */
-uint8_t GUI_STRING_UNICODE_Encode(const uint32_t c, GUI_Char* out);
+uint8_t gui_string_unicode_encode(const uint32_t c, GUI_Char* out);
 
 /**
  * \}
@@ -143,29 +143,29 @@ typedef struct GUI_STRING_t {
  *
  * \param[in]       *src: Pointer to source string to get length
  * \retval          Number of visible characters in string
- * \sa              GUI_STRING_LengthTotal
+ * \sa              gui_string_lengthtotal
  */
-size_t GUI_STRING_Length(const GUI_Char* src);
+size_t gui_string_length(const GUI_Char* src);
 
 /**
  * \brief           Return total number of bytes required for string
  *      
- * \note            When \ref GUI_USE_UNICODE is set to 0, this function returns the same as \ref GUI_STRING_Length
+ * \note            When \ref GUI_USE_UNICODE is set to 0, this function returns the same as \ref gui_string_length
  *
  * \param[in]       *src: Pointer to source string to get length
  * \retval          Number of visible characters in string
- * \sa              GUI_STRING_Length
+ * \sa              gui_string_length
  */
-size_t GUI_STRING_LengthTotal(const GUI_Char* src);
+size_t gui_string_lengthtotal(const GUI_Char* src);
 
 /**
  * \brief           Copy string from source to destination no matter of \ref GUI_USE_UNICODE selection
  * \param[out]      *dst: Destination memory address
  * \param[in]       *src: Source memory address
  * \retval          Pointer to destination memory
- * \sa              GUI_STRING_CopyN
+ * \sa              gui_string_copyn
  */
-GUI_Char* GUI_STRING_Copy(GUI_Char* dst, const GUI_Char* src);
+GUI_Char* gui_string_copy(GUI_Char* dst, const GUI_Char* src);
 
 /**
  * \brief           Copy string from source to destination with selectable number of bytes
@@ -173,9 +173,9 @@ GUI_Char* GUI_STRING_Copy(GUI_Char* dst, const GUI_Char* src);
  * \param[in]       *src: Source memory address
  * \param[in]       len: Number of bytes to copy
  * \retval          Pointer to destination memory
- * \sa              GUI_STRING_Copy
+ * \sa              gui_string_copy
  */
-GUI_Char* GUI_STRING_CopyN(GUI_Char* dst, const GUI_Char* src, size_t len);
+GUI_Char* gui_string_copyn(GUI_Char* dst, const GUI_Char* src, size_t len);
 
 /**
  * \brief           Compare 2 strings
@@ -184,7 +184,7 @@ GUI_Char* GUI_STRING_CopyN(GUI_Char* dst, const GUI_Char* src, size_t len);
  * \retval          0: Strings are the same
  * \retval          !=0: Strings are not the same
  */
-int GUI_STRING_Compare(const GUI_Char* s1, const GUI_Char* s2);
+int gui_string_compare(const GUI_Char* s1, const GUI_Char* s2);
 
 /**
  * \brief           Check if character is printable
@@ -192,7 +192,7 @@ int GUI_STRING_Compare(const GUI_Char* s1, const GUI_Char* s2);
  * \retval          1: Character is printable
  * \retval          0: Character is not printable
  */
-uint8_t GUI_STRING_IsPrintable(uint32_t ch);
+uint8_t gui_string_isprintable(uint32_t ch);
 
 /**
  * \brief           Prepare string before it can be used with \ref GUI_STRING_GetCh or \ref GUI_STRING_GetChReverse functions
@@ -201,7 +201,7 @@ uint8_t GUI_STRING_IsPrintable(uint32_t ch);
  * \retval          1: String prepared and ready to use
  * \retval          0: String was tno prepared
  */
-uint8_t GUI_STRING_Prepare(GUI_STRING_t* s, const GUI_Char* str);
+uint8_t gui_string_prepare(GUI_STRING_t* s, const GUI_Char* str);
 
 /**
  * \brief           Get next decoded character from source string
@@ -214,8 +214,8 @@ uint8_t i;                                      //Number of bytes required for c
 
 //GUI_USE_UNICODE = 1: string length = 9;  Length total: 11
 //GUI_USE_UNICODE = 0: string length = 11; Length total: 11
-GUI_STRING_Prepare(&s, myStr);                  //Prepare string for reading
-while (GUI_STRING_GetCh(&s, &ch, &i)) {         //Go through entire string
+gui_string_prepare(&s, myStr);                  //Prepare string for reading
+while (gui_string_getch(&s, &ch, &i)) {         //Go through entire string
     printf("I: %d, ch %c (%d)\r\n", i, ch, ch); //Print character by character
 }
 \endcode
@@ -227,9 +227,9 @@ while (GUI_STRING_GetCh(&s, &ch, &i)) {         //Go through entire string
  * \param[out]      *len: Pointer to output memory where number of bytes for string will be saved
  * \retval          1: Character decoded OK
  * \retval          0: Error with character decode process or string has reach the end
- * \sa              GUI_STRING_GetChReverse
+ * \sa              gui_string_getchreverse
  */
-uint8_t GUI_STRING_GetCh(GUI_STRING_t* str, uint32_t* out, uint8_t* len);
+uint8_t gui_string_getch(GUI_STRING_t* str, uint32_t* out, uint8_t* len);
 
 /**
  * \brief           Get character by character from end of string up
@@ -246,9 +246,9 @@ uint8_t i;                                      //Number of bytes required for c
 
 //GUI_USE_UNICODE = 1: string length = 9;  Length total: 11
 //GUI_USE_UNICODE = 0: string length = 11; Length total: 11
-GUI_STRING_Prepare(&s, myStr);                  //Prepare string for reading
-GUI_STRING_GoToEnd(&ptr);                       //Go to last character of string
-while (GUI_STRING_GetChReverse(&s, &ch, &i)) {  //Go through entire string
+gui_string_prepare(&s, myStr);                  //Prepare string for reading
+gui_string_gotoend(&ptr);                       //Go to last character of string
+while (gui_string_getchreverse(&s, &ch, &i)) {  //Go through entire string
     printf("I: %d, ch %c (%d)\r\n", i, ch, ch); //Print character by character
 }
 \endcode
@@ -260,9 +260,9 @@ while (GUI_STRING_GetChReverse(&s, &ch, &i)) {  //Go through entire string
  * \param[out]      *len: Pointer to output memory where number of bytes for string will be saved
  * \retval          1: Character decoded OK
  * \retval          0: Error with character decode process or string has reach the start
- * \sa              GUI_STRING_GetCh, GUI_STRING_GoToEnd
+ * \sa              gui_string_getch, gui_string_gotoend
  */
-uint8_t GUI_STRING_GetChReverse(GUI_STRING_t* str, uint32_t* out, uint8_t* len);
+uint8_t gui_string_getchreverse(GUI_STRING_t* str, uint32_t* out, uint8_t* len);
 
 /**
  *
@@ -270,9 +270,9 @@ uint8_t GUI_STRING_GetChReverse(GUI_STRING_t* str, uint32_t* out, uint8_t* len);
  * \param[in,out]   **str: Pointer to pointer to source string to modify pointing location
  * \retval          1: Pointer set to last character
  * \retval          0: Pointer was not set to last character
- * \sa              GUI_STRING_GetChReverse
+ * \sa              gui_string_getchreverse
  */
-uint8_t GUI_STRING_GoToEnd(GUI_STRING_t* str);
+uint8_t gui_string_gotoend(GUI_STRING_t* str);
     
 /**
  * \}

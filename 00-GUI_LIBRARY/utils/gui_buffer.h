@@ -102,7 +102,7 @@ typedef struct _GUI_BUFFER_t {
  *            - 0: Buffer initialized OK
  *            - > 0: Buffer initialization error. Malloc has failed with allocation
  */
-uint8_t GUI_BUFFER_Init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr);
+uint8_t gui_buffer_init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr);
 
 /**
  * \brief  Free memory for buffer allocated using dynamic memory allocation
@@ -110,7 +110,7 @@ uint8_t GUI_BUFFER_Init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr);
  * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \retval None
  */
-void GUI_BUFFER_Free(GUI_BUFFER_t* Buffer);
+void gui_buffer_free(GUI_BUFFER_t* Buffer);
 
 /**
  * \brief  Writes data to buffer
@@ -119,7 +119,7 @@ void GUI_BUFFER_Free(GUI_BUFFER_t* Buffer);
  * \param  count: Number of elements of type unsigned char to write
  * \retval Number of elements written in buffer 
  */
-uint32_t GUI_BUFFER_Write(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count);
+uint32_t gui_buffer_write(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count);
 
 /**
  * \brief  Writes data to buffer to top of buffer in reversed order
@@ -129,7 +129,7 @@ uint32_t GUI_BUFFER_Write(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count
  * \param  count: Number of elements of type unsigned char to write
  * \retval Number of elements written in buffer on top in reverse order
  */
-uint32_t GUI_BUFFER_WriteToTop(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count);
+uint32_t gui_buffer_writetotop(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count);
 
 /**
  * \brief  Reads data from buffer
@@ -138,35 +138,35 @@ uint32_t GUI_BUFFER_WriteToTop(GUI_BUFFER_t* Buffer, const void* Data, uint32_t 
  * \param  count: Number of elements of type unsigned char to read
  * \retval Number of elements read from buffer 
  */
-uint32_t GUI_BUFFER_Read(GUI_BUFFER_t* Buffer, void* Data, uint32_t count);
+uint32_t gui_buffer_read(GUI_BUFFER_t* Buffer, void* Data, uint32_t count);
 
 /**
  * \brief  Gets number of free elements in buffer 
  * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \retval Number of free elements in buffer
  */
-uint32_t GUI_BUFFER_GetFree(GUI_BUFFER_t* Buffer);
+uint32_t gui_buffer_getfree(GUI_BUFFER_t* Buffer);
 
 /**
  * \brief  Gets number of elements in buffer 
  * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \retval Number of elements in buffer
  */
-uint32_t GUI_BUFFER_GetFull(GUI_BUFFER_t* Buffer);
+uint32_t gui_buffer_getfull(GUI_BUFFER_t* Buffer);
 
 /**
  * \brief  Gets number of elements in buffer in fast way
  * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \retval Number of elements in buffer
  */
-uint32_t GUI_BUFFER_GetFullFast(GUI_BUFFER_t* Buffer);
+uint32_t gui_buffer_getfullfast(GUI_BUFFER_t* Buffer);
 
 /**
  * \brief  Resets (clears) buffer pointers
  * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \retval None
  */
-void GUI_BUFFER_Reset(GUI_BUFFER_t* Buffer);
+void gui_buffer_reset(GUI_BUFFER_t* Buffer);
 
 /**
  * \brief  Checks if specific element value is stored in buffer
@@ -177,7 +177,7 @@ void GUI_BUFFER_Reset(GUI_BUFFER_t* Buffer);
  *            - >= 0: Element found, location in buffer is returned
  *                   Ex: If value 1 is returned, it means 1 read from buffer and your element will be returned
  */
-int32_t GUI_BUFFER_FindElement(GUI_BUFFER_t* Buffer, uint8_t Element);
+int32_t gui_buffer_findelement(GUI_BUFFER_t* Buffer, uint8_t Element);
 
 /**
  * \brief  Checks if specific data sequence are stored in buffer
@@ -188,7 +188,7 @@ int32_t GUI_BUFFER_FindElement(GUI_BUFFER_t* Buffer, uint8_t Element);
  *            -  < 0: Sequence was not found
  *            - >= 0: Sequence found, start sequence location in buffer is returned
  */
-int32_t GUI_BUFFER_Find(GUI_BUFFER_t* Buffer, const void* Data, uint32_t Size);
+int32_t gui_buffer_find(GUI_BUFFER_t* Buffer, const void* Data, uint32_t Size);
 
 /**
  * \brief  Sets string delimiter character when reading from buffer as string
@@ -196,7 +196,7 @@ int32_t GUI_BUFFER_Find(GUI_BUFFER_t* Buffer, const void* Data, uint32_t Size);
  * \param  StrDel: Character as string delimiter
  * \retval None
  */
-#define GUI_BUFFER_SetStringDelimiter(Buffer, StrDel)  ((Buffer)->StringDelimiter = (StrDel))
+#define gui_buffer_setstringdelimiter(Buffer, StrDel)  ((Buffer)->StringDelimiter = (StrDel))
 
 /**
  * \brief  Writes string formatted data to buffer
@@ -204,7 +204,7 @@ int32_t GUI_BUFFER_Find(GUI_BUFFER_t* Buffer, const void* Data, uint32_t Size);
  * \param  *buff: Pointer to string to write 
  * \retval Number of characters written
  */
-uint32_t GUI_BUFFER_WriteString(GUI_BUFFER_t* Buffer, const char* buff);
+uint32_t gui_buffer_writestring(GUI_BUFFER_t* Buffer, const char* buff);
 
 /**
  * \brief  Reads from buffer as string
@@ -213,7 +213,7 @@ uint32_t GUI_BUFFER_WriteString(GUI_BUFFER_t* Buffer, const char* buff);
  * \param  buffsize: Buffer size in units of bytes
  * \retval Number of characters in string
  */
-uint32_t GUI_BUFFER_ReadString(GUI_BUFFER_t* Buffer, char* buff, uint32_t buffsize);
+uint32_t gui_buffer_readstring(GUI_BUFFER_t* Buffer, char* buff, uint32_t buffsize);
 
 /**
  * \brief  Checks if character exists in location in buffer
@@ -224,7 +224,7 @@ uint32_t GUI_BUFFER_ReadString(GUI_BUFFER_t* Buffer, char* buff, uint32_t buffsi
  *            - 0: Buffer is not so long as position desired
  *            - > 0: Position to check was inside buffer data size
  */
-int8_t GUI_BUFFER_CheckElement(GUI_BUFFER_t* Buffer, uint32_t pos, uint8_t* element);
+int8_t gui_buffer_checkelement(GUI_BUFFER_t* Buffer, uint32_t pos, uint8_t* element);
 
 /**
  * \}

@@ -128,24 +128,24 @@ uint8_t progbar_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result
  * \brief           
  */
 bulk_init_t frontedWidgets[] = {
-    {ID_BTN_WIN_BTN,        _GT("Buttons"),         GUI_BUTTON_Create,      button_callback,    {ID_WIN_BTN, _GT("Buttons")}},
-    {ID_BTN_WIN_EDIT,       _GT("Edit text"),       GUI_BUTTON_Create,      button_callback,    {ID_WIN_EDIT, _GT("Edit text")}},
-    {ID_BTN_WIN_RADIO,      _GT("Radio box"),       GUI_BUTTON_Create,      button_callback,    {ID_WIN_RADIO, _GT("Radio box")}},
-    {ID_BTN_WIN_CHECKBOX,   _GT("Check box"),       GUI_BUTTON_Create,      button_callback,    {ID_WIN_CHECKBOX, _GT("Check box")}},
-    {ID_BTN_WIN_PROGBAR,    _GT("Progress bar"),    GUI_BUTTON_Create,      button_callback,    {ID_WIN_PROGBAR, _GT("Progress bar")}},
-    {ID_BTN_WIN_GRAPH,      _GT("Graph"),           GUI_BUTTON_Create,      button_callback,    {ID_WIN_GRAPH, _GT("Graph")}},
-    {ID_BTN_WIN_LISTBOX,    _GT("List box"),        GUI_BUTTON_Create,      button_callback,    {ID_WIN_LISTBOX, _GT("List box")}},
-    {ID_BTN_WIN_LED,        _GT("Led"),             GUI_BUTTON_Create,      button_callback,    {ID_WIN_LED, _GT("Led")}},
-    {ID_BTN_WIN_TEXTVIEW,   _GT("Text view"),       GUI_BUTTON_Create,      button_callback,    {ID_WIN_TEXTVIEW, _GT("Text view")}},
-    {ID_BTN_WIN_DROPDOWN,   _GT("Dropdown"),        GUI_BUTTON_Create,      button_callback,    {ID_WIN_DROPDOWN, _GT("Dropdown")}},
-    {ID_BTN_WIN_DIALOG,     _GT("Dialog"),          GUI_BUTTON_Create,      button_callback,    {ID_WIN_DIALOG, _GT("Dialog")}},
-    {ID_BTN_WIN_LISTVIEW,   _GT("Listview"),        GUI_BUTTON_Create,      button_callback,    {ID_WIN_LISTVIEW, _GT("Listview")}},
-    {ID_BTN_WIN_IMAGE,      _GT("Image"),           GUI_BUTTON_Create,      button_callback,    {ID_WIN_IMAGE, _GT("Image")}},
-    {ID_BTN_WIN_SLIDER,     _GT("Slider"),          GUI_BUTTON_Create,      button_callback,    {ID_WIN_SLIDER, _GT("Slider")}},
-    {ID_BTN_WIN_ZINDEX,     _GT("z-index"),         GUI_BUTTON_Create,      button_callback,    {ID_WIN_ZINDEX, _GT("z-index test page")}},
-    {ID_BTN_WIN_TRANSP,     _GT("Transparency"),    GUI_BUTTON_Create,      button_callback,    {ID_WIN_TRANSP, _GT("Transparency presentation")}},
-    {ID_BTN_WIN_WINDOW,     _GT("Window"),          GUI_BUTTON_Create,      button_callback,    {ID_WIN_WINDOW, _GT("Window")}},
-    {ID_PROGBAR_CPUUSAGE,   _GT("CPU Usage"),       GUI_PROGBAR_Create,     progbar_callback,   {0}},
+    {ID_BTN_WIN_BTN,        _GT("Buttons"),         gui_button_create,      button_callback,    {ID_WIN_BTN, _GT("Buttons")}},
+    {ID_BTN_WIN_EDIT,       _GT("Edit text"),       gui_button_create,      button_callback,    {ID_WIN_EDIT, _GT("Edit text")}},
+    {ID_BTN_WIN_RADIO,      _GT("Radio box"),       gui_button_create,      button_callback,    {ID_WIN_RADIO, _GT("Radio box")}},
+    {ID_BTN_WIN_CHECKBOX,   _GT("Check box"),       gui_button_create,      button_callback,    {ID_WIN_CHECKBOX, _GT("Check box")}},
+    {ID_BTN_WIN_PROGBAR,    _GT("Progress bar"),    gui_button_create,      button_callback,    {ID_WIN_PROGBAR, _GT("Progress bar")}},
+    {ID_BTN_WIN_GRAPH,      _GT("Graph"),           gui_button_create,      button_callback,    {ID_WIN_GRAPH, _GT("Graph")}},
+    {ID_BTN_WIN_LISTBOX,    _GT("List box"),        gui_button_create,      button_callback,    {ID_WIN_LISTBOX, _GT("List box")}},
+    {ID_BTN_WIN_LED,        _GT("Led"),             gui_button_create,      button_callback,    {ID_WIN_LED, _GT("Led")}},
+    {ID_BTN_WIN_TEXTVIEW,   _GT("Text view"),       gui_button_create,      button_callback,    {ID_WIN_TEXTVIEW, _GT("Text view")}},
+    {ID_BTN_WIN_DROPDOWN,   _GT("Dropdown"),        gui_button_create,      button_callback,    {ID_WIN_DROPDOWN, _GT("Dropdown")}},
+    {ID_BTN_WIN_DIALOG,     _GT("Dialog"),          gui_button_create,      button_callback,    {ID_WIN_DIALOG, _GT("Dialog")}},
+    {ID_BTN_WIN_LISTVIEW,   _GT("Listview"),        gui_button_create,      button_callback,    {ID_WIN_LISTVIEW, _GT("Listview")}},
+    {ID_BTN_WIN_IMAGE,      _GT("Image"),           gui_button_create,      button_callback,    {ID_WIN_IMAGE, _GT("Image")}},
+    {ID_BTN_WIN_SLIDER,     _GT("Slider"),          gui_button_create,      button_callback,    {ID_WIN_SLIDER, _GT("Slider")}},
+    {ID_BTN_WIN_ZINDEX,     _GT("z-index"),         gui_button_create,      button_callback,    {ID_WIN_ZINDEX, _GT("z-index test page")}},
+    {ID_BTN_WIN_TRANSP,     _GT("Transparency"),    gui_button_create,      button_callback,    {ID_WIN_TRANSP, _GT("Transparency presentation")}},
+    {ID_BTN_WIN_WINDOW,     _GT("Window"),          gui_button_create,      button_callback,    {ID_WIN_WINDOW, _GT("Window")}},
+    {ID_PROGBAR_CPUUSAGE,   _GT("CPU Usage"),       gui_progbar_create,     progbar_callback,   {0}},
 };
 
 #define PI      3.14159265359f
@@ -232,29 +232,29 @@ user_thread(void const * arg) {
     GUI_KeyboardData_t key;
     uint32_t state;
     
-    GUI_Init();                                 /* Initialize GUI as RTOS */
+    gui_init();                                 /* Initialize GUI as RTOS */
     
-    GUI_WIDGET_SetFontDefault(&GUI_Font_Arial_Narrow_Italic_21_AA); /* Set default font for widgets */
-    //GUI_WIDGET_SetFontDefault(&GUI_Font_Comic_Sans_MS_Regular_22); /* Set default font for widgets */
-    //GUI_WIDGET_SetFontDefault(&GUI_Font_Roboto_Italic_14); /* Set default font for widgets */
+    gui_widget_setfontdefault(&GUI_Font_Arial_Narrow_Italic_21_AA); /* Set default font for widgets */
+    //gui_widget_setfontdefault(&GUI_Font_Comic_Sans_MS_Regular_22); /* Set default font for widgets */
+    //gui_widget_setfontdefault(&GUI_Font_Roboto_Italic_14); /* Set default font for widgets */
     
     /* Create all widgets on screen */
-    win1 = GUI_WINDOW_GetDesktop();             /* Get desktop window */
+    win1 = gui_window_getdesktop();             /* Get desktop window */
     for (state = 0; state < GUI_COUNT_OF(frontedWidgets); state++) {
         handle = frontedWidgets[state].createFunc(frontedWidgets[state].id,
-            2 + (state % LCD_COLUMNS) * ((GUI_LCD_GetWidth() / LCD_COLUMNS)),
+            2 + (state % LCD_COLUMNS) * ((gui_lcd_getwidth() / LCD_COLUMNS)),
             2 + (state / LCD_COLUMNS) * 40,
-            ((GUI_LCD_GetWidth() / LCD_COLUMNS) - 4),
+            ((gui_lcd_getwidth() / LCD_COLUMNS) - 4),
             36, 
             win1, 
             frontedWidgets[state].cbFunc, 0
         );
-        GUI_WIDGET_SetText(handle, frontedWidgets[state].text);
-        GUI_WIDGET_SetUserData(handle, &frontedWidgets[state].data);
-        GUI_WIDGET_Set3DStyle(handle, 0);
+        gui_widget_settext(handle, frontedWidgets[state].text);
+        gui_widget_setuserdata(handle, &frontedWidgets[state].data);
+        gui_widget_set3dstyle(handle, 0);
     }
     
-    //GUI_KEYBOARD_Create();                      /* Create virtual keyboard */
+    //gui_keyboard_create();                      /* Create virtual keyboard */
     
     touch_thread_id = osThreadCreate(osThread(touch_thread), NULL); /* Create touch thread */
     fat_thread_id = osThreadCreate(osThread(fat_thread), NULL); /* Create FAT thread */
@@ -266,7 +266,7 @@ user_thread(void const * arg) {
          * On pressed button, open dialog in blocking and wait for user press to continue
          */
         if (pressed) {
-            pressed = GUI_DIALOG_CreateBlocking(ID_WIN_DIALOG, 50, 10, 300, 150, GUI_CONTAINER_Create, dialog_callback, 0);
+            pressed = gui_dialog_createblocking(ID_WIN_DIALOG, 50, 10, 300, 150, gui_container_create, dialog_callback, 0);
             if (pressed == 1) {
                 __GUI_DEBUG("Confirmed\r\n");
                 TM_DISCO_LedToggle(LED_GREEN);
@@ -278,7 +278,7 @@ user_thread(void const * arg) {
         
         while (!TM_USART_BufferEmpty(DISCO_USART)) {
             GUI_Char ch = TM_USART_Getc(DISCO_USART);
-            switch (GUI_STRING_UNICODE_Decode(&s, ch)) {
+            switch (gui_string_unicode_decode(&s, ch)) {
                 case UNICODE_OK:
                     if (ch == 'l') {
                         gui_linkedlist_printlist__();
@@ -300,9 +300,9 @@ user_thread(void const * arg) {
                         ch = GUI_KEY_LF;
                     }
                     key.Keys[s.t - 1] = ch;
-                    GUI_INPUT_KeyAdd(&key);
+                    gui_input_keyadd(&key);
                     key.Keys[0] = 0;
-                    GUI_INPUT_KeyAdd(&key);
+                    gui_input_keyadd(&key);
                     break;
                 case UNICODE_PROGRESS:
                     key.Keys[s.t - s.r - 1] = ch;
@@ -323,7 +323,7 @@ static void
 fat_thread(void const * arg) {
     while (1) {
         osDelay(100);
-        GUI_PROGBAR_SetValue(GUI_WIDGET_GetById(ID_PROGBAR_CPUUSAGE), osGetCPUUsage());
+        gui_progbar_setvalue(gui_widget_getbyid(ID_PROGBAR_CPUUSAGE), osGetCPUUsage());
     }
 //    osThreadTerminate(NULL);
 //    if ((fres = f_mount(&fs, "SD:", 1)) == FR_OK) {
@@ -375,125 +375,125 @@ touch_thread(void const * arg) {
 }
 
 uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
-    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    uint8_t ret = gui_widget_processdefaultcallback(h, cmd, param, result);
     if (cmd == GUI_WC_Init) {           /* Window has been just initialized */
-        switch (GUI_WIDGET_GetId(h)) {  /* Button callbacks */
+        switch (gui_widget_getid(h)) {  /* Button callbacks */
             case ID_WIN_BTN: {
-                handle = GUI_BUTTON_Create(0, 0, 0, 100, 40, h, button_callback, 0);
-                GUI_WIDGET_SetText(handle, _GT("Button 1"));
-                GUI_WIDGET_SetPositionPercent(handle, 0, 0);
-                GUI_WIDGET_SetSizePercent(handle, 50, 50);
+                handle = gui_button_create(0, 0, 0, 100, 40, h, button_callback, 0);
+                gui_widget_settext(handle, _GT("Button 1"));
+                gui_widget_setpositionpercent(handle, 0, 0);
+                gui_widget_setsizepercent(handle, 50, 50);
                 
-                handle = GUI_BUTTON_Create(0, 10, 60, 100, 40, h, button_callback, 0);
-                GUI_WIDGET_SetText(handle, _GT("Button 2"));
-                GUI_WIDGET_SetPositionPercent(handle, 50, 0);
-                GUI_WIDGET_SetSizePercent(handle, 50, 50);
+                handle = gui_button_create(0, 10, 60, 100, 40, h, button_callback, 0);
+                gui_widget_settext(handle, _GT("Button 2"));
+                gui_widget_setpositionpercent(handle, 50, 0);
+                gui_widget_setsizepercent(handle, 50, 50);
                 
-                handle = GUI_BUTTON_Create(0, 0, 0, 100, 40, h, button_callback, 0);
-                GUI_WIDGET_SetText(handle, _GT("Button 3"));
-                GUI_WIDGET_SetPositionPercent(handle, 0, 50);
-                GUI_WIDGET_SetSizePercent(handle, 50, 50);
+                handle = gui_button_create(0, 0, 0, 100, 40, h, button_callback, 0);
+                gui_widget_settext(handle, _GT("Button 3"));
+                gui_widget_setpositionpercent(handle, 0, 50);
+                gui_widget_setsizepercent(handle, 50, 50);
                 
-                handle = GUI_BUTTON_Create(0, 10, 60, 100, 30, h, button_callback, 0);
-                GUI_WIDGET_SetText(handle, _GT("Button 4"));
-                GUI_WIDGET_SetPositionPercent(handle, 50, 50);
-                GUI_WIDGET_SetSizePercent(handle, 50, 50);
+                handle = gui_button_create(0, 10, 60, 100, 30, h, button_callback, 0);
+                gui_widget_settext(handle, _GT("Button 4"));
+                gui_widget_setpositionpercent(handle, 50, 50);
+                gui_widget_setsizepercent(handle, 50, 50);
                 break;
             }
             case ID_WIN_CHECKBOX: {     /* Check box */
-                handle = GUI_CHECKBOX_Create(ID_CHECKBOX_LED, 10, 10, 400, 40, h, checkbox_callback, 0);
-                GUI_WIDGET_SetText(handle, _GT("Check box default"));
-                handle = GUI_CHECKBOX_Create(1, 10, 50, 400, 40, h, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Check box checked"));
-                GUI_CHECKBOX_SetChecked(handle, 1);
-                handle = GUI_CHECKBOX_Create(ID_CHECKBOX_LED, 10, 90, 400, 40, h, checkbox_callback, 0);
-                GUI_WIDGET_SetText(handle, _GT("Check box disabled"));
-                GUI_CHECKBOX_SetDisabled(handle, 1);
-                handle = GUI_CHECKBOX_Create(1, 10, 130, 400, 40, h, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Check box checked disabled"));
-                GUI_CHECKBOX_SetChecked(handle, 1);
-                GUI_CHECKBOX_SetDisabled(handle, 1);
+                handle = gui_checkbox_create(ID_CHECKBOX_LED, 10, 10, 400, 40, h, checkbox_callback, 0);
+                gui_widget_settext(handle, _GT("Check box default"));
+                handle = gui_checkbox_create(1, 10, 50, 400, 40, h, 0, 0);
+                gui_widget_settext(handle, _GT("Check box checked"));
+                gui_checkbox_setchecked(handle, 1);
+                handle = gui_checkbox_create(ID_CHECKBOX_LED, 10, 90, 400, 40, h, checkbox_callback, 0);
+                gui_widget_settext(handle, _GT("Check box disabled"));
+                gui_checkbox_setdisabled(handle, 1);
+                handle = gui_checkbox_create(1, 10, 130, 400, 40, h, 0, 0);
+                gui_widget_settext(handle, _GT("Check box checked disabled"));
+                gui_checkbox_setchecked(handle, 1);
+                gui_checkbox_setdisabled(handle, 1);
                 break;
             }
             case ID_WIN_RADIO: {        /* Radio box */
                 uint8_t i;
                 for (i = 0; i < 4; i++) {
-                    handle = GUI_RADIO_Create(10, 10, 10 + (i * 30), 300, 25, h, 0, 0);
+                    handle = gui_radio_create(10, 10, 10 + (i * 30), 300, 25, h, 0, 0);
                     switch (i) {
-                        case 0: GUI_WIDGET_SetText(handle, _GT("Radio box default")); break;
-                        case 1: GUI_WIDGET_SetText(handle, _GT("Radio box selected")); break;
-                        case 2: GUI_WIDGET_SetText(handle, _GT("Radio box disabled")); break;
-                        case 3: GUI_WIDGET_SetText(handle, _GT("Radio box disabled checked")); break;
+                        case 0: gui_widget_settext(handle, _GT("Radio box default")); break;
+                        case 1: gui_widget_settext(handle, _GT("Radio box selected")); break;
+                        case 2: gui_widget_settext(handle, _GT("Radio box disabled")); break;
+                        case 3: gui_widget_settext(handle, _GT("Radio box disabled checked")); break;
                         default: break;
                     }
-                    GUI_RADIO_SetGroup(handle, i < 2 ? 1 : 2);
-                    GUI_RADIO_SetValue(handle, i);
+                    gui_radio_setgroup(handle, i < 2 ? 1 : 2);
+                    gui_radio_setvalue(handle, i);
                     if (i % 2) {
-                        GUI_RADIO_SetSelected(handle);
+                        gui_radio_setselected(handle);
                     }
-                    GUI_RADIO_SetDisabled(handle, i / 2);
+                    gui_radio_setdisabled(handle, i / 2);
                 }
                 break;
             }
             case ID_WIN_LISTBOX: {      /* List box */
                 uint8_t i;
-                handle = GUI_LISTBOX_Create(1, 10, 10, 190, 195, h, 0, 0);
+                handle = gui_listbox_create(1, 10, 10, 190, 195, h, 0, 0);
                 for (i = 0; i < COUNT_OF(listboxtexts); i++) {
-                    GUI_LISTBOX_AddString(handle, listboxtexts[i]);
+                    gui_listbox_addstring(handle, listboxtexts[i]);
                 }
-                GUI_LISTBOX_SetSliderAuto(handle, 0);
-                GUI_LISTBOX_SetSliderVisibility(handle, 1);
+                gui_listbox_setsliderauto(handle, 0);
+                gui_listbox_setslidervisibility(handle, 1);
                 
-                handle = GUI_LISTBOX_Create(1, 210, 10, 200, 195, h, 0, 0);
+                handle = gui_listbox_create(1, 210, 10, 200, 195, h, 0, 0);
                 for (i = 0; i < COUNT_OF(listboxtexts); i++) {
-                    GUI_LISTBOX_AddString(handle, listboxtexts[i]);
+                    gui_listbox_addstring(handle, listboxtexts[i]);
                 }
-                GUI_LISTBOX_SetSliderAuto(handle, 0);
-                GUI_LISTBOX_SetSliderVisibility(handle, 0);
+                gui_listbox_setsliderauto(handle, 0);
+                gui_listbox_setslidervisibility(handle, 0);
                 break;
             }
             case ID_WIN_LISTVIEW: {     /* Listview */
                 size_t len;
                 GUI_LISTVIEW_ROW_p row;
-                handle = GUI_LISTVIEW_Create(0, 10, 10, 100, 40, h, listview_callback, 0);
-                GUI_WIDGET_SetExpanded(handle, 1);
-                GUI_WIDGET_SetFont(handle, &GUI_Font_Roboto_Italic_14);
+                handle = gui_listview_create(0, 10, 10, 100, 40, h, listview_callback, 0);
+                gui_widget_setexpanded(handle, 1);
+                gui_widget_setfont(handle, &GUI_Font_Roboto_Italic_14);
                 
-                GUI_LISTVIEW_AddColumn(handle, _GT("Name"), 120);
-                GUI_LISTVIEW_AddColumn(handle, _GT("LastName"), 150);
-                GUI_LISTVIEW_AddColumn(handle, _GT("Email"), 220);
-                GUI_LISTVIEW_AddColumn(handle, _GT("Phone"), 160);
+                gui_listview_addcolumn(handle, _GT("Name"), 120);
+                gui_listview_addcolumn(handle, _GT("LastName"), 150);
+                gui_listview_addcolumn(handle, _GT("Email"), 220);
+                gui_listview_addcolumn(handle, _GT("Phone"), 160);
                 
                 for (len = 0; len < 10; len++) {
-                    row = GUI_LISTVIEW_AddRow(handle);
-                    GUI_LISTVIEW_SetItemString(handle, row, 0, _GT("Name 1"));
-                    GUI_LISTVIEW_SetItemString(handle, row, 1, _GT("Last name 2"));
-                    GUI_LISTVIEW_SetItemString(handle, row, 2, _GT("info@example.com"));
-                    GUI_LISTVIEW_SetItemString(handle, row, 3, _GT("0123456789"));
+                    row = gui_listview_addrow(handle);
+                    gui_listview_setitemstring(handle, row, 0, _GT("Name 1"));
+                    gui_listview_setitemstring(handle, row, 1, _GT("Last name 2"));
+                    gui_listview_setitemstring(handle, row, 2, _GT("info@example.com"));
+                    gui_listview_setitemstring(handle, row, 3, _GT("0123456789"));
                 }
                 
                 break;
             }
             case ID_WIN_GRAPH: {        /* Graph window */
                 uint16_t i;
-                handle = GUI_GRAPH_Create(ID_GRAPH_MAIN, 10, 10, 400, 220, h, 0, 0);
-                GUI_WIDGET_SetExpanded(handle, 1);
+                handle = gui_graph_create(ID_GRAPH_MAIN, 10, 10, 400, 220, h, 0, 0);
+                gui_widget_setexpanded(handle, 1);
 
-                GUI_GRAPH_SetMinX(handle, -100);
-                GUI_GRAPH_SetMaxX(handle, 100);
-                GUI_GRAPH_SetMinY(handle, -100);
-                GUI_GRAPH_SetMaxY(handle, 100);
-                GUI_WIDGET_Invalidate(handle);
-                GUI_GRAPH_ZoomReset(handle);
-                GUI_GRAPH_Zoom(handle, 0.1, 0.5, 0.5);
+                gui_graph_setminx(handle, -100);
+                gui_graph_setmaxx(handle, 100);
+                gui_graph_setminy(handle, -100);
+                gui_graph_setmaxy(handle, 100);
+                gui_widget_invalidate(handle);
+                gui_graph_zoomreset(handle);
+                gui_graph_zoom(handle, 0.1, 0.5, 0.5);
 
                 //Create data objects
                 if (!graphdata1) {
-                    graphdata1 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_XY, len);
+                    graphdata1 = gui_graph_data_create(GUI_GRAPH_TYPE_XY, len);
                     graphdata1->Color = GUI_COLOR_RED;
                 }
                 if (!graphdata2) {
-                    graphdata2 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_YT, len / 2);
+                    graphdata2 = gui_graph_data_create(GUI_GRAPH_TYPE_YT, len / 2);
                     graphdata2->Color = GUI_COLOR_GREEN;
                 }
 
@@ -501,75 +501,75 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 for (i = 0; i <= 360; i += 360 / len) {
                     x = cos((float)i * (PI / 180.0f));
                     y = sin((float)i * (PI / 180.0f));
-                    GUI_GRAPH_DATA_AddValue(graphdata1, x * radius, y * radius);
-                    GUI_GRAPH_DATA_AddValue(graphdata2, x * radius / 3, y * radius / 4);
+                    gui_graph_data_addvalue(graphdata1, x * radius, y * radius);
+                    gui_graph_data_addvalue(graphdata2, x * radius / 3, y * radius / 4);
                 }
-                GUI_GRAPH_AttachData(handle, graphdata1);
-                GUI_GRAPH_AttachData(handle, graphdata2);
+                gui_graph_attachdata(handle, graphdata1);
+                gui_graph_attachdata(handle, graphdata2);
                 
                 /* Create checkbox handle for graph */
-                handle = GUI_CHECKBOX_Create(ID_CHECKBOX_GRAPH, 17, 15, 200, 30, h, checkbox_callback, 0);
-                GUI_WIDGET_SetText(handle, _GT("SetExpanded"));
-                GUI_WIDGET_SetZIndex(handle, 1);
-                GUI_CHECKBOX_SetColor(handle, GUI_CHECKBOX_COLOR_TEXT, GUI_COLOR_WHITE);
-                GUI_CHECKBOX_SetChecked(handle, GUI_WIDGET_IsExpanded(GUI_WIDGET_GetById(ID_GRAPH_MAIN)));
+                handle = gui_checkbox_create(ID_CHECKBOX_GRAPH, 17, 15, 200, 30, h, checkbox_callback, 0);
+                gui_widget_settext(handle, _GT("SetExpanded"));
+                gui_widget_setzindex(handle, 1);
+                gui_checkbox_setcolor(handle, GUI_CHECKBOX_COLOR_TEXT, GUI_COLOR_WHITE);
+                gui_checkbox_setchecked(handle, gui_widget_isexpanded(gui_widget_getbyid(ID_GRAPH_MAIN)));
                 break;
             }
             case ID_WIN_EDIT: {         /* Edit text */
-                handle = GUI_EDITTEXT_Create(1, 10, 10, 400, 40, h, 0, 0);
-                GUI_WIDGET_AllocTextMemory(handle, 255);
-                GUI_WIDGET_SetText(handle, _GT("Edit text very long text OLA CIKAS OLA CIKAS OLA CIKASS"));
-                GUI_WIDGET_SetFont(handle, &GUI_Font_Arial_Narrow_Italic_21_AA);
+                handle = gui_edittext_create(1, 10, 10, 400, 40, h, 0, 0);
+                gui_widget_alloctextmemory(handle, 255);
+                gui_widget_settext(handle, _GT("Edit text very long text OLA CIKAS OLA CIKAS OLA CIKASS"));
+                gui_widget_setfont(handle, &GUI_Font_Arial_Narrow_Italic_21_AA);
                 
                 /* Create text field first to hold view of edit text*/
-                handle = GUI_TEXTVIEW_Create(ID_TEXTVIEW_2, 10, 210, 400, 150, h, 0, 0);
+                handle = gui_textview_create(ID_TEXTVIEW_2, 10, 210, 400, 150, h, 0, 0);
                 
                 /* edittext_callback is responsible to set display text from edit text to text view */
-                handle = GUI_EDITTEXT_Create(ID_EDITTEXT_1, 10, 60, 400, 150, h, edittext_callback, 0);
-                GUI_WIDGET_AllocTextMemory(handle, 255);
-                GUI_EDITTEXT_SetMultiline(handle, 1);
-                GUI_EDITTEXT_SetVAlign(handle, GUI_EDITTEXT_VALIGN_TOP);
-                GUI_WIDGET_SetText(handle, _GT("Edit\ntext\nmultiline\n\n\n\nTextText\nTexttttt\nOLAAA\nOLAAAAAAA\n\nEvenMoreText\nMoreee\n"));
+                handle = gui_edittext_create(ID_EDITTEXT_1, 10, 60, 400, 150, h, edittext_callback, 0);
+                gui_widget_alloctextmemory(handle, 255);
+                gui_edittext_setmultiline(handle, 1);
+                gui_edittext_setvalign(handle, GUI_EDITTEXT_VALIGN_TOP);
+                gui_widget_settext(handle, _GT("Edit\ntext\nmultiline\n\n\n\nTextText\nTexttttt\nOLAAA\nOLAAAAAAA\n\nEvenMoreText\nMoreee\n"));
                 break;
             }
             case ID_WIN_PROGBAR: {      /* Progress bar */
-                handle = GUI_PROGBAR_Create(2, 10, 10, 400, 40, h, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Progress bar with custom text"));
+                handle = gui_progbar_create(2, 10, 10, 400, 40, h, 0, 0);
+                gui_widget_settext(handle, _GT("Progress bar with custom text"));
                 
-                handle = GUI_PROGBAR_Create(2, 10, 60, 400, 40, h, 0, 0);
-                GUI_PROGBAR_SetPercentMode(handle, 1);
-                GUI_PROGBAR_SetMin(handle, 20);
-                GUI_PROGBAR_SetMax(handle, 30);
-                GUI_PROGBAR_SetValue(handle, 22);
+                handle = gui_progbar_create(2, 10, 60, 400, 40, h, 0, 0);
+                gui_progbar_setpercentmode(handle, 1);
+                gui_progbar_setmin(handle, 20);
+                gui_progbar_setmax(handle, 30);
+                gui_progbar_setvalue(handle, 22);
                 
-                handle = GUI_PROGBAR_Create(3, 10, 110, 400, 40, h, 0, 0);
-                GUI_PROGBAR_SetPercentMode(handle, 1);
-                GUI_PROGBAR_SetMin(handle, 0);
-                GUI_PROGBAR_SetMax(handle, 100);
-                GUI_PROGBAR_SetValue(handle, 0);
-                GUI_PROGBAR_SetAnimation(handle, 1);
-                GUI_PROGBAR_SetValue(handle, 80);
+                handle = gui_progbar_create(3, 10, 110, 400, 40, h, 0, 0);
+                gui_progbar_setpercentmode(handle, 1);
+                gui_progbar_setmin(handle, 0);
+                gui_progbar_setmax(handle, 100);
+                gui_progbar_setvalue(handle, 0);
+                gui_progbar_setanimation(handle, 1);
+                gui_progbar_setvalue(handle, 80);
                 break;
             }
             case ID_WIN_LED: {          /* Leds */                
-                handle = GUI_LED_Create(ID_LED_1, 10, 80, 30, 30, 0, led_callback, 0);
-                GUI_LED_SetType(handle, GUI_LED_TYPE_CIRCLE);
-                GUI_LED_Set(handle, 1);
+                handle = gui_led_create(ID_LED_1, 10, 80, 30, 30, 0, led_callback, 0);
+                gui_led_settype(handle, GUI_LED_TYPE_CIRCLE);
+                gui_led_set(handle, 1);
                 
-                handle = GUI_LED_Create(ID_LED_2, 50, 80, 30, 30, 0, led_callback, 0);
-                GUI_LED_SetType(handle, GUI_LED_TYPE_CIRCLE);
+                handle = gui_led_create(ID_LED_2, 50, 80, 30, 30, 0, led_callback, 0);
+                gui_led_settype(handle, GUI_LED_TYPE_CIRCLE);
                 
-                handle = GUI_LED_Create(ID_LED_3, 90, 80, 30, 30, 0, led_callback, 0);
-                GUI_LED_SetType(handle, GUI_LED_TYPE_RECT);
-                GUI_LED_Set(handle, 1);
-                handle = GUI_LED_Create(ID_LED_4, 130, 80, 30, 30, 0, led_callback, 0);
-                GUI_LED_SetType(handle, GUI_LED_TYPE_RECT);
+                handle = gui_led_create(ID_LED_3, 90, 80, 30, 30, 0, led_callback, 0);
+                gui_led_settype(handle, GUI_LED_TYPE_RECT);
+                gui_led_set(handle, 1);
+                handle = gui_led_create(ID_LED_4, 130, 80, 30, 30, 0, led_callback, 0);
+                gui_led_settype(handle, GUI_LED_TYPE_RECT);
                 
-                handle = GUI_TEXTVIEW_Create(0, 40, 10, 400, 1000, h, 0, 0);
-                GUI_WIDGET_SetFont(handle, &GUI_Font_Roboto_Italic_14);
-                GUI_WIDGET_SetText(handle, _GT("\"LEDs\" are widgets used to indicate some status or any other situation. Press blue button on discovery board to see LED in happen"));
-                GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_TRANS);
-                GUI_WIDGET_SetZIndex(handle, -1);
+                handle = gui_textview_create(0, 40, 10, 400, 1000, h, 0, 0);
+                gui_widget_setfont(handle, &GUI_Font_Roboto_Italic_14);
+                gui_widget_settext(handle, _GT("\"LEDs\" are widgets used to indicate some status or any other situation. Press blue button on discovery board to see LED in happen"));
+                gui_textview_setcolor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_TRANS);
+                gui_widget_setzindex(handle, -1);
                 break;
             }
             case ID_WIN_TEXTVIEW: {     /* Text view */
@@ -586,119 +586,119 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                     _GT("Text view with bottom right                          alignment on screen koji kurac se to dogaja?"),
                 };
                 for (i = 0; i < 9; i++) {
-                    handle = GUI_TEXTVIEW_Create(0, 1, 1, 1, 1, 0, 0, 0);
-                    GUI_WIDGET_SetSizePercent(handle, 30, 30);
-                    GUI_WIDGET_SetPositionPercent(handle, 3 + (i % 3) * 33, 3 + (i / 3) * 33);
-                    GUI_WIDGET_AllocTextMemory(handle, 255);
-                    GUI_WIDGET_SetText(handle, texts[i]);
-                    GUI_WIDGET_SetFont(handle, &GUI_Font_Roboto_Italic_14);
+                    handle = gui_textview_create(0, 1, 1, 1, 1, 0, 0, 0);
+                    gui_widget_setsizepercent(handle, 30, 30);
+                    gui_widget_setpositionpercent(handle, 3 + (i % 3) * 33, 3 + (i / 3) * 33);
+                    gui_widget_alloctextmemory(handle, 255);
+                    gui_widget_settext(handle, texts[i]);
+                    gui_widget_setfont(handle, &GUI_Font_Roboto_Italic_14);
                     switch (i % 4) {
-                        case 0: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_WHITE); break;
-                        case 1: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_YELLOW); break;
-                        case 2: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_GRAY); break;
-                        case 3: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_LIGHTGREEN); break;
+                        case 0: gui_textview_setcolor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_WHITE); break;
+                        case 1: gui_textview_setcolor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_YELLOW); break;
+                        case 2: gui_textview_setcolor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_GRAY); break;
+                        case 3: gui_textview_setcolor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_LIGHTGREEN); break;
                     }
                     switch (i % 3) {
-                        case 0: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_LEFT); break;
-                        case 1: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_CENTER); break;
-                        case 2: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_RIGHT); break;
+                        case 0: gui_textview_sethalign(handle, GUI_TEXTVIEW_HALIGN_LEFT); break;
+                        case 1: gui_textview_sethalign(handle, GUI_TEXTVIEW_HALIGN_CENTER); break;
+                        case 2: gui_textview_sethalign(handle, GUI_TEXTVIEW_HALIGN_RIGHT); break;
                     }
                     switch (i / 3) {
-                        case 0: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_TOP); break;
-                        case 1: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_CENTER); break;
-                        case 2: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_BOTTOM); break;
+                        case 0: gui_textview_setvalign(handle, GUI_TEXTVIEW_VALIGN_TOP); break;
+                        case 1: gui_textview_setvalign(handle, GUI_TEXTVIEW_VALIGN_CENTER); break;
+                        case 2: gui_textview_setvalign(handle, GUI_TEXTVIEW_VALIGN_BOTTOM); break;
                     }
                 }
                 break;
             }
             case ID_WIN_DROPDOWN: {     /* Dropdown */
                 uint8_t i;
-                handle = GUI_DROPDOWN_Create(0, 10, 10, 200, 40, h, 0, 0);
+                handle = gui_dropdown_create(0, 10, 10, 200, 40, h, 0, 0);
                 for (i = 0; i < COUNT_OF(listboxtexts); i++) {
-                    GUI_DROPDOWN_AddString(handle, listboxtexts[i]);
+                    gui_dropdown_addstring(handle, listboxtexts[i]);
                 }
-                GUI_DROPDOWN_SetSliderAuto(handle, 0);
-                GUI_DROPDOWN_SetSliderVisibility(handle, 1);
+                gui_dropdown_setsliderauto(handle, 0);
+                gui_dropdown_setslidervisibility(handle, 1);
                 
-                handle = GUI_DROPDOWN_Create(0, 220, 180, 200, 40, h, 0, 0);
-                GUI_DROPDOWN_SetOpenDirection(handle, GUI_DROPDOWN_OPENDIR_UP);
+                handle = gui_dropdown_create(0, 220, 180, 200, 40, h, 0, 0);
+                gui_dropdown_setopendirection(handle, GUI_DROPDOWN_OPENDIR_UP);
                 for (i = 0; i < COUNT_OF(listboxtexts); i++) {
-                    GUI_DROPDOWN_AddString(handle, listboxtexts[i]);
+                    gui_dropdown_addstring(handle, listboxtexts[i]);
                 }
                 break;
             }
             case ID_WIN_IMAGE: {
-//                handle = GUI_BUTTON_Create(0, 10, 10, 300, 50, h, 0, 0);
-//                GUI_WIDGET_SetText(handle, _GT("Button"));
-//                handle = GUI_IMAGE_Create(0, 2, 2, bmimage_brand.xSize, bmimage_brand.ySize, h, 0, 0);
-//                GUI_IMAGE_SetSource(handle, &bmimage_brand);
-//                handle = GUI_IMAGE_Create(0, 200, 40, bmimage_voyo.xSize, bmimage_voyo.ySize, h, 0, 0);
-//                GUI_IMAGE_SetSource(handle, &bmimage_voyo);
-//                handle = GUI_IMAGE_Create(0, 350, 10, bmimage_voyo565.xSize, bmimage_voyo565.ySize, h, 0, 0);
-//                GUI_IMAGE_SetSource(handle, &bmimage_voyo565);
+//                handle = gui_button_create(0, 10, 10, 300, 50, h, 0, 0);
+//                gui_widget_settext(handle, _GT("Button"));
+//                handle = gui_image_create(0, 2, 2, bmimage_brand.xSize, bmimage_brand.ySize, h, 0, 0);
+//                gui_image_setsource(handle, &bmimage_brand);
+//                handle = gui_image_create(0, 200, 40, bmimage_voyo.xSize, bmimage_voyo.ySize, h, 0, 0);
+//                gui_image_setsource(handle, &bmimage_voyo);
+//                handle = gui_image_create(0, 350, 10, bmimage_voyo565.xSize, bmimage_voyo565.ySize, h, 0, 0);
+//                gui_image_setsource(handle, &bmimage_voyo565);
                 break;
             }
             case ID_WIN_SLIDER: {
-                GUI_BUTTON_Create(ID_BUTTON_0, 5, 100, 100, 30, h, 0, 0);
+                gui_button_create(ID_BUTTON_0, 5, 100, 100, 30, h, 0, 0);
                
-                handle = GUI_SLIDER_Create(ID_SLIDER_0, 5, 5, 400, 50, h, slider_callback, 0);
-                GUI_SLIDER_SetMode(handle, GUI_SLIDER_MODE_LEFT_RIGHT);
-                GUI_SLIDER_SetMin(handle, 100);
-                GUI_SLIDER_SetMax(handle, 300);
-                GUI_SLIDER_SetValue(handle, 200);
+                handle = gui_slider_create(ID_SLIDER_0, 5, 5, 400, 50, h, slider_callback, 0);
+                gui_slider_setmode(handle, GUI_SLIDER_MODE_LEFT_RIGHT);
+                gui_slider_setmin(handle, 100);
+                gui_slider_setmax(handle, 300);
+                gui_slider_setvalue(handle, 200);
                 
-                handle = GUI_SLIDER_Create(0, 5, 70, 400, 15, h, slider_callback, 0);
-                GUI_SLIDER_SetMode(handle, GUI_SLIDER_MODE_RIGHT_LEFT);
-                handle = GUI_SLIDER_Create(0, 430, 10, 10, 230, h, slider_callback, 0);
-                GUI_SLIDER_SetMode(handle, GUI_SLIDER_MODE_BOTTOM_TOP);
-                handle = GUI_SLIDER_Create(0, 450, 10, 20, 230, h, slider_callback, 0);
-                GUI_SLIDER_SetMode(handle, GUI_SLIDER_MODE_TOP_BOTTOM);
+                handle = gui_slider_create(0, 5, 70, 400, 15, h, slider_callback, 0);
+                gui_slider_setmode(handle, GUI_SLIDER_MODE_RIGHT_LEFT);
+                handle = gui_slider_create(0, 430, 10, 10, 230, h, slider_callback, 0);
+                gui_slider_setmode(handle, GUI_SLIDER_MODE_BOTTOM_TOP);
+                handle = gui_slider_create(0, 450, 10, 20, 230, h, slider_callback, 0);
+                gui_slider_setmode(handle, GUI_SLIDER_MODE_TOP_BOTTOM);
                 break;
             }
             case ID_WIN_ZINDEX: {
-                handle = GUI_TEXTVIEW_Create(0, 10, 10, 180, 100, 0, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("All buttons with same z-index. Auto z-index is allowed."));
+                handle = gui_textview_create(0, 10, 10, 180, 100, 0, 0, 0);
+                gui_widget_settext(handle, _GT("All buttons with same z-index. Auto z-index is allowed."));
                 
                 /* Create button group with the same index */
-                handle = GUI_BUTTON_Create(0, 200, 10, 150, 40, h, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Button1 z-i: 0"));
-                handle = GUI_BUTTON_Create(0, 300, 20, 150, 40, h, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Button2 z-i: 0"));
-                handle = GUI_BUTTON_Create(0, 250, 30, 150, 40, h, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Button3 z-i: 0"));
+                handle = gui_button_create(0, 200, 10, 150, 40, h, 0, 0);
+                gui_widget_settext(handle, _GT("Button1 z-i: 0"));
+                handle = gui_button_create(0, 300, 20, 150, 40, h, 0, 0);
+                gui_widget_settext(handle, _GT("Button2 z-i: 0"));
+                handle = gui_button_create(0, 250, 30, 150, 40, h, 0, 0);
+                gui_widget_settext(handle, _GT("Button3 z-i: 0"));
                 
                 
-                handle = GUI_TEXTVIEW_Create(0, 10, 120, 180, 100, 0, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Each button has dedicated z-index. Auto z-index is not allowed."));
-                handle = GUI_BUTTON_Create(0, 200, 120, 150, 40, h, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Button4 z-i: 1"));
-                GUI_WIDGET_SetZIndex(handle, 1);
-                handle = GUI_BUTTON_Create(0, 300, 130, 150, 40, h, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Button5 z-i: 3"));
-                GUI_WIDGET_SetZIndex(handle, 3);
-                handle = GUI_BUTTON_Create(0, 250, 140, 150, 40, h, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Button6 z-i: 2"));
-                GUI_WIDGET_SetZIndex(handle, 2);
+                handle = gui_textview_create(0, 10, 120, 180, 100, 0, 0, 0);
+                gui_widget_settext(handle, _GT("Each button has dedicated z-index. Auto z-index is not allowed."));
+                handle = gui_button_create(0, 200, 120, 150, 40, h, 0, 0);
+                gui_widget_settext(handle, _GT("Button4 z-i: 1"));
+                gui_widget_setzindex(handle, 1);
+                handle = gui_button_create(0, 300, 130, 150, 40, h, 0, 0);
+                gui_widget_settext(handle, _GT("Button5 z-i: 3"));
+                gui_widget_setzindex(handle, 3);
+                handle = gui_button_create(0, 250, 140, 150, 40, h, 0, 0);
+                gui_widget_settext(handle, _GT("Button6 z-i: 2"));
+                gui_widget_setzindex(handle, 2);
                 break;
             }
             case ID_WIN_TRANSP: {
-                //GUI_WIDGET_SetTransparency(h, 0xF0);
+                //gui_widget_settransparency(h, 0xF0);
                 
-                handle = GUI_BUTTON_Create(ID_BUTTON_2, 10, 50, 300, 35, 0, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Opaque button"));
-                GUI_WIDGET_SetTransparency(handle, 0xFF);
-                handle = GUI_BUTTON_Create(ID_BUTTON_3, 10, 90, 300, 35, 0, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Opaque button"));
-                GUI_WIDGET_SetTransparency(handle, 0xC0);
+                handle = gui_button_create(ID_BUTTON_2, 10, 50, 300, 35, 0, 0, 0);
+                gui_widget_settext(handle, _GT("Opaque button"));
+                gui_widget_settransparency(handle, 0xFF);
+                handle = gui_button_create(ID_BUTTON_3, 10, 90, 300, 35, 0, 0, 0);
+                gui_widget_settext(handle, _GT("Opaque button"));
+                gui_widget_settransparency(handle, 0xC0);
                 
-                handle = GUI_BUTTON_Create(ID_BUTTON_1, 5, 30, 300, 35, 0, 0, 0);
-                GUI_WIDGET_SetText(handle, _GT("Transparent button"));
-                GUI_WIDGET_SetTransparency(handle, 0x80);
+                handle = gui_button_create(ID_BUTTON_1, 5, 30, 300, 35, 0, 0, 0);
+                gui_widget_settext(handle, _GT("Transparent button"));
+                gui_widget_settransparency(handle, 0x80);
                 
-                handle = GUI_SLIDER_Create(ID_SLIDER_1, 10, 150, 400, 50, 0, slider_callback, 0);
-                GUI_SLIDER_SetMin(handle, 0);
-                GUI_SLIDER_SetMax(handle, 0xFF);
-                GUI_SLIDER_SetValue(handle, 0x80);
+                handle = gui_slider_create(ID_SLIDER_1, 10, 150, 400, 50, 0, slider_callback, 0);
+                gui_slider_setmin(handle, 0);
+                gui_slider_setmax(handle, 0xFF);
+                gui_slider_setvalue(handle, 0x80);
                 break;
             }
             default:
@@ -709,16 +709,16 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
 }
 
 uint8_t radio_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
-    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    uint8_t ret = gui_widget_processdefaultcallback(h, cmd, param, result);
     if (cmd == GUI_WC_SelectionChanged) {
-        uint32_t group = GUI_RADIO_GetGroup(h);
+        uint32_t group = gui_radio_getgroup(h);
         if (group == RADIO_GROUP_VALIGN || group == RADIO_GROUP_HALIGN) {
-            GUI_HANDLE_p textview = GUI_WIDGET_GetById(ID_TEXTVIEW_1);
+            GUI_HANDLE_p textview = gui_widget_getbyid(ID_TEXTVIEW_1);
             if (textview) {
                 if (group == RADIO_GROUP_VALIGN) {
-                    GUI_TEXTVIEW_SetVAlign(textview, (GUI_TEXTVIEW_VALIGN_t)GUI_RADIO_GetValue(h));
+                    gui_textview_setvalign(textview, (GUI_TEXTVIEW_VALIGN_t)gui_radio_getvalue(h));
                 } else if (group == RADIO_GROUP_HALIGN) {
-                    GUI_TEXTVIEW_SetHAlign(textview, (GUI_TEXTVIEW_HALIGN_t)GUI_RADIO_GetValue(h));
+                    gui_textview_sethalign(textview, (GUI_TEXTVIEW_HALIGN_t)gui_radio_getvalue(h));
                 }
             }
         }
@@ -727,26 +727,26 @@ uint8_t radio_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) 
 }
 
 uint8_t led_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
-    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    uint8_t ret = gui_widget_processdefaultcallback(h, cmd, param, result);
     if (cmd == GUI_WC_Click) {
-        GUI_LED_Toggle(h);              /* Toggle status */
+        gui_led_toggle(h);              /* Toggle status */
     }
     return ret;
 }
 
 uint8_t checkbox_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
     GUI_ID_t id;
-    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    uint8_t ret = gui_widget_processdefaultcallback(h, cmd, param, result);
     
-    id = GUI_WIDGET_GetId(h);
+    id = gui_widget_getid(h);
     if (cmd == GUI_WC_Init) {
         if (id == ID_CHECKBOX_LED) {
-            GUI_CHECKBOX_SetChecked(h, TM_DISCO_LedIsOn(LED_GREEN));
+            gui_checkbox_setchecked(h, TM_DISCO_LedIsOn(LED_GREEN));
         }
     } else if (cmd == GUI_WC_ValueChanged) {
         switch (id) {
             case ID_CHECKBOX_LED: {
-                if (GUI_CHECKBOX_IsChecked(h)) {
+                if (gui_checkbox_ischecked(h)) {
                     TM_DISCO_LedOn(LED_ALL);
                 } else {
                     TM_DISCO_LedOff(LED_ALL);
@@ -754,9 +754,9 @@ uint8_t checkbox_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* resul
                 break;
             }
             case ID_CHECKBOX_GRAPH: {
-                GUI_HANDLE_p handle = GUI_WIDGET_GetById(ID_GRAPH_MAIN); /* Find graph widget if exists */
+                GUI_HANDLE_p handle = gui_widget_getbyid(ID_GRAPH_MAIN); /* Find graph widget if exists */
                 if (handle) {
-                    GUI_WIDGET_SetExpanded(handle, GUI_CHECKBOX_IsChecked(h));
+                    gui_widget_setexpanded(handle, gui_checkbox_ischecked(h));
                 }
                 break;
             }
@@ -766,7 +766,7 @@ uint8_t checkbox_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* resul
 }
 
 uint8_t listview_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
-    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    uint8_t ret = gui_widget_processdefaultcallback(h, cmd, param, result);
     if (cmd == GUI_WC_SelectionChanged) {
         
     }
@@ -775,13 +775,13 @@ uint8_t listview_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* resul
 
 uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
     GUI_ID_t id;
-    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    uint8_t ret = gui_widget_processdefaultcallback(h, cmd, param, result);
     switch (cmd) {
         case GUI_WC_Init: {
             break;
         }
         case GUI_WC_Click: {
-            id = GUI_WIDGET_GetId(h);
+            id = gui_widget_getid(h);
             switch (id) {
                 case ID_BTN_WIN_BTN:
                 case ID_BTN_WIN_CHECKBOX:
@@ -799,34 +799,34 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 case ID_BTN_WIN_ZINDEX:
                 case ID_BTN_WIN_TRANSP: 
                 case ID_BTN_WIN_WINDOW: {
-                    btn_user_data_t* data = GUI_WIDGET_GetUserData(h);
+                    btn_user_data_t* data = gui_widget_getuserdata(h);
                     uint32_t diff = id - ID_BTN_WIN_BTN;
                     if (data) {
                         GUI_HANDLE_p tmp;
-                        if ((tmp = GUI_WIDGET_GetById(data->win_id)) != 0) {
-                            GUI_WIDGET_Show(tmp);
-                            GUI_WIDGET_PutOnFront(tmp);
+                        if ((tmp = gui_widget_getbyid(data->win_id)) != 0) {
+                            gui_widget_show(tmp);
+                            gui_widget_putonfront(tmp);
                         } else {
-                            //tmp = GUI_WINDOW_CreateChild(data->win_id, 5, 5, 470, 262, GUI_WINDOW_GetDesktop(), window_callback, NULL);
-                            tmp = GUI_WINDOW_Create(data->win_id, 40, 20, 300, 200, GUI_WINDOW_GetDesktop(), window_callback, 0);
-                            GUI_WIDGET_SetExpanded(tmp, 1);
-                            GUI_WIDGET_SetText(tmp, data->win_text);
-                            GUI_WIDGET_SetZIndex(tmp, diff);
-                            GUI_WIDGET_PutOnFront(tmp);
+                            //tmp = gui_window_createChild(data->win_id, 5, 5, 470, 262, gui_window_getdesktop(), window_callback, NULL);
+                            tmp = gui_window_create(data->win_id, 40, 20, 300, 200, gui_window_getdesktop(), window_callback, 0);
+                            gui_widget_setexpanded(tmp, 1);
+                            gui_widget_settext(tmp, data->win_text);
+                            gui_widget_setzindex(tmp, diff);
+                            gui_widget_putonfront(tmp);
                             if (data->win_id == ID_WIN_TRANSP) {
-                                //GUI_WIDGET_SetTransparency(tmp, 0x80);
+                                //gui_widget_settransparency(tmp, 0x80);
                             }
                         }
                     }
                     break;
                 }
                 case ID_BTN_WIN_DIALOG: {
-                    GUI_DIALOG_Create(ID_WIN_DIALOG, 60, 20, 300, 150, GUI_CONTAINER_Create, dialog_callback, 0);
+                    gui_dialog_create(ID_WIN_DIALOG, 60, 20, 300, 150, gui_container_create, dialog_callback, 0);
                     break;
                 }
                 case ID_BTN_DIALOG_CONFIRM:
                 case ID_BTN_DIALOG_CANCEL: {
-                    GUI_DIALOG_Dismiss(GUI_WIDGET_GetById(ID_WIN_DIALOG), ID_BTN_DIALOG_CONFIRM == id);
+                    gui_dialog_dismiss(gui_widget_getbyid(ID_WIN_DIALOG), ID_BTN_DIALOG_CONFIRM == id);
                     break;
                 }
                 default:
@@ -841,24 +841,24 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
 }
 
 uint8_t dialog_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
-    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    uint8_t ret = gui_widget_processdefaultcallback(h, cmd, param, result);
     switch (cmd) {
         case GUI_WC_Init: {
             GUI_HANDLE_p tmp;
-            switch (GUI_WIDGET_GetId(h)) {
+            switch (gui_widget_getid(h)) {
                 case ID_WIN_DIALOG:
-                    tmp = GUI_CONTAINER_Create(0, 0, 0, GUI_WIDGET_GetWidth(h), GUI_WIDGET_GetHeight(h), h, 0, 0);
-                    handle = GUI_TEXTVIEW_Create(0, 10, 10, GUI_WIDGET_GetWidth(h) - 20, GUI_WIDGET_GetHeight(h) - 52, tmp, 0, 0);
+                    tmp = gui_container_create(0, 0, 0, gui_widget_getwidth(h), gui_widget_getheight(h), h, 0, 0);
+                    handle = gui_textview_create(0, 10, 10, gui_widget_getwidth(h) - 20, gui_widget_getheight(h) - 52, tmp, 0, 0);
                     if (TM_DISCO_LedIsOn(LED_GREEN)) {
-                        GUI_WIDGET_SetText(handle, _GT("LED is ON. Do you want to turn it off?"));
+                        gui_widget_settext(handle, _GT("LED is ON. Do you want to turn it off?"));
                     } else  {
-                        GUI_WIDGET_SetText(handle, _GT("LED is OFF. Do you want to turn it on?"));
+                        gui_widget_settext(handle, _GT("LED is OFF. Do you want to turn it on?"));
                     }
-                    handle = GUI_BUTTON_Create(ID_BTN_DIALOG_CONFIRM, 0,   118, 150, 32, tmp, button_callback, 0);
-                    GUI_WIDGET_SetText(handle, _GT("OK"));
-                    handle = GUI_BUTTON_Create(ID_BTN_DIALOG_CANCEL,  150, 118, 150, 32, tmp, button_callback, 0);
-                    GUI_WIDGET_SetText(handle, _GT("CANCEL"));
-                    GUI_WIDGET_SetFocus(handle);
+                    handle = gui_button_create(ID_BTN_DIALOG_CONFIRM, 0,   118, 150, 32, tmp, button_callback, 0);
+                    gui_widget_settext(handle, _GT("OK"));
+                    handle = gui_button_create(ID_BTN_DIALOG_CANCEL,  150, 118, 150, 32, tmp, button_callback, 0);
+                    gui_widget_settext(handle, _GT("CANCEL"));
+                    gui_widget_setfocus(handle);
                     break;
             }
         }
@@ -872,30 +872,30 @@ uint8_t dialog_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
 }
 
 uint8_t slider_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
-    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    uint8_t ret = gui_widget_processdefaultcallback(h, cmd, param, result);
     switch (cmd) {
         case GUI_WC_Init: {
-            GUI_SLIDER_SetMin(h, 0);
-            GUI_SLIDER_SetMax(h, 300);
-            GUI_SLIDER_SetValue(h, 212);
+            gui_slider_setmin(h, 0);
+            gui_slider_setmax(h, 300);
+            gui_slider_setvalue(h, 212);
             break;
         }
         case GUI_WC_ValueChanged: {
-            int32_t value = GUI_SLIDER_GetValue(h); /* Get widget handle */
-            switch (GUI_WIDGET_GetId(h)) {
+            int32_t value = gui_slider_getvalue(h); /* Get widget handle */
+            switch (gui_widget_getid(h)) {
                 case ID_SLIDER_0: {
                     GUI_HANDLE_p tmp;
-                    tmp = GUI_WIDGET_GetById(ID_BUTTON_0);
+                    tmp = gui_widget_getbyid(ID_BUTTON_0);
                     if (tmp) {
-                        GUI_WIDGET_SetSize(tmp, value, value / 4);
+                        gui_widget_setsize(tmp, value, value / 4);
                     }
                     break;
                 }
                 case ID_SLIDER_1: {
                     GUI_HANDLE_p tmp;
-                    tmp = GUI_WIDGET_GetById(ID_BUTTON_1);
+                    tmp = gui_widget_getbyid(ID_BUTTON_1);
                     if (tmp) {
-                        GUI_WIDGET_SetTransparency(tmp, value);
+                        gui_widget_settransparency(tmp, value);
                     }
                     break;
                 }
@@ -909,16 +909,16 @@ uint8_t slider_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
 }
 
 uint8_t progbar_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
-    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    uint8_t ret = gui_widget_processdefaultcallback(h, cmd, param, result);
     switch (cmd) {
         case GUI_WC_Init: {
-            switch (GUI_WIDGET_GetId(h)) {
+            switch (gui_widget_getid(h)) {
                 case ID_PROGBAR_CPUUSAGE:
-                    GUI_PROGBAR_SetMin(h, 0);
-                    GUI_PROGBAR_SetMax(h, 100);
-                    GUI_PROGBAR_SetValue(h, 0);
-                    GUI_PROGBAR_SetPercentMode(h, 1);
-                    GUI_PROGBAR_SetAnimation(h, 1);
+                    gui_progbar_setmin(h, 0);
+                    gui_progbar_setmax(h, 100);
+                    gui_progbar_setvalue(h, 0);
+                    gui_progbar_setpercentmode(h, 1);
+                    gui_progbar_setanimation(h, 1);
                     break;
                 default:
                     break;
@@ -932,15 +932,15 @@ uint8_t progbar_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result
 }
 
 uint8_t edittext_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
-    uint8_t ret = GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);
+    uint8_t ret = gui_widget_processdefaultcallback(h, cmd, param, result);
     if (cmd == GUI_WC_TextChanged) {
-        GUI_ID_t id = GUI_WIDGET_GetId(h);          /* Get widget ID */
+        GUI_ID_t id = gui_widget_getid(h);          /* Get widget ID */
         switch (id) {
             case ID_EDITTEXT_1: {
-                GUI_HANDLE_p tmp = GUI_WIDGET_GetById(ID_TEXTVIEW_2);
+                GUI_HANDLE_p tmp = gui_widget_getbyid(ID_TEXTVIEW_2);
                 if (tmp) {
-                    GUI_WIDGET_SetText(tmp, GUI_WIDGET_GetText(h));
-                    GUI_WIDGET_Invalidate(tmp);
+                    gui_widget_settext(tmp, gui_widget_gettext(h));
+                    gui_widget_invalidate(tmp);
                 }
                 break;
             }
@@ -976,7 +976,7 @@ void read_touch(void) {
     
     /* Check differences */
     if (update || (t.Status == GUI_TouchState_RELEASED && p.Status != GUI_TouchState_RELEASED)) {
-        GUI_INPUT_TouchAdd(&t);
+        gui_input_touchadd(&t);
     }
     memcpy(&p, &t, sizeof(p));
 }

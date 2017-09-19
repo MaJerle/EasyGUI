@@ -71,19 +71,19 @@ GUI_Char* listboxtexts[] = {
 };
 
 //Create left dropdown
-handle = GUI_DROPDOWN_Create(0, 10, 10, 200, 40, h, 0, 0);
+handle = gui_dropdown_create(0, 10, 10, 200, 40, h, 0, 0);
 for (i = 0; i < COUNT_OF(listboxtexts); i++) {
-    GUI_DROPDOWN_AddString(handle, listboxtexts[i]);
+    gui_dropdown_addstring(handle, listboxtexts[i]);
 }
 //Force slider to be visible always
-GUI_DROPDOWN_SetSliderAuto(handle, 0);
-GUI_DROPDOWN_SetSliderVisibility(handle, 1);
+gui_dropdown_setsliderauto(handle, 0);
+gui_dropdown_setslidervisibility(handle, 1);
 
 //Create right widget
-handle = GUI_DROPDOWN_Create(0, 220, 180, 200, 40, h, 0, 0);
-GUI_DROPDOWN_SetOpenDirection(handle, GUI_DROPDOWN_OPENDIR_UP);
+handle = gui_dropdown_create(0, 220, 180, 200, 40, h, 0, 0);
+gui_dropdown_setopendirection(handle, GUI_DROPDOWN_OPENDIR_UP);
 for (i = 0; i < COUNT_OF(listboxtexts); i++) {
-    GUI_DROPDOWN_AddString(handle, listboxtexts[i]);
+    gui_dropdown_addstring(handle, listboxtexts[i]);
 }
 \endcode
  */
@@ -160,7 +160,7 @@ typedef struct GUI_DROPDOWN_t {
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_DROPDOWN_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_dropdown_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Set color to DROPDOWN
@@ -170,7 +170,7 @@ GUI_HANDLE_p GUI_DROPDOWN_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Di
  * \retval          1: Color was set ok
  * \retval          0: Color was not set
  */
-uint8_t GUI_DROPDOWN_SetColor(GUI_HANDLE_p h, GUI_DROPDOWN_COLOR_t index, GUI_Color_t color);
+uint8_t gui_dropdown_setcolor(GUI_HANDLE_p h, GUI_DROPDOWN_COLOR_t index, GUI_Color_t color);
 
 /**
  * \brief           Add a new string to list box
@@ -179,25 +179,25 @@ uint8_t GUI_DROPDOWN_SetColor(GUI_HANDLE_p h, GUI_DROPDOWN_COLOR_t index, GUI_Co
  * \retval          1: String added to the end
  * \retval          0: String not added
  */
-uint8_t GUI_DROPDOWN_AddString(GUI_HANDLE_p h, const GUI_Char* text);
+uint8_t gui_dropdown_addstring(GUI_HANDLE_p h, const GUI_Char* text);
 
 /**
  * \brief           Delete first string from list
  * \param[in,out]   h: Widget handle
  * \retval          1: String deleted
  * \retval          0: String not deleted
- * \sa              GUI_DROPDOWN_DeleteString, GUI_DROPDOWN_DeleteLastString
+ * \sa              gui_dropdown_deletestring, gui_dropdown_deletelaststring
  */
-uint8_t GUI_DROPDOWN_DeleteFirstString(GUI_HANDLE_p h);
+uint8_t gui_dropdown_deletefirststring(GUI_HANDLE_p h);
 
 /**
  * \brief           Delete last string from list
  * \param[in,out]   h: Widget handle
  * \retval          1: String deleted
  * \retval          0: String not deleted
- * \sa              GUI_DROPDOWN_DeleteString, GUI_DROPDOWN_DeleteFirstString
+ * \sa              gui_dropdown_deletestring, gui_dropdown_deletefirststring
  */
-uint8_t GUI_DROPDOWN_DeleteLastString(GUI_HANDLE_p h);
+uint8_t gui_dropdown_deletelaststring(GUI_HANDLE_p h);
 
 /**
  * \brief           Delete specific entry from list
@@ -205,9 +205,9 @@ uint8_t GUI_DROPDOWN_DeleteLastString(GUI_HANDLE_p h);
  * \param[in]       index: List index (position) to delete
  * \retval          1: String deleted
  * \retval          0: String not deleted
- * \sa              GUI_DROPDOWN_DeleteFirstString, GUI_DROPDOWN_DeleteLastString
+ * \sa              gui_dropdown_deletefirststring, gui_dropdown_deletelaststring
  */
-uint8_t GUI_DROPDOWN_DeleteString(GUI_HANDLE_p h, uint16_t index);
+uint8_t gui_dropdown_deletestring(GUI_HANDLE_p h, uint16_t index);
 
 /**
  * \brief           Set string value to already added string index
@@ -217,7 +217,7 @@ uint8_t GUI_DROPDOWN_DeleteString(GUI_HANDLE_p h, uint16_t index);
  * \retval          1: String changed
  * \retval          0: String not changed
  */
-uint8_t GUI_DROPDOWN_SetString(GUI_HANDLE_p h, uint16_t index, const GUI_Char* text);
+uint8_t gui_dropdown_setstring(GUI_HANDLE_p h, uint16_t index, const GUI_Char* text);
 
 /**
  * \brief           Set selected value
@@ -225,17 +225,17 @@ uint8_t GUI_DROPDOWN_SetString(GUI_HANDLE_p h, uint16_t index, const GUI_Char* t
  * \param[in]       selection: Set to -1 to invalidate selection or 0 - count-1 for specific selection 
  * \retval          1: Selection changed
  * \retval          0: Selection not changed
- * \sa              GUI_DROPDOWN_GetSelection
+ * \sa              gui_dropdown_getselection
  */
-uint8_t GUI_DROPDOWN_SetSelection(GUI_HANDLE_p h, int16_t selection);
+uint8_t gui_dropdown_setselection(GUI_HANDLE_p h, int16_t selection);
 
 /**
  * \brief           Get selected value
  * \param[in,out]   h: Widget handle
  * \retval          Selection number or -1 if no selection
- * \sa              GUI_DROPDOWN_SetSelection
+ * \sa              gui_dropdown_setselection
  */
-int16_t GUI_DROPDOWN_GetSelection(GUI_HANDLE_p h);
+int16_t gui_dropdown_getselection(GUI_HANDLE_p h);
 
 /**
  * \brief           Set auto mode for slider
@@ -244,9 +244,9 @@ int16_t GUI_DROPDOWN_GetSelection(GUI_HANDLE_p h);
  * \param[in]       autoMode: Auto mode status. Set to 1 for auto mode or 0 for manual mode
  * \retval          1: Set OK
  * \retval          0: Set ERROR
- * \sa              GUI_DROPDOWN_SetSliderVisibility
+ * \sa              gui_dropdown_setslidervisibility
  */
-uint8_t GUI_DROPDOWN_SetSliderAuto(GUI_HANDLE_p h, uint8_t autoMode);
+uint8_t gui_dropdown_setsliderauto(GUI_HANDLE_p h, uint8_t autoMode);
 
 /**
  * \brief           Set manual visibility for slider
@@ -255,9 +255,9 @@ uint8_t GUI_DROPDOWN_SetSliderAuto(GUI_HANDLE_p h, uint8_t autoMode);
  * \param[in]       visible: Slider visible status, 1 or 0
  * \retval          1: Set to desired value
  * \retval          0: Not set to desired value
- * \sa              GUI_DROPDOWN_SetSliderAuto
+ * \sa              gui_dropdown_setsliderauto
  */
-uint8_t GUI_DROPDOWN_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible);
+uint8_t gui_dropdown_setslidervisibility(GUI_HANDLE_p h, uint8_t visible);
 
 /**
  * \brief           Scroll list if possible
@@ -266,7 +266,7 @@ uint8_t GUI_DROPDOWN_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible);
  * \retval          1: Scroll successful
  * \retval          0: Scroll not successful
  */
-uint8_t GUI_DROPDOWN_Scroll(GUI_HANDLE_p h, int16_t step);
+uint8_t gui_dropdown_scroll(GUI_HANDLE_p h, int16_t step);
 
 /**
  * \brief           Set opening direction for dropdown list
@@ -275,7 +275,7 @@ uint8_t GUI_DROPDOWN_Scroll(GUI_HANDLE_p h, int16_t step);
  * \retval          1: Open direction has been changed 
  * \retval          0: Open direction has not been changed
  */
-uint8_t GUI_DROPDOWN_SetOpenDirection(GUI_HANDLE_p h, GUI_DROPDOWN_OPENDIR_t dir);
+uint8_t gui_dropdown_setopendirection(GUI_HANDLE_p h, GUI_DROPDOWN_OPENDIR_t dir);
     
 /**
  * \}

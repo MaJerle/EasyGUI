@@ -77,7 +77,7 @@ GUI_TIMER_t* gui_timer_create__(uint16_t period, void (*callback)(GUI_TIMER_t *)
         ptr->Params = params;                       /* Timer custom parameters */
         ptr->Flags = 0;                             /* Timer flags management */
         
-        __GUI_LINKEDLIST_ADD_GEN(&GUI.Timers.List, (GUI_LinkedList_t *)ptr);    /* Add timer to linked list */
+        gui_linkedlist_add_gen__(&GUI.Timers.List, (GUI_LinkedList_t *)ptr);    /* Add timer to linked list */
 #if GUI_OS
         gui_sys_mbox_putnow(&GUI.OS.mbox, &timer_msg);  /* Add new message to queue */
 #endif /* GUI_OS */
@@ -87,7 +87,7 @@ GUI_TIMER_t* gui_timer_create__(uint16_t period, void (*callback)(GUI_TIMER_t *)
 
 uint8_t gui_timer_remove__(GUI_TIMER_t** t) {  
     __GUI_ASSERTPARAMS(t && *t);                    /* Check input parameters */  
-    __GUI_LINKEDLIST_REMOVE_GEN(&GUI.Timers.List, (GUI_LinkedList_t *)(*t));    /* Remove timer from linked list */
+    gui_linkedlist_remove_gen__(&GUI.Timers.List, (GUI_LinkedList_t *)(*t));    /* Remove timer from linked list */
     __GUI_MEMFREE(*t);                              /* Free memory for timer */
     *t = 0;                                         /* Restore pointer */
     

@@ -56,19 +56,19 @@ extern "C" {
  *
  * Example code of image above:
  * \code{c}
-handle = GUI_LED_Create(0, 10, 80, 30, 30, 0, 0, 0);
-GUI_LED_SetType(handle, GUI_LED_TYPE_CIRCLE);
-GUI_LED_Set(handle, 1);
+handle = gui_led_create(0, 10, 80, 30, 30, 0, 0, 0);
+gui_led_settype(handle, GUI_LED_TYPE_CIRCLE);
+gui_led_set(handle, 1);
 
-handle = GUI_LED_Create(0, 50, 80, 30, 30, 0, 0, 0);
-GUI_LED_SetType(handle, GUI_LED_TYPE_CIRCLE);
+handle = gui_led_create(0, 50, 80, 30, 30, 0, 0, 0);
+gui_led_settype(handle, GUI_LED_TYPE_CIRCLE);
 
-handle = GUI_LED_Create(0, 90, 80, 30, 30, 0, 0, 0);
-GUI_LED_SetType(handle, GUI_LED_TYPE_RECT);
-GUI_LED_Set(handle, 1);
+handle = gui_led_create(0, 90, 80, 30, 30, 0, 0, 0);
+gui_led_settype(handle, GUI_LED_TYPE_RECT);
+gui_led_set(handle, 1);
 
-handle = GUI_LED_Create(0, 130, 80, 30, 30, 0, 0, 0);
-GUI_LED_SetType(handle, GUI_LED_TYPE_RECT);
+handle = gui_led_create(0, 130, 80, 30, 30, 0, 0, 0);
+gui_led_settype(handle, GUI_LED_TYPE_RECT);
 \endcode
  */
 
@@ -118,7 +118,7 @@ typedef struct GUI_LED_t {
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_LED_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_led_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Set color to specific part of widget
@@ -128,7 +128,7 @@ GUI_HANDLE_p GUI_LED_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t w
  * \retval          1: Color was set ok
  * \retval          0: Color was not set
  */
-uint8_t GUI_LED_SetColor(GUI_HANDLE_p h, GUI_LED_COLOR_t index, GUI_Color_t color);
+uint8_t gui_led_setcolor(GUI_HANDLE_p h, GUI_LED_COLOR_t index, GUI_Color_t color);
 
 /**
  * \brief           Set led type
@@ -137,7 +137,7 @@ uint8_t GUI_LED_SetColor(GUI_HANDLE_p h, GUI_LED_COLOR_t index, GUI_Color_t colo
  * \retval          1: Type was set ok
  * \retval          0: Type was not set
  */
-uint8_t GUI_LED_SetType(GUI_HANDLE_p h, GUI_LED_TYPE_t type);
+uint8_t gui_led_settype(GUI_HANDLE_p h, GUI_LED_TYPE_t type);
 
 /**
  * \brief           Toggle LED state
@@ -145,7 +145,7 @@ uint8_t GUI_LED_SetType(GUI_HANDLE_p h, GUI_LED_TYPE_t type);
  * \retval          1: Led was toggled ok
  * \retval          0: Led was not toggled
  */
-uint8_t GUI_LED_Toggle(GUI_HANDLE_p h);
+uint8_t gui_led_toggle(GUI_HANDLE_p h);
 
 /**
  * \brief           Set LED value either on (turn on) or off (turn off)
@@ -154,7 +154,7 @@ uint8_t GUI_LED_Toggle(GUI_HANDLE_p h);
  * \retval          1: Led state was set ok
  * \retval          0: Led state was not set
  */
-uint8_t GUI_LED_Set(GUI_HANDLE_p h, uint8_t state);
+uint8_t gui_led_set(GUI_HANDLE_p h, uint8_t state);
 
 /**
  * \brief           Check if led is ON
@@ -162,7 +162,7 @@ uint8_t GUI_LED_Set(GUI_HANDLE_p h, uint8_t state);
  * \retval          1: Led is ON
  * \retval          0: Led is OFF
  */
-uint8_t GUI_LED_IsOn(GUI_HANDLE_p h);
+uint8_t gui_led_ison(GUI_HANDLE_p h);
 
 /**
  * \}

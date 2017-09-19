@@ -57,9 +57,9 @@ extern "C" {
  * Example code of image above:
  * \code{c}                
 //Create widget and allocate memory for text edit process
-handle = GUI_EDITTEXT_Create(1, 10, 10, 400, 40, h, 0, 0);
-GUI_WIDGET_AllocTextMemory(handle, 255);
-GUI_WIDGET_SetText(handle, _GT("Edit text"));
+handle = gui_edittext_create(1, 10, 10, 400, 40, h, 0, 0);
+gui_widget_alloctextmemory(handle, 255);
+gui_widget_settext(handle, _GT("Edit text"));
 \endcode
  */
 
@@ -119,7 +119,7 @@ typedef struct GUI_EDITTEXT_t {
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_edittext_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Set color to specific part of widget
@@ -129,7 +129,7 @@ GUI_HANDLE_p GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Di
  * \retval          1: Color was set ok
  * \retval          0: Color was not set
  */
-uint8_t GUI_EDITTEXT_SetColor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color);
+uint8_t gui_edittext_setcolor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color);
 
 /**
  * \brief           Set edit text to multi line mode
@@ -139,7 +139,7 @@ uint8_t GUI_EDITTEXT_SetColor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Co
  * \retval          1: Color was set ok
  * \retval          0: Color was not set
  */
-uint8_t GUI_EDITTEXT_SetMultiline(GUI_HANDLE_p h, uint8_t multiline);
+uint8_t gui_edittext_setmultiline(GUI_HANDLE_p h, uint8_t multiline);
 
 /**
  * \brief           Set vertical align for text inside text box
@@ -148,7 +148,7 @@ uint8_t GUI_EDITTEXT_SetMultiline(GUI_HANDLE_p h, uint8_t multiline);
  * \retval          1: Align was set ok
  * \retval          0: Align was not set
  */
-uint8_t GUI_EDITTEXT_SetVAlign(GUI_HANDLE_p h, GUI_EDITTEXT_VALIGN_t align);
+uint8_t gui_edittext_setvalign(GUI_HANDLE_p h, GUI_EDITTEXT_VALIGN_t align);
 
 /**
  * \brief           Set horizontal align for text inside text box
@@ -157,7 +157,7 @@ uint8_t GUI_EDITTEXT_SetVAlign(GUI_HANDLE_p h, GUI_EDITTEXT_VALIGN_t align);
  * \retval          1: Align was set ok
  * \retval          0: Align was not set
  */
-uint8_t GUI_EDITTEXT_SetHAlign(GUI_HANDLE_p h, GUI_EDITTEXT_HALIGN_t align);
+uint8_t gui_edittext_sethalign(GUI_HANDLE_p h, GUI_EDITTEXT_HALIGN_t align);
 
 /**
  * \}

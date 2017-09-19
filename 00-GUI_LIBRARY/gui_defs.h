@@ -135,7 +135,7 @@ typedef enum GUI_Result_t {
 /**
  * \brief           Linked list structure
  * \note            This structure must be first element in \ref GUI_HANDLE_p structure
- * \sa              GUI_LinkedListRoot_t
+ * \sa              gui_linkedlistroot_t
  */
 typedef struct GUI_LinkedList_t {
     void* Prev;                             /*!< Previous object in linked list */
@@ -144,7 +144,7 @@ typedef struct GUI_LinkedList_t {
 
 /**
  * \brief           Structure used for dynamic struct allocation
- * \sa              GUI_LinkedListRoot_t
+ * \sa              gui_linkedlistroot_t
  */
 typedef struct GUI_LinkedListMulti_t {
     GUI_LinkedList_t List;                  /*!< Linked list structure, must be first on structure for casting */
@@ -153,8 +153,8 @@ typedef struct GUI_LinkedListMulti_t {
 
 /**
  * \brief           Linked list root structure for start and end widget in structure
- * \sa              GUI_LinkedList_t
- * \sa              GUI_LinkedListMulti_t
+ * \sa              gui_linkedlist_t
+ * \sa              gui_linkedlistmulti_t
  */
 typedef struct GUI_LinkedListRoot_t {
     void* First;                            /*!< First element in linked list */
@@ -219,7 +219,7 @@ drv_t* driver_ptr = &my->driver;
 void myFunc(drv_t* drv) {
     //We know drv pointer is child of my_structure
     //Let's get that my_structure pointer from drv_t structure
-    my_structure* my_struct = GUI_ContainerOf(drv, my_structure, driver);
+    my_structure* my_struct = gui_containerof(drv, my_structure, driver);
     
     //Check if they match
     if (my_struct == &my) {
@@ -228,7 +228,7 @@ void myFunc(drv_t* drv) {
 }
 \endcode
  */
-#define             GUI_ContainerOf(ptr, type, memb)      (type *)((char *)(ptr) - (char *)offsetof(type, memb))
+#define             gui_containerof(ptr, type, memb)      (type *)((char *)(ptr) - (char *)offsetof(type, memb))
 
 /**
  * \brief           Color gradient definition
@@ -975,7 +975,7 @@ typedef enum GUI_WC_t {
     /**     
      * \brief       Widget should increase/decrease selection
      *
-     * \note        Called from \ref GUI_WIDGET_IncSelection function to increase/decrease selection for widgets
+     * \note        Called from \ref gui_widget_incselection function to increase/decrease selection for widgets
      *                 such as listbox or dropdown, where active selection can be changed
      *
      * \param[in]   *param: Pointer to \ref int16_t variable for amount of increase/decrease value

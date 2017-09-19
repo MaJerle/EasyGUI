@@ -65,11 +65,11 @@ static GUI_Byte_t KBBufferData[GUI_TOUCH_BUFFER_SIZE * sizeof(GUI_KeyboardData_t
 /******************************************************************************/
 /******************************************************************************/
 #if GUI_USE_TOUCH
-uint8_t GUI_INPUT_TouchAdd(GUI_TouchData_t* ts) {
+uint8_t gui_input_touchadd(GUI_TouchData_t* ts) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(ts);                         /* Check input parameters */
     ts->Time = gui_sys_now();                       /* Set event time */
-    ret = GUI_BUFFER_Write(&TSBuffer, ts, sizeof(*ts)) ? 1 : 0; /* Write data to buffer */
+    ret = gui_buffer_write(&TSBuffer, ts, sizeof(*ts)) ? 1 : 0; /* Write data to buffer */
 #if GUI_OS
     static gui_mbox_msg_t gui_touch_value = {GUI_SYS_MBOX_TYPE_TOUCH};  /* Enter some value, don't care about */
     gui_sys_mbox_putnow(&GUI.OS.mbox, &gui_touch_value);    /* Notify stack about new key added */
@@ -78,25 +78,25 @@ uint8_t GUI_INPUT_TouchAdd(GUI_TouchData_t* ts) {
 }
 
 uint8_t gui_input_touchread__(GUI_TouchData_t* ts) {
-    if (GUI_BUFFER_GetFull(&TSBuffer) >= sizeof(*ts)) {
-        return (uint8_t)GUI_BUFFER_Read(&TSBuffer, ts, sizeof(*ts)); /* Read data fro mbuffer */
+    if (gui_buffer_getfull(&TSBuffer) >= sizeof(*ts)) {
+        return (uint8_t)gui_buffer_read(&TSBuffer, ts, sizeof(*ts)); /* Read data fro mbuffer */
     }
     return 0;
 }
 
 uint8_t gui_input_touchavailable__(void) {
-    return GUI_BUFFER_GetFull(&TSBuffer) > 0;       /* Check if any available touch */
+    return gui_buffer_getfull(&TSBuffer) > 0;       /* Check if any available touch */
 }
 #endif /* GUI_USE_TOUCH */
 
 
 #if GUI_USE_KEYBOARD
 
-uint8_t GUI_INPUT_KeyAdd(GUI_KeyboardData_t* kb) {
+uint8_t gui_input_keyadd(GUI_KeyboardData_t* kb) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(kb);                         /* Check input parameters */
     kb->Time = gui_sys_now();                       /* Set event time */
-    ret = GUI_BUFFER_Write(&KBBuffer, kb, sizeof(*kb)) ? 1 : 0; /* Write data to buffer */
+    ret = gui_buffer_write(&KBBuffer, kb, sizeof(*kb)) ? 1 : 0; /* Write data to buffer */
 #if GUI_OS
     static gui_mbox_msg_t gui_kbd_value = {GUI_SYS_MBOX_TYPE_KEYBOARD}; /* Enter some value, don't care about */
     gui_sys_mbox_putnow(&GUI.OS.mbox, &gui_kbd_value);   /* Notify stack about new key added */
@@ -105,8 +105,8 @@ uint8_t GUI_INPUT_KeyAdd(GUI_KeyboardData_t* kb) {
 }
 
 uint8_t gui_input_keyread__(GUI_KeyboardData_t* kb) {
-    if (GUI_BUFFER_GetFull(&KBBuffer) >= sizeof(*kb)) {
-        return (uint8_t)GUI_BUFFER_Read(&KBBuffer, kb, sizeof(*kb)); /* Read data fro mbuffer */
+    if (gui_buffer_getfull(&KBBuffer) >= sizeof(*kb)) {
+        return (uint8_t)gui_buffer_read(&KBBuffer, kb, sizeof(*kb)); /* Read data fro mbuffer */
     }
     return 0;
 }
@@ -114,9 +114,9 @@ uint8_t gui_input_keyread__(GUI_KeyboardData_t* kb) {
 
 void gui_input_init__(void) {
 #if GUI_USE_TOUCH
-    GUI_BUFFER_Init(&TSBuffer, sizeof(TSBufferData), TSBufferData);
+    gui_buffer_init(&TSBuffer, sizeof(TSBufferData), TSBufferData);
 #endif /* GUI_USE_TOUCH */
 #if GUI_USE_KEYBOARD
-    GUI_BUFFER_Init(&KBBuffer, sizeof(KBBufferData), KBBufferData);
+    gui_buffer_init(&KBBuffer, sizeof(KBBufferData), KBBufferData);
 #endif /* GUI_USE_KEYBOARD */
 }

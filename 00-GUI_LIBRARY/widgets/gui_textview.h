@@ -66,26 +66,26 @@ static const GUI_Char* texts[] = {
     _GT("Text view with bottom right alignment on screen"),
 };
 for (i = 0; i < 9; i++) {
-    handle = GUI_TEXTVIEW_Create(0, 1, 1, 1, 1, 0, 0, 0);
-    GUI_WIDGET_SetSizePercent(handle, 30, 30);
-    GUI_WIDGET_SetPositionPercent(handle, 3 + (i % 3) * 33, 3 + (i / 3) * 33);
-    GUI_WIDGET_SetText(handle, texts[i]);
-    GUI_WIDGET_SetFont(handle, &GUI_Font_Roboto_Italic_14);
+    handle = gui_textview_create(0, 1, 1, 1, 1, 0, 0, 0);
+    gui_widget_setsizepercent(handle, 30, 30);
+    gui_widget_setpositionpercent(handle, 3 + (i % 3) * 33, 3 + (i / 3) * 33);
+    gui_widget_settext(handle, texts[i]);
+    gui_widget_setfont(handle, &GUI_Font_Roboto_Italic_14);
     switch (i % 4) {
-        case 0: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_WHITE); break;
-        case 1: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_YELLOW); break;
-        case 2: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_GRAY); break;
-        case 3: GUI_TEXTVIEW_SetColor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_LIGHTGREEN); break;
+        case 0: gui_textview_setcolor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_WHITE); break;
+        case 1: gui_textview_setcolor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_YELLOW); break;
+        case 2: gui_textview_setcolor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_GRAY); break;
+        case 3: gui_textview_setcolor(handle, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_LIGHTGREEN); break;
     }
     switch (i % 3) {
-        case 0: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_LEFT); break;
-        case 1: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_CENTER); break;
-        case 2: GUI_TEXTVIEW_SetHAlign(handle, GUI_TEXTVIEW_HALIGN_RIGHT); break;
+        case 0: gui_textview_sethalign(handle, GUI_TEXTVIEW_HALIGN_LEFT); break;
+        case 1: gui_textview_sethalign(handle, GUI_TEXTVIEW_HALIGN_CENTER); break;
+        case 2: gui_textview_sethalign(handle, GUI_TEXTVIEW_HALIGN_RIGHT); break;
     }
     switch (i / 3) {
-        case 0: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_TOP); break;
-        case 1: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_CENTER); break;
-        case 2: GUI_TEXTVIEW_SetVAlign(handle, GUI_TEXTVIEW_VALIGN_BOTTOM); break;
+        case 0: gui_textview_setvalign(handle, GUI_TEXTVIEW_VALIGN_TOP); break;
+        case 1: gui_textview_setvalign(handle, GUI_TEXTVIEW_VALIGN_CENTER); break;
+        case 2: gui_textview_setvalign(handle, GUI_TEXTVIEW_VALIGN_BOTTOM); break;
     }
 }
 \endcode
@@ -144,7 +144,7 @@ typedef struct GUI_TEXTVIEW_t {
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_TEXTVIEW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_textview_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Set color to specific part of widget
@@ -154,7 +154,7 @@ GUI_HANDLE_p GUI_TEXTVIEW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Di
  * \retval          1: Color was set ok
  * \retval          0: Color was not set
  */
-uint8_t GUI_TEXTVIEW_SetColor(GUI_HANDLE_p h, GUI_TEXTVIEW_COLOR_t index, GUI_Color_t color);
+uint8_t gui_textview_setcolor(GUI_HANDLE_p h, GUI_TEXTVIEW_COLOR_t index, GUI_Color_t color);
 
 /**
  * \brief           Set vertical align for text inside text box
@@ -163,7 +163,7 @@ uint8_t GUI_TEXTVIEW_SetColor(GUI_HANDLE_p h, GUI_TEXTVIEW_COLOR_t index, GUI_Co
  * \retval          1: Align was set ok
  * \retval          0: Align was not set
  */
-uint8_t GUI_TEXTVIEW_SetVAlign(GUI_HANDLE_p h, GUI_TEXTVIEW_VALIGN_t align);
+uint8_t gui_textview_setvalign(GUI_HANDLE_p h, GUI_TEXTVIEW_VALIGN_t align);
 
 /**
  * \brief           Set horizontal align for text inside text box
@@ -172,7 +172,7 @@ uint8_t GUI_TEXTVIEW_SetVAlign(GUI_HANDLE_p h, GUI_TEXTVIEW_VALIGN_t align);
  * \retval          1: Align was set ok
  * \retval          0: Align was not set
  */
-uint8_t GUI_TEXTVIEW_SetHAlign(GUI_HANDLE_p h, GUI_TEXTVIEW_HALIGN_t align);
+uint8_t gui_textview_sethalign(GUI_HANDLE_p h, GUI_TEXTVIEW_HALIGN_t align);
     
 /**
  * \}

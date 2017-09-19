@@ -50,7 +50,7 @@ typedef struct DDList_t {
 #define __GW(x)             ((GUI_WINDOW_t *)(x))
 
 static
-uint8_t GUI_DIALOG_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+uint8_t gui_dialog_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 static
 GUI_LinkedListRoot_t DDList;                        /*!< List of dismissed dialog elements which are not read yet */
@@ -64,7 +64,7 @@ static const GUI_WIDGET_t Widget = {
     .Name = _GT("DIALOG"),                          /*!< Widget name */
     .Size = sizeof(GUI_DIALOG_t),                   /*!< Size of widget for memory allocation */
     .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN | GUI_FLAG_WIDGET_DIALOG_BASE,  /*!< List of widget flags */
-    .Callback = GUI_DIALOG_Callback,                /*!< Control function */
+    .Callback = gui_dialog_callback,                /*!< Control function */
     .Colors = NULL,                                 /*!< Pointer to colors array */
     .ColorsCount = 0,                               /*!< Number of colors */
 };
@@ -84,7 +84,7 @@ DDList_t* __AddToActiveDialogs(GUI_HANDLE_p h) {
     if (l) {
         l->h = h;
         l->id = gui_widget_getid__(h);
-        __GUI_LINKEDLIST_ADD_GEN(&DDList, &l->list);/* Add entry to linked list */
+        gui_linkedlist_add_gen__(&DDList, &l->list);/* Add entry to linked list */
     }
     return l;
 }
@@ -92,7 +92,7 @@ DDList_t* __AddToActiveDialogs(GUI_HANDLE_p h) {
 /* Remove and free memory from linked list */
 static
 void __RemoveFromActiveDialogs(DDList_t* l) {
-    __GUI_LINKEDLIST_REMOVE_GEN(&DDList, &l->list); /* Remove entry from linked list first */
+    gui_linkedlist_remove_gen__(&DDList, &l->list); /* Remove entry from linked list first */
     
     __GUI_MEMFREE(l);                               /* Free memory */
 }
@@ -105,8 +105,8 @@ DDList_t* __GetFromActiveDialogs(GUI_HANDLE_p h) {
     
     id = gui_widget_getid__(h);                     /* Get id of widget */
     
-    for (l = (DDList_t *)__GUI_LINKEDLIST_GETNEXT_GEN((GUI_LinkedListRoot_t *)&DDList, NULL); l;
-        l = (DDList_t *)__GUI_LINKEDLIST_GETNEXT_GEN(NULL, (GUI_LinkedList_t *)l)) {
+    for (l = (DDList_t *)gui_linkedlist_getnext_gen__((GUI_LinkedListRoot_t *)&DDList, NULL); l;
+        l = (DDList_t *)gui_linkedlist_getnext_gen__(NULL, (GUI_LinkedList_t *)l)) {
         if (l->h == h && l->id == id) {             /* Check match for handle and id */
             break;
         }
@@ -116,15 +116,13 @@ DDList_t* __GetFromActiveDialogs(GUI_HANDLE_p h) {
 
 /* Default dialog callback */
 static
-uint8_t GUI_DIALOG_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+uint8_t gui_dialog_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Remove: {
-            /* Remove from dismissed list if exists */
             return 1;
         }
         case GUI_WC_PreInit: {
-            
             return 1;
         }
         case GUI_WC_OnDismiss: {
@@ -143,7 +141,7 @@ uint8_t GUI_DIALOG_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_DIALOG_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p gui_dialog_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_HANDLE_p ptr;
     if (!func) {                                    /* Check create function */
         return NULL;
@@ -162,11 +160,11 @@ GUI_HANDLE_p GUI_DIALOG_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
 }
 
 #if GUI_OS
-int GUI_DIALOG_CreateBlocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+int gui_dialog_createblocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_HANDLE_p ptr;
     int resp = -1;                                  /* Dialog not created error */
     
-    ptr = GUI_DIALOG_Create(id, x, y, width, height, func, cb, flags);  /* Create dialog first */
+    ptr = gui_dialog_create(id, x, y, width, height, func, cb, flags);  /* Create dialog first */
     if (ptr) {                                      /* Widget created */
         DDList_t* l;
         
@@ -194,7 +192,7 @@ int GUI_DIALOG_CreateBlocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
 }
 #endif /* GUI_OS */
 
-uint8_t GUI_DIALOG_Dismiss(GUI_HANDLE_p h, int status) {
+uint8_t gui_dialog_dismiss(GUI_HANDLE_p h, int status) {
     DDList_t* l;
     uint8_t ret = 0;
     

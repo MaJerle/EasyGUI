@@ -54,7 +54,7 @@ extern "C" {
  * \retval          0: Initialization successful
  * \retval          1: Initialization failed
  */
-uint8_t GUI_LL_Init(GUI_LCD_t* LCD, GUI_LL_t* LL);
+uint8_t gui_ll_init(GUI_LCD_t* LCD, GUI_LL_t* LL);
 
 /**
  * \brief           Send command to for LCD from GUI
@@ -65,7 +65,7 @@ uint8_t GUI_LL_Init(GUI_LCD_t* LCD, GUI_LL_t* LL);
  * \retval          0: Command has been processed
  * \retval          1: Command has not been processed
  */
-uint8_t GUI_LL_Control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* result);
+uint8_t gui_ll_control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* result);
  
 /**
  * \}

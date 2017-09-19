@@ -60,7 +60,7 @@ extern "C" {
  * \retval          1: Function succedded, result is valid
  * \retval          0: Function failed, result is not valid
  */
-uint8_t GUI_MATH_Sqrt(float x, float* result);
+uint8_t gui_math_sqrt(float x, float* result);
 
 /**
  * \brief           Calculate reverse square of input value
@@ -72,7 +72,7 @@ uint8_t GUI_MATH_Sqrt(float x, float* result);
  * \retval          1: Function succedded, result is valid
  * \retval          0: Function failed, result is not valid
  */
-uint8_t GUI_MATH_RSqrt(float x, float* result);
+uint8_t gui_math_rsqrt(float x, float* result);
 
 /**
  * \brief           Calculate distance between 2 XY points
@@ -87,7 +87,7 @@ uint8_t GUI_MATH_RSqrt(float x, float* result);
  * \retval          1: Function succedded, result is valid
  * \retval          0: Function failed, result is not valid
  */
-uint8_t GUI_MATH_DistanceBetweenXY(float x1, float y1, float x2, float y2, float* result);
+uint8_t gui_math_distancebetweenxy(float x1, float y1, float x2, float y2, float* result);
 
 /**
  * \brief           Calculate center XY coordinate between 2 XY points
@@ -105,7 +105,7 @@ uint8_t GUI_MATH_DistanceBetweenXY(float x1, float y1, float x2, float y2, float
  * \retval          1: Function succedded, results are valid
  * \retval          0: Function failed, results are not valid
  */
-uint8_t GUI_MATH_CenterOfXY(float x1, float y1, float x2, float y2, float* resultX, float* resultY);
+uint8_t gui_math_centerofxy(float x1, float y1, float x2, float y2, float* resultX, float* resultY);
     
 /**
  * \}

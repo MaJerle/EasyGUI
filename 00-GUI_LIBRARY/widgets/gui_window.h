@@ -53,9 +53,9 @@ extern "C" {
  *
  * Example code of image above:
  * \code{c}
-handle = GUI_WINDOW_Create(0, 40, 20, 300, 200, GUI_WINDOW_GetDesktop(), 0, 0);
-GUI_WIDGET_SetExpanded(handle, 1);
-GUI_WIDGET_SetText(handle, _GT("Window"));
+handle = gui_window_create(0, 40, 20, 300, 200, gui_window_getdesktop(), 0, 0);
+gui_widget_setexpanded(handle, 1);
+gui_widget_settext(handle, _GT("Window"));
 \endcode
  */
     
@@ -87,7 +87,7 @@ typedef struct GUI_WINDOW_t {
  * \brief           Get desktop window
  * \retval          Widget handle of desktop window
  */
-GUI_HANDLE_p GUI_WINDOW_GetDesktop(void);
+GUI_HANDLE_p gui_window_getdesktop(void);
     
 /**
  * \brief           Set active window for future widgets and for current top window
@@ -95,7 +95,7 @@ GUI_HANDLE_p GUI_WINDOW_GetDesktop(void);
  * \retval          1: Widget was set ok
  * \retval          0: Widget was not set
  */
-uint8_t GUI_WINDOW_SetActive(GUI_HANDLE_p h);
+uint8_t gui_window_setactive(GUI_HANDLE_p h);
 
 /**
  * \brief           Create new base widget window with desktop window as a parent
@@ -104,7 +104,7 @@ uint8_t GUI_WINDOW_SetActive(GUI_HANDLE_p h);
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_WINDOW_CreateDesktop(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb);
+GUI_HANDLE_p gui_window_createdesktop(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb);
 
 /**
  * \brief           Create new window widget
@@ -119,7 +119,7 @@ GUI_HANDLE_p GUI_WINDOW_CreateDesktop(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb);
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_window_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Set color to specific part of widget
@@ -129,7 +129,7 @@ GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
  * \retval          1: Color was set ok
  * \retval          0: Color was not set
  */
-uint8_t GUI_WINDOW_SetColor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color);
+uint8_t gui_window_setcolor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color);
  
 /**
  * \}

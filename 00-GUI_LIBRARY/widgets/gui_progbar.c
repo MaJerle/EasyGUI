@@ -49,7 +49,7 @@
 #define CFG_ANIM            0x05
 
 static
-uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+uint8_t gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -66,7 +66,7 @@ static const GUI_WIDGET_t Widget = {
     .Name = _GT("PROGBAR"),                         /*!< Widget name */
     .Size = sizeof(GUI_PROGBAR_t),                  /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = GUI_PROGBAR_Callback,               /*!< Callback function */
+    .Callback = gui_progbar_callback,               /*!< Callback function */
     .Colors = Colors,                               /*!< List of default colors */
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
 };
@@ -118,7 +118,7 @@ void __TimerCallback(GUI_TIMER_t* t) {
 
 /* Main widget callback */
 static
-uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+uint8_t gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
@@ -188,9 +188,9 @@ uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
            
             w = ((width - 4) * (p->CurrentValue - p->Min)) / (p->Max - p->Min); /* Get width for active part */
             
-            GUI_DRAW_FilledRectangle(disp, x + w + 2, y + 2, width - w - 4, height - 4, gui_widget_getcolor__(h, GUI_PROGBAR_COLOR_BG));
-            GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, w, height - 4, gui_widget_getcolor__(h, GUI_PROGBAR_COLOR_FG));
-            GUI_DRAW_Rectangle3D(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
+            gui_draw_filledrectangle(disp, x + w + 2, y + 2, width - w - 4, height - 4, gui_widget_getcolor__(h, GUI_PROGBAR_COLOR_BG));
+            gui_draw_filledrectangle(disp, x + 2, y + 2, w, height - 4, gui_widget_getcolor__(h, GUI_PROGBAR_COLOR_FG));
+            gui_draw_rectangle3d(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
             
             /* Draw text if possible */
             if (__GH(h)->Font) {
@@ -206,7 +206,7 @@ uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                 
                 if (text) {                         /* If text is valid, print it */
                     GUI_DRAW_FONT_t f;
-                    GUI_DRAW_FONT_Init(&f);         /* Init structure */
+                    gui_draw_font_init(&f);         /* Init structure */
                     
                     f.X = x + 2;
                     f.Y = y + 2;
@@ -216,7 +216,7 @@ uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                     f.Color1Width = w ? w - 1 : 0;
                     f.Color1 = gui_widget_getcolor__(h, GUI_PROGBAR_COLOR_BG);
                     f.Color2 = gui_widget_getcolor__(h, GUI_PROGBAR_COLOR_FG);
-                    GUI_DRAW_WriteText(disp, gui_widget_getfont__(h), text, &f);
+                    gui_draw_writetext(disp, gui_widget_getfont__(h), text, &f);
                 }
             }
         }
@@ -237,41 +237,41 @@ uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_PROGBAR_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p gui_progbar_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
-uint8_t GUI_PROGBAR_SetColor(GUI_HANDLE_p h, GUI_PROGBAR_COLOR_t index, GUI_Color_t color) {
+uint8_t gui_progbar_setcolor(GUI_HANDLE_p h, GUI_PROGBAR_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }
 
-uint8_t GUI_PROGBAR_SetValue(GUI_HANDLE_p h, int32_t val) {
+uint8_t gui_progbar_setvalue(GUI_HANDLE_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_VALUE, &val, 1, 0); /* Set parameter */
 }
 
-uint8_t GUI_PROGBAR_SetMin(GUI_HANDLE_p h, int32_t val) {
+uint8_t gui_progbar_setmin(GUI_HANDLE_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_MIN, &val, 1, 0);   /* Set parameter */
 }
 
-uint8_t GUI_PROGBAR_SetMax(GUI_HANDLE_p h, int32_t val) {
+uint8_t gui_progbar_setmax(GUI_HANDLE_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_MAX, &val, 1, 0);   /* Set parameter */
 }
 
-uint8_t GUI_PROGBAR_SetPercentMode(GUI_HANDLE_p h, uint8_t enable) {
+uint8_t gui_progbar_setpercentmode(GUI_HANDLE_p h, uint8_t enable) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_PERCENT, &enable, 1, 0);    /* Set parameter */
 }
 
-uint8_t GUI_PROGBAR_SetAnimation(GUI_HANDLE_p h, uint8_t anim) {
+uint8_t gui_progbar_setanimation(GUI_HANDLE_p h, uint8_t anim) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_ANIM, &anim, 1, 0); /* Set parameter */
 }
 
-int32_t GUI_PROGBAR_GetMin(GUI_HANDLE_p h) {
+int32_t gui_progbar_getmin(GUI_HANDLE_p h) {
     int32_t val;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
@@ -282,7 +282,7 @@ int32_t GUI_PROGBAR_GetMin(GUI_HANDLE_p h) {
     return val;
 }
 
-int32_t GUI_PROGBAR_GetMax(GUI_HANDLE_p h) {
+int32_t gui_progbar_getmax(GUI_HANDLE_p h) {
     int32_t val;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
@@ -293,7 +293,7 @@ int32_t GUI_PROGBAR_GetMax(GUI_HANDLE_p h) {
     return val;
 }
 
-int32_t GUI_PROGBAR_GetValue(GUI_HANDLE_p h) {
+int32_t gui_progbar_getvalue(GUI_HANDLE_p h) {
     int32_t val;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */

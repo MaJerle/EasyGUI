@@ -55,7 +55,7 @@
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-void __GUI_LINKEDLIST_ADD_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
+void gui_linkedlist_add_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
     if (!root->First || !root->Last) {              /* First widget is about to be created */
         element->Prev = NULL;                       /* There is no previous element */
         element->Next = NULL;                       /* There is no next element */
@@ -69,7 +69,7 @@ void __GUI_LINKEDLIST_ADD_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* elem
     }
 }
 
-GUI_LinkedList_t* __GUI_LINKEDLIST_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
+GUI_LinkedList_t* gui_linkedlist_remove_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
     GUI_LinkedList_t* prev;
     GUI_LinkedList_t* next;
     
@@ -98,7 +98,7 @@ GUI_LinkedList_t* __GUI_LINKEDLIST_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_Li
     return element;
 }
 
-GUI_LinkedList_t* __GUI_LINKEDLIST_GETNEXT_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
+GUI_LinkedList_t* gui_linkedlist_getnext_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
     if (!element) { 
         if (root) {
             return (void *)root->First;
@@ -109,7 +109,7 @@ GUI_LinkedList_t* __GUI_LINKEDLIST_GETNEXT_GEN(GUI_LinkedListRoot_t* root, GUI_L
     return element->Next;                           /* Get next widget of current in linked list */
 }
 
-GUI_LinkedList_t* __GUI_LINKEDLIST_GETPREV_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
+GUI_LinkedList_t* gui_linkedlist_getprev_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
     if (!element) { 
         if (root) {
             return (void *)root->Last;
@@ -120,7 +120,7 @@ GUI_LinkedList_t* __GUI_LINKEDLIST_GETPREV_GEN(GUI_LinkedListRoot_t* root, GUI_L
     return element->Prev;                           /* Get next widget of current in linked list */
 }
 
-uint8_t __GUI_LINKEDLIST_MOVEDOWN_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
+uint8_t gui_linkedlist_movedown_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
     GUI_LinkedList_t* Prev = 0;
     GUI_LinkedList_t* Next = 0;
     GUI_LinkedList_t* NextNext = 0;
@@ -160,7 +160,7 @@ uint8_t __GUI_LINKEDLIST_MOVEDOWN_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList
     return 1;                                       /* Move was successful */
 }
 
-uint8_t __GUI_LINKEDLIST_MOVEUP_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
+uint8_t gui_linkedlist_moveup_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
     GUI_LinkedList_t* PrevPrev = 0;
     GUI_LinkedList_t* Prev = 0;
     GUI_LinkedList_t* Next = 0;
@@ -200,15 +200,15 @@ uint8_t __GUI_LINKEDLIST_MOVEUP_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedList_t
     return 1;                                       /* Move was successful */
 }
 
-GUI_LinkedList_t* __GUI_LINKEDLIST_GETNEXT_BYINDEX_GEN(GUI_LinkedListRoot_t* root, uint16_t index) {
-    GUI_LinkedList_t* item = __GUI_LINKEDLIST_GETNEXT_GEN(root, 0); /* Get first element */
+GUI_LinkedList_t* gui_linkedlist_getnext_byindex_gen__(GUI_LinkedListRoot_t* root, uint16_t index) {
+    GUI_LinkedList_t* item = gui_linkedlist_getnext_gen__(root, 0); /* Get first element */
     while (index-- && item) {                       /* Scroll to next elements */
-        item = __GUI_LINKEDLIST_GETNEXT_GEN(0, (GUI_LinkedList_t *)item);
+        item = gui_linkedlist_getnext_gen__(NULL, (GUI_LinkedList_t *)item);
     }
     return item;                                    /* Get that item */
 }
 
-GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_ADD_GEN(GUI_LinkedListRoot_t* root, void* element) {
+GUI_LinkedListMulti_t* gui_linkedlist_multi_add_gen__(GUI_LinkedListRoot_t* root, void* element) {
     GUI_LinkedListMulti_t* ptr;
     ptr = __GUI_MEMALLOC(sizeof(GUI_LinkedListMulti_t));    /* Create memory for linked list */
     if (!ptr) {
@@ -216,21 +216,21 @@ GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_ADD_GEN(GUI_LinkedListRoot_t* root
     }
     
     ptr->Element = element;                         /* Save pointer to our element */
-    __GUI_LINKEDLIST_ADD_GEN(root, &ptr->List);     /* Add element to linked list */
+    gui_linkedlist_add_gen__(root, &ptr->List);     /* Add element to linked list */
     
     return ptr;
 }
 
-uint8_t __GUI_LINKEDLIST_MULTI_REMOVE_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
+uint8_t gui_linkedlist_multi_remove_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
     if (!element) {                                 /* Check valid element */
         return 0;
     }
-    __GUI_LINKEDLIST_REMOVE_GEN(root, (GUI_LinkedList_t *)element); /* Remove element from linked list */
+    gui_linkedlist_remove_gen__(root, (GUI_LinkedList_t *)element); /* Remove element from linked list */
     __GUI_MEMFREE(element);                         /* Free memory */
     return 1;
 }
 
-GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
+GUI_LinkedListMulti_t* gui_linkedlist_multi_getnext_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
     if (!element) { 
         if (root) {
             return (GUI_LinkedListMulti_t *)root->First;
@@ -241,7 +241,7 @@ GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(GUI_LinkedListRoot_t* 
     return (GUI_LinkedListMulti_t *)element->List.Next; /* Get next widget of current in linked list */
 }
 
-GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_GETPREV_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
+GUI_LinkedListMulti_t* gui_linkedlist_multi_getprev_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
     if (!element) { 
         if (root) {
             return (GUI_LinkedListMulti_t *)root->Last;
@@ -252,23 +252,23 @@ GUI_LinkedListMulti_t* __GUI_LINKEDLIST_MULTI_GETPREV_GEN(GUI_LinkedListRoot_t* 
     return (GUI_LinkedListMulti_t *)element->List.Prev; /* Get next widget of current in linked list */
 }
 
-uint8_t __GUI_LINKEDLIST_MULTI_MOVEDOWN_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
-    return __GUI_LINKEDLIST_MOVEDOWN_GEN(root, &element->List); /* Move down elemenet */
+uint8_t gui_linkedlist_multi_movedown_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
+    return gui_linkedlist_movedown_gen__(root, &element->List); /* Move down elemenet */
 }
 
-uint8_t __GUI_LINKEDLIST_MULTI_MOVEUP_GEN(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
-    return __GUI_LINKEDLIST_MOVEUP_GEN(root, &element->List);   /* Move down elemenet */
+uint8_t gui_linkedlist_multi_moveup_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
+    return gui_linkedlist_moveup_gen__(root, &element->List);   /* Move down elemenet */
 }
 
-uint8_t __GUI_LINKEDLIST_MULTI_FIND_REMOVE(GUI_LinkedListRoot_t* root, void* element) {
+uint8_t gui_linkedlist_multi_find_remove__(GUI_LinkedListRoot_t* root, void* element) {
     GUI_LinkedListMulti_t* link;
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(root);                       /* Check input parameters */
     
-    for (link = __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(root, NULL); link; link = __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(NULL, link)) {
+    for (link = gui_linkedlist_multi_getnext_gen__(root, NULL); link; link = gui_linkedlist_multi_getnext_gen__(NULL, link)) {
         if ((void *)gui_linkedlist_multi_getdata__(link) == element) {  /* Check match */
-            __GUI_LINKEDLIST_MULTI_REMOVE_GEN(root, link);  /* Remove element from linked list */
+            gui_linkedlist_multi_remove_gen__(root, link);  /* Remove element from linked list */
             ret = 1;
         }
     }
@@ -282,9 +282,9 @@ uint8_t __GUI_LINKEDLIST_MULTI_FIND_REMOVE(GUI_LinkedListRoot_t* root, void* ele
 /******************************************************************************/
 void gui_linkedlist_widgetadd__(GUI_HANDLE_ROOT_t* root, GUI_HANDLE_p h) {    
     if (root) {
-        __GUI_LINKEDLIST_ADD_GEN(&root->RootList, (GUI_LinkedList_t *)h);
+        gui_linkedlist_add_gen__(&root->RootList, (GUI_LinkedList_t *)h);
     } else {
-        __GUI_LINKEDLIST_ADD_GEN(&GUI.Root, (GUI_LinkedList_t *)h);
+        gui_linkedlist_add_gen__(&GUI.Root, (GUI_LinkedList_t *)h);
     }
     gui_linkedlist_widgetmovetotop__(h);            /* Reset by moving to top */
     gui_linkedlist_widgetmovetobottom__(h);         /* Reset by moving to bottom with reorder */
@@ -292,24 +292,24 @@ void gui_linkedlist_widgetadd__(GUI_HANDLE_ROOT_t* root, GUI_HANDLE_p h) {
 
 void gui_linkedlist_widgetremove__(GUI_HANDLE_p h) {    
     if (__GH(h)->Parent) {
-        __GUI_LINKEDLIST_REMOVE_GEN(&((GUI_HANDLE_ROOT_t *)__GH(h)->Parent)->RootList, (GUI_LinkedList_t *)h);
+        gui_linkedlist_remove_gen__(&((GUI_HANDLE_ROOT_t *)__GH(h)->Parent)->RootList, (GUI_LinkedList_t *)h);
     } else {
-        __GUI_LINKEDLIST_REMOVE_GEN(&GUI.Root, (GUI_LinkedList_t *)h);
+        gui_linkedlist_remove_gen__(&GUI.Root, (GUI_LinkedList_t *)h);
     }
 }
 
 GUI_Byte gui_linkedlist_widgetmoveup__(GUI_HANDLE_p h) {
     if (__GH(h)->Parent) {
-        return __GUI_LINKEDLIST_MOVEUP_GEN(&__GHR(__GH(h)->Parent)->RootList, (GUI_LinkedList_t *)h);
+        return gui_linkedlist_moveup_gen__(&__GHR(__GH(h)->Parent)->RootList, (GUI_LinkedList_t *)h);
     }
-    return __GUI_LINKEDLIST_MOVEUP_GEN(&GUI.Root, (GUI_LinkedList_t *)h);
+    return gui_linkedlist_moveup_gen__(&GUI.Root, (GUI_LinkedList_t *)h);
 }
 
 GUI_Byte gui_linkedlist_widgetmovedown__(GUI_HANDLE_p h) {
     if (__GH(h)->Parent) {
-        return __GUI_LINKEDLIST_MOVEDOWN_GEN(&__GHR(__GH(h)->Parent)->RootList, (GUI_LinkedList_t *)h);
+        return gui_linkedlist_movedown_gen__(&__GHR(__GH(h)->Parent)->RootList, (GUI_LinkedList_t *)h);
     }
-    return __GUI_LINKEDLIST_MOVEDOWN_GEN(&GUI.Root, (GUI_LinkedList_t *)h);
+    return gui_linkedlist_movedown_gen__(&GUI.Root, (GUI_LinkedList_t *)h);
 }
 
 GUI_HANDLE_p gui_linkedlist_widgetgetnext__(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h) {
@@ -337,7 +337,7 @@ GUI_HANDLE_p gui_linkedlist_widgetgetprev__(GUI_HANDLE_ROOT_t* parent, GUI_HANDL
 /***
  * Widget linked list order:
  *
- * 1. Normal widgets
+ * 1. Normal widgets, with automatic or fixed z-index
  * 2. Widgets with children support
  * 3. Widgets as dialog base elements
  */

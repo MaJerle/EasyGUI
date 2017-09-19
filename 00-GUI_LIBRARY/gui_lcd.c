@@ -67,11 +67,11 @@
 /******************************************************************************/
 /******************************************************************************/
 GUI_Dim_t
-GUI_LCD_GetWidth(void) {
+gui_lcd_getwidth(void) {
     return GUI.LCD.Width;
 }
 
 GUI_Dim_t
-GUI_LCD_GetHeight(void) {
+gui_lcd_getheight(void) {
     return GUI.LCD.Height;
 }

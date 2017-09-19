@@ -57,14 +57,14 @@ extern "C" {
  *
  * Example code for example above
  * \code{c}
-handle = GUI_BUTTON_Create(0, 10, 10, 300, 50, 0, 0, 0);
-GUI_WIDGET_SetText(handle, _GT("Button"));
-handle = GUI_IMAGE_Create(0, 2, 2, bmimage_brand.xSize, bmimage_brand.ySize, 0, 0, 0);
-GUI_IMAGE_SetSource(handle, &bmimage_brand);
-handle = GUI_IMAGE_Create(0, 200, 40, bmimage_voyo.xSize, bmimage_voyo.ySize, 0, 0, 0);
-GUI_IMAGE_SetSource(handle, &bmimage_voyo);
-handle = GUI_IMAGE_Create(0, 350, 10, bmimage_voyo565.xSize, bmimage_voyo565.ySize, 0, 0, 0);
-GUI_IMAGE_SetSource(handle, &bmimage_voyo565);
+handle = gui_button_create(0, 10, 10, 300, 50, 0, 0, 0);
+gui_widget_settext(handle, _GT("Button"));
+handle = gui_image_create(0, 2, 2, bmimage_brand.xSize, bmimage_brand.ySize, 0, 0, 0);
+gui_image_setsource(handle, &bmimage_brand);
+handle = gui_image_create(0, 200, 40, bmimage_voyo.xSize, bmimage_voyo.ySize, 0, 0, 0);
+gui_image_setsource(handle, &bmimage_voyo);
+handle = gui_image_create(0, 350, 10, bmimage_voyo565.xSize, bmimage_voyo565.ySize, 0, 0, 0);
+gui_image_setsource(handle, &bmimage_voyo565);
 \endcode
  */
 
@@ -92,7 +92,7 @@ typedef struct GUI_IMAGE_t {
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_IMAGE_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_image_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Set image source to draw
@@ -101,7 +101,7 @@ GUI_HANDLE_p GUI_IMAGE_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
  * \retval          1: Image was set ok
  * \retval          0: Image was not set
  */
-uint8_t GUI_IMAGE_SetSource(GUI_HANDLE_p h, const GUI_IMAGE_DESC_t* img);
+uint8_t gui_image_setsource(GUI_HANDLE_p h, const GUI_IMAGE_DESC_t* img);
 
 /**
  * \}

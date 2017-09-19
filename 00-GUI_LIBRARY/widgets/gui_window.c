@@ -40,7 +40,7 @@
 #define __GW(x)             ((GUI_WINDOW_t *)(x))
 
 static
-uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+uint8_t gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
     
 /******************************************************************************/
 /******************************************************************************/
@@ -58,7 +58,7 @@ static const GUI_WIDGET_t Widget = {
     .Name = _GT("WINDOW"),                          /*!< Widget name */
     .Size = sizeof(GUI_WINDOW_t),                   /*!< Size of widget for memory allocation */
     .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
-    .Callback = GUI_WINDOW_Callback,                /*!< Control function */
+    .Callback = gui_window_callback,                /*!< Control function */
     .Colors = Colors,                               /*!< Pointer to colors array */
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
 };
@@ -70,7 +70,7 @@ static const GUI_WIDGET_t Widget = {
 /******************************************************************************/
 #define w          ((GUI_WINDOW_t *)h)
 static
-uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+uint8_t gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
 #if GUI_USE_TOUCH
    static GUI_iDim_t tX, tY, Mode = 0;
 #endif /* GUI_USE_TOUCH */
@@ -78,7 +78,7 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {                      /* Called immediatelly after widget is created */
-            GUI_WINDOW_SetActive(h);                /* Set active window */
+            gui_window_setactive(h);                /* Set active window */
             return 1;
         }
         case GUI_WC_Draw: {
@@ -93,11 +93,11 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
             wi = gui_widget_getwidth__(h);
             hi = gui_widget_getheight__(h);
             
-            GUI_DRAW_FilledRectangle(disp, x, y, wi, hi, gui_widget_getcolor__(h, GUI_WINDOW_COLOR_BG));
+            gui_draw_filledrectangle(disp, x, y, wi, hi, gui_widget_getcolor__(h, GUI_WINDOW_COLOR_BG));
             if (gui_widget_getflag__(h, GUI_FLAG_CHILD)) {
                 GUI_iDim_t tX, tY, tW;
                 
-                GUI_DRAW_Rectangle3D(disp, x, y, wi, hi, GUI_DRAW_3D_State_Lowered);
+                gui_draw_rectangle3d(disp, x, y, wi, hi, GUI_DRAW_3D_State_Lowered);
                 
                 x += 2;
                 y += 2;
@@ -107,51 +107,51 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
                 
                 inFocus = gui_widget_isfocused__(h);    /* Check if window is in focus or any children widget */
                 
-                GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, wi - 2, topH, inFocus ? gui_widget_getcolor__(h, GUI_WINDOW_COLOR_TOP_BG_FOC) : gui_widget_getcolor__(h, GUI_WINDOW_COLOR_TOP_BG_NOFOC));
+                gui_draw_filledrectangle(disp, x + 1, y + 1, wi - 2, topH, inFocus ? gui_widget_getcolor__(h, GUI_WINDOW_COLOR_TOP_BG_FOC) : gui_widget_getcolor__(h, GUI_WINDOW_COLOR_TOP_BG_NOFOC));
                 
                 /* Draw "hide" button */
-                GUI_DRAW_Rectangle3D(disp, x + wi - 3 * topH, y + 2, topH - 2, topH - 2, GUI_DRAW_3D_State_Raised);
-                GUI_DRAW_FilledRectangle(disp, x + wi - 3 * topH + 2, y + 4, topH - 6, topH - 6, GUI_COLOR_GRAY);
-                GUI_DRAW_FilledRectangle(disp, x + wi - 3 * topH + 4, y + topH - 6, (topH - 6) / 2, 2, GUI_COLOR_BLACK); 
+                gui_draw_rectangle3d(disp, x + wi - 3 * topH, y + 2, topH - 2, topH - 2, GUI_DRAW_3D_State_Raised);
+                gui_draw_filledrectangle(disp, x + wi - 3 * topH + 2, y + 4, topH - 6, topH - 6, GUI_COLOR_GRAY);
+                gui_draw_filledrectangle(disp, x + wi - 3 * topH + 4, y + topH - 6, (topH - 6) / 2, 2, GUI_COLOR_BLACK); 
                 
                 /* Draw maximize button */
-                GUI_DRAW_Rectangle3D(disp, x + wi - 2 * topH, y + 2, topH - 2, topH - 2, GUI_DRAW_3D_State_Raised);
-                GUI_DRAW_FilledRectangle(disp, x + wi - 2 * topH + 2, y + 4, topH - 6, topH - 6, GUI_COLOR_GRAY);
+                gui_draw_rectangle3d(disp, x + wi - 2 * topH, y + 2, topH - 2, topH - 2, GUI_DRAW_3D_State_Raised);
+                gui_draw_filledrectangle(disp, x + wi - 2 * topH + 2, y + 4, topH - 6, topH - 6, GUI_COLOR_GRAY);
                 if (gui_widget_isexpanded__(h)) {
                     GUI_iDim_t tmpX, tmpY;
                     tmpX = x + wi - 2 * topH + 4;
                     tmpY = y + 7;
-                    GUI_DRAW_Rectangle(disp, tmpX, tmpY + 4, topH - 14, topH - 14, GUI_COLOR_BLACK);
-                    GUI_DRAW_HLine(disp, tmpX + 1, tmpY + 5, topH - 16, GUI_COLOR_BLACK); 
+                    gui_draw_rectangle(disp, tmpX, tmpY + 4, topH - 14, topH - 14, GUI_COLOR_BLACK);
+                    gui_draw_hline(disp, tmpX + 1, tmpY + 5, topH - 16, GUI_COLOR_BLACK); 
                     
-                    GUI_DRAW_FilledRectangle(disp, tmpX + 4, tmpY, topH - 15, 2, GUI_COLOR_BLACK);
-                    GUI_DRAW_VLine(disp, tmpX + 4, tmpY + 2, 2, GUI_COLOR_BLACK);
-                    GUI_DRAW_VLine(disp, tmpX + 4 + topH - 15, tmpY, topH - 15, GUI_COLOR_BLACK);
-                    GUI_DRAW_HLine(disp, tmpX + topH - 14, tmpY + topH - 15, 4, GUI_COLOR_BLACK);
+                    gui_draw_filledrectangle(disp, tmpX + 4, tmpY, topH - 15, 2, GUI_COLOR_BLACK);
+                    gui_draw_vline(disp, tmpX + 4, tmpY + 2, 2, GUI_COLOR_BLACK);
+                    gui_draw_vline(disp, tmpX + 4 + topH - 15, tmpY, topH - 15, GUI_COLOR_BLACK);
+                    gui_draw_hline(disp, tmpX + topH - 14, tmpY + topH - 15, 4, GUI_COLOR_BLACK);
                 } else {
-                    GUI_DRAW_Rectangle(disp, x + wi - 2 * topH + 4, y + 7, topH - 10, topH - 10, GUI_COLOR_BLACK); 
-                    GUI_DRAW_HLine(disp, x + wi - 2 * topH + 4, y + 8, topH - 10, GUI_COLOR_BLACK); 
+                    gui_draw_rectangle(disp, x + wi - 2 * topH + 4, y + 7, topH - 10, topH - 10, GUI_COLOR_BLACK); 
+                    gui_draw_hline(disp, x + wi - 2 * topH + 4, y + 8, topH - 10, GUI_COLOR_BLACK); 
                 }
                 
                 /* Draw "close" button */
-                GUI_DRAW_Rectangle3D(disp, x + wi - topH, y + 2, topH - 2, topH - 2, GUI_DRAW_3D_State_Raised);
-                GUI_DRAW_FilledRectangle(disp, x + wi - topH + 2, y + 4, topH - 6, topH - 6, GUI_COLOR_WIN_RED);
+                gui_draw_rectangle3d(disp, x + wi - topH, y + 2, topH - 2, topH - 2, GUI_DRAW_3D_State_Raised);
+                gui_draw_filledrectangle(disp, x + wi - topH + 2, y + 4, topH - 6, topH - 6, GUI_COLOR_WIN_RED);
                 
                 tX = x + wi - topH + 6;
                 tY = y + 8;
                 tW = topH - 15;
                 
-                GUI_DRAW_Line(disp, tX,     tY,     tX + tW,     tY + tW,     GUI_COLOR_WHITE);
-                GUI_DRAW_Line(disp, tX + 1, tY,     tX + tW,     tY + tW - 1, GUI_COLOR_WHITE);
-                GUI_DRAW_Line(disp, tX,     tY + 1, tX + tW - 1, tY + tW,     GUI_COLOR_WHITE);
+                gui_draw_line(disp, tX,     tY,     tX + tW,     tY + tW,     GUI_COLOR_WHITE);
+                gui_draw_line(disp, tX + 1, tY,     tX + tW,     tY + tW - 1, GUI_COLOR_WHITE);
+                gui_draw_line(disp, tX,     tY + 1, tX + tW - 1, tY + tW,     GUI_COLOR_WHITE);
                 
-                GUI_DRAW_Line(disp, tX,     tY + tW,     tX + tW,     tY,     GUI_COLOR_WHITE);
-                GUI_DRAW_Line(disp, tX + 1, tY + tW,     tX + tW,     tY + 1, GUI_COLOR_WHITE);
-                GUI_DRAW_Line(disp, tX,     tY + tW - 1, tX + tW - 1, tY,     GUI_COLOR_WHITE);
+                gui_draw_line(disp, tX,     tY + tW,     tX + tW,     tY,     GUI_COLOR_WHITE);
+                gui_draw_line(disp, tX + 1, tY + tW,     tX + tW,     tY + 1, GUI_COLOR_WHITE);
+                gui_draw_line(disp, tX,     tY + tW - 1, tX + tW - 1, tY,     GUI_COLOR_WHITE);
                 
                 if (gui_widget_isfontandtextset__(h)) {
                     GUI_DRAW_FONT_t f;
-                    GUI_DRAW_FONT_Init(&f);         /* Init structure */
+                    gui_draw_font_init(&f);         /* Init structure */
                     
                     f.X = x + 3;
                     f.Y = y + 3;
@@ -160,7 +160,7 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
                     f.Align = GUI_HALIGN_CENTER | GUI_VALIGN_CENTER;
                     f.Color1Width = f.Width;
                     f.Color1 = gui_widget_getcolor__(h, GUI_WINDOW_COLOR_TEXT);
-                    GUI_DRAW_WriteText(disp, gui_widget_getfont__(h), gui_widget_gettext__(h), &f);
+                    gui_draw_writetext(disp, gui_widget_getfont__(h), gui_widget_gettext__(h), &f);
                 }
             }
             
@@ -270,11 +270,11 @@ uint8_t GUI_WINDOW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_WINDOW_CreateDesktop(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb) {
+GUI_HANDLE_p gui_window_createdesktop(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, 0, 0, GUI.LCD.Width, GUI.LCD.Height, 0, cb, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);   /* Allocate memory for basic widget */
 }
 
-GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p gui_window_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_WINDOW_t* ptr;
 
     ptr = gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
@@ -292,14 +292,14 @@ GUI_HANDLE_p GUI_WINDOW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
     return (GUI_HANDLE_p)ptr;
 }
 
-uint8_t GUI_WINDOW_SetColor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color) {
+uint8_t gui_window_setcolor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     ret = gui_widget_setcolor__(h, (uint8_t)index, color);  /* Set color */
     return ret;
 }
 
-uint8_t GUI_WINDOW_SetActive(GUI_HANDLE_p h) {
+uint8_t gui_window_setactive(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -313,6 +313,6 @@ uint8_t GUI_WINDOW_SetActive(GUI_HANDLE_p h) {
     return 1;
 }
 
-GUI_HANDLE_p GUI_WINDOW_GetDesktop(void) {
-    return (GUI_HANDLE_p)__GUI_LINKEDLIST_GETNEXT_GEN(&GUI.Root, NULL); /* Return desktop window */
+GUI_HANDLE_p gui_window_getdesktop(void) {
+    return (GUI_HANDLE_p)gui_linkedlist_getnext_gen__(&GUI.Root, NULL); /* Return desktop window */
 }

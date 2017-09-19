@@ -50,8 +50,8 @@ extern "C" {
  * \brief           LCD info specific functions
  */
 
-GUI_iDim_t GUI_LCD_GetWidth(void);
-GUI_iDim_t GUI_LCD_GetHeighth(void);
+GUI_iDim_t gui_lcd_getwidth(void);
+GUI_iDim_t gui_lcd_getheighth(void);
 
 /**
  * \}

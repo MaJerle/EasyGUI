@@ -336,9 +336,9 @@ uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* r
                     break;
                 default:
                     if (Kbd.IsShift && kbtn->CS) {  /* Character when shift is ON */
-                        GUI_STRING_UNICODE_Encode(kbtn->CS, str);   /* Encode character to unicode */
+                        gui_string_unicode_encode(kbtn->CS, str);   /* Encode character to unicode */
                     } else {                        /* Character when shift is OFF */
-                        GUI_STRING_UNICODE_Encode(kbtn->C, str);    /* Encode character to unicode */
+                        gui_string_unicode_encode(kbtn->C, str);    /* Encode character to unicode */
                     }
             }
             
@@ -349,7 +349,7 @@ uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* r
             }
             
             gui_widget_settext__(h, str);           /* Temporary set text */
-            GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);   /* Process default callback with drawing */
+            gui_widget_processdefaultcallback(h, cmd, param, result);   /* Process default callback with drawing */
             return 1;
         }
         case GUI_WC_Click: {                        /* Handle pressed button */
@@ -426,10 +426,10 @@ uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* r
                 /************************************/
                 /* Send character to focused widget */
                 /************************************/
-                GUI_STRING_UNICODE_Encode(ch, kbd.Keys);    /* Decode key */
-                GUI_INPUT_KeyAdd(&kbd);             /* Add actual key */
+                gui_string_unicode_encode(ch, kbd.Keys);    /* Decode key */
+                gui_input_keyadd(&kbd);             /* Add actual key */
                 kbd.Keys[0] = 0;                    /* Set key to 0 */
-                GUI_INPUT_KeyAdd(&kbd);             /* Add end key */
+                gui_input_keyadd(&kbd);             /* Add end key */
             }
             return 1;
         }
@@ -447,7 +447,7 @@ uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* r
         }
         default:
             __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
-            return GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);    /* Process default callback */
+            return gui_widget_processdefaultcallback(h, cmd, param, result);    /* Process default callback */
     }
 }
 
@@ -460,7 +460,7 @@ uint8_t keyboard_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* resul
         }
         default:                                    /* Handle default option */
             __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
-            return GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);    /* Process default callback */
+            return gui_widget_processdefaultcallback(h, cmd, param, result);    /* Process default callback */
     }
 }
 
@@ -523,7 +523,7 @@ uint8_t keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* 
                 /***************************/
                 /* Create keyboard layout  */
                 /***************************/
-                handleLayout = GUI_CONTAINER_Create(Layout->ID, 0, 0, 100, 100, h, keyboard_callback, 0);
+                handleLayout = gui_container_create(Layout->ID, 0, 0, 100, 100, h, keyboard_callback, 0);
                 gui_widget_setsizepercent__(handleLayout, 100, 100);
                 gui_widget_setpositionpercent__(handleLayout, 0, 0);
                 gui_widget_setuserdata__(handleLayout, (void *)Layout);
@@ -541,7 +541,7 @@ uint8_t keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* 
                     for (z = 0; z < Row->BtnsCount; z++) {
                         Btn = &Row->Btns[z];        /* Get button pointer */
                         
-                        handle = GUI_BUTTON_Create(0, 0, 0, 1, 1, handleLayout, keyboard_btn_callback, 0);    /* Create button object */
+                        handle = gui_button_create(0, 0, 0, 1, 1, handleLayout, keyboard_btn_callback, 0);    /* Create button object */
                         gui_widget_setuserdata__(handle, (void *)Btn);  /* Set pointer to button */
                         gui_widget_setsizepercent__(handle, Btn->W, 23);    /* Set button percent */
                         gui_widget_setpositionpercent__(handle, Btn->X, 1 + 25 * k);
@@ -553,7 +553,7 @@ uint8_t keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* 
         }
         default:                                    /* Handle default option */
             __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
-            return GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);    /* Process default callback */
+            return gui_widget_processdefaultcallback(h, cmd, param, result);    /* Process default callback */
     }
 }
 
@@ -587,18 +587,18 @@ uint8_t gui_keyboard_show__(GUI_HANDLE_p h) {
 /***                         Thread safe public API                          **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_KEYBOARD_Create(void) {    
+GUI_HANDLE_p gui_keyboard_create(void) {    
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (!Kbd.Handle) {
-        Kbd.Handle = GUI_CONTAINER_Create(GUI_ID_KEYBOARD_BASE, 0, 0, 1, 1, 0, keyboard_base_callback, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);  /* Create keyboard base element with desktop as parent */
+        Kbd.Handle = gui_container_create(GUI_ID_KEYBOARD_BASE, 0, 0, 1, 1, 0, keyboard_base_callback, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);  /* Create keyboard base element with desktop as parent */
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return Kbd.Handle;
 }
 
-uint8_t GUI_KEYBOARD_Hide(void) {
+uint8_t gui_keyboard_hide(void) {
     uint8_t ret;
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -608,7 +608,7 @@ uint8_t GUI_KEYBOARD_Hide(void) {
     return ret;
 }
 
-uint8_t GUI_KEYBOARD_Show(GUI_HANDLE_p h) {
+uint8_t gui_keyboard_show(GUI_HANDLE_p h) {
     uint8_t ret;
     __GUI_ENTER();                                  /* Enter GUI */
     

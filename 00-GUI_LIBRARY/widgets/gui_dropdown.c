@@ -40,7 +40,7 @@
 #define __GD(x)             ((GUI_DROPDOWN_t *)(x))
 
 static
-uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+uint8_t gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -60,7 +60,7 @@ static const GUI_WIDGET_t Widget = {
     .Name = _GT("DROPDOWN"),                        /*!< Widget name */
     .Size = sizeof(GUI_DROPDOWN_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = GUI_DROPDOWN_Callback,              /*!< Callback function */
+    .Callback = gui_dropdown_callback,              /*!< Callback function */
     .Colors = Colors,
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Define number of colors */
 };
@@ -196,14 +196,14 @@ GUI_DROPDOWN_ITEM_t* __GetItem(GUI_HANDLE_p h, uint16_t index) {
     }
     
     if (index == 0) {                               /* Check for first element */
-        return (GUI_DROPDOWN_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&o->Root, NULL); /* Return first element */
+        return (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getnext_gen__(&o->Root, NULL); /* Return first element */
     } else if (index == o->Count - 1) {
-        return (GUI_DROPDOWN_ITEM_t *)__GUI_LINKEDLIST_GETPREV_GEN(&o->Root, NULL); /* Return last element */
+        return (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getprev_gen__(&o->Root, NULL); /* Return last element */
     }
     
-    item = (GUI_DROPDOWN_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&o->Root, NULL);
+    item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getnext_gen__(&o->Root, NULL);
     while (i++ < index) {
-        item = (GUI_DROPDOWN_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(NULL, &item->List);
+        item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getnext_gen__(NULL, &item->List);
     }
     return item;
 }
@@ -264,7 +264,7 @@ uint8_t __DeleteItem(GUI_HANDLE_p h, uint16_t index) {
     
     item = __GetItem(h, index);                     /* Get list item from handle */
     if (item) {
-        __GUI_LINKEDLIST_REMOVE_GEN(&__GD(h)->Root, &item->List);
+        gui_linkedlist_remove_gen__(&__GD(h)->Root, &item->List);
         __GD(h)->Count--;                           /* Decrease count */
         
         if (o->Selected == index) {
@@ -313,7 +313,7 @@ void __ProcessClick(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
 }
 
 static
-uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+uint8_t gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
 #if GUI_USE_TOUCH
     static GUI_iDim_t tY;
 #endif /* GUI_USE_TOUCH */
@@ -338,28 +338,28 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             if (__IsOpened(h)) {
                 __GetOpenedPositions(h, &y, &height, &y1, &height1);
                 
-                GUI_DRAW_Rectangle3D(disp, x, y1, width, height1, GUI_DRAW_3D_State_Lowered);
-                GUI_DRAW_FilledRectangle(disp, x + 2, y1 + 2, width - 4, height1 - 4, gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_BG));
+                gui_draw_rectangle3d(disp, x, y1, width, height1, GUI_DRAW_3D_State_Lowered);
+                gui_draw_filledrectangle(disp, x + 2, y1 + 2, width - 4, height1 - 4, gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_BG));
                 
-                GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_BG));
-                GUI_DRAW_Rectangle3D(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
+                gui_draw_filledrectangle(disp, x + 2, y + 2, width - 4, height - 4, gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_BG));
+                gui_draw_rectangle3d(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
             } else {
                 y1 = y;
                 height1 = height;
                 
-                GUI_DRAW_Rectangle3D(disp, x, y, width, height, GUI_DRAW_3D_State_Raised);
-                GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_BG));
+                gui_draw_rectangle3d(disp, x, y, width, height, GUI_DRAW_3D_State_Raised);
+                gui_draw_filledrectangle(disp, x + 2, y + 2, width - 4, height - 4, gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_BG));
             }
                 
             if (__GD(h)->Selected >= 0 && __GH(h)->Font) {
                 int16_t i;
                 GUI_DRAW_FONT_t f;
                 GUI_DROPDOWN_ITEM_t* item;
-                GUI_DRAW_FONT_Init(&f);             /* Init structure */
+                gui_draw_font_init(&f);             /* Init structure */
                 
-                item = (GUI_DROPDOWN_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&__GD(h)->Root, NULL);
+                item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getnext_gen__(&__GD(h)->Root, NULL);
                 for (i = 0; i < __GD(h)->Selected; i++) {
-                    item = (GUI_DROPDOWN_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(NULL, (GUI_LinkedList_t *)item);
+                    item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getnext_gen__(NULL, (GUI_LinkedList_t *)item);
                 }
                 
                 f.X = x + 3;
@@ -369,7 +369,7 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.Color1Width = f.Width;
                 f.Color1 = gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_TEXT);
-                GUI_DRAW_WriteText(disp, gui_widget_getfont__(h), item->Text, &f);
+                gui_draw_writetext(disp, gui_widget_getfont__(h), item->Text, &f);
             }
             
             if (__IsOpened(h) && __GD(h)->Flags & GUI_FLAG_DROPDOWN_SLIDER_ON) {
@@ -377,7 +377,7 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 
                 width -= __GD(h)->SliderWidth;       /* Available width is decreased */
                 
-                GUI_DRAW_ScrollBar_init(&sb);
+                gui_draw_scrollbar_init(&sb);
                 
                 sb.X = x + width - 1;
                 sb.Y = y + 1;
@@ -388,7 +388,7 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 sb.EntriesTotal = o->Count;
                 sb.EntriesVisible = __NumberOfEntriesPerPage(h);
                 
-                GUI_DRAW_ScrollBar(disp, &sb);      /* Draw scroll bar */
+                gui_draw_scrollbar(disp, &sb);      /* Draw scroll bar */
             } else {
                 width--;                            /* Go down for one for alignment on non-slider */
             }
@@ -403,7 +403,7 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 
                 itemHeight = __ItemHeight(h, &yOffset); /* Get item height and Y offset */
                 
-                GUI_DRAW_FONT_Init(&f);             /* Init structure */
+                gui_draw_font_init(&f);             /* Init structure */
                 
                 f.X = x + 4;
                 f.Y = y + 2;
@@ -418,17 +418,17 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 }
                 
                 /* Try to process all strings */
-                for (index = 0, item = (GUI_DROPDOWN_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&o->Root, NULL); item && f.Y <= disp->Y2; item = (GUI_DROPDOWN_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(NULL, (GUI_LinkedList_t *)item), index++) {
+                for (index = 0, item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getnext_gen__(&o->Root, NULL); item && f.Y <= disp->Y2; item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getnext_gen__(NULL, (GUI_LinkedList_t *)item), index++) {
                     if (index < o->VisibleStartIndex) { /* Check for start visible */
                         continue;
                     }
                     if (index == __GD(h)->Selected) {
-                        GUI_DRAW_FilledRectangle(disp, x + 2, f.Y, width - 3, __GUI_MIN(f.Height, itemHeight), gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_SEL_FOC_BG) : gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_SEL_NOFOC_BG));
+                        gui_draw_filledrectangle(disp, x + 2, f.Y, width - 3, __GUI_MIN(f.Height, itemHeight), gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_SEL_FOC_BG) : gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_SEL_NOFOC_BG));
                         f.Color1 = gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_SEL_FOC) : gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_SEL_NOFOC);
                     } else {
                         f.Color1 = gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_TEXT);
                     }
-                    GUI_DRAW_WriteText(disp, gui_widget_getfont__(h), item->Text, &f);
+                    gui_draw_writetext(disp, gui_widget_getfont__(h), item->Text, &f);
                     f.Y += itemHeight;
                 }
                 disp->Y2 = tmp;                     /* Set temporary value back */
@@ -437,7 +437,7 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
         }
         case GUI_WC_Remove: {
             GUI_DROPDOWN_ITEM_t* item;
-            while ((item = (GUI_DROPDOWN_ITEM_t *)__GUI_LINKEDLIST_REMOVE_GEN(&o->Root, (GUI_LinkedList_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&o->Root, 0))) != NULL) {
+            while ((item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_remove_gen__(&o->Root, (GUI_LinkedList_t *)gui_linkedlist_getnext_gen__(&o->Root, 0))) != NULL) {
                 __GUI_MEMFREE(item);                /* Free memory */
             }
             return 1;
@@ -506,18 +506,18 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_DROPDOWN_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p gui_dropdown_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
-uint8_t GUI_DROPDOWN_SetColor(GUI_HANDLE_p h, GUI_DROPDOWN_COLOR_t index, GUI_Color_t color) {
+uint8_t gui_dropdown_setcolor(GUI_HANDLE_p h, GUI_DROPDOWN_COLOR_t index, GUI_Color_t color) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     ret = gui_widget_setcolor__(h, (uint8_t)index, color);  /* Set color */
     return ret;
 }
 
-uint8_t GUI_DROPDOWN_AddString(GUI_HANDLE_p h, const GUI_Char* text) {
+uint8_t gui_dropdown_addstring(GUI_HANDLE_p h, const GUI_Char* text) {
     GUI_DROPDOWN_ITEM_t* item;
     uint8_t ret = 0;
     
@@ -527,7 +527,7 @@ uint8_t GUI_DROPDOWN_AddString(GUI_HANDLE_p h, const GUI_Char* text) {
     item = __GUI_MEMALLOC(sizeof(*item));           /* Allocate memory for entry */
     if (item) {
         item->Text = (GUI_Char *)text;              /* Add text to entry */
-        __GUI_LINKEDLIST_ADD_GEN(&__GD(h)->Root, &item->List);  /* Add to linked list */
+        gui_linkedlist_add_gen__(&__GD(h)->Root, &item->List);  /* Add to linked list */
         __GD(h)->Count++;                           /* Increase number of strings */
         
         __CheckValues(h);                           /* Check values */
@@ -540,7 +540,7 @@ uint8_t GUI_DROPDOWN_AddString(GUI_HANDLE_p h, const GUI_Char* text) {
     return ret;
 }
 
-uint8_t GUI_DROPDOWN_SetOpenDirection(GUI_HANDLE_p h, GUI_DROPDOWN_OPENDIR_t dir) {
+uint8_t gui_dropdown_setopendirection(GUI_HANDLE_p h, GUI_DROPDOWN_OPENDIR_t dir) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -560,7 +560,7 @@ uint8_t GUI_DROPDOWN_SetOpenDirection(GUI_HANDLE_p h, GUI_DROPDOWN_OPENDIR_t dir
     return ret;
 }
 
-uint8_t GUI_DROPDOWN_SetString(GUI_HANDLE_p h, uint16_t index, const GUI_Char* text) {
+uint8_t gui_dropdown_setstring(GUI_HANDLE_p h, uint16_t index, const GUI_Char* text) {
     GUI_DROPDOWN_ITEM_t* item;
     uint8_t ret = 0;
     
@@ -577,7 +577,7 @@ uint8_t GUI_DROPDOWN_SetString(GUI_HANDLE_p h, uint16_t index, const GUI_Char* t
     return ret;
 }
 
-uint8_t GUI_DROPDOWN_DeleteFirstString(GUI_HANDLE_p h) {
+uint8_t gui_dropdown_deletefirststring(GUI_HANDLE_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -589,7 +589,7 @@ uint8_t GUI_DROPDOWN_DeleteFirstString(GUI_HANDLE_p h) {
     return ret;
 }
 
-uint8_t GUI_DROPDOWN_DeleteLastString(GUI_HANDLE_p h) {
+uint8_t gui_dropdown_deletelaststring(GUI_HANDLE_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -601,7 +601,7 @@ uint8_t GUI_DROPDOWN_DeleteLastString(GUI_HANDLE_p h) {
     return ret;
 }
 
-uint8_t GUI_DROPDOWN_DeleteString(GUI_HANDLE_p h, uint16_t index) {
+uint8_t gui_dropdown_deletestring(GUI_HANDLE_p h, uint16_t index) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -613,7 +613,7 @@ uint8_t GUI_DROPDOWN_DeleteString(GUI_HANDLE_p h, uint16_t index) {
     return ret;
 }
 
-uint8_t GUI_DROPDOWN_SetSliderAuto(GUI_HANDLE_p h, uint8_t autoMode) {
+uint8_t gui_dropdown_setsliderauto(GUI_HANDLE_p h, uint8_t autoMode) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -629,7 +629,7 @@ uint8_t GUI_DROPDOWN_SetSliderAuto(GUI_HANDLE_p h, uint8_t autoMode) {
     return 1;
 }
 
-uint8_t GUI_DROPDOWN_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible) {
+uint8_t gui_dropdown_setslidervisibility(GUI_HANDLE_p h, uint8_t visible) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -651,7 +651,7 @@ uint8_t GUI_DROPDOWN_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible) {
     return ret;
 }
 
-uint8_t GUI_DROPDOWN_Scroll(GUI_HANDLE_p h, int16_t step) {
+uint8_t gui_dropdown_scroll(GUI_HANDLE_p h, int16_t step) {
     volatile int16_t start;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -672,7 +672,7 @@ uint8_t GUI_DROPDOWN_Scroll(GUI_HANDLE_p h, int16_t step) {
     return start;
 }
 
-uint8_t GUI_DROPDOWN_SetSelection(GUI_HANDLE_p h, int16_t selection) {
+uint8_t gui_dropdown_setselection(GUI_HANDLE_p h, int16_t selection) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -684,7 +684,7 @@ uint8_t GUI_DROPDOWN_SetSelection(GUI_HANDLE_p h, int16_t selection) {
     return 1;
 }
 
-int16_t GUI_DROPDOWN_GetSelection(GUI_HANDLE_p h) {
+int16_t gui_dropdown_getselection(GUI_HANDLE_p h) {
     int16_t selection;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */

@@ -42,7 +42,7 @@
 #define CFG_BORDER_RADIUS   0x01
 
 static
-uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+uint8_t gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
     
 /******************************************************************************/
 /******************************************************************************/
@@ -59,7 +59,7 @@ static const GUI_WIDGET_t Widget = {
     .Name = _GT("BUTTON"),                          /*!< Widget name */
     .Size = sizeof(GUI_BUTTON_t),                   /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = GUI_BUTTON_Callback,                /*!< Callback function */
+    .Callback = gui_button_callback,                /*!< Callback function */
     .Colors = Colors,                               /*!< List of default colors */
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
 };
@@ -71,7 +71,7 @@ static const GUI_WIDGET_t Widget = {
 /******************************************************************************/
 #define b                   ((GUI_BUTTON_t *)(h))
 static
-uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+uint8_t gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
@@ -112,17 +112,17 @@ uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
             
             /* Draw actual button structure */
             if (gui_widget_getflag__(h, GUI_FLAG_3D)) {
-                GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, c1);
-                GUI_DRAW_Rectangle3D(disp, x, y, width, height, gui_widget_getflag__(h, GUI_FLAG_ACTIVE) ? GUI_DRAW_3D_State_Lowered : GUI_DRAW_3D_State_Raised);
+                gui_draw_filledrectangle(disp, x + 2, y + 2, width - 4, height - 4, c1);
+                gui_draw_rectangle3d(disp, x, y, width, height, gui_widget_getflag__(h, GUI_FLAG_ACTIVE) ? GUI_DRAW_3D_State_Lowered : GUI_DRAW_3D_State_Raised);
             } else {
-                GUI_DRAW_FilledRoundedRectangle(disp, x, y, width, height, b->BorderRadius, c1);
-                GUI_DRAW_RoundedRectangle(disp, x, y, width, height, b->BorderRadius, c2);
+                gui_draw_filledroundedrectangle(disp, x, y, width, height, b->BorderRadius, c1);
+                gui_draw_roundedrectangle(disp, x, y, width, height, b->BorderRadius, c2);
             }
             
             /* Draw text if possible */
             if (gui_widget_isfontandtextset__(h)) {
                 GUI_DRAW_FONT_t f;
-                GUI_DRAW_FONT_Init(&f);             /* Init structure */
+                gui_draw_font_init(&f);             /* Init structure */
                 
                 f.X = x + 1;
                 f.Y = y + 1;
@@ -131,7 +131,7 @@ uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
                 f.Align = GUI_HALIGN_CENTER | GUI_VALIGN_CENTER;
                 f.Color1Width = f.Width;
                 f.Color1 = c2;
-                GUI_DRAW_WriteText(disp, gui_widget_getfont__(h), gui_widget_gettext__(h), &f);
+                gui_draw_writetext(disp, gui_widget_getfont__(h), gui_widget_gettext__(h), &f);
             }
             return 1;
         }
@@ -163,16 +163,16 @@ uint8_t GUI_BUTTON_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_BUTTON_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p gui_button_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
-uint8_t GUI_BUTTON_SetColor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color) {
+uint8_t gui_button_setcolor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }
 
-uint8_t GUI_BUTTON_SetBorderRadius(GUI_HANDLE_p h, GUI_Dim_t size) {
+uint8_t gui_button_setborderradius(GUI_HANDLE_p h, GUI_Dim_t size) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_BORDER_RADIUS, &size, 1, 1);    /* Set parameter */
 }

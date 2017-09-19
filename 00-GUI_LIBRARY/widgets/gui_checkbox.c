@@ -43,7 +43,7 @@
 #define CFG_DISABLE         0x02
 
 static
-uint8_t GUI_CHECKBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+uint8_t gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -62,7 +62,7 @@ static const GUI_WIDGET_t Widget = {
     .Name = _GT("CHECKBOX"),                        /*!< Widget name */
     .Size = sizeof(GUI_CHECKBOX_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = GUI_CHECKBOX_Callback,              /*!< Callback function */
+    .Callback = gui_checkbox_callback,              /*!< Callback function */
     .Colors = Colors,                               /*!< List of default colors */
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
 };
@@ -107,7 +107,7 @@ uint8_t __SetDisabled(GUI_HANDLE_p h, uint8_t state) {
 }
 
 static
-uint8_t GUI_CHECKBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+uint8_t gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
             GUI_WIDGET_Param_t* p = (GUI_WIDGET_Param_t *)param;
@@ -144,27 +144,27 @@ uint8_t GUI_CHECKBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 c1 = gui_widget_getcolor__(h, GUI_CHECKBOX_COLOR_BG);
             }
             
-            GUI_DRAW_FilledRectangle(disp, sx + 1, sy + 1, size - 2, size - 2, c1);
-            GUI_DRAW_Rectangle3D(disp, sx, sy, size, size, GUI_DRAW_3D_State_Lowered);
+            gui_draw_filledrectangle(disp, sx + 1, sy + 1, size - 2, size - 2, c1);
+            gui_draw_rectangle3d(disp, sx, sy, size, size, GUI_DRAW_3D_State_Lowered);
             
             if (gui_widget_isfocused__(h)) {        /* When in focus */
-                GUI_DRAW_Rectangle(disp, sx + 2, sy + 2, size - 4, size - 4, gui_widget_getcolor__(h, GUI_CHECKBOX_COLOR_FG));
+                gui_draw_rectangle(disp, sx + 2, sy + 2, size - 4, size - 4, gui_widget_getcolor__(h, GUI_CHECKBOX_COLOR_FG));
             }
             
             if (__GC(h)->Flags & GUI_FLAG_CHECKBOX_CHECKED) {
-                GUI_DRAW_Line(disp, sx + 4, sy + 5, sx + size - 4 - 2, sy + size - 4 - 1, gui_widget_getcolor__(h, GUI_CHECKBOX_COLOR_FG));
-                GUI_DRAW_Line(disp, sx + 4, sy + 4, sx + size - 4 - 1, sy + size - 4 - 1, gui_widget_getcolor__(h, GUI_CHECKBOX_COLOR_FG));
-                GUI_DRAW_Line(disp, sx + 5, sy + 4, sx + size - 4 - 1, sy + size - 4 - 2, gui_widget_getcolor__(h, GUI_CHECKBOX_COLOR_FG));
+                gui_draw_line(disp, sx + 4, sy + 5, sx + size - 4 - 2, sy + size - 4 - 1, gui_widget_getcolor__(h, GUI_CHECKBOX_COLOR_FG));
+                gui_draw_line(disp, sx + 4, sy + 4, sx + size - 4 - 1, sy + size - 4 - 1, gui_widget_getcolor__(h, GUI_CHECKBOX_COLOR_FG));
+                gui_draw_line(disp, sx + 5, sy + 4, sx + size - 4 - 1, sy + size - 4 - 2, gui_widget_getcolor__(h, GUI_CHECKBOX_COLOR_FG));
                 
-                GUI_DRAW_Line(disp, sx + 4, sy + size - 4 - 2, sx + size - 4 - 2, sy + 4, gui_widget_getcolor__(h, GUI_CHECKBOX_COLOR_FG));
-                GUI_DRAW_Line(disp, sx + 4, sy + size - 4 - 1, sx + size - 4 - 1, sy + 4, gui_widget_getcolor__(h, GUI_CHECKBOX_COLOR_FG));
-                GUI_DRAW_Line(disp, sx + 5, sy + size - 4 - 1, sx + size - 4 - 1, sy + 5, gui_widget_getcolor__(h, GUI_CHECKBOX_COLOR_FG));
+                gui_draw_line(disp, sx + 4, sy + size - 4 - 2, sx + size - 4 - 2, sy + 4, gui_widget_getcolor__(h, GUI_CHECKBOX_COLOR_FG));
+                gui_draw_line(disp, sx + 4, sy + size - 4 - 1, sx + size - 4 - 1, sy + 4, gui_widget_getcolor__(h, GUI_CHECKBOX_COLOR_FG));
+                gui_draw_line(disp, sx + 5, sy + size - 4 - 1, sx + size - 4 - 1, sy + 5, gui_widget_getcolor__(h, GUI_CHECKBOX_COLOR_FG));
             }
             
             /* Draw text if possible */
             if (gui_widget_isfontandtextset__(h)) {
                 GUI_DRAW_FONT_t f;
-                GUI_DRAW_FONT_Init(&f);             /* Init structure */
+                gui_draw_font_init(&f);             /* Init structure */
                 
                 f.X = sx + size + 5;
                 f.Y = y + 1;
@@ -173,7 +173,7 @@ uint8_t GUI_CHECKBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.Color1Width = f.Width;
                 f.Color1 = gui_widget_getcolor__(h, GUI_CHECKBOX_COLOR_TEXT);
-                GUI_DRAW_WriteText(disp, gui_widget_getfont__(h), gui_widget_gettext__(h), &f);
+                gui_draw_writetext(disp, gui_widget_getfont__(h), gui_widget_gettext__(h), &f);
             }
             
             return 1;
@@ -205,26 +205,26 @@ uint8_t GUI_CHECKBOX_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_CHECKBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p gui_checkbox_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
-uint8_t GUI_CHECKBOX_SetColor(GUI_HANDLE_p h, GUI_CHECKBOX_COLOR_t index, GUI_Color_t color) {
+uint8_t gui_checkbox_setcolor(GUI_HANDLE_p h, GUI_CHECKBOX_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }
 
-uint8_t GUI_CHECKBOX_SetChecked(GUI_HANDLE_p h, uint8_t checked) {
+uint8_t gui_checkbox_setchecked(GUI_HANDLE_p h, uint8_t checked) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_CHECK, &checked, 0, 0); /* Set parameter */
 }
 
-uint8_t GUI_CHECKBOX_SetDisabled(GUI_HANDLE_p h, uint8_t disabled) {
+uint8_t gui_checkbox_setdisabled(GUI_HANDLE_p h, uint8_t disabled) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_DISABLE, &disabled, 0, 0);  /* Set parameter */
 }
 
-uint8_t GUI_CHECKBOX_IsChecked(GUI_HANDLE_p h) {
+uint8_t gui_checkbox_ischecked(GUI_HANDLE_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -236,7 +236,7 @@ uint8_t GUI_CHECKBOX_IsChecked(GUI_HANDLE_p h) {
     return ret;
 }
 
-uint8_t GUI_CHECKBOX_IsDisabled(GUI_HANDLE_p h) {
+uint8_t gui_checkbox_isdisabled(GUI_HANDLE_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */

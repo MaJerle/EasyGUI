@@ -82,7 +82,7 @@ typedef struct GUI_CONTAINER_t {
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_CONTAINER_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_container_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Set color to specific part of widget
@@ -92,7 +92,7 @@ GUI_HANDLE_p GUI_CONTAINER_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_D
  * \retval          1: Color was set ok
  * \retval          0: Color was not set
  */
-uint8_t GUI_CONTAINER_SetColor(GUI_HANDLE_p h, GUI_CONTAINER_COLOR_t index, GUI_Color_t color);
+uint8_t gui_container_setcolor(GUI_HANDLE_p h, GUI_CONTAINER_COLOR_t index, GUI_Color_t color);
 
 /**
  * \}

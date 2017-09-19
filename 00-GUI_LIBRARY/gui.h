@@ -312,27 +312,27 @@ extern GUI_t GUI;
  *                    calls low-layer functions to initialize LCD or custom driver for LCD
  * \retval          Member of \ref GUI_Result_t enumeration
  */
-GUI_Result_t GUI_Init(void);
+GUI_Result_t gui_init(void);
 
 /**
  * \brief           Processes all drawing operations for GUI
  * \retval          Number of jobs done in current call
  */
-int32_t GUI_Process(void);
+int32_t gui_process(void);
 
 /**
  * \brief           Updates current time in GUI interface for amount of milliseconds
  * \param[in]       millis: Number of milliseconds to add to current time, value depends on number of function calls from user space
  * \retval          None
  */
-void GUI_UpdateTime(uint32_t millis);
+void gui_updatetime(uint32_t millis);
 
 /**
  * \brief           Notify GUI stack from low-level layer which layer is currently used as display layer
  * \param[in]       layer_num: Layer number used as display layer
  * \retval          None
  */
-void GUI_LCD_ConfirmActiveLayer(GUI_Byte layer_num);
+void gui_lcd_confirmactivelayer(GUI_Byte layer_num);
  
 /**
  * \}

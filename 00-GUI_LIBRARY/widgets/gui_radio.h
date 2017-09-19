@@ -55,20 +55,20 @@ extern "C" {
  * \code{c}
 uint8_t i;
 for (i = 0; i < 4; i++) {
-    handle = GUI_RADIO_Create(10, 10, 10 + (i * 30), 300, 25, h, 0, 0);
+    handle = gui_radio_create(10, 10, 10 + (i * 30), 300, 25, h, 0, 0);
     switch (i) {
-        case 0: GUI_WIDGET_SetText(handle, _GT("Radio box default")); break;
-        case 1: GUI_WIDGET_SetText(handle, _GT("Radio box selected")); break;
-        case 2: GUI_WIDGET_SetText(handle, _GT("Radio box disabled")); break;
-        case 3: GUI_WIDGET_SetText(handle, _GT("Radio box disabled checked")); break;
+        case 0: gui_widget_settext(handle, _GT("Radio box default")); break;
+        case 1: gui_widget_settext(handle, _GT("Radio box selected")); break;
+        case 2: gui_widget_settext(handle, _GT("Radio box disabled")); break;
+        case 3: gui_widget_settext(handle, _GT("Radio box disabled checked")); break;
         default: break;
     }
-    GUI_RADIO_SetGroup(handle, i < 2 ? 1 : 2);
-    GUI_RADIO_SetValue(handle, i);
+    gui_radio_setgroup(handle, i < 2 ? 1 : 2);
+    gui_radio_setvalue(handle, i);
     if (i % 2) {
-        GUI_RADIO_SetSelected(handle);
+        gui_radio_setselected(handle);
     }
-    GUI_RADIO_SetDisabled(handle, i / 2);
+    gui_radio_setdisabled(handle, i / 2);
 }
 \endcode
  */
@@ -115,7 +115,7 @@ typedef struct GUI_RADIO_t {
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_RADIO_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_radio_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Set color to specific part of widget
@@ -125,7 +125,7 @@ GUI_HANDLE_p GUI_RADIO_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
  * \retval          1: Color was set ok
  * \retval          0: Color vas not set
  */
-uint8_t GUI_RADIO_SetColor(GUI_HANDLE_p h, GUI_RADIO_COLOR_t index, GUI_Color_t color);
+uint8_t gui_radio_setcolor(GUI_HANDLE_p h, GUI_RADIO_COLOR_t index, GUI_Color_t color);
 
 /**
  * \brief           Set radio group for widget
@@ -134,17 +134,17 @@ uint8_t GUI_RADIO_SetColor(GUI_HANDLE_p h, GUI_RADIO_COLOR_t index, GUI_Color_t 
  * \param[in]       groupId: Group ID for widget
  * \retval          1: Group set ok
  * \retval          0: Group was not set
- * \sa              GUI_RADIO_GetGroup
+ * \sa              gui_radio_getgroup
  */
-uint8_t GUI_RADIO_SetGroup(GUI_HANDLE_p h, uint8_t groupId);
+uint8_t gui_radio_setgroup(GUI_HANDLE_p h, uint8_t groupId);
 
 /**
  * \brief           Get radio group for widget
  * \param[in,out]   h: Widget handle
  * \retval          Widget group
- * \sa              GUI_RADIO_SetGroup
+ * \sa              gui_radio_setgroup
  */
-uint8_t GUI_RADIO_GetGroup(GUI_HANDLE_p h);
+uint8_t gui_radio_getgroup(GUI_HANDLE_p h);
 
 /**
  * \brief           Set value for widget when pressed
@@ -152,17 +152,17 @@ uint8_t GUI_RADIO_GetGroup(GUI_HANDLE_p h);
  * \param[in]       value: Value of widget group when specific widget is selected
  * \retval          1: Value set ok
  * \retval          0: Value was not set
- * \sa              GUI_RADIO_GetValue
+ * \sa              gui_radio_getvalue
  */
-uint8_t GUI_RADIO_SetValue(GUI_HANDLE_p h, uint32_t value);
+uint8_t gui_radio_setvalue(GUI_HANDLE_p h, uint32_t value);
 
 /**
  * \brief           Get value for specific widget
  * \param[in,out]   h: Widget handle
  * \retval          Widget value
- * \sa              GUI_RADIO_SetValue
+ * \sa              gui_radio_setvalue
  */
-uint32_t GUI_RADIO_GetValue(GUI_HANDLE_p h);
+uint32_t gui_radio_getvalue(GUI_HANDLE_p h);
 
 /**
  * \brief           Get value of selected widget from widget group
@@ -170,7 +170,7 @@ uint32_t GUI_RADIO_GetValue(GUI_HANDLE_p h);
  * \param[in,out]   h: Widget handle
  * \retval          Widget selected value
  */
-uint32_t GUI_RADIO_GetSelectedValue(GUI_HANDLE_p h);
+uint32_t gui_radio_getselectedvalue(GUI_HANDLE_p h);
 
 /**
  * \brief           Set disabled status to widget
@@ -179,7 +179,7 @@ uint32_t GUI_RADIO_GetSelectedValue(GUI_HANDLE_p h);
  * \retval          1: Radio was set to desired disabled value
  * \retval          0: Radio was not set to desired disabled value
  */
-uint8_t GUI_RADIO_SetDisabled(GUI_HANDLE_p h, uint8_t disabled);
+uint8_t gui_radio_setdisabled(GUI_HANDLE_p h, uint8_t disabled);
 
 /**
  * \brief           Check if Radio is disabled
@@ -187,7 +187,7 @@ uint8_t GUI_RADIO_SetDisabled(GUI_HANDLE_p h, uint8_t disabled);
  * \retval          1: Radio is disabled
  * \retval          0: Radio is not disabled
  */
-uint8_t GUI_RADIO_IsDisabled(GUI_HANDLE_p h);
+uint8_t gui_radio_isdisabled(GUI_HANDLE_p h);
 
 /**
  * \brief           Set radio widget selected in radio group
@@ -195,7 +195,7 @@ uint8_t GUI_RADIO_IsDisabled(GUI_HANDLE_p h);
  * \retval          1: Widget selected ok
  * \retval          0: Widget was not selected
  */
-uint8_t GUI_RADIO_SetSelected(GUI_HANDLE_p h);
+uint8_t gui_radio_setselected(GUI_HANDLE_p h);
     
 /**
  * \}

@@ -446,7 +446,7 @@ size_t gui_mem_getminfree__(void) {
 /***                  Thread safe version of public API                      **/
 /******************************************************************************/
 /******************************************************************************/
-uint8_t GUI_MEM_AssignMemory(const GUI_MEM_Region_t* regions, size_t len) {
+uint8_t gui_mem_assignmemory(const GUI_MEM_Region_t* regions, size_t len) {
     uint8_t ret;
     __GUI_ENTER();                                  /* Enter GUI */
     ret = mem_assignmem(regions, len);              /* Assign memory */

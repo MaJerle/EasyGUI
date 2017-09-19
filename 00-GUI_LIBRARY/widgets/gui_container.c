@@ -40,7 +40,7 @@
 #define __GW(x)             ((GUI_WINDOW_t *)(x))
 
 static
-uint8_t GUI_CONTAINER_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+uint8_t gui_container_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -55,7 +55,7 @@ static const GUI_WIDGET_t Widget = {
     .Name = _GT("CONTAINER"),                       /*!< Widget name */
     .Size = sizeof(GUI_CONTAINER_t),                /*!< Size of widget for memory allocation */
     .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
-    .Callback = GUI_CONTAINER_Callback,             /*!< Control function */
+    .Callback = gui_container_callback,             /*!< Control function */
     .Colors = Colors,                               /*!< Pointer to colors array */
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
 };
@@ -66,7 +66,7 @@ static const GUI_WIDGET_t Widget = {
 /******************************************************************************/
 /******************************************************************************/
 static
-uint8_t GUI_CONTAINER_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+uint8_t gui_container_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
@@ -78,7 +78,7 @@ uint8_t GUI_CONTAINER_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void*
             wi = gui_widget_getwidth__(h);
             hi = gui_widget_getheight__(h);
  
-            GUI_DRAW_FilledRectangle(disp, x, y, wi, hi, gui_widget_getcolor__(h, GUI_CONTAINER_COLOR_BG));
+            gui_draw_filledrectangle(disp, x, y, wi, hi, gui_widget_getcolor__(h, GUI_CONTAINER_COLOR_BG));
             
             return 1;
         }
@@ -93,11 +93,11 @@ uint8_t GUI_CONTAINER_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void*
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_CONTAINER_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p gui_container_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
-uint8_t GUI_CONTAINER_SetColor(GUI_HANDLE_p h, GUI_CONTAINER_COLOR_t index, GUI_Color_t color) {
+uint8_t gui_container_setcolor(GUI_HANDLE_p h, GUI_CONTAINER_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }

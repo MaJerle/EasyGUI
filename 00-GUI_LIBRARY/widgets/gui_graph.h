@@ -53,15 +53,15 @@ extern "C" {
  *
  * Example code for image above
  * \code{c}
-handle = GUI_GRAPH_Create(ID_GRAPH_MAIN, 10, 10, 400, 220, h, 0, 0);
+handle = gui_graph_create(ID_GRAPH_MAIN, 10, 10, 400, 220, h, 0, 0);
 
 //Create data objects
 if (!graphdata1) {
-    graphdata1 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_XY, len);
+    graphdata1 = gui_graph_data_create(GUI_GRAPH_TYPE_XY, len);
     graphdata1->Color = GUI_COLOR_RED;
 }
 if (!graphdata2) {
-    graphdata2 = GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_YT, len / 2);
+    graphdata2 = gui_graph_data_create(GUI_GRAPH_TYPE_YT, len / 2);
     graphdata2->Color = GUI_COLOR_GREEN;
 }
 
@@ -69,17 +69,17 @@ if (!graphdata2) {
 for (i = 0; i <= 360; i += 360 / len) {
     x = cos((float)i * (PI / 180.0f));
     y = sin((float)i * (PI / 180.0f));
-    GUI_GRAPH_DATA_AddValue(graphdata1, x * radius, y * radius);
-    GUI_GRAPH_DATA_AddValue(graphdata2, x * radius / 3, y * radius / 4);
+    gui_graph_data_addvalue(graphdata1, x * radius, y * radius);
+    gui_graph_data_addvalue(graphdata2, x * radius / 3, y * radius / 4);
 }
-GUI_GRAPH_AttachData(handle, graphdata1);
-GUI_GRAPH_AttachData(handle, graphdata2);
+gui_graph_attachdata(handle, graphdata1);
+gui_graph_attachdata(handle, graphdata2);
 \endcode
  */
     
 /**
  * \brief           Graph color list enumeration
- * \sa              GUI_GRAPH_SetColor
+ * \sa              gui_graph_setcolor
  */
 typedef enum GUI_GRAPH_COLOR_t {
     GUI_GRAPH_COLOR_BG = 0x00,              /*!< Background color index */
@@ -159,7 +159,7 @@ typedef struct GUI_GRAPH_t {
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_GRAPH_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_graph_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Set color to specific part of widget
@@ -169,7 +169,7 @@ GUI_HANDLE_p GUI_GRAPH_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
  * \retval          1: Color was set ok
  * \retval          0: Color was not set
  */
-uint8_t GUI_GRAPH_SetColor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t color);
+uint8_t gui_graph_setcolor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t color);
 
 /**
  * \brief           Set minimal X value of plot
@@ -177,9 +177,9 @@ uint8_t GUI_GRAPH_SetColor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t 
  * \param[in]       v: New minimal X value
  * \retval          1: Value was set ok
  * \retval          0: Value was not set
- * \sa              GUI_GRAPH_SetMaxX, GUI_GRAPH_SetMinY, GUI_GRAPH_SetMaxY
+ * \sa              gui_graph_setmaxx, gui_graph_setminy, gui_graph_setmaxy
  */
-uint8_t GUI_GRAPH_SetMinX(GUI_HANDLE_p h, float v);
+uint8_t gui_graph_setminx(GUI_HANDLE_p h, float v);
 
 /**
  * \brief           Set maximal X value of plot
@@ -187,9 +187,9 @@ uint8_t GUI_GRAPH_SetMinX(GUI_HANDLE_p h, float v);
  * \param[in]       v: New maximal X value
  * \retval          1: Value was set ok
  * \retval          0: Value was not set
- * \sa              GUI_GRAPH_SetMinX, GUI_GRAPH_SetMinY, GUI_GRAPH_SetMaxY
+ * \sa              gui_graph_setminx, gui_graph_setminy, gui_graph_setmaxy
  */
-uint8_t GUI_GRAPH_SetMaxX(GUI_HANDLE_p h, float v);
+uint8_t gui_graph_setmaxx(GUI_HANDLE_p h, float v);
 
 /**
  * \brief           Set minimal Y value of plot
@@ -197,9 +197,9 @@ uint8_t GUI_GRAPH_SetMaxX(GUI_HANDLE_p h, float v);
  * \param[in]       v: New minimal Y value
  * \retval          1: Value was set ok
  * \retval          0: Value was not set
- * \sa              GUI_GRAPH_SetMinX, GUI_GRAPH_SetMaxX, GUI_GRAPH_SetMaxY
+ * \sa              gui_graph_setminx, gui_graph_setmaxx, gui_graph_setmaxy
  */
-uint8_t GUI_GRAPH_SetMinY(GUI_HANDLE_p h, float v);
+uint8_t gui_graph_setminy(GUI_HANDLE_p h, float v);
 
 /**
  * \brief           Set maximal Y value of plot
@@ -207,9 +207,9 @@ uint8_t GUI_GRAPH_SetMinY(GUI_HANDLE_p h, float v);
  * \param[in]       v: New maximal Y value
  * \retval          1: Value was set ok
  * \retval          0: Value was not set
- * \sa              GUI_GRAPH_SetMinX, GUI_GRAPH_SetMaxX, GUI_GRAPH_SetMinY
+ * \sa              gui_graph_setminx, gui_graph_setmaxx, gui_graph_setminy
  */
-uint8_t GUI_GRAPH_SetMaxY(GUI_HANDLE_p h, float v);
+uint8_t gui_graph_setmaxy(GUI_HANDLE_p h, float v);
 
 /**
  * \brief           Reset zoom of widget
@@ -217,7 +217,7 @@ uint8_t GUI_GRAPH_SetMaxY(GUI_HANDLE_p h, float v);
  * \retval          1: Zoom was reseted
  * \retval          0: Zoom was not reseted
  */
-uint8_t GUI_GRAPH_ZoomReset(GUI_HANDLE_p h);
+uint8_t gui_graph_zoomreset(GUI_HANDLE_p h);
 
 /**
  * \brief           Zoom widget display data
@@ -228,7 +228,7 @@ uint8_t GUI_GRAPH_ZoomReset(GUI_HANDLE_p h);
  * \retval          1: Zoom was reseted
  * \retval          0: Zoom was not reseted
  */
-uint8_t GUI_GRAPH_Zoom(GUI_HANDLE_p h, float zoom, float x, float y);
+uint8_t gui_graph_zoom(GUI_HANDLE_p h, float zoom, float x, float y);
 
 /**
  * \brief           Attach new data object to graph widget
@@ -236,9 +236,9 @@ uint8_t GUI_GRAPH_Zoom(GUI_HANDLE_p h, float zoom, float x, float y);
  * \param[in]       data: Data object handle
  * \retval          1: Attaching was successful
  * \retval          0: Attaching failed
- * \sa              GUI_GRAPH_DetachData
+ * \sa              gui_graph_detachdata
  */
-uint8_t GUI_GRAPH_AttachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
+uint8_t gui_graph_attachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
 
 /**
  * \brief           Detach existing data object from graph widget
@@ -246,9 +246,9 @@ uint8_t GUI_GRAPH_AttachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
  * \param[in]       data: Data object handle
  * \retval          1: Detaching was successful
  * \retval          0: Detaching failed
- * \sa              GUI_GRAPH_AttachData
+ * \sa              gui_graph_attachdata
  */
-uint8_t GUI_GRAPH_DetachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
+uint8_t gui_graph_detachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
 
 /**
  * \brief           Creates data object according to specific type
@@ -260,7 +260,7 @@ uint8_t GUI_GRAPH_DetachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
  * \retval          > 0: \ref GUI_GRAPH_DATA_p object of created widget
  * \retval          0: Data creation failed
  */
-GUI_GRAPH_DATA_p GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_t type, size_t length);
+GUI_GRAPH_DATA_p gui_graph_data_create(GUI_GRAPH_TYPE_t type, size_t length);
 
 /**
  * \brief           Add new value to the end of data object
@@ -270,7 +270,7 @@ GUI_GRAPH_DATA_p GUI_GRAPH_DATA_Create(GUI_GRAPH_TYPE_t type, size_t length);
  * \retval          1: Value was added to data object ok
  * \retval          0: Value was not added to data object
  */
-uint8_t GUI_GRAPH_DATA_AddValue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y);
+uint8_t gui_graph_data_addvalue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y);
  
 /**
  * \}

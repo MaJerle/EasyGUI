@@ -424,7 +424,7 @@ void HAL_LTDC_LineEvenCallback(LTDC_HandleTypeDef *hltdc) {
             
             __HAL_LTDC_RELOAD_CONFIG(hltdc);
             
-            GUI_LCD_ConfirmActiveLayer(i);
+            gui_lcd_confirmactivelayer(i);
             break;
         }
     }

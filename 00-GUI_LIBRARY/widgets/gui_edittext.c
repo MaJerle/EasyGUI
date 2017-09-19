@@ -44,7 +44,7 @@
 #define CFG_HALIGN          0x03
     
 static
-uint8_t GUI_EDITTEXT_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+uint8_t gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
     
 /******************************************************************************/
 /******************************************************************************/
@@ -61,7 +61,7 @@ static const GUI_WIDGET_t Widget = {
     .Name = _GT("EDITTEXT"),                        /*!< Widget name */
     .Size = sizeof(GUI_EDITTEXT_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = GUI_EDITTEXT_Callback,              /*!< Control function */
+    .Callback = gui_edittext_callback,              /*!< Control function */
     .Colors = Colors,                               /*!< List of default colors */
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
 };
@@ -83,7 +83,7 @@ void TimerCallback(GUI_TIMER_t* timer) {
 
 /* Widget callback */
 static
-uint8_t GUI_EDITTEXT_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+uint8_t gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
@@ -121,16 +121,16 @@ uint8_t GUI_EDITTEXT_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             width = gui_widget_getwidth__(h);       /* Get widget width */
             height = gui_widget_getheight__(h);     /* Get widget height */
             
-            GUI_DRAW_Rectangle3D(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
-            GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, gui_widget_getcolor__(h, GUI_EDITTEXT_COLOR_BG));
+            gui_draw_rectangle3d(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
+            gui_draw_filledrectangle(disp, x + 2, y + 2, width - 4, height - 4, gui_widget_getcolor__(h, GUI_EDITTEXT_COLOR_BG));
             
             if (gui_widget_isfocused__(h)) {        /* Check if widget is in focus */
-                GUI_DRAW_Rectangle(disp, x + 3, y + 3, width - 6, height - 6, gui_widget_getcolor__(h, GUI_EDITTEXT_COLOR_BORDER));
+                gui_draw_rectangle(disp, x + 3, y + 3, width - 6, height - 6, gui_widget_getcolor__(h, GUI_EDITTEXT_COLOR_BORDER));
             }
             
             if (gui_widget_isfontandtextset__(h)) { /* Ready to write string */
                 GUI_DRAW_FONT_t f;
-                GUI_DRAW_FONT_Init(&f);             /* Init font drawing */
+                gui_draw_font_init(&f);             /* Init font drawing */
                 
                 f.X = x + 5;
                 f.Y = y + 5;
@@ -145,7 +145,7 @@ uint8_t GUI_EDITTEXT_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                     f.Flags |= GUI_FLAG_FONT_MULTILINE; /* Set multiline flag for widget */
                 }
                 
-                GUI_DRAW_WriteText(disp, gui_widget_getfont__(h), gui_widget_gettext__(h), &f);
+                gui_draw_writetext(disp, gui_widget_getfont__(h), gui_widget_gettext__(h), &f);
             }
             return 1;
         }
@@ -187,26 +187,26 @@ uint8_t GUI_EDITTEXT_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_EDITTEXT_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p gui_edittext_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
-uint8_t GUI_EDITTEXT_SetColor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color) {
+uint8_t gui_edittext_setcolor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setcolor__(h, (uint8_t)index, color);  /* Set color */
 }
 
-uint8_t GUI_EDITTEXT_SetMultiline(GUI_HANDLE_p h, uint8_t multiline) {
+uint8_t gui_edittext_setmultiline(GUI_HANDLE_p h, uint8_t multiline) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_MULTILINE, &multiline, 1, 0);   /* Set parameter */
 }
 
-uint8_t GUI_EDITTEXT_SetVAlign(GUI_HANDLE_p h, GUI_EDITTEXT_VALIGN_t align) {
+uint8_t gui_edittext_setvalign(GUI_HANDLE_p h, GUI_EDITTEXT_VALIGN_t align) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_VALIGN, &align, 1, 1);  /* Set parameter */
 }
 
-uint8_t GUI_EDITTEXT_SetHAlign(GUI_HANDLE_p h, GUI_EDITTEXT_HALIGN_t align) {
+uint8_t gui_edittext_sethalign(GUI_HANDLE_p h, GUI_EDITTEXT_HALIGN_t align) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_HALIGN, &align, 1, 1);  /* Set parameter */
 }

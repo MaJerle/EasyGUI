@@ -26,7 +26,7 @@
 #define GUI_INTERNAL
 #include "gui_buffer.h"
 
-uint8_t GUI_BUFFER_Init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr) {
+uint8_t gui_buffer_init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr) {
 	if (Buffer == NULL) {									/* Check buffer structure */
 		return 1;
 	}
@@ -50,7 +50,7 @@ uint8_t GUI_BUFFER_Init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr) {
 	return 0;												/* Initialized OK */
 }
 
-void GUI_BUFFER_Free(GUI_BUFFER_t* Buffer) {
+void gui_buffer_free(GUI_BUFFER_t* Buffer) {
 	if (Buffer == NULL) {									/* Check buffer structure */
 		return;
 	}
@@ -61,7 +61,7 @@ void GUI_BUFFER_Free(GUI_BUFFER_t* Buffer) {
 	Buffer->Size = 0;
 }
 
-uint32_t GUI_BUFFER_Write(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count) {
+uint32_t gui_buffer_write(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count) {
 	uint32_t i = 0;
 	uint32_t free;
     const uint8_t* d = (const uint8_t *)Data;
@@ -75,7 +75,7 @@ uint32_t GUI_BUFFER_Write(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count
 	if (Buffer->In >= Buffer->Size) {						/* Check input pointer */
 		Buffer->In = 0;
 	}
-	free = GUI_BUFFER_GetFree(Buffer);							/* Get free memory */
+	free = gui_buffer_getfree(Buffer);							/* Get free memory */
 	if (free < count) {										/* Check available memory */	
 		if (free == 0) {									/* If no memory, stop execution */
 			return 0;
@@ -113,7 +113,7 @@ uint32_t GUI_BUFFER_Write(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count
 #endif
 }
 
-uint32_t GUI_BUFFER_WriteToTop(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count) {
+uint32_t gui_buffer_writetotop(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count) {
 	uint32_t i = 0;
 	uint32_t free;
     uint8_t *d = (uint8_t *)Data;
@@ -127,7 +127,7 @@ uint32_t GUI_BUFFER_WriteToTop(GUI_BUFFER_t* Buffer, const void* Data, uint32_t 
 	if (Buffer->Out >= Buffer->Size) {						/* Check output pointer */
 		Buffer->Out = 0;
 	}
-	free = GUI_BUFFER_GetFree(Buffer);							/* Get free memory */
+	free = gui_buffer_getfree(Buffer);							/* Get free memory */
 	if (free < count) {										/* Check available memory */
 		if (free == 0) {									/* If no memory, stop execution */
 			return 0;
@@ -147,7 +147,7 @@ uint32_t GUI_BUFFER_WriteToTop(GUI_BUFFER_t* Buffer, const void* Data, uint32_t 
 	return i;												/* Return number of elements written */
 }
 
-uint32_t GUI_BUFFER_Read(GUI_BUFFER_t* Buffer, void* Data, uint32_t count) {
+uint32_t gui_buffer_read(GUI_BUFFER_t* Buffer, void* Data, uint32_t count) {
 	uint32_t i = 0, full;
     uint8_t *d = (uint8_t *)Data;
 #if GUI_BUFFER_FAST
@@ -160,7 +160,7 @@ uint32_t GUI_BUFFER_Read(GUI_BUFFER_t* Buffer, void* Data, uint32_t count) {
 	if (Buffer->Out >= Buffer->Size) {						/* Check output pointer */
 		Buffer->Out = 0;
 	}
-	full = GUI_BUFFER_GetFull(Buffer);							/* Get free memory */
+	full = gui_buffer_getfull(Buffer);							/* Get free memory */
 	if (full < count) {										/* Check available memory */
 		if (full == 0) {									/* If no memory, stop execution */
 			return 0;
@@ -196,7 +196,7 @@ uint32_t GUI_BUFFER_Read(GUI_BUFFER_t* Buffer, void* Data, uint32_t count) {
 #endif
 }
 
-uint32_t GUI_BUFFER_GetFree(GUI_BUFFER_t* Buffer) {
+uint32_t gui_buffer_getfree(GUI_BUFFER_t* Buffer) {
 	uint32_t size = 0, in, out;
 	
 	if (Buffer == NULL) {									/* Check buffer structure */
@@ -214,7 +214,7 @@ uint32_t GUI_BUFFER_GetFree(GUI_BUFFER_t* Buffer) {
 	return size - 1;										/* Return free memory */
 }
 
-uint32_t GUI_BUFFER_GetFull(GUI_BUFFER_t* Buffer) {
+uint32_t gui_buffer_getfull(GUI_BUFFER_t* Buffer) {
 	uint32_t in, out, size;
 	
 	if (Buffer == NULL) {									/* Check buffer structure */
@@ -232,7 +232,7 @@ uint32_t GUI_BUFFER_GetFull(GUI_BUFFER_t* Buffer) {
 	return size;											/* Return number of elements in buffer */
 }
 
-uint32_t GUI_BUFFER_GetFullFast(GUI_BUFFER_t* Buffer) {
+uint32_t gui_buffer_getfullfast(GUI_BUFFER_t* Buffer) {
 	uint32_t in, out;
 	
 	if (Buffer == NULL) {									/* Check buffer structure */
@@ -243,7 +243,7 @@ uint32_t GUI_BUFFER_GetFullFast(GUI_BUFFER_t* Buffer) {
 	return (Buffer->Size + in - out) % Buffer->Size;
 }
 
-void GUI_BUFFER_Reset(GUI_BUFFER_t* Buffer) {
+void gui_buffer_reset(GUI_BUFFER_t* Buffer) {
 	if (Buffer == NULL) {									/* Check buffer structure */
 		return;
 	}
@@ -251,14 +251,14 @@ void GUI_BUFFER_Reset(GUI_BUFFER_t* Buffer) {
 	Buffer->Out = 0;
 }
 
-int32_t GUI_BUFFER_FindElement(GUI_BUFFER_t* Buffer, uint8_t Element) {
+int32_t gui_buffer_findelement(GUI_BUFFER_t* Buffer, uint8_t Element) {
 	uint32_t Num, Out, retval = 0;
 	
 	if (Buffer == NULL) {									/* Check buffer structure */
 		return -1;
 	}
 	
-	Num = GUI_BUFFER_GetFull(Buffer);							/* Create temporary variables */
+	Num = gui_buffer_getfull(Buffer);							/* Create temporary variables */
 	Out = Buffer->Out;
 	while (Num > 0) {										/* Go through input elements */
 		if (Out >= Buffer->Size) {							/* Check output overflow */
@@ -274,12 +274,12 @@ int32_t GUI_BUFFER_FindElement(GUI_BUFFER_t* Buffer, uint8_t Element) {
 	return -1;												/* Element is not in buffer */
 }
 
-int32_t GUI_BUFFER_Find(GUI_BUFFER_t* Buffer, const void* Data, uint32_t Size) {
+int32_t gui_buffer_find(GUI_BUFFER_t* Buffer, const void* Data, uint32_t Size) {
 	uint32_t Num, Out, i, retval = 0;
 	uint8_t found = 0;
     uint8_t* d = (uint8_t *)Data;
 
-	if (Buffer == NULL || (Num = GUI_BUFFER_GetFull(Buffer)) < Size) {	/* Check buffer structure and number of elements in buffer */
+	if (Buffer == NULL || (Num = gui_buffer_getfull(Buffer)) < Size) {	/* Check buffer structure and number of elements in buffer */
 		return -1;
 	}
 	Out = Buffer->Out;										/* Create temporary variables */
@@ -316,23 +316,23 @@ int32_t GUI_BUFFER_Find(GUI_BUFFER_t* Buffer, const void* Data, uint32_t Size) {
 	return -1;												/* Data sequence is not in buffer */
 }
 
-uint32_t GUI_BUFFER_WriteString(GUI_BUFFER_t* Buffer, const char* buff) {
-	return GUI_BUFFER_Write(Buffer, (uint8_t *)buff, strlen(buff));	/* Write string to buffer */
+uint32_t gui_buffer_writestring(GUI_BUFFER_t* Buffer, const char* buff) {
+	return gui_buffer_write(Buffer, (uint8_t *)buff, strlen(buff));	/* Write string to buffer */
 }
 
-uint32_t GUI_BUFFER_ReadString(GUI_BUFFER_t* Buffer, char* buff, uint32_t buffsize) {
+uint32_t gui_buffer_readstring(GUI_BUFFER_t* Buffer, char* buff, uint32_t buffsize) {
 	uint32_t i = 0, freeMem, fullMem;
 	uint8_t ch;
 	if (Buffer == NULL) {
 		return 0;											/* Check value buffer */
 	}
 	
-	freeMem = GUI_BUFFER_GetFree(Buffer);					/* Get free memory */
-	fullMem = GUI_BUFFER_GetFull(Buffer);				    /* Get full memory */
+	freeMem = gui_buffer_getfree(Buffer);					/* Get free memory */
+	fullMem = gui_buffer_getfull(Buffer);				    /* Get full memory */
 	if (													/* Check for any data in buffer */
 		fullMem == 0 ||                                 	/* Buffer empty */
 		(
-			GUI_BUFFER_FindElement(Buffer, Buffer->StringDelimiter) < 0 && 	/* String delimiter is not in buffer */
+			gui_buffer_findelement(Buffer, Buffer->StringDelimiter) < 0 && 	/* String delimiter is not in buffer */
 			freeMem != 0 &&                                 /* Buffer is not full */
 			fullMem < buffsize                              /* User buffer size is larger than number of elements in buffer */
 		)
@@ -340,7 +340,7 @@ uint32_t GUI_BUFFER_ReadString(GUI_BUFFER_t* Buffer, char* buff, uint32_t buffsi
 		return 0;											/* Return with no elements read */
 	}
 	while (i < (buffsize - 1)) {							/* If available buffer size is more than 0 characters */
-		GUI_BUFFER_Read(Buffer, &ch, 1);						/* We have available data */
+		gui_buffer_read(Buffer, &ch, 1);						/* We have available data */
 		buff[i] = (char)ch;									/* Save character */
 		if ((char)buff[i] == (char)Buffer->StringDelimiter) {	/* Check for end of string */
 			break;											/* Done */
@@ -355,7 +355,7 @@ uint32_t GUI_BUFFER_ReadString(GUI_BUFFER_t* Buffer, char* buff, uint32_t buffsi
 	return i;												/* Return number of characters in buffer */
 }
 
-int8_t GUI_BUFFER_CheckElement(GUI_BUFFER_t* Buffer, uint32_t pos, uint8_t* element) {
+int8_t gui_buffer_checkelement(GUI_BUFFER_t* Buffer, uint32_t pos, uint8_t* element) {
 	uint32_t In, Out, i = 0;
 	if (Buffer == NULL) {									/* Check value buffer */
 		return 0;

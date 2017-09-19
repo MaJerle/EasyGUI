@@ -54,24 +54,24 @@ extern "C" {
  * Example code of image above:
  * \code{c}
 //First checkbox widget
-handle = GUI_CHECKBOX_Create(0, 10, 10, 400, 40, 0, 0, 0);
-GUI_WIDGET_SetText(handle, _GT("Check box default"));
+handle = gui_checkbox_create(0, 10, 10, 400, 40, 0, 0, 0);
+gui_widget_settext(handle, _GT("Check box default"));
 
 //Second checkbox widget
-handle = GUI_CHECKBOX_Create(0, 10, 50, 400, 40, 0, 0, 0);
-GUI_WIDGET_SetText(handle, _GT("Check box checked"));
-GUI_CHECKBOX_SetChecked(handle, 1);
+handle = gui_checkbox_create(0, 10, 50, 400, 40, 0, 0, 0);
+gui_widget_settext(handle, _GT("Check box checked"));
+gui_checkbox_setchecked(handle, 1);
 
 //Third checkbox widget
-handle = GUI_CHECKBOX_Create(0, 10, 90, 400, 40, 0, 0, 0);
-GUI_WIDGET_SetText(handle, _GT("Check box disabled"));
-GUI_CHECKBOX_SetDisabled(handle, 1);
+handle = gui_checkbox_create(0, 10, 90, 400, 40, 0, 0, 0);
+gui_widget_settext(handle, _GT("Check box disabled"));
+gui_checkbox_setdisabled(handle, 1);
 
 //Forth checkbox widget
-handle = GUI_CHECKBOX_Create(0, 10, 130, 400, 40, 0, 0, 0);
-GUI_WIDGET_SetText(handle, _GT("Check box checked disabled"));
-GUI_CHECKBOX_SetChecked(handle, 1);
-GUI_CHECKBOX_SetDisabled(handle, 1);
+handle = gui_checkbox_create(0, 10, 130, 400, 40, 0, 0, 0);
+gui_widget_settext(handle, _GT("Check box checked disabled"));
+gui_checkbox_setchecked(handle, 1);
+gui_checkbox_setdisabled(handle, 1);
 \endcode
  */
     
@@ -114,7 +114,7 @@ typedef struct GUI_CHECKBOX_t {
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_CHECKBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_checkbox_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Set color to specific part of widget
@@ -124,7 +124,7 @@ GUI_HANDLE_p GUI_CHECKBOX_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Di
  * \retval          1: Color was set ok
  * \retval          0: Color vas not set
  */
-uint8_t GUI_CHECKBOX_SetColor(GUI_HANDLE_p h, GUI_CHECKBOX_COLOR_t index, GUI_Color_t color);
+uint8_t gui_checkbox_setcolor(GUI_HANDLE_p h, GUI_CHECKBOX_COLOR_t index, GUI_Color_t color);
 
 /**
  * \brief           Set checked status to widget
@@ -133,7 +133,7 @@ uint8_t GUI_CHECKBOX_SetColor(GUI_HANDLE_p h, GUI_CHECKBOX_COLOR_t index, GUI_Co
  * \retval          1: Checkbox was set to desired checked value
  * \retval          0: Checkbox was not set to desired checked value
  */
-uint8_t GUI_CHECKBOX_SetChecked(GUI_HANDLE_p h, uint8_t checked);
+uint8_t gui_checkbox_setchecked(GUI_HANDLE_p h, uint8_t checked);
 
 /**
  * \brief           Check if checkbox is checked
@@ -141,7 +141,7 @@ uint8_t GUI_CHECKBOX_SetChecked(GUI_HANDLE_p h, uint8_t checked);
  * \retval          1: Checkbox is checked
  * \retval          0: Checkbox is not checked
  */
-uint8_t GUI_CHECKBOX_IsChecked(GUI_HANDLE_p h);
+uint8_t gui_checkbox_ischecked(GUI_HANDLE_p h);
 
 /**
  * \brief           Set disabled status to widget
@@ -150,7 +150,7 @@ uint8_t GUI_CHECKBOX_IsChecked(GUI_HANDLE_p h);
  * \retval          1: Checkbox was set to desired disabled value
  * \retval          0: Checkbox was not set to desired disabled value
  */
-uint8_t GUI_CHECKBOX_SetDisabled(GUI_HANDLE_p h, uint8_t disabled);
+uint8_t gui_checkbox_setdisabled(GUI_HANDLE_p h, uint8_t disabled);
 
 /**
  * \brief           Check if checkbox is disabled
@@ -158,7 +158,7 @@ uint8_t GUI_CHECKBOX_SetDisabled(GUI_HANDLE_p h, uint8_t disabled);
  * \retval          1: Checkbox is disabled
  * \retval          0: Checkbox is not disabled
  */
-uint8_t GUI_CHECKBOX_IsDisabled(GUI_HANDLE_p h);
+uint8_t gui_checkbox_isdisabled(GUI_HANDLE_p h);
 
 /**
  * \}

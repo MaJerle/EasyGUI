@@ -329,7 +329,7 @@ void __SetRelativeCoordinate(__GUI_TouchData_t* ts, GUI_iDim_t x, GUI_iDim_t y, 
 #if GUI_TOUCH_MAX_PRESSES > 1
     if (ts->TS.Count == 2) {                        /* 2 points detected */
         ts->DistanceOld = ts->Distance;             /* Save old distance */
-        GUI_MATH_DistanceBetweenXY(ts->RelX[0], ts->RelY[0], ts->RelX[1], ts->RelY[1], &ts->Distance);  /* Calculate distance between 2 points */
+        gui_math_distancebetweenxy(ts->RelX[0], ts->RelY[0], ts->RelX[1], ts->RelY[1], &ts->Distance);  /* Calculate distance between 2 points */
     }
 #endif /* GUI_TOUCH_MAX_PRESSES > 1 */
 }
@@ -603,7 +603,7 @@ gui_process_redraw__(void) {
     
     /* Notify low-level about layer change */
     GUI.LCD.Flags |= GUI_FLAG_LCD_WAIT_LAYER_CONFIRM;
-    GUI_LL_Control(&GUI.LCD, GUI_LL_Command_SetActiveLayer, &drawing, &result); /* Set new active layer to low-level driver */
+    gui_ll_control(&GUI.LCD, GUI_LL_Command_SetActiveLayer, &drawing, &result); /* Set new active layer to low-level driver */
     
     /* Swap active and drawing layers */
     /* New drawings won't be affected until confirmation from low-level is not received */
@@ -631,7 +631,7 @@ static void
 gui_thread(void * const argument) {
     
     while (1) {
-        GUI_Process();                              /* Process graphical update */
+        gui_process();                              /* Process graphical update */
     }
 }
 #endif
@@ -648,7 +648,7 @@ gui_thread(void * const argument) {
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_Result_t GUI_Init(void) {
+GUI_Result_t gui_init(void) {
     uint8_t result;
     
     memset((void *)&GUI, 0x00, sizeof(GUI_t));      /* Reset GUI structure */
@@ -661,7 +661,7 @@ GUI_Result_t GUI_Init(void) {
     
     /* Call LCD low-level function */
     result = 1;
-    GUI_LL_Control(&GUI.LCD, GUI_LL_Command_Init, &GUI.LL, &result);    /* Call low-level initialization */
+    gui_ll_control(&GUI.LCD, GUI_LL_Command_Init, &GUI.LL, &result);    /* Call low-level initialization */
     GUI.LL.Init(&GUI.LCD);                          /* Call user LCD driver function */
     
     /* Check situation with layers */
@@ -696,7 +696,7 @@ GUI_Result_t GUI_Init(void) {
     return guiOK;
 }
 
-int32_t GUI_Process(void) {
+int32_t gui_process(void) {
 #if GUI_OS
     gui_mbox_msg_t* msg;
     uint32_t time;
@@ -726,7 +726,7 @@ int32_t GUI_Process(void) {
     return 0;                                       /* Return number of elements updated on GUI */
 }
 
-void GUI_LCD_ConfirmActiveLayer(GUI_Byte layer_num) {
+void gui_lcd_confirmactivelayer(GUI_Byte layer_num) {
     if ((GUI.LCD.Flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM)) {/* If we have anything pending */
         GUI.LCD.Layers[layer_num].Pending = 0;
         GUI.LCD.Flags &= ~GUI_FLAG_LCD_WAIT_LAYER_CONFIRM;  /* Clear flag */

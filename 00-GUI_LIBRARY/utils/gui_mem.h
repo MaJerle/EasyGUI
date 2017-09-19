@@ -149,7 +149,7 @@ size_t gui_mem_getminfree__(void);
  * \retval          1: Memory assigned ok
  * \retval          0: Memory was not assigned
  */
-uint8_t GUI_MEM_AssignMemory(const GUI_MEM_Region_t* regions, size_t size);
+uint8_t gui_mem_assignmemory(const GUI_MEM_Region_t* regions, size_t size);
 
 /**
  * \brief           Allocate memory of specific size

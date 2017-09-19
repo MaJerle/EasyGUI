@@ -57,21 +57,21 @@ size_t len;
 GUI_LISTVIEW_ROW_p row;
 
 //Create widget
-handle = GUI_LISTVIEW_Create(0, 10, 10, 100, 40, 0, 0, 0);
+handle = gui_listview_create(0, 10, 10, 100, 40, 0, 0, 0);
 
 //Create columns
-GUI_LISTVIEW_AddColumn(handle, _GT("Name"), 120);
-GUI_LISTVIEW_AddColumn(handle, _GT("LastName"), 150);
-GUI_LISTVIEW_AddColumn(handle, _GT("Email"), 220);
-GUI_LISTVIEW_AddColumn(handle, _GT("Phone"), 160);
+gui_listview_addcolumn(handle, _GT("Name"), 120);
+gui_listview_addcolumn(handle, _GT("LastName"), 150);
+gui_listview_addcolumn(handle, _GT("Email"), 220);
+gui_listview_addcolumn(handle, _GT("Phone"), 160);
 
 //Create rows and add values for columns
 for (len = 0; len < 10; len++) {
-    row = GUI_LISTVIEW_AddRow(handle);
-    GUI_LISTVIEW_SetItemString(handle, row, 0, _GT("Name 1"));
-    GUI_LISTVIEW_SetItemString(handle, row, 1, _GT("Last name 2"));
-    GUI_LISTVIEW_SetItemString(handle, row, 2, _GT("info@example.com"));
-    GUI_LISTVIEW_SetItemString(handle, row, 3, _GT("0123456789"));
+    row = gui_listview_addrow(handle);
+    gui_listview_setitemstring(handle, row, 0, _GT("Name 1"));
+    gui_listview_setitemstring(handle, row, 1, _GT("Last name 2"));
+    gui_listview_setitemstring(handle, row, 2, _GT("info@example.com"));
+    gui_listview_setitemstring(handle, row, 3, _GT("0123456789"));
 }
 \endcode
  */
@@ -169,7 +169,7 @@ typedef void* GUI_LISTVIEW_ROW_p;
  * \retval          > 0: \ref GUI_HANDLE_p object of created widget
  * \retval          0: Widget creation failed
  */
-GUI_HANDLE_p GUI_LISTVIEW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_listview_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \brief           Set color to LISTVIEW
@@ -179,7 +179,7 @@ GUI_HANDLE_p GUI_LISTVIEW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Di
  * \retval          1: Color was set ok
  * \retval          0: Color was not set
  */
-uint8_t GUI_LISTVIEW_SetColor(GUI_HANDLE_p h, GUI_LISTVIEW_COLOR_t index, GUI_Color_t color);
+uint8_t gui_listview_setcolor(GUI_HANDLE_p h, GUI_LISTVIEW_COLOR_t index, GUI_Color_t color);
 
 /**
  * \brief           Add new column to listview
@@ -189,7 +189,7 @@ uint8_t GUI_LISTVIEW_SetColor(GUI_HANDLE_p h, GUI_LISTVIEW_COLOR_t index, GUI_Co
  * \retval          1: Column was added
  * \retval          0: Column was not added
  */
-uint8_t GUI_LISTVIEW_AddColumn(GUI_HANDLE_p h, const GUI_Char* text, GUI_Dim_t width);
+uint8_t gui_listview_addcolumn(GUI_HANDLE_p h, const GUI_Char* text, GUI_Dim_t width);
 
 /**
  * \brief           Set column width in units of pixels
@@ -199,14 +199,14 @@ uint8_t GUI_LISTVIEW_AddColumn(GUI_HANDLE_p h, const GUI_Char* text, GUI_Dim_t w
  * \retval          1: Column was added
  * \retval          0: Column was not added
  */
-uint8_t GUI_LISTVIEW_SetColumnWidth(GUI_HANDLE_p h, uint16_t index, GUI_Dim_t width);
+uint8_t gui_listview_setcolumnwidth(GUI_HANDLE_p h, uint16_t index, GUI_Dim_t width);
 
 /**
  * \brief           Add new empty row
  * \param[in]       h: Widget handle
  * \retval          Row object handle
  */
-GUI_LISTVIEW_ROW_p GUI_LISTVIEW_AddRow(GUI_HANDLE_p h);
+GUI_LISTVIEW_ROW_p gui_listview_addrow(GUI_HANDLE_p h);
 
 /**
  * \brief           Set item string for specific row and column
@@ -217,7 +217,7 @@ GUI_LISTVIEW_ROW_p GUI_LISTVIEW_AddRow(GUI_HANDLE_p h);
  * \retval          1: Item string was set ok
  * \retval          0: Item string was not set
  */
-uint8_t GUI_LISTVIEW_SetItemString(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row, uint16_t col, const GUI_Char* text);
+uint8_t gui_listview_setitemstring(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row, uint16_t col, const GUI_Char* text);
 
 /**
  * \brief           Set selected row number
@@ -226,14 +226,14 @@ uint8_t GUI_LISTVIEW_SetItemString(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row, uint1
  * \retval          1: Selection changed
  * \retval          0: Selection not changed
  */
-uint8_t GUI_LISTVIEW_SetSelection(GUI_HANDLE_p h, int16_t selection);
+uint8_t gui_listview_setselection(GUI_HANDLE_p h, int16_t selection);
 
 /**
  * \brief           Get selected row number
  * \param[in,out]   h: Widget handle
  * \retval          Selection number or -1 if no selection
  */
-int16_t GUI_LISTVIEW_GetSelection(GUI_HANDLE_p h);
+int16_t gui_listview_getselection(GUI_HANDLE_p h);
 
 /**
  * \brief           Set auto mode for slider
@@ -242,9 +242,9 @@ int16_t GUI_LISTVIEW_GetSelection(GUI_HANDLE_p h);
  * \param[in]       autoMode: Auto mode status. Set to 1 for auto mode or 0 for manual mode
  * \retval          1: Set OK
  * \retval          0: Set ERROR
- * \sa              GUI_LISTVIEW_SetSliderVisibility
+ * \sa              gui_listview_setslidervisibility
  */
-uint8_t GUI_LISTVIEW_SetSliderAuto(GUI_HANDLE_p h, uint8_t autoMode);
+uint8_t gui_listview_setsliderauto(GUI_HANDLE_p h, uint8_t autoMode);
 
 /**
  * \brief           Set manual visibility for slider
@@ -253,9 +253,9 @@ uint8_t GUI_LISTVIEW_SetSliderAuto(GUI_HANDLE_p h, uint8_t autoMode);
  * \param[in]       visible: Slider visible status, 1 or 0
  * \retval          1: Set to desired value
  * \retval          0: Not set to desired value
- * \sa              GUI_LISTVIEW_SetSliderAuto
+ * \sa              gui_listview_setsliderauto
  */
-uint8_t GUI_LISTVIEW_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible);
+uint8_t gui_listview_setslidervisibility(GUI_HANDLE_p h, uint8_t visible);
 
 /**
  * \brief           Scroll list if possible
@@ -264,7 +264,7 @@ uint8_t GUI_LISTVIEW_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible);
  * \retval          1: Scroll successful
  * \retval          0: Scroll not successful
  */
-uint8_t GUI_LISTVIEW_Scroll(GUI_HANDLE_p h, int16_t step);
+uint8_t gui_listview_scroll(GUI_HANDLE_p h, int16_t step);
 
 /**
  * \brief           Get item text value from row index and column index
@@ -276,7 +276,7 @@ uint8_t GUI_LISTVIEW_Scroll(GUI_HANDLE_p h, int16_t step);
  * \retval          1: Text was found and copied
  * \retval          0: Text was not found
  */
-uint8_t GUI_LISTVIEW_GetItemValue(GUI_HANDLE_p h, uint16_t rindex, uint16_t cindex, GUI_Char* dst, size_t length);
+uint8_t gui_listview_getitemvalue(GUI_HANDLE_p h, uint16_t rindex, uint16_t cindex, GUI_Char* dst, size_t length);
 
 /**
  * \}

@@ -85,14 +85,14 @@ GUI_TRANSLATE_Language_t languageGerman = {
 };
 
 //Set source and active languages
-GUI_TRANSLATE_SetSourceLanguage(&languageEnglish); //Translate from this language
-GUI_TRANSLATE_SetActiveLanguage(&languageGerman);  //Translate to this language
+gui_translate_setsourcelanguage(&languageEnglish); //Translate from this language
+gui_translate_setactivelanguage(&languageGerman);  //Translate to this language
 
 //Now try to translate
-printf("Button: %s\n", GUI_TRANSLATE_Get(_GT("Button"))); //Prints: "Button: Taste\n"
-printf("Dropdown: %s\n", GUI_TRANSLATE_Get(_GT("Dropdown"))); //Prints: "Button: Dropdown-Liste\n"
-printf("Listview: %s\n", GUI_TRANSLATE_Get(_GT("Listview"))); //Prints: "Button: Listenansicht\n"
-printf("Your string here without translate.: %s\n", GUI_TRANSLATE_Get(_GT("Your string here without translate."))); //Prints: "Your string here without translate.: Your string here without translate.\n"
+printf("Button: %s\n", gui_translate_get(_GT("Button"))); //Prints: "Button: Taste\n"
+printf("Dropdown: %s\n", gui_translate_get(_GT("Dropdown"))); //Prints: "Button: Dropdown-Liste\n"
+printf("Listview: %s\n", gui_translate_get(_GT("Listview"))); //Prints: "Button: Listenansicht\n"
+printf("Your string here without translate.: %s\n", gui_translate_get(_GT("Your string here without translate."))); //Prints: "Your string here without translate.: Your string here without translate.\n"
 \endcode
  */
 
@@ -101,7 +101,7 @@ printf("Your string here without translate.: %s\n", GUI_TRANSLATE_Get(_GT("Your 
  * \param[in]       *src: Pointer to \ref GUI_Char string to translate
  * \retval          Pointer to translated string or source string if translate not found
  */
-const GUI_Char* GUI_TRANSLATE_Get(const GUI_Char* src);
+const GUI_Char* gui_translate_get(const GUI_Char* src);
 
 /**
  * \brief           Set currently active language for translated entries
@@ -110,7 +110,7 @@ const GUI_Char* GUI_TRANSLATE_Get(const GUI_Char* src);
  * \retval          1: Entries set ok
  * \retval          0: Entries were not set
  */
-uint8_t GUI_TRANSLATE_SetActiveLanguage(const GUI_TRANSLATE_Language_t* lang);
+uint8_t gui_translate_setactivelanguage(const GUI_TRANSLATE_Language_t* lang);
 
 /**
  * \brief           Set source language for translated entries
@@ -119,7 +119,7 @@ uint8_t GUI_TRANSLATE_SetActiveLanguage(const GUI_TRANSLATE_Language_t* lang);
  * \retval          1: Entries set ok
  * \retval          0: Entries were not set
  */
-uint8_t GUI_TRANSLATE_SetSourceLanguage(const GUI_TRANSLATE_Language_t* lang); 
+uint8_t gui_translate_setsourcelanguage(const GUI_TRANSLATE_Language_t* lang); 
     
 /**
  * \}

@@ -44,7 +44,7 @@
 #define CFG_TYPE            0x03
 
 static
-uint8_t GUI_LED_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+uint8_t gui_led_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
     
 /******************************************************************************/
 /******************************************************************************/
@@ -62,7 +62,7 @@ static const GUI_WIDGET_t Widget = {
     .Name = _GT("LED"),                             /*!< Widget name */ 
     .Size = sizeof(GUI_LED_t),                      /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = GUI_LED_Callback,                   /*!< Control function */
+    .Callback = gui_led_callback,                   /*!< Control function */
     .Colors = Colors,                               /*!< List of default colors */
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
 };
@@ -74,7 +74,7 @@ static const GUI_WIDGET_t Widget = {
 /******************************************************************************/
 #define l           ((GUI_LED_t *)h)
 static
-uint8_t GUI_LED_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+uint8_t gui_led_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
@@ -118,11 +118,11 @@ uint8_t GUI_LED_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* resul
             }
             
             if (l->Type == GUI_LED_TYPE_RECT) {     /* When led has rectangle shape */
-                GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, width - 2, height - 2, c1);
-                GUI_DRAW_Rectangle(disp, x, y, width, height, c2);
+                gui_draw_filledrectangle(disp, x + 1, y + 1, width - 2, height - 2, c1);
+                gui_draw_rectangle(disp, x, y, width, height, c2);
             } else {
-                GUI_DRAW_FilledCircle(disp, x + width / 2, y + height / 2, width / 2, c1);
-                GUI_DRAW_Circle(disp, x + width / 2, y + height / 2, width / 2, c2);
+                gui_draw_filledcircle(disp, x + width / 2, y + height / 2, width / 2, c1);
+                gui_draw_circle(disp, x + width / 2, y + height / 2, width / 2, c2);
             }
             return 1;                               /* */
         }
@@ -138,31 +138,31 @@ uint8_t GUI_LED_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* resul
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p GUI_LED_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p gui_led_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
-uint8_t GUI_LED_SetColor(GUI_HANDLE_p h, GUI_LED_COLOR_t index, GUI_Color_t color) {
+uint8_t gui_led_setcolor(GUI_HANDLE_p h, GUI_LED_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }
 
-uint8_t GUI_LED_SetType(GUI_HANDLE_p h, GUI_LED_TYPE_t type) {
+uint8_t gui_led_settype(GUI_HANDLE_p h, GUI_LED_TYPE_t type) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_TYPE, &type, 1, 1); /* Set parameter */
 }
 
-uint8_t GUI_LED_Toggle(GUI_HANDLE_p h) {
+uint8_t gui_led_toggle(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_TOGGLE, NULL, 1, 0);/* Set parameter */
 }
 
-uint8_t GUI_LED_Set(GUI_HANDLE_p h, uint8_t state) {
+uint8_t gui_led_set(GUI_HANDLE_p h, uint8_t state) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_SET, &state, 1, 0); /* Set parameter */
 }
 
-uint8_t GUI_LED_IsOn(GUI_HANDLE_p h) {
+uint8_t gui_led_ison(GUI_HANDLE_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */

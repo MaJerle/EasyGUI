@@ -201,7 +201,7 @@ size_t __StringRectangle(GUI_StringRect_t* rect, GUI_STRING_t* str, uint8_t only
     if (rect->StringDraw->Flags & GUI_FLAG_FONT_MULTILINE) {    /* We want to know exact rectangle for drawing multi line texts including new lines and carriage return */
         while (1) {                                 /* Unlimited execution */
             lastS = var.s.Str;                      /* Save current string pointer */
-            if (GUI_STRING_GetCh(&var.s, &var.ch, &i)) {/* Get next character from string */
+            if (gui_string_getch(&var.s, &var.ch, &i)) {/* Get next character from string */
                 /* Check for CR character */
                 if (CH_CR == var.ch) {              /* Check character */
                     var.ch = CH_WS;                 /* Set it as space and don't care for more */
@@ -298,7 +298,7 @@ size_t __StringRectangle(GUI_StringRect_t* rect, GUI_STRING_t* str, uint8_t only
     }
     else {
         var.cW = 0;
-        while (GUI_STRING_GetCh(&var.s, &var.ch, &i)) { /* Get next character from string */
+        while (gui_string_getch(&var.s, &var.ch, &i)) { /* Get next character from string */
             __StringGetCharSize(rect->Font, var.ch, &w, &h);/* Get character width and height */
             if (!(rect->StringDraw->Flags & GUI_FLAG_FONT_RIGHTALIGN) && (var.cW + w) > rect->StringDraw->Width) {  /* Check if end now */
                 break;
@@ -320,8 +320,8 @@ size_t __StringRectangle(GUI_StringRect_t* rect, GUI_STRING_t* str, uint8_t only
 static
 GUI_FONT_CharEntry_t* __GetCharEntryFromFont(const GUI_FONT_t* font, const GUI_FONT_CharInfo_t* c) {
     GUI_FONT_CharEntry_t* entry;
-    for (entry = (GUI_FONT_CharEntry_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&GUI.RootFonts, 0); entry;
-        entry = (GUI_FONT_CharEntry_t *)__GUI_LINKEDLIST_GETNEXT_GEN(0, (GUI_LinkedList_t *)entry)) {
+    for (entry = (GUI_FONT_CharEntry_t *)gui_linkedlist_getnext_gen__(&GUI.RootFonts, 0); entry;
+        entry = (GUI_FONT_CharEntry_t *)gui_linkedlist_getnext_gen__(0, (GUI_LinkedList_t *)entry)) {
         if (entry->Font == font && entry->Ch == c) {
             return entry;
         }
@@ -405,7 +405,7 @@ GUI_FONT_CharEntry_t* __CreateCharEntryFromFont(const GUI_FONT_t* font, const GU
             }
         }
         
-        __GUI_LINKEDLIST_ADD_GEN(&GUI.RootFonts, (GUI_LinkedList_t *)entry);    /* Add entry to linked list */
+        gui_linkedlist_add_gen__(&GUI.RootFonts, (GUI_LinkedList_t *)entry);    /* Add entry to linked list */
     }
     return entry;                                   /* Return new created entry */
 }
@@ -522,10 +522,10 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DR
                     }
                     tmp = (b >> (6 - 2 * k)) & 0x03;/* Get temporary bits on bottom */
                     if (tmp == 0x03) {              /* Draw solid color if both bits are enabled */
-                        GUI_DRAW_SetPixel(disp, x1, y, baseColor);
+                        gui_draw_setpixel(disp, x1, y, baseColor);
                     } else if (tmp) {               /* Calculate new color */
                         float t = (float)tmp / 3.0f;
-                        color = GUI_DRAW_GetPixel(disp, x1, y); /* Read current color */
+                        color = gui_draw_getpixel(disp, x1, y); /* Read current color */
                         
                         /* Calculate new values for pixel */
                         r1 = (float)t * (float)((color >> 16) & 0xFF) + (float)(1.0f - (float)t) * (float)((baseColor >> 16) & 0xFF);
@@ -533,7 +533,7 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DR
                         b1 = (float)t * (float)((color >>  0) & 0xFF) + (float)(1.0f - (float)t) * (float)((baseColor >>  0) & 0xFF);
                         
                         /* Draw actual pixel to screen */
-                        GUI_DRAW_SetPixel(disp, x1, y, (color & 0xFF000000UL) | r1 << 16 | g1 << 8 | b1);
+                        gui_draw_setpixel(disp, x1, y, (color & 0xFF000000UL) | r1 << 16 | g1 << 8 | b1);
                     }
                 }
             }
@@ -556,9 +556,9 @@ void __DRAW_Char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DR
                             continue;
                         }
                         if (x1 <= (draw->X + draw->Color1Width)) {
-                            GUI_DRAW_SetPixel(disp, x1, y, draw->Color1);
+                            gui_draw_setpixel(disp, x1, y, draw->Color1);
                         } else {
-                            GUI_DRAW_SetPixel(disp, x1, y, draw->Color2);
+                            gui_draw_setpixel(disp, x1, y, draw->Color2);
                         }
                     }
                 }
@@ -578,10 +578,10 @@ const GUI_Char* __StringGetPointerForWidth(const GUI_FONT_t* font, GUI_STRING_t*
     uint32_t ch;
     const GUI_Char* tmp = str->Str;                 /* Set start of string */
     
-    GUI_STRING_GoToEnd(str);                        /* Go to the end of string */
+    gui_string_gotoend(str);                        /* Go to the end of string */
     
     while (str->Str >= tmp) {
-        if (!GUI_STRING_GetChReverse(str, &ch, &i)) {   /* Get character in reverse order */
+        if (!gui_string_getchreverse(str, &ch, &i)) {   /* Get character in reverse order */
             break;
         }
         __StringGetCharSize(font, ch, &w, &h);
@@ -606,7 +606,7 @@ const GUI_Char* __StringGetPointerForWidth(const GUI_FONT_t* font, GUI_STRING_t*
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-void GUI_DRAW_FONT_Init(GUI_DRAW_FONT_t* f) {
+void gui_draw_font_init(GUI_DRAW_FONT_t* f) {
     memset((void *)f, 0x00, sizeof(*f));            /* Reset structure */
 }
 
@@ -615,11 +615,11 @@ void GUI_DRAW_FONT_Init(GUI_DRAW_FONT_t* f) {
 /***                    Functions with low-level communication               **/
 /******************************************************************************/
 /******************************************************************************/
-void GUI_DRAW_FillScreen(const GUI_Display_t* disp, GUI_Color_t color) {
+void gui_draw_fillscreen(const GUI_Display_t* disp, GUI_Color_t color) {
     GUI.LL.Fill(&GUI.LCD, GUI.LCD.DrawingLayer, 0, GUI.LCD.DrawingLayer->Width, GUI.LCD.DrawingLayer->Height, 0, color);
 }
 
-void GUI_DRAW_Fill(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_Color_t color) {
+void gui_draw_fill(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_Color_t color) {
     if (                                            /* Check if redraw is inside area */
         !__GUI_RECT_MATCH(  x, y, x + width, y + height,
                             disp->X1, disp->Y1, disp->X2, disp->Y2)) {
@@ -652,18 +652,18 @@ void GUI_DRAW_Fill(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iD
     }
 }
 
-void GUI_DRAW_SetPixel(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_Color_t color) {
+void gui_draw_setpixel(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_Color_t color) {
     if (y < disp->Y1 || y >= disp->Y2 || x < disp->X1 || x >= disp->X2) {
         return;
     }
     GUI.LL.SetPixel(&GUI.LCD, GUI.LCD.DrawingLayer, x - GUI.LCD.DrawingLayer->OffsetX, y - GUI.LCD.DrawingLayer->OffsetY, color);
 }
 
-GUI_Color_t GUI_DRAW_GetPixel(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y) {
+GUI_Color_t gui_draw_getpixel(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y) {
     return GUI.LL.GetPixel(&GUI.LCD, GUI.LCD.DrawingLayer, x - GUI.LCD.DrawingLayer->OffsetX, y - GUI.LCD.DrawingLayer->OffsetY);
 }
 
-void GUI_DRAW_VLine(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t length, GUI_Color_t color) {
+void gui_draw_vline(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t length, GUI_Color_t color) {
     if (x >= disp->X2 || x < disp->X1 || y > disp->Y2 || (y + length) < disp->Y1) {
         return;
     }
@@ -677,7 +677,7 @@ void GUI_DRAW_VLine(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_i
     GUI.LL.DrawVLine(&GUI.LCD, GUI.LCD.DrawingLayer, x - GUI.LCD.DrawingLayer->OffsetX, y - GUI.LCD.DrawingLayer->OffsetY, length, color);
 }
 
-void GUI_DRAW_HLine(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t length, GUI_Color_t color) {
+void gui_draw_hline(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t length, GUI_Color_t color) {
     if (y >= disp->Y2 || y < disp->Y1 || x > disp->X2 || (x + length) < disp->X1) {
         return;
     }
@@ -696,7 +696,7 @@ void GUI_DRAW_HLine(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_i
 /***                          Functions for primitives                       **/
 /******************************************************************************/
 /******************************************************************************/
-void GUI_DRAW_Line(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_iDim_t x2, GUI_iDim_t y2, GUI_Color_t color) {
+void gui_draw_line(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_iDim_t x2, GUI_iDim_t y2, GUI_Color_t color) {
     GUI_iDim_t deltax = 0, deltay = 0, x = 0, y = 0, xinc1 = 0, xinc2 = 0, 
     yinc1 = 0, yinc2 = 0, den = 0, num = 0, numadd = 0, numpixels = 0, 
     curpixel = 0;
@@ -712,11 +712,11 @@ void GUI_DRAW_Line(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_
 	deltay = __GUI_ABS(y2 - y1);
     
     if (deltax == 0) {                              /* Straight vertical line */
-        GUI_DRAW_VLine(disp, x1, __GUI_MIN(y1, y2), deltay, color);
+        gui_draw_vline(disp, x1, __GUI_MIN(y1, y2), deltay, color);
         return;
     }
     if (deltay == 0) {                              /* Straight horizontal line */
-        GUI_DRAW_HLine(disp, __GUI_MIN(x1, x2), y1, deltax, color);
+        gui_draw_hline(disp, __GUI_MIN(x1, x2), y1, deltax, color);
         return;
     }
 
@@ -756,7 +756,7 @@ void GUI_DRAW_Line(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_
     }
 
     for (curpixel = 0; curpixel <= numpixels; curpixel++) {
-        GUI_DRAW_SetPixel(disp, x, y, color);
+        gui_draw_setpixel(disp, x, y, color);
         num += numadd;
         if (num >= den) {
             num -= den;
@@ -768,22 +768,22 @@ void GUI_DRAW_Line(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_
     }
 }
 
-void GUI_DRAW_Rectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_Color_t color) {
+void gui_draw_rectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_Color_t color) {
     if (width == 0 || height == 0) {
         return;
     }
-    GUI_DRAW_HLine(disp, x,             y,              width,  color);
-    GUI_DRAW_VLine(disp, x,             y,              height, color);
+    gui_draw_hline(disp, x,             y,              width,  color);
+    gui_draw_vline(disp, x,             y,              height, color);
     
-    GUI_DRAW_HLine(disp, x,             y + height - 1, width,  color);
-    GUI_DRAW_VLine(disp, x + width - 1, y,              height, color);
+    gui_draw_hline(disp, x,             y + height - 1, width,  color);
+    gui_draw_vline(disp, x + width - 1, y,              height, color);
 }
 
-void GUI_DRAW_FilledRectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_Color_t color) {
-    GUI_DRAW_Fill(disp, x, y, width, height, color);
+void gui_draw_filledrectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_Color_t color) {
+    gui_draw_fill(disp, x, y, width, height, color);
 }
 
-void GUI_DRAW_Rectangle3D(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_DRAW_3D_State_t state) {
+void gui_draw_rectangle3d(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_DRAW_3D_State_t state) {
     GUI_Color_t c1, c2, c3;
     
     c1 = GUI_COLOR_BLACK;
@@ -795,16 +795,16 @@ void GUI_DRAW_Rectangle3D(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y,
         c3 = 0xFFAAAAAA;
     }
     
-    GUI_DRAW_Rectangle(disp, x, y, width, height, c1);
+    gui_draw_rectangle(disp, x, y, width, height, c1);
     
-    GUI_DRAW_HLine(disp, x + 1, y + 1, width - 2, c2);
-    GUI_DRAW_VLine(disp, x + 1, y + 1, height - 3, c2);
+    gui_draw_hline(disp, x + 1, y + 1, width - 2, c2);
+    gui_draw_vline(disp, x + 1, y + 1, height - 3, c2);
     
-    GUI_DRAW_HLine(disp, x + 1, y + height - 2, width - 2, c3);
-    GUI_DRAW_VLine(disp, x + width - 2, y + 2, height - 4, c3);
+    gui_draw_hline(disp, x + 1, y + height - 2, width - 2, c3);
+    gui_draw_vline(disp, x + width - 2, y + 2, height - 4, c3);
 }
 
-void GUI_DRAW_RoundedRectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_iDim_t r, GUI_Color_t color) {
+void gui_draw_roundedrectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_iDim_t r, GUI_Color_t color) {
     if (r >= (height / 2)) {
         r = height / 2 - 1;
     }
@@ -812,21 +812,21 @@ void GUI_DRAW_RoundedRectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim
         r = width / 2 - 1;
     }
     if (r) {
-        GUI_DRAW_HLine(disp, x + r,         y,              width - 2 * r,  color);
-        GUI_DRAW_VLine(disp, x + width - 1, y + r,          height - 2 * r, color);
-        GUI_DRAW_HLine(disp, x + r,         y + height - 1, width - 2 * r,  color);
-        GUI_DRAW_VLine(disp, x,             y + r,          height - 2 * r, color);
+        gui_draw_hline(disp, x + r,         y,              width - 2 * r,  color);
+        gui_draw_vline(disp, x + width - 1, y + r,          height - 2 * r, color);
+        gui_draw_hline(disp, x + r,         y + height - 1, width - 2 * r,  color);
+        gui_draw_vline(disp, x,             y + r,          height - 2 * r, color);
         
-        GUI_DRAW_CircleCorner(disp, x + r,             y + r,              r, GUI_DRAW_CIRCLE_TL, color);
-        GUI_DRAW_CircleCorner(disp, x + width - r - 1, y + r,              r, GUI_DRAW_CIRCLE_TR, color);
-        GUI_DRAW_CircleCorner(disp, x + r,             y + height - r - 1, r, GUI_DRAW_CIRCLE_BL, color);
-        GUI_DRAW_CircleCorner(disp, x + width - r - 1, y + height - r - 1, r, GUI_DRAW_CIRCLE_BR, color);
+        gui_draw_circlecorner(disp, x + r,             y + r,              r, GUI_DRAW_CIRCLE_TL, color);
+        gui_draw_circlecorner(disp, x + width - r - 1, y + r,              r, GUI_DRAW_CIRCLE_TR, color);
+        gui_draw_circlecorner(disp, x + r,             y + height - r - 1, r, GUI_DRAW_CIRCLE_BL, color);
+        gui_draw_circlecorner(disp, x + width - r - 1, y + height - r - 1, r, GUI_DRAW_CIRCLE_BR, color);
     } else {
-        GUI_DRAW_Rectangle(disp, x, y, width, height, color);
+        gui_draw_rectangle(disp, x, y, width, height, color);
     }
 }
 
-void GUI_DRAW_FilledRoundedRectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_iDim_t r, GUI_Color_t color) {
+void gui_draw_filledroundedrectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_iDim_t r, GUI_Color_t color) {
     if (r >= (height / 2)) {
         r = height / 2 - 1;
     }
@@ -835,43 +835,43 @@ void GUI_DRAW_FilledRoundedRectangle(const GUI_Display_t* disp, GUI_iDim_t x, GU
     }
     if (r) {
         if ((GUI_iDim_t)(width - 2 * r) > 0) {
-            GUI_DRAW_FilledRectangle(disp, x + r,         y,     width - 2 * r, height,         color);
+            gui_draw_filledrectangle(disp, x + r,         y,     width - 2 * r, height,         color);
         }
         if ((GUI_iDim_t)(height - 2 * r) > 0) {
-            GUI_DRAW_FilledRectangle(disp, x,             y + r, r,             height - 2 * r, color);
-            GUI_DRAW_FilledRectangle(disp, x + width - r, y + r, r,             height - 2 * r, color);
+            gui_draw_filledrectangle(disp, x,             y + r, r,             height - 2 * r, color);
+            gui_draw_filledrectangle(disp, x + width - r, y + r, r,             height - 2 * r, color);
         }
         
-        GUI_DRAW_FilledCircleCorner(disp, x + r,             y + r,              r, GUI_DRAW_CIRCLE_TL, color);
-        GUI_DRAW_FilledCircleCorner(disp, x + width - r - 1, y + r,              r, GUI_DRAW_CIRCLE_TR, color);
-        GUI_DRAW_FilledCircleCorner(disp, x + r,             y + height - r - 1, r, GUI_DRAW_CIRCLE_BL, color);
-        GUI_DRAW_FilledCircleCorner(disp, x + width - r - 1, y + height - r - 1, r, GUI_DRAW_CIRCLE_BR, color);
+        gui_draw_filledcirclecorner(disp, x + r,             y + r,              r, GUI_DRAW_CIRCLE_TL, color);
+        gui_draw_filledcirclecorner(disp, x + width - r - 1, y + r,              r, GUI_DRAW_CIRCLE_TR, color);
+        gui_draw_filledcirclecorner(disp, x + r,             y + height - r - 1, r, GUI_DRAW_CIRCLE_BL, color);
+        gui_draw_filledcirclecorner(disp, x + width - r - 1, y + height - r - 1, r, GUI_DRAW_CIRCLE_BR, color);
     } else {
-        GUI_DRAW_FilledRectangle(disp, x, y, width, height, color);
+        gui_draw_filledrectangle(disp, x, y, width, height, color);
     }
 }
 
-void GUI_DRAW_Circle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t r, GUI_Color_t color) {
-    GUI_DRAW_CircleCorner(disp, x, y, r, GUI_DRAW_CIRCLE_TL, color);
-    GUI_DRAW_CircleCorner(disp, x - 1, y, r, GUI_DRAW_CIRCLE_TR, color);
-    GUI_DRAW_CircleCorner(disp, x, y - 1, r, GUI_DRAW_CIRCLE_BL, color);
-    GUI_DRAW_CircleCorner(disp, x - 1, y - 1, r, GUI_DRAW_CIRCLE_BR, color);
+void gui_draw_circle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t r, GUI_Color_t color) {
+    gui_draw_circlecorner(disp, x, y, r, GUI_DRAW_CIRCLE_TL, color);
+    gui_draw_circlecorner(disp, x - 1, y, r, GUI_DRAW_CIRCLE_TR, color);
+    gui_draw_circlecorner(disp, x, y - 1, r, GUI_DRAW_CIRCLE_BL, color);
+    gui_draw_circlecorner(disp, x - 1, y - 1, r, GUI_DRAW_CIRCLE_BR, color);
 }
 
-void GUI_DRAW_FilledCircle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t r, GUI_Color_t color) {
-    GUI_DRAW_FilledCircleCorner(disp, x, y, r, GUI_DRAW_CIRCLE_TL, color);
-    GUI_DRAW_FilledCircleCorner(disp, x, y, r, GUI_DRAW_CIRCLE_TR, color);
-    GUI_DRAW_FilledCircleCorner(disp, x, y - 1, r, GUI_DRAW_CIRCLE_BL, color);
-    GUI_DRAW_FilledCircleCorner(disp, x, y - 1, r, GUI_DRAW_CIRCLE_BR, color);
+void gui_draw_filledcircle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t r, GUI_Color_t color) {
+    gui_draw_filledcirclecorner(disp, x, y, r, GUI_DRAW_CIRCLE_TL, color);
+    gui_draw_filledcirclecorner(disp, x, y, r, GUI_DRAW_CIRCLE_TR, color);
+    gui_draw_filledcirclecorner(disp, x, y - 1, r, GUI_DRAW_CIRCLE_BL, color);
+    gui_draw_filledcirclecorner(disp, x, y - 1, r, GUI_DRAW_CIRCLE_BR, color);
 }
 
-void GUI_DRAW_Triangle(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1,  GUI_iDim_t x2, GUI_iDim_t y2, GUI_iDim_t x3, GUI_iDim_t y3, GUI_Color_t color) {
-    GUI_DRAW_Line(disp, x1, y1, x2, y2, color);
-    GUI_DRAW_Line(disp, x1, y1, x3, y3, color);
-    GUI_DRAW_Line(disp, x2, y2, x3, y3, color);
+void gui_draw_triangle(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1,  GUI_iDim_t x2, GUI_iDim_t y2, GUI_iDim_t x3, GUI_iDim_t y3, GUI_Color_t color) {
+    gui_draw_line(disp, x1, y1, x2, y2, color);
+    gui_draw_line(disp, x1, y1, x3, y3, color);
+    gui_draw_line(disp, x2, y2, x3, y3, color);
 }
 
-void GUI_DRAW_FilledTriangle(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_iDim_t x2, GUI_iDim_t y2, GUI_iDim_t x3, GUI_iDim_t y3, GUI_Color_t color) {
+void gui_draw_filledtriangle(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_iDim_t x2, GUI_iDim_t y2, GUI_iDim_t x3, GUI_iDim_t y3, GUI_Color_t color) {
     GUI_iDim_t deltax = 0, deltay = 0, x = 0, y = 0, xinc1 = 0, xinc2 = 0, 
     yinc1 = 0, yinc2 = 0, den = 0, num = 0, numadd = 0, numpixels = 0, 
     curpixel = 0;
@@ -914,7 +914,7 @@ void GUI_DRAW_FilledTriangle(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_
     }
 
     for (curpixel = 0; curpixel <= numpixels; curpixel++) {
-        GUI_DRAW_Line(disp, x, y, x3, y3, color);
+        gui_draw_line(disp, x, y, x3, y3, color);
 
         num += numadd;
         if (num >= den) {
@@ -927,7 +927,7 @@ void GUI_DRAW_FilledTriangle(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_
     }
 }
 
-void GUI_DRAW_CircleCorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t y0, GUI_iDim_t r, GUI_Byte_t c, GUI_Color_t color) {
+void gui_draw_circlecorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t y0, GUI_iDim_t r, GUI_Byte_t c, GUI_Color_t color) {
     GUI_iDim_t f = 1 - r;
     GUI_iDim_t ddF_x = 1;
     GUI_iDim_t ddF_y = -2 * r;
@@ -952,28 +952,28 @@ void GUI_DRAW_CircleCorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t 
         f += ddF_x;
 
         if (c & GUI_DRAW_CIRCLE_TL) {               /* Top left corner */
-            GUI_DRAW_SetPixel(disp, x0 - y, y0 - x, color);
-            GUI_DRAW_SetPixel(disp, x0 - x, y0 - y, color);
+            gui_draw_setpixel(disp, x0 - y, y0 - x, color);
+            gui_draw_setpixel(disp, x0 - x, y0 - y, color);
         }
 
         if (c & GUI_DRAW_CIRCLE_TR) {               /* Top right corner */
-            GUI_DRAW_SetPixel(disp, x0 + x, y0 - y, color);
-            GUI_DRAW_SetPixel(disp, x0 + y, y0 - x, color);
+            gui_draw_setpixel(disp, x0 + x, y0 - y, color);
+            gui_draw_setpixel(disp, x0 + y, y0 - x, color);
         }
 
         if (c & GUI_DRAW_CIRCLE_BR) {               /* Bottom right corner */
-            GUI_DRAW_SetPixel(disp, x0 + x, y0 + y, color);
-            GUI_DRAW_SetPixel(disp, x0 + y, y0 + x, color);
+            gui_draw_setpixel(disp, x0 + x, y0 + y, color);
+            gui_draw_setpixel(disp, x0 + y, y0 + x, color);
         }
 
         if (c & GUI_DRAW_CIRCLE_BL) {               /* Bottom left corner */
-            GUI_DRAW_SetPixel(disp, x0 - x, y0 + y, color);
-            GUI_DRAW_SetPixel(disp, x0 - y, y0 + x, color);
+            gui_draw_setpixel(disp, x0 - x, y0 + y, color);
+            gui_draw_setpixel(disp, x0 - y, y0 + x, color);
         }
     }
 }
 
-void GUI_DRAW_FilledCircleCorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t y0, GUI_iDim_t r, GUI_Byte_t c, GUI_Color_t color) {
+void gui_draw_filledcirclecorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t y0, GUI_iDim_t r, GUI_Byte_t c, GUI_Color_t color) {
     GUI_iDim_t f = 1 - r;
     GUI_iDim_t ddF_x = 1;
     GUI_iDim_t ddF_y = -2 * r;
@@ -998,25 +998,25 @@ void GUI_DRAW_FilledCircleCorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_i
         f += ddF_x;
 
         if (c & GUI_DRAW_CIRCLE_TL) {               /* Top left */            
-            GUI_DRAW_HLine(disp, x0 - x, y0 - y, x, color);
-            GUI_DRAW_HLine(disp, x0 - y, y0 - x, y, color);
+            gui_draw_hline(disp, x0 - x, y0 - y, x, color);
+            gui_draw_hline(disp, x0 - y, y0 - x, y, color);
         }
         if (c & GUI_DRAW_CIRCLE_TR) {               /* Top right */
-            GUI_DRAW_HLine(disp, x0, y0 - y, x, color);
-            GUI_DRAW_HLine(disp, x0, y0 - x, y, color);
+            gui_draw_hline(disp, x0, y0 - y, x, color);
+            gui_draw_hline(disp, x0, y0 - x, y, color);
         }
         if (c & GUI_DRAW_CIRCLE_BL) {               /* Bottom left */
-            GUI_DRAW_HLine(disp, x0 - y, y0 + x, y, color);
-            GUI_DRAW_HLine(disp, x0 - x, y0 + y, x, color);
+            gui_draw_hline(disp, x0 - y, y0 + x, y, color);
+            gui_draw_hline(disp, x0 - x, y0 + y, x, color);
         }
         if (c & GUI_DRAW_CIRCLE_BR) {               /* Bottom right */
-            GUI_DRAW_HLine(disp, x0, y0 + x, y, color);
-            GUI_DRAW_HLine(disp, x0, y0 + y, x, color);
+            gui_draw_hline(disp, x0, y0 + x, y, color);
+            gui_draw_hline(disp, x0, y0 + y, x, color);
         }
     }
 }
 
-void GUI_DRAW_Image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_IMAGE_DESC_t* img) {
+void gui_draw_image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_IMAGE_DESC_t* img) {
     uint8_t bytes = img->BPP >> 3;                  /* Get number of bytes per pixel on image */
     
     GUI_Layer_t* layer;
@@ -1079,24 +1079,24 @@ void GUI_DRAW_Image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_I
     }
 }
 
-void GUI_DRAW_Poly(const GUI_Display_t* disp, const GUI_DRAW_Poly_t* points, size_t len, GUI_Color_t color) {
+void gui_draw_poly(const GUI_Display_t* disp, const GUI_DRAW_Poly_t* points, size_t len, GUI_Color_t color) {
     GUI_iDim_t x = 0, y = 0;
 
     if (len < 2) {
         return;
     }
 
-    GUI_DRAW_Line(disp, points->X, points->Y, (points + len - 1)->X, (points + len - 1)->Y, color);
+    gui_draw_line(disp, points->X, points->Y, (points + len - 1)->X, (points + len - 1)->Y, color);
 
     while (--len) {
         x = points->X;
         y = points->Y;
         points++;
-        GUI_DRAW_Line(disp, x, y, points->X, points->Y, color);
+        gui_draw_line(disp, x, y, points->X, points->Y, color);
     }
 }
 
-void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_Char* str, GUI_DRAW_FONT_t* draw) {
+void gui_draw_writetext(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_Char* str, GUI_DRAW_FONT_t* draw) {
     GUI_iDim_t x, y;
     uint32_t ch;
     uint8_t i;
@@ -1113,11 +1113,11 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
     rect.StringDraw = draw;                         /* Set drawing pointer */
     rect.IsEditMode = !!(draw->Flags & GUI_FLAG_FONT_EDITMODE); /* Check if in edit mode */
       
-    GUI_STRING_Prepare(&currStr, str);              /* Prepare string */
+    gui_string_prepare(&currStr, str);              /* Prepare string */
     __StringRectangle(&rect, &currStr, 0);          /* Get string width for this box */
     if (rect.Width > draw->Width) {                 /* If string is wider than available rectangle */
         if (draw->Flags & GUI_FLAG_FONT_RIGHTALIGN) {   /* Check right align text */
-            GUI_STRING_Prepare(&currStr, str);      /* Prepare string */
+            gui_string_prepare(&currStr, str);      /* Prepare string */
             str = __StringGetPointerForWidth(font, &currStr, draw); /* Get string pointer */
         } else {
             rect.Width = draw->Width;               /* Strip text width to available */
@@ -1154,10 +1154,10 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
 //    } else if (draw->Align & GUI_HALIGN_RIGHT) {
 //        x += draw->Width - rect.Width;
 //    }
-//    GUI_DRAW_Rectangle(disp, x, y, rect.Width, rect.Height, GUI_COLOR_BLUE);
+//    gui_draw_rectangle(disp, x, y, rect.Width, rect.Height, GUI_COLOR_BLUE);
     
     
-    GUI_STRING_Prepare(&currStr, str);              /* Prepare string again */
+    gui_string_prepare(&currStr, str);              /* Prepare string again */
     while ((cnt = __StringRectangle(&rect, &currStr, 1)) > 0) {
         x = draw->X;                                       
         if (draw->Align & GUI_HALIGN_CENTER) {      /* Check for horizontal align center */
@@ -1165,8 +1165,8 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
         } else if (draw->Align & GUI_HALIGN_RIGHT) {/* Check for horizontal align right */
             x += draw->Width - rect.Width;          /* Align right of drawing area */
         }
-//        GUI_DRAW_Rectangle(disp, x, y, rect.Width, rect.Height, GUI_COLOR_RED);
-        while (cnt-- && GUI_STRING_GetCh(&currStr, &ch, &i)) {  /* Read character by character */
+//        gui_draw_rectangle(disp, x, y, rect.Width, rect.Height, GUI_COLOR_RED);
+        while (cnt-- && gui_string_getch(&currStr, &ch, &i)) {  /* Read character by character */
             if (rect.ReadDraw == 0) {               /* Anything to draw? */
                 continue;
             }
@@ -1191,27 +1191,27 @@ void GUI_DRAW_WriteText(const GUI_Display_t* disp, const GUI_FONT_t* font, const
     }
 }
 
-void GUI_DRAW_ScrollBar_init(GUI_DRAW_SB_t* sb) {
+void gui_draw_scrollbar_init(GUI_DRAW_SB_t* sb) {
     memset(sb, 0x00, sizeof(*sb));                  /* Reset structure */
 }
 
-void GUI_DRAW_ScrollBar(const GUI_Display_t* disp, GUI_DRAW_SB_t* sb) {
+void gui_draw_scrollbar(const GUI_Display_t* disp, GUI_DRAW_SB_t* sb) {
     GUI_Dim_t btnW, btnH, midHeight, rectHeight, midOffset = 0;
 
     btnW = sb->Width;
     btnH = (sb->Width << 1) / 3;
     
     /* Top box */
-    GUI_DRAW_Rectangle3D(disp, sb->X, sb->Y, btnW, btnH, GUI_DRAW_3D_State_Raised);
-    GUI_DRAW_FilledRectangle(disp, sb->X + 2, sb->Y + 2, btnW - 4, btnH - 4, GUI_COLOR_WIN_MIDDLEGRAY);
+    gui_draw_rectangle3d(disp, sb->X, sb->Y, btnW, btnH, GUI_DRAW_3D_State_Raised);
+    gui_draw_filledrectangle(disp, sb->X + 2, sb->Y + 2, btnW - 4, btnH - 4, GUI_COLOR_WIN_MIDDLEGRAY);
     
     /* Bottom box */
-    GUI_DRAW_Rectangle3D(disp, sb->X, sb->Y + sb->Height - btnH, btnW, btnH, GUI_DRAW_3D_State_Raised);
-    GUI_DRAW_FilledRectangle(disp, sb->X + 2, sb->Y + sb->Height - btnH + 2, btnW - 4, btnH - 4, GUI_COLOR_WIN_MIDDLEGRAY);
+    gui_draw_rectangle3d(disp, sb->X, sb->Y + sb->Height - btnH, btnW, btnH, GUI_DRAW_3D_State_Raised);
+    gui_draw_filledrectangle(disp, sb->X + 2, sb->Y + sb->Height - btnH + 2, btnW - 4, btnH - 4, GUI_COLOR_WIN_MIDDLEGRAY);
     
     /* Middle part */
     midHeight = (sb->Height - 2U * btnH);           /* Calculate middle rectangle part */
-    GUI_DRAW_FilledRectangle(disp, sb->X, sb->Y + btnH, sb->Width, midHeight, GUI_COLOR_WIN_MIDDLEGRAY);
+    gui_draw_filledrectangle(disp, sb->X, sb->Y + btnH, sb->Width, midHeight, GUI_COLOR_WIN_MIDDLEGRAY);
     
     /* Calculate size and offset for middle part */
     if (sb->EntriesVisible < sb->EntriesTotal) {    /* More entries than available visual space */
@@ -1223,5 +1223,5 @@ void GUI_DRAW_ScrollBar(const GUI_Display_t* disp, GUI_DRAW_SB_t* sb) {
     } else {
         rectHeight = midHeight;
     }
-    GUI_DRAW_Rectangle3D(disp, sb->X, sb->Y + btnH + midOffset, sb->Width, rectHeight, GUI_DRAW_3D_State_Raised); 
+    gui_draw_rectangle3d(disp, sb->X, sb->Y + btnH + midOffset, sb->Width, rectHeight, GUI_DRAW_3D_State_Raised); 
 }
