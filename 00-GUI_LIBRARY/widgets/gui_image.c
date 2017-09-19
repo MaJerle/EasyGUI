@@ -70,8 +70,8 @@ uint8_t GUI_IMAGE_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
             GUI_Display_t* disp = (GUI_Display_t *)param;
             GUI_Dim_t x, y;
 
-            x = __GUI_WIDGET_GetAbsoluteX(h);       /* Get absolute X coordinate */
-            y = __GUI_WIDGET_GetAbsoluteY(h);       /* Get absolute Y coordinate */
+            x = gui_widget_getabsolutex__(h);       /* Get absolute X coordinate */
+            y = gui_widget_getabsolutey__(h);       /* Get absolute Y coordinate */
             
             GUI_DRAW_Image(disp, x, y, o->Image);
             return 1;
@@ -89,7 +89,7 @@ uint8_t GUI_IMAGE_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
 /******************************************************************************/
 /******************************************************************************/
 GUI_HANDLE_p GUI_IMAGE_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
-    return (GUI_HANDLE_p)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+    return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
 uint8_t GUI_IMAGE_SetSource(GUI_HANDLE_p h, const GUI_IMAGE_DESC_t* img) {
@@ -99,8 +99,8 @@ uint8_t GUI_IMAGE_SetSource(GUI_HANDLE_p h, const GUI_IMAGE_DESC_t* img) {
     __GUI_ENTER();                                  /* Enter GUI */
     
     __GI(h)->Image = img;                           /* Set image */
-    __GUI_WIDGET_SetInvalidateWithParent(h, img && img->BPP == 32); /* Set how invalidation functon hebaves */
-    __GUI_WIDGET_InvalidateWithParent(h);           /* Invalidate widget */
+    gui_widget_setinvalidatewithparent__(h, img && img->BPP == 32); /* Set how invalidation functon hebaves */
+    gui_widget_invalidatewithparent__(h);           /* Invalidate widget */
 
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;

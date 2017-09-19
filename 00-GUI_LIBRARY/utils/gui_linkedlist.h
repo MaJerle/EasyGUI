@@ -72,7 +72,7 @@ extern "C" {
  * \retval          Element in linked list
  * \hideinitializer
  */
-#define __GUI_LINKEDLIST_MULTI_GetData(element)     ((element) ? (element)->Element : 0)
+#define gui_linkedlist_multi_getdata__(element)     ((element) ? (element)->Element : 0)
 
 /**
  * \brief           Add element to doubly linked list
@@ -274,7 +274,7 @@ uint8_t __GUI_LINKEDLIST_MULTI_FIND_REMOVE(GUI_LinkedListRoot_t* root, void* ele
  * \retval          > 0: Has entries
  * \hideinitializer
  */
-#define __GUI_LINKEDLIST_HasEntries(root)       (!!((root)->First))
+#define gui_linkedlist_hasentries__(root)       (!!((root)->First))
 
 /**
  * \defgroup        GUI_LINKEDLIST_WIDGET Widget linked list
@@ -295,7 +295,7 @@ uint8_t __GUI_LINKEDLIST_MULTI_FIND_REMOVE(GUI_LinkedListRoot_t* root, void* ele
  * \sa              __GUI_LINKEDLIST_IsWidgetLast
  * \hideinitializer
  */
-#define __GUI_LINKEDLIST_IsWidgetFirst(h)       (!(h) || !(__GH(h))->List.Prev)
+#define gui_linkedlist_iswidgetfirst__(h)       (!(h) || !(__GH(h))->List.Prev)
 
 /**
  * \brief           Check if widget is last child element in linked list
@@ -306,7 +306,7 @@ uint8_t __GUI_LINKEDLIST_MULTI_FIND_REMOVE(GUI_LinkedListRoot_t* root, void* ele
  * \sa              __GUI_LINKEDLIST_IsWidgetFirst
  * \hideinitializer
  */
-#define __GUI_LINKEDLIST_IsWidgetLast(h)        (!(h) || !(__GH(h))->List.Next)
+#define gui_linkedlist_iswidgetlast__(h)        (!(h) || !(__GH(h))->List.Next)
 
 /**
  * \brief           Add new widget to linked list of parent widget
@@ -317,7 +317,7 @@ uint8_t __GUI_LINKEDLIST_MULTI_FIND_REMOVE(GUI_LinkedListRoot_t* root, void* ele
  * \retval          None
  * \sa              __GUI_LINKEDLIST_WidgetRemove
  */
-void __GUI_LINKEDLIST_WidgetAdd(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h);
+void gui_linkedlist_widgetadd__(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h);
 
 /**
  * \brief           Remove widget from linked list of parent widget
@@ -326,7 +326,7 @@ void __GUI_LINKEDLIST_WidgetAdd(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h);
  * \retval          None
  * \sa              __GUI_LINKEDLIST_WidgetAdd
  */
-void __GUI_LINKEDLIST_WidgetRemove(GUI_HANDLE_p h);
+void gui_linkedlist_widgetremove__(GUI_HANDLE_p h);
 
 /**
  * \brief           Move widget up for one in linked list
@@ -336,7 +336,7 @@ void __GUI_LINKEDLIST_WidgetRemove(GUI_HANDLE_p h);
  * \retval          0: Move was not successful. Widget is on top and cannot be moved
  * \sa              __GUI_LINKEDLIST_WidgetMoveDown
  */
-GUI_Byte __GUI_LINKEDLIST_WidgetMoveUp(GUI_HANDLE_p h);
+GUI_Byte gui_linkedlist_widgetmoveup__(GUI_HANDLE_p h);
 
 /**
  * \brief           Move widget down for one in linked list
@@ -346,13 +346,13 @@ GUI_Byte __GUI_LINKEDLIST_WidgetMoveUp(GUI_HANDLE_p h);
  * \retval          0: Move was not successful. Widget is on bottom and cannot be moved
  * \sa              __GUI_LINKEDLIST_WidgetMoveUp
  */
-GUI_Byte __GUI_LINKEDLIST_WidgetMoveDown(GUI_HANDLE_p h);
+GUI_Byte gui_linkedlist_widgetmovedown__(GUI_HANDLE_p h);
 
 /**
  * \brief           Get next widget from current widget handle
  * \note            With combination of input parameters, function acts different:
  *                  <table>
- *                      <tr><th>parent  <th>h   <th>__GUI_LINKEDLIST_WidgetGetNext(parent, h)
+ *                      <tr><th>parent  <th>h   <th>gui_linkedlist_widgetgetnext__(parent, h)
  *                      <tr><td>0       <td>0   <td>0
  *                      <tr><td>0       <td>> 0 <td>Next widget of <b>h</b> if exists, <b>0</b> otherwise
  *                      <tr><td>> 0     <td>0   <td>First widget in <b>parent</b> list if exists, <b>0</b> otherwise
@@ -367,7 +367,7 @@ GUI_Byte __GUI_LINKEDLIST_WidgetMoveDown(GUI_HANDLE_p h);
 void LoopWidgets(GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;         //Value holding widgets of parent
 
-    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, NULL); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
+    for (h = gui_linkedlist_widgetgetnext__((GUI_HANDLE_ROOT_t *)parent, NULL); h; h = gui_linkedlist_widgetgetnext__(NULL, h)) {
         //Loop through each widget of parent
     }
 }
@@ -378,13 +378,13 @@ void LoopWidgets(GUI_HANDLE_p parent) {
  * \retval          0: No widget in linked list anymore
  * \sa              __GUI_LINKEDLIST_WidgetGetPrev
  */
-GUI_HANDLE_p __GUI_LINKEDLIST_WidgetGetNext(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h);
+GUI_HANDLE_p gui_linkedlist_widgetgetnext__(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h);
 
 /**
  * \brief           Get previous widget from current widget handle
  * \note            With combination of input parameters, function acts different:
  *                  <table>
- *                      <tr><th>parent  <th>h   <th>__GUI_LINKEDLIST_WidgetGetPrev(parent, h)
+ *                      <tr><th>parent  <th>h   <th>gui_linkedlist_widgetgetprev__(parent, h)
  *                      <tr><td>0       <td>0   <td>0
  *                      <tr><td>0       <td>> 0 <td>Previous widget of <b>h</b> if exists, <b>0</b> otherwise
  *                      <tr><td>> 0     <td>0   <td>Last widget in <b>parent</b> list if exists, <b>0</b> otherwise
@@ -399,7 +399,7 @@ GUI_HANDLE_p __GUI_LINKEDLIST_WidgetGetNext(GUI_HANDLE_ROOT_t* parent, GUI_HANDL
 void LoopWidgets(GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;         //Value holding widgets of parent
     
-    for (h = __GUI_LINKEDLIST_WidgetGetPrev((GUI_HANDLE_ROOT_t *)parent, 0); h; h = __GUI_LINKEDLIST_WidgetGetPrev(NULL, h)) {
+    for (h = gui_linkedlist_widgetgetprev__((GUI_HANDLE_ROOT_t *)parent, 0); h; h = gui_linkedlist_widgetgetprev__(NULL, h)) {
         //Loop through each widget of parent
     }
 }
@@ -410,7 +410,7 @@ void LoopWidgets(GUI_HANDLE_p parent) {
  * \retval          0: No widget in linked list anymore
  * \sa              __GUI_LINKEDLIST_WidgetGetNext
  */
-GUI_HANDLE_p __GUI_LINKEDLIST_WidgetGetPrev(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h);
+GUI_HANDLE_p gui_linkedlist_widgetgetprev__(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h);
 
 /**
  * \brief           Move widget to bottom in linked list of parent widget
@@ -420,7 +420,7 @@ GUI_HANDLE_p __GUI_LINKEDLIST_WidgetGetPrev(GUI_HANDLE_ROOT_t* parent, GUI_HANDL
  * \retval          0: Widget is already at bottom
  * \sa              __GUI_LINKEDLIST_WidgetMoveToTop
  */
-GUI_Byte __GUI_LINKEDLIST_WidgetMoveToBottom(GUI_HANDLE_p h);
+GUI_Byte gui_linkedlist_widgetmovetobottom__(GUI_HANDLE_p h);
 
 /**
  * \brief           Move widget to top in linked list of parent widget
@@ -430,7 +430,7 @@ GUI_Byte __GUI_LINKEDLIST_WidgetMoveToBottom(GUI_HANDLE_p h);
  * \retval          0: Widget is already on top
  * \sa              __GUI_LINKEDLIST_WidgetMoveToBottom
  */
-GUI_Byte __GUI_LINKEDLIST_WidgetMoveToTop(GUI_HANDLE_p h);
+GUI_Byte gui_linkedlist_widgetmovetotop__(GUI_HANDLE_p h);
  
 #endif /* GUI_INTERNAL || defined(DOXYGEN) */
 
@@ -444,7 +444,7 @@ GUI_Byte __GUI_LINKEDLIST_WidgetMoveToTop(GUI_HANDLE_p h);
  *                     Set to NULL to use GUI root widget
  * \retval          None
  */
-void __GUI_LINKEDLIST_PrintList(void);
+void gui_linkedlist_printlist__(void);
 
 /**
  * \}

@@ -60,7 +60,7 @@ extern "C" {
  * \retval          > 0: Timer created
  * \retval          0: Timer creation failed
  */
-GUI_TIMER_t* __GUI_TIMER_Create(uint16_t period, void (*callback)(GUI_TIMER_t *), void* param);
+GUI_TIMER_t* gui_timer_create__(uint16_t period, void (*callback)(GUI_TIMER_t *), void* param);
 
 /**
  * \brief           Remove timer
@@ -70,7 +70,7 @@ GUI_TIMER_t* __GUI_TIMER_Create(uint16_t period, void (*callback)(GUI_TIMER_t *)
  * \retval          1: Timer was removed ok
  * \retval          0: Timer was not removed
  */
-uint8_t __GUI_TIMER_Remove(GUI_TIMER_t** t);
+uint8_t gui_timer_remove__(GUI_TIMER_t** t);
 
 /**
  * \brief           Start timer
@@ -79,7 +79,7 @@ uint8_t __GUI_TIMER_Remove(GUI_TIMER_t** t);
  * \retval          1: Timer was started ok
  * \retval          0: Timer was not started
  */
-uint8_t __GUI_TIMER_Start(GUI_TIMER_t* t);
+uint8_t gui_timer_start__(GUI_TIMER_t* t);
 
 /**
  * \brief           Start timer periodically. It will start again when callback is called
@@ -88,7 +88,7 @@ uint8_t __GUI_TIMER_Start(GUI_TIMER_t* t);
  * \retval          1: Timer was started ok
  * \retval          0: Timer was not started
  */
-uint8_t __GUI_TIMER_StartPeriodic(GUI_TIMER_t* t);
+uint8_t gui_timer_startperiodic__(GUI_TIMER_t* t);
 
 /**
  * \brief           Stop timer
@@ -97,7 +97,7 @@ uint8_t __GUI_TIMER_StartPeriodic(GUI_TIMER_t* t);
  * \retval          1: Timer was stopped ok
  * \retval          0: Timer was not stopped
  */
-uint8_t __GUI_TIMER_Stop(GUI_TIMER_t* t);
+uint8_t gui_timer_stop__(GUI_TIMER_t* t);
 
 /**
  * \brief           Reset timer to zero
@@ -106,7 +106,7 @@ uint8_t __GUI_TIMER_Stop(GUI_TIMER_t* t);
  * \retval          1: Timer was reseted ok
  * \retval          0: Timer was not reseted
  */
-uint8_t __GUI_TIMER_Reset(GUI_TIMER_t* t);
+uint8_t gui_timer_reset__(GUI_TIMER_t* t);
 
 /**
  * \brief           Internal processing called by GUI library
@@ -114,7 +114,7 @@ uint8_t __GUI_TIMER_Reset(GUI_TIMER_t* t);
  * \note            Processes all timers in loop and calls callback function if needed
  * \retval          None
  */
-void __GUI_TIMER_Process(void);
+void gui_timer_process__(void);
 
 /**
  * \brief           Get parameters from timer
@@ -123,9 +123,9 @@ void __GUI_TIMER_Process(void);
  * \retval          Timer parameters
  * \hideinitializer
  */
-#define __GUI_TIMER_GetParams(t)        (t)->Params
+#define gui_timer_getparams__(t)        (t)->Params
 
-uint32_t __GUI_TIMER_GetActiveCount(void);
+uint32_t gui_timer_getactivecount__(void);
 
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 

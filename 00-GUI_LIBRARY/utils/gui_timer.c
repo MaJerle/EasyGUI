@@ -42,7 +42,7 @@
 #define GUI_FLAG_TIMER_PERIODIC         ((uint16_t)(1 << 1UL))  /*!< Timer will start from beginning after reach end */ 
 #define GUI_FLAG_TIMER_CALL             ((uint16_t)(1 << 2UL))  /*!< Call callback function on timer */
 
-#define __GUI_TIMER_IsPeriodic(t)       ((t)->Flags & GUI_FLAG_TIMER_PERIODIC)
+#define gui_timer_isperiodic__(t)       ((t)->Flags & GUI_FLAG_TIMER_PERIODIC)
 
 /******************************************************************************/
 /******************************************************************************/
@@ -64,7 +64,7 @@ static gui_mbox_msg_t timer_msg = {GUI_SYS_MBOX_TYPE_TIMER};
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_TIMER_t* __GUI_TIMER_Create(uint16_t period, void (*callback)(GUI_TIMER_t *), void* params) {
+GUI_TIMER_t* gui_timer_create__(uint16_t period, void (*callback)(GUI_TIMER_t *), void* params) {
     GUI_TIMER_t* ptr;
     
     ptr = __GUI_MEMALLOC(sizeof(*ptr));             /* Allocate memory for timer */
@@ -85,7 +85,7 @@ GUI_TIMER_t* __GUI_TIMER_Create(uint16_t period, void (*callback)(GUI_TIMER_t *)
     return ptr;
 }
 
-uint8_t __GUI_TIMER_Remove(GUI_TIMER_t** t) {  
+uint8_t gui_timer_remove__(GUI_TIMER_t** t) {  
     __GUI_ASSERTPARAMS(t && *t);                    /* Check input parameters */  
     __GUI_LINKEDLIST_REMOVE_GEN(&GUI.Timers.List, (GUI_LinkedList_t *)(*t));    /* Remove timer from linked list */
     __GUI_MEMFREE(*t);                              /* Free memory for timer */
@@ -94,7 +94,7 @@ uint8_t __GUI_TIMER_Remove(GUI_TIMER_t** t) {
     return 1;
 }
 
-uint8_t __GUI_TIMER_Start(GUI_TIMER_t* t) {
+uint8_t gui_timer_start__(GUI_TIMER_t* t) {
     __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
     t->Counter = t->Period;                         /* Reset counter to top value */
     t->Flags &= ~GUI_FLAG_TIMER_PERIODIC;           /* Clear periodic flag */
@@ -106,7 +106,7 @@ uint8_t __GUI_TIMER_Start(GUI_TIMER_t* t) {
     return 1;
 }
 
-uint8_t __GUI_TIMER_StartPeriodic(GUI_TIMER_t* t) {
+uint8_t gui_timer_startperiodic__(GUI_TIMER_t* t) {
     __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
     t->Counter = t->Period;                         /* Reset counter to top value */
     t->Flags |= GUI_FLAG_TIMER_ACTIVE | GUI_FLAG_TIMER_PERIODIC;    /* Set active flag */
@@ -114,7 +114,7 @@ uint8_t __GUI_TIMER_StartPeriodic(GUI_TIMER_t* t) {
     return 1;
 }
 
-uint8_t __GUI_TIMER_Stop(GUI_TIMER_t* t) {
+uint8_t gui_timer_stop__(GUI_TIMER_t* t) {
     __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
     t->Counter = t->Period;                         /* Reset counter to top value */
     t->Flags &= ~GUI_FLAG_TIMER_ACTIVE;             /* Clear active flag */
@@ -122,14 +122,14 @@ uint8_t __GUI_TIMER_Stop(GUI_TIMER_t* t) {
     return 1;
 }
 
-uint8_t __GUI_TIMER_Reset(GUI_TIMER_t* t) {
+uint8_t gui_timer_reset__(GUI_TIMER_t* t) {
     __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
     t->Counter = t->Period;                         /* Clear and reset timer */
     
     return 1;
 }
 
-void __GUI_TIMER_Process(void) {
+void gui_timer_process__(void) {
     GUI_TIMER_t* t;
     volatile uint32_t time = gui_sys_now();         /* Get current time */
     volatile uint32_t lastTime = GUI.Timers.Time;
@@ -143,8 +143,8 @@ void __GUI_TIMER_Process(void) {
     for (t = (GUI_TIMER_t *)GUI.Timers.List.First; t; t = (GUI_TIMER_t *)t->List.Next) {
         if (t->Flags & GUI_FLAG_TIMER_CALL) {       /* Counter is set to 0, process callback */
             t->Flags &= ~GUI_FLAG_TIMER_CALL;       /* Clear timer flag */
-            if (!__GUI_TIMER_IsPeriodic(t)) {       /* If timer is not periodic */
-                __GUI_TIMER_Stop(t);                /* Stop timer */
+            if (!gui_timer_isperiodic__(t)) {       /* If timer is not periodic */
+                gui_timer_stop__(t);                /* Stop timer */
             }
             if (t->Callback) {                      /* Process callback */
                 t->Callback(t);                     /* Call user function */
@@ -169,7 +169,7 @@ void __GUI_TIMER_Process(void) {
     GUI.Timers.Time = time;                         /* Reset time */
 }
 
-uint32_t __GUI_TIMER_GetActiveCount(void) {
+uint32_t gui_timer_getactivecount__(void) {
     uint32_t cnt = 0;
     GUI_TIMER_t* t;
     for (t = (GUI_TIMER_t *)GUI.Timers.List.First; t; t = (GUI_TIMER_t *)t->List.Next) {

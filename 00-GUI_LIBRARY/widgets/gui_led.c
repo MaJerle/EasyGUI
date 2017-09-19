@@ -103,18 +103,18 @@ uint8_t GUI_LED_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* resul
             GUI_Color_t c1, c2;
             GUI_Dim_t x, y, width, height;
             
-            x = __GUI_WIDGET_GetAbsoluteX(h);       /* Get absolute position on screen */
-            y = __GUI_WIDGET_GetAbsoluteY(h);       /* Get absolute position on screen */
-            width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
-            height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
+            x = gui_widget_getabsolutex__(h);       /* Get absolute position on screen */
+            y = gui_widget_getabsolutey__(h);       /* Get absolute position on screen */
+            width = gui_widget_getwidth__(h);       /* Get widget width */
+            height = gui_widget_getheight__(h);     /* Get widget height */
             
             /* Get drawing colors */
             if (l->Flags & GUI_LED_FLAG_ON) {       /* If LED is on */
-                c1 = __GUI_WIDGET_GetColor(h, GUI_LED_COLOR_ON);
-                c2 = __GUI_WIDGET_GetColor(h, GUI_LED_COLOR_ON_BORDER);
+                c1 = gui_widget_getcolor__(h, GUI_LED_COLOR_ON);
+                c2 = gui_widget_getcolor__(h, GUI_LED_COLOR_ON_BORDER);
             } else {
-                c1 = __GUI_WIDGET_GetColor(h, GUI_LED_COLOR_OFF);
-                c2 = __GUI_WIDGET_GetColor(h, GUI_LED_COLOR_OFF_BORDER);
+                c1 = gui_widget_getcolor__(h, GUI_LED_COLOR_OFF);
+                c2 = gui_widget_getcolor__(h, GUI_LED_COLOR_OFF_BORDER);
             }
             
             if (l->Type == GUI_LED_TYPE_RECT) {     /* When led has rectangle shape */
@@ -139,27 +139,27 @@ uint8_t GUI_LED_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* resul
 /******************************************************************************/
 /******************************************************************************/
 GUI_HANDLE_p GUI_LED_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
-    return (GUI_HANDLE_p)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+    return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
 uint8_t GUI_LED_SetColor(GUI_HANDLE_p h, GUI_LED_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return __GUI_WIDGET_SetColor(h, (uint8_t)index, color); /* Set color */
+    return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }
 
 uint8_t GUI_LED_SetType(GUI_HANDLE_p h, GUI_LED_TYPE_t type) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return __GUI_WIDGET_SetParam(h, CFG_TYPE, &type, 1, 1); /* Set parameter */
+    return gui_widget_setparam__(h, CFG_TYPE, &type, 1, 1); /* Set parameter */
 }
 
 uint8_t GUI_LED_Toggle(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return __GUI_WIDGET_SetParam(h, CFG_TOGGLE, NULL, 1, 0);/* Set parameter */
+    return gui_widget_setparam__(h, CFG_TOGGLE, NULL, 1, 0);/* Set parameter */
 }
 
 uint8_t GUI_LED_Set(GUI_HANDLE_p h, uint8_t state) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return __GUI_WIDGET_SetParam(h, CFG_SET, &state, 1, 0); /* Set parameter */
+    return gui_widget_setparam__(h, CFG_SET, &state, 1, 0); /* Set parameter */
 }
 
 uint8_t GUI_LED_IsOn(GUI_HANDLE_p h) {

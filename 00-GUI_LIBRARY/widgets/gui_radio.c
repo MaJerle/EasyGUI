@@ -70,7 +70,7 @@ static const GUI_WIDGET_t Widget = {
 /******************************************************************************/
 #define c                   ((GUI_RADIO_t *)(h))
 static
-uint8_t __GUI_RADIO_SetActive(GUI_HANDLE_p h) {
+uint8_t gui_radio_setactive__(GUI_HANDLE_p h) {
     GUI_HANDLE_p handle;
     
     if (__GR(h)->Flags & GUI_FLAG_RADIO_DISABLED) { /* Check if it can be enabled */
@@ -81,22 +81,22 @@ uint8_t __GUI_RADIO_SetActive(GUI_HANDLE_p h) {
      * Find radio widgets on the same page
      * and with the same group ID as widget to be set as active
      */
-    for (handle = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)__GH(h)->Parent, NULL); handle; handle = __GUI_LINKEDLIST_WidgetGetNext(NULL, handle)) {
+    for (handle = gui_linkedlist_widgetgetnext__((GUI_HANDLE_ROOT_t *)__GH(h)->Parent, NULL); handle; handle = gui_linkedlist_widgetgetnext__(NULL, handle)) {
         if (handle != h && __GH(handle)->Widget == &Widget && __GR(handle)->GroupId == __GR(h)->GroupId) {  /* Check if widget is radio box and group is the same as clicked widget */
             __GR(handle)->SelectedValue = __GR(h)->Value;   /* Set selected value for widget */
             if (__GR(handle)->Flags & GUI_FLAG_RADIO_CHECKED) { /* Check if widget active */
                 __GR(handle)->Flags &= ~GUI_FLAG_RADIO_CHECKED; /* Clear flag */
-                __GUI_WIDGET_Invalidate(handle);    /* Invalidate widget */
+                gui_widget_invalidate__(handle);    /* Invalidate widget */
             }
         }
     }
     
     if (!(__GR(h)->Flags & GUI_FLAG_RADIO_CHECKED)) {   /* Invalidate only if not checked already */
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
+        gui_widget_invalidate__(h);                 /* Invalidate widget */
     }
     __GR(h)->Flags |= GUI_FLAG_RADIO_CHECKED;       /* Set active flag */
     __GR(h)->SelectedValue = __GR(h)->Value;        /* Set selected value of this radio */
-    __GUI_WIDGET_Callback(h, GUI_WC_SelectionChanged, NULL, NULL);  /* Call user function */
+    gui_widget_callback__(h, GUI_WC_SelectionChanged, NULL, NULL);  /* Call user function */
     
     return 1;
 }
@@ -106,11 +106,11 @@ static
 uint8_t __SetDisabled(GUI_HANDLE_p h, uint8_t state) {
     if (state && !(c->Flags & GUI_FLAG_RADIO_DISABLED)) {
         c->Flags |= GUI_FLAG_RADIO_DISABLED;        /* Set flag */
-        __GUI_WIDGET_Invalidate(h);
+        gui_widget_invalidate__(h);
         return 1;
     } else if (!state && (c->Flags & GUI_FLAG_RADIO_DISABLED)) {
         c->Flags &= ~GUI_FLAG_RADIO_DISABLED;       /* Clear flag */
-        __GUI_WIDGET_Invalidate(h);
+        gui_widget_invalidate__(h);
         return 1;
     }
     return 0;
@@ -125,10 +125,10 @@ uint8_t GUI_RADIO_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
             GUI_Color_t c1;
             GUI_iDim_t x, y, width, height, size, sx, sy;
             
-            x = __GUI_WIDGET_GetAbsoluteX(h);       /* Get absolute X coordinate */
-            y = __GUI_WIDGET_GetAbsoluteY(h);       /* Get absolute Y coordinate */
-            width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
-            height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
+            x = gui_widget_getabsolutex__(h);       /* Get absolute X coordinate */
+            y = gui_widget_getabsolutey__(h);       /* Get absolute Y coordinate */
+            width = gui_widget_getwidth__(h);       /* Get widget width */
+            height = gui_widget_getheight__(h);     /* Get widget height */
             
             size = 20;                              /* Circle size in pixels */
             
@@ -136,24 +136,24 @@ uint8_t GUI_RADIO_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
             sy = y + (height - size) / 2;
             
             if (__GR(h)->Flags & GUI_FLAG_RADIO_DISABLED) {
-                c1 = __GUI_WIDGET_GetColor(h, GUI_RADIO_COLOR_DISABLED_BG);
+                c1 = gui_widget_getcolor__(h, GUI_RADIO_COLOR_DISABLED_BG);
             } else {
-                c1 = __GUI_WIDGET_GetColor(h, GUI_RADIO_COLOR_BG);
+                c1 = gui_widget_getcolor__(h, GUI_RADIO_COLOR_BG);
             }
             
             GUI_DRAW_FilledCircle(disp, sx + size / 2, sy + size / 2, size / 2, c1);
-            GUI_DRAW_Circle(disp, sx + size / 2, sy + size / 2, size / 2, __GUI_WIDGET_GetColor(h, GUI_RADIO_COLOR_BORDER));
+            GUI_DRAW_Circle(disp, sx + size / 2, sy + size / 2, size / 2, gui_widget_getcolor__(h, GUI_RADIO_COLOR_BORDER));
             
-            if (__GUI_WIDGET_IsFocused(h)) {        /* When in focus */
-                GUI_DRAW_Circle(disp, sx + size / 2, sy + size / 2, size / 2 - 2, __GUI_WIDGET_GetColor(h, GUI_RADIO_COLOR_FG));
+            if (gui_widget_isfocused__(h)) {        /* When in focus */
+                GUI_DRAW_Circle(disp, sx + size / 2, sy + size / 2, size / 2 - 2, gui_widget_getcolor__(h, GUI_RADIO_COLOR_FG));
             }
 
             if (__GR(h)->Flags & GUI_FLAG_RADIO_CHECKED) {
-                GUI_DRAW_FilledCircle(disp, sx + size / 2, sy + size / 2, size / 2 - 5, __GUI_WIDGET_GetColor(h, GUI_RADIO_COLOR_FG));
+                GUI_DRAW_FilledCircle(disp, sx + size / 2, sy + size / 2, size / 2 - 5, gui_widget_getcolor__(h, GUI_RADIO_COLOR_FG));
             }
             
             /* Draw text if possible */
-            if (__GUI_WIDGET_IsFontAndTextSet(h)) {
+            if (gui_widget_isfontandtextset__(h)) {
                 GUI_DRAW_FONT_t f;
                 GUI_DRAW_FONT_Init(&f);             /* Init structure */
                 
@@ -163,8 +163,8 @@ uint8_t GUI_RADIO_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
                 f.Height = height - 2;
                 f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.Color1Width = f.Width;
-                f.Color1 = __GUI_WIDGET_GetColor(h, GUI_RADIO_COLOR_FG);
-                GUI_DRAW_WriteText(disp, __GUI_WIDGET_GetFont(h), __GUI_WIDGET_GetText(h), &f);
+                f.Color1 = gui_widget_getcolor__(h, GUI_RADIO_COLOR_FG);
+                GUI_DRAW_WriteText(disp, gui_widget_getfont__(h), gui_widget_gettext__(h), &f);
             }
             
             return 1;
@@ -180,8 +180,8 @@ uint8_t GUI_RADIO_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
         }
 #endif /* GUI_USE_TOUCH */
         case GUI_WC_Click: {
-            __GUI_RADIO_SetActive(h);               /* Set widget as active */
-            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
+            gui_radio_setactive__(h);               /* Set widget as active */
+            gui_widget_invalidate__(h);             /* Invalidate widget */
         }
         default:                                    /* Handle default option */
             __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
@@ -197,13 +197,13 @@ uint8_t GUI_RADIO_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
 /******************************************************************************/
 /******************************************************************************/
 GUI_HANDLE_p GUI_RADIO_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
-    return (GUI_HANDLE_p)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+    return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
 uint8_t GUI_RADIO_SetColor(GUI_HANDLE_p h, GUI_RADIO_COLOR_t index, GUI_Color_t color) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set color */
+    ret = gui_widget_setcolor__(h, (uint8_t)index, color);  /* Set color */
     return ret;
 }
 
@@ -220,7 +220,7 @@ uint8_t GUI_RADIO_SetGroup(GUI_HANDLE_p h, uint8_t groupId) {
          *
          * This is to set selected value to new radio with new group ID
          */
-        for (handle = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)__GH(h)->Parent, NULL); handle; handle = __GUI_LINKEDLIST_WidgetGetNext(NULL, handle)) {
+        for (handle = gui_linkedlist_widgetgetnext__((GUI_HANDLE_ROOT_t *)__GH(h)->Parent, NULL); handle; handle = gui_linkedlist_widgetgetnext__(NULL, handle)) {
             if (handle != h && __GH(handle)->Widget == &Widget && __GR(handle)->GroupId == groupId) {   /* Check if widget is radio box and group is the same as input group */
                 __GR(h)->SelectedValue = __GR(handle)->SelectedValue;   /* Set selected value for widget */
                 break;          
@@ -228,7 +228,7 @@ uint8_t GUI_RADIO_SetGroup(GUI_HANDLE_p h, uint8_t groupId) {
         }
         
         __GR(h)->GroupId = groupId;                 /* Set new group id */
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
+        gui_widget_invalidate__(h);                 /* Invalidate widget */
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
@@ -253,7 +253,7 @@ uint8_t GUI_RADIO_SetValue(GUI_HANDLE_p h, uint32_t value) {
     if (__GR(h)->Value != value) {
         __GR(h)->Value = value;                     /* Set new value */
         if (__GR(h)->Flags & GUI_FLAG_RADIO_CHECKED) {
-            __GUI_RADIO_SetActive(h);               /* Check active radio widgets */
+            gui_radio_setactive__(h);               /* Check active radio widgets */
         }
     }
     
@@ -267,7 +267,7 @@ uint8_t GUI_RADIO_SetSelected(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __GUI_RADIO_SetActive(h);                 /* Set radio active */
+    ret = gui_radio_setactive__(h);                 /* Set radio active */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;

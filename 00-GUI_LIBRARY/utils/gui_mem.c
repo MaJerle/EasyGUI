@@ -384,7 +384,7 @@ size_t mem_getminfree(void) {
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-void* __GUI_MEM_Alloc(uint32_t size) {
+void* gui_mem_alloc__(uint32_t size) {
     void* ptr;
     __GUI_SYS_PROTECT();                            /* Lock system protection */
 #if GUI_USE_MEM
@@ -396,7 +396,7 @@ void* __GUI_MEM_Alloc(uint32_t size) {
     return ptr;
 }
 
-void* __GUI_MEM_Realloc(void* ptr, size_t size) {
+void* gui_mem_realloc__(void* ptr, size_t size) {
     __GUI_SYS_PROTECT();                            /* Lock system protection */
 #if GUI_USE_MEM
     ptr = mem_realloc(ptr, size);                   /* Reallocate and return pointer */
@@ -407,7 +407,7 @@ void* __GUI_MEM_Realloc(void* ptr, size_t size) {
     return ptr;
 }
 
-void* __GUI_MEM_Calloc(size_t num, size_t size) {
+void* gui_mem_calloc__(size_t num, size_t size) {
     void* ptr;
     __GUI_SYS_PROTECT();                            /* Lock system protection */
 #if GUI_USE_MEM
@@ -419,7 +419,7 @@ void* __GUI_MEM_Calloc(size_t num, size_t size) {
     return ptr;
 }
 
-void __GUI_MEM_Free(void* ptr) {
+void gui_mem_free__(void* ptr) {
     __GUI_SYS_PROTECT();                            /* Lock system protection */
 #if GUI_USE_MEM
     mem_free(ptr);                                  /* Free already allocated memory */
@@ -429,15 +429,15 @@ void __GUI_MEM_Free(void* ptr) {
     __GUI_SYS_UNPROTECT();                          /* Unlock protection */
 }
 
-size_t __GUI_MEM_GetFree(void) {
+size_t gui_mem_getfree__(void) {
     return mem_getfree();                           /* Get free bytes available to allocate */
 }
 
-size_t __GUI_MEM_GetFull(void) {
+size_t gui_mem_getfull__(void) {
     return mem_getfull();                           /* Get number of bytes allocated already */
 }
 
-size_t __GUI_MEM_GetMinFree(void) {
+size_t gui_mem_getminfree__(void) {
     return mem_getminfree();                        /* Get minimal number of bytes ever available for allocation */
 }
 

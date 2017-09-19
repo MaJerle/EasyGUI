@@ -284,17 +284,17 @@ static const KeyboardLayout_t KeyboardLayouts[] = {
 static
 KeyboardInfo_t Kbd = {.ActionValue = 10};   /* Set action value to max */
 
-#define SHIFT_DISABLE()     if (Kbd.IsShift) { Kbd.IsShift = 0; __GUI_WIDGET_Invalidate(Kbd.MainLayoutHandle); }
+#define SHIFT_DISABLE()     if (Kbd.IsShift) { Kbd.IsShift = 0; gui_widget_invalidate__(Kbd.MainLayoutHandle); }
 #define SHIFT_ENABLE(mode)  do {                        \
     if (!Kbd.IsShift && (mode)) {                       \
-        __GUI_WIDGET_Invalidate(Kbd.MainLayoutHandle);  \
+        gui_widget_invalidate__(Kbd.MainLayoutHandle);  \
     }                                                   \
     Kbd.IsShift = (mode);                               \
 } while (0)
 
 #define SHIFT_TOGGLE()      do {        \
     Kbd.IsShift = !Kbd.IsShift;         \
-    __GUI_WIDGET_Invalidate(Kbd.MainLayoutHandle);  \
+    gui_widget_invalidate__(Kbd.MainLayoutHandle);  \
 } while (0)
 
 /******************************************************************************/
@@ -310,7 +310,7 @@ uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* r
             GUI_Char str[10] = {0};
             const KeyboardBtn_t* kbtn;
             
-            kbtn = (const KeyboardBtn_t *)__GUI_WIDGET_GetUserData(h);  /* Get user data */
+            kbtn = (const KeyboardBtn_t *)gui_widget_getuserdata__(h);  /* Get user data */
             
             switch (kbtn->S) {
                 case SPECIAL_123: 
@@ -343,12 +343,12 @@ uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* r
             }
             
             if (Kbd.Font) {                         /* Check if widget font is set */
-                __GUI_WIDGET_SetFont(h, Kbd.Font);  /* Set drawing font */
+                gui_widget_setfont__(h, Kbd.Font);  /* Set drawing font */
             } else {
-                __GUI_WIDGET_SetFont(h, Kbd.DefaultFont);   /* Set drawing font */
+                gui_widget_setfont__(h, Kbd.DefaultFont);   /* Set drawing font */
             }
             
-            __GUI_WIDGET_SetText(h, str);           /* Temporary set text */
+            gui_widget_settext__(h, str);           /* Temporary set text */
             GUI_WIDGET_ProcessDefaultCallback(h, cmd, param, result);   /* Process default callback with drawing */
             return 1;
         }
@@ -358,35 +358,35 @@ uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* r
             uint32_t ch = 0;
             GUI_KeyboardData_t kbd = {0};
             
-            kbtn = __GUI_WIDGET_GetUserData(h);     /* Get data from widget */
+            kbtn = gui_widget_getuserdata__(h);     /* Get data from widget */
             if (kbtn->S) {                          /* Is button special function? */
                 switch (kbtn->S) {                  /* Check special function */
                     case SPECIAL_123:
                     case SPECIAL_ABC: 
                     case SPECIAL_CALC: {            /* Special functions 123 or ABC */
-                        tmp1 = __GUI_WIDGET_GetById(GUI_ID_KEYBOARD_LAYOUT_123);
-                        tmp2 = __GUI_WIDGET_GetById(GUI_ID_KEYBOARD_LAYOUT_ABC);
-                        tmp3 = __GUI_WIDGET_GetById(GUI_ID_KEYBOARD_LAYOUT_CALC);
+                        tmp1 = gui_widget_getbyid__(GUI_ID_KEYBOARD_LAYOUT_123);
+                        tmp2 = gui_widget_getbyid__(GUI_ID_KEYBOARD_LAYOUT_ABC);
+                        tmp3 = gui_widget_getbyid__(GUI_ID_KEYBOARD_LAYOUT_CALC);
                         
                         /* Hide layouts */
                         if (kbtn->S == SPECIAL_ABC) {
-                            __GUI_WIDGET_Hide(tmp1);
-                            __GUI_WIDGET_Hide(tmp3);
+                            gui_widget_hide__(tmp1);
+                            gui_widget_hide__(tmp3);
                         } else if (kbtn->S == SPECIAL_123) {
-                            __GUI_WIDGET_Hide(tmp2);
-                            __GUI_WIDGET_Hide(tmp3);
+                            gui_widget_hide__(tmp2);
+                            gui_widget_hide__(tmp3);
                         } else if (kbtn->S == SPECIAL_CALC) {
-                            __GUI_WIDGET_Hide(tmp1);
-                            __GUI_WIDGET_Hide(tmp2);
+                            gui_widget_hide__(tmp1);
+                            gui_widget_hide__(tmp2);
                         }
                         
                         /* Show layout */
                         if (kbtn->S == SPECIAL_ABC) {
-                            __GUI_WIDGET_Show(tmp2);
+                            gui_widget_show__(tmp2);
                         } else if (kbtn->S == SPECIAL_123) {
-                            __GUI_WIDGET_Show(tmp1);
+                            gui_widget_show__(tmp1);
                         } else if (kbtn->S == SPECIAL_CALC) {
-                            __GUI_WIDGET_Show(tmp3);
+                            gui_widget_show__(tmp3);
                         }
                         SHIFT_DISABLE();            /* Clear shift mode */
                         break;
@@ -400,7 +400,7 @@ uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* r
                         break;
                     }
                     case SPECIAL_HIDE: {            /* Hide button pressed */
-                        __GUI_KEYBOARD_Hide();      /* Hide keyboard */
+                        gui_keyboard_hide__();      /* Hide keyboard */
                         break;
                     }
                 }
@@ -436,7 +436,7 @@ uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* r
         case GUI_WC_DblClick: {
             const KeyboardBtn_t* kbtn;
             
-            kbtn = __GUI_WIDGET_GetUserData(h);     /* Get data from widget */
+            kbtn = gui_widget_getuserdata__(h);     /* Get data from widget */
             switch (kbtn->S) {
                 case SPECIAL_SHIFT: {
                     SHIFT_ENABLE(SHIFT_UPPERCASE);  /* Enable shift upper case mode */
@@ -470,18 +470,18 @@ void keyboard_timer_callback(GUI_TIMER_t* timer) {
     if (Kbd.Action == ACTION_HIDE) {                /* We should hide the keyboard */
         if (Kbd.ActionValue < 10) {
             Kbd.ActionValue++;
-            __GUI_WIDGET_SetPositionPercent(Kbd.Handle, 0, 50 + Kbd.ActionValue * 5);
+            gui_widget_setpositionpercent__(Kbd.Handle, 0, 50 + Kbd.ActionValue * 5);
         } else {
-            __GUI_WIDGET_Hide(Kbd.Handle);          /* Hide keyboard */
-            __GUI_TIMER_Stop(timer);                /* Stop timer */
+            gui_widget_hide__(Kbd.Handle);          /* Hide keyboard */
+            gui_timer_stop__(timer);                /* Stop timer */
         }
     } else if (Kbd.Action == ACTION_SHOW) {         /* We should show the keyboard */
         if (Kbd.ActionValue) {
             if (Kbd.ActionValue == 10) {            /* At the bottom? */
-                __GUI_WIDGET_Show(Kbd.Handle);      /* First set keyboard as visible */
+                gui_widget_show__(Kbd.Handle);      /* First set keyboard as visible */
             }
             Kbd.ActionValue--;                      /* Decrease value */
-            __GUI_WIDGET_SetPositionPercent(Kbd.Handle, 0, 50 + Kbd.ActionValue * 5);
+            gui_widget_setpositionpercent__(Kbd.Handle, 0, 50 + Kbd.ActionValue * 5);
         }
     }
 }
@@ -491,7 +491,7 @@ static
 uint8_t keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
     switch (cmd) {
         case GUI_WC_PreInit: {
-            __GH(h)->Timer = __GUI_TIMER_Create(60, keyboard_timer_callback, 0);    /* Create timer */
+            __GH(h)->Timer = gui_timer_create__(60, keyboard_timer_callback, 0);    /* Create timer */
             if (!__GH(h)->Timer) {
                 *(uint8_t *)result = 0;             /* Failed, stop and clear memory */
             }
@@ -507,10 +507,10 @@ uint8_t keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* 
             /***************************/
             /*   Configure keyboard    */
             /***************************/
-            __GUI_WIDGET_SetSizePercent(h, 100, 50);    /* Set keyboard size */
-            __GUI_WIDGET_SetPositionPercent(h, 0, 100); /* Set position of keyboard outside visible area */
-            __GUI_WIDGET_SetZIndex(h, GUI_WIDGET_ZINDEX_MAX);   /* Set to maximal z-index */
-            __GUI_WIDGET_Hide(h);                       /* Hide keyboard by default */
+            gui_widget_setsizepercent__(h, 100, 50);    /* Set keyboard size */
+            gui_widget_setpositionpercent__(h, 0, 100); /* Set position of keyboard outside visible area */
+            gui_widget_setzindex__(h, GUI_WIDGET_ZINDEX_MAX);   /* Set to maximal z-index */
+            gui_widget_hide__(h);                       /* Hide keyboard by default */
             
             Kbd.DefaultFont = __GH(h)->Font;            /* Save current font */
             
@@ -524,11 +524,11 @@ uint8_t keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* 
                 /* Create keyboard layout  */
                 /***************************/
                 handleLayout = GUI_CONTAINER_Create(Layout->ID, 0, 0, 100, 100, h, keyboard_callback, 0);
-                __GUI_WIDGET_SetSizePercent(handleLayout, 100, 100);
-                __GUI_WIDGET_SetPositionPercent(handleLayout, 0, 0);
-                __GUI_WIDGET_SetUserData(handleLayout, (void *)Layout);
+                gui_widget_setsizepercent__(handleLayout, 100, 100);
+                gui_widget_setpositionpercent__(handleLayout, 0, 0);
+                gui_widget_setuserdata__(handleLayout, (void *)Layout);
                 if (i) {                            /* Show only first layout */
-                    __GUI_WIDGET_Hide(handleLayout);
+                    gui_widget_hide__(handleLayout);
                 } else {                            /* Save main layout handle */
                     Kbd.MainLayoutHandle = handleLayout;
                 }
@@ -542,10 +542,10 @@ uint8_t keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* 
                         Btn = &Row->Btns[z];        /* Get button pointer */
                         
                         handle = GUI_BUTTON_Create(0, 0, 0, 1, 1, handleLayout, keyboard_btn_callback, 0);    /* Create button object */
-                        __GUI_WIDGET_SetUserData(handle, (void *)Btn);  /* Set pointer to button */
-                        __GUI_WIDGET_SetSizePercent(handle, Btn->W, 23);    /* Set button percent */
-                        __GUI_WIDGET_SetPositionPercent(handle, Btn->X, 1 + 25 * k);
-                        __GUI_WIDGET_Set3DStyle(handle, 0); /* Make buttons flat */
+                        gui_widget_setuserdata__(handle, (void *)Btn);  /* Set pointer to button */
+                        gui_widget_setsizepercent__(handle, Btn->W, 23);    /* Set button percent */
+                        gui_widget_setpositionpercent__(handle, Btn->X, 1 + 25 * k);
+                        gui_widget_set3dstyle__(handle, 0); /* Make buttons flat */
                     }
                 }
             }
@@ -562,22 +562,22 @@ uint8_t keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-uint8_t __GUI_KEYBOARD_Hide(void) {
+uint8_t gui_keyboard_hide__(void) {
     __GUI_ASSERTPARAMS(Kbd.Handle);                 /* Check parameters */
     Kbd.Action = ACTION_HIDE;                       /* Set action to hide */
-    __GUI_TIMER_StartPeriodic(__GH(Kbd.Handle)->Timer); /* Start periodic timer */
+    gui_timer_startperiodic__(__GH(Kbd.Handle)->Timer); /* Start periodic timer */
     
     return 1;
 }
 
-uint8_t __GUI_KEYBOARD_Show(GUI_HANDLE_p h) {
+uint8_t gui_keyboard_show__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(Kbd.Handle);                 /* Check parameters */
     Kbd.Action = ACTION_SHOW;                       /* Set action to show */
     if (h && __GH(h)->Font) {                       /* Check widget and font for it */
         Kbd.Font = __GH(h)->Font;                   /* Save font as display font */
-        __GUI_WIDGET_Invalidate(Kbd.Handle);        /* Force invalidation */
+        gui_widget_invalidate__(Kbd.Handle);        /* Force invalidation */
     }
-    __GUI_TIMER_StartPeriodic(__GH(Kbd.Handle)->Timer); /* Start periodic timer */
+    gui_timer_startperiodic__(__GH(Kbd.Handle)->Timer); /* Start periodic timer */
     
     return 1;
 }
@@ -602,7 +602,7 @@ uint8_t GUI_KEYBOARD_Hide(void) {
     uint8_t ret;
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __GUI_KEYBOARD_Hide();                    /* Hide keyboard */
+    ret = gui_keyboard_hide__();                    /* Hide keyboard */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -612,7 +612,7 @@ uint8_t GUI_KEYBOARD_Show(GUI_HANDLE_p h) {
     uint8_t ret;
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __GUI_KEYBOARD_Show(h);                   /* Show keyboard */
+    ret = gui_keyboard_show__(h);                   /* Show keyboard */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;

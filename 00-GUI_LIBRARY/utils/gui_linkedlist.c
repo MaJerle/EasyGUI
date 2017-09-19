@@ -267,7 +267,7 @@ uint8_t __GUI_LINKEDLIST_MULTI_FIND_REMOVE(GUI_LinkedListRoot_t* root, void* ele
     __GUI_ASSERTPARAMS(root);                       /* Check input parameters */
     
     for (link = __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(root, NULL); link; link = __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(NULL, link)) {
-        if ((void *)__GUI_LINKEDLIST_MULTI_GetData(link) == element) {  /* Check match */
+        if ((void *)gui_linkedlist_multi_getdata__(link) == element) {  /* Check match */
             __GUI_LINKEDLIST_MULTI_REMOVE_GEN(root, link);  /* Remove element from linked list */
             ret = 1;
         }
@@ -280,17 +280,17 @@ uint8_t __GUI_LINKEDLIST_MULTI_FIND_REMOVE(GUI_LinkedListRoot_t* root, void* ele
 /***                          Widget linkedlist API                          **/
 /******************************************************************************/
 /******************************************************************************/
-void __GUI_LINKEDLIST_WidgetAdd(GUI_HANDLE_ROOT_t* root, GUI_HANDLE_p h) {    
+void gui_linkedlist_widgetadd__(GUI_HANDLE_ROOT_t* root, GUI_HANDLE_p h) {    
     if (root) {
         __GUI_LINKEDLIST_ADD_GEN(&root->RootList, (GUI_LinkedList_t *)h);
     } else {
         __GUI_LINKEDLIST_ADD_GEN(&GUI.Root, (GUI_LinkedList_t *)h);
     }
-    __GUI_LINKEDLIST_WidgetMoveToTop(h);            /* Reset by moving to top */
-    __GUI_LINKEDLIST_WidgetMoveToBottom(h);         /* Reset by moving to bottom with reorder */
+    gui_linkedlist_widgetmovetotop__(h);            /* Reset by moving to top */
+    gui_linkedlist_widgetmovetobottom__(h);         /* Reset by moving to bottom with reorder */
 }
 
-void __GUI_LINKEDLIST_WidgetRemove(GUI_HANDLE_p h) {    
+void gui_linkedlist_widgetremove__(GUI_HANDLE_p h) {    
     if (__GH(h)->Parent) {
         __GUI_LINKEDLIST_REMOVE_GEN(&((GUI_HANDLE_ROOT_t *)__GH(h)->Parent)->RootList, (GUI_LinkedList_t *)h);
     } else {
@@ -298,21 +298,21 @@ void __GUI_LINKEDLIST_WidgetRemove(GUI_HANDLE_p h) {
     }
 }
 
-GUI_Byte __GUI_LINKEDLIST_WidgetMoveUp(GUI_HANDLE_p h) {
+GUI_Byte gui_linkedlist_widgetmoveup__(GUI_HANDLE_p h) {
     if (__GH(h)->Parent) {
         return __GUI_LINKEDLIST_MOVEUP_GEN(&__GHR(__GH(h)->Parent)->RootList, (GUI_LinkedList_t *)h);
     }
     return __GUI_LINKEDLIST_MOVEUP_GEN(&GUI.Root, (GUI_LinkedList_t *)h);
 }
 
-GUI_Byte __GUI_LINKEDLIST_WidgetMoveDown(GUI_HANDLE_p h) {
+GUI_Byte gui_linkedlist_widgetmovedown__(GUI_HANDLE_p h) {
     if (__GH(h)->Parent) {
         return __GUI_LINKEDLIST_MOVEDOWN_GEN(&__GHR(__GH(h)->Parent)->RootList, (GUI_LinkedList_t *)h);
     }
     return __GUI_LINKEDLIST_MOVEDOWN_GEN(&GUI.Root, (GUI_LinkedList_t *)h);
 }
 
-GUI_HANDLE_p __GUI_LINKEDLIST_WidgetGetNext(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h) {
+GUI_HANDLE_p gui_linkedlist_widgetgetnext__(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h) {
     if (!h) {                                       /* Get first widget on list */
         if (parent) {                               /* If parent exists... */
             return (GUI_HANDLE_p)parent->RootList.First;    /* ...get first widget on parent */
@@ -323,7 +323,7 @@ GUI_HANDLE_p __GUI_LINKEDLIST_WidgetGetNext(GUI_HANDLE_ROOT_t* parent, GUI_HANDL
     return (GUI_HANDLE_p)__GH(h)->List.Next;        /* Get next widget of current in linked list */
 }
 
-GUI_HANDLE_p __GUI_LINKEDLIST_WidgetGetPrev(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h) {
+GUI_HANDLE_p gui_linkedlist_widgetgetprev__(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h) {
     if (!h) {                                       /* Get last widget on list */
         if (parent) {                               /* If parent exists... */
             return (GUI_HANDLE_p)parent->RootList.Last; /* ...get last widget on parent */
@@ -341,19 +341,19 @@ GUI_HANDLE_p __GUI_LINKEDLIST_WidgetGetPrev(GUI_HANDLE_ROOT_t* parent, GUI_HANDL
  * 2. Widgets with children support
  * 3. Widgets as dialog base elements
  */
-GUI_Byte __GUI_LINKEDLIST_WidgetMoveToBottom(GUI_HANDLE_p h) {
+GUI_Byte gui_linkedlist_widgetmovetobottom__(GUI_HANDLE_p h) {
     if (!__GH(h)->List.Next) {
         return 0;
     }
     while (__GH(h)->List.Next) {                    /* While device has next element */
-        if (__GUI_WIDGET_IsDialogBase(h)) {         /* Widget is dialog base element */
-            if (!__GUI_LINKEDLIST_WidgetMoveDown(h)) {  /* Move down */
+        if (gui_widget_isdialogbase__(h)) {         /* Widget is dialog base element */
+            if (!gui_linkedlist_widgetmovedown__(h)) {  /* Move down */
                 return 0;
             }
-        } else if (__GUI_WIDGET_AllowChildren(h)) { /* Widget supports children widgets, go to the end of the list if necessary */
-            if (!__GUI_WIDGET_IsDialogBase(__GH(__GH(h)->List.Next))) { /* Go down till dialog base is reached */
+        } else if (gui_widget_allowchildren__(h)) { /* Widget supports children widgets, go to the end of the list if necessary */
+            if (!gui_widget_isdialogbase__(__GH(__GH(h)->List.Next))) { /* Go down till dialog base is reached */
                 if (__GH(h)->ZIndex >= __GH(__GH(h)->List.Next)->ZIndex) {  /* Check if z-index allows move */
-                    if (!__GUI_LINKEDLIST_WidgetMoveDown(h)) {  /* Move down */
+                    if (!gui_linkedlist_widgetmovedown__(h)) {  /* Move down */
                         return 0;
                     }
                 } else {
@@ -363,9 +363,9 @@ GUI_Byte __GUI_LINKEDLIST_WidgetMoveToBottom(GUI_HANDLE_p h) {
                 break;
             }
         } else {                                    /* Our widget does not allow sub widgets */
-            if (!__GUI_WIDGET_AllowChildren(__GH(__GH(h)->List.Next))) {    /* Allow moving down only if next widget does not allow sub widgets */
+            if (!gui_widget_allowchildren__(__GH(__GH(h)->List.Next))) {    /* Allow moving down only if next widget does not allow sub widgets */
                 if (__GH(h)->ZIndex >= __GH(__GH(h)->List.Next)->ZIndex) {  /* Check if z-index allows move */
-                    if (!__GUI_LINKEDLIST_WidgetMoveDown(h)) {  /* Move down */
+                    if (!gui_linkedlist_widgetmovedown__(h)) {  /* Move down */
                         return 0;
                     }
                 } else {
@@ -379,23 +379,23 @@ GUI_Byte __GUI_LINKEDLIST_WidgetMoveToBottom(GUI_HANDLE_p h) {
     return 1;
 }
 
-GUI_Byte __GUI_LINKEDLIST_WidgetMoveToTop(GUI_HANDLE_p h) {
+GUI_Byte gui_linkedlist_widgetmovetotop__(GUI_HANDLE_p h) {
     if (!__GH(h)->List.Prev) {
         return 0;
     }
     while (__GH(h)->List.Prev) {                    /* While device has previous element */
-        if (__GUI_WIDGET_IsDialogBase(h)) {         /* Widget is dialog base element */
-            if (__GUI_WIDGET_IsDialogBase(__GH(__GH(h)->List.Prev))) {  /* If previous widget is dialog base too */
-                if (!__GUI_LINKEDLIST_WidgetMoveUp(h)) {    /* Move up widget */
+        if (gui_widget_isdialogbase__(h)) {         /* Widget is dialog base element */
+            if (gui_widget_isdialogbase__(__GH(__GH(h)->List.Prev))) {  /* If previous widget is dialog base too */
+                if (!gui_linkedlist_widgetmoveup__(h)) {    /* Move up widget */
                     return 0;
                 }
             } else {
                 break;                              /* Stop execution */
             }
-        } else if (__GUI_WIDGET_AllowChildren(h)) { /* If moving widget allows children elements */
-            if (__GUI_WIDGET_AllowChildren(__GH(__GH(h)->List.Prev))) { /* If previous widget allows children too */
+        } else if (gui_widget_allowchildren__(h)) { /* If moving widget allows children elements */
+            if (gui_widget_allowchildren__(__GH(__GH(h)->List.Prev))) { /* If previous widget allows children too */
                 if (__GH(h)->ZIndex <= __GH(__GH(h)->List.Prev)->ZIndex) {  /* Check if z-index allows move */
-                    if (!__GUI_LINKEDLIST_WidgetMoveUp(h)) {    /* Move up */
+                    if (!gui_linkedlist_widgetmoveup__(h)) {    /* Move up */
                         return 0;
                     }
                 } else {
@@ -406,7 +406,7 @@ GUI_Byte __GUI_LINKEDLIST_WidgetMoveToTop(GUI_HANDLE_p h) {
             }
         } else {                                    /* Normal widget */
             if (__GH(h)->ZIndex <= __GH(__GH(h)->List.Prev)->ZIndex) {  /* Check if z-index allows move */
-                if (!__GUI_LINKEDLIST_WidgetMoveUp(h)) {    /* Move up */
+                if (!gui_linkedlist_widgetmoveup__(h)) {    /* Move up */
                     return 0;
                 }
             } else {
@@ -431,13 +431,13 @@ void PrintList(GUI_HANDLE_ROOT_t* root) {
     }
     for (h = (GUI_HANDLE_ROOT_t *)list->First; h; h = h->Handle.List.Next) {
         __GUI_DEBUG("%*d: W: %s; A: 0x%08X; R: %lu; D: %lu\r\n", depth, depth, (const char *)h->Handle.Widget->Name, (unsigned int)h, (unsigned long)!!(h->Handle.Flags & GUI_FLAG_REDRAW), (unsigned long)!!(h->Handle.Flags & GUI_FLAG_REMOVE));
-        if (__GUI_WIDGET_AllowChildren(h)) {
+        if (gui_widget_allowchildren__(h)) {
             PrintList(h);
         }
     }
     depth--;
 }
 
-void __GUI_LINKEDLIST_PrintList(void) {
+void gui_linkedlist_printlist__(void) {
     PrintList(NULL);
 }

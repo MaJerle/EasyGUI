@@ -79,7 +79,7 @@ static const GUI_WIDGET_t Widget = {
 
 /* Reset zoom control on graph */
 static
-void __GUI_GRAPH_Reset(GUI_HANDLE_p h) {
+void gui_graph_reset__(GUI_HANDLE_p h) {
     g->VisibleMaxX = g->MaxX;
     g->VisibleMinX = g->MinX;
     g->VisibleMaxY = g->MaxY;
@@ -88,7 +88,7 @@ void __GUI_GRAPH_Reset(GUI_HANDLE_p h) {
 
 /* Zoom plot */
 static
-void __GUI_GRAPH_Zoom(GUI_HANDLE_p h, float zoom, float xpos, float ypos) {
+void gui_graph_zoom__(GUI_HANDLE_p h, float zoom, float xpos, float ypos) {
     if (xpos < 0 || xpos > 1) { xpos = 0.5; }
     if (ypos < 0 || ypos > 1) { ypos = 0.5; }
            
@@ -115,7 +115,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
             g->MinX = -10;
             g->MaxY = 10;
             g->MinY = -10;
-            __GUI_GRAPH_Reset(h);                   /* Reset plot */
+            gui_graph_reset__(h);                   /* Reset plot */
 
             g->Rows = 8;                            /* Number of rows */
             g->Columns = 10;                        /* Number of columns */
@@ -128,7 +128,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 case CFG_MAX_X: g->MaxX = *(float *)p->Data; break; /* Set max X value to widget */
                 case CFG_MIN_Y: g->MinY = *(float *)p->Data; break; /* Set max X value to widget */
                 case CFG_MAX_Y: g->MaxY = *(float *)p->Data; break; /* Set max X value to widget */
-                case CFG_ZOOM_RESET: __GUI_GRAPH_Reset(h); break;   /* Reset zoom */
+                case CFG_ZOOM_RESET: gui_graph_reset__(h); break;   /* Reset zoom */
                 default: break;
             }
             *(uint8_t *)result = 1;                 /* Save result */
@@ -146,24 +146,24 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
             bb = g->Border[GUI_GRAPH_BORDER_BOTTOM];
             bl = g->Border[GUI_GRAPH_BORDER_LEFT];
             
-            x = __GUI_WIDGET_GetAbsoluteX(h);       /* Get absolute X position */
-            y = __GUI_WIDGET_GetAbsoluteY(h);       /* Get absolute Y position */
-            width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
-            height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
+            x = gui_widget_getabsolutex__(h);       /* Get absolute X position */
+            y = gui_widget_getabsolutey__(h);       /* Get absolute Y position */
+            width = gui_widget_getwidth__(h);       /* Get widget width */
+            height = gui_widget_getheight__(h);     /* Get widget height */
             
-            GUI_DRAW_FilledRectangle(disp, x, y, bl, height, __GUI_WIDGET_GetColor(h, GUI_GRAPH_COLOR_BG));
-            GUI_DRAW_FilledRectangle(disp, x + bl, y, width - bl - br, bt, __GUI_WIDGET_GetColor(h, GUI_GRAPH_COLOR_BG));
-            GUI_DRAW_FilledRectangle(disp, x + bl, y + height - bb, width - bl - br, bb, __GUI_WIDGET_GetColor(h, GUI_GRAPH_COLOR_BG));
-            GUI_DRAW_FilledRectangle(disp, x + width - br, y, br, height, __GUI_WIDGET_GetColor(h, GUI_GRAPH_COLOR_BG));
-            GUI_DRAW_FilledRectangle(disp, x + bl, y + bt, width - bl - br, height - bt - bb, __GUI_WIDGET_GetColor(h, GUI_GRAPH_COLOR_FG));
-            GUI_DRAW_Rectangle(disp, x, y, width, height, __GUI_WIDGET_GetColor(h, GUI_GRAPH_COLOR_BORDER));
+            GUI_DRAW_FilledRectangle(disp, x, y, bl, height, gui_widget_getcolor__(h, GUI_GRAPH_COLOR_BG));
+            GUI_DRAW_FilledRectangle(disp, x + bl, y, width - bl - br, bt, gui_widget_getcolor__(h, GUI_GRAPH_COLOR_BG));
+            GUI_DRAW_FilledRectangle(disp, x + bl, y + height - bb, width - bl - br, bb, gui_widget_getcolor__(h, GUI_GRAPH_COLOR_BG));
+            GUI_DRAW_FilledRectangle(disp, x + width - br, y, br, height, gui_widget_getcolor__(h, GUI_GRAPH_COLOR_BG));
+            GUI_DRAW_FilledRectangle(disp, x + bl, y + bt, width - bl - br, height - bt - bb, gui_widget_getcolor__(h, GUI_GRAPH_COLOR_FG));
+            GUI_DRAW_Rectangle(disp, x, y, width, height, gui_widget_getcolor__(h, GUI_GRAPH_COLOR_BORDER));
             
             /* Draw horizontal lines */
             if (g->Rows) {
                 float step;
                 step = (float)(height - bt - bb) / (float)g->Rows;
                 for (i = 1; i < g->Rows; i++) {
-                    GUI_DRAW_HLine(disp, x + bl, y + bt + i * step, width - bl - br, __GUI_WIDGET_GetColor(h, GUI_GRAPH_COLOR_GRID));
+                    GUI_DRAW_HLine(disp, x + bl, y + bt + i * step, width - bl - br, gui_widget_getcolor__(h, GUI_GRAPH_COLOR_GRID));
                 }
             }
             /* Draw vertical lines */
@@ -171,7 +171,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 float step;
                 step = (float)(width - bl - br) / (float)g->Columns;
                 for (i = 1; i < g->Columns; i++) {
-                    GUI_DRAW_VLine(disp, x + bl + i * step, y + bt, height - bt - bb, __GUI_WIDGET_GetColor(h, GUI_GRAPH_COLOR_GRID));
+                    GUI_DRAW_VLine(disp, x + bl + i * step, y + bt, height - bt - bb, gui_widget_getcolor__(h, GUI_GRAPH_COLOR_GRID));
                 }
             }
             
@@ -205,7 +205,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 
                 /* Draw all plot attached to graph */
                 for (link = __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(&g->Root, 0); link; link = __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(0, link)) {
-                    data = (GUI_GRAPH_DATA_p)__GUI_LINKEDLIST_MULTI_GetData(link);  /* Get data from list */
+                    data = (GUI_GRAPH_DATA_p)gui_linkedlist_multi_getdata__(link);  /* Get data from list */
                     
                     read = data->Ptr;               /* Get start read pointer */
                     write = data->Ptr;              /* Get start write pointer */
@@ -280,12 +280,12 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 x = ts->RelX[0];
                 y = ts->RelY[0];
                 
-                step = (float)(__GUI_WIDGET_GetWidth(h) - g->Border[GUI_GRAPH_BORDER_LEFT] - g->Border[GUI_GRAPH_BORDER_RIGHT]) / (float)(g->VisibleMaxX - g->VisibleMinX);
+                step = (float)(gui_widget_getwidth__(h) - g->Border[GUI_GRAPH_BORDER_LEFT] - g->Border[GUI_GRAPH_BORDER_RIGHT]) / (float)(g->VisibleMaxX - g->VisibleMinX);
                 diff = (float)(x - tX[0]) / step;
                 g->VisibleMinX -= diff;
                 g->VisibleMaxX -= diff;
                 
-                step = (float)(__GUI_WIDGET_GetHeight(h) - g->Border[GUI_GRAPH_BORDER_TOP] - g->Border[GUI_GRAPH_BORDER_BOTTOM]) / (float)(g->VisibleMaxY - g->VisibleMinY);
+                step = (float)(gui_widget_getheight__(h) - g->Border[GUI_GRAPH_BORDER_TOP] - g->Border[GUI_GRAPH_BORDER_BOTTOM]) / (float)(g->VisibleMaxY - g->VisibleMinY);
                 diff = (float)(y - tY[0]) / step;
                 g->VisibleMinY += diff;
                 g->VisibleMaxY += diff;
@@ -296,7 +296,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 GUI_MATH_CenterOfXY(ts->RelX[0], ts->RelY[0], ts->RelX[1], ts->RelY[1], &centerX, &centerY);    /* Calculate center position between points */
                 zoom = ts->Distance / ts->DistanceOld;  /* Calculate zoom value */
                 
-                __GUI_GRAPH_Zoom(h, zoom, (float)centerX / (float)__GUI_WIDGET_GetWidth(h), (float)centerY / (float)__GUI_WIDGET_GetHeight(h));
+                gui_graph_zoom__(h, zoom, (float)centerX / (float)gui_widget_getwidth__(h), (float)centerY / (float)gui_widget_getheight__(h));
 #endif /* GUI_TOUCH_MAX_PRESSES > 1 */
             }
             
@@ -305,15 +305,15 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 tY[i] = ts->RelY[i];                /* Relative Y position on widget */
             }
             
-            __GUI_WIDGET_Invalidate(h);
+            gui_widget_invalidate__(h);
             return 1;
         }
         case GUI_WC_TouchEnd:
             return 1;
 #endif /* GUI_USE_TOUCH */
         case GUI_WC_DblClick:
-            __GUI_GRAPH_Reset(h);                   /* Reset zoom */
-            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
+            gui_graph_reset__(h);                   /* Reset zoom */
+            gui_widget_invalidate__(h);             /* Invalidate widget */
             return 1;
 #if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
         case GUI_WC_Remove: {                       /* When widget is about to be removed */
@@ -324,7 +324,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
              * Go through all data objects in this widget
              */
             for (link = __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(&g->Root, NULL); link; link = __GUI_LINKEDLIST_MULTI_GETNEXT_GEN(0, link)) {
-                data = (GUI_GRAPH_DATA_p)__GUI_LINKEDLIST_MULTI_GetData(link);  /* Get data from list */
+                data = (GUI_GRAPH_DATA_p)gui_linkedlist_multi_getdata__(link);  /* Get data from list */
                 __GUI_LINKEDLIST_MULTI_FIND_REMOVE(&data->Root, h); /* Remove element from linked list with search */
             }
             
@@ -351,12 +351,12 @@ void InvalidateGraphs(GUI_GRAPH_DATA_p data) {
         /**
          * Linked list of graph member in data structure is not on top
          */
-        h = (GUI_HANDLE_p)__GUI_LINKEDLIST_MULTI_GetData(link); /* Get data from linked list object */
+        h = (GUI_HANDLE_p)gui_linkedlist_multi_getdata__(link); /* Get data from linked list object */
         
         /**
          * Invalidate each object attached to this data graph
          */
-        __GUI_WIDGET_Invalidate(h);
+        gui_widget_invalidate__(h);
     }
 }
 #endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
@@ -367,12 +367,12 @@ void InvalidateGraphs(GUI_GRAPH_DATA_p data) {
 /******************************************************************************/
 /******************************************************************************/
 GUI_HANDLE_p GUI_GRAPH_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
-    return (GUI_HANDLE_p)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+    return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
 uint8_t GUI_GRAPH_SetColor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return __GUI_WIDGET_SetColor(h, (uint8_t)index, color); /* Set color */
+    return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }
 
 uint8_t GUI_GRAPH_AttachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
@@ -421,34 +421,34 @@ uint8_t GUI_GRAPH_DetachData(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
 
 uint8_t GUI_GRAPH_SetMinX(GUI_HANDLE_p h, float v) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return __GUI_WIDGET_SetParam(h, CFG_MIN_X, &v, 1, 0);   /* Set parameter */
+    return gui_widget_setparam__(h, CFG_MIN_X, &v, 1, 0);   /* Set parameter */
 }
 
 uint8_t GUI_GRAPH_SetMaxX(GUI_HANDLE_p h, float v) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return __GUI_WIDGET_SetParam(h, CFG_MAX_X, &v, 1, 0);   /* Set parameter */
+    return gui_widget_setparam__(h, CFG_MAX_X, &v, 1, 0);   /* Set parameter */
 }
 
 uint8_t GUI_GRAPH_SetMinY(GUI_HANDLE_p h, float v) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return __GUI_WIDGET_SetParam(h, CFG_MIN_Y, &v, 1, 0);   /* Set parameter */
+    return gui_widget_setparam__(h, CFG_MIN_Y, &v, 1, 0);   /* Set parameter */
 }
 
 uint8_t GUI_GRAPH_SetMaxY(GUI_HANDLE_p h, float v) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return __GUI_WIDGET_SetParam(h, CFG_MAX_Y, &v, 1, 0);   /* Set parameter */
+    return gui_widget_setparam__(h, CFG_MAX_Y, &v, 1, 0);   /* Set parameter */
 }
 
 uint8_t GUI_GRAPH_ZoomReset(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return __GUI_WIDGET_SetParam(h, CFG_ZOOM_RESET, NULL, 1, 0);  /* Set parameter */
+    return gui_widget_setparam__(h, CFG_ZOOM_RESET, NULL, 1, 0);  /* Set parameter */
 }
 
 uint8_t GUI_GRAPH_Zoom(GUI_HANDLE_p h, float zoom, float x, float y) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    __GUI_GRAPH_Zoom(h, zoom, x, y);                /* Reset zoom */
+    gui_graph_zoom__(h, zoom, x, y);                /* Reset zoom */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;

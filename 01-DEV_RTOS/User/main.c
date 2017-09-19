@@ -281,7 +281,7 @@ user_thread(void const * arg) {
             switch (GUI_STRING_UNICODE_Decode(&s, ch)) {
                 case UNICODE_OK:
                     if (ch == 'l') {
-                        __GUI_LINKEDLIST_PrintList();
+                        gui_linkedlist_printlist__();
                         break;
                     }
                     if (ch == 'b') {

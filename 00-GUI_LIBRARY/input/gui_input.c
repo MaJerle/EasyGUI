@@ -77,14 +77,14 @@ uint8_t GUI_INPUT_TouchAdd(GUI_TouchData_t* ts) {
     return ret;
 }
 
-uint8_t __GUI_INPUT_TouchRead(GUI_TouchData_t* ts) {
+uint8_t gui_input_touchread__(GUI_TouchData_t* ts) {
     if (GUI_BUFFER_GetFull(&TSBuffer) >= sizeof(*ts)) {
         return (uint8_t)GUI_BUFFER_Read(&TSBuffer, ts, sizeof(*ts)); /* Read data fro mbuffer */
     }
     return 0;
 }
 
-uint8_t __GUI_INPUT_TouchAvailable(void) {
+uint8_t gui_input_touchavailable__(void) {
     return GUI_BUFFER_GetFull(&TSBuffer) > 0;       /* Check if any available touch */
 }
 #endif /* GUI_USE_TOUCH */
@@ -104,7 +104,7 @@ uint8_t GUI_INPUT_KeyAdd(GUI_KeyboardData_t* kb) {
     return ret;
 }
 
-uint8_t __GUI_INPUT_KeyRead(GUI_KeyboardData_t* kb) {
+uint8_t gui_input_keyread__(GUI_KeyboardData_t* kb) {
     if (GUI_BUFFER_GetFull(&KBBuffer) >= sizeof(*kb)) {
         return (uint8_t)GUI_BUFFER_Read(&KBBuffer, kb, sizeof(*kb)); /* Read data fro mbuffer */
     }
@@ -112,7 +112,7 @@ uint8_t __GUI_INPUT_KeyRead(GUI_KeyboardData_t* kb) {
 }
 #endif /* GUI_USE_KEYBOARD */
 
-void __GUI_INPUT_Init(void) {
+void gui_input_init__(void) {
 #if GUI_USE_TOUCH
     GUI_BUFFER_Init(&TSBuffer, sizeof(TSBufferData), TSBufferData);
 #endif /* GUI_USE_TOUCH */

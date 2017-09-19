@@ -60,10 +60,10 @@ __CheckDispClipping(GUI_HANDLE_p h) {
     GUI_Dim_t wi, hi;
     
     /* Set widget itself first */
-    x = __GUI_WIDGET_GetAbsoluteX(h);
-    y = __GUI_WIDGET_GetAbsoluteY(h);
-    wi = __GUI_WIDGET_GetWidth(h);
-    hi = __GUI_WIDGET_GetHeight(h);
+    x = gui_widget_getabsolutex__(h);
+    y = gui_widget_getabsolutey__(h);
+    wi = gui_widget_getwidth__(h);
+    hi = gui_widget_getheight__(h);
     
     memcpy(&GUI.DisplayTemp, &GUI.Display, sizeof(GUI.DisplayTemp));
     if (GUI.DisplayTemp.X1 == (GUI_iDim_t)0x7FFF)   { GUI.DisplayTemp.X1 = x; }
@@ -78,10 +78,10 @@ __CheckDispClipping(GUI_HANDLE_p h) {
     
     /* Check that widget is not drawn over any of parent widgets because of scrolling */
     for (; h; h = __GH(h)->Parent) {
-        x = __GUI_WIDGET_GetParentAbsoluteX(h);     /* Parent absolute X position for inner widgets */
-        y = __GUI_WIDGET_GetParentAbsoluteY(h);     /* Parent absolute Y position for inner widgets */
-        wi = __GUI_WIDGET_GetParentInnerWidth(h);   /* Get parent inner width */
-        hi = __GUI_WIDGET_GetParentInnerHeight(h);  /* Get parent inner height */
+        x = gui_widget_getparentabsolutex__(h);     /* Parent absolute X position for inner widgets */
+        y = gui_widget_getparentabsolutey__(h);     /* Parent absolute Y position for inner widgets */
+        wi = gui_widget_getparentinnerwidth__(h);   /* Get parent inner width */
+        hi = gui_widget_getparentinnerheight__(h);  /* Get parent inner height */
         
         if (GUI.DisplayTemp.X1 < x)         { GUI.DisplayTemp.X1 = x; }
         if (GUI.DisplayTemp.X2 > x + wi)    { GUI.DisplayTemp.X2 = x + wi; }
@@ -98,19 +98,19 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
     static uint32_t level = 0;
 
     /* Go through all elements of parent */
-    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, NULL); h; 
-            h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
-        if (!__GUI_WIDGET_IsVisible(h)) {           /* Check if visible */
-            __GUI_WIDGET_ClrFlag(h, GUI_FLAG_REDRAW);   /* Clear flag to be sure */
+    for (h = gui_linkedlist_widgetgetnext__((GUI_HANDLE_ROOT_t *)parent, NULL); h; 
+            h = gui_linkedlist_widgetgetnext__(NULL, h)) {
+        if (!gui_widget_isvisible__(h)) {           /* Check if visible */
+            gui_widget_clrflag__(h, GUI_FLAG_REDRAW);   /* Clear flag to be sure */
             continue;                               /* Ignore hidden elements */
         }
-        if (__GUI_WIDGET_IsInsideClippingRegion(h)) {   /* If widget is inside clipping region */
+        if (gui_widget_isinsideclippingregion__(h)) {   /* If widget is inside clipping region */
             /* Draw main widget if required */
-            if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_REDRAW)) { /* Check if redraw required */
+            if (gui_widget_getflag__(h, GUI_FLAG_REDRAW)) { /* Check if redraw required */
                 GUI_Layer_t* layerPrev = GUI.LCD.DrawingLayer;  /* Save drawing layer */
                 uint8_t transparent = 0;
                 
-                __GUI_WIDGET_ClrFlag(h, GUI_FLAG_REDRAW);   /* Clear flag for drawing on widget */
+                gui_widget_clrflag__(h, GUI_FLAG_REDRAW);   /* Clear flag for drawing on widget */
                 
                 /**
                  * Prepare clipping region for this widget drawing
@@ -120,7 +120,7 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
                 /**
                  * Check transparency and check if blending function exists to merge layers later together
                  */
-                if (__GUI_WIDGET_IsTransparent(h) && GUI.LL.CopyBlend) {
+                if (gui_widget_istransparent__(h) && GUI.LL.CopyBlend) {
                     GUI_iDim_t width = GUI.DisplayTemp.X2 - GUI.DisplayTemp.X1;
                     GUI_iDim_t height = GUI.DisplayTemp.Y2 - GUI.DisplayTemp.Y1;
                     
@@ -144,16 +144,16 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
                 /**
                  * Draw widget itself normally, don't care on layer offset and size
                  */
-                __GUI_WIDGET_Callback(h, GUI_WC_Draw, &GUI.DisplayTemp, NULL);  /* Draw widget */
+                gui_widget_callback__(h, GUI_WC_Draw, &GUI.DisplayTemp, NULL);  /* Draw widget */
                 
                 /* Check if there are children widgets in this widget */
-                if (__GUI_WIDGET_AllowChildren(h)) {
+                if (gui_widget_allowchildren__(h)) {
                     GUI_HANDLE_p tmp;
                     
                     /* Set drawing flag to all widgets  first... */
-                    for (tmp = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)h, NULL); tmp; 
-                            tmp = __GUI_LINKEDLIST_WidgetGetNext(NULL, tmp)) {
-                        __GUI_WIDGET_SetFlag(tmp, GUI_FLAG_REDRAW); /* Set redraw bit to all children elements */
+                    for (tmp = gui_linkedlist_widgetgetnext__((GUI_HANDLE_ROOT_t *)h, NULL); tmp; 
+                            tmp = gui_linkedlist_widgetgetnext__(NULL, tmp)) {
+                        gui_widget_setflag__(tmp, GUI_FLAG_REDRAW); /* Set redraw bit to all children elements */
                     }
                     /* ...now call function for actual redrawing process */
                     level++;
@@ -170,7 +170,7 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
                         (void *)GUI.LCD.DrawingLayer->StartAddress, 
                         (void *)(layerPrev->StartAddress + 
                             GUI.LCD.PixelSize * (layerPrev->Width * (GUI.LCD.DrawingLayer->OffsetY - layerPrev->OffsetY) + (GUI.LCD.DrawingLayer->OffsetX - layerPrev->OffsetX))),
-                        __GUI_WIDGET_GetTransparency(h), 0xFF,
+                        gui_widget_gettransparency__(h), 0xFF,
                         GUI.LCD.DrawingLayer->Width, GUI.LCD.DrawingLayer->Height,
                         0, layerPrev->Width - GUI.LCD.DrawingLayer->Width
                     );
@@ -182,7 +182,7 @@ uint32_t __RedrawWidgets(GUI_HANDLE_p parent) {
             /**
              * Check if any widget from children should be redrawn
              */
-            } else if (__GUI_WIDGET_AllowChildren(h)) {
+            } else if (gui_widget_allowchildren__(h)) {
                 cnt += __RedrawWidgets(h);          /* Redraw children widgets */
             }
         }
@@ -256,7 +256,7 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
                  * then we can use click events also after touch move (for example, button is that widget) where in
                  * some cases, click event should not be processed after touch move (slider, dropdown, etc)
                  */
-                if (ts->TS.Status && GUI.ActiveWidget && !__GUI_WIDGET_GetFlag(GUI.ActiveWidget, GUI_FLAG_TOUCH_MOVE)) {
+                if (ts->TS.Status && GUI.ActiveWidget && !gui_widget_getflag__(GUI.ActiveWidget, GUI_FLAG_TOUCH_MOVE)) {
                     Time = ts->TS.Time;             /* Get start time of this touch */
                     x[i] = ts->RelX[0];             /* Update X value */
                     y[i] = ts->RelY[0];             /* Update Y value */
@@ -342,29 +342,29 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
     __GUI_TouchStatus_t tStat = touchCONTINUE;
     
     /* Check touches if any matches, go reverse on linked list */
-    for (h = __GUI_LINKEDLIST_WidgetGetPrev((GUI_HANDLE_ROOT_t *)parent, NULL); h; h = __GUI_LINKEDLIST_WidgetGetPrev(NULL, h)) {
-        if (__GUI_WIDGET_IsHidden(h)) {             /* Ignore hidden widget */
+    for (h = gui_linkedlist_widgetgetprev__((GUI_HANDLE_ROOT_t *)parent, NULL); h; h = gui_linkedlist_widgetgetprev__(NULL, h)) {
+        if (gui_widget_ishidden__(h)) {             /* Ignore hidden widget */
             continue;
         }
         
         if (deep == 1) {                            /* On base elements list = children of base window element */
-            if (__GUI_WIDGET_IsDialogBase(h)) {     /* We found dialog element */
+            if (gui_widget_isdialogbase__(h)) {     /* We found dialog element */
                 dialogOnly = 1;                     /* Check only widgets which are dialog based */
             }
         }
         
         /* When we should only check dialogs and previous element is not dialog anymore */
-        if (dialogOnly && !__GUI_WIDGET_IsDialogBase(h)) {
+        if (dialogOnly && !gui_widget_isdialogbase__(h)) {
             break;
         }
         
         /* Check for keyboard mode */
-        if (__GUI_WIDGET_GetId(h) == GUI_ID_KEYBOARD_BASE) {
+        if (gui_widget_getid__(h) == GUI_ID_KEYBOARD_BASE) {
             isKeyboard = 1;                         /* Set keyboard mode as 1 */
         }
         
         /* Check children elements first */
-        if (__GUI_WIDGET_AllowChildren(h)) {        /* If children widgets are allowed */
+        if (gui_widget_allowchildren__(h)) {        /* If children widgets are allowed */
             deep++;                                 /* Go deeper in level */
             tStat = __ProcessTouch(touch, h);       /* Process touch on widget elements first */
             deep--;                                 /* Go back to normal level */
@@ -380,12 +380,12 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
             if (touch->TS.X[0] >= GUI.DisplayTemp.X1 && touch->TS.X[0] <= GUI.DisplayTemp.X2 && 
                 touch->TS.Y[0] >= GUI.DisplayTemp.Y1 && touch->TS.Y[0] <= GUI.DisplayTemp.Y2) {
                 __SetRelativeCoordinate(touch,      /* Set relative coordinate */
-                    __GUI_WIDGET_GetAbsoluteX(h), __GUI_WIDGET_GetAbsoluteY(h), 
-                    __GUI_WIDGET_GetWidth(h), __GUI_WIDGET_GetHeight(h)
+                    gui_widget_getabsolutex__(h), gui_widget_getabsolutey__(h), 
+                    gui_widget_getwidth__(h), gui_widget_getheight__(h)
                 ); 
             
                 /* Call touch start callback to see if widget accepts touches */
-                __GUI_WIDGET_Callback(h, GUI_WC_TouchStart, touch, &tStat);
+                gui_widget_callback__(h, GUI_WC_TouchStart, touch, &tStat);
                 if (tStat == touchCONTINUE) {       /* Check result status */
                     tStat = touchHANDLED;           /* If command is processed, touchCONTINUE can't work */
                 }
@@ -394,7 +394,7 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
                  * Move widget down on parent linked list and do the same with all of its parents,
                  * no matter of touch focus or not
                  */
-                __GUI_WIDGET_MoveDownTree(h);
+                gui_widget_movedowntree__(h);
                 
                 if (tStat == touchHANDLED) {        /* Touch handled for widget completely */
                     /**
@@ -412,7 +412,7 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
                      * Invalidate actual handle object
                      * Already invalidated in __GUI_ACTIVE_SET function
                      */
-                    //__GUI_WIDGET_Invalidate(h);
+                    //gui_widget_invalidate__(h);
                 } else {                            /* Touch handled with no focus */
                     /**
                      * When touch was handled without focus,
@@ -427,7 +427,7 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
         }
         
         /* Check for keyboard mode */
-        if (__GUI_WIDGET_GetId(h) == GUI_ID_KEYBOARD_BASE) {
+        if (gui_widget_getid__(h) == GUI_ID_KEYBOARD_BASE) {
             isKeyboard = 0;                         /* Set keyboard mode as 1 */
         }
         
@@ -440,9 +440,9 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
 
 #define __ProcessAfterTouchEventsThread() do {\
     if (result != 0) {                  /* Valid event occurred */\
-        uint8_t ret = __GUI_WIDGET_Callback(GUI.ActiveWidget, result, &GUI.Touch, NULL);\
+        uint8_t ret = gui_widget_callback__(GUI.ActiveWidget, result, &GUI.Touch, NULL);\
         if (result == GUI_WC_DblClick && !ret) {    /* If double click was not recorded, proceed with normal click again */\
-            __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_Click, &GUI.Touch, NULL);    /* Check for normal click now */\
+            gui_widget_callback__(GUI.ActiveWidget, GUI_WC_Click, &GUI.Touch, NULL);    /* Check for normal click now */\
         }\
     }\
 } while (0)
@@ -451,16 +451,16 @@ __GUI_TouchStatus_t __ProcessTouch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent
  * \brief           Process touch inputs
  */
 static void
-__GUI_Process_Touch(void) {
+gui_process_touch__(void) {
     __GUI_TouchStatus_t tStat;
     GUI_WC_t result;
     
-    if (__GUI_INPUT_TouchAvailable()) {             /* Check if any touch available */
-        while (__GUI_INPUT_TouchRead(&GUI.Touch.TS)) {  /* Process all touch events possible */
+    if (gui_input_touchavailable__()) {             /* Check if any touch available */
+        while (gui_input_touchread__(&GUI.Touch.TS)) {  /* Process all touch events possible */
             if (GUI.ActiveWidget && GUI.Touch.TS.Status) {  /* Check active widget for touch and pressed status */
                 __SetRelativeCoordinate(&GUI.Touch, /* Set relative touch (for widget) from current touch */
-                    __GUI_WIDGET_GetAbsoluteX(GUI.ActiveWidget), __GUI_WIDGET_GetAbsoluteY(GUI.ActiveWidget), 
-                    __GUI_WIDGET_GetWidth(GUI.ActiveWidget), __GUI_WIDGET_GetHeight(GUI.ActiveWidget)
+                    gui_widget_getabsolutex__(GUI.ActiveWidget), gui_widget_getabsolutey__(GUI.ActiveWidget), 
+                    gui_widget_getwidth__(GUI.ActiveWidget), gui_widget_getheight__(GUI.ActiveWidget)
                 );
             }
             
@@ -472,14 +472,14 @@ __GUI_Process_Touch(void) {
             if (GUI.Touch.TS.Status && GUI.TouchOld.TS.Status) {
                 if (GUI.ActiveWidget) {             /* If active widget exists */
                     if (GUI.Touch.TS.Count == GUI.TouchOld.TS.Count) {
-                        uint8_t result = __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchMove, &GUI.Touch, &tStat); /* The same amount of touch events currently */
+                        uint8_t result = gui_widget_callback__(GUI.ActiveWidget, GUI_WC_TouchMove, &GUI.Touch, &tStat); /* The same amount of touch events currently */
                         if (result) {               /* Check if touch move processed */
-                            __GUI_WIDGET_SetFlag(GUI.ActiveWidget, GUI_FLAG_TOUCH_MOVE);    /* Touch move has been processed */
+                            gui_widget_setflag__(GUI.ActiveWidget, GUI_FLAG_TOUCH_MOVE);    /* Touch move has been processed */
                         } else {
-                            __GUI_WIDGET_ClrFlag(GUI.ActiveWidget, GUI_FLAG_TOUCH_MOVE);    /* Touch move has not been processed */
+                            gui_widget_clrflag__(GUI.ActiveWidget, GUI_FLAG_TOUCH_MOVE);    /* Touch move has not been processed */
                         }
                     } else {
-                        __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchStart, &GUI.Touch, &tStat); /* New amount of touch elements happened */
+                        gui_widget_callback__(GUI.ActiveWidget, GUI_WC_TouchStart, &GUI.Touch, &tStat); /* New amount of touch elements happened */
                     }
                 }
             }
@@ -510,7 +510,7 @@ __GUI_Process_Touch(void) {
              */
             if (!GUI.Touch.TS.Status && GUI.TouchOld.TS.Status) {
                 if (GUI.ActiveWidget) {             /* Check if active widget */
-                    __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_TouchEnd, &GUI.Touch, &tStat);   /* Process callback function */
+                    gui_widget_callback__(GUI.ActiveWidget, GUI_WC_TouchEnd, &GUI.Touch, &tStat);   /* Process callback function */
                     __GUI_WIDGET_ACTIVE_CLEAR();    /* Clear active widget */
                 }
             }
@@ -529,30 +529,30 @@ __GUI_Process_Touch(void) {
  * \brief           Process reads of keyboard
  */
 static void
-__GUI_Process_Keyboard(void) {
+gui_process_keyboard__(void) {
     __GUI_KeyboardData_t key;
     __GUI_KeyboardStatus_t kStat;
     
-    while (__GUI_INPUT_KeyRead(&key.KB)) {          /* Read all keyboard entires */
+    while (gui_input_keyread__(&key.KB)) {          /* Read all keyboard entires */
         if (GUI.FocusedWidget) {                    /* Check if any widget is in focus already */
             kStat = keyCONTINUE;
-            __GUI_WIDGET_Callback(GUI.FocusedWidget, GUI_WC_KeyPress, &key, &kStat);
+            gui_widget_callback__(GUI.FocusedWidget, GUI_WC_KeyPress, &key, &kStat);
             if (kStat != keyHANDLED) {
                 if (key.KB.Keys[0] == GUI_KEY_TAB) {/* Tab key pressed, set next widget as focused */
-                    GUI_HANDLE_p h = __GUI_LINKEDLIST_WidgetGetNext(NULL, GUI.FocusedWidget);   /* Get next widget if possible */
-                    if (h && __GUI_WIDGET_IsHidden(h)) {    /* Ignore hidden widget */
+                    GUI_HANDLE_p h = gui_linkedlist_widgetgetnext__(NULL, GUI.FocusedWidget);   /* Get next widget if possible */
+                    if (h && gui_widget_ishidden__(h)) {    /* Ignore hidden widget */
                         h = 0;
                     }
                     if (!h) {                       /* There is no next widget */
-                        for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)__GH(GUI.FocusedWidget)->Parent, NULL); 
-                            h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
-                            if (__GUI_WIDGET_IsVisible(h)) {    /* Check if widget is visible */
+                        for (h = gui_linkedlist_widgetgetnext__((GUI_HANDLE_ROOT_t *)__GH(GUI.FocusedWidget)->Parent, NULL); 
+                            h; h = gui_linkedlist_widgetgetnext__(NULL, h)) {
+                            if (gui_widget_isvisible__(h)) {    /* Check if widget is visible */
                                 break;
                             }
                         }
                     }
                     if (h) {                        /* We have next widget */
-                        __GUI_LINKEDLIST_WidgetMoveToBottom(h); /* Set widget to the down of list */
+                        gui_linkedlist_widgetmovetobottom__(h); /* Set widget to the down of list */
                         __GUI_WIDGET_FOCUS_SET(h);  /* Set focus to new widget */
                     }
                 }
@@ -567,7 +567,7 @@ __GUI_Process_Keyboard(void) {
  * \brief           Process redraw of all widgets
  */
 static void
-__GUI_Process_Redraw(void) {
+gui_process_redraw__(void) {
     uint32_t time;
     GUI_Layer_t* active = GUI.LCD.ActiveLayer;
     GUI_Layer_t* drawing = GUI.LCD.DrawingLayer;
@@ -684,9 +684,9 @@ GUI_Result_t GUI_Init(void) {
         return guiERROR;
     }
     
-    __GUI_INPUT_Init();                             /* Init input devices */
+    gui_input_init__();                             /* Init input devices */
     GUI.Initialized = 1;                            /* GUI is initialized */
-    __GUI_WIDGET_Init();                            /* Init widgets */
+    gui_widget_init__();                            /* Init widgets */
     
 #if GUI_OS
     /* Create graphical thread */
@@ -700,7 +700,7 @@ int32_t GUI_Process(void) {
 #if GUI_OS
     gui_mbox_msg_t* msg;
     uint32_t time;
-    uint32_t tmr_cnt = __GUI_TIMER_GetActiveCount();    /* Get number of active timers in system */
+    uint32_t tmr_cnt = gui_timer_getactivecount__();    /* Get number of active timers in system */
     
     time = gui_sys_mbox_get(&GUI.OS.mbox, (void **)&msg, tmr_cnt ? 10 : 0); /* Get value from message queue */
     __GUI_UNUSED(time);                             /* Unused variable */
@@ -712,14 +712,14 @@ int32_t GUI_Process(void) {
      * Periodically process everything
      */
 #if GUI_USE_TOUCH
-    __GUI_Process_Touch();                          /* Process touch inputs */
+    gui_process_touch__();                          /* Process touch inputs */
 #endif /* GUI_USE_TOUCH */
 #if GUI_USE_KEYBOARD
-    __GUI_Process_Keyboard();                       /* Process keyboard inputs */
+    gui_process_keyboard__();                       /* Process keyboard inputs */
 #endif /* GUI_USE_KEYBOARD */
-    __GUI_TIMER_Process();                          /* Process all timers */
-    __GUI_WIDGET_ExecuteRemove();                   /* Delete widgets */
-    __GUI_Process_Redraw();                         /* Redraw widgets */
+    gui_timer_process__();                          /* Process all timers */
+    gui_widget_executeremove__();                   /* Delete widgets */
+    gui_process_redraw__();                         /* Redraw widgets */
     
     __GUI_SYS_UNPROTECT();                          /* Release protection */
     

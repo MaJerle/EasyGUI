@@ -118,7 +118,7 @@ int16_t __NumberOfEntriesPerPage(GUI_HANDLE_p h) {
     int16_t res = 0;
     if (__GH(h)->Font) {                            /* Font is responsible for this setup */
         GUI_Dim_t height = __ItemHeight(h, 0);      /* Get item height */
-        res = (__GUI_WIDGET_GetHeight(h) - height) / height;
+        res = (gui_widget_getheight__(h) - height) / height;
     }
     return res;
 }
@@ -133,14 +133,14 @@ void __Slide(GUI_HANDLE_p h, int16_t dir) {
         } else {
             o->VisibleStartIndex += dir;
         }
-        __GUI_WIDGET_Invalidate(h);
+        gui_widget_invalidate__(h);
     } else if (dir > 0) {
         if ((o->VisibleStartIndex + dir) > (o->Count - mPP - 1)) {  /* Slide elements down */
             o->VisibleStartIndex = o->Count - mPP;
         } else {
             o->VisibleStartIndex += dir;
         }
-        __GUI_WIDGET_Invalidate(h);
+        gui_widget_invalidate__(h);
     }
 }
 
@@ -149,7 +149,7 @@ static
 void __SetSelection(GUI_HANDLE_p h, int16_t selected) {
     if (o->Selected != selected) {                  /* Set selected value */
         o->Selected = selected;
-        __GUI_WIDGET_Callback(h, GUI_WC_SelectionChanged, NULL, NULL);  /* Notify about selection changed */
+        gui_widget_callback__(h, GUI_WC_SelectionChanged, NULL, NULL);  /* Notify about selection changed */
     }                         
 }
 
@@ -162,14 +162,14 @@ void __IncSelection(GUI_HANDLE_p h, int16_t dir) {
         } else {
             __SetSelection(h, o->Selected + dir);
         }
-        __GUI_WIDGET_Invalidate(h);
+        gui_widget_invalidate__(h);
     } else if (dir > 0) {
         if ((o->Selected + dir) > (o->Count - 1)) { /* Slide elements down */
             __SetSelection(h, o->Count - 1);
         } else {
             __SetSelection(h, o->Selected + dir);
         }
-        __GUI_WIDGET_Invalidate(h);
+        gui_widget_invalidate__(h);
     }
 }
 
@@ -220,24 +220,24 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             GUI_Dim_t x, y, width, height;
             uint16_t i;
             GUI_Dim_t itemHeight;
-            uint8_t is3D = __GUI_WIDGET_Is3D(h);    /* Is 3D mode enabled */
+            uint8_t is3D = gui_widget_is3d__(h);    /* Is 3D mode enabled */
             
             GUI_LISTVIEW_ROW_t* row;
             GUI_LISTVIEW_ITEM_t* item;
 
-            x = __GUI_WIDGET_GetAbsoluteX(h);       /* Get absolute X coordinate */
-            y = __GUI_WIDGET_GetAbsoluteY(h);       /* Get absolute Y coordinate */
-            width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
-            height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
+            x = gui_widget_getabsolutex__(h);       /* Get absolute X coordinate */
+            y = gui_widget_getabsolutey__(h);       /* Get absolute Y coordinate */
+            width = gui_widget_getwidth__(h);       /* Get widget width */
+            height = gui_widget_getheight__(h);     /* Get widget height */
             
             __CheckValues(h);                       /* Check values if size changed */
             
             if (is3D) {
                 GUI_DRAW_Rectangle3D(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
-                GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, __GUI_WIDGET_GetColor(h, GUI_LISTVIEW_COLOR_BG));
+                GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_BG));
             } else {
-                GUI_DRAW_Rectangle(disp, x, y, width, height, __GUI_WIDGET_GetColor(h, GUI_LISTVIEW_COLOR_BORDER));
-                GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, width - 2, height - 2, __GUI_WIDGET_GetColor(h, GUI_LISTVIEW_COLOR_BG));
+                GUI_DRAW_Rectangle(disp, x, y, width, height, gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_BORDER));
+                GUI_DRAW_FilledRectangle(disp, x + 1, y + 1, width - 2, height - 2, gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_BG));
             }
 
             
@@ -292,13 +292,13 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                         f.Width = o->Cols[i]->Width - 6;    /* Set width */
                         f.X = xTmp + 3;             /* Set offset */
                     }
-                    GUI_DRAW_WriteText(disp, __GUI_WIDGET_GetFont(h), o->Cols[i]->Text, &f);
+                    GUI_DRAW_WriteText(disp, gui_widget_getfont__(h), o->Cols[i]->Text, &f);
                     xTmp += o->Cols[i]->Width;      /* Increase X value */
                 }
                 f.Y += itemHeight;                  /* Go to next line */
                 
                 /* Draw all rows and entry elements */           
-                if (__GH(h)->Font && __GUI_LINKEDLIST_HasEntries(&__GL(h)->Root)) { /* Is first set? */
+                if (__GH(h)->Font && gui_linkedlist_hasentries__(&__GL(h)->Root)) { /* Is first set? */
                     uint16_t index = 0;             /* Start index */
                     GUI_iDim_t tmp;
                     
@@ -313,10 +313,10 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                             continue;
                         }               
                         if (index == __GL(h)->Selected) {
-                            GUI_DRAW_FilledRectangle(disp, x + 2, f.Y, width - 2, __GUI_MIN(f.Height, itemHeight), __GUI_WIDGET_IsFocused(h) ? __GUI_WIDGET_GetColor(h, GUI_LISTVIEW_COLOR_SEL_FOC_BG) : __GUI_WIDGET_GetColor(h, GUI_LISTVIEW_COLOR_SEL_NOFOC_BG));
-                            f.Color1 = __GUI_WIDGET_IsFocused(h) ? __GUI_WIDGET_GetColor(h, GUI_LISTVIEW_COLOR_SEL_FOC) : __GUI_WIDGET_GetColor(h, GUI_LISTVIEW_COLOR_SEL_NOFOC);
+                            GUI_DRAW_FilledRectangle(disp, x + 2, f.Y, width - 2, __GUI_MIN(f.Height, itemHeight), gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_SEL_FOC_BG) : gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_SEL_NOFOC_BG));
+                            f.Color1 = gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_SEL_FOC) : gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_SEL_NOFOC);
                         } else {
-                            f.Color1 = __GUI_WIDGET_GetColor(h, GUI_LISTVIEW_COLOR_TEXT);
+                            f.Color1 = gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_TEXT);
                         }
                         xTmp = x + 2;
                         for (i = 0, item = (GUI_LISTVIEW_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(&row->Root, 0); item && i < o->ColsCount; item = (GUI_LISTVIEW_ITEM_t *)__GUI_LINKEDLIST_GETNEXT_GEN(0, (GUI_LinkedList_t *)item), i++) {
@@ -324,7 +324,7 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                                 f.Width = o->Cols[i]->Width - 6;    /* Set width */
                                 f.Color1Width = GUI.LCD.Width;  /* Use the same color for entire width */
                                 f.X = xTmp + 3;     /* Set offset */
-                                GUI_DRAW_WriteText(disp, __GUI_WIDGET_GetFont(h), item->Text, &f);
+                                GUI_DRAW_WriteText(disp, gui_widget_getfont__(h), item->Text, &f);
                             }
                             xTmp += o->Cols[i]->Width;  /* Increase X value */
                         }
@@ -404,7 +404,7 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                             o->Cols[i]->Width -= diff;  /* Set new width for difference */
                         }
                         tX = ts->RelX[0];           /* Set new start X position for relative calculation */
-                        __GUI_WIDGET_Invalidate(h); /* Invalidate widget */
+                        gui_widget_invalidate__(h); /* Invalidate widget */
                     }
                 }
             }
@@ -416,8 +416,8 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             uint8_t handled = 0;
             uint16_t itemHeight = __ItemHeight(h, NULL);    /* Get element height */
             
-            GUI_Dim_t width = __GUI_WIDGET_GetWidth(h); /* Get widget widget */
-            GUI_Dim_t height = __GUI_WIDGET_GetHeight(h);   /* Get widget height */
+            GUI_Dim_t width = gui_widget_getwidth__(h); /* Get widget widget */
+            GUI_Dim_t height = gui_widget_getheight__(h);   /* Get widget height */
             
             if (o->Flags & GUI_FLAG_LISTVIEW_SLIDER_ON) {
                 if (ts->RelX[0] > (width - o->SliderWidth)) {   /* Touch is inside slider */
@@ -436,7 +436,7 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                     tmpSelected = (ts->RelY[0] - itemHeight) / itemHeight;  /* Get temporary selected index */
                     if ((o->VisibleStartIndex + tmpSelected) <= o->Count) {
                         __SetSelection(h, o->VisibleStartIndex + tmpSelected);
-                        __GUI_WIDGET_Invalidate(h); /* Choose new selection */
+                        gui_widget_invalidate__(h); /* Choose new selection */
                     }
                     handled = 1;
                 }
@@ -490,13 +490,13 @@ uint8_t GUI_LISTVIEW_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /******************************************************************************/
 /******************************************************************************/
 GUI_HANDLE_p GUI_LISTVIEW_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
-    return (GUI_HANDLE_p)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+    return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
 uint8_t GUI_LISTVIEW_SetColor(GUI_HANDLE_p h, GUI_LISTVIEW_COLOR_t index, GUI_Color_t color) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set color */
+    ret = gui_widget_setcolor__(h, (uint8_t)index, color);  /* Set color */
     return ret;
 }
 
@@ -534,7 +534,7 @@ uint8_t GUI_LISTVIEW_SetColumnWidth(GUI_HANDLE_p h, uint16_t index, GUI_Dim_t wi
     
     if (index < __GL(h)->ColsCount) {
         __GL(h)->Cols[index]->Width = width > 4 ? width : 4;    /* Set new width */
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
+        gui_widget_invalidate__(h);                 /* Invalidate widget */
         ret = 1;
     }
 
@@ -595,10 +595,10 @@ uint8_t GUI_LISTVIEW_SetSliderAuto(GUI_HANDLE_p h, uint8_t autoMode) {
     
     if (autoMode && !(__GL(h)->Flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO)) {
         __GL(h)->Flags |= GUI_FLAG_LISTVIEW_SLIDER_AUTO;
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
+        gui_widget_invalidate__(h);                 /* Invalidate widget */
     } else if (!autoMode && (__GL(h)->Flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO)) {
         __GL(h)->Flags &= ~GUI_FLAG_LISTVIEW_SLIDER_AUTO;
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
+        gui_widget_invalidate__(h);                 /* Invalidate widget */
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
@@ -614,11 +614,11 @@ uint8_t GUI_LISTVIEW_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible) {
     if (!(__GL(h)->Flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO)) {
         if (visible && !(__GL(h)->Flags & GUI_FLAG_LISTVIEW_SLIDER_ON)) {
             __GL(h)->Flags |= GUI_FLAG_LISTVIEW_SLIDER_ON;
-            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
+            gui_widget_invalidate__(h);             /* Invalidate widget */
             ret = 1;
         } else if (!visible && (__GL(h)->Flags & GUI_FLAG_LISTVIEW_SLIDER_ON)) {
             __GL(h)->Flags &= ~GUI_FLAG_LISTVIEW_SLIDER_ON;
-            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
+            gui_widget_invalidate__(h);             /* Invalidate widget */
             ret = 1;
         }
     }
@@ -641,7 +641,7 @@ uint8_t GUI_LISTVIEW_Scroll(GUI_HANDLE_p h, int16_t step) {
     start = start != __GL(h)->VisibleStartIndex;    /* Check if there was valid change */
     
     if (start) {
-        __GUI_WIDGET_Invalidate(h);
+        gui_widget_invalidate__(h);
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
@@ -654,7 +654,7 @@ uint8_t GUI_LISTVIEW_SetSelection(GUI_HANDLE_p h, int16_t selection) {
     
     __SetSelection(h, selection);                   /* Set selection */
     __CheckValues(h);                               /* Check values */
-    __GUI_WIDGET_Invalidate(h);                     /* Invalidate widget */
+    gui_widget_invalidate__(h);                     /* Invalidate widget */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;

@@ -109,7 +109,7 @@ static
 int16_t __NumberOfEntriesPerPage(GUI_HANDLE_p h) {
     int16_t res = 0;
     if (__GH(h)->Font) {                            /* Font is responsible for this setup */
-        GUI_iDim_t height = __GUI_WIDGET_GetHeight(h);  /* Get item height */
+        GUI_iDim_t height = gui_widget_getheight__(h);  /* Get item height */
         if (!__IsOpened(h)) {
             height *= __HeightConst(h) - 1;         /* Get height of opened area part */
         } else {
@@ -131,10 +131,10 @@ uint8_t __OpenClose(GUI_HANDLE_p h, uint8_t state) {
             o->C.Y = o->C.Y - (__HeightConst(h) - 1) * o->C.Height; /* Go up for 3 height values */
         }
         o->C.Height = __HeightConst(h) * o->C.Height;
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
+        gui_widget_invalidate__(h);                 /* Invalidate widget */
         return 1;
     } else if (!state && (o->Flags & GUI_FLAG_DROPDOWN_OPENED)) {
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate widget */
+        gui_widget_invalidatewithparent__(h);       /* Invalidate widget */
         o->Flags &= ~GUI_FLAG_DROPDOWN_OPENED;      /* Clear flag */
         o->C.Height = o->OldHeight;                 /* Restore height value */
         o->C.Y = o->OldY;                           /* Restore position */
@@ -165,14 +165,14 @@ void __Slide(GUI_HANDLE_p h, int16_t dir) {
         } else {
             o->VisibleStartIndex += dir;
         }
-        __GUI_WIDGET_Invalidate(h);
+        gui_widget_invalidate__(h);
     } else if (dir > 0) {
         if ((o->VisibleStartIndex + dir) > (o->Count - mPP - 1)) {  /* Slide elements down */
             o->VisibleStartIndex = o->Count - mPP;
         } else {
             o->VisibleStartIndex += dir;
         }
-        __GUI_WIDGET_Invalidate(h);
+        gui_widget_invalidate__(h);
     }
 }
 
@@ -181,7 +181,7 @@ static
 void __SetSelection(GUI_HANDLE_p h, int16_t selected) {
     if (o->Selected != selected) {                  /* Set selected value */
         o->Selected = selected;
-        __GUI_WIDGET_Callback(h, GUI_WC_SelectionChanged, NULL, NULL);  /* Notify about selection changed */
+        gui_widget_callback__(h, GUI_WC_SelectionChanged, NULL, NULL);  /* Notify about selection changed */
     }                         
 }
 
@@ -246,14 +246,14 @@ void __IncSelection(GUI_HANDLE_p h, int16_t dir) {
         } else {
             __SetSelection(h, o->Selected + dir);
         }
-        __GUI_WIDGET_Invalidate(h);
+        gui_widget_invalidate__(h);
     } else if (dir > 0) {
         if ((o->Selected + dir) > (o->Count - 1)) { /* Slide elements down */
             __SetSelection(h, o->Count - 1);
         } else {
             __SetSelection(h, o->Selected + dir);
         }
-        __GUI_WIDGET_Invalidate(h);
+        gui_widget_invalidate__(h);
     }
 }
 
@@ -272,7 +272,7 @@ uint8_t __DeleteItem(GUI_HANDLE_p h, uint16_t index) {
         }
         
         __CheckValues(h);                           /* Check widget values */
-        __GUI_WIDGET_Invalidate(h);
+        gui_widget_invalidate__(h);
         return 1;
     }
     return 0;
@@ -289,7 +289,7 @@ void __ProcessClick(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
     }
     
     y = 0;                                          /* Relative Y position for touch events */
-    height = __GUI_WIDGET_GetHeight(h);             /* Get widget height */
+    height = gui_widget_getheight__(h);             /* Get widget height */
     __GetOpenedPositions(h, &y, &height, &y1, &height1);    /* Calculate values */
     
     /* Check if press was on normal area when widget is closed */
@@ -305,7 +305,7 @@ void __ProcessClick(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
         }
         if ((o->VisibleStartIndex + tmpSelected) < o->Count) {
             __SetSelection(h, o->VisibleStartIndex + tmpSelected);
-            __GUI_WIDGET_Invalidate(h);             /* Choose new selection */
+            gui_widget_invalidate__(h);             /* Choose new selection */
         }
         __CheckValues(h);                           /* Check values */
     }
@@ -330,25 +330,25 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
             GUI_iDim_t x, y, width, height;
             GUI_iDim_t y1, height1;                 /* Position of main widget part, when widget is opened */
             
-            x = __GUI_WIDGET_GetAbsoluteX(h);       /* Get absolute X coordinate */
-            y = __GUI_WIDGET_GetAbsoluteY(h);       /* Get absolute Y coordinate */
-            width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
-            height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
+            x = gui_widget_getabsolutex__(h);       /* Get absolute X coordinate */
+            y = gui_widget_getabsolutey__(h);       /* Get absolute Y coordinate */
+            width = gui_widget_getwidth__(h);       /* Get widget width */
+            height = gui_widget_getheight__(h);     /* Get widget height */
             
             if (__IsOpened(h)) {
                 __GetOpenedPositions(h, &y, &height, &y1, &height1);
                 
                 GUI_DRAW_Rectangle3D(disp, x, y1, width, height1, GUI_DRAW_3D_State_Lowered);
-                GUI_DRAW_FilledRectangle(disp, x + 2, y1 + 2, width - 4, height1 - 4, __GUI_WIDGET_GetColor(h, GUI_DROPDOWN_COLOR_BG));
+                GUI_DRAW_FilledRectangle(disp, x + 2, y1 + 2, width - 4, height1 - 4, gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_BG));
                 
-                GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, __GUI_WIDGET_GetColor(h, GUI_DROPDOWN_COLOR_BG));
+                GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_BG));
                 GUI_DRAW_Rectangle3D(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
             } else {
                 y1 = y;
                 height1 = height;
                 
                 GUI_DRAW_Rectangle3D(disp, x, y, width, height, GUI_DRAW_3D_State_Raised);
-                GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, __GUI_WIDGET_GetColor(h, GUI_DROPDOWN_COLOR_BG));
+                GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, width - 4, height - 4, gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_BG));
             }
                 
             if (__GD(h)->Selected >= 0 && __GH(h)->Font) {
@@ -368,8 +368,8 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 f.Height = height1 - 6;
                 f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.Color1Width = f.Width;
-                f.Color1 = __GUI_WIDGET_GetColor(h, GUI_DROPDOWN_COLOR_TEXT);
-                GUI_DRAW_WriteText(disp, __GUI_WIDGET_GetFont(h), item->Text, &f);
+                f.Color1 = gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_TEXT);
+                GUI_DRAW_WriteText(disp, gui_widget_getfont__(h), item->Text, &f);
             }
             
             if (__IsOpened(h) && __GD(h)->Flags & GUI_FLAG_DROPDOWN_SLIDER_ON) {
@@ -393,7 +393,7 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                 width--;                            /* Go down for one for alignment on non-slider */
             }
             
-            if (__IsOpened(h) && __GH(h)->Font && __GUI_LINKEDLIST_HasEntries(&__GD(h)->Root)) {
+            if (__IsOpened(h) && __GH(h)->Font && gui_linkedlist_hasentries__(&__GD(h)->Root)) {
                 GUI_DRAW_FONT_t f;
                 GUI_DROPDOWN_ITEM_t* item;
                 uint16_t yOffset;
@@ -423,12 +423,12 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
                         continue;
                     }
                     if (index == __GD(h)->Selected) {
-                        GUI_DRAW_FilledRectangle(disp, x + 2, f.Y, width - 3, __GUI_MIN(f.Height, itemHeight), __GUI_WIDGET_IsFocused(h) ? __GUI_WIDGET_GetColor(h, GUI_DROPDOWN_COLOR_SEL_FOC_BG) : __GUI_WIDGET_GetColor(h, GUI_DROPDOWN_COLOR_SEL_NOFOC_BG));
-                        f.Color1 = __GUI_WIDGET_IsFocused(h) ? __GUI_WIDGET_GetColor(h, GUI_DROPDOWN_COLOR_SEL_FOC) : __GUI_WIDGET_GetColor(h, GUI_DROPDOWN_COLOR_SEL_NOFOC);
+                        GUI_DRAW_FilledRectangle(disp, x + 2, f.Y, width - 3, __GUI_MIN(f.Height, itemHeight), gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_SEL_FOC_BG) : gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_SEL_NOFOC_BG));
+                        f.Color1 = gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_SEL_FOC) : gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_SEL_NOFOC);
                     } else {
-                        f.Color1 = __GUI_WIDGET_GetColor(h, GUI_DROPDOWN_COLOR_TEXT);
+                        f.Color1 = gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_TEXT);
                     }
-                    GUI_DRAW_WriteText(disp, __GUI_WIDGET_GetFont(h), item->Text, &f);
+                    GUI_DRAW_WriteText(disp, gui_widget_getfont__(h), item->Text, &f);
                     f.Y += itemHeight;
                 }
                 disp->Y2 = tmp;                     /* Set temporary value back */
@@ -507,13 +507,13 @@ uint8_t GUI_DROPDOWN_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /******************************************************************************/
 /******************************************************************************/
 GUI_HANDLE_p GUI_DROPDOWN_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
-    return (GUI_HANDLE_p)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+    return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
 uint8_t GUI_DROPDOWN_SetColor(GUI_HANDLE_p h, GUI_DROPDOWN_COLOR_t index, GUI_Color_t color) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    ret = __GUI_WIDGET_SetColor(h, (uint8_t)index, color);  /* Set color */
+    ret = gui_widget_setcolor__(h, (uint8_t)index, color);  /* Set color */
     return ret;
 }
 
@@ -531,7 +531,7 @@ uint8_t GUI_DROPDOWN_AddString(GUI_HANDLE_p h, const GUI_Char* text) {
         __GD(h)->Count++;                           /* Increase number of strings */
         
         __CheckValues(h);                           /* Check values */
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
+        gui_widget_invalidate__(h);                 /* Invalidate widget */
          
         ret = 1;
     }
@@ -570,7 +570,7 @@ uint8_t GUI_DROPDOWN_SetString(GUI_HANDLE_p h, uint16_t index, const GUI_Char* t
     item = __GetItem(h, index);                     /* Get list item from handle */
     if (item) {
         item->Text = (GUI_Char *)text;              /* Set new text */
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
+        gui_widget_invalidate__(h);                 /* Invalidate widget */
     }
 
     __GUI_LEAVE();                                  /* Leave GUI */
@@ -619,10 +619,10 @@ uint8_t GUI_DROPDOWN_SetSliderAuto(GUI_HANDLE_p h, uint8_t autoMode) {
     
     if (autoMode && !(__GD(h)->Flags & GUI_FLAG_DROPDOWN_SLIDER_AUTO)) {
         __GD(h)->Flags |= GUI_FLAG_DROPDOWN_SLIDER_AUTO;
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
+        gui_widget_invalidate__(h);                 /* Invalidate widget */
     } else if (!autoMode && (__GD(h)->Flags & GUI_FLAG_DROPDOWN_SLIDER_AUTO)) {
         __GD(h)->Flags &= ~GUI_FLAG_DROPDOWN_SLIDER_AUTO;
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
+        gui_widget_invalidate__(h);                 /* Invalidate widget */
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
@@ -638,11 +638,11 @@ uint8_t GUI_DROPDOWN_SetSliderVisibility(GUI_HANDLE_p h, uint8_t visible) {
     if (!(__GD(h)->Flags & GUI_FLAG_DROPDOWN_SLIDER_AUTO)) {
         if (visible && !(__GD(h)->Flags & GUI_FLAG_DROPDOWN_SLIDER_ON)) {
             __GD(h)->Flags |= GUI_FLAG_DROPDOWN_SLIDER_ON;
-            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
+            gui_widget_invalidate__(h);             /* Invalidate widget */
             ret = 1;
         } else if (!visible && (__GD(h)->Flags & GUI_FLAG_DROPDOWN_SLIDER_ON)) {
             __GD(h)->Flags &= ~GUI_FLAG_DROPDOWN_SLIDER_ON;
-            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
+            gui_widget_invalidate__(h);             /* Invalidate widget */
             ret = 1;
         }
     }
@@ -665,7 +665,7 @@ uint8_t GUI_DROPDOWN_Scroll(GUI_HANDLE_p h, int16_t step) {
     start = start != __GD(h)->VisibleStartIndex;    /* Check if there was valid change */
     
     if (start) {
-        __GUI_WIDGET_Invalidate(h);
+        gui_widget_invalidate__(h);
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
@@ -678,7 +678,7 @@ uint8_t GUI_DROPDOWN_SetSelection(GUI_HANDLE_p h, int16_t selection) {
     
     __SetSelection(h, selection);                   /* Set selection */
     __CheckValues(h);                               /* Check values */
-    __GUI_WIDGET_Invalidate(h);                     /* Invalidate widget */
+    gui_widget_invalidate__(h);                     /* Invalidate widget */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;

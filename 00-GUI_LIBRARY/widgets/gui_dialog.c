@@ -83,7 +83,7 @@ DDList_t* __AddToActiveDialogs(GUI_HANDLE_p h) {
     l = __GUI_MEMALLOC(sizeof(*l));                 /* Allocate memory for dismissed dialog list */
     if (l) {
         l->h = h;
-        l->id = __GUI_WIDGET_GetId(h);
+        l->id = gui_widget_getid__(h);
         __GUI_LINKEDLIST_ADD_GEN(&DDList, &l->list);/* Add entry to linked list */
     }
     return l;
@@ -103,7 +103,7 @@ DDList_t* __GetFromActiveDialogs(GUI_HANDLE_p h) {
     DDList_t* l = NULL;
     GUI_ID_t id;
     
-    id = __GUI_WIDGET_GetId(h);                     /* Get id of widget */
+    id = gui_widget_getid__(h);                     /* Get id of widget */
     
     for (l = (DDList_t *)__GUI_LINKEDLIST_GETNEXT_GEN((GUI_LinkedListRoot_t *)&DDList, NULL); l;
         l = (DDList_t *)__GUI_LINKEDLIST_GETNEXT_GEN(NULL, (GUI_LinkedList_t *)l)) {
@@ -152,8 +152,8 @@ GUI_HANDLE_p GUI_DIALOG_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
     ptr = func(id, x, y, width, height, NULL, cb, flags | GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);   /* Create desired widget */
     if (ptr) {
         __GUI_ENTER();                              /* Enter GUI */
-        __GUI_WIDGET_SetFlag(ptr, GUI_FLAG_WIDGET_DIALOG_BASE); /* Add dialog base flag to widget */
-        __GUI_LINKEDLIST_WidgetMoveToBottom(ptr);   /* Move to bottom on linked list make it on top now with flag set as dialog */
+        gui_widget_setflag__(ptr, GUI_FLAG_WIDGET_DIALOG_BASE); /* Add dialog base flag to widget */
+        gui_linkedlist_widgetmovetobottom__(ptr);   /* Move to bottom on linked list make it on top now with flag set as dialog */
         __AddToActiveDialogs(ptr);                  /* Add this dialog to active dialogs */
         __GUI_LEAVE();                              /* Leave GUI */
     }
@@ -182,10 +182,10 @@ int GUI_DIALOG_CreateBlocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t
                 resp = l->status;                   /* Get new status */
                 __RemoveFromActiveDialogs(l);       /* Remove from active dialogs */
             } else {
-                __GUI_WIDGET_Remove(ptr);           /* Remove widget */
+                gui_widget_remove__(ptr);           /* Remove widget */
             }
         } else {
-            __GUI_WIDGET_Remove(ptr);               /* Remove widget */
+            gui_widget_remove__(ptr);               /* Remove widget */
         }
         __GUI_LEAVE();                              /* Leave GUI */
     }
@@ -205,7 +205,7 @@ uint8_t GUI_DIALOG_Dismiss(GUI_HANDLE_p h, int status) {
     l = __GetFromActiveDialogs(h);                  /* Get entry from list */
     if (l) {
         l->status = status;                         /* Save status for later */
-        __GUI_WIDGET_Callback(h, GUI_WC_OnDismiss, (int *)&l->status, 0);   /* Process callback */
+        gui_widget_callback__(h, GUI_WC_OnDismiss, (int *)&l->status, 0);   /* Process callback */
 #if GUI_OS
         if (l->ib && gui_sys_sem_isvalid(&l->sem)) {    /* Check if semaphore is valid */
             gui_sys_sem_release(&l->sem);           /* Release locked semaphore */
@@ -214,7 +214,7 @@ uint8_t GUI_DIALOG_Dismiss(GUI_HANDLE_p h, int status) {
         {
             __RemoveFromActiveDialogs(l);           /* Remove from active dialogs */
         }
-        __GUI_WIDGET_Remove(h);                     /* Remove widget */
+        gui_widget_remove__(h);                     /* Remove widget */
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */

@@ -78,7 +78,7 @@ extern "C" {
  * \retval          0: Keyboard hiding process not started
  * \sa              __GUI_KEYBOARD_Show
  */
-uint8_t __GUI_KEYBOARD_Hide(void);
+uint8_t gui_keyboard_hide__(void);
 
 /**
  * \brief           Show hidden virtual keyboard
@@ -88,7 +88,7 @@ uint8_t __GUI_KEYBOARD_Hide(void);
  * \retval          0: Keyboard opening process not started
  * \sa              __GUI_KEYBOARD_Hide
  */
-uint8_t __GUI_KEYBOARD_Show(GUI_HANDLE_p h);
+uint8_t gui_keyboard_show__(GUI_HANDLE_p h);
     
 /**
  * \}

@@ -116,20 +116,20 @@ extern "C" {
  * \note            This function must take care of reseting memory to zero
  * \hideinitializer
  */
-#define __GUI_MEMALLOC(size)        __GUI_MEM_Calloc(size, 1)
+#define __GUI_MEMALLOC(size)        gui_mem_calloc__(size, 1)
 
 /**
  * \brief           Reallocate memory with specific size in bytes
  * \hideinitializer
  */
-#define __GUI_MEMREALLOC(ptr, size) __GUI_MEM_Realloc(ptr, size)
+#define __GUI_MEMREALLOC(ptr, size) gui_mem_realloc__(ptr, size)
 
 /**
  * \brief           Free memory from specific address previously allocated with \ref __GUI_MEMALLOC
  * \hideinitializer
  */
 #define __GUI_MEMFREE(p)            do {            \
-    __GUI_MEM_Free(p);                              \
+    gui_mem_free__(p);                              \
     (p) = NULL;                                     \
 } while (0);
 

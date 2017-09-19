@@ -90,19 +90,19 @@ void __SetValue(GUI_HANDLE_p h, int32_t val) {
             p->CurrentValue = p->Max;
         }
         if (__isAnim(h) && __GH(h)->Timer) {        /* In case of animation and timer availability */
-            __GUI_TIMER_Start(__GH(h)->Timer);      /* Start timer */
+            gui_timer_start__(__GH(h)->Timer);      /* Start timer */
         } else {
             p->CurrentValue = p->DesiredValue;      /* Set values to the same */
         }
-        __GUI_WIDGET_Invalidate(h);                 /* Redraw widget */
-        __GUI_WIDGET_Callback(h, GUI_WC_ValueChanged, NULL, NULL);  /* Process callback */
+        gui_widget_invalidate__(h);                 /* Redraw widget */
+        gui_widget_callback__(h, GUI_WC_ValueChanged, NULL, NULL);  /* Process callback */
     }
 }
 
 /* Timer callback for widget */
 static
 void __TimerCallback(GUI_TIMER_t* t) {
-    GUI_HANDLE_p h = __GUI_TIMER_GetParams(t);      /* Get timer parameters */
+    GUI_HANDLE_p h = gui_timer_getparams__(t);      /* Get timer parameters */
     if (h) {
         if (p->CurrentValue != p->DesiredValue) {   /* Check difference */
             if (p->CurrentValue > p->DesiredValue) {
@@ -110,8 +110,8 @@ void __TimerCallback(GUI_TIMER_t* t) {
             } else {
                 p->CurrentValue++;
             }
-            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
-            __GUI_TIMER_Start(t);                   /* Start timer */
+            gui_widget_invalidate__(h);             /* Invalidate widget */
+            gui_timer_start__(t);                   /* Start timer */
         }
     }
 }
@@ -162,7 +162,7 @@ uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                 case CFG_ANIM:
                     if (*(uint8_t *)v->Data) {
                         if (!__GH(h)->Timer) {
-                            __GH(h)->Timer = __GUI_TIMER_Create(10, __TimerCallback, h);    /* Create animation timer */
+                            __GH(h)->Timer = gui_timer_create__(10, __TimerCallback, h);    /* Create animation timer */
                         }
                         if (__GH(h)->Timer) {       /* Check timer response */
                             __GP(h)->Flags |= GUI_PROGBAR_FLAG_ANIMATE; /* Enable animations */
@@ -181,15 +181,15 @@ uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
             GUI_Dim_t x, y, w, width, height;
             GUI_Display_t* disp = (GUI_Display_t *)param;
     
-            x = __GUI_WIDGET_GetAbsoluteX(h);       /* Get absolute position on screen */
-            y = __GUI_WIDGET_GetAbsoluteY(h);       /* Get absolute position on screen */
-            width = __GUI_WIDGET_GetWidth(h);       /* Get widget width */
-            height = __GUI_WIDGET_GetHeight(h);     /* Get widget height */
+            x = gui_widget_getabsolutex__(h);       /* Get absolute position on screen */
+            y = gui_widget_getabsolutey__(h);       /* Get absolute position on screen */
+            width = gui_widget_getwidth__(h);       /* Get widget width */
+            height = gui_widget_getheight__(h);     /* Get widget height */
            
             w = ((width - 4) * (p->CurrentValue - p->Min)) / (p->Max - p->Min); /* Get width for active part */
             
-            GUI_DRAW_FilledRectangle(disp, x + w + 2, y + 2, width - w - 4, height - 4, __GUI_WIDGET_GetColor(h, GUI_PROGBAR_COLOR_BG));
-            GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, w, height - 4, __GUI_WIDGET_GetColor(h, GUI_PROGBAR_COLOR_FG));
+            GUI_DRAW_FilledRectangle(disp, x + w + 2, y + 2, width - w - 4, height - 4, gui_widget_getcolor__(h, GUI_PROGBAR_COLOR_BG));
+            GUI_DRAW_FilledRectangle(disp, x + 2, y + 2, w, height - 4, gui_widget_getcolor__(h, GUI_PROGBAR_COLOR_FG));
             GUI_DRAW_Rectangle3D(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
             
             /* Draw text if possible */
@@ -200,8 +200,8 @@ uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                 if (p->Flags & GUI_PROGBAR_FLAG_PERCENT) {
                     sprintf((char *)buff, "%lu%%", (unsigned long)(((p->CurrentValue - p->Min) * 100) / (p->Max - p->Min)));
                     text = buff;
-                } else if (__GUI_WIDGET_IsFontAndTextSet(h)) {
-                    text = __GUI_WIDGET_GetText(h);
+                } else if (gui_widget_isfontandtextset__(h)) {
+                    text = gui_widget_gettext__(h);
                 }
                 
                 if (text) {                         /* If text is valid, print it */
@@ -214,9 +214,9 @@ uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                     f.Height = height - 4;
                     f.Align = GUI_HALIGN_CENTER | GUI_VALIGN_CENTER;
                     f.Color1Width = w ? w - 1 : 0;
-                    f.Color1 = __GUI_WIDGET_GetColor(h, GUI_PROGBAR_COLOR_BG);
-                    f.Color2 = __GUI_WIDGET_GetColor(h, GUI_PROGBAR_COLOR_FG);
-                    GUI_DRAW_WriteText(disp, __GUI_WIDGET_GetFont(h), text, &f);
+                    f.Color1 = gui_widget_getcolor__(h, GUI_PROGBAR_COLOR_BG);
+                    f.Color2 = gui_widget_getcolor__(h, GUI_PROGBAR_COLOR_FG);
+                    GUI_DRAW_WriteText(disp, gui_widget_getfont__(h), text, &f);
                 }
             }
         }
@@ -238,37 +238,37 @@ uint8_t GUI_PROGBAR_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
 /******************************************************************************/
 /******************************************************************************/
 GUI_HANDLE_p GUI_PROGBAR_Create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
-    return (GUI_HANDLE_p)__GUI_WIDGET_Create(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+    return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
 uint8_t GUI_PROGBAR_SetColor(GUI_HANDLE_p h, GUI_PROGBAR_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return __GUI_WIDGET_SetColor(h, (uint8_t)index, color); /* Set color */
+    return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }
 
 uint8_t GUI_PROGBAR_SetValue(GUI_HANDLE_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return __GUI_WIDGET_SetParam(h, CFG_VALUE, &val, 1, 0); /* Set parameter */
+    return gui_widget_setparam__(h, CFG_VALUE, &val, 1, 0); /* Set parameter */
 }
 
 uint8_t GUI_PROGBAR_SetMin(GUI_HANDLE_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return __GUI_WIDGET_SetParam(h, CFG_MIN, &val, 1, 0);   /* Set parameter */
+    return gui_widget_setparam__(h, CFG_MIN, &val, 1, 0);   /* Set parameter */
 }
 
 uint8_t GUI_PROGBAR_SetMax(GUI_HANDLE_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return __GUI_WIDGET_SetParam(h, CFG_MAX, &val, 1, 0);   /* Set parameter */
+    return gui_widget_setparam__(h, CFG_MAX, &val, 1, 0);   /* Set parameter */
 }
 
 uint8_t GUI_PROGBAR_SetPercentMode(GUI_HANDLE_p h, uint8_t enable) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return __GUI_WIDGET_SetParam(h, CFG_PERCENT, &enable, 1, 0);    /* Set parameter */
+    return gui_widget_setparam__(h, CFG_PERCENT, &enable, 1, 0);    /* Set parameter */
 }
 
 uint8_t GUI_PROGBAR_SetAnimation(GUI_HANDLE_p h, uint8_t anim) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return __GUI_WIDGET_SetParam(h, CFG_ANIM, &anim, 1, 0); /* Set parameter */
+    return gui_widget_setparam__(h, CFG_ANIM, &anim, 1, 0); /* Set parameter */
 }
 
 int32_t GUI_PROGBAR_GetMin(GUI_HANDLE_p h) {

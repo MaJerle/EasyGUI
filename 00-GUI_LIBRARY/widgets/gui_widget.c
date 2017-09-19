@@ -62,7 +62,7 @@ static gui_mbox_msg_t msg_widget_invalidate = {GUI_SYS_MBOX_TYPE_INVALIDATE};
 /* Removes widget and children widgets */
 static 
 uint8_t __RemoveWidget(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
     /* Check focus state */
     if (GUI.FocusedWidget == h) {
@@ -83,15 +83,15 @@ uint8_t __RemoveWidget(GUI_HANDLE_p h) {
         GUI.ActiveWidgetPrev = __GH(h)->Parent;     /* Set widget as previous active */
     }
     
-    __GUI_WIDGET_InvalidateWithParent(h);           /* Invalidate object and its parent */
-    __GUI_WIDGET_FreeTextMemory(h);                 /* Free text memory */
+    gui_widget_invalidatewithparent__(h);           /* Invalidate object and its parent */
+    gui_widget_freetextmemory__(h);                 /* Free text memory */
     if (__GH(h)->Timer) {                           /* Check timer memory */
-        __GUI_TIMER_Remove(&__GH(h)->Timer);        /* Free timer memory */
+        gui_timer_remove__(&__GH(h)->Timer);        /* Free timer memory */
     }
     if (__GH(h)->Colors) {                          /* Check colors memory */
         __GUI_MEMFREE(__GH(h)->Colors);             /* Free colors memory */
     }
-    __GUI_LINKEDLIST_WidgetRemove(h);               /* Remove entry from linked list of parent widget */
+    gui_linkedlist_widgetremove__(h);               /* Remove entry from linked list of parent widget */
     __GUI_MEMFREE(h);                               /* Free memory for widget */
     
     return 1;                                       /* Widget deleted */
@@ -106,16 +106,16 @@ void __RemoveWidgets(GUI_HANDLE_p parent) {
     /**
      * Scan all widgets in system
      */
-    for (h = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)parent, NULL); h; ) {        
-        if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_REMOVE)) { /* Widget should be deleted */
-            next = __GUI_LINKEDLIST_WidgetGetNext(NULL, h); /* Get next widget of current */
-            if (__GUI_WIDGET_AllowChildren(h)) {    /* Children widgets are supported */
+    for (h = gui_linkedlist_widgetgetnext__((GUI_HANDLE_ROOT_t *)parent, NULL); h; ) {        
+        if (gui_widget_getflag__(h, GUI_FLAG_REMOVE)) { /* Widget should be deleted */
+            next = gui_linkedlist_widgetgetnext__(NULL, h); /* Get next widget of current */
+            if (gui_widget_allowchildren__(h)) {    /* Children widgets are supported */
                 GUI_HANDLE_p tmp;
                 
                 /* Set remove flag to all widgets first... */
-                for (tmp = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)h, NULL); tmp; 
-                        tmp = __GUI_LINKEDLIST_WidgetGetNext(NULL, tmp)) {
-                    __GUI_WIDGET_SetFlag(tmp, GUI_FLAG_REMOVE); /* Set remove bit to all children elements */
+                for (tmp = gui_linkedlist_widgetgetnext__((GUI_HANDLE_ROOT_t *)h, NULL); tmp; 
+                        tmp = gui_linkedlist_widgetgetnext__(NULL, tmp)) {
+                    gui_widget_setflag__(tmp, GUI_FLAG_REMOVE); /* Set remove bit to all children elements */
                 }
                 
                 /* ...process with children delete */
@@ -135,10 +135,10 @@ void __RemoveWidgets(GUI_HANDLE_p parent) {
              */
             h = next;                               /* Set current pointer to next one */
             continue;                               /* Continue to prevent further execution */
-        } else if (__GUI_WIDGET_AllowChildren(h)) { /* Children widgets are supported */
+        } else if (gui_widget_allowchildren__(h)) { /* Children widgets are supported */
             __RemoveWidgets(h);                     /* Check children widgets if anything to remove */
         }
-        h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h);    /* Get next widget of current */
+        h = gui_linkedlist_widgetgetnext__(NULL, h);    /* Get next widget of current */
     }
     
 #if GUI_OS
@@ -150,15 +150,15 @@ void __RemoveWidgets(GUI_HANDLE_p parent) {
 
 /* Get where on LCD is widget visible and what is visible width and height on screen */
 static
-uint8_t __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(GUI_HANDLE_p h, GUI_iDim_t* x1, GUI_iDim_t* y1, GUI_iDim_t* x2, GUI_iDim_t* y2) {
+uint8_t gui_widget_getlcdabsposandvisiblewidthheight__(GUI_HANDLE_p h, GUI_iDim_t* x1, GUI_iDim_t* y1, GUI_iDim_t* x2, GUI_iDim_t* y2) {
     GUI_iDim_t x, y, wi, hi;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
-    x = __GUI_WIDGET_GetAbsoluteX(h);               /* Get absolute X position */
-    y = __GUI_WIDGET_GetAbsoluteY(h);               /* Get absolute Y position */
-    wi = __GUI_WIDGET_GetWidth(h);                  /* Get absolute width */
-    hi = __GUI_WIDGET_GetHeight(h);                 /* Get absolute height */
+    x = gui_widget_getabsolutex__(h);               /* Get absolute X position */
+    y = gui_widget_getabsolutey__(h);               /* Get absolute Y position */
+    wi = gui_widget_getwidth__(h);                  /* Get absolute width */
+    hi = gui_widget_getheight__(h);                 /* Get absolute height */
     
     /**
      * Set widget visible positions with X and Y coordinates
@@ -172,10 +172,10 @@ uint8_t __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(GUI_HANDLE_p h, GUI_iDim_
      * Check if widget is hidden by any parent or any parent is hidden by its parent
      */
     for (; h; h = __GH(h)->Parent) {
-        x = __GUI_WIDGET_GetParentAbsoluteX(h);     /* Parent absolute X position for inner widgets */
-        y = __GUI_WIDGET_GetParentAbsoluteY(h);     /* Parent absolute Y position for inner widgets */
-        wi = __GUI_WIDGET_GetParentInnerWidth(h);   /* Get parent inner width */
-        hi = __GUI_WIDGET_GetParentInnerHeight(h);  /* Get parent inner height */
+        x = gui_widget_getparentabsolutex__(h);     /* Parent absolute X position for inner widgets */
+        y = gui_widget_getparentabsolutey__(h);     /* Parent absolute Y position for inner widgets */
+        wi = gui_widget_getparentinnerwidth__(h);   /* Get parent inner width */
+        hi = gui_widget_getparentinnerheight__(h);  /* Get parent inner height */
     
         if (*x1 < x)        { *x1 = x; }
         if (*x2 > x + wi)   { *x2 = x + wi; }
@@ -191,10 +191,10 @@ static
 uint8_t __SetClippingRegion(GUI_HANDLE_p h) {
     GUI_Dim_t x1, y1, x2, y2;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
     /* Get visible widget part and absolute position on screen */
-    __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(h, &x1, &y1, &x2, &y2);
+    gui_widget_getlcdabsposandvisiblewidthheight__(h, &x1, &y1, &x2, &y2);
     
     /* Set invalid clipping region */
     if (GUI.Display.X1 > x1)    { GUI.Display.X1 = x1; }
@@ -212,13 +212,13 @@ uint8_t __InvalidatePrivate(GUI_HANDLE_p h, uint8_t setclipping) {
     GUI_iDim_t h1x1, h1x2, h2x1, h2x2;
     GUI_iDim_t h1y1, h1y2, h2y1, h2y2;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
     h1 = h;                                         /* Get widget handle */
-    if (__GUI_WIDGET_GetFlag(h1, GUI_FLAG_IGNORE_INVALIDATE)) { /* Check ignore flag */
+    if (gui_widget_getflag__(h1, GUI_FLAG_IGNORE_INVALIDATE)) { /* Check ignore flag */
         return 0;                                   /* Ignore invalidate process */
     }
-    __GUI_WIDGET_SetFlag(h1, GUI_FLAG_REDRAW);      /* Redraw widget */
+    gui_widget_setflag__(h1, GUI_FLAG_REDRAW);      /* Redraw widget */
     GUI.Flags |= GUI_FLAG_REDRAW;                   /* Notify stack about redraw operations */
     
     if (setclipping) {
@@ -235,22 +235,22 @@ uint8_t __InvalidatePrivate(GUI_HANDLE_p h, uint8_t setclipping) {
      * If widget is transparent, check all widgets, even those which are below current widget in list
      * Get first element of parent linked list for checking
      */
-    if (__GUI_WIDGET_IsTransparent(h1)) {
+    if (gui_widget_istransparent__(h1)) {
         __InvalidatePrivate(__GH(h1)->Parent, 0);   /* Invalidate parent widget */
     }
-    for (; h1; h1 = __GUI_LINKEDLIST_WidgetGetNext(NULL, h1)) {
-        __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(h1, &h1x1, &h1y1, &h1x2, &h1y2); /* Get visible position on LCD for widget */
-        for (h2 = __GUI_LINKEDLIST_WidgetGetNext(NULL, h1); h2; h2 = __GUI_LINKEDLIST_WidgetGetNext(NULL, h2)) {
-            __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(h2, &h2x1, &h2y1, &h2x2, &h2y2);
+    for (; h1; h1 = gui_linkedlist_widgetgetnext__(NULL, h1)) {
+        gui_widget_getlcdabsposandvisiblewidthheight__(h1, &h1x1, &h1y1, &h1x2, &h1y2); /* Get visible position on LCD for widget */
+        for (h2 = gui_linkedlist_widgetgetnext__(NULL, h1); h2; h2 = gui_linkedlist_widgetgetnext__(NULL, h2)) {
+            gui_widget_getlcdabsposandvisiblewidthheight__(h2, &h2x1, &h2y1, &h2x2, &h2y2);
             if (
-                __GUI_WIDGET_GetFlag(h2, GUI_FLAG_REDRAW) ||    /* Flag is already set */
+                gui_widget_getflag__(h2, GUI_FLAG_REDRAW) ||    /* Flag is already set */
                 !__GUI_RECT_MATCH(                  /* Widgets are not one over another */
                     h1x1, h1y1, h1x2, h1y2,
                     h2x1, h2y1, h2x2, h2y2)
             ) {
                 continue;
             }
-            __GUI_WIDGET_SetFlag(h2, GUI_FLAG_REDRAW);  /* Redraw widget on next loop */
+            gui_widget_setflag__(h2, GUI_FLAG_REDRAW);  /* Redraw widget on next loop */
         }
     }
     
@@ -259,7 +259,7 @@ uint8_t __InvalidatePrivate(GUI_HANDLE_p h, uint8_t setclipping) {
      * check status of parent widget if it is last.
      * If it is not, process parent redraw and check similar parent widgets if are over our widget
      */
-    if (__GH(h)->Parent && !__GUI_LINKEDLIST_IsWidgetLast(__GH(h)->Parent)) {
+    if (__GH(h)->Parent && !gui_linkedlist_iswidgetlast__(__GH(h)->Parent)) {
         __InvalidatePrivate(__GH(h)->Parent, 0);
     }
     
@@ -269,7 +269,7 @@ uint8_t __InvalidatePrivate(GUI_HANDLE_p h, uint8_t setclipping) {
      * Since recursion is used, call function only once and recursion will take care for upper level of parent widgets
      */
     for (h = __GH(h)->Parent; h; h = __GH(h)->Parent) {
-        if (__GUI_WIDGET_IsTransparent(h)) {        /* If widget is transparent */
+        if (gui_widget_istransparent__(h)) {        /* If widget is transparent */
             __InvalidatePrivate(h, 0);              /* Invalidate this parent too */
             break;
         }
@@ -283,10 +283,10 @@ static
 GUI_HANDLE_p __GetWidgetById(GUI_HANDLE_p parent, GUI_ID_t id, uint8_t deep) {
     GUI_HANDLE_p h;
     
-    for (h = __GUI_LINKEDLIST_WidgetGetNext(__GHR(parent), NULL); h; h = __GUI_LINKEDLIST_WidgetGetNext(NULL, h)) {
-        if (__GUI_WIDGET_GetId(h) == id) {          /* Compare ID values */
+    for (h = gui_linkedlist_widgetgetnext__(__GHR(parent), NULL); h; h = gui_linkedlist_widgetgetnext__(NULL, h)) {
+        if (gui_widget_getid__(h) == id) {          /* Compare ID values */
             return h;
-        } else if (deep && __GUI_WIDGET_AllowChildren(h)) { /* Check children if possible */
+        } else if (deep && gui_widget_allowchildren__(h)) { /* Check children if possible */
             GUI_HANDLE_p tmp = __GetWidgetById(h, id, deep);
             if (tmp) {
                 return tmp;
@@ -301,7 +301,7 @@ static
 GUI_HANDLE_p __GetCommonParentWidget(GUI_HANDLE_p h1, GUI_HANDLE_p h2) {
     GUI_HANDLE_p tmp;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h1) && __GUI_WIDGET_IsWidget(h2)); /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h1) && gui_widget_iswidget__(h2)); /* Check valid parameter */
     
     for (; h1; h1 = __GH(h1)->Parent) {             /* Process all entries */
         for (tmp = h2; tmp; tmp = __GH(tmp)->Parent) {
@@ -316,12 +316,12 @@ GUI_HANDLE_p __GetCommonParentWidget(GUI_HANDLE_p h1, GUI_HANDLE_p h2) {
 /* Set widget size */
 static
 uint8_t __SetWidgetSize(GUI_HANDLE_p h, float wi, float hi) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
     if (wi != __GH(h)->Width || hi != __GH(h)->Height) {    /* Check any differences */
         uint8_t invalidateSecond = 0;
-        if (!__GUI_WIDGET_IsExpanded(h)) {          /* First invalidate current position if not expanded before change of size */
-            __GUI_WIDGET_InvalidateWithParent(h);   /* Set old clipping region first */
+        if (!gui_widget_isexpanded__(h)) {          /* First invalidate current position if not expanded before change of size */
+            gui_widget_invalidatewithparent__(h);   /* Set old clipping region first */
             if (wi > __GH(h)->Width || hi > __GH(h)->Height) {
                 invalidateSecond = 1;
             }
@@ -329,7 +329,7 @@ uint8_t __SetWidgetSize(GUI_HANDLE_p h, float wi, float hi) {
         __GH(h)->Width = wi;                        /* Set parameter */
         __GH(h)->Height = hi;                       /* Set parameter */
         if (invalidateSecond) {                     /* Invalidate second time only if widget greater than before */
-            __GUI_WIDGET_InvalidateWithParent(h);   /* Set new clipping region */
+            gui_widget_invalidatewithparent__(h);   /* Set new clipping region */
         }
     }
     return 1;
@@ -338,16 +338,16 @@ uint8_t __SetWidgetSize(GUI_HANDLE_p h, float wi, float hi) {
 /* Set widget position */
 static
 uint8_t __SetWidgetPosition(GUI_HANDLE_p h, float x, float y) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
     if (__GH(h)->X != x || __GH(h)->Y != y) {       /* Check any differences */
-        if (!__GUI_WIDGET_IsExpanded(h)) {
-            __GUI_WIDGET_InvalidateWithParent(h);   /* Set old clipping region first */
+        if (!gui_widget_isexpanded__(h)) {
+            gui_widget_invalidatewithparent__(h);   /* Set old clipping region first */
         }
         __GH(h)->X = x;                             /* Set parameter */
         __GH(h)->Y = y;                             /* Set parameter */
-        if (!__GUI_WIDGET_IsExpanded(h)) {
-            __GUI_WIDGET_InvalidateWithParent(h);   /* Set new clipping region */
+        if (!gui_widget_isexpanded__(h)) {
+            gui_widget_invalidatewithparent__(h);   /* Set new clipping region */
         }
     }
     return 1;
@@ -358,7 +358,7 @@ static
 uint8_t __CanRemoveWidget(GUI_HANDLE_p h) {
     uint8_t r = 1;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
     /**
      * Desktop window cannot be deleted
@@ -370,16 +370,16 @@ uint8_t __CanRemoveWidget(GUI_HANDLE_p h) {
     /**
      * Check widget status itself
      */
-    if (!__GUI_WIDGET_Callback(h, GUI_WC_Remove, 0, &r) || r) { /* If command was not processed, allow delete */
+    if (!gui_widget_callback__(h, GUI_WC_Remove, 0, &r) || r) { /* If command was not processed, allow delete */
         r = 1;                                      /* Manually allow delete */
     }
     
     /**
      * Check children widgets recursively
      */
-    if (r && __GUI_WIDGET_AllowChildren(h)) {       /* Check if we can delete all children widgets */
+    if (r && gui_widget_allowchildren__(h)) {       /* Check if we can delete all children widgets */
         GUI_HANDLE_p h1;
-        for (h1 = __GUI_LINKEDLIST_WidgetGetNext((GUI_HANDLE_ROOT_t *)h, NULL); h1; h1 = __GUI_LINKEDLIST_WidgetGetNext(NULL, h1)) {
+        for (h1 = gui_linkedlist_widgetgetnext__((GUI_HANDLE_ROOT_t *)h, NULL); h1; h1 = gui_linkedlist_widgetgetnext__(NULL, h1)) {
             if (!__CanRemoveWidget(h1)) {           /* If we should not delete it */
                 return 0;                           /* Stop on first call */
             }
@@ -390,23 +390,23 @@ uint8_t __CanRemoveWidget(GUI_HANDLE_p h) {
 }
 
 /* Check if widget is inside LCD invalidate region */
-uint8_t __GUI_WIDGET_IsInsideClippingRegion(GUI_HANDLE_p h) {
+uint8_t gui_widget_isinsideclippingregion__(GUI_HANDLE_p h) {
     GUI_iDim_t x1, y1, x2, y2;
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
     /* Get widget visible section */
-    __GUI_WIDGET_GetLCDAbsPosAndVisibleWidthHeight(h, &x1, &y1, &x2, &y2);
+    gui_widget_getlcdabsposandvisiblewidthheight__(h, &x1, &y1, &x2, &y2);
     return __GUI_RECT_MATCH(
         x1, y1, x2, y2,
         GUI.Display.X1, GUI.Display.Y1, GUI.Display.X2, GUI.Display.Y2
     );
 }
 
-void __GUI_WIDGET_Init(void) {
+void gui_widget_init__(void) {
     GUI_WINDOW_CreateDesktop(GUI_ID_WINDOW_BASE, NULL); /* Create base window object */
 }
 
-uint8_t __GUI_WIDGET_ExecuteRemove(void) {
+uint8_t gui_widget_executeremove__(void) {
     if (GUI.Flags & GUI_FLAG_REMOVE) {              /* Anything to remove? */
         __RemoveWidgets(NULL);                      /* Remove widgets */
         GUI.Flags &= ~GUI_FLAG_REMOVE;
@@ -415,18 +415,18 @@ uint8_t __GUI_WIDGET_ExecuteRemove(void) {
     return 0;
 }
 
-GUI_Dim_t __GUI_WIDGET_GetWidth(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+GUI_Dim_t gui_widget_getwidth__(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
-    if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_EXPANDED)) {   /* Maximize window over parent */
-        return __GUI_WIDGET_GetParentInnerWidth(h); /* Return parent inner width */
-    } else if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_WIDTH_FILL)) {  /* "fill_parent" mode for width */
-        GUI_iDim_t parent = __GUI_WIDGET_GetParentInnerWidth(h);
-        if (parent > __GUI_WIDGET_GetRelativeX(h)) {
-            return parent - __GUI_WIDGET_GetRelativeX(h);   /* Return widget width */
+    if (gui_widget_getflag__(h, GUI_FLAG_EXPANDED)) {   /* Maximize window over parent */
+        return gui_widget_getparentinnerwidth__(h); /* Return parent inner width */
+    } else if (gui_widget_getflag__(h, GUI_FLAG_WIDTH_FILL)) {  /* "fill_parent" mode for width */
+        GUI_iDim_t parent = gui_widget_getparentinnerwidth__(h);
+        if (parent > gui_widget_getrelativex__(h)) {
+            return parent - gui_widget_getrelativex__(h);   /* Return widget width */
         }
-    } else if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_WIDTH_PERCENT)) {   /* Percentage width */
-        GUI_Dim_t parent = __GUI_WIDGET_GetParentInnerWidth(h);
+    } else if (gui_widget_getflag__(h, GUI_FLAG_WIDTH_PERCENT)) {   /* Percentage width */
+        GUI_Dim_t parent = gui_widget_getparentinnerwidth__(h);
         return GUI_ROUND(__GH(h)->Width * parent / 100);
     } else {                                        /* Normal width */
         return __GH(h)->Width;
@@ -434,25 +434,25 @@ GUI_Dim_t __GUI_WIDGET_GetWidth(GUI_HANDLE_p h) {
     return 0;
 }
 
-GUI_Dim_t __GUI_WIDGET_GetHeight(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+GUI_Dim_t gui_widget_getheight__(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
-    if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_EXPANDED)) {   /* Maximize window over parent */
-        return __GUI_WIDGET_GetParentInnerHeight(h);/* Return parent inner height */
-    } else if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_HEIGHT_FILL)) { /* "fill_parent" mode for height */
-        GUI_Dim_t parent = __GUI_WIDGET_GetParentInnerHeight(h);
-        if (parent > __GUI_WIDGET_GetRelativeY(h)) {
-            return parent - __GUI_WIDGET_GetRelativeY(h);   /* Return widget width */
+    if (gui_widget_getflag__(h, GUI_FLAG_EXPANDED)) {   /* Maximize window over parent */
+        return gui_widget_getparentinnerheight__(h);/* Return parent inner height */
+    } else if (gui_widget_getflag__(h, GUI_FLAG_HEIGHT_FILL)) { /* "fill_parent" mode for height */
+        GUI_Dim_t parent = gui_widget_getparentinnerheight__(h);
+        if (parent > gui_widget_getrelativey__(h)) {
+            return parent - gui_widget_getrelativey__(h);   /* Return widget width */
         }
-    } else if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_HEIGHT_PERCENT)) {  /* Percentage height */
-        return GUI_ROUND(__GH(h)->Height * __GUI_WIDGET_GetParentInnerHeight(h) / 100);
+    } else if (gui_widget_getflag__(h, GUI_FLAG_HEIGHT_PERCENT)) {  /* Percentage height */
+        return GUI_ROUND(__GH(h)->Height * gui_widget_getparentinnerheight__(h) / 100);
     } else {                                        /* Normal height */
         return __GH(h)->Height;
     }
     return 0;
 }
 
-GUI_iDim_t __GUI_WIDGET_GetAbsoluteX(GUI_HANDLE_p h) {
+GUI_iDim_t gui_widget_getabsolutex__(GUI_HANDLE_p h) {
     GUI_HANDLE_p w = 0;
     GUI_iDim_t out = 0;
     
@@ -461,17 +461,17 @@ GUI_iDim_t __GUI_WIDGET_GetAbsoluteX(GUI_HANDLE_p h) {
     }
     
     /* If widget is not expanded, use actual value */
-    out = __GUI_WIDGET_GetRelativeX(h);             /* Get start relative position */
+    out = gui_widget_getrelativex__(h);             /* Get start relative position */
     
     /* Process all parent widgets to get real absolute screen value */
     for (w = __GH(h)->Parent; w; w = __GH(w)->Parent) { /* Go through all parent windows */
-        out += __GUI_WIDGET_GetRelativeX(w) + __GUI_WIDGET_GetPaddingLeft(w);   /* Add X offset from parent and left padding of parent */
+        out += gui_widget_getrelativex__(w) + gui_widget_getpaddingleft__(w);   /* Add X offset from parent and left padding of parent */
         out -= __GHR(w)->ScrollX;                   /* Decrease by scroll value */
     }
     return out;
 }
 
-GUI_iDim_t __GUI_WIDGET_GetAbsoluteY(GUI_HANDLE_p h) {
+GUI_iDim_t gui_widget_getabsolutey__(GUI_HANDLE_p h) {
     GUI_HANDLE_p w = 0;
     GUI_iDim_t out = 0;
     
@@ -480,57 +480,57 @@ GUI_iDim_t __GUI_WIDGET_GetAbsoluteY(GUI_HANDLE_p h) {
     }
     
     /* If widget is not expanded, use actual value */
-    out = __GUI_WIDGET_GetRelativeY(h);             /* Get start relative position */
+    out = gui_widget_getrelativey__(h);             /* Get start relative position */
     
     /* Process all parent widgets to get real absolute screen value */
     for (w = __GH(h)->Parent; w; w = __GH(w)->Parent) { /* Go through all parent windows */
-        out += __GUI_WIDGET_GetRelativeY(w) + __GUI_WIDGET_GetPaddingTop(w);    /* Add X offset from parent and left padding of parent */
+        out += gui_widget_getrelativey__(w) + gui_widget_getpaddingtop__(w);    /* Add X offset from parent and left padding of parent */
         out -= __GHR(w)->ScrollX;                   /* Decrease by scroll value */
     }
     return out;
 }
 
-GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteX(GUI_HANDLE_p h) {
+GUI_iDim_t gui_widget_getparentabsolutex__(GUI_HANDLE_p h) {
     GUI_Dim_t out = 0;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
     if (h) {                                        /* Check valid widget */
         h = __GH(h)->Parent;                        /* Get parent of widget */
         if (h) {                                    /* Save left padding */
-            out = __GUI_WIDGET_GetPaddingLeft(h);   /* Get left padding from parent widget */
+            out = gui_widget_getpaddingleft__(h);   /* Get left padding from parent widget */
         }
     }
-    out += __GUI_WIDGET_GetAbsoluteX(h);            /* Add absolute X of parent and to current padding */
+    out += gui_widget_getabsolutex__(h);            /* Add absolute X of parent and to current padding */
     return out;
 }
 
-GUI_iDim_t __GUI_WIDGET_GetParentAbsoluteY(GUI_HANDLE_p h) {
+GUI_iDim_t gui_widget_getparentabsolutey__(GUI_HANDLE_p h) {
     GUI_Dim_t out = 0;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
     if (h) {                                        /* Check valid widget */
         h = __GH(h)->Parent;                        /* Get parent of widget */
         if (h) {                                    /* Save left padding */
-            out = __GUI_WIDGET_GetPaddingTop(h);    /* Get top padding from parent widget */
+            out = gui_widget_getpaddingtop__(h);    /* Get top padding from parent widget */
         }
     }
-    out += __GUI_WIDGET_GetAbsoluteY(h);            /* Add absolute Y of parent and to current padding */
+    out += gui_widget_getabsolutey__(h);            /* Add absolute Y of parent and to current padding */
     return out;
 }
 
-uint8_t __GUI_WIDGET_Invalidate(GUI_HANDLE_p h) {
+uint8_t gui_widget_invalidate__(GUI_HANDLE_p h) {
     uint8_t ret;
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
     ret = __InvalidatePrivate(h, 1);                /* Invalidate widget with clipping */
     
     if (
         (
-            __GUI_WIDGET_GetFlag(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT) || 
-            __GUI_WIDGET_GetCoreFlag(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT) ||
-            __GUI_WIDGET_IsTransparent(h)           /* At least little transparent */
+            gui_widget_getflag__(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT) || 
+            gui_widget_getcoreflag__(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT) ||
+            gui_widget_istransparent__(h)           /* At least little transparent */
         ) && __GH(h)->Parent) {
         __InvalidatePrivate(__GH(h)->Parent, 0); /* Invalidate parent object too but without clipping */
     }
@@ -540,8 +540,8 @@ uint8_t __GUI_WIDGET_Invalidate(GUI_HANDLE_p h) {
     return ret;
 }
 
-uint8_t __GUI_WIDGET_InvalidateWithParent(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+uint8_t gui_widget_invalidatewithparent__(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __InvalidatePrivate(h, 1);                      /* Invalidate object with clipping */
     if (__GH(h)->Parent) {                          /* If parent exists, invalid only parent */
         __InvalidatePrivate(__GH(h)->Parent, 0);    /* Invalidate parent object without clipping */
@@ -549,24 +549,24 @@ uint8_t __GUI_WIDGET_InvalidateWithParent(GUI_HANDLE_p h) {
     return 1;
 }
 
-uint8_t __GUI_WIDGET_SetInvalidateWithParent(GUI_HANDLE_p h, uint8_t value) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+uint8_t gui_widget_setinvalidatewithparent__(GUI_HANDLE_p h, uint8_t value) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     if (value) {                                    /* On positive value */
-        __GUI_WIDGET_SetFlag(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT); /* Enable auto invalidation of parent widget */
+        gui_widget_setflag__(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT); /* Enable auto invalidation of parent widget */
     } else {                                        /* On zero */
-        __GUI_WIDGET_ClrFlag(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT);   /* Disable auto invalidation of parent widget */
+        gui_widget_clrflag__(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT);   /* Disable auto invalidation of parent widget */
     }
     return 1;
 }
 
-uint8_t __GUI_WIDGET_Set3DStyle(GUI_HANDLE_p h, uint8_t enable) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
-    if (enable && !__GUI_WIDGET_GetFlag(h, GUI_FLAG_3D)) {  /* Enable style */
-        __GUI_WIDGET_SetFlag(h, GUI_FLAG_3D);       /* Enable 3D style */
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate object */
-    } else if (!enable && __GUI_WIDGET_GetFlag(h, GUI_FLAG_3D)) {   /* Disable style */
-        __GUI_WIDGET_ClrFlag(h, GUI_FLAG_3D);       /* Disable 3D style */
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate object */
+uint8_t gui_widget_set3dstyle__(GUI_HANDLE_p h, uint8_t enable) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    if (enable && !gui_widget_getflag__(h, GUI_FLAG_3D)) {  /* Enable style */
+        gui_widget_setflag__(h, GUI_FLAG_3D);       /* Enable 3D style */
+        gui_widget_invalidate__(h);                 /* Invalidate object */
+    } else if (!enable && gui_widget_getflag__(h, GUI_FLAG_3D)) {   /* Disable style */
+        gui_widget_clrflag__(h, GUI_FLAG_3D);       /* Disable 3D style */
+        gui_widget_invalidate__(h);                 /* Invalidate object */
     }
     return 1;
 }
@@ -574,7 +574,7 @@ uint8_t __GUI_WIDGET_Set3DStyle(GUI_HANDLE_p h, uint8_t enable) {
 /*******************************************/
 /**  Widget create and remove management  **/
 /*******************************************/
-void* __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+void* gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_HANDLE_p h;
     GUI_Byte result = 0;
     
@@ -609,10 +609,10 @@ void* __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x,
          * - If flag for parent desktop is set, parent widget is also desktop
          * - Otherwise parent widget passed as parameter is used if it supports children widgets
          */
-        if (__GUI_WIDGET_IsDialogBase(h) || flags & GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP) {/* Dialogs do not have parent widget */
+        if (gui_widget_isdialogbase__(h) || flags & GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP) {/* Dialogs do not have parent widget */
             __GH(h)->Parent = GUI_WINDOW_GetDesktop();  /* Set parent object */
         } else {
-            if (parent && __GUI_WIDGET_AllowChildren(parent)) {
+            if (parent && gui_widget_allowchildren__(parent)) {
                 __GH(h)->Parent = parent;
             } else {
                 __GH(h)->Parent = GUI.WindowActive; /* Set parent object. It will be NULL on first call */
@@ -620,7 +620,7 @@ void* __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x,
         }
         
         result = 1;                                 /* We are OK at starting point */
-        __GUI_WIDGET_Callback(h, GUI_WC_PreInit, NULL, &result);    /* Notify internal widget library about init successful */
+        gui_widget_callback__(h, GUI_WC_PreInit, NULL, &result);    /* Notify internal widget library about init successful */
         
         if (!result) {                              /* Check result */
             __GUI_MEMFREE(h);                       /* Clear widget memory */
@@ -631,19 +631,19 @@ void* __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x,
         /* Set widget default values */
         __GH(h)->Font = WIDGET_Default.Font;        /* Set default font */
         
-        __GUI_WIDGET_SetFlag(h, GUI_FLAG_IGNORE_INVALIDATE);    /* Ignore invalidation process */
-        __GUI_WIDGET_SetSize(h, width, height);     /* Set widget size */
-        __GUI_WIDGET_SetPosition(h, x, y);          /* Set widget position */
-        __GUI_WIDGET_ClrFlag(h, GUI_FLAG_IGNORE_INVALIDATE);    /* Include invalidation process */
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate properly now when everything is set correctly = set for valid clipping region part */
+        gui_widget_setflag__(h, GUI_FLAG_IGNORE_INVALIDATE);    /* Ignore invalidation process */
+        gui_widget_setsize__(h, width, height);     /* Set widget size */
+        gui_widget_setposition__(h, x, y);          /* Set widget position */
+        gui_widget_clrflag__(h, GUI_FLAG_IGNORE_INVALIDATE);    /* Include invalidation process */
+        gui_widget_invalidate__(h);                 /* Invalidate properly now when everything is set correctly = set for valid clipping region part */
 
         result = 0;
-        __GUI_WIDGET_Callback(h, GUI_WC_ExcludeLinkedList, 0, &result);
+        gui_widget_callback__(h, GUI_WC_ExcludeLinkedList, 0, &result);
         if (!result) {                              /* Check if widget should be added to linked list */
-            __GUI_LINKEDLIST_WidgetAdd((GUI_HANDLE_ROOT_t *)__GH(h)->Parent, h);    /* Add entry to linkedlist of parent widget */
+            gui_linkedlist_widgetadd__((GUI_HANDLE_ROOT_t *)__GH(h)->Parent, h);    /* Add entry to linkedlist of parent widget */
         }
-        __GUI_WIDGET_Callback(h, GUI_WC_Init, NULL, NULL);  /* Notify user about init successful */
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate object */
+        gui_widget_callback__(h, GUI_WC_Init, NULL, NULL);  /* Notify user about init successful */
+        gui_widget_invalidate__(h);                 /* Invalidate object */
         
 #if GUI_OS
         static gui_mbox_msg_t msg = {GUI_SYS_MBOX_TYPE_WIDGET_CREATED};
@@ -655,12 +655,12 @@ void* __GUI_WIDGET_Create(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x,
     return (void *)h;
 }
 
-uint8_t __GUI_WIDGET_Remove(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+uint8_t gui_widget_remove__(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     if (__CanRemoveWidget(h)) {                     /* Check if we can delete widget */
-        __GUI_WIDGET_SetFlag(h, GUI_FLAG_REMOVE);   /* Set flag for widget delete */
+        gui_widget_setflag__(h, GUI_FLAG_REMOVE);   /* Set flag for widget delete */
         GUI.Flags |= GUI_FLAG_REMOVE;               /* Set flag for to remove at least one widget from tree */
-        if (__GUI_WIDGET_IsFocused(h)) {
+        if (gui_widget_isfocused__(h)) {
             __GUI_WIDGET_FOCUS_SET(__GH(h)->Parent);
         }
 #if GUI_OS
@@ -674,48 +674,48 @@ uint8_t __GUI_WIDGET_Remove(GUI_HANDLE_p h) {
 /*******************************************/
 /**    Widget text and font management    **/
 /*******************************************/
-uint8_t __GUI_WIDGET_SetFont(GUI_HANDLE_p h, GUI_Const GUI_FONT_t* font) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+uint8_t gui_widget_setfont__(GUI_HANDLE_p h, GUI_Const GUI_FONT_t* font) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     if (__GH(h)->Font != font) {                    /* Any parameter changed */
         __GH(h)->Font = font;                       /* Set parameter */
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate object */
+        gui_widget_invalidatewithparent__(h);       /* Invalidate object */
     }
     return 1;
 }
 
-uint8_t __GUI_WIDGET_SetText(GUI_HANDLE_p h, const GUI_Char* text) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
-    if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_DYNAMICTEXTALLOC)) {   /* Memory for text is dynamically allocated */
+uint8_t gui_widget_settext__(GUI_HANDLE_p h, const GUI_Char* text) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    if (gui_widget_getflag__(h, GUI_FLAG_DYNAMICTEXTALLOC)) {   /* Memory for text is dynamically allocated */
         if (__GH(h)->TextMemSize) {
             if (GUI_STRING_LengthTotal(text) > (__GH(h)->TextMemSize - 1)) {    /* Check string length */
                 GUI_STRING_CopyN(__GH(h)->Text, text, __GH(h)->TextMemSize - 1);    /* Do not copy all bytes because of memory overflow */
             } else {
                 GUI_STRING_Copy(__GH(h)->Text, text);   /* Copy entire string */
             }
-            __GUI_WIDGET_Invalidate(h);             /* Redraw object */
-            __GUI_WIDGET_Callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+            gui_widget_invalidate__(h);             /* Redraw object */
+            gui_widget_callback__(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
         }
     } else {                                        /* Memory allocated by user */
         if (__GH(h)->Text && __GH(h)->Text == text) {   /* In case the same pointer is passed to WIDGET */
             if (GUI_STRING_Compare(__GH(h)->Text, text)) {  /* If strings does not match, source string updated? */
-                __GUI_WIDGET_Invalidate(h);         /* Redraw object */
-                __GUI_WIDGET_Callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+                gui_widget_invalidate__(h);         /* Redraw object */
+                gui_widget_callback__(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
             }
         }
         
         if (__GH(h)->Text != text) {                /* Check if pointer do not match */
             __GH(h)->Text = (GUI_Char *)text;       /* Set parameter */
-            __GUI_WIDGET_Invalidate(h);             /* Redraw object */
-            __GUI_WIDGET_Callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+            gui_widget_invalidate__(h);             /* Redraw object */
+            gui_widget_callback__(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
         }
     }
     __GH(h)->TextCursor = GUI_STRING_LengthTotal(__GH(h)->Text);    /* Set cursor to the end of string */
     return 1;
 }
 
-uint8_t __GUI_WIDGET_AllocateTextMemory(GUI_HANDLE_p h, uint32_t size) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
-    if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_DYNAMICTEXTALLOC) && __GH(h)->Text) {  /* Check if already allocated */
+uint8_t gui_widget_allocatetextmemory__(GUI_HANDLE_p h, uint32_t size) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    if (gui_widget_getflag__(h, GUI_FLAG_DYNAMICTEXTALLOC) && __GH(h)->Text) {  /* Check if already allocated */
         __GUI_MEMFREE(__GH(h)->Text);               /* Free memory first */
         __GH(h)->TextMemSize = 0;                   /* Reset memory size */
     }
@@ -724,43 +724,43 @@ uint8_t __GUI_WIDGET_AllocateTextMemory(GUI_HANDLE_p h, uint32_t size) {
     __GH(h)->TextMemSize = size * sizeof(GUI_Char); /* Allocate text memory */
     __GH(h)->Text = __GUI_MEMALLOC(__GH(h)->TextMemSize);   /* Allocate memory for text */
     if (__GH(h)->Text) {                            /* Check if allocated */
-        __GUI_WIDGET_SetFlag(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Dynamically allocated */
+        gui_widget_setflag__(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Dynamically allocated */
     } else {
         __GH(h)->TextMemSize = 0;                   /* No dynamic bytes available */
-        __GUI_WIDGET_ClrFlag(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Not allocated */
+        gui_widget_clrflag__(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Not allocated */
     }
-    __GUI_WIDGET_Invalidate(h);                     /* Redraw object */
-    __GUI_WIDGET_Callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+    gui_widget_invalidate__(h);                     /* Redraw object */
+    gui_widget_callback__(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
     return 1;
 }
 
-uint8_t __GUI_WIDGET_FreeTextMemory(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
-    if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_DYNAMICTEXTALLOC) && __GH(h)->Text) {  /* Check if dynamically alocated */
+uint8_t gui_widget_freetextmemory__(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    if (gui_widget_getflag__(h, GUI_FLAG_DYNAMICTEXTALLOC) && __GH(h)->Text) {  /* Check if dynamically alocated */
         __GUI_MEMFREE(__GH(h)->Text);               /* Free memory first */
         __GH(h)->Text = 0;                          /* Reset memory */
         __GH(h)->TextMemSize = 0;                   /* Reset memory size */
-        __GUI_WIDGET_ClrFlag(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Not allocated */
-        __GUI_WIDGET_Invalidate(h);                 /* Redraw object */
-        __GUI_WIDGET_Callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+        gui_widget_clrflag__(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Not allocated */
+        gui_widget_invalidate__(h);                 /* Redraw object */
+        gui_widget_callback__(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
     }
     return 1;
 }
 
-uint8_t __GUI_WIDGET_IsFontAndTextSet(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+uint8_t gui_widget_isfontandtextset__(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     return __GH(h)->Text && __GH(h)->Text[0] && __GH(h)->Font && GUI_STRING_Length(__GH(h)->Text);  /* Check if conditions are met for drawing string */
 }
 
-uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
+uint8_t gui_widget_processtextkey__(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
     size_t len, tlen;
     uint32_t ch;
     uint8_t l;
     GUI_STRING_t currStr;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
-    if (!__GUI_WIDGET_GetFlag(h, GUI_FLAG_DYNAMICTEXTALLOC)) {  /* Must be dynamically allocated memory */
+    if (!gui_widget_getflag__(h, GUI_FLAG_DYNAMICTEXTALLOC)) {  /* Must be dynamically allocated memory */
         return 0;
     }
     
@@ -782,8 +782,8 @@ uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
             }
             __GH(h)->Text[tlen + l] = 0;            /* Add 0 to the end */
             
-            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
-            __GUI_WIDGET_Callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+            gui_widget_invalidate__(h);             /* Invalidate widget */
+            gui_widget_callback__(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
             return 1;
         }
     } else if (ch == 8 || ch == 127) {              /* Backspace character */
@@ -801,105 +801,105 @@ uint8_t __GUI_WIDGET_ProcessTextKey(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
             __GH(h)->TextCursor -= l;               /* Decrease text cursor by number of bytes for character deleted */
             __GH(h)->Text[tlen - l] = 0;            /* Set 0 to the end of string */
             
-            __GUI_WIDGET_Invalidate(h);             /* Invalidate widget */
-            __GUI_WIDGET_Callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+            gui_widget_invalidate__(h);             /* Invalidate widget */
+            gui_widget_callback__(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
             return 1;
         }
     }
     return 0;
 }
 
-const GUI_Char* __GUI_WIDGET_GetText(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+const GUI_Char* gui_widget_gettext__(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     /* Prepare for transpate support */
 #if GUI_USE_TRANSLATE
     /* For static texts only */
-    if (!__GUI_WIDGET_GetFlag(h, GUI_FLAG_DYNAMICTEXTALLOC) && __GH(h)->Text) {
+    if (!gui_widget_getflag__(h, GUI_FLAG_DYNAMICTEXTALLOC) && __GH(h)->Text) {
         return GUI_TRANSLATE_Get(__GH(h)->Text);    /* Get translation entry */
     }
 #endif /* GUI_USE_TRANSLATE */
     return __GH(h)->Text;                           /* Return text for widget */
 }
 
-const GUI_FONT_t* __GUI_WIDGET_GetFont(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+const GUI_FONT_t* gui_widget_getfont__(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     return __GH(h)->Font;                           /* Return font for widget */
 }
 
 /*******************************************/
 /**         Widget size management        **/
 /*******************************************/
-uint8_t __GUI_WIDGET_SetWidth(GUI_HANDLE_p h, GUI_Dim_t width) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
-    if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_WIDTH_PERCENT)) {  /* Invalidate if percent not yet enabled to force invalidation */
-        __GUI_WIDGET_ClrFlag(h, GUI_FLAG_WIDTH_PERCENT);    /* Set percentage flag */
+uint8_t gui_widget_setwidth__(GUI_HANDLE_p h, GUI_Dim_t width) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    if (gui_widget_getflag__(h, GUI_FLAG_WIDTH_PERCENT)) {  /* Invalidate if percent not yet enabled to force invalidation */
+        gui_widget_clrflag__(h, GUI_FLAG_WIDTH_PERCENT);    /* Set percentage flag */
         __GH(h)->Height = width + 1;                /* Invalidate height */
     }
     return __SetWidgetSize(h, width, __GH(h)->Height);  /* Set new height */
 }
 
-uint8_t __GUI_WIDGET_SetHeight(GUI_HANDLE_p h, GUI_Dim_t height) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
-    if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_HEIGHT_PERCENT)) { /* Invalidate if percent not yet enabled to force invalidation */
-        __GUI_WIDGET_ClrFlag(h, GUI_FLAG_HEIGHT_PERCENT);   /* Set percentage flag */
+uint8_t gui_widget_setheight__(GUI_HANDLE_p h, GUI_Dim_t height) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    if (gui_widget_getflag__(h, GUI_FLAG_HEIGHT_PERCENT)) { /* Invalidate if percent not yet enabled to force invalidation */
+        gui_widget_clrflag__(h, GUI_FLAG_HEIGHT_PERCENT);   /* Set percentage flag */
         __GH(h)->Height = height + 1;               /* Invalidate height */
     }
     return __SetWidgetSize(h, __GH(h)->Width, height);  /* Set new height */
 }
 
-uint8_t __GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, float width) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
-    if (!__GUI_WIDGET_GetFlag(h, GUI_FLAG_WIDTH_PERCENT)) { /* Invalidate if percent not yet enabled to force invalidation */
-        __GUI_WIDGET_SetFlag(h, GUI_FLAG_WIDTH_PERCENT);    /* Set percentage flag */
+uint8_t gui_widget_setwidthpercent__(GUI_HANDLE_p h, float width) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    if (!gui_widget_getflag__(h, GUI_FLAG_WIDTH_PERCENT)) { /* Invalidate if percent not yet enabled to force invalidation */
+        gui_widget_setflag__(h, GUI_FLAG_WIDTH_PERCENT);    /* Set percentage flag */
         __GH(h)->Width = width + 1;                 /* Invalidate widget */
     }
     return __SetWidgetSize(h, width, __GH(h)->Height);  /* Set new width */
 }
 
-uint8_t __GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, float height) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
-    if (!__GUI_WIDGET_GetFlag(h, GUI_FLAG_HEIGHT_PERCENT)) {    /* Invalidate if percent not yet enabled to force invalidation */
-        __GUI_WIDGET_SetFlag(h, GUI_FLAG_HEIGHT_PERCENT);   /* Set percentage flag */
+uint8_t gui_widget_setheightpercent__(GUI_HANDLE_p h, float height) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    if (!gui_widget_getflag__(h, GUI_FLAG_HEIGHT_PERCENT)) {    /* Invalidate if percent not yet enabled to force invalidation */
+        gui_widget_setflag__(h, GUI_FLAG_HEIGHT_PERCENT);   /* Set percentage flag */
         __GH(h)->Height = height + 1;               /* Invalidate height */
     }
     return __SetWidgetSize(h, __GH(h)->Width, height);  /* Set new height */
 }
 
-uint8_t __GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t hi) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+uint8_t gui_widget_setsize__(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t hi) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     /* If percentage enabled on at least one, either width or height */
-    if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_WIDTH_PERCENT | GUI_FLAG_HEIGHT_PERCENT)) {
-        __GUI_WIDGET_SetFlag(h, GUI_FLAG_WIDTH_PERCENT | GUI_FLAG_HEIGHT_PERCENT);  /* Set both flags */
+    if (gui_widget_getflag__(h, GUI_FLAG_WIDTH_PERCENT | GUI_FLAG_HEIGHT_PERCENT)) {
+        gui_widget_setflag__(h, GUI_FLAG_WIDTH_PERCENT | GUI_FLAG_HEIGHT_PERCENT);  /* Set both flags */
         __GH(h)->Width = wi + 1;                    /* Invalidate width */
         __GH(h)->Height = hi + 1;                   /* Invalidate height */
     }
     return __SetWidgetSize(h, wi, hi);              /* Set widget size */
 }
 
-uint8_t __GUI_WIDGET_SetSizePercent(GUI_HANDLE_p h, float wi, float hi) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+uint8_t gui_widget_setsizepercent__(GUI_HANDLE_p h, float wi, float hi) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     /* If percentage not enable on width or height */
-    if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_WIDTH_PERCENT | GUI_FLAG_HEIGHT_PERCENT) != (GUI_FLAG_WIDTH_PERCENT | GUI_FLAG_HEIGHT_PERCENT)) {
-        __GUI_WIDGET_SetFlag(h, GUI_FLAG_WIDTH_PERCENT | GUI_FLAG_HEIGHT_PERCENT);  /* Set both flags */
+    if (gui_widget_getflag__(h, GUI_FLAG_WIDTH_PERCENT | GUI_FLAG_HEIGHT_PERCENT) != (GUI_FLAG_WIDTH_PERCENT | GUI_FLAG_HEIGHT_PERCENT)) {
+        gui_widget_setflag__(h, GUI_FLAG_WIDTH_PERCENT | GUI_FLAG_HEIGHT_PERCENT);  /* Set both flags */
         __GH(h)->Width = wi + 1;                    /* Invalidate width */
         __GH(h)->Height = hi + 1;                   /* Invalidate height */
     }
     return __SetWidgetSize(h, wi, hi);              /* Set widget size */
 }
 
-uint8_t __GUI_WIDGET_ToggleExpanded(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
-    return __GUI_WIDGET_SetExpanded(h, !__GUI_WIDGET_IsExpanded(h));    /* Invert expanded mode */
+uint8_t gui_widget_toggleexpanded__(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    return gui_widget_setexpanded__(h, !gui_widget_isexpanded__(h));    /* Invert expanded mode */
 }
 
-uint8_t __GUI_WIDGET_SetExpanded(GUI_HANDLE_p h, uint8_t state) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
-    if (!state && __GUI_WIDGET_IsExpanded(h)) {     /* Check current status */
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate with parent first for clipping region */
-        __GUI_WIDGET_ClrFlag(h, GUI_FLAG_EXPANDED); /* Clear expanded after invalidation */
-    } else if (state && !__GUI_WIDGET_IsExpanded(h)) {
-        __GUI_WIDGET_SetFlag(h, GUI_FLAG_EXPANDED); /* Expand widget */
-        __GUI_WIDGET_Invalidate(h);                 /* Redraw only selected widget as it is over all window */
+uint8_t gui_widget_setexpanded__(GUI_HANDLE_p h, uint8_t state) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    if (!state && gui_widget_isexpanded__(h)) {     /* Check current status */
+        gui_widget_invalidatewithparent__(h);       /* Invalidate with parent first for clipping region */
+        gui_widget_clrflag__(h, GUI_FLAG_EXPANDED); /* Clear expanded after invalidation */
+    } else if (state && !gui_widget_isexpanded__(h)) {
+        gui_widget_setflag__(h, GUI_FLAG_EXPANDED); /* Expand widget */
+        gui_widget_invalidate__(h);                 /* Redraw only selected widget as it is over all window */
     }
     return 1;
 }
@@ -907,59 +907,59 @@ uint8_t __GUI_WIDGET_SetExpanded(GUI_HANDLE_p h, uint8_t state) {
 /*******************************************/
 /**       Widget position management      **/
 /*******************************************/
-uint8_t __GUI_WIDGET_SetPosition(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+uint8_t gui_widget_setposition__(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     /* If percent enabled on at least one coordinate, clear to force invalidation */
-    if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_XPOS_PERCENT | GUI_FLAG_YPOS_PERCENT)) {
-        __GUI_WIDGET_ClrFlag(h, GUI_FLAG_XPOS_PERCENT | GUI_FLAG_YPOS_PERCENT); /* Disable percent on X and Y position */
+    if (gui_widget_getflag__(h, GUI_FLAG_XPOS_PERCENT | GUI_FLAG_YPOS_PERCENT)) {
+        gui_widget_clrflag__(h, GUI_FLAG_XPOS_PERCENT | GUI_FLAG_YPOS_PERCENT); /* Disable percent on X and Y position */
         __GH(h)->X = x + 1;                         /* Invalidate X position */
         __GH(h)->Y = y + 1;                         /* Invalidate Y position */
     }  
     return __SetWidgetPosition(h, x, y);            /* Set widget position */
 }
 
-uint8_t __GUI_WIDGET_SetPositionPercent(GUI_HANDLE_p h, float x, float y) {  
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */   
+uint8_t gui_widget_setpositionpercent__(GUI_HANDLE_p h, float x, float y) {  
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */   
     /* If percent not set on both, enable to force invalidation */
-    if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_XPOS_PERCENT | GUI_FLAG_YPOS_PERCENT) != (GUI_FLAG_XPOS_PERCENT | GUI_FLAG_YPOS_PERCENT)) {
-        __GUI_WIDGET_SetFlag(h, GUI_FLAG_XPOS_PERCENT | GUI_FLAG_YPOS_PERCENT); /* Enable percent on X and Y position */
+    if (gui_widget_getflag__(h, GUI_FLAG_XPOS_PERCENT | GUI_FLAG_YPOS_PERCENT) != (GUI_FLAG_XPOS_PERCENT | GUI_FLAG_YPOS_PERCENT)) {
+        gui_widget_setflag__(h, GUI_FLAG_XPOS_PERCENT | GUI_FLAG_YPOS_PERCENT); /* Enable percent on X and Y position */
         __GH(h)->X = x + 1;                         /* Invalidate X position */
         __GH(h)->Y = y + 1;                         /* Invalidate Y position */
     }
     return __SetWidgetPosition(h, x, y);            /* Set widget position */
 }
 
-uint8_t __GUI_WIDGET_SetXPosition(GUI_HANDLE_p h, GUI_iDim_t x) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
-    if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_XPOS_PERCENT)) {   /* if percent enabled */
-        __GUI_WIDGET_ClrFlag(h, GUI_FLAG_XPOS_PERCENT); /* Clear it to force invalidation */
+uint8_t gui_widget_setxposition__(GUI_HANDLE_p h, GUI_iDim_t x) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    if (gui_widget_getflag__(h, GUI_FLAG_XPOS_PERCENT)) {   /* if percent enabled */
+        gui_widget_clrflag__(h, GUI_FLAG_XPOS_PERCENT); /* Clear it to force invalidation */
         __GH(h)->X = x + 1;                         /* Invalidate position */
     }
     return __SetWidgetPosition(h, x, __GH(h)->Y);   /* Set widget position */
 }
 
-uint8_t __GUI_WIDGET_SetXPositionPercent(GUI_HANDLE_p h, float x) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
-    if (!__GUI_WIDGET_GetFlag(h, GUI_FLAG_XPOS_PERCENT)) {  /* if percent not enabled */
-        __GUI_WIDGET_SetFlag(h, GUI_FLAG_XPOS_PERCENT); /* Set it to force invalidation */
+uint8_t gui_widget_setxpositionpercent__(GUI_HANDLE_p h, float x) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    if (!gui_widget_getflag__(h, GUI_FLAG_XPOS_PERCENT)) {  /* if percent not enabled */
+        gui_widget_setflag__(h, GUI_FLAG_XPOS_PERCENT); /* Set it to force invalidation */
         __GH(h)->X = x + 1;                         /* Invalidate position */
     }
     return __SetWidgetPosition(h, x, __GH(h)->Y);   /* Set widget position */
 }
 
-uint8_t __GUI_WIDGET_SetYPosition(GUI_HANDLE_p h, GUI_iDim_t y) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
-    if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_YPOS_PERCENT)) {   /* if percent enabled */
-        __GUI_WIDGET_ClrFlag(h, GUI_FLAG_YPOS_PERCENT); /* Clear it to force invalidation */
+uint8_t gui_widget_setyposition__(GUI_HANDLE_p h, GUI_iDim_t y) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    if (gui_widget_getflag__(h, GUI_FLAG_YPOS_PERCENT)) {   /* if percent enabled */
+        gui_widget_clrflag__(h, GUI_FLAG_YPOS_PERCENT); /* Clear it to force invalidation */
         __GH(h)->Y = y + 1;                         /* Invalidate position */
     }
     return __SetWidgetPosition(h, __GH(h)->X, y);   /* Set widget position */
 }
 
-uint8_t __GUI_WIDGET_SetYPositionPercent(GUI_HANDLE_p h, float y) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
-    if (!__GUI_WIDGET_GetFlag(h, GUI_FLAG_YPOS_PERCENT)) {  /* if percent not enabled */
-        __GUI_WIDGET_SetFlag(h, GUI_FLAG_YPOS_PERCENT); /* Set it to force invalidation */
+uint8_t gui_widget_setypositionpercent__(GUI_HANDLE_p h, float y) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    if (!gui_widget_getflag__(h, GUI_FLAG_YPOS_PERCENT)) {  /* if percent not enabled */
+        gui_widget_setflag__(h, GUI_FLAG_YPOS_PERCENT); /* Set it to force invalidation */
         __GH(h)->X = y + 1;                         /* Invalidate position */
     }
     return __SetWidgetPosition(h, __GH(h)->X, y);   /* Set widget position */
@@ -968,39 +968,39 @@ uint8_t __GUI_WIDGET_SetYPositionPercent(GUI_HANDLE_p h, float y) {
 /*******************************************/
 /**                  .....                **/
 /*******************************************/
-uint8_t __GUI_WIDGET_Show(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+uint8_t gui_widget_show__(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
-    if (__GUI_WIDGET_GetFlag(h, GUI_FLAG_HIDDEN)) { /* If hidden, show it */
-        __GUI_WIDGET_ClrFlag(h, GUI_FLAG_HIDDEN);
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate it for redraw with parent */
+    if (gui_widget_getflag__(h, GUI_FLAG_HIDDEN)) { /* If hidden, show it */
+        gui_widget_clrflag__(h, GUI_FLAG_HIDDEN);
+        gui_widget_invalidatewithparent__(h);       /* Invalidate it for redraw with parent */
     }
     return 1;
 }
 
-uint8_t __GUI_WIDGET_Hide(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+uint8_t gui_widget_hide__(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
-    if (!__GUI_WIDGET_GetFlag(h, GUI_FLAG_HIDDEN)) {    /* If visible, hide it */
-        __GUI_WIDGET_SetFlag(h, GUI_FLAG_HIDDEN);
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate it for redraw with parenta */
+    if (!gui_widget_getflag__(h, GUI_FLAG_HIDDEN)) {    /* If visible, hide it */
+        gui_widget_setflag__(h, GUI_FLAG_HIDDEN);
+        gui_widget_invalidatewithparent__(h);       /* Invalidate it for redraw with parenta */
     }
     
     /**
      * TODO: Check if active/focused widget is maybe children of this widget
      */
     
-    if (GUI.FocusedWidget == h || __GUI_WIDGET_IsChildOf(GUI.FocusedWidget, h)) {   /* Clear focus */
+    if (GUI.FocusedWidget == h || gui_widget_ischildof__(GUI.FocusedWidget, h)) {   /* Clear focus */
         __GUI_WIDGET_FOCUS_SET(__GH(h)->Parent);    /* Set parent widget as focused now */
     }
-    if (GUI.ActiveWidget == h || __GUI_WIDGET_IsChildOf(GUI.ActiveWidget, h)) { /* Clear active */
+    if (GUI.ActiveWidget == h || gui_widget_ischildof__(GUI.ActiveWidget, h)) { /* Clear active */
         __GUI_WIDGET_ACTIVE_CLEAR();
     }
     return 1;
 }
 
-uint8_t __GUI_WIDGET_IsChildOf(GUI_HANDLE_p h, GUI_HANDLE_p parent) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h) && __GUI_WIDGET_IsWidget(parent));  /* Check valid parameter */
+uint8_t gui_widget_ischildof__(GUI_HANDLE_p h, GUI_HANDLE_p parent) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h) && gui_widget_iswidget__(parent));  /* Check valid parameter */
     
     for (h = __GH(h)->Parent; h; h = __GH(h)->Parent) { /* Check widget parent objects */
         if (parent == h) {                          /* If they matches */
@@ -1010,37 +1010,37 @@ uint8_t __GUI_WIDGET_IsChildOf(GUI_HANDLE_p h, GUI_HANDLE_p parent) {
     return 0;
 }
 
-uint8_t __GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+uint8_t gui_widget_setzindex__(GUI_HANDLE_p h, int32_t zindex) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
     uint8_t ret = 1;
     if (__GH(h)->ZIndex != zindex) {                /* There was a change in z-index value */
         int32_t current = __GH(h)->ZIndex;
         __GH(h)->ZIndex = zindex;                   /* Set new index */
         if (zindex < current) {                     /* New index value is less important than before = move widget to top */
-            __GUI_LINKEDLIST_WidgetMoveToTop(h);    /* Move widget to top on linked list = less important and less visible */
+            gui_linkedlist_widgetmovetotop__(h);    /* Move widget to top on linked list = less important and less visible */
         } else {
-            __GUI_LINKEDLIST_WidgetMoveToBottom(h); /* Move widget to bottom on linked list = most important and most visible */
+            gui_linkedlist_widgetmovetobottom__(h); /* Move widget to bottom on linked list = most important and most visible */
         }
     }
     return ret;
 }
 
-uint8_t __GUI_WIDGET_SetTransparency(GUI_HANDLE_p h, uint8_t trans) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+uint8_t gui_widget_settransparency__(GUI_HANDLE_p h, uint8_t trans) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
     if (__GH(h)->Transparency != trans) {           /* Check transparency match */
         __GH(h)->Transparency = trans;              /* Set new transparency level */
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
+        gui_widget_invalidate__(h);                 /* Invalidate widget */
     }
     
     return 1;
 }
 
-uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color) {
+uint8_t gui_widget_setcolor__(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color) {
     uint8_t ret = 1;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI context */
     if (!__GH(h)->Colors) {                         /* Do we need to allocate color memory? */
         if (__GH(h)->Widget->ColorsCount) {         /* Check if at least some colors should be used */
@@ -1065,32 +1065,32 @@ uint8_t __GUI_WIDGET_SetColor(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color) 
     return ret;
 }
 
-GUI_HANDLE_p __GUI_WIDGET_GetById(GUI_ID_t id) {
+GUI_HANDLE_p gui_widget_getbyid__(GUI_ID_t id) {
     return __GetWidgetById(NULL, id, 1);            /* Find widget by ID */ 
 }
 
-uint8_t __GUI_WIDGET_SetUserData(GUI_HANDLE_p h, void* data) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */    
+uint8_t gui_widget_setuserdata__(GUI_HANDLE_p h, void* data) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */    
     __GH(h)->UserData = data;                       /* Set user data */
     return 1;
 }
 
-void* __GUI_WIDGET_GetUserData(GUI_HANDLE_p h) {
+void* gui_widget_getuserdata__(GUI_HANDLE_p h) {
     void* data;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     data = __GH(h)->UserData;                       /* Get user data */
     return data;
 }
 
-void __GUI_WIDGET_MoveDownTree(GUI_HANDLE_p h) {              
+void gui_widget_movedowntree__(GUI_HANDLE_p h) {              
     /**
      * Move widget to the end of parent linked list
      * This will allow widget to be first checked next time for touch detection
      * and will be drawn on top of al widgets as expected except if there is widget which allows children (new window or similar)
      */
-    if (__GUI_LINKEDLIST_WidgetMoveToBottom(h)) {
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate object */
+    if (gui_linkedlist_widgetmovetobottom__(h)) {
+        gui_widget_invalidate__(h);                 /* Invalidate object */
     }
     
     /**
@@ -1101,8 +1101,8 @@ void __GUI_WIDGET_MoveDownTree(GUI_HANDLE_p h) {
     if (__GH(h)->Parent) {                          /* Move its parent to the bottom of parent linked list */
         GUI_HANDLE_p parent = __GH(h)->Parent;
         for (; parent; parent = __GH(parent)->Parent) {
-            if (__GUI_LINKEDLIST_WidgetMoveToBottom(parent)) {  /* If move down was successful */
-                __GUI_WIDGET_Invalidate(parent);    /* Invalidate parent of widget */
+            if (gui_linkedlist_widgetmovetobottom__(parent)) {  /* If move down was successful */
+                gui_widget_invalidate__(parent);    /* Invalidate parent of widget */
             }
         }
     }
@@ -1113,9 +1113,9 @@ void __GUI_WIDGET_FOCUS_CLEAR(void) {
     if (GUI.FocusedWidget && GUI.FocusedWidget != GUI.Root.First) { /* First widget is always in focus */
         GUI.FocusedWidgetPrev = GUI.FocusedWidget;  /* Clear everything */
         do {
-            __GUI_WIDGET_Callback(GUI.FocusedWidget, GUI_WC_FocusOut, NULL, NULL);
-            __GUI_WIDGET_ClrFlag(GUI.FocusedWidget, GUI_FLAG_FOCUS);    /* Clear focused widget */
-            __GUI_WIDGET_Invalidate(GUI.FocusedWidget); /* Invalidate widget */
+            gui_widget_callback__(GUI.FocusedWidget, GUI_WC_FocusOut, NULL, NULL);
+            gui_widget_clrflag__(GUI.FocusedWidget, GUI_FLAG_FOCUS);    /* Clear focused widget */
+            gui_widget_invalidate__(GUI.FocusedWidget); /* Invalidate widget */
             GUI.FocusedWidget = __GH(GUI.FocusedWidget)->Parent;    /* Get parent widget */
         } while (GUI.FocusedWidget != GUI.Root.First);  /* Loop to the bottom */
         GUI.FocusedWidget = 0;                      /* Reset focused widget */
@@ -1144,9 +1144,9 @@ void __GUI_WIDGET_FOCUS_SET(GUI_HANDLE_p h) {
         common = __GetCommonParentWidget(GUI.FocusedWidget, h); /* Get first widget in common */
         if (common) {                               /* We have common object, invalidate only those which are not common in tree */
             for (; GUI.FocusedWidget && common && GUI.FocusedWidget != common; GUI.FocusedWidget = __GH(GUI.FocusedWidget)->Parent) {
-                __GUI_WIDGET_ClrFlag(GUI.FocusedWidget, GUI_FLAG_FOCUS);    /* Clear focused flag */
-                __GUI_WIDGET_Callback(GUI.FocusedWidget, GUI_WC_FocusOut, NULL, NULL);  /* Notify with callback */
-                __GUI_WIDGET_Invalidate(GUI.FocusedWidget); /* Invalidate widget */
+                gui_widget_clrflag__(GUI.FocusedWidget, GUI_FLAG_FOCUS);    /* Clear focused flag */
+                gui_widget_callback__(GUI.FocusedWidget, GUI_WC_FocusOut, NULL, NULL);  /* Notify with callback */
+                gui_widget_invalidate__(GUI.FocusedWidget); /* Invalidate widget */
             }
         }
     } else {
@@ -1161,9 +1161,9 @@ void __GUI_WIDGET_FOCUS_SET(GUI_HANDLE_p h) {
      */ 
     GUI.FocusedWidget = h;                          /* Set new focused widget */
     while (h && common && h != common) {
-        __GUI_WIDGET_SetFlag(h, GUI_FLAG_FOCUS);    /* Set focused flag */
-        __GUI_WIDGET_Callback(h, GUI_WC_FocusIn, NULL, NULL);   /* Notify with callback */
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget */
+        gui_widget_setflag__(h, GUI_FLAG_FOCUS);    /* Set focused flag */
+        gui_widget_callback__(h, GUI_WC_FocusIn, NULL, NULL);   /* Notify with callback */
+        gui_widget_invalidate__(h);                 /* Invalidate widget */
         h = __GH(h)->Parent;                        /* Get parent widget */
     }
 }
@@ -1171,8 +1171,8 @@ void __GUI_WIDGET_FOCUS_SET(GUI_HANDLE_p h) {
 /* Clear active widget status */
 void __GUI_WIDGET_ACTIVE_CLEAR(void) {
     if (GUI.ActiveWidget) {
-        __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_ActiveOut, NULL, NULL);  /* Notify user about change */
-        __GUI_WIDGET_ClrFlag(GUI.ActiveWidget, GUI_FLAG_ACTIVE | GUI_FLAG_TOUCH_MOVE);  /* Clear all widget based flags */
+        gui_widget_callback__(GUI.ActiveWidget, GUI_WC_ActiveOut, NULL, NULL);  /* Notify user about change */
+        gui_widget_clrflag__(GUI.ActiveWidget, GUI_FLAG_ACTIVE | GUI_FLAG_TOUCH_MOVE);  /* Clear all widget based flags */
         GUI.ActiveWidgetPrev = GUI.ActiveWidget;    /* Save as previous active */
         GUI.ActiveWidget = 0;                       /* Clear active widget handle */
     }
@@ -1183,8 +1183,8 @@ void __GUI_WIDGET_ACTIVE_SET(GUI_HANDLE_p h) {
     __GUI_WIDGET_ACTIVE_CLEAR();                    /* Clear active widget flag */
     GUI.ActiveWidget = h;                           /* Set new active widget */
     if (h) {
-        __GUI_WIDGET_SetFlag(GUI.ActiveWidget, GUI_FLAG_ACTIVE);    /* Set active widget flag */
-        __GUI_WIDGET_Callback(GUI.ActiveWidget, GUI_WC_ActiveIn, NULL, NULL);
+        gui_widget_setflag__(GUI.ActiveWidget, GUI_FLAG_ACTIVE);    /* Set active widget flag */
+        gui_widget_callback__(GUI.ActiveWidget, GUI_WC_ActiveIn, NULL, NULL);
     }
 }
 
@@ -1194,10 +1194,10 @@ void __GUI_WIDGET_ACTIVE_SET(GUI_HANDLE_p h) {
 /******************************************************************************/
 /******************************************************************************/
 uint8_t GUI_WIDGET_Remove(GUI_HANDLE_p* h) {
-    __GUI_ASSERTPARAMS(h && __GUI_WIDGET_IsWidget(*h));     /* Check valid parameter */
+    __GUI_ASSERTPARAMS(h && gui_widget_iswidget__(*h));     /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
 
-    __GUI_WIDGET_Remove(*h);                        /* Remove widget */
+    gui_widget_remove__(*h);                        /* Remove widget */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;                                       /* Removev successfully */
@@ -1207,10 +1207,10 @@ uint8_t GUI_WIDGET_Remove(GUI_HANDLE_p* h) {
 /**         Widget text management        **/
 /*******************************************/
 uint32_t GUI_WIDGET_AllocTextMemory(GUI_HANDLE_p h, uint32_t size) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h) && size > 1);   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h) && size > 1);   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    __GUI_WIDGET_AllocateTextMemory(h, size);       /* Allocate memory for text */
+    gui_widget_allocatetextmemory__(h, size);       /* Allocate memory for text */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     
@@ -1220,10 +1220,10 @@ uint32_t GUI_WIDGET_AllocTextMemory(GUI_HANDLE_p h, uint32_t size) {
 uint8_t GUI_WIDGET_FreeTextMemory(GUI_HANDLE_p h) {
     uint8_t res;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_FreeTextMemory(h);           /* Free memory for text */
+    res = gui_widget_freetextmemory__(h);           /* Free memory for text */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1232,10 +1232,10 @@ uint8_t GUI_WIDGET_FreeTextMemory(GUI_HANDLE_p h) {
 uint8_t GUI_WIDGET_SetText(GUI_HANDLE_p h, const GUI_Char* text) {
     uint8_t res;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_SetText(h, text);            /* Set text for widget */
+    res = gui_widget_settext__(h, text);            /* Set text for widget */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1244,10 +1244,10 @@ uint8_t GUI_WIDGET_SetText(GUI_HANDLE_p h, const GUI_Char* text) {
 const GUI_Char* GUI_WIDGET_GetText(GUI_HANDLE_p h) {
     const GUI_Char* t;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    t = __GUI_WIDGET_GetText(h);                    /* Return text */
+    t = gui_widget_gettext__(h);                    /* Return text */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return t;
@@ -1256,10 +1256,10 @@ const GUI_Char* GUI_WIDGET_GetText(GUI_HANDLE_p h) {
 const GUI_Char* GUI_WIDGET_GetTextCopy(GUI_HANDLE_p h, GUI_Char* dst, uint32_t len) {
     const GUI_Char* t;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    t = __GUI_WIDGET_GetText(h);                    /* Return text */
+    t = gui_widget_gettext__(h);                    /* Return text */
     GUI_STRING_CopyN(dst, t, len);                  /* Copy text after */
     dst[len] = 0;                                   /* Set trailling zero */
     
@@ -1269,10 +1269,10 @@ const GUI_Char* GUI_WIDGET_GetTextCopy(GUI_HANDLE_p h, GUI_Char* dst, uint32_t l
 
 uint8_t GUI_WIDGET_SetFont(GUI_HANDLE_p h, const GUI_FONT_t* font) {
     uint8_t res;
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_SetFont(h, font);            /* Set widget font */
+    res = gui_widget_setfont__(h, font);            /* Set widget font */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1280,27 +1280,27 @@ uint8_t GUI_WIDGET_SetFont(GUI_HANDLE_p h, const GUI_FONT_t* font) {
 
 const GUI_FONT_t* GUI_WIDGET_GetFont(GUI_HANDLE_p h) {
     const GUI_FONT_t* font;
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    font = __GUI_WIDGET_GetFont(h);                 /* Get widget font */
+    font = gui_widget_getfont__(h);                 /* Get widget font */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return font;
 }
 
-uint8_t __GUI_WIDGET_SetParam(GUI_HANDLE_p h, uint16_t cfg, const void* data, uint8_t invalidate, uint8_t invalidateparent) {
+uint8_t gui_widget_setparam__(GUI_HANDLE_p h, uint16_t cfg, const void* data, uint8_t invalidate, uint8_t invalidateparent) {
     GUI_WIDGET_Param_t p;
     uint8_t result = 1;
     
     p.Type = cfg;
     p.Data = (void *)data;
     __GUI_ENTER();                                  /* Enter GUI */
-    __GUI_WIDGET_Callback(h, GUI_WC_SetParam, &p, &result); /* Process callback function */
+    gui_widget_callback__(h, GUI_WC_SetParam, &p, &result); /* Process callback function */
     if (invalidateparent) {
-        __GUI_WIDGET_InvalidateWithParent(h);       /* Invalidate widget and parent */
+        gui_widget_invalidatewithparent__(h);       /* Invalidate widget and parent */
     } else if (invalidate) {
-        __GUI_WIDGET_Invalidate(h);                 /* Invalidate widget only */
+        gui_widget_invalidate__(h);                 /* Invalidate widget only */
     }
     __GUI_LEAVE();                                  /* Leave GUI */
     
@@ -1313,10 +1313,10 @@ uint8_t __GUI_WIDGET_SetParam(GUI_HANDLE_p h, uint16_t cfg, const void* data, ui
 uint8_t GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t width, GUI_Dim_t height) {
     uint8_t res;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_SetSize(h, width, height);   /* Set actual size to object */
+    res = gui_widget_setsize__(h, width, height);   /* Set actual size to object */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1325,10 +1325,10 @@ uint8_t GUI_WIDGET_SetSize(GUI_HANDLE_p h, GUI_Dim_t width, GUI_Dim_t height) {
 uint8_t GUI_WIDGET_SetSizePercent(GUI_HANDLE_p h, float width, float height) {
     uint8_t res;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_SetSizePercent(h, width, height);    /* Set actual size to object in percent */
+    res = gui_widget_setsizepercent__(h, width, height);    /* Set actual size to object in percent */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1337,10 +1337,10 @@ uint8_t GUI_WIDGET_SetSizePercent(GUI_HANDLE_p h, float width, float height) {
 uint8_t GUI_WIDGET_SetWidth(GUI_HANDLE_p h, GUI_Dim_t width) {
     uint8_t res;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_SetWidth(h, width);          /* Set object width */
+    res = gui_widget_setwidth__(h, width);          /* Set object width */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1349,10 +1349,10 @@ uint8_t GUI_WIDGET_SetWidth(GUI_HANDLE_p h, GUI_Dim_t width) {
 uint8_t GUI_WIDGET_SetHeight(GUI_HANDLE_p h, GUI_Dim_t height) {
     uint8_t res;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_SetHeight(h, height);        /* Set object height */
+    res = gui_widget_setheight__(h, height);        /* Set object height */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1360,10 +1360,10 @@ uint8_t GUI_WIDGET_SetHeight(GUI_HANDLE_p h, GUI_Dim_t height) {
 
 uint8_t GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, float width) {
     uint8_t res;
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_SetWidthPercent(h, width);   /* Set object width */
+    res = gui_widget_setwidthpercent__(h, width);   /* Set object width */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1371,10 +1371,10 @@ uint8_t GUI_WIDGET_SetWidthPercent(GUI_HANDLE_p h, float width) {
 
 uint8_t GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, float height) {
     uint8_t res;
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_SetHeightPercent(h, height); /* Set object height */
+    res = gui_widget_setheightpercent__(h, height); /* Set object height */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1382,10 +1382,10 @@ uint8_t GUI_WIDGET_SetHeightPercent(GUI_HANDLE_p h, float height) {
 
 GUI_Dim_t GUI_WIDGET_GetWidth(GUI_HANDLE_p h) {
     GUI_Dim_t res;
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_GetWidth(h);                 /* Get widget width */
+    res = gui_widget_getwidth__(h);                 /* Get widget width */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1393,10 +1393,10 @@ GUI_Dim_t GUI_WIDGET_GetWidth(GUI_HANDLE_p h) {
 
 GUI_Dim_t GUI_WIDGET_GetHeight(GUI_HANDLE_p h) {
     GUI_Dim_t res;
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_GetHeight(h);                /* Get widget height */
+    res = gui_widget_getheight__(h);                /* Get widget height */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1405,10 +1405,10 @@ GUI_Dim_t GUI_WIDGET_GetHeight(GUI_HANDLE_p h) {
 uint8_t GUI_WIDGET_SetExpanded(GUI_HANDLE_p h, uint8_t state) {
     uint8_t ret;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __GUI_WIDGET_SetExpanded(h, state);       /* Set expanded mode */
+    ret = gui_widget_setexpanded__(h, state);       /* Set expanded mode */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -1417,10 +1417,10 @@ uint8_t GUI_WIDGET_SetExpanded(GUI_HANDLE_p h, uint8_t state) {
 uint8_t GUI_WIDGET_IsExpanded(GUI_HANDLE_p h) {
     uint8_t ret;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __GUI_WIDGET_IsExpanded(h);               /* Check expanded mode */
+    ret = gui_widget_isexpanded__(h);               /* Check expanded mode */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -1431,10 +1431,10 @@ uint8_t GUI_WIDGET_IsExpanded(GUI_HANDLE_p h) {
 /*******************************************/
 uint8_t GUI_WIDGET_SetPosition(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
     uint8_t res;
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_SetPosition(h, x, y);        /* Set X and Y position */
+    res = gui_widget_setposition__(h, x, y);        /* Set X and Y position */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1442,10 +1442,10 @@ uint8_t GUI_WIDGET_SetPosition(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
 
 uint8_t GUI_WIDGET_SetPositionPercent(GUI_HANDLE_p h, float x, float y) {
     uint8_t res;
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_SetPositionPercent(h, x, y); /* Set X and Y position in percent */
+    res = gui_widget_setpositionpercent__(h, x, y); /* Set X and Y position in percent */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1453,10 +1453,10 @@ uint8_t GUI_WIDGET_SetPositionPercent(GUI_HANDLE_p h, float x, float y) {
 
 uint8_t GUI_WIDGET_SetXPosition(GUI_HANDLE_p h, GUI_iDim_t x) {
     uint8_t res;
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_SetXPosition(h, x);          /* Set X position */
+    res = gui_widget_setxposition__(h, x);          /* Set X position */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1464,10 +1464,10 @@ uint8_t GUI_WIDGET_SetXPosition(GUI_HANDLE_p h, GUI_iDim_t x) {
 
 uint8_t GUI_WIDGET_SetXPositionPercent(GUI_HANDLE_p h, float x) {
     uint8_t res;
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_SetXPositionPercent(h, x);   /* Set X position in percent */
+    res = gui_widget_setxpositionpercent__(h, x);   /* Set X position in percent */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1475,10 +1475,10 @@ uint8_t GUI_WIDGET_SetXPositionPercent(GUI_HANDLE_p h, float x) {
 
 uint8_t GUI_WIDGET_SetYPosition(GUI_HANDLE_p h, GUI_iDim_t y) {
     uint8_t res;
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_SetYPosition(h, y);          /* Set Y position */
+    res = gui_widget_setyposition__(h, y);          /* Set Y position */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1486,10 +1486,10 @@ uint8_t GUI_WIDGET_SetYPosition(GUI_HANDLE_p h, GUI_iDim_t y) {
 
 uint8_t GUI_WIDGET_SetYPositionPercent(GUI_HANDLE_p h, float y) {
     uint8_t res;
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_SetYPositionPercent(h, y);   /* Set Y position in percent */
+    res = gui_widget_setypositionpercent__(h, y);   /* Set Y position in percent */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1497,10 +1497,10 @@ uint8_t GUI_WIDGET_SetYPositionPercent(GUI_HANDLE_p h, float y) {
 
 uint8_t GUI_WIDGET_Invalidate(GUI_HANDLE_p h) {
     uint8_t res;
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */ 
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */ 
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_Invalidate(h);               /* Invalidate widget */
+    res = gui_widget_invalidate__(h);               /* Invalidate widget */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
@@ -1508,20 +1508,20 @@ uint8_t GUI_WIDGET_Invalidate(GUI_HANDLE_p h) {
 
 uint8_t GUI_WIDGET_Show(GUI_HANDLE_p h) {
     uint8_t res;
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_Show(h);                     /* Show widget */
+    res = gui_widget_show__(h);                     /* Show widget */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
 }
 
 uint8_t GUI_WIDGET_PutOnFront(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    __GUI_WIDGET_MoveDownTree(h);                   /* Put widget on front */
+    gui_widget_movedowntree__(h);                   /* Put widget on front */
     __GUI_WIDGET_FOCUS_SET(h);                      /* Set widget to focused state */
     
     __GUI_LEAVE();                                  /* Leave GUI */
@@ -1530,18 +1530,18 @@ uint8_t GUI_WIDGET_PutOnFront(GUI_HANDLE_p h) {
 
 uint8_t GUI_WIDGET_Hide(GUI_HANDLE_p h) {
     uint8_t res;
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    res = __GUI_WIDGET_Hide(h);                     /* Hide widget */
+    res = gui_widget_hide__(h);                     /* Hide widget */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;
 }
 
 GUI_ID_t GUI_WIDGET_GetId(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
-    return __GUI_WIDGET_GetId(h);                   /* Return widget ID */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    return gui_widget_getid__(h);                   /* Return widget ID */
 }
 
 GUI_HANDLE_p GUI_WIDGET_GetById(GUI_ID_t id) {
@@ -1555,12 +1555,12 @@ GUI_HANDLE_p GUI_WIDGET_GetById(GUI_ID_t id) {
 }
 
 uint8_t GUI_WIDGET_IsChildOf(GUI_HANDLE_p h, GUI_HANDLE_p parent) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h) && __GUI_WIDGET_IsWidget(parent));  /* Check valid parameter */
-    return __GUI_WIDGET_IsChildOf(h, parent);       /* Return status */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h) && gui_widget_iswidget__(parent));  /* Check valid parameter */
+    return gui_widget_ischildof__(h, parent);       /* Return status */
 }
 
 uint8_t GUI_WIDGET_SetCallback(GUI_HANDLE_p h, GUI_WIDGET_CALLBACK_t callback) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
     __GH(h)->Callback = callback;                   /* Set callback function */
@@ -1570,10 +1570,10 @@ uint8_t GUI_WIDGET_SetCallback(GUI_HANDLE_p h, GUI_WIDGET_CALLBACK_t callback) {
 }
 
 uint8_t GUI_WIDGET_SetUserData(GUI_HANDLE_p h, void* data) {
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    __GUI_WIDGET_SetUserData(h, data);              /* Set user data */
+    gui_widget_setuserdata__(h, data);              /* Set user data */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;
@@ -1582,10 +1582,10 @@ uint8_t GUI_WIDGET_SetUserData(GUI_HANDLE_p h, void* data) {
 void* GUI_WIDGET_GetUserData(GUI_HANDLE_p h) {
     void* data;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    data = __GUI_WIDGET_GetUserData(h);             /* Get user data */
+    data = gui_widget_getuserdata__(h);             /* Get user data */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return data;
@@ -1594,7 +1594,7 @@ void* GUI_WIDGET_GetUserData(GUI_HANDLE_p h) {
 uint8_t GUI_WIDGET_ProcessDefaultCallback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     uint8_t ret;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
     ret = __GH(h)->Widget->Callback(h, ctrl, param, result);    /* Call callback function */
@@ -1606,10 +1606,10 @@ uint8_t GUI_WIDGET_ProcessDefaultCallback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* p
 uint8_t GUI_WIDGET_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     uint8_t ret;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __GUI_WIDGET_Callback(h, ctrl, param, result);    /* Call callback function */
+    ret = gui_widget_callback__(h, ctrl, param, result);    /* Call callback function */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -1618,12 +1618,12 @@ uint8_t GUI_WIDGET_Callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
 uint8_t GUI_WIDGET_SetScrollX(GUI_HANDLE_p h, GUI_iDim_t scroll) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (__GUI_WIDGET_AllowChildren(h) && __GHR(h)->ScrollX != scroll) { /* Only widgets with children support can set scroll */
+    if (gui_widget_allowchildren__(h) && __GHR(h)->ScrollX != scroll) { /* Only widgets with children support can set scroll */
         __GHR(h)->ScrollX = scroll;
-        __GUI_WIDGET_Invalidate(h);
+        gui_widget_invalidate__(h);
         ret = 1;
     }
     
@@ -1634,12 +1634,12 @@ uint8_t GUI_WIDGET_SetScrollX(GUI_HANDLE_p h, GUI_iDim_t scroll) {
 uint8_t GUI_WIDGET_SetScrollY(GUI_HANDLE_p h, GUI_iDim_t scroll) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (__GUI_WIDGET_AllowChildren(h) && __GHR(h)->ScrollY != scroll) { /* Only widgets with children support can set scroll */
+    if (gui_widget_allowchildren__(h) && __GHR(h)->ScrollY != scroll) { /* Only widgets with children support can set scroll */
         __GHR(h)->ScrollY = scroll;
-        __GUI_WIDGET_Invalidate(h);
+        gui_widget_invalidate__(h);
         ret = 1;
     }
     
@@ -1650,7 +1650,7 @@ uint8_t GUI_WIDGET_SetScrollY(GUI_HANDLE_p h, GUI_iDim_t scroll) {
 uint8_t GUI_WIDGET_SetFocus(GUI_HANDLE_p h) {
     uint8_t ret = 1;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     __GUI_WIDGET_FOCUS_SET(h);                      /* Put widget in focus */
     
@@ -1666,10 +1666,10 @@ uint8_t GUI_WIDGET_SetFontDefault(const GUI_FONT_t* font) {
 uint8_t GUI_WIDGET_IncSelection(GUI_HANDLE_p h, int16_t dir) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __GUI_WIDGET_Callback(h, GUI_WC_IncSelection, &dir, &ret);    /* Increase selection for specific amount */
+    ret = gui_widget_callback__(h, GUI_WC_IncSelection, &dir, &ret);    /* Increase selection for specific amount */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -1678,10 +1678,10 @@ uint8_t GUI_WIDGET_IncSelection(GUI_HANDLE_p h, int16_t dir) {
 uint8_t GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex) {
     uint8_t ret;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __GUI_WIDGET_SetZIndex(h, zindex);        /* Set z-index value */
+    ret = gui_widget_setzindex__(h, zindex);        /* Set z-index value */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -1690,10 +1690,10 @@ uint8_t GUI_WIDGET_SetZIndex(GUI_HANDLE_p h, int32_t zindex) {
 int32_t GUI_WIDGET_GetZIndex(GUI_HANDLE_p h) {
     int32_t ret;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __GUI_WIDGET_GetZIndex(h);                /* Set z-index value */
+    ret = gui_widget_getzindex__(h);                /* Set z-index value */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -1702,10 +1702,10 @@ int32_t GUI_WIDGET_GetZIndex(GUI_HANDLE_p h) {
 uint8_t GUI_WIDGET_SetTransparency(GUI_HANDLE_p h, uint8_t trans) {
     uint8_t ret;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __GUI_WIDGET_SetTransparency(h, trans);   /* Set widget transparency */
+    ret = gui_widget_settransparency__(h, trans);   /* Set widget transparency */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -1714,10 +1714,10 @@ uint8_t GUI_WIDGET_SetTransparency(GUI_HANDLE_p h, uint8_t trans) {
 uint8_t GUI_WIDGET_GetTransparency(GUI_HANDLE_p h) {
     uint8_t trans;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    trans = __GUI_WIDGET_GetTransparency(h);        /* Get widget transparency */
+    trans = gui_widget_gettransparency__(h);        /* Get widget transparency */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return trans;
@@ -1726,10 +1726,10 @@ uint8_t GUI_WIDGET_GetTransparency(GUI_HANDLE_p h) {
 uint8_t GUI_WIDGET_Set3DStyle(GUI_HANDLE_p h, uint8_t enable) {
     uint8_t ret;
     
-    __GUI_ASSERTPARAMS(__GUI_WIDGET_IsWidget(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __GUI_WIDGET_Set3DStyle(h, enable);       /* Set 3D mode */
+    ret = gui_widget_set3dstyle__(h, enable);       /* Set 3D mode */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;

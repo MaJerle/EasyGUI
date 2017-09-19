@@ -86,7 +86,7 @@ typedef mem_region_t GUI_MEM_Region_t;
  * \retval          0: Allocation failed
  * \retval          >0: Pointer to allocated memory
  */
-void* __GUI_MEM_Alloc(uint32_t size);
+void* gui_mem_alloc__(uint32_t size);
 
 /**
  * \brief           Allocate memory of specific size
@@ -98,7 +98,7 @@ void* __GUI_MEM_Alloc(uint32_t size);
  * \retval          0: Allocation failed
  * \retval          >0: Pointer to allocated memory
  */
-void* __GUI_MEM_Realloc(void* ptr, size_t size);
+void* gui_mem_realloc__(void* ptr, size_t size);
 
 /**
  * \brief           Allocate memory of specific size and set memory to zero
@@ -108,34 +108,34 @@ void* __GUI_MEM_Realloc(void* ptr, size_t size);
  * \retval          0: Allocation failed
  * \retval          >0: Pointer to allocated memory
  */
-void* __GUI_MEM_Calloc(size_t num, size_t size);
+void* gui_mem_calloc__(size_t num, size_t size);
 
 /**
  * \brief           Free memory
  * \param[in]       *ptr: Pointer to memory previously returned using \ref GUI_MEM_Alloc, \ref GUI_MEM_Calloc or \ref GUI_MEM_Realloc functions
  */
-void __GUI_MEM_Free(void* ptr);
+void gui_mem_free__(void* ptr);
 
 /**
  * \brief           Get total free size still available in memory to allocate
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \retval          Number of bytes available to allocate
  */
-size_t __GUI_MEM_GetFree(void);
+size_t gui_mem_getfree__(void);
 
 /**
  * \brief           Get total currently allocated memory in regions
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \retval          Number of bytes in use
  */
-size_t __GUI_MEM_GetFull(void);
+size_t gui_mem_getfull__(void);
 
 /**
  * \brief           Get minimal available number of bytes ever for allocation
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \retval          Number of minimal available number of bytes ever
  */
-size_t __GUI_MEM_GetMinFree(void);
+size_t gui_mem_getminfree__(void);
   
 /**
  * \}
