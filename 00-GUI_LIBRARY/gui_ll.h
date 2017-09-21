@@ -29,7 +29,7 @@
 \endverbatim
  */
 #ifndef GUI_LL_H
-#define GUI_LL_H
+#define GUI_LL_H 100
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -42,6 +42,7 @@ extern "C" {
  * \{
  */
 #include "gui.h"
+#include "gui_lcd.h"
 
 /**
  * \brief           Initialize LCD low-level display driver
@@ -62,8 +63,8 @@ uint8_t gui_ll_init(GUI_LCD_t* LCD, GUI_LL_t* LL);
  * \param[in]       cmd: Command to be executed. This parameter can be a value of \ref GUI_LL_Command_t enumeration
  * \param[in]       *param: Optional data included in command. Check \ref GUI_LL_Command_t enumeration what is used for each command
  * \param[out]      *result: Result from command
- * \retval          0: Command has been processed
- * \retval          1: Command has not been processed
+ * \retval          1: Command has been processed
+ * \retval          0: Command has not been processed
  */
 uint8_t gui_ll_control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* result);
  

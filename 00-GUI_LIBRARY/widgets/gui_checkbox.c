@@ -42,8 +42,7 @@
 #define CFG_CHECK           0x01
 #define CFG_DISABLE         0x02
 
-static
-uint8_t gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -75,8 +74,8 @@ static const GUI_WIDGET_t Widget = {
 #define c                   ((GUI_CHECKBOX_t *)(h))
 
 /* Set checked status */
-static
-uint8_t __SetChecked(GUI_HANDLE_p h, uint8_t state) {
+static uint8_t
+set_checked(GUI_HANDLE_p h, uint8_t state) {
     if (state && !(c->Flags & GUI_FLAG_CHECKBOX_CHECKED)) {
         c->Flags |= GUI_FLAG_CHECKBOX_CHECKED;      /* Set flag */
         gui_widget_callback__(h, GUI_WC_ValueChanged, NULL, NULL);  /* Process callback */
@@ -92,31 +91,29 @@ uint8_t __SetChecked(GUI_HANDLE_p h, uint8_t state) {
 }
 
 /* Set disabled status */
-static
-uint8_t __SetDisabled(GUI_HANDLE_p h, uint8_t state) {
+static uint8_t
+set_disabled(GUI_HANDLE_p h, uint8_t state) {
     if (state && !(c->Flags & GUI_FLAG_CHECKBOX_DISABLED)) {
         c->Flags |= GUI_FLAG_CHECKBOX_DISABLED;     /* Set flag */
-        gui_widget_invalidate__(h);
         return 1;
     } else if (!state && (c->Flags & GUI_FLAG_CHECKBOX_DISABLED)) {
         c->Flags &= ~GUI_FLAG_CHECKBOX_DISABLED;    /* Clear flag */
-        gui_widget_invalidate__(h);
         return 1;
     }
     return 0;
 }
 
-static
-uint8_t gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+static uint8_t
+gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
             GUI_WIDGET_Param_t* p = (GUI_WIDGET_Param_t *)param;
             switch (p->Type) {
                 case CFG_CHECK:                     /* Set current progress value */
-                    __SetChecked(h, *(uint8_t *)p->Data);
+                    set_checked(h, *(uint8_t *)p->Data);
                     break;
                 case CFG_DISABLE:                   /* Set disabled status */
-                    __SetDisabled(h, *(uint8_t *)p->Data);
+                    set_disabled(h, *(uint8_t *)p->Data);
                     break;
                 default: break;
             }
@@ -189,7 +186,7 @@ uint8_t gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
         }
 #endif /* GUI_USE_TOUCH */
         case GUI_WC_Click: {
-            __SetChecked(h, (c->Flags & GUI_FLAG_CHECKBOX_CHECKED) ? 0 : 1);    /* Toggle checked state */
+            set_checked(h, (c->Flags & GUI_FLAG_CHECKBOX_CHECKED) ? 0 : 1);    /* Toggle checked state */
             return 1;
         }
         default:                                    /* Handle default option */
@@ -205,26 +202,31 @@ uint8_t gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p gui_checkbox_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p
+gui_checkbox_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
-uint8_t gui_checkbox_setcolor(GUI_HANDLE_p h, GUI_CHECKBOX_COLOR_t index, GUI_Color_t color) {
+uint8_t
+gui_checkbox_setcolor(GUI_HANDLE_p h, GUI_CHECKBOX_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }
 
-uint8_t gui_checkbox_setchecked(GUI_HANDLE_p h, uint8_t checked) {
+uint8_t
+gui_checkbox_setchecked(GUI_HANDLE_p h, uint8_t checked) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_CHECK, &checked, 0, 0); /* Set parameter */
 }
 
-uint8_t gui_checkbox_setdisabled(GUI_HANDLE_p h, uint8_t disabled) {
+uint8_t
+gui_checkbox_setdisabled(GUI_HANDLE_p h, uint8_t disabled) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_DISABLE, &disabled, 0, 0);  /* Set parameter */
 }
 
-uint8_t gui_checkbox_ischecked(GUI_HANDLE_p h) {
+uint8_t
+gui_checkbox_ischecked(GUI_HANDLE_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -236,7 +238,8 @@ uint8_t gui_checkbox_ischecked(GUI_HANDLE_p h) {
     return ret;
 }
 
-uint8_t gui_checkbox_isdisabled(GUI_HANDLE_p h) {
+uint8_t
+gui_checkbox_isdisabled(GUI_HANDLE_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */

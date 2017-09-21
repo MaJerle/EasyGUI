@@ -86,7 +86,7 @@ typedef mem_region_t GUI_MEM_Region_t;
  * \retval          0: Allocation failed
  * \retval          >0: Pointer to allocated memory
  */
-void* gui_mem_alloc__(uint32_t size);
+void* gui_mem_alloc(uint32_t size);
 
 /**
  * \brief           Allocate memory of specific size
@@ -98,7 +98,7 @@ void* gui_mem_alloc__(uint32_t size);
  * \retval          0: Allocation failed
  * \retval          >0: Pointer to allocated memory
  */
-void* gui_mem_realloc__(void* ptr, size_t size);
+void* gui_mem_realloc(void* ptr, size_t size);
 
 /**
  * \brief           Allocate memory of specific size and set memory to zero
@@ -108,34 +108,34 @@ void* gui_mem_realloc__(void* ptr, size_t size);
  * \retval          0: Allocation failed
  * \retval          >0: Pointer to allocated memory
  */
-void* gui_mem_calloc__(size_t num, size_t size);
+void* gui_mem_calloc(size_t num, size_t size);
 
 /**
  * \brief           Free memory
  * \param[in]       *ptr: Pointer to memory previously returned using \ref GUI_MEM_Alloc, \ref GUI_MEM_Calloc or \ref GUI_MEM_Realloc functions
  */
-void gui_mem_free__(void* ptr);
+void gui_mem_free(void* ptr);
 
 /**
  * \brief           Get total free size still available in memory to allocate
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \retval          Number of bytes available to allocate
  */
-size_t gui_mem_getfree__(void);
+size_t gui_mem_getfree(void);
 
 /**
  * \brief           Get total currently allocated memory in regions
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \retval          Number of bytes in use
  */
-size_t gui_mem_getfull__(void);
+size_t gui_mem_getfull(void);
 
 /**
  * \brief           Get minimal available number of bytes ever for allocation
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \retval          Number of minimal available number of bytes ever
  */
-size_t gui_mem_getminfree__(void);
+size_t gui_mem_getminfree(void);
   
 /**
  * \}
@@ -150,57 +150,6 @@ size_t gui_mem_getminfree__(void);
  * \retval          0: Memory was not assigned
  */
 uint8_t gui_mem_assignmemory(const GUI_MEM_Region_t* regions, size_t size);
-
-/**
- * \brief           Allocate memory of specific size
- * \param[in]       size: Number of bytes to allocate
- * \retval          0: Allocation failed
- * \retval          >0: Pointer to allocated memory
- */
-#define GUI_MEM_Alloc       __GUI_MEM_Alloc
-
-/**
- * \brief           Allocate memory of specific size
- * \note            After new memory is allocated, content of old one is copied to new allocated memory
- * \param[in]       *ptr: Pointer to current allocated memory to resize, returned using \ref GUI_MEM_Alloc, \ref GUI_MEM_Calloc or \ref GUI_MEM_Realloc functions
- * \param[in]       size: Number of bytes to allocate on new memory
- * \retval          0: Allocation failed
- * \retval          >0: Pointer to allocated memory
- */
-#define GUI_MEM_Realloc     __GUI_MEM_Realloc
-
-/**
- * \brief           Allocate memory of specific size and set memory to zero
- * \param[in]       num: Number of elements to allocate
- * \param[in]       size: Size of each element
- * \retval          0: Allocation failed
- * \retval          >0: Pointer to allocated memory
- */
-#define GUI_MEM_Calloc      __GUI_MEM_Calloc
-
-/**
- * \brief           Free memory
- * \param[in]       *ptr: Pointer to memory previously returned using \ref GUI_MEM_Alloc, \ref GUI_MEM_Calloc or \ref GUI_MEM_Realloc functions
- */
-#define GUI_MEM_Free        __GUI_MEM_Free
-
-/**
- * \brief           Get total free size still available in memory to allocate
- * \retval          Number of bytes available to allocate
- */
-#define GUI_MEM_GetFree     __GUI_MEM_GetFree
-
-/**
- * \brief           Get total currently allocated memory in regions
- * \retval          Number of bytes in use
- */
-#define GUI_MEM_GetFull     __GUI_MEM_GetFull
-
-/**
- * \brief           Get minimal available number of bytes ever for allocation
- * \retval          Number of minimal available number of bytes ever
- */
-#define GUI_MEM_GetMinFree  __GUI_MEM_GetMinFree
     
 /**
  * \}

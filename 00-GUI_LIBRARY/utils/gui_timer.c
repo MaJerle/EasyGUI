@@ -64,7 +64,8 @@ static gui_mbox_msg_t timer_msg = {GUI_SYS_MBOX_TYPE_TIMER};
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_TIMER_t* gui_timer_create__(uint16_t period, void (*callback)(GUI_TIMER_t *), void* params) {
+GUI_TIMER_t*
+gui_timer_create__(uint16_t period, void (*callback)(GUI_TIMER_t *), void* params) {
     GUI_TIMER_t* ptr;
     
     ptr = __GUI_MEMALLOC(sizeof(*ptr));             /* Allocate memory for timer */
@@ -77,7 +78,7 @@ GUI_TIMER_t* gui_timer_create__(uint16_t period, void (*callback)(GUI_TIMER_t *)
         ptr->Params = params;                       /* Timer custom parameters */
         ptr->Flags = 0;                             /* Timer flags management */
         
-        gui_linkedlist_add_gen__(&GUI.Timers.List, (GUI_LinkedList_t *)ptr);    /* Add timer to linked list */
+        gui_linkedlist_add_gen(&GUI.Timers.List, (GUI_LinkedList_t *)ptr);  /* Add timer to linked list */
 #if GUI_OS
         gui_sys_mbox_putnow(&GUI.OS.mbox, &timer_msg);  /* Add new message to queue */
 #endif /* GUI_OS */
@@ -85,16 +86,18 @@ GUI_TIMER_t* gui_timer_create__(uint16_t period, void (*callback)(GUI_TIMER_t *)
     return ptr;
 }
 
-uint8_t gui_timer_remove__(GUI_TIMER_t** t) {  
+uint8_t
+gui_timer_remove__(GUI_TIMER_t** t) {  
     __GUI_ASSERTPARAMS(t && *t);                    /* Check input parameters */  
-    gui_linkedlist_remove_gen__(&GUI.Timers.List, (GUI_LinkedList_t *)(*t));    /* Remove timer from linked list */
+    gui_linkedlist_remove_gen(&GUI.Timers.List, (GUI_LinkedList_t *)(*t));  /* Remove timer from linked list */
     __GUI_MEMFREE(*t);                              /* Free memory for timer */
     *t = 0;                                         /* Restore pointer */
     
     return 1;
 }
 
-uint8_t gui_timer_start__(GUI_TIMER_t* t) {
+uint8_t
+gui_timer_start__(GUI_TIMER_t* t) {
     __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
     t->Counter = t->Period;                         /* Reset counter to top value */
     t->Flags &= ~GUI_FLAG_TIMER_PERIODIC;           /* Clear periodic flag */
@@ -106,7 +109,8 @@ uint8_t gui_timer_start__(GUI_TIMER_t* t) {
     return 1;
 }
 
-uint8_t gui_timer_startperiodic__(GUI_TIMER_t* t) {
+uint8_t
+gui_timer_startperiodic__(GUI_TIMER_t* t) {
     __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
     t->Counter = t->Period;                         /* Reset counter to top value */
     t->Flags |= GUI_FLAG_TIMER_ACTIVE | GUI_FLAG_TIMER_PERIODIC;    /* Set active flag */
@@ -114,7 +118,8 @@ uint8_t gui_timer_startperiodic__(GUI_TIMER_t* t) {
     return 1;
 }
 
-uint8_t gui_timer_stop__(GUI_TIMER_t* t) {
+uint8_t
+gui_timer_stop__(GUI_TIMER_t* t) {
     __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
     t->Counter = t->Period;                         /* Reset counter to top value */
     t->Flags &= ~GUI_FLAG_TIMER_ACTIVE;             /* Clear active flag */
@@ -122,14 +127,16 @@ uint8_t gui_timer_stop__(GUI_TIMER_t* t) {
     return 1;
 }
 
-uint8_t gui_timer_reset__(GUI_TIMER_t* t) {
+uint8_t
+gui_timer_reset__(GUI_TIMER_t* t) {
     __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
     t->Counter = t->Period;                         /* Clear and reset timer */
     
     return 1;
 }
 
-void gui_timer_process__(void) {
+void
+gui_timer_process(void) {
     GUI_TIMER_t* t;
     volatile uint32_t time = gui_sys_now();         /* Get current time */
     volatile uint32_t lastTime = GUI.Timers.Time;
@@ -169,7 +176,8 @@ void gui_timer_process__(void) {
     GUI.Timers.Time = time;                         /* Reset time */
 }
 
-uint32_t gui_timer_getactivecount__(void) {
+uint32_t
+gui_timer_getactivecount(void) {
     uint32_t cnt = 0;
     GUI_TIMER_t* t;
     for (t = (GUI_TIMER_t *)GUI.Timers.List.First; t; t = (GUI_TIMER_t *)t->List.Next) {

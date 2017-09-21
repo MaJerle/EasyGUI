@@ -114,7 +114,7 @@ uint8_t gui_timer_reset__(GUI_TIMER_t* t);
  * \note            Processes all timers in loop and calls callback function if needed
  * \retval          None
  */
-void gui_timer_process__(void);
+void gui_timer_process(void);
 
 /**
  * \brief           Get parameters from timer
@@ -125,7 +125,7 @@ void gui_timer_process__(void);
  */
 #define gui_timer_getparams__(t)        (t)->Params
 
-uint32_t gui_timer_getactivecount__(void);
+uint32_t gui_timer_getactivecount(void);
 
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 

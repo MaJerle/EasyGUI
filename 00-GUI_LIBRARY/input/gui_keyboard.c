@@ -303,8 +303,8 @@ KeyboardInfo_t Kbd = {.ActionValue = 10};   /* Set action value to max */
 /******************************************************************************/
 /******************************************************************************/
 /* Callback for keyboard button */
-static
-uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
+static uint8_t
+keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
     switch (cmd) {                                  /* Process commands */
         case GUI_WC_Draw: {
             GUI_Char str[10] = {0};
@@ -452,8 +452,8 @@ uint8_t keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* r
 }
 
 /* Callback for keyboard base widget */
-static
-uint8_t keyboard_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
+static uint8_t
+keyboard_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
     switch (cmd) {
         case GUI_WC_Init: {
             return 1;
@@ -465,8 +465,8 @@ uint8_t keyboard_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* resul
 }
 
 /* Timer callback for keyboard */
-static
-void keyboard_timer_callback(GUI_TIMER_t* timer) {
+static void
+keyboard_timer_callback(GUI_TIMER_t* timer) {
     if (Kbd.Action == ACTION_HIDE) {                /* We should hide the keyboard */
         if (Kbd.ActionValue < 10) {
             Kbd.ActionValue++;
@@ -487,8 +487,8 @@ void keyboard_timer_callback(GUI_TIMER_t* timer) {
 }
 
 /* Callback function for base element of keyboard */
-static
-uint8_t keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
+static uint8_t
+keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
     switch (cmd) {
         case GUI_WC_PreInit: {
             __GH(h)->Timer = gui_timer_create__(60, keyboard_timer_callback, 0);    /* Create timer */
@@ -562,7 +562,8 @@ uint8_t keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-uint8_t gui_keyboard_hide__(void) {
+uint8_t
+gui_keyboard_hide__(void) {
     __GUI_ASSERTPARAMS(Kbd.Handle);                 /* Check parameters */
     Kbd.Action = ACTION_HIDE;                       /* Set action to hide */
     gui_timer_startperiodic__(__GH(Kbd.Handle)->Timer); /* Start periodic timer */
@@ -570,7 +571,8 @@ uint8_t gui_keyboard_hide__(void) {
     return 1;
 }
 
-uint8_t gui_keyboard_show__(GUI_HANDLE_p h) {
+uint8_t
+gui_keyboard_show__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(Kbd.Handle);                 /* Check parameters */
     Kbd.Action = ACTION_SHOW;                       /* Set action to show */
     if (h && __GH(h)->Font) {                       /* Check widget and font for it */
@@ -587,7 +589,8 @@ uint8_t gui_keyboard_show__(GUI_HANDLE_p h) {
 /***                         Thread safe public API                          **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p gui_keyboard_create(void) {    
+GUI_HANDLE_p
+gui_keyboard_create(void) {    
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (!Kbd.Handle) {
@@ -598,7 +601,8 @@ GUI_HANDLE_p gui_keyboard_create(void) {
     return Kbd.Handle;
 }
 
-uint8_t gui_keyboard_hide(void) {
+uint8_t
+gui_keyboard_hide(void) {
     uint8_t ret;
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -608,7 +612,8 @@ uint8_t gui_keyboard_hide(void) {
     return ret;
 }
 
-uint8_t gui_keyboard_show(GUI_HANDLE_p h) {
+uint8_t
+gui_keyboard_show(GUI_HANDLE_p h) {
     uint8_t ret;
     __GUI_ENTER();                                  /* Enter GUI */
     

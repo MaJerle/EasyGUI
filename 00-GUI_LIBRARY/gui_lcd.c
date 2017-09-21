@@ -75,3 +75,11 @@ GUI_Dim_t
 gui_lcd_getheight(void) {
     return GUI.LCD.Height;
 }
+
+void
+gui_lcd_confirmactivelayer(GUI_Byte layer_num) {
+    if ((GUI.LCD.Flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM)) {/* If we have anything pending */
+        GUI.LCD.Layers[layer_num].Pending = 0;
+        GUI.LCD.Flags &= ~GUI_FLAG_LCD_WAIT_LAYER_CONFIRM;  /* Clear flag */
+    }
+}

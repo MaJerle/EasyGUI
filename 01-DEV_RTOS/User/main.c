@@ -254,7 +254,7 @@ user_thread(void const * arg) {
         gui_widget_set3dstyle(handle, 0);
     }
     
-    //gui_keyboard_create();                      /* Create virtual keyboard */
+    gui_keyboard_create();                      /* Create virtual keyboard */
     
     touch_thread_id = osThreadCreate(osThread(touch_thread), NULL); /* Create touch thread */
     fat_thread_id = osThreadCreate(osThread(fat_thread), NULL); /* Create FAT thread */
@@ -281,7 +281,7 @@ user_thread(void const * arg) {
             switch (gui_string_unicode_decode(&s, ch)) {
                 case UNICODE_OK:
                     if (ch == 'l') {
-                        gui_linkedlist_printlist__();
+                        gui_linkedlist_printlist();
                         break;
                     }
                     if (ch == 'b') {

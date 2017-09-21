@@ -35,7 +35,6 @@ typedef struct MemBlock {
     struct MemBlock* NextFreeBlock;                 /*!< Pointer to next free block */
     size_t Size;                                    /*!< Size of block */
 } MemBlock_t;
-#define MEMBLOCK_METASIZE           sizeof(MemBlock_t)
 
 
 #define GUI_USE_MEM                 1               /*!< Use internal memory allocation */
@@ -43,8 +42,11 @@ typedef struct MemBlock {
 /**
  * \brief           Memory alignment bits and absolute number
  */
-#define MEM_ALIGN_BITS              ((size_t)0x03)
-#define MEM_ALIGN_NUM               ((size_t)MEM_ALIGN_BITS + (size_t)1)
+#define MEM_ALIGN_BITS              ((size_t)(GUI_MEM_ALIGNMENT - 1))
+#define MEM_ALIGN_NUM               ((size_t)GUI_MEM_ALIGNMENT)
+#define MEM_ALIGN(x)                GUI_MEM_ALIGN(x)
+
+#define MEMBLOCK_METASIZE           MEM_ALIGN(sizeof(MemBlock_t))
 
 /******************************************************************************/
 /******************************************************************************/
@@ -71,8 +73,8 @@ static size_t MemTotalSize = 0;                     /* Size of memory in units o
 /******************************************************************************/
 /******************************************************************************/
 /* Insert block to list of free blocks */
-static
-void __mem_insertfreeblock(MemBlock_t* newBlock) {
+static void
+mem_insertfreeblock(MemBlock_t* newBlock) {
     MemBlock_t* ptr;
     uint8_t* addr;
 
@@ -117,7 +119,8 @@ void __mem_insertfreeblock(MemBlock_t* newBlock) {
     }
 }
 
-uint8_t mem_assignmem(const mem_region_t* regions, size_t len) {
+uint8_t
+mem_assignmem(const mem_region_t* regions, size_t len) {
     uint8_t* MemStartAddr;
     size_t MemSize;
     MemBlock_t* FirstBlock;
@@ -223,7 +226,8 @@ uint8_t mem_assignmem(const mem_region_t* regions, size_t len) {
     return 1;                                       /* Regions set as expected */
 }
 
-void* mem_alloc(size_t size) {
+void*
+mem_alloc(size_t size) {
     MemBlock_t *Prev, *Curr, *Next;
     void* retval = 0;
 
@@ -238,10 +242,7 @@ void* mem_alloc(size_t size) {
         return 0;
     }
 
-    size += MEMBLOCK_METASIZE;                      /* Increase allocation size for meta data */
-    if ((size & MEM_ALIGN_BITS)) {
-        size = (size + MEM_ALIGN_BITS) & ~MEM_ALIGN_BITS;
-    }
+    size = MEM_ALIGN(size) + MEMBLOCK_METASIZE;
     if (size > MemAvailableBytes) {                 /* Check if we have enough memory available */
         return 0;
     }
@@ -283,7 +284,7 @@ void* mem_alloc(size_t size) {
              * Add virtual block to list of free blocks.
              * It is placed directly after currently allocated memory
              */
-            __mem_insertfreeblock(Next);            /* Insert free memory block to list of free memory blocks (linked list chain) */
+            mem_insertfreeblock(Next);              /* Insert free memory block to list of free memory blocks (linked list chain) */
         }
         Curr->Size |= MemAllocBit;                  /* Set allocated bit = memory is allocated */
         Curr->NextFreeBlock = 0;                    /* Clear next free block pointer as there is no one */
@@ -299,7 +300,8 @@ void* mem_alloc(size_t size) {
     return retval;
 }
 
-void mem_free(void* ptr) {
+void
+mem_free(void* ptr) {
     MemBlock_t* block;
 
     if (!ptr) {                                     /* To be in compliance with C free function */
@@ -319,12 +321,13 @@ void mem_free(void* ptr) {
          */
         block->Size &= ~MemAllocBit;                /* Clear allocated bit */
         MemAvailableBytes += block->Size;           /* Increase available bytes back */
-        __mem_insertfreeblock(block);               /* Insert block to list of free blocks */
+        mem_insertfreeblock(block);                 /* Insert block to list of free blocks */
     }
 }
 
 /* Get size of user memory from input pointer */
-size_t mem_getusersize(void* ptr) {
+size_t
+mem_getusersize(void* ptr) {
     MemBlock_t* block;
     
     if (!ptr) {
@@ -338,7 +341,8 @@ size_t mem_getusersize(void* ptr) {
 }
 
 /* Allocate memory and set it to 0 */
-void* mem_calloc(size_t num, size_t size) {
+void*
+mem_calloc(size_t num, size_t size) {
     void* ptr;
     size_t tot_len = num * size;
     
@@ -349,7 +353,8 @@ void* mem_calloc(size_t num, size_t size) {
 }
 
 /* Reallocate previously allocated memory */
-void* mem_realloc(void* ptr, size_t size) {
+void*
+mem_realloc(void* ptr, size_t size) {
     void* newPtr;
     size_t oldSize;
     
@@ -367,15 +372,18 @@ void* mem_realloc(void* ptr, size_t size) {
     return 0;
 }
 
-size_t mem_getfree(void) {
+size_t
+mem_getfree(void) {
     return MemAvailableBytes;                       /* Return free bytes available for allocation */
 }
 
-size_t mem_getfull(void) {
+size_t
+mem_getfull(void) {
     return MemTotalSize - MemAvailableBytes;        /* Return remaining bytes */
 }
 
-size_t mem_getminfree(void) {
+size_t
+mem_getminfree(void) {
     return MemMinAvailableBytes;                    /* Return minimal bytes ever available */
 }
 
@@ -384,7 +392,8 @@ size_t mem_getminfree(void) {
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-void* gui_mem_alloc__(uint32_t size) {
+void*
+gui_mem_alloc(uint32_t size) {
     void* ptr;
     __GUI_SYS_PROTECT();                            /* Lock system protection */
 #if GUI_USE_MEM
@@ -396,7 +405,8 @@ void* gui_mem_alloc__(uint32_t size) {
     return ptr;
 }
 
-void* gui_mem_realloc__(void* ptr, size_t size) {
+void*
+gui_mem_realloc(void* ptr, size_t size) {
     __GUI_SYS_PROTECT();                            /* Lock system protection */
 #if GUI_USE_MEM
     ptr = mem_realloc(ptr, size);                   /* Reallocate and return pointer */
@@ -407,7 +417,8 @@ void* gui_mem_realloc__(void* ptr, size_t size) {
     return ptr;
 }
 
-void* gui_mem_calloc__(size_t num, size_t size) {
+void*
+gui_mem_calloc(size_t num, size_t size) {
     void* ptr;
     __GUI_SYS_PROTECT();                            /* Lock system protection */
 #if GUI_USE_MEM
@@ -419,7 +430,8 @@ void* gui_mem_calloc__(size_t num, size_t size) {
     return ptr;
 }
 
-void gui_mem_free__(void* ptr) {
+void
+gui_mem_free(void* ptr) {
     __GUI_SYS_PROTECT();                            /* Lock system protection */
 #if GUI_USE_MEM
     mem_free(ptr);                                  /* Free already allocated memory */
@@ -429,15 +441,18 @@ void gui_mem_free__(void* ptr) {
     __GUI_SYS_UNPROTECT();                          /* Unlock protection */
 }
 
-size_t gui_mem_getfree__(void) {
+size_t
+gui_mem_getfree(void) {
     return mem_getfree();                           /* Get free bytes available to allocate */
 }
 
-size_t gui_mem_getfull__(void) {
+size_t
+gui_mem_getfull(void) {
     return mem_getfull();                           /* Get number of bytes allocated already */
 }
 
-size_t gui_mem_getminfree__(void) {
+size_t
+gui_mem_getminfree(void) {
     return mem_getminfree();                        /* Get minimal number of bytes ever available for allocation */
 }
 

@@ -41,8 +41,7 @@
 
 #define CFG_BORDER_RADIUS   0x01
 
-static
-uint8_t gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
     
 /******************************************************************************/
 /******************************************************************************/
@@ -70,8 +69,9 @@ static const GUI_WIDGET_t Widget = {
 /******************************************************************************/
 /******************************************************************************/
 #define b                   ((GUI_BUTTON_t *)(h))
-static
-uint8_t gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+
+static uint8_t
+gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
@@ -163,16 +163,19 @@ uint8_t gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p gui_button_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p
+gui_button_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
-uint8_t gui_button_setcolor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color) {
+uint8_t
+gui_button_setcolor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }
 
-uint8_t gui_button_setborderradius(GUI_HANDLE_p h, GUI_Dim_t size) {
+uint8_t
+gui_button_setborderradius(GUI_HANDLE_p h, GUI_Dim_t size) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_BORDER_RADIUS, &size, 1, 1);    /* Set parameter */
 }

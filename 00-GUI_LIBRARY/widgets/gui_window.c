@@ -39,8 +39,7 @@
 /******************************************************************************/
 #define __GW(x)             ((GUI_WINDOW_t *)(x))
 
-static
-uint8_t gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
     
 /******************************************************************************/
 /******************************************************************************/
@@ -69,8 +68,8 @@ static const GUI_WIDGET_t Widget = {
 /******************************************************************************/
 /******************************************************************************/
 #define w          ((GUI_WINDOW_t *)h)
-static
-uint8_t gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+static uint8_t
+gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
 #if GUI_USE_TOUCH
    static GUI_iDim_t tX, tY, Mode = 0;
 #endif /* GUI_USE_TOUCH */
@@ -270,11 +269,13 @@ uint8_t gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p gui_window_createdesktop(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb) {
+GUI_HANDLE_p
+gui_window_createdesktop(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, 0, 0, GUI.LCD.Width, GUI.LCD.Height, 0, cb, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);   /* Allocate memory for basic widget */
 }
 
-GUI_HANDLE_p gui_window_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p
+gui_window_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_WINDOW_t* ptr;
 
     ptr = gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
@@ -292,27 +293,30 @@ GUI_HANDLE_p gui_window_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_
     return (GUI_HANDLE_p)ptr;
 }
 
-uint8_t gui_window_setcolor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color) {
+uint8_t
+gui_window_setcolor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     ret = gui_widget_setcolor__(h, (uint8_t)index, color);  /* Set color */
     return ret;
 }
 
-uint8_t gui_window_setactive(GUI_HANDLE_p h) {
+uint8_t
+gui_window_setactive(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     GUI.WindowActive = h;                           /* Set new active window */
-    gui_widget_movedowntree__(h);                   /* Move widget down on tree */
+    gui_widget_movedowntree(h);                     /* Move widget down on tree */
     
-    __GUI_WIDGET_FOCUS_CLEAR();                     /* Clear focus on widget */
-    __GUI_WIDGET_ACTIVE_CLEAR();                    /* Clear active on widget */
+    gui_widget_focus_clear();                       /* Clear focus on widget */
+    gui_widget_active_clear();                      /* Clear active on widget */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;
 }
 
-GUI_HANDLE_p gui_window_getdesktop(void) {
-    return (GUI_HANDLE_p)gui_linkedlist_getnext_gen__(&GUI.Root, NULL); /* Return desktop window */
+GUI_HANDLE_p
+gui_window_getdesktop(void) {
+    return (GUI_HANDLE_p)gui_linkedlist_getnext_gen(&GUI.Root, NULL);   /* Return desktop window */
 }

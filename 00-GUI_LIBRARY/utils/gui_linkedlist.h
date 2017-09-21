@@ -72,7 +72,7 @@ extern "C" {
  * \retval          Element in linked list
  * \hideinitializer
  */
-#define gui_linkedlist_multi_getdata__(element)     ((element) ? (element)->Element : 0)
+#define gui_linkedlist_multi_getdata(element)     ((element) ? (element)->Element : 0)
 
 /**
  * \brief           Add element to doubly linked list
@@ -82,9 +82,9 @@ extern "C" {
  * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to add to base linked list
  * \retval          None
- * \sa              gui_linkedlist_remove_gen__, gui_linkedlist_multi_add_gen__, gui_linkedlist_multi_remove_gen__
+ * \sa              gui_linkedlist_remove_gen, gui_linkedlist_multi_add_gen, gui_linkedlist_multi_remove_gen
  */
-void gui_linkedlist_add_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
+void gui_linkedlist_add_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
     
 /**
  * \brief           Remove element from doubly linked list
@@ -92,15 +92,15 @@ void gui_linkedlist_add_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* elem
  * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to remove from base linked list
  * \retval          Pointer to removed \ref GUI_LinkedList_t element
- * \sa              gui_linkedlist_add_gen__, gui_linkedlist_multi_add_gen__, gui_linkedlist_multi_remove_gen__
+ * \sa              gui_linkedlist_add_gen, gui_linkedlist_multi_add_gen, gui_linkedlist_multi_remove_gen
  */
-GUI_LinkedList_t* gui_linkedlist_remove_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
+GUI_LinkedList_t* gui_linkedlist_remove_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 
 /**
  * \brief           Get next element structure from doubly linked list
  * \note            With combination of input parameters, function acts different:
  *                  <table>
- *                      <tr><th>root    <th>element <th>gui_linkedlist_getnext_gen__(root, element)
+ *                      <tr><th>root    <th>element <th>gui_linkedlist_getnext_gen(root, element)
  *                      <tr><td>0       <td>0       <td>0
  *                      <tr><td>0       <td>> 0     <td>Next element of <b>element</b> if exists, <b>0</b> otherwise
  *                      <tr><td>> 0     <td>0       <td>First element in <b>parent</b> list if exists, <b>0</b> otherwise
@@ -112,15 +112,15 @@ GUI_LinkedList_t* gui_linkedlist_remove_gen__(GUI_LinkedListRoot_t* root, GUI_Li
  * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to get next element of
  * \retval          > 0: Pointer to next element
  * \retval          0: No elements anymore in list
- * \sa              gui_linkedlist_getprev_gen__, gui_linkedlist_multi_getnext_gen__, gui_linkedlist_multi_getprev_gen__
+ * \sa              gui_linkedlist_getprev_gen, gui_linkedlist_multi_getnext_gen, gui_linkedlist_multi_getprev_gen
  */
-GUI_LinkedList_t* gui_linkedlist_getnext_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
+GUI_LinkedList_t* gui_linkedlist_getnext_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 
 /**
  * \brief           Get previous element structure from doubly linked list
  * \note            With combination of input parameters, function acts different:
  *                  <table>
- *                      <tr><th>root    <th>element <th>gui_linkedlist_getnext_gen__(root, element)
+ *                      <tr><th>root    <th>element <th>gui_linkedlist_getnext_gen(root, element)
  *                      <tr><td>0       <td>0       <td>0
  *                      <tr><td>0       <td>> 0     <td>Previous element of <b>element</b> if exists, <b>0</b> otherwise
  *                      <tr><td>> 0     <td>0       <td>Last element in <b>parent</b> list if exists, <b>0</b> otherwise
@@ -132,9 +132,9 @@ GUI_LinkedList_t* gui_linkedlist_getnext_gen__(GUI_LinkedListRoot_t* root, GUI_L
  * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to get next element of
  * \retval          > 0: Pointer to previous element
  * \retval          0: No elements anymore in list
- * \sa              gui_linkedlist_getnext_gen__, gui_linkedlist_multi_getnext_gen__, gui_linkedlist_multi_getprev_gen__
+ * \sa              gui_linkedlist_getnext_gen, gui_linkedlist_multi_getnext_gen, gui_linkedlist_multi_getprev_gen
  */
-GUI_LinkedList_t* gui_linkedlist_getprev_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
+GUI_LinkedList_t* gui_linkedlist_getprev_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 
 /**
  * \brief           Get item from linked list by index
@@ -144,7 +144,7 @@ GUI_LinkedList_t* gui_linkedlist_getprev_gen__(GUI_LinkedListRoot_t* root, GUI_L
  * \retval          0: Element not found
  * \retval          > 0: Pointer to \ref GUI_LinkedList_t structure
  */
-GUI_LinkedList_t* gui_linkedlist_getnext_byindex_gen__(GUI_LinkedListRoot_t* root, uint16_t index);
+GUI_LinkedList_t* gui_linkedlist_getnext_byindex_gen(GUI_LinkedListRoot_t* root, uint16_t index);
 
 /**
  * \brief           Move widget down for one on doubly linked list
@@ -153,9 +153,9 @@ GUI_LinkedList_t* gui_linkedlist_getnext_byindex_gen__(GUI_LinkedListRoot_t* roo
  * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to move down on base linked list
  * \retval          1: Element moved down
  * \retval          0: Element was not moved down as it is already on bottom
- * \sa              gui_linkedlist_moveup_gen__, gui_linkedlist_multi_moveup_gen__, gui_linkedlist_multi_movedown_gen__
+ * \sa              gui_linkedlist_moveup_gen, gui_linkedlist_multi_moveup_gen, gui_linkedlist_multi_movedown_gen
  */
-uint8_t gui_linkedlist_movedown_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
+uint8_t gui_linkedlist_movedown_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 
 /**
  * \brief           Move widget up for one on doubly linked list
@@ -164,9 +164,9 @@ uint8_t gui_linkedlist_movedown_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedList
  * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to move up on base linked list
  * \retval          1: Element moved up
  * \retval          0: Element was not moved up as it is already on bottom
- * \sa              gui_linkedlist_movedown_gen__, gui_linkedlist_multi_moveup_gen__, gui_linkedlist_multi_movedown_gen__
+ * \sa              gui_linkedlist_movedown_gen, gui_linkedlist_multi_moveup_gen, gui_linkedlist_multi_movedown_gen
  */
-uint8_t gui_linkedlist_moveup_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
+uint8_t gui_linkedlist_moveup_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element);
 
 /**
  * \brief           Add element to multi linked list
@@ -177,9 +177,9 @@ uint8_t gui_linkedlist_moveup_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedList_t
  * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to add to base linked list
  * \retval          > 0: Pointer to allocated \ref GUI_LinkedListMulti_t structure with linked list entries
  * \retval          0: Failed to allocate memory for \ref GUI_LinkedListMulti_t structure
- * \sa              gui_linkedlist_add_gen__, gui_linkedlist_remove_gen__, gui_linkedlist_multi_remove_gen__
+ * \sa              gui_linkedlist_add_gen, gui_linkedlist_remove_gen, gui_linkedlist_multi_remove_gen
  */
-GUI_LinkedListMulti_t* gui_linkedlist_multi_add_gen__(GUI_LinkedListRoot_t* root, void* element);
+GUI_LinkedListMulti_t* gui_linkedlist_multi_add_gen(GUI_LinkedListRoot_t* root, void* element);
     
 /**
  * \brief           Remove element from linked list in multi linked list
@@ -188,15 +188,15 @@ GUI_LinkedListMulti_t* gui_linkedlist_multi_add_gen__(GUI_LinkedListRoot_t* root
  * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to remove from base linked list
  * \retval          1: Element removed and memory deallocated
  * \retval          0: Failed to remove element
- * \sa              gui_linkedlist_add_gen__, gui_linkedlist_remove_gen__, gui_linkedlist_multi_add_gen__
+ * \sa              gui_linkedlist_add_gen, gui_linkedlist_remove_gen, gui_linkedlist_multi_add_gen
  */
-uint8_t gui_linkedlist_multi_remove_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element);
+uint8_t gui_linkedlist_multi_remove_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element);
 
 /**
  * \brief           Get next element structure from multi linked list
  * \note            With combination of input parameters, function acts different:
  *                  <table>
- *                      <tr><th>root    <th>element <th>gui_linkedlist_multi_getnext_gen__(root, element)
+ *                      <tr><th>root    <th>element <th>gui_linkedlist_multi_getnext_gen(root, element)
  *                      <tr><td>0       <td>0       <td>0
  *                      <tr><td>0       <td>> 0     <td>Next element of <b>element</b> if exists, <b>0</b> otherwise
  *                      <tr><td>> 0     <td>0       <td>First element in <b>parent</b> list if exists, <b>0</b> otherwise
@@ -208,15 +208,15 @@ uint8_t gui_linkedlist_multi_remove_gen__(GUI_LinkedListRoot_t* root, GUI_Linked
  * \param[in]       *element: Pointer to \ref GUI_LinkedListMulti_t element to get next element of
  * \retval          > 0: Pointer to next element
  * \retval          0: No elements anymore in list
- * \sa              gui_linkedlist_getnext_gen__, gui_linkedlist_getprev_gen__, gui_linkedlist_multi_getprev_gen__
+ * \sa              gui_linkedlist_getnext_gen, gui_linkedlist_getprev_gen, gui_linkedlist_multi_getprev_gen
  */
-GUI_LinkedListMulti_t* gui_linkedlist_multi_getnext_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element);
+GUI_LinkedListMulti_t* gui_linkedlist_multi_getnext_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element);
 
 /**
  * \brief           Get previous element structure from multi linked list
  * \note            With combination of input parameters, function acts different:
  *                  <table>
- *                      <tr><th>root    <th>element <th>gui_linkedlist_multi_getprev_gen__(root, element)
+ *                      <tr><th>root    <th>element <th>gui_linkedlist_multi_getprev_gen(root, element)
  *                      <tr><td>0       <td>0       <td>0
  *                      <tr><td>0       <td>> 0     <td>Previous element of <b>element</b> if exists, <b>0</b> otherwise
  *                      <tr><td>> 0     <td>0       <td>Last element in <b>parent</b> list if exists, <b>0</b> otherwise
@@ -228,9 +228,9 @@ GUI_LinkedListMulti_t* gui_linkedlist_multi_getnext_gen__(GUI_LinkedListRoot_t* 
  * \param[in]       *element: Pointer to \ref GUI_LinkedListMulti_t element to get next element of
  * \retval          > 0: Pointer to previous element
  * \retval          0: No elements anymore in list
- * \sa              gui_linkedlist_getnext_gen__, gui_linkedlist_getprev_gen__, gui_linkedlist_multi_getnext_gen__
+ * \sa              gui_linkedlist_getnext_gen, gui_linkedlist_getprev_gen, gui_linkedlist_multi_getnext_gen
  */
-GUI_LinkedListMulti_t* gui_linkedlist_multi_getprev_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element);
+GUI_LinkedListMulti_t* gui_linkedlist_multi_getprev_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element);
 
 /**
  * \brief           Move widget down for one on multi linked list
@@ -239,9 +239,9 @@ GUI_LinkedListMulti_t* gui_linkedlist_multi_getprev_gen__(GUI_LinkedListRoot_t* 
  * \param[in]       *element: Pointer to \ref GUI_LinkedListMulti_t element to move down on base linked list
  * \retval          1: Element moved down
  * \retval          0: Element was not moved down as it is already on bottom
- * \sa              gui_linkedlist_moveup_gen__, gui_linkedlist_movedown_gen__, gui_linkedlist_multi_moveup_gen__
+ * \sa              gui_linkedlist_moveup_gen, gui_linkedlist_movedown_gen, gui_linkedlist_multi_moveup_gen
  */
-uint8_t gui_linkedlist_multi_movedown_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element);
+uint8_t gui_linkedlist_multi_movedown_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element);
 
 /**
  * \brief           Move widget up for one on multi linked list
@@ -250,9 +250,9 @@ uint8_t gui_linkedlist_multi_movedown_gen__(GUI_LinkedListRoot_t* root, GUI_Link
  * \param[in]       *element: Pointer to \ref GUI_LinkedListMulti_t element to move up on base linked list
  * \retval          1: Element moved up
  * \retval          0: Element was not moved up as it is already on bottom
- * \sa              gui_linkedlist_moveup_gen__, gui_linkedlist_movedown_gen__, gui_linkedlist_multi_movedown_gen__
+ * \sa              gui_linkedlist_moveup_gen, gui_linkedlist_movedown_gen, gui_linkedlist_multi_movedown_gen
  */
-uint8_t gui_linkedlist_multi_moveup_gen__(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element);
+uint8_t gui_linkedlist_multi_moveup_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element);
     
 /**
  * \brief           Remove element from linked list in multi linked list
@@ -263,9 +263,9 @@ uint8_t gui_linkedlist_multi_moveup_gen__(GUI_LinkedListRoot_t* root, GUI_Linked
  * \param[in]       *element: Memory address in data part of linked list entry
  * \retval          1: Element removed and memory deallocated
  * \retval          0: Failed to remove element
- * \sa              gui_linkedlist_remove_gen__, gui_linkedlist_multi_remove_gen__
+ * \sa              gui_linkedlist_remove_gen, gui_linkedlist_multi_remove_gen
  */
-uint8_t gui_linkedlist_multi_find_remove__(GUI_LinkedListRoot_t* root, void* element);
+uint8_t gui_linkedlist_multi_find_remove(GUI_LinkedListRoot_t* root, void* element);
     
 /**
  * \brief           Checks if linked list has any entries
@@ -274,7 +274,7 @@ uint8_t gui_linkedlist_multi_find_remove__(GUI_LinkedListRoot_t* root, void* ele
  * \retval          > 0: Has entries
  * \hideinitializer
  */
-#define gui_linkedlist_hasentries__(root)       (!!((root)->First))
+#define gui_linkedlist_hasentries(root)       (!!((root)->First))
 
 /**
  * \defgroup        GUI_LINKEDLIST_WIDGET Widget linked list
@@ -292,10 +292,10 @@ uint8_t gui_linkedlist_multi_find_remove__(GUI_LinkedListRoot_t* root, void* ele
  * \param[in]       h: Widget handle
  * \retval          1: Widget is first child
  * \retval          0: Widget is not first child
- * \sa              gui_linkedlist_iswidgetlast__
+ * \sa              gui_linkedlist_iswidgetlast
  * \hideinitializer
  */
-#define gui_linkedlist_iswidgetfirst__(h)       (!(h) || !(__GH(h))->List.Prev)
+#define gui_linkedlist_iswidgetfirst(h)       (!(h) || !(__GH(h))->List.Prev)
 
 /**
  * \brief           Check if widget is last child element in linked list
@@ -303,10 +303,10 @@ uint8_t gui_linkedlist_multi_find_remove__(GUI_LinkedListRoot_t* root, void* ele
  * \param[in]       h: Widget handle
  * \retval          1: Widget is last child
  * \retval          0: Widget is not last child
- * \sa              gui_linkedlist_iswidgetfirst__
+ * \sa              gui_linkedlist_iswidgetfirst
  * \hideinitializer
  */
-#define gui_linkedlist_iswidgetlast__(h)        (!(h) || !(__GH(h))->List.Next)
+#define gui_linkedlist_iswidgetlast(h)        (!(h) || !(__GH(h))->List.Next)
 
 /**
  * \brief           Add new widget to linked list of parent widget
@@ -315,18 +315,18 @@ uint8_t gui_linkedlist_multi_find_remove__(GUI_LinkedListRoot_t* root, void* ele
  *                      Set to NULL if there is no parent widget.
  * \param[in]       h: Widget handle to add to linked list
  * \retval          None
- * \sa              gui_linkedlist_widgetremove__
+ * \sa              gui_linkedlist_widgetremove
  */
-void gui_linkedlist_widgetadd__(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h);
+void gui_linkedlist_widgetadd(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h);
 
 /**
  * \brief           Remove widget from linked list of parent widget
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in]       h: Widget handle to remove from linked list
  * \retval          None
- * \sa              gui_linkedlist_widgetadd__
+ * \sa              gui_linkedlist_widgetadd
  */
-void gui_linkedlist_widgetremove__(GUI_HANDLE_p h);
+void gui_linkedlist_widgetremove(GUI_HANDLE_p h);
 
 /**
  * \brief           Move widget up for one in linked list
@@ -334,9 +334,9 @@ void gui_linkedlist_widgetremove__(GUI_HANDLE_p h);
  * \param[in]       h: Widget handle to move up
  * \retval          1: Move has been successful
  * \retval          0: Move was not successful. Widget is on top and cannot be moved
- * \sa              gui_linkedlist_widgetmovedown__
+ * \sa              gui_linkedlist_widgetmovedown
  */
-GUI_Byte gui_linkedlist_widgetmoveup__(GUI_HANDLE_p h);
+uint8_t gui_linkedlist_widgetmoveup(GUI_HANDLE_p h);
 
 /**
  * \brief           Move widget down for one in linked list
@@ -344,15 +344,15 @@ GUI_Byte gui_linkedlist_widgetmoveup__(GUI_HANDLE_p h);
  * \param[in]       h: Widget handle to move down
  * \retval          1: Move has been successful
  * \retval          0: Move was not successful. Widget is on bottom and cannot be moved
- * \sa              gui_linkedlist_widgetmoveup__
+ * \sa              gui_linkedlist_widgetmoveup
  */
-GUI_Byte gui_linkedlist_widgetmovedown__(GUI_HANDLE_p h);
+uint8_t gui_linkedlist_widgetmovedown(GUI_HANDLE_p h);
 
 /**
  * \brief           Get next widget from current widget handle
  * \note            With combination of input parameters, function acts different:
  *                  <table>
- *                      <tr><th>parent  <th>h   <th>gui_linkedlist_widgetgetnext__(parent, h)
+ *                      <tr><th>parent  <th>h   <th>gui_linkedlist_widgetgetnext(parent, h)
  *                      <tr><td>0       <td>0   <td>0
  *                      <tr><td>0       <td>> 0 <td>Next widget of <b>h</b> if exists, <b>0</b> otherwise
  *                      <tr><td>> 0     <td>0   <td>First widget in <b>parent</b> list if exists, <b>0</b> otherwise
@@ -367,7 +367,7 @@ GUI_Byte gui_linkedlist_widgetmovedown__(GUI_HANDLE_p h);
 void LoopWidgets(GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;         //Value holding widgets of parent
 
-    for (h = gui_linkedlist_widgetgetnext__((GUI_HANDLE_ROOT_t *)parent, NULL); h; h = gui_linkedlist_widgetgetnext__(NULL, h)) {
+    for (h = gui_linkedlist_widgetgetnext((GUI_HANDLE_ROOT_t *)parent, NULL); h; h = gui_linkedlist_widgetgetnext(NULL, h)) {
         //Loop through each widget of parent
     }
 }
@@ -376,15 +376,15 @@ void LoopWidgets(GUI_HANDLE_p parent) {
  * \param[in]       h: Widget handle for which you want next widget
  * \retval          > 0: Next widget in linked list
  * \retval          0: No widget in linked list anymore
- * \sa              gui_linkedlist_widgetgetprev__
+ * \sa              gui_linkedlist_widgetgetprev
  */
-GUI_HANDLE_p gui_linkedlist_widgetgetnext__(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h);
+GUI_HANDLE_p gui_linkedlist_widgetgetnext(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h);
 
 /**
  * \brief           Get previous widget from current widget handle
  * \note            With combination of input parameters, function acts different:
  *                  <table>
- *                      <tr><th>parent  <th>h   <th>gui_linkedlist_widgetgetprev__(parent, h)
+ *                      <tr><th>parent  <th>h   <th>gui_linkedlist_widgetgetprev(parent, h)
  *                      <tr><td>0       <td>0   <td>0
  *                      <tr><td>0       <td>> 0 <td>Previous widget of <b>h</b> if exists, <b>0</b> otherwise
  *                      <tr><td>> 0     <td>0   <td>Last widget in <b>parent</b> list if exists, <b>0</b> otherwise
@@ -399,7 +399,7 @@ GUI_HANDLE_p gui_linkedlist_widgetgetnext__(GUI_HANDLE_ROOT_t* parent, GUI_HANDL
 void LoopWidgets(GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;         //Value holding widgets of parent
     
-    for (h = gui_linkedlist_widgetgetprev__((GUI_HANDLE_ROOT_t *)parent, 0); h; h = gui_linkedlist_widgetgetprev__(NULL, h)) {
+    for (h = gui_linkedlist_widgetgetprev((GUI_HANDLE_ROOT_t *)parent, 0); h; h = gui_linkedlist_widgetgetprev(NULL, h)) {
         //Loop through each widget of parent
     }
 }
@@ -408,9 +408,9 @@ void LoopWidgets(GUI_HANDLE_p parent) {
  * \param[in]       h: Widget handle for which you want next widget
  * \retval          > 0: Next widget in linked list
  * \retval          0: No widget in linked list anymore
- * \sa              gui_linkedlist_widgetgetnext__
+ * \sa              gui_linkedlist_widgetgetnext
  */
-GUI_HANDLE_p gui_linkedlist_widgetgetprev__(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h);
+GUI_HANDLE_p gui_linkedlist_widgetgetprev(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h);
 
 /**
  * \brief           Move widget to bottom in linked list of parent widget
@@ -418,9 +418,9 @@ GUI_HANDLE_p gui_linkedlist_widgetgetprev__(GUI_HANDLE_ROOT_t* parent, GUI_HANDL
  * \param[in]       h: Widget to move to bottom
  * \retval          1: Widget moved to bottom
  * \retval          0: Widget is already at bottom
- * \sa              gui_linkedlist_widgetmovetotop__
+ * \sa              gui_linkedlist_widgetmovetotop
  */
-GUI_Byte gui_linkedlist_widgetmovetobottom__(GUI_HANDLE_p h);
+uint8_t gui_linkedlist_widgetmovetobottom(GUI_HANDLE_p h);
 
 /**
  * \brief           Move widget to top in linked list of parent widget
@@ -428,9 +428,9 @@ GUI_Byte gui_linkedlist_widgetmovetobottom__(GUI_HANDLE_p h);
  * \param[in]       h: Widget to move to top
  * \retval          1: Widget moved to top
  * \retval          0: Widget is already on top
- * \sa              gui_linkedlist_widgetmovetobottom__
+ * \sa              gui_linkedlist_widgetmovetobottom
  */
-GUI_Byte gui_linkedlist_widgetmovetotop__(GUI_HANDLE_p h);
+uint8_t gui_linkedlist_widgetmovetotop(GUI_HANDLE_p h);
  
 #endif /* GUI_INTERNAL || defined(DOXYGEN) */
 
@@ -444,7 +444,7 @@ GUI_Byte gui_linkedlist_widgetmovetotop__(GUI_HANDLE_p h);
  *                     Set to NULL to use GUI root widget
  * \retval          None
  */
-void gui_linkedlist_printlist__(void);
+void gui_linkedlist_printlist(void);
 
 /**
  * \}

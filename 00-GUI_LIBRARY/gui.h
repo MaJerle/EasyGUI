@@ -116,20 +116,20 @@ extern "C" {
  * \note            This function must take care of reseting memory to zero
  * \hideinitializer
  */
-#define __GUI_MEMALLOC(size)        gui_mem_calloc__(size, 1)
+#define __GUI_MEMALLOC(size)        gui_mem_calloc(size, 1)
 
 /**
  * \brief           Reallocate memory with specific size in bytes
  * \hideinitializer
  */
-#define __GUI_MEMREALLOC(ptr, size) gui_mem_realloc__(ptr, size)
+#define __GUI_MEMREALLOC(ptr, size) gui_mem_realloc(ptr, size)
 
 /**
  * \brief           Free memory from specific address previously allocated with \ref __GUI_MEMALLOC
  * \hideinitializer
  */
 #define __GUI_MEMFREE(p)            do {            \
-    gui_mem_free__(p);                              \
+    gui_mem_free(p);                                \
     (p) = NULL;                                     \
 } while (0);
 
@@ -229,6 +229,13 @@ extern "C" {
 #define GUI_ROUND(x)                ((float)(x) + 0.5f)
 
 /**
+ * \brief           Align x value to specific number of bits, provided from \ref GUI_MEM_ALIGNMENT configuration
+ * \param[in]       x: Input value to align
+ * \retval          Input value aligned to specific number of bytes
+ */
+#define GUI_MEM_ALIGN(x)            ((x + (GUI_MEM_ALIGNMENT - 1)) & ~(GUI_MEM_ALIGNMENT - 1))
+
+/**
  * \}
  */
 //#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
@@ -326,13 +333,6 @@ int32_t gui_process(void);
  * \retval          None
  */
 void gui_updatetime(uint32_t millis);
-
-/**
- * \brief           Notify GUI stack from low-level layer which layer is currently used as display layer
- * \param[in]       layer_num: Layer number used as display layer
- * \retval          None
- */
-void gui_lcd_confirmactivelayer(GUI_Byte layer_num);
  
 /**
  * \}

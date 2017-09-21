@@ -61,10 +61,10 @@ uint8_t gui_input_touchadd(GUI_TouchData_t* ts);
 uint8_t gui_input_keyadd(GUI_KeyboardData_t* kb);
 
 #if !defined(DOXYGEN) && defined(GUI_INTERNAL)
-void gui_input_init__(void);
-uint8_t gui_input_touchavailable__(void);
-uint8_t gui_input_touchread__(GUI_TouchData_t* ts);
-uint8_t gui_input_keyread__(GUI_KeyboardData_t* kb);
+void gui_input_init(void);
+uint8_t gui_input_touchavailable(void);
+uint8_t gui_input_touchread(GUI_TouchData_t* ts);
+uint8_t gui_input_keyread(GUI_KeyboardData_t* kb);
 #endif /* !defined(DOXYGEN) && defined(GUI_INTERNAL) */
 
 /**

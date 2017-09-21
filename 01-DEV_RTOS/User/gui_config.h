@@ -109,6 +109,17 @@
 #define GUI_USE_TRANSLATE               1
 
 /**
+ * \brief           Memory alignment setup, used for memory allocation in systems where unaligned memory access is not allowed
+ * \note            Value must be power of 2, in most cases number 4 will be ok.
+ *
+ *                  1: No memory alignment
+ *                  2: Align memory to 2 bytes
+ *                  4: Align memory to 4 bytes
+ *                  8: Align memory to 8 bytes
+ */
+#define GUI_MEM_ALIGNMENT               4
+
+/**
  * \}
  */
  

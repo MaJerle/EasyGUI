@@ -42,8 +42,7 @@
 #define CFG_VALIGN          0x01
 #define CFG_HALIGN          0x02
 
-static
-uint8_t gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -71,8 +70,8 @@ static const GUI_WIDGET_t Widget = {
 /******************************************************************************/
 #define o                   ((GUI_TEXTVIEW_t *)(h))
 
-static
-uint8_t gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+static uint8_t
+gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
             GUI_WIDGET_Param_t* p = (GUI_WIDGET_Param_t *)param;
@@ -150,11 +149,13 @@ uint8_t gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p gui_textview_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p
+gui_textview_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
-uint8_t gui_textview_setcolor(GUI_HANDLE_p h, GUI_TEXTVIEW_COLOR_t index, GUI_Color_t color) {
+uint8_t
+gui_textview_setcolor(GUI_HANDLE_p h, GUI_TEXTVIEW_COLOR_t index, GUI_Color_t color) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     ret = gui_widget_setcolor__(h, (uint8_t)index, color);  /* Set color */
@@ -169,12 +170,14 @@ uint8_t gui_textview_setcolor(GUI_HANDLE_p h, GUI_TEXTVIEW_COLOR_t index, GUI_Co
     return ret;
 }
 
-uint8_t gui_textview_setvalign(GUI_HANDLE_p h, GUI_TEXTVIEW_VALIGN_t align) {
+uint8_t
+gui_textview_setvalign(GUI_HANDLE_p h, GUI_TEXTVIEW_VALIGN_t align) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_VALIGN, &align, 1, 1);  /* Set parameter */
 }
 
-uint8_t gui_textview_sethalign(GUI_HANDLE_p h, GUI_TEXTVIEW_HALIGN_t align) {
+uint8_t
+gui_textview_sethalign(GUI_HANDLE_p h, GUI_TEXTVIEW_HALIGN_t align) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_HALIGN, &align, 1, 1);  /* Set parameter */
 }

@@ -55,11 +55,13 @@
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-void gui_string_unicode_init(GUI_STRING_UNICODE_t* s) {
+void
+gui_string_unicode_init(GUI_STRING_UNICODE_t* s) {
     memset(s, 0x00, sizeof(*s));            /* Reset structure */
 }
 
-GUI_STRING_UNICODE_Result_t gui_string_unicode_decode(GUI_STRING_UNICODE_t* s, const GUI_Char c) {    
+GUI_STRING_UNICODE_Result_t
+gui_string_unicode_decode(GUI_STRING_UNICODE_t* s, const GUI_Char c) {    
     if (!s->r) {                            /* First byte received */
         s->t = 0;
         if (c < 0x80) {                     /* One byte only in UTF-8 representation */
@@ -101,7 +103,8 @@ GUI_STRING_UNICODE_Result_t gui_string_unicode_decode(GUI_STRING_UNICODE_t* s, c
     }
 }
 
-uint8_t gui_string_unicode_encode(const uint32_t c, GUI_Char* out) {
+uint8_t
+gui_string_unicode_encode(const uint32_t c, GUI_Char* out) {
     if (c < 0x0080) {                       /* Normal ASCII character */
         *out++ = (uint8_t)c;                /* 1-byte sequence */
         return 1;
@@ -119,7 +122,8 @@ uint8_t gui_string_unicode_encode(const uint32_t c, GUI_Char* out) {
     }
 }
 
-size_t gui_string_length(const GUI_Char* src) {
+size_t
+gui_string_length(const GUI_Char* src) {
 #if GUI_USE_UNICODE
     size_t out = 0;
     const GUI_Char* tmp = src;
@@ -137,23 +141,28 @@ size_t gui_string_length(const GUI_Char* src) {
 #endif /* GUI_USE_UNICODE */
 }
 
-size_t gui_string_lengthtotal(const GUI_Char* src) {
+size_t
+gui_string_lengthtotal(const GUI_Char* src) {
     return strlen((const char *)src);       /* Get string length */
 }
 
-GUI_Char* gui_string_copy(GUI_Char* dst, const GUI_Char* src) {
+GUI_Char*
+gui_string_copy(GUI_Char* dst, const GUI_Char* src) {
     return (GUI_Char *)strcpy((char *)dst, (const char *)src);  /* Copy source string to destination */
 }
 
-GUI_Char* gui_string_copyn(GUI_Char* dst, const GUI_Char* src, size_t len) {
+GUI_Char*
+gui_string_copyn(GUI_Char* dst, const GUI_Char* src, size_t len) {
     return (GUI_Char *)strncpy((char *)dst, (const char *)src, len);    /* Copy source string to destination */
 }
 
-int gui_string_compare(const GUI_Char* s1, const GUI_Char* s2) {
+int
+gui_string_compare(const GUI_Char* s1, const GUI_Char* s2) {
     return strcmp((const char *)s1, (const char *)s2);
 }
 
-uint8_t gui_string_prepare(GUI_STRING_t* s, const GUI_Char* str) {
+uint8_t
+gui_string_prepare(GUI_STRING_t* s, const GUI_Char* str) {
     s->Str = str;                           /* Save string pointer */
 #if GUI_USE_UNICODE
     gui_string_unicode_init(&s->S);         /* Prepare unicode structure */
@@ -161,7 +170,8 @@ uint8_t gui_string_prepare(GUI_STRING_t* s, const GUI_Char* str) {
     return 1;
 }
 
-uint8_t gui_string_getch(GUI_STRING_t* s, uint32_t* out, uint8_t* len) {
+uint8_t
+gui_string_getch(GUI_STRING_t* s, uint32_t* out, uint8_t* len) {
 #if GUI_USE_UNICODE
     GUI_STRING_UNICODE_Result_t r;
     
@@ -193,7 +203,8 @@ uint8_t gui_string_getch(GUI_STRING_t* s, uint32_t* out, uint8_t* len) {
 #endif /* GUI_USE_UNICODE */  
 }
 
-uint8_t gui_string_getchreverse(GUI_STRING_t* str, uint32_t* out, uint8_t* len) {
+uint8_t
+gui_string_getchreverse(GUI_STRING_t* str, uint32_t* out, uint8_t* len) {
 #if GUI_USE_UNICODE
     const GUI_Char* ch = (str->Str) - 3;    /* Save character pointer, start 3 bytes before current active character */
     if (ch[3] < 0x80) {                     /* Normal ASCII character */
@@ -241,7 +252,8 @@ uint8_t gui_string_getchreverse(GUI_STRING_t* str, uint32_t* out, uint8_t* len) 
 #endif /* GUI_USE_UNICODE */  
 }
 
-uint8_t gui_string_gotoend(GUI_STRING_t* str) {
+uint8_t
+gui_string_gotoend(GUI_STRING_t* str) {
     while (*str->Str) {                     /* Check characters */
         str->Str++;                         /* Go to next character */
     }
@@ -249,6 +261,7 @@ uint8_t gui_string_gotoend(GUI_STRING_t* str) {
     return 1;
 }
 
-uint8_t gui_string_isprintable(uint32_t ch) {
+uint8_t
+gui_string_isprintable(uint32_t ch) {
     return (ch >= 32 && ch != 127) || (ch == '\r') || (ch == '\n');
 }

@@ -46,8 +46,7 @@
 #define CFG_MAX_Y           0x04
 #define CFG_ZOOM_RESET      0x05
 
-static
-uint8_t gui_graph_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_graph_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -78,8 +77,8 @@ static const GUI_WIDGET_t Widget = {
 #define g       ((GUI_GRAPH_t *)h)
 
 /* Reset zoom control on graph */
-static
-void gui_graph_reset__(GUI_HANDLE_p h) {
+static void
+graph_reset(GUI_HANDLE_p h) {
     g->VisibleMaxX = g->MaxX;
     g->VisibleMinX = g->MinX;
     g->VisibleMaxY = g->MaxY;
@@ -87,8 +86,8 @@ void gui_graph_reset__(GUI_HANDLE_p h) {
 }
 
 /* Zoom plot */
-static
-void gui_graph_zoom__(GUI_HANDLE_p h, float zoom, float xpos, float ypos) {
+static void
+graph_zoom(GUI_HANDLE_p h, float zoom, float xpos, float ypos) {
     if (xpos < 0 || xpos > 1) { xpos = 0.5; }
     if (ypos < 0 || ypos > 1) { ypos = 0.5; }
            
@@ -99,8 +98,8 @@ void gui_graph_zoom__(GUI_HANDLE_p h, float zoom, float xpos, float ypos) {
     g->VisibleMaxY -= (g->VisibleMaxY - g->VisibleMinY) * (zoom - 1.0f) * (1.0f - ypos);
 }
 
-static
-uint8_t gui_graph_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+static uint8_t
+gui_graph_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
 #if GUI_USE_TOUCH
 static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
 #endif /* GUI_USE_TOUCH */    
@@ -115,7 +114,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
             g->MinX = -10;
             g->MaxY = 10;
             g->MinY = -10;
-            gui_graph_reset__(h);                   /* Reset plot */
+            graph_reset(h);                         /* Reset plot */
 
             g->Rows = 8;                            /* Number of rows */
             g->Columns = 10;                        /* Number of columns */
@@ -128,7 +127,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 case CFG_MAX_X: g->MaxX = *(float *)p->Data; break; /* Set max X value to widget */
                 case CFG_MIN_Y: g->MinY = *(float *)p->Data; break; /* Set max X value to widget */
                 case CFG_MAX_Y: g->MaxY = *(float *)p->Data; break; /* Set max X value to widget */
-                case CFG_ZOOM_RESET: gui_graph_reset__(h); break;   /* Reset zoom */
+                case CFG_ZOOM_RESET: graph_reset(h); break; /* Reset zoom */
                 default: break;
             }
             *(uint8_t *)result = 1;                 /* Save result */
@@ -204,8 +203,9 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 }
                 
                 /* Draw all plot attached to graph */
-                for (link = gui_linkedlist_multi_getnext_gen__(&g->Root, 0); link; link = gui_linkedlist_multi_getnext_gen__(0, link)) {
-                    data = (GUI_GRAPH_DATA_p)gui_linkedlist_multi_getdata__(link);  /* Get data from list */
+                for (link = gui_linkedlist_multi_getnext_gen(&g->Root, NULL); link; 
+                        link = gui_linkedlist_multi_getnext_gen(NULL, link)) {
+                    data = (GUI_GRAPH_DATA_p)gui_linkedlist_multi_getdata(link);/* Get data from list */
                     
                     read = data->Ptr;               /* Get start read pointer */
                     write = data->Ptr;              /* Get start write pointer */
@@ -213,13 +213,13 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                     if (data->Type == GUI_GRAPH_TYPE_YT) {  /* Draw YT plot */
                         /* Calculate first point */
                         x1 = xLeft - g->VisibleMinX * xStep;/* Calculate start X */
-                        y1 = yBottom - (data->Data[read] - g->VisibleMinY) * yStep;    /* Calculate start Y */
+                        y1 = yBottom - (data->Data[read] - g->VisibleMinY) * yStep;/* Calculate start Y */
                         if (++read == data->Length) {   /* Check overflow */
                             read = 0;
                         }
                         
                         /* Outside of right || outside on left */
-                        if (x1 > disp->X2 || (x1 + (data->Length * xStep)) < disp->X1) {    /* Plot start is on the right of active area */
+                        if (x1 > disp->X2 || (x1 + (data->Length * xStep)) < disp->X1) {/* Plot start is on the right of active area */
                             continue;
                         }
                         
@@ -296,7 +296,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 gui_math_centerofxy(ts->RelX[0], ts->RelY[0], ts->RelX[1], ts->RelY[1], &centerX, &centerY);    /* Calculate center position between points */
                 zoom = ts->Distance / ts->DistanceOld;  /* Calculate zoom value */
                 
-                gui_graph_zoom__(h, zoom, (float)centerX / (float)gui_widget_getwidth__(h), (float)centerY / (float)gui_widget_getheight__(h));
+                graph_zoom(h, zoom, (float)centerX / (float)gui_widget_getwidth__(h), (float)centerY / (float)gui_widget_getheight__(h));
 #endif /* GUI_TOUCH_MAX_PRESSES > 1 */
             }
             
@@ -312,7 +312,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
             return 1;
 #endif /* GUI_USE_TOUCH */
         case GUI_WC_DblClick:
-            gui_graph_reset__(h);                   /* Reset zoom */
+            graph_reset(h);                         /* Reset zoom */
             gui_widget_invalidate__(h);             /* Invalidate widget */
             return 1;
 #if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
@@ -323,9 +323,10 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
             /**
              * Go through all data objects in this widget
              */
-            for (link = gui_linkedlist_multi_getnext_gen__(&g->Root, NULL); link; link = gui_linkedlist_multi_getnext_gen__(0, link)) {
-                data = (GUI_GRAPH_DATA_p)gui_linkedlist_multi_getdata__(link);  /* Get data from list */
-                gui_linkedlist_multi_find_remove__(&data->Root, h); /* Remove element from linked list with search */
+            for (link = gui_linkedlist_multi_getnext_gen(&g->Root, NULL); link;
+                    link = gui_linkedlist_multi_getnext_gen(NULL, link)) {
+                data = (GUI_GRAPH_DATA_p)gui_linkedlist_multi_getdata(link);    /* Get data from list */
+                gui_linkedlist_multi_find_remove(&data->Root, h);   /* Remove element from linked list with search */
             }
             
             return 1;
@@ -340,18 +341,18 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
 
 #if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
 /* Invalidate graphs attached to data */
-static
-void InvalidateGraphs(GUI_GRAPH_DATA_p data) {
+static void graph_invalidate(GUI_GRAPH_DATA_p data) {
     GUI_HANDLE_p h;
     GUI_LinkedListMulti_t* link;
     /**
      * Invalidate all graphs attached to this data plot
      */
-    for (link = gui_linkedlist_multi_getnext_gen__(&data->Root, NULL); link; link = gui_linkedlist_multi_getnext_gen__(NULL, link)) {
+    for (link = gui_linkedlist_multi_getnext_gen(&data->Root, NULL); link;
+            link = gui_linkedlist_multi_getnext_gen(NULL, link)) {
         /**
          * Linked list of graph member in data structure is not on top
          */
-        h = (GUI_HANDLE_p)gui_linkedlist_multi_getdata__(link); /* Get data from linked list object */
+        h = (GUI_HANDLE_p)gui_linkedlist_multi_getdata(link); /* Get data from linked list object */
         
         /**
          * Invalidate each object attached to this data graph
@@ -366,23 +367,26 @@ void InvalidateGraphs(GUI_GRAPH_DATA_p data) {
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p gui_graph_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p
+gui_graph_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
-uint8_t gui_graph_setcolor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t color) {
+uint8_t
+gui_graph_setcolor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }
 
-uint8_t gui_graph_attachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
+uint8_t
+gui_graph_attachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     /**
      * Linked list of data plots for this graph
      */
-    gui_linkedlist_multi_add_gen__(&__GG(h)->Root, data);
+    gui_linkedlist_multi_add_gen(&__GG(h)->Root, data);
 
 #if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
     /**
@@ -390,14 +394,15 @@ uint8_t gui_graph_attachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
      * This linked list is not on top!
      * Must subtract list element offset when using graphs from data
      */
-    gui_linkedlist_multi_add_gen__(&data->Root, h);
+    gui_linkedlist_multi_add_gen(&data->Root, h);
 #endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;
 }
 
-uint8_t gui_graph_detachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
+uint8_t
+gui_graph_detachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget && data);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -405,50 +410,56 @@ uint8_t gui_graph_detachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
      * Linked list of data plots for this graph
      * Remove data from graph's linked list
      */
-    gui_linkedlist_multi_find_remove__(&__GG(h)->Root, data);
+    gui_linkedlist_multi_find_remove(&__GG(h)->Root, data);
 
 #if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
     /**
      * Linked list of graphs for this data plot
      * Remove graph from data linked list
      */
-    gui_linkedlist_multi_find_remove__(&data->Root, h);
+    gui_linkedlist_multi_find_remove(&data->Root, h);
 #endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;
 }
 
-uint8_t gui_graph_setminx(GUI_HANDLE_p h, float v) {
+uint8_t
+gui_graph_setminx(GUI_HANDLE_p h, float v) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_MIN_X, &v, 1, 0);   /* Set parameter */
 }
 
-uint8_t gui_graph_setmaxx(GUI_HANDLE_p h, float v) {
+uint8_t
+gui_graph_setmaxx(GUI_HANDLE_p h, float v) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_MAX_X, &v, 1, 0);   /* Set parameter */
 }
 
-uint8_t gui_graph_setminy(GUI_HANDLE_p h, float v) {
+uint8_t
+gui_graph_setminy(GUI_HANDLE_p h, float v) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_MIN_Y, &v, 1, 0);   /* Set parameter */
 }
 
-uint8_t gui_graph_setmaxy(GUI_HANDLE_p h, float v) {
+uint8_t
+gui_graph_setmaxy(GUI_HANDLE_p h, float v) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_MAX_Y, &v, 1, 0);   /* Set parameter */
 }
 
-uint8_t gui_graph_zoomreset(GUI_HANDLE_p h) {
+uint8_t
+gui_graph_zoomreset(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_ZOOM_RESET, NULL, 1, 0);  /* Set parameter */
 }
 
-uint8_t gui_graph_zoom(GUI_HANDLE_p h, float zoom, float x, float y) {
+uint8_t
+gui_graph_zoom(GUI_HANDLE_p h, float zoom, float x, float y) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    gui_graph_zoom__(h, zoom, x, y);                /* Reset zoom */
+    graph_zoom(h, zoom, x, y);                      /* Reset zoom */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;
@@ -457,7 +468,8 @@ uint8_t gui_graph_zoom(GUI_HANDLE_p h, float zoom, float x, float y) {
 /*************************/
 /* GRAPH DATA functions  */
 /*************************/
-GUI_GRAPH_DATA_p gui_graph_data_create(GUI_GRAPH_TYPE_t type, size_t length) {
+GUI_GRAPH_DATA_p
+gui_graph_data_create(GUI_GRAPH_TYPE_t type, size_t length) {
     GUI_GRAPH_DATA_t* data;
 
     data = __GUI_MEMALLOC(sizeof(*data));           /* Allocate memory for basic widget */
@@ -479,7 +491,8 @@ GUI_GRAPH_DATA_p gui_graph_data_create(GUI_GRAPH_TYPE_t type, size_t length) {
     return (GUI_GRAPH_DATA_p)data;
 }
 
-uint8_t gui_graph_data_addvalue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y) {
+uint8_t
+gui_graph_data_addvalue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y) {
     __GUI_ASSERTPARAMS(data);                       /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -496,7 +509,7 @@ uint8_t gui_graph_data_addvalue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y) {
     }
     
 #if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
-    InvalidateGraphs(data);                         /* Invalidate graphs attached to this data object */
+    graph_invalidate(data);                         /* Invalidate graphs attached to this data object */
 #endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     
     __GUI_LEAVE();                                  /* Leave GUI */

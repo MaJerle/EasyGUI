@@ -55,7 +55,8 @@
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-const GUI_Char* gui_translate_get(const GUI_Char* src) {
+const GUI_Char*
+gui_translate_get(const GUI_Char* src) {
 #if GUI_USE_TRANSLATE
     size_t i;
     /* Try to find source string in translate table */
@@ -78,7 +79,8 @@ const GUI_Char* gui_translate_get(const GUI_Char* src) {
     return src;                                     /* Return main source */
 }
 
-uint8_t gui_translate_setactivelanguage(const GUI_TRANSLATE_Language_t* lang) {
+uint8_t
+gui_translate_setactivelanguage(const GUI_TRANSLATE_Language_t* lang) {
 #if GUI_USE_TRANSLATE
     GUI.Translate.Active = lang;                    /* Set currently active language */
     return 1;
@@ -88,7 +90,8 @@ uint8_t gui_translate_setactivelanguage(const GUI_TRANSLATE_Language_t* lang) {
 #endif /* GUI_USE_TRANSLATE */
 }
 
-uint8_t gui_translate_setsourcelanguage(const GUI_TRANSLATE_Language_t* lang) {
+uint8_t
+gui_translate_setsourcelanguage(const GUI_TRANSLATE_Language_t* lang) {
 #if GUI_USE_TRANSLATE
     GUI.Translate.Source = lang;                    /* Set source language */
     return 1;

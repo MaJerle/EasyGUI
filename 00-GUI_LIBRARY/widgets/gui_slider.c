@@ -44,8 +44,7 @@
 #define CFG_MIN             0x03
 #define CFG_MAX             0x04
 
-static
-uint8_t gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -79,14 +78,14 @@ static const GUI_WIDGET_t Widget = {
 #define __IsHorizontal(h)   (o->Mode == GUI_SLIDER_MODE_LEFT_RIGHT || o->Mode == GUI_SLIDER_MODE_RIGHT_LEFT)
 
 /* Get delta value from widget */
-static
-GUI_Dim_t __GetDelta(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t he) {
+static GUI_Dim_t
+__GetDelta(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t he) {
     return wi > he ? he : wi;
 }
 
 /* Set slider value */
-static
-void __SetValue(GUI_HANDLE_p h, int32_t value) {
+static void 
+__SetValue(GUI_HANDLE_p h, int32_t value) {
     if (value > o->Max) {
         value = o->Max;
     } else if (value < o->Min) {
@@ -99,8 +98,8 @@ void __SetValue(GUI_HANDLE_p h, int32_t value) {
 }
 
 /* Process touch event */
-static 
-void __TouchHandle(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
+static void
+__TouchHandle(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
     GUI_Dim_t pos, delta, deltaH, width, height;
     int32_t value;
             
@@ -147,8 +146,8 @@ void __TouchHandle(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
 }
 
 /* Timer callback function for slider widget */
-static
-void __TimerCallback(GUI_TIMER_t* timer) {
+static void
+__TimerCallback(GUI_TIMER_t* timer) {
     GUI_HANDLE_p h = (GUI_HANDLE_p)gui_timer_getparams__(timer);    /* Get user parameters */
     if (gui_widget_isactive__(h)) {                 /* Timer is in focus */
         if (__GS(h)->CurrentSize < __GS(h)->MaxSize) {
@@ -166,8 +165,8 @@ void __TimerCallback(GUI_TIMER_t* timer) {
 }
 
 /* Callback function */
-static
-uint8_t gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) { 
+static uint8_t
+gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) { 
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
@@ -312,36 +311,43 @@ uint8_t gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* re
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-GUI_HANDLE_p gui_slider_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+GUI_HANDLE_p
+gui_slider_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
-uint8_t gui_slider_setcolor(GUI_HANDLE_p h, GUI_SLIDER_COLOR_t index, GUI_Color_t color) {
+uint8_t
+gui_slider_setcolor(GUI_HANDLE_p h, GUI_SLIDER_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }
 
-uint8_t gui_slider_setmode(GUI_HANDLE_p h, GUI_SLIDER_MODE_t mode) {
+uint8_t
+gui_slider_setmode(GUI_HANDLE_p h, GUI_SLIDER_MODE_t mode) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_MODE, &mode, 1, 0); /* Set parameter */
 }
 
-uint8_t gui_slider_setvalue(GUI_HANDLE_p h, int32_t val) {
+uint8_t
+gui_slider_setvalue(GUI_HANDLE_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_VALUE, &val, 1, 0); /* Set parameter */
 }
 
-uint8_t gui_slider_setmin(GUI_HANDLE_p h, int32_t val) {
+uint8_t
+gui_slider_setmin(GUI_HANDLE_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_MIN, &val, 1, 0);   /* Set parameter */
 }
 
-uint8_t gui_slider_setmax(GUI_HANDLE_p h, int32_t val) {
+uint8_t
+gui_slider_setmax(GUI_HANDLE_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_MAX, &val, 1, 0);   /* Set parameter */
 }
 
-int32_t gui_slider_getmin(GUI_HANDLE_p h) {
+int32_t
+gui_slider_getmin(GUI_HANDLE_p h) {
     int32_t val;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
@@ -352,7 +358,8 @@ int32_t gui_slider_getmin(GUI_HANDLE_p h) {
     return val;
 }
 
-int32_t gui_slider_getmax(GUI_HANDLE_p h) {
+int32_t
+gui_slider_getmax(GUI_HANDLE_p h) {
     int32_t val;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
@@ -363,7 +370,8 @@ int32_t gui_slider_getmax(GUI_HANDLE_p h) {
     return val;
 }
 
-int32_t gui_slider_getvalue(GUI_HANDLE_p h) {
+int32_t
+gui_slider_getvalue(GUI_HANDLE_p h) {
     int32_t val;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
