@@ -105,63 +105,11 @@ typedef struct GUI_LED_t {
 } GUI_LED_t;
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
-/**
- * \brief           Create new led widget
- * \param[in]       id: Widget unique ID to use for identity for callback processing
- * \param[in]       x: Widget X position relative to parent widget
- * \param[in]       y: Widget Y position relative to parent widget
- * \param[in]       width: Widget width in units of pixels
- * \param[in]       height: Widget height in uints of pixels
- * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
- * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
- * \param[in]       flags: Flags for widget creation
- * \retval          > 0: \ref GUI_HANDLE_p object of created widget
- * \retval          0: Widget creation failed
- */
 GUI_HANDLE_p gui_led_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
-
-/**
- * \brief           Set color to specific part of widget
- * \param[in,out]   h: Widget handle
- * \param[in]       index: Color index. This parameter can be a value of \ref GUI_LED_COLOR_t enumeration
- * \param[in]       color: Color value
- * \retval          1: Color was set ok
- * \retval          0: Color was not set
- */
 uint8_t gui_led_setcolor(GUI_HANDLE_p h, GUI_LED_COLOR_t index, GUI_Color_t color);
-
-/**
- * \brief           Set led type
- * \param[in,out]   h: Widget handle
- * \param[in]       type: New type for LED. This parameter can be a value of \ref GUI_LED_TYPE_t enumeration
- * \retval          1: Type was set ok
- * \retval          0: Type was not set
- */
 uint8_t gui_led_settype(GUI_HANDLE_p h, GUI_LED_TYPE_t type);
-
-/**
- * \brief           Toggle LED state
- * \param[in,out]   h: Widget handle
- * \retval          1: Led was toggled ok
- * \retval          0: Led was not toggled
- */
 uint8_t gui_led_toggle(GUI_HANDLE_p h);
-
-/**
- * \brief           Set LED value either on (turn on) or off (turn off)
- * \param[in,out]   h: Widget handle
- * \param[in]       state: LED state, either 1 or 0 according to selected state
- * \retval          1: Led state was set ok
- * \retval          0: Led state was not set
- */
 uint8_t gui_led_set(GUI_HANDLE_p h, uint8_t state);
-
-/**
- * \brief           Check if led is ON
- * \param[in,out]   h: Widget handle
- * \retval          1: Led is ON
- * \retval          0: Led is OFF
- */
 uint8_t gui_led_ison(GUI_HANDLE_p h);
 
 /**

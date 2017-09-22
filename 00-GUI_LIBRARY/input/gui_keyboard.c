@@ -446,7 +446,7 @@ keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
             return 0;
         }
         default:
-            __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
+            GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return gui_widget_processdefaultcallback(h, cmd, param, result);    /* Process default callback */
     }
 }
@@ -459,7 +459,7 @@ keyboard_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
             return 1;
         }
         default:                                    /* Handle default option */
-            __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
+            GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return gui_widget_processdefaultcallback(h, cmd, param, result);    /* Process default callback */
     }
 }
@@ -552,7 +552,7 @@ keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) 
             return 1;
         }
         default:                                    /* Handle default option */
-            __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
+            GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return gui_widget_processdefaultcallback(h, cmd, param, result);    /* Process default callback */
     }
 }
@@ -562,6 +562,14 @@ keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
+
+/**
+ * \brief           Hide opened virtual keyboard
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \retval          1: Keyboard hiding process started
+ * \retval          0: Keyboard hiding process not started
+ * \sa              __gui_keyboard_show
+ */
 uint8_t
 gui_keyboard_hide__(void) {
     __GUI_ASSERTPARAMS(Kbd.Handle);                 /* Check parameters */
@@ -571,6 +579,14 @@ gui_keyboard_hide__(void) {
     return 1;
 }
 
+/**
+ * \brief           Show hidden virtual keyboard
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in]       h: Widget handle for which keyboard will be opened
+ * \retval          1: Keyboard opening process started
+ * \retval          0: Keyboard opening process not started
+ * \sa              __gui_keyboard_hide
+ */
 uint8_t
 gui_keyboard_show__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(Kbd.Handle);                 /* Check parameters */
@@ -589,6 +605,12 @@ gui_keyboard_show__(GUI_HANDLE_p h) {
 /***                         Thread safe public API                          **/
 /******************************************************************************/
 /******************************************************************************/
+
+/**
+ * \brief           Creates virtual keyboard for user interaction.
+ * \note            This function must be called by user after \ref GUI_Init is called to use virtual keyboard
+ * \retval          Keyboard handle
+ */
 GUI_HANDLE_p
 gui_keyboard_create(void) {    
     __GUI_ENTER();                                  /* Enter GUI */
@@ -601,6 +623,12 @@ gui_keyboard_create(void) {
     return Kbd.Handle;
 }
 
+/**
+ * \brief           Hide opened virtual keyboard
+ * \retval          1: Keyboard hiding process started
+ * \retval          0: Keyboard hiding process not started
+ * \sa              gui_keyboard_show
+ */
 uint8_t
 gui_keyboard_hide(void) {
     uint8_t ret;
@@ -612,6 +640,13 @@ gui_keyboard_hide(void) {
     return ret;
 }
 
+/**
+ * \brief           Show hidden virtual keyboard
+ * \param[in]       h: Widget handle for which keyboard will be opened
+ * \retval          1: Keyboard opening process started
+ * \retval          0: Keyboard opening process not started
+ * \sa              gui_keyboard_hide
+ */
 uint8_t
 gui_keyboard_show(GUI_HANDLE_p h) {
     uint8_t ret;

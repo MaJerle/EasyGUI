@@ -42,22 +42,8 @@ extern "C" {
  * \{
  */
 #include "../gui.h"
-
-/**
- * \brief           Add new touch data to internal buffer for further processing
- * \param[in]       *ts: Pointer to \ref GUI_TouchData_t touch data with valid input
- * \retval          1: Success
- * \retval          0: Failure
- */
+    
 uint8_t gui_input_touchadd(GUI_TouchData_t* ts);
-
-/**
- * \brief           Add new key data to internal buffer for further processing
- * \param[in]       *kb: Pointer to \ref GUI_KeyboardData_t key data
- * \retval          1: Success
- * \retval          0: Failure
- * \sa              gui_keys
- */
 uint8_t gui_input_keyadd(GUI_KeyboardData_t* kb);
 
 #if !defined(DOXYGEN) && defined(GUI_INTERNAL)

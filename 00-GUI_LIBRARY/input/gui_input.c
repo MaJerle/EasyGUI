@@ -65,7 +65,15 @@ static GUI_Byte_t KBBufferData[GUI_TOUCH_BUFFER_SIZE * sizeof(GUI_KeyboardData_t
 /******************************************************************************/
 /******************************************************************************/
 #if GUI_USE_TOUCH
-uint8_t gui_input_touchadd(GUI_TouchData_t* ts) {
+
+/**
+ * \brief           Add new touch data to internal buffer for further processing
+ * \param[in]       *ts: Pointer to \ref GUI_TouchData_t touch data with valid input
+ * \retval          1: Success
+ * \retval          0: Failure
+ */
+uint8_t
+gui_input_touchadd(GUI_TouchData_t* ts) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(ts);                         /* Check input parameters */
     ts->Time = gui_sys_now();                       /* Set event time */
@@ -77,21 +85,43 @@ uint8_t gui_input_touchadd(GUI_TouchData_t* ts) {
     return ret;
 }
 
-uint8_t gui_input_touchread(GUI_TouchData_t* ts) {
+/**
+ * \brief           Reads new touch entry
+ * \param[out]      *ts: Pointer to \ref GUI_TouchData_t structure to save touch into to
+ * \retval          1: Valid data read
+ * \retval          0: Data invalid
+ */
+uint8_t
+gui_input_touchread(GUI_TouchData_t* ts) {
     if (gui_buffer_getfull(&TSBuffer) >= sizeof(*ts)) {
         return (uint8_t)gui_buffer_read(&TSBuffer, ts, sizeof(*ts)); /* Read data fro mbuffer */
     }
     return 0;
 }
 
-uint8_t gui_input_touchavailable(void) {
+/**
+ * \brief           Checks if anything available for touch inputs
+ * \retval          1: Touch available for read
+ * \retval          0: Touch not available for read
+ */
+uint8_t
+gui_input_touchavailable(void) {
     return gui_buffer_getfull(&TSBuffer) > 0;       /* Check if any available touch */
 }
+
 #endif /* GUI_USE_TOUCH */
 
 
 #if GUI_USE_KEYBOARD
-uint8_t gui_input_keyadd(GUI_KeyboardData_t* kb) {
+
+/**
+ * \brief           Add new key data to internal buffer for further processing
+ * \param[in]       *kb: Pointer to \ref GUI_KeyboardData_t key data
+ * \retval          1: Success
+ * \retval          0: Failure
+ */
+uint8_t
+gui_input_keyadd(GUI_KeyboardData_t* kb) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(kb);                         /* Check input parameters */
     kb->Time = gui_sys_now();                       /* Set event time */
@@ -103,7 +133,14 @@ uint8_t gui_input_keyadd(GUI_KeyboardData_t* kb) {
     return ret;
 }
 
-uint8_t gui_input_keyread(GUI_KeyboardData_t* kb) {
+/**
+ * \brief           Read keyboard entry from buffer
+ * \param[out]      *kb: Pointer to \ref GUI_KeyboardData_t to save entry to
+ * \retval          1: Entry valid
+ * \retval          0: Entry invalid
+ */
+uint8_t
+gui_input_keyread(GUI_KeyboardData_t* kb) {
     if (gui_buffer_getfull(&KBBuffer) >= sizeof(*kb)) {
         return (uint8_t)gui_buffer_read(&KBBuffer, kb, sizeof(*kb)); /* Read data fro mbuffer */
     }
@@ -111,7 +148,11 @@ uint8_t gui_input_keyread(GUI_KeyboardData_t* kb) {
 }
 #endif /* GUI_USE_KEYBOARD */
 
-void gui_input_init(void) {
+/**
+ * \brief           Initialize input part of GUI
+ */
+void
+gui_input_init(void) {
 #if GUI_USE_TOUCH
     gui_buffer_init(&TSBuffer, sizeof(TSBufferData), TSBufferData);
 #endif /* GUI_USE_TOUCH */

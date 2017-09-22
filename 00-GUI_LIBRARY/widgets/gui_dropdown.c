@@ -423,7 +423,7 @@ gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
                         continue;
                     }
                     if (index == __GD(h)->Selected) {
-                        gui_draw_filledrectangle(disp, x + 2, f.Y, width - 3, __GUI_MIN(f.Height, itemHeight), gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_SEL_FOC_BG) : gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_SEL_NOFOC_BG));
+                        gui_draw_filledrectangle(disp, x + 2, f.Y, width - 3, GUI_MIN(f.Height, itemHeight), gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_SEL_FOC_BG) : gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_SEL_NOFOC_BG));
                         f.Color1 = gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_SEL_FOC) : gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_SEL_NOFOC);
                     } else {
                         f.Color1 = gui_widget_getcolor__(h, GUI_DROPDOWN_COLOR_TEXT);
@@ -438,7 +438,7 @@ gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
         case GUI_WC_Remove: {
             GUI_DROPDOWN_ITEM_t* item;
             while ((item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_remove_gen(&o->Root, (GUI_LinkedList_t *)gui_linkedlist_getnext_gen(&o->Root, NULL))) != NULL) {
-                __GUI_MEMFREE(item);                /* Free memory */
+                GUI_MEMFREE(item);                  /* Free memory */
             }
             return 1;
         }
@@ -456,7 +456,7 @@ gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
                 GUI_Dim_t height = item_height(h, NULL);   /* Get element height */
                 GUI_iDim_t diff = tY - ts->RelY[0];
                 
-                if (__GUI_ABS(diff) > height) {
+                if (GUI_ABS(diff) > height) {
                     slide(h, diff > 0 ? 1 : -1);    /* Slide widget */
                     tY = ts->RelY[0];               /* Save pointer */
                 }
@@ -496,7 +496,7 @@ gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
             return 1;
         }
         default:                                    /* Handle default option */
-            __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
+            GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
     }
 }
@@ -506,29 +506,56 @@ gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
+
+/**
+ * \brief           Create new dropdown widget
+ * \param[in]       id: Widget unique ID to use for identity for callback processing
+ * \param[in]       x: Widget X position relative to parent widget
+ * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       width: Widget width in units of pixels
+ * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
+ * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       flags: Flags for widget creation
+ * \retval          > 0: \ref GUI_HANDLE_p object of created widget
+ * \retval          0: Widget creation failed
+ */
 GUI_HANDLE_p
 gui_dropdown_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
+/**
+ * \brief           Set color to DROPDOWN
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Index in array of colors. This parameter can be a value of \ref GUI_DROPDOWN_COLOR_t enumeration
+ * \param[in]       color: Actual color code to set
+ * \retval          1: Color was set ok
+ * \retval          0: Color was not set
+ */
 uint8_t
 gui_dropdown_setcolor(GUI_HANDLE_p h, GUI_DROPDOWN_COLOR_t index, GUI_Color_t color) {
-    uint8_t ret;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    ret = gui_widget_setcolor__(h, (uint8_t)index, color);  /* Set color */
-    return ret;
+    return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }
 
+/**
+ * \brief           Add a new string to list box
+ * \param[in,out]   h: Widget handle
+ * \param[in]       *text: Pointer to text to add to list. Only pointer is saved to memory!
+ * \retval          1: String added to the end
+ * \retval          0: String not added
+ */
 uint8_t
 gui_dropdown_addstring(GUI_HANDLE_p h, const GUI_Char* text) {
     GUI_DROPDOWN_ITEM_t* item;
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
     
-    item = __GUI_MEMALLOC(sizeof(*item));           /* Allocate memory for entry */
+    item = GUI_MEMALLOC(sizeof(*item));             /* Allocate memory for entry */
     if (item) {
+        __GUI_ENTER();                              /* Enter GUI */
         item->Text = (GUI_Char *)text;              /* Add text to entry */
         gui_linkedlist_add_gen(&__GD(h)->Root, &item->List);/* Add to linked list */
         __GD(h)->Count++;                           /* Increase number of strings */
@@ -537,12 +564,19 @@ gui_dropdown_addstring(GUI_HANDLE_p h, const GUI_Char* text) {
         gui_widget_invalidate__(h);                 /* Invalidate widget */
          
         ret = 1;
+        __GUI_LEAVE();                              /* Leave GUI */
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
 }
 
+/**
+ * \brief           Set opening direction for dropdown list
+ * \param[in,out]   h: Widget handle
+ * \param[in]       dir: Opening direction. This parameter can be a value of \ref GUI_DROPDOWN_OPENDIR_t enumeration
+ * \retval          1: Open direction has been changed 
+ * \retval          0: Open direction has not been changed
+ */
 uint8_t
 gui_dropdown_setopendirection(GUI_HANDLE_p h, GUI_DROPDOWN_OPENDIR_t dir) {
     uint8_t ret = 0;
@@ -564,6 +598,14 @@ gui_dropdown_setopendirection(GUI_HANDLE_p h, GUI_DROPDOWN_OPENDIR_t dir) {
     return ret;
 }
 
+/**
+ * \brief           Set string value to already added string index
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Index (position) on list to set/change text
+ * \param[in]       *text: Pointer to text to add to list. Only pointer is saved to memory!
+ * \retval          1: String changed
+ * \retval          0: String not changed
+ */
 uint8_t
 gui_dropdown_setstring(GUI_HANDLE_p h, uint16_t index, const GUI_Char* text) {
     GUI_DROPDOWN_ITEM_t* item;
@@ -582,6 +624,13 @@ gui_dropdown_setstring(GUI_HANDLE_p h, uint16_t index, const GUI_Char* text) {
     return ret;
 }
 
+/**
+ * \brief           Delete first string from list
+ * \param[in,out]   h: Widget handle
+ * \retval          1: String deleted
+ * \retval          0: String not deleted
+ * \sa              gui_dropdown_deletestring, gui_dropdown_deletelaststring
+ */
 uint8_t
 gui_dropdown_deletefirststring(GUI_HANDLE_p h) {
     uint8_t ret;
@@ -595,6 +644,13 @@ gui_dropdown_deletefirststring(GUI_HANDLE_p h) {
     return ret;
 }
 
+/**
+ * \brief           Delete last string from list
+ * \param[in,out]   h: Widget handle
+ * \retval          1: String deleted
+ * \retval          0: String not deleted
+ * \sa              gui_dropdown_deletestring, gui_dropdown_deletefirststring
+ */
 uint8_t
 gui_dropdown_deletelaststring(GUI_HANDLE_p h) {
     uint8_t ret;
@@ -608,6 +664,14 @@ gui_dropdown_deletelaststring(GUI_HANDLE_p h) {
     return ret;
 }
 
+/**
+ * \brief           Delete specific entry from list
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: List index (position) to delete
+ * \retval          1: String deleted
+ * \retval          0: String not deleted
+ * \sa              gui_dropdown_deletefirststring, gui_dropdown_deletelaststring
+ */
 uint8_t
 gui_dropdown_deletestring(GUI_HANDLE_p h, uint16_t index) {
     uint8_t ret;
@@ -621,6 +685,15 @@ gui_dropdown_deletestring(GUI_HANDLE_p h, uint16_t index) {
     return ret;
 }
 
+/**
+ * \brief           Set auto mode for slider
+ * \note            When it is enabled, slider will only appear if needed to show more entries on list
+ * \param[in,out]   h: Widget handle
+ * \param[in]       autoMode: Auto mode status. Set to 1 for auto mode or 0 for manual mode
+ * \retval          1: Set OK
+ * \retval          0: Set ERROR
+ * \sa              gui_dropdown_setslidervisibility
+ */
 uint8_t
 gui_dropdown_setsliderauto(GUI_HANDLE_p h, uint8_t autoMode) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -638,6 +711,15 @@ gui_dropdown_setsliderauto(GUI_HANDLE_p h, uint8_t autoMode) {
     return 1;
 }
 
+/**
+ * \brief           Set manual visibility for slider
+ * \note            Slider must be in manual mode in order to get this to work
+ * \param[in,out]   h: Widget handle
+ * \param[in]       visible: Slider visible status, 1 or 0
+ * \retval          1: Set to desired value
+ * \retval          0: Not set to desired value
+ * \sa              gui_dropdown_setsliderauto
+ */
 uint8_t
 gui_dropdown_setslidervisibility(GUI_HANDLE_p h, uint8_t visible) {
     uint8_t ret = 0;
@@ -661,6 +743,13 @@ gui_dropdown_setslidervisibility(GUI_HANDLE_p h, uint8_t visible) {
     return ret;
 }
 
+/**
+ * \brief           Scroll list if possible
+ * \param[in,out]   h: Widget handle
+ * \param[in]       step: Step to scroll. Positive step will scroll up, negative will scroll down
+ * \retval          1: Scroll successful
+ * \retval          0: Scroll not successful
+ */
 uint8_t
 gui_dropdown_scroll(GUI_HANDLE_p h, int16_t step) {
     volatile int16_t start;
@@ -683,6 +772,14 @@ gui_dropdown_scroll(GUI_HANDLE_p h, int16_t step) {
     return start;
 }
 
+/**
+ * \brief           Set selected value
+ * \param[in,out]   h: Widget handle
+ * \param[in]       selection: Set to -1 to invalidate selection or 0 - count-1 for specific selection 
+ * \retval          1: Selection changed
+ * \retval          0: Selection not changed
+ * \sa              gui_dropdown_getselection
+ */
 uint8_t
 gui_dropdown_setselection(GUI_HANDLE_p h, int16_t selection) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -696,6 +793,12 @@ gui_dropdown_setselection(GUI_HANDLE_p h, int16_t selection) {
     return 1;
 }
 
+/**
+ * \brief           Get selected value
+ * \param[in,out]   h: Widget handle
+ * \retval          Selection number or -1 if no selection
+ * \sa              gui_dropdown_setselection
+ */
 int16_t
 gui_dropdown_getselection(GUI_HANDLE_p h) {
     int16_t selection;

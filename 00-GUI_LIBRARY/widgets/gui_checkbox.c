@@ -190,7 +190,7 @@ gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
             return 1;
         }
         default:                                    /* Handle default option */
-            __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
+            GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
     }
 }
@@ -202,29 +202,71 @@ gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
+
+/**
+ * \brief           Create new checkbox widget
+ * \param[in]       id: Widget unique ID to use for identity for callback processing
+ * \param[in]       x: Widget X position relative to parent widget
+ * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       width: Widget width in units of pixels
+ * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
+ * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       flags: Flags for widget creation
+ * \retval          > 0: \ref GUI_HANDLE_p object of created widget
+ * \retval          0: Widget creation failed
+ */
 GUI_HANDLE_p
 gui_checkbox_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
+/**
+ * \brief           Set color to specific part of widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Color index. This parameter can be a value of \ref GUI_CHECKBOX_COLOR_t enumeration
+ * \param[in]       color: Color value
+ * \retval          1: Color was set ok
+ * \retval          0: Color vas not set
+ */
 uint8_t
 gui_checkbox_setcolor(GUI_HANDLE_p h, GUI_CHECKBOX_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }
 
+/**
+ * \brief           Set checked status to widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       checked: Checked status
+ * \retval          1: Checkbox was set to desired checked value
+ * \retval          0: Checkbox was not set to desired checked value
+ */
 uint8_t
 gui_checkbox_setchecked(GUI_HANDLE_p h, uint8_t checked) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_CHECK, &checked, 0, 0); /* Set parameter */
 }
 
+/**
+ * \brief           Set disabled status to widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       disabled: Disabled status
+ * \retval          1: Checkbox was set to desired disabled value
+ * \retval          0: Checkbox was not set to desired disabled value
+ */
 uint8_t
 gui_checkbox_setdisabled(GUI_HANDLE_p h, uint8_t disabled) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_DISABLE, &disabled, 0, 0);  /* Set parameter */
 }
 
+/**
+ * \brief           Check if checkbox is checked
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Checkbox is checked
+ * \retval          0: Checkbox is not checked
+ */
 uint8_t
 gui_checkbox_ischecked(GUI_HANDLE_p h) {
     uint8_t ret;
@@ -238,6 +280,12 @@ gui_checkbox_ischecked(GUI_HANDLE_p h) {
     return ret;
 }
 
+/**
+ * \brief           Check if checkbox is disabled
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Checkbox is disabled
+ * \retval          0: Checkbox is not disabled
+ */
 uint8_t
 gui_checkbox_isdisabled(GUI_HANDLE_p h) {
     uint8_t ret;

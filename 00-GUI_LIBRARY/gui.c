@@ -127,7 +127,7 @@ redraw_widgets(GUI_HANDLE_p parent) {
                     /**
                      * Try to allocate memory for new virtual layer for temporary usage
                      */
-                    GUI.LCD.DrawingLayer = __GUI_MEMALLOC(sizeof(*GUI.LCD.DrawingLayer) + (size_t)width * (size_t)height * (size_t)GUI.LCD.PixelSize);
+                    GUI.LCD.DrawingLayer = GUI_MEMALLOC(sizeof(*GUI.LCD.DrawingLayer) + (size_t)width * (size_t)height * (size_t)GUI.LCD.PixelSize);
                     
                     if (GUI.LCD.DrawingLayer) {     /* Check if allocation was successful */
                         GUI.LCD.DrawingLayer->Width = width;
@@ -175,7 +175,7 @@ redraw_widgets(GUI_HANDLE_p parent) {
                         0, layerPrev->Width - GUI.LCD.DrawingLayer->Width
                     );
                     
-                    __GUI_MEMFREE(GUI.LCD.DrawingLayer);    /* Free memory for virtual layer */
+                    GUI_MEMFREE(GUI.LCD.DrawingLayer);  /* Free memory for virtual layer */
                     GUI.LCD.DrawingLayer = layerPrev;   /* Reset layer pointer */
                 }
                 
@@ -275,7 +275,7 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
         if (v) {                                    /* New touch event occurred */
             if (!ts->TS.Status) {                   /* We received released state */
                 if (i) {                            /* Try to get second click, check difference for double click */
-                    if (__GUI_ABS(x[0] - x[1]) > 30 || __GUI_ABS(y[0] - y[1]) > 30) {
+                    if (GUI_ABS(x[0] - x[1]) > 30 || GUI_ABS(y[0] - y[1]) > 30) {
                         i = 0;                      /* Difference was too big, reset and act like normal click */
                     }
                 }
@@ -563,13 +563,11 @@ process_keyboard(void) {
 }
 #endif
 
-#include "tm_stm32_general.h"
 /**
  * \brief           Process redraw of all widgets
  */
 static void
 process_redraw(void) {
-    uint32_t time;
     GUI_Layer_t* active = GUI.LCD.ActiveLayer;
     GUI_Layer_t* drawing = GUI.LCD.DrawingLayer;
     uint8_t result = 1;
@@ -581,8 +579,6 @@ process_redraw(void) {
     
     GUI.Flags &= ~GUI_FLAG_REDRAW;                  /* Clear redraw flag */
     
-    time = TM_GENERAL_DWTCounterGetValue();
-    
     /* Copy from currently active layer to drawing layer only changes on layer */
     GUI.LL.Copy(&GUI.LCD, drawing, 
         (void *)(active->StartAddress + GUI.LCD.PixelSize * (dispA->Y1 * active->Width + dispA->X1)),    /* Source address */
@@ -592,15 +588,9 @@ process_redraw(void) {
         active->Width - (dispA->X2 - dispA->X1),    /* Offline source */
         drawing->Width - (dispA->X2 - dispA->X1)    /* Offline destination */
     );
-        
-    /* Actually draw new screen based on setup */
-    redraw_widgets(NULL);                           /* Redraw all widgets now */
-        
-    /* Get cycles for drawing */
-    time = TM_GENERAL_DWTCounterGetValue() - time;
-    
-    /* Set drawing layer as pending */
-    drawing->Pending = 1;
+     
+    redraw_widgets(NULL);                           /* Redraw all widgets now on drawing layer */
+    drawing->Pending = 1;                           /* Set drawing layer as pending */
     
     /* Notify low-level about layer change */
     GUI.LCD.Flags |= GUI_FLAG_LCD_WAIT_LAYER_CONFIRM;
@@ -611,16 +601,13 @@ process_redraw(void) {
     GUI.LCD.ActiveLayer = drawing;
     GUI.LCD.DrawingLayer = active;
     
-    /* Copy clipping data to region */
-    memcpy(&GUI.LCD.ActiveLayer->Display, &GUI.Display, sizeof(GUI.Display));
+    memcpy(&GUI.LCD.ActiveLayer->Display, &GUI.Display, sizeof(GUI.Display));   /* Copy clipping data to region */
     
     /* Invalid clipping region(s) for next drawing process */
     GUI.Display.X1 = 0x7FFF;
     GUI.Display.Y1 = 0x7FFF;
     GUI.Display.X2 = 0x8000;
     GUI.Display.Y2 = 0x8000;
-    
-    __GUI_UNUSED(time);                             /* Prevent compiler warnings */
 }
 
 #if GUI_OS
@@ -630,7 +617,6 @@ process_redraw(void) {
  */
 static void
 gui_thread(void * const argument) {
-    
     while (1) {
         gui_process();                              /* Process graphical update */
     }
@@ -649,6 +635,13 @@ gui_thread(void * const argument) {
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
+
+/**
+ * \brief           Initializes GUI stack.
+ *                    In addition, it prepares memory for work with widgets on later usage and
+ *                    calls low-layer functions to initialize LCD or custom driver for LCD
+ * \retval          Member of \ref GUI_Result_t enumeration
+ */
 GUI_Result_t
 gui_init(void) {
     uint8_t result;
@@ -698,6 +691,10 @@ gui_init(void) {
     return guiOK;
 }
 
+/**
+ * \brief           Processes all drawing operations for GUI
+ * \retval          Number of jobs done in current call
+ */
 int32_t
 gui_process(void) {
 #if GUI_OS
@@ -706,7 +703,7 @@ gui_process(void) {
     uint32_t tmr_cnt = gui_timer_getactivecount();  /* Get number of active timers in system */
     
     time = gui_sys_mbox_get(&GUI.OS.mbox, (void **)&msg, tmr_cnt ? 10 : 0); /* Get value from message queue */
-    __GUI_UNUSED(time);                             /* Unused variable */
+    GUI_UNUSED(time);                               /* Unused variable */
     
     __GUI_SYS_PROTECT();                            /* Release protection */
 #endif /* GUI_OS */

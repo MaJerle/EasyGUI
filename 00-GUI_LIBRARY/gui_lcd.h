@@ -52,13 +52,6 @@ extern "C" {
 
 GUI_iDim_t gui_lcd_getwidth(void);
 GUI_iDim_t gui_lcd_getheighth(void);
-    
-   
-/**
- * \brief           Notify GUI stack from low-level layer which layer is currently used as display layer
- * \param[in]       layer_num: Layer number used as display layer
- * \retval          None
- */
 void gui_lcd_confirmactivelayer(GUI_Byte layer_num);
 
 /**

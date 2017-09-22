@@ -95,7 +95,7 @@ extern "C" {
  * \note            When RTOS is not used, this macro has no meaning
  * \hideinitializer
  */
-#define __GUI_DEBUG(fmt, ...)       printf(fmt, ##__VA_ARGS__)
+#define GUI_DEBUG(fmt, ...)         printf(fmt, ##__VA_ARGS__)
 
 /**
  * \brief           GUI Handle object from main object
@@ -116,19 +116,19 @@ extern "C" {
  * \note            This function must take care of reseting memory to zero
  * \hideinitializer
  */
-#define __GUI_MEMALLOC(size)        gui_mem_calloc(size, 1)
+#define GUI_MEMALLOC(size)        gui_mem_calloc(size, 1)
 
 /**
  * \brief           Reallocate memory with specific size in bytes
  * \hideinitializer
  */
-#define __GUI_MEMREALLOC(ptr, size) gui_mem_realloc(ptr, size)
+#define GUI_MEMREALLOC(ptr, size) gui_mem_realloc(ptr, size)
 
 /**
  * \brief           Free memory from specific address previously allocated with \ref __GUI_MEMALLOC
  * \hideinitializer
  */
-#define __GUI_MEMFREE(p)            do {            \
+#define GUI_MEMFREE(p)              do {            \
     gui_mem_free(p);                                \
     (p) = NULL;                                     \
 } while (0);
@@ -139,7 +139,7 @@ extern "C" {
  */
 #define __GUI_ASSERTPARAMS(c)       do {            \
     if (!(c) || !(GUI.Initialized)) {                                     \
-        __GUI_DEBUG("Assert param failed in file %s and line %d\r\n", (const char *)__FILE__, (unsigned)__LINE__);  \
+        GUI_DEBUG("Assert param failed in file %s and line %d\r\n", (const char *)__FILE__, (unsigned)__LINE__);  \
         return 0;                                   \
     }                                               \
 } while (0)
@@ -162,7 +162,7 @@ extern "C" {
  * \retval          Maximal value
  * \hideinitializer
  */
-#define __GUI_MAX(x, y)             ((x) > (y) ? (x) : (y))
+#define GUI_MAX(x, y)               ((x) > (y) ? (x) : (y))
 
 /**
  * \brief           Get minimal value between 2 values
@@ -171,7 +171,7 @@ extern "C" {
  * \retval          Minimal value
  * \hideinitializer
  */
-#define __GUI_MIN(x, y)             ((x) < (y) ? (x) : (y))
+#define GUI_MIN(x, y)               ((x) < (y) ? (x) : (y))
 
 /**
  * \brief           Get absolute value of input
@@ -179,7 +179,7 @@ extern "C" {
  * \retval          Absolute value of input
  * \hideinitializer
  */
-#define __GUI_ABS(x)                ((x) >= 0 ? (x) : -(x))
+#define GUI_ABS(x)                  ((x) >= 0 ? (x) : -(x))
 
 /**
  * \brief           Check if 2 rectangle objects covers each other in any way
@@ -198,28 +198,28 @@ extern "C" {
  * \note            It uses 1 parameter
  * \hideinitializer
  */
-#define __GUI_UNUSED(x)             (void)(x)
+#define GUI_UNUSED(x)               (void)(x)
 
 /**
  * \brief           Macro for unused variables to prevent compiler warnings
  * \note            It uses 2 parameters
  * \hideinitializer
  */
-#define __GUI_UNUSED2(x, y)         { __GUI_UNUSED(x); __GUI_UNUSED(y); }
+#define GUI_UNUSED2(x, y)           { GUI_UNUSED(x); GUI_UNUSED(y); }
 
 /**
  * \brief           Macro for unused variables to prevent compiler warnings
  * \note            It uses 3 parameters
  * \hideinitializer
  */
-#define __GUI_UNUSED3(x, y, z)      { __GUI_UNUSED(x); __GUI_UNUSED(y); __GUI_UNUSED(z); }
+#define GUI_UNUSED3(x, y, z)        { GUI_UNUSED2(x, y); GUI_UNUSED(z); }
 
 /**
  * \brief           Macro for unused variables to prevent compiler warnings
  * \note            It uses 4 parameters
  * \hideinitializer
  */
-#define __GUI_UNUSED4(x, y, z, k)   { __GUI_UNUSED(x); __GUI_UNUSED(y); __GUI_UNUSED(z); __GUI_UNUSED(k); }
+#define GUI_UNUSED4(x, y, z, k)     { GUI_UNUSED3(x, y, z); GUI_UNUSED(k); }
 
 /**
  * \brief           Round value to the nearest integer and return it as float (can be casted to int without problems)
@@ -313,26 +313,8 @@ extern GUI_t GUI;
 #include "widgets/gui_widget.h"
 #include "input/gui_input.h"
 
-/**
- * \brief           Initializes GUI stack.
- *                    In addition, it prepares memory for work with widgets on later usage and
- *                    calls low-layer functions to initialize LCD or custom driver for LCD
- * \retval          Member of \ref GUI_Result_t enumeration
- */
 GUI_Result_t gui_init(void);
-
-/**
- * \brief           Processes all drawing operations for GUI
- * \retval          Number of jobs done in current call
- */
 int32_t gui_process(void);
-
-/**
- * \brief           Updates current time in GUI interface for amount of milliseconds
- * \param[in]       millis: Number of milliseconds to add to current time, value depends on number of function calls from user space
- * \retval          None
- */
-void gui_updatetime(uint32_t millis);
  
 /**
  * \}

@@ -89,10 +89,10 @@ remove_widget(GUI_HANDLE_p h) {
         gui_timer_remove__(&__GH(h)->Timer);        /* Free timer memory */
     }
     if (__GH(h)->Colors) {                          /* Check colors memory */
-        __GUI_MEMFREE(__GH(h)->Colors);             /* Free colors memory */
+        GUI_MEMFREE(__GH(h)->Colors);               /* Free colors memory */
     }
     gui_linkedlist_widgetremove(h);                 /* Remove entry from linked list of parent widget */
-    __GUI_MEMFREE(h);                               /* Free memory for widget */
+    GUI_MEMFREE(h);                                 /* Free memory for widget */
     
     return 1;                                       /* Widget deleted */
 }
@@ -725,7 +725,7 @@ gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_i
         return 0;
     }
     
-    h = __GUI_MEMALLOC(widget->Size);               /* Allocate memory for widget */
+    h = GUI_MEMALLOC(widget->Size);                 /* Allocate memory for widget */
     if (h) {
         __GUI_ENTER();                              /* Enter GUI */
         memset(h, 0x00, widget->Size);              /* Set memory to 0 */
@@ -757,7 +757,7 @@ gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_i
         gui_widget_callback__(h, GUI_WC_PreInit, NULL, &result);    /* Notify internal widget library about init successful */
         
         if (!result) {                              /* Check result */
-            __GUI_MEMFREE(h);                       /* Clear widget memory */
+            GUI_MEMFREE(h);                         /* Clear widget memory */
             h = 0;                                  /* Reset handle */
             return 0;                               /* Stop execution at this point */
         }
@@ -854,13 +854,13 @@ uint8_t
 gui_widget_allocatetextmemory__(GUI_HANDLE_p h, uint32_t size) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     if (gui_widget_getflag__(h, GUI_FLAG_DYNAMICTEXTALLOC) && __GH(h)->Text) {  /* Check if already allocated */
-        __GUI_MEMFREE(__GH(h)->Text);               /* Free memory first */
+        GUI_MEMFREE(__GH(h)->Text);                 /* Free memory first */
         __GH(h)->TextMemSize = 0;                   /* Reset memory size */
     }
     __GH(h)->Text = 0;                              /* Reset pointer */
     
     __GH(h)->TextMemSize = size * sizeof(GUI_Char); /* Allocate text memory */
-    __GH(h)->Text = __GUI_MEMALLOC(__GH(h)->TextMemSize);   /* Allocate memory for text */
+    __GH(h)->Text = GUI_MEMALLOC(__GH(h)->TextMemSize); /* Allocate memory for text */
     if (__GH(h)->Text) {                            /* Check if allocated */
         gui_widget_setflag__(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Dynamically allocated */
     } else {
@@ -876,7 +876,7 @@ uint8_t
 gui_widget_freetextmemory__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     if (gui_widget_getflag__(h, GUI_FLAG_DYNAMICTEXTALLOC) && __GH(h)->Text) {  /* Check if dynamically alocated */
-        __GUI_MEMFREE(__GH(h)->Text);               /* Free memory first */
+        GUI_MEMFREE(__GH(h)->Text);                 /* Free memory first */
         __GH(h)->Text = 0;                          /* Reset memory */
         __GH(h)->TextMemSize = 0;                   /* Reset memory size */
         gui_widget_clrflag__(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Not allocated */
@@ -1207,7 +1207,7 @@ gui_widget_setcolor__(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color) {
     __GUI_ENTER();                                  /* Enter GUI context */
     if (!__GH(h)->Colors) {                         /* Do we need to allocate color memory? */
         if (__GH(h)->Widget->ColorsCount) {         /* Check if at least some colors should be used */
-            __GH(h)->Colors = __GUI_MEMALLOC(__GH(h)->Widget->ColorsCount * sizeof(*__GH(h)->Colors));
+            __GH(h)->Colors = GUI_MEMALLOC(sizeof(*__GH(h)->Colors) * __GH(h)->Widget->ColorsCount);
             if (__GH(h)->Colors) {                  /* Copy all colors to new memory first */
                 memcpy(__GH(h)->Colors, __GH(h)->Widget->Colors, __GH(h)->Widget->ColorsCount * sizeof(*__GH(h)->Colors));
             } else {

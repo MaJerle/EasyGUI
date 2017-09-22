@@ -341,7 +341,7 @@ create_char_entry_from_font(const GUI_FONT_t* font, const GUI_FONT_CharInfo_t* c
     memDataSize = c->xSize * c->ySize;
     
     memsize += GUI_MEM_ALIGN(memDataSize);          /* Align memory before increase */
-    entry = __GUI_MEMALLOC(memsize);                /* Allocate memory for entry */
+    entry = GUI_MEMALLOC(memsize);                  /* Allocate memory for entry */
     if (entry) {                                    /* Allocation was successful */
         uint16_t i, x;
         uint8_t b, k, t;
@@ -595,33 +595,8 @@ string_get_pointer_for_width(const GUI_FONT_t* font, GUI_STRING_t* str, GUI_DRAW
     return str->Str + i + 1;
 }
 
-/******************************************************************************/
-/******************************************************************************/
-/***                              Protothreads                               **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
-void
-gui_draw_font_init(GUI_DRAW_FONT_t* f) {
-    memset((void *)f, 0x00, sizeof(*f));            /* Reset structure */
-}
-
-/******************************************************************************/
-/******************************************************************************/
-/***                    Functions with low-level communication               **/
-/******************************************************************************/
-/******************************************************************************/
-void
-gui_draw_fillscreen(const GUI_Display_t* disp, GUI_Color_t color) {
-    GUI.LL.Fill(&GUI.LCD, GUI.LCD.DrawingLayer, 0, GUI.LCD.DrawingLayer->Width, GUI.LCD.DrawingLayer->Height, 0, color);
-}
-
-void
+/* Fill screen with color on specific coordinates */
+static void
 gui_draw_fill(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_Color_t color) {
     if (                                            /* Check if redraw is inside area */
         !__GUI_RECT_MATCH(  x, y, x + width, y + height,
@@ -655,6 +630,54 @@ gui_draw_fill(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t 
     }
 }
 
+/******************************************************************************/
+/******************************************************************************/
+/***                              Protothreads                               **/
+/******************************************************************************/
+/******************************************************************************/
+
+/******************************************************************************/
+/******************************************************************************/
+/***                                Public API                               **/
+/******************************************************************************/
+/******************************************************************************/
+
+/**
+ * \brief           Initialize \ref GUI_DRAW_FONT_t structure for further usage
+ * \param[in,out]   *f: Pointer to empty \ref GUI_DRAW_FONT_t structure
+ * \retval          None
+ */
+void
+gui_draw_font_init(GUI_DRAW_FONT_t* f) {
+    memset((void *)f, 0x00, sizeof(*f));            /* Reset structure */
+}
+
+/******************************************************************************/
+/******************************************************************************/
+/***                    Functions with low-level communication               **/
+/******************************************************************************/
+/******************************************************************************/
+
+/**
+ * \brief           Fill screen with color
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       color: Color to use for filling screen
+ * \retval          None
+ */
+void
+gui_draw_fillscreen(const GUI_Display_t* disp, GUI_Color_t color) {
+    GUI.LL.Fill(&GUI.LCD, GUI.LCD.DrawingLayer, 0, GUI.LCD.DrawingLayer->Width, GUI.LCD.DrawingLayer->Height, 0, color);
+}
+
+/**
+ * \brief           Set single pixel at X and Y location
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: X position on LCD
+ * \param[in]       y: Y position on LCD
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              gui_draw_getpixel
+ */
 void
 gui_draw_setpixel(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_Color_t color) {
     if (y < disp->Y1 || y >= disp->Y2 || x < disp->X1 || x >= disp->X2) {
@@ -663,11 +686,29 @@ gui_draw_setpixel(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_Col
     GUI.LL.SetPixel(&GUI.LCD, GUI.LCD.DrawingLayer, x - GUI.LCD.DrawingLayer->OffsetX, y - GUI.LCD.DrawingLayer->OffsetY, color);
 }
 
+/**
+ * \brief           Get pixel color at X and Y location
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: X position on LCD
+ * \param[in]       y: Y position on LCD
+ * \retval          Pixel color at desired position
+ * \sa              gui_draw_setpixel
+ */
 GUI_Color_t
 gui_draw_getpixel(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y) {
     return GUI.LL.GetPixel(&GUI.LCD, GUI.LCD.DrawingLayer, x - GUI.LCD.DrawingLayer->OffsetX, y - GUI.LCD.DrawingLayer->OffsetY);
 }
 
+/**
+ * \brief           Draw vertical line to LCD
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: Line top X position
+ * \param[in]       y: Line top Y position
+ * \param[in]       length: Length of vertical line
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              gui_draw_hline, gui_draw_line
+ */
 void
 gui_draw_vline(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t length, GUI_Color_t color) {
     if (x >= disp->X2 || x < disp->X1 || y > disp->Y2 || (y + length) < disp->Y1) {
@@ -683,6 +724,16 @@ gui_draw_vline(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t
     GUI.LL.DrawVLine(&GUI.LCD, GUI.LCD.DrawingLayer, x - GUI.LCD.DrawingLayer->OffsetX, y - GUI.LCD.DrawingLayer->OffsetY, length, color);
 }
 
+/**
+ * \brief           Draw horizontal line to LCD
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: Line left X position
+ * \param[in]       y: Line left Y position
+ * \param[in]       length: Length of horizontal line
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              gui_draw_vline, gui_draw_line
+ */
 void
 gui_draw_hline(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t length, GUI_Color_t color) {
     if (y >= disp->Y2 || y < disp->Y1 || x > disp->X2 || (x + length) < disp->X1) {
@@ -703,6 +754,18 @@ gui_draw_hline(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t
 /***                          Functions for primitives                       **/
 /******************************************************************************/
 /******************************************************************************/
+
+/**
+ * \brief           Draw line from point 1 to point 2
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x1: Line start X position
+ * \param[in]       y1: Line start Y position
+ * \param[in]       x2: Line end X position
+ * \param[in]       y2: Line end Y position
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              gui_draw_vline, gui_draw_hline
+ */
 void
 gui_draw_line(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_iDim_t x2, GUI_iDim_t y2, GUI_Color_t color) {
     GUI_iDim_t deltax = 0, deltay = 0, x = 0, y = 0, xinc1 = 0, xinc2 = 0, 
@@ -716,15 +779,15 @@ gui_draw_line(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_iDim_
 //        return;
 //    }
 
-	deltax = __GUI_ABS(x2 - x1);
-	deltay = __GUI_ABS(y2 - y1);
+	deltax = GUI_ABS(x2 - x1);
+	deltay = GUI_ABS(y2 - y1);
     
     if (deltax == 0) {                              /* Straight vertical line */
-        gui_draw_vline(disp, x1, __GUI_MIN(y1, y2), deltay, color);
+        gui_draw_vline(disp, x1, GUI_MIN(y1, y2), deltay, color);
         return;
     }
     if (deltay == 0) {                              /* Straight horizontal line */
-        gui_draw_hline(disp, __GUI_MIN(x1, x2), y1, deltax, color);
+        gui_draw_hline(disp, GUI_MIN(x1, x2), y1, deltax, color);
         return;
     }
 
@@ -776,6 +839,17 @@ gui_draw_line(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_iDim_
     }
 }
 
+/**
+ * \brief           Draw rectangle
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: Top left X position
+ * \param[in]       y: Top left Y position
+ * \param[in]       width: Rectangle width
+ * \param[in]       height: Rectangle height
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              gui_draw_filledrectangle, gui_draw_roundedrectangle, gui_draw_filledroundedrectangle
+ */
 void
 gui_draw_rectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_Color_t color) {
     if (width == 0 || height == 0) {
@@ -788,11 +862,32 @@ gui_draw_rectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iD
     gui_draw_vline(disp, x + width - 1, y,              height, color);
 }
 
+/**
+ * \brief           Draw filled rectangle
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: Top left X position
+ * \param[in]       y: Top left Y position
+ * \param[in]       width: Rectangle width
+ * \param[in]       height: Rectangle height
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              gui_draw_rectangle, gui_draw_roundedrectangle, gui_draw_filledroundedrectangle
+ */
 void
 gui_draw_filledrectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_Color_t color) {
     gui_draw_fill(disp, x, y, width, height, color);
 }
 
+/**
+ * \brief           Draw rectangle with 3D view
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: Top left X position
+ * \param[in]       y: Top left Y position
+ * \param[in]       width: Rectangle width
+ * \param[in]       height: Rectangle height
+ * \param[in]       state: 3D state. This parameter can be a value of \ref GUI_DRAW_3D_State_t enumeration
+ * \retval          None
+ */
 void
 gui_draw_rectangle3d(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_DRAW_3D_State_t state) {
     GUI_Color_t c1, c2, c3;
@@ -815,6 +910,18 @@ gui_draw_rectangle3d(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_
     gui_draw_vline(disp, x + width - 2, y + 2, height - 4, c3);
 }
 
+/**
+ * \brief           Draw rectangle with rounded corners
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: Top left X position
+ * \param[in]       y: Top left Y position
+ * \param[in]       width: Rectangle width
+ * \param[in]       height: Rectangle height
+ * \param[in]       r: Corner radius, max value can be r = MIN(width, height) / 2
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              gui_draw_rectangle, gui_draw_filledrectangle, gui_draw_filledroundedrectangle
+ */
 void
 gui_draw_roundedrectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_iDim_t r, GUI_Color_t color) {
     if (r >= (height / 2)) {
@@ -838,6 +945,18 @@ gui_draw_roundedrectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y,
     }
 }
 
+/**
+ * \brief           Draw filled rectangle with rounded corners
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: Top left X position
+ * \param[in]       y: Top left Y position
+ * \param[in]       width: Rectangle width
+ * \param[in]       height: Rectangle height
+ * \param[in]       r: Corner radius, max value can be r = MIN(width, height) / 2
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              gui_draw_rectangle, gui_draw_filledrectangle, gui_draw_roundedrectangle
+ */
 void
 gui_draw_filledroundedrectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_iDim_t r, GUI_Color_t color) {
     if (r >= (height / 2)) {
@@ -864,6 +983,16 @@ gui_draw_filledroundedrectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDi
     }
 }
 
+/**
+ * \brief           Draw circle
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x0: X position of circle center
+ * \param[in]       y0: X position of circle center
+ * \param[in]       r: Circle radius
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              gui_draw_filledcircle, gui_draw_circlecorner, gui_draw_filledcirclecorner
+ */
 void
 gui_draw_circle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t r, GUI_Color_t color) {
     gui_draw_circlecorner(disp, x, y, r, GUI_DRAW_CIRCLE_TL, color);
@@ -872,6 +1001,16 @@ gui_draw_circle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_
     gui_draw_circlecorner(disp, x - 1, y - 1, r, GUI_DRAW_CIRCLE_BR, color);
 }
 
+/**
+ * \brief           Draw filled circle
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x0: X position of circle center
+ * \param[in]       y0: X position of circle center
+ * \param[in]       r: Circle radius
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              gui_draw_circle, gui_draw_circlecorner, gui_draw_filledcirclecorner
+ */
 void
 gui_draw_filledcircle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t r, GUI_Color_t color) {
     gui_draw_filledcirclecorner(disp, x, y, r, GUI_DRAW_CIRCLE_TL, color);
@@ -880,6 +1019,19 @@ gui_draw_filledcircle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI
     gui_draw_filledcirclecorner(disp, x, y - 1, r, GUI_DRAW_CIRCLE_BR, color);
 }
 
+/**
+ * \brief           Draw triangle
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x1: Triangle point 1 X position
+ * \param[in]       y1: Triangle point 1 Y position
+ * \param[in]       x2: Triangle point 2 X position
+ * \param[in]       y2: Triangle point 2 Y position
+ * \param[in]       x3: Triangle point 3 X position
+ * \param[in]       y3: Triangle point 3 Y position
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              gui_draw_filledtriangle
+ */
 void
 gui_draw_triangle(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1,  GUI_iDim_t x2, GUI_iDim_t y2, GUI_iDim_t x3, GUI_iDim_t y3, GUI_Color_t color) {
     gui_draw_line(disp, x1, y1, x2, y2, color);
@@ -887,14 +1039,27 @@ gui_draw_triangle(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1,  GUI_
     gui_draw_line(disp, x2, y2, x3, y3, color);
 }
 
+/**
+ * \brief           Draw filled triangle
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x1: Triangle point 1 X position
+ * \param[in]       y1: Triangle point 1 Y position
+ * \param[in]       x2: Triangle point 2 X position
+ * \param[in]       y2: Triangle point 2 Y position
+ * \param[in]       x3: Triangle point 3 X position
+ * \param[in]       y3: Triangle point 3 Y position
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              gui_draw_triangle
+ */
 void
 gui_draw_filledtriangle(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_iDim_t x2, GUI_iDim_t y2, GUI_iDim_t x3, GUI_iDim_t y3, GUI_Color_t color) {
     GUI_iDim_t deltax = 0, deltay = 0, x = 0, y = 0, xinc1 = 0, xinc2 = 0, 
     yinc1 = 0, yinc2 = 0, den = 0, num = 0, numadd = 0, numpixels = 0, 
     curpixel = 0;
 
-    deltax = __GUI_ABS(x2 - x1);
-    deltay = __GUI_ABS(y2 - y1);
+    deltax = GUI_ABS(x2 - x1);
+    deltay = GUI_ABS(y2 - y1);
     x = x1;
     y = y1;
 
@@ -944,6 +1109,21 @@ gui_draw_filledtriangle(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1,
     }
 }
 
+/**
+ * \brief           Draw circle corner, selected with parameter
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x0: X position of corner origin
+ * \param[in]       y0: Y position of corner origin
+ * \param[in]       r: Circle radius
+ * \param[in]       c: List of corners to draw. Use BITWISE OR with these values to specify corner:
+ *                     - \ref GUI_DRAW_CIRCLE_TL
+ *                     - \ref GUI_DRAW_CIRCLE_TR
+ *                     - \ref GUI_DRAW_CIRCLE_BL
+ *                     - \ref GUI_DRAW_CIRCLE_BR
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              gui_draw_circle, gui_draw_filledcircle, gui_draw_filledcirclecorner
+ */
 void
 gui_draw_circlecorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t y0, GUI_iDim_t r, GUI_Byte_t c, GUI_Color_t color) {
     GUI_iDim_t f = 1 - r;
@@ -991,6 +1171,21 @@ gui_draw_circlecorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t y0, G
     }
 }
 
+/**
+ * \brief           Draw filled circle corner, selected with parameter
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x0: X position of corner origin
+ * \param[in]       y0: Y position of corner origin
+ * \param[in]       r: Circle radius
+ * \param[in]       c: List of corners to draw. Use BITWISE OR with these values to specify corner:
+ *                     - \ref GUI_DRAW_CIRCLE_TL
+ *                     - \ref GUI_DRAW_CIRCLE_TR
+ *                     - \ref GUI_DRAW_CIRCLE_BL
+ *                     - \ref GUI_DRAW_CIRCLE_BR
+ * \param[in]       color: Color used for drawing operation
+ * \retval          None
+ * \sa              gui_draw_circle, gui_draw_filledcircle, gui_draw_circlecorner
+ */
 void
 gui_draw_filledcirclecorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t y0, GUI_iDim_t r, GUI_Byte_t c, GUI_Color_t color) {
     GUI_iDim_t f = 1 - r;
@@ -1035,6 +1230,14 @@ gui_draw_filledcirclecorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t
     }
 }
 
+/**
+ * \brief           Draw image to display of any depth and size
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       x: Top left X position
+ * \param[in]       y: Top left Y position
+ * \param[in]       *img: Pointer to \ref GUI_IMAGE_DESC_t structure with image description
+ * \retval          None
+ */
 void
 gui_draw_image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_IMAGE_DESC_t* img) {
     uint8_t bytes = img->BPP >> 3;                  /* Get number of bytes per pixel on image */
@@ -1099,6 +1302,14 @@ gui_draw_image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_IMAGE_
     }
 }
 
+/**
+ * \brief           Draw polygon lines
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       *points: Pointer to array of \ref GUI_DRAW_Poly_t points to draw lines between
+ * \param[in]       len: Number of points in array. There must be at least 2 points
+ * \param[in]       color: Color to use for drawing
+ * \retval          None
+ */
 void
 gui_draw_poly(const GUI_Display_t* disp, const GUI_DRAW_Poly_t* points, size_t len, GUI_Color_t color) {
     GUI_iDim_t x = 0, y = 0;
@@ -1117,6 +1328,14 @@ gui_draw_poly(const GUI_Display_t* disp, const GUI_DRAW_Poly_t* points, size_t l
     }
 }
 
+/**
+ * \brief           Write text to screen
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       *font: Pointer to \ref GUI_FONT_t structure with font to use
+ * \param[in]       *str: Pointer to string to draw on screen
+ * \param[in]       *draw: Pointer to \ref GUI_DRAW_FONT_t structure with specifications about drawing style
+ * \retval          None
+ */
 void
 gui_draw_writetext(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_Char* str, GUI_DRAW_FONT_t* draw) {
     GUI_iDim_t x, y;
@@ -1202,11 +1421,22 @@ gui_draw_writetext(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_
     }
 }
 
+/**
+ * \brief           Initializes \ref GUI_DRAW_SB_t structure for drawing operations
+ * \param[in]       *sb: Pointer to \ref GUI_DRAW_SB_t to initialize to default values
+ * \retval          None
+ */
 void
 gui_draw_scrollbar_init(GUI_DRAW_SB_t* sb) {
     memset(sb, 0x00, sizeof(*sb));                  /* Reset structure */
 }
 
+/**
+ * \brief           Draw scroll bar to screen
+ * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
+ * \param[in]       *sb: Pointer to \ref GUI_DRAW_SB_t parameters for scroll bar
+ * \retval          None
+ */
 void
 gui_draw_scrollbar(const GUI_Display_t* disp, GUI_DRAW_SB_t* sb) {
     GUI_Dim_t btnW, btnH, midHeight, rectHeight, midOffset = 0;

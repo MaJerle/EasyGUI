@@ -57,45 +57,8 @@ typedef struct GUI_DIALOG_t {
 } GUI_DIALOG_t;
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
-/**
- * \brief           Create new dialog base element without any "design" style
- * \param[in]       id: Widget unique ID to use for identity for callback processing
- * \param[in]       x: Widget X position relative to parent widget
- * \param[in]       y: Widget Y position relative to parent widget
- * \param[in]       width: Widget width in units of pixels
- * \param[in]       height: Widget height in uints of pixels
- * \param[in]       func: Widget create function used as dialog base. In most cases \ref GUI_CONTAINER_Create will be used to create empty container
- * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
- * \param[in]       flags: Flags for widget creation
- * \retval          > 0: \ref GUI_HANDLE_p object of created widget
- * \retval          0: Widget creation failed
- */
 GUI_HANDLE_p gui_dialog_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
-
-/**
- * \brief           Create new dialog base element without any "design" style and wait for dismiss status
- * \note            Function will block thread until dialog is dismissed using \ref GUI_DIALOG_Dismiss function by user
- *
- * \param[in]       id: Widget unique ID to use for identity for callback processing
- * \param[in]       x: Widget X position relative to parent widget
- * \param[in]       y: Widget Y position relative to parent widget
- * \param[in]       width: Widget width in units of pixels
- * \param[in]       height: Widget height in uints of pixels
- * \param[in]       func: Widget create function used as dialog base. In most cases \ref GUI_CONTAINER_Create will be used to create empty container
- * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
- * \param[in]       flags: Flags for widget creation
- * \retval          -1: Widget creation fail
- * \retval          int: Value passed to \ref GUI_DIALOG_Dismiss when dialog is dismissed
- */
 int gui_dialog_createblocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
-
-/**
- * \brief           Dismiss (close) dialog with status
- * \param[in]       h: Widget handle
- * \param[in]       status: Dismiss status. Do not use value -1 as it is reserved for error detection
- * \retval          1: Dialog was dismissed ok
- * \retval          0: Dialog was not dismissed
- */
 uint8_t gui_dialog_dismiss(GUI_HANDLE_p h, int status);
 
 /**

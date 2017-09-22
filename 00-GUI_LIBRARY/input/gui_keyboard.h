@@ -71,51 +71,15 @@ extern "C" {
  * \{
  */
  
-/**
- * \brief           Hide opened virtual keyboard
- * \note            Since this function is private, it can only be used by user inside GUI library
- * \retval          1: Keyboard hiding process started
- * \retval          0: Keyboard hiding process not started
- * \sa              __gui_keyboard_show
- */
 uint8_t gui_keyboard_hide__(void);
-
-/**
- * \brief           Show hidden virtual keyboard
- * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       h: Widget handle for which keyboard will be opened
- * \retval          1: Keyboard opening process started
- * \retval          0: Keyboard opening process not started
- * \sa              __gui_keyboard_hide
- */
 uint8_t gui_keyboard_show__(GUI_HANDLE_p h);
     
 /**
  * \}
  */
     
-/**
- * \brief           Creates virtual keyboard for user interaction.
- * \note            This function must be called by user after \ref GUI_Init is called to use virtual keyboard
- * \retval          Keyboard handle
- */
 GUI_HANDLE_p gui_keyboard_create(void);
-
-/**
- * \brief           Hide opened virtual keyboard
- * \retval          1: Keyboard hiding process started
- * \retval          0: Keyboard hiding process not started
- * \sa              gui_keyboard_show
- */
 uint8_t gui_keyboard_hide(void);
-
-/**
- * \brief           Show hidden virtual keyboard
- * \param[in]       h: Widget handle for which keyboard will be opened
- * \retval          1: Keyboard opening process started
- * \retval          0: Keyboard opening process not started
- * \sa              gui_keyboard_hide
- */
 uint8_t gui_keyboard_show(GUI_HANDLE_p h);
     
 /**

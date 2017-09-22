@@ -98,92 +98,14 @@ typedef struct GUI_SLIDER_t {
 } GUI_SLIDER_t;
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
-/**
- * \brief           Create new slider widget
- * \param[in]       id: Widget unique ID to use for identity for callback processing
- * \param[in]       x: Widget X position relative to parent widget
- * \param[in]       y: Widget Y position relative to parent widget
- * \param[in]       width: Widget width in units of pixels
- * \param[in]       height: Widget height in uints of pixels
- * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
- * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
- * \param[in]       flags: Flags for create procedure
- * \retval          > 0: \ref GUI_HANDLE_p object of created widget
- * \retval          0: Widget creation failed
- */
 GUI_HANDLE_p gui_slider_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
-
-/**
- * \brief           Set color to specific part of widget
- * \param[in,out]   h: Widget handle
- * \param[in]       index: Color index. This parameter can be a value of \ref GUI_SLIDER_COLOR_t enumeration
- * \param[in]       color: Color value
- * \retval          1: Color was set ok
- * \retval          0: Color vas not set
- */
 uint8_t gui_slider_setcolor(GUI_HANDLE_p h, GUI_SLIDER_COLOR_t index, GUI_Color_t color);
-
-/**
- * \brief           Set slider mode (orientation)
- * \param[in]       h: Widget handle
- * \param[in]       mode: Slider mode. This parameter can be a value of \ref GUI_SLIDER_MODE_t enumeration
- * \retval          1: Mode was set ok
- * \retval          0: Mode was not set
- */
 uint8_t gui_slider_setmode(GUI_HANDLE_p h, GUI_SLIDER_MODE_t mode);
-
-/**
- * \brief           Set slider minimal value
- * \param[in,out]   h: Widget handle
- * \param[in]       val: New minimal value
- * \retval          1: Value was set ok
- * \retval          0: Value vas not set
- * \sa              gui_slider_setvalue, gui_slider_setmax, gui_slider_getvalue, gui_slider_getmin, gui_slider_getmax         
- */
 uint8_t gui_slider_setmin(GUI_HANDLE_p h, int32_t val);
-
-/**
- * \brief           Set slider maximal value
- * \param[in,out]   h: Widget handle
- * \param[in]       val: New maximal value
- * \retval          1: Value was set ok
- * \retval          0: Value vas not set
- * \sa              gui_slider_setmin, gui_slider_setvalue, gui_slider_getvalue, gui_slider_getmin, gui_slider_getmax  
- */
 uint8_t gui_slider_setmax(GUI_HANDLE_p h, int32_t val);
-
-/**
- * \brief           Set slider current value
- * \param[in,out]   h: Widget handle
- * \param[in]       val: New current value
- * \retval          1: Value was set ok
- * \retval          0: Value vas not set
- * \sa              gui_slider_setmin, gui_slider_setmax, gui_slider_getvalue, gui_slider_getmin, gui_slider_getmax  
- */
 uint8_t gui_slider_setvalue(GUI_HANDLE_p h, int32_t val);
-
-/**
- * \brief           Get slider minimal value
- * \param[in,out]   h: Widget handle
- * \retval          Minimal value
- * \sa              gui_slider_setmin, gui_slider_setvalue, gui_slider_setmax, gui_slider_getvalue, gui_slider_getmax  
- */
 int32_t gui_slider_getmin(GUI_HANDLE_p h);
-
-/**
- * \brief           Get slider maximal value
- * \param[in,out]   h: Widget handle
- * \retval          Maximal value
- * \sa              gui_slider_setmin, gui_slider_setvalue, gui_slider_setmax, gui_slider_getvalue, gui_slider_getmin  
- */
 int32_t gui_slider_getmax(GUI_HANDLE_p h);
-
-/**
- * \brief           Get slider current value
- * \param[in,out]   h: Widget handle
- * \retval          Current value
- * \sa              gui_slider_setmin, gui_slider_setvalue, gui_slider_setmax, gui_slider_getmin, gui_slider_getmax  
- */
 int32_t gui_slider_getvalue(GUI_HANDLE_p h);
 
 /**

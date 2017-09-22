@@ -39,8 +39,7 @@
 /******************************************************************************/
 #define __GL(x)             ((GUI_LISTVIEW_t *)(x))
 
-static
-uint8_t gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -313,7 +312,7 @@ gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
                             continue;
                         }               
                         if (index == __GL(h)->Selected) {
-                            gui_draw_filledrectangle(disp, x + 2, f.Y, width - 2, __GUI_MIN(f.Height, itemHeight), gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_SEL_FOC_BG) : gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_SEL_NOFOC_BG));
+                            gui_draw_filledrectangle(disp, x + 2, f.Y, width - 2, GUI_MIN(f.Height, itemHeight), gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_SEL_FOC_BG) : gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_SEL_NOFOC_BG));
                             f.Color1 = gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_SEL_FOC) : gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_SEL_NOFOC);
                         } else {
                             f.Color1 = gui_widget_getcolor__(h, GUI_LISTVIEW_COLOR_TEXT);
@@ -351,9 +350,9 @@ gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
                  * Remove all items in row first
                  */
                 while ((item = (GUI_LISTVIEW_ITEM_t *)gui_linkedlist_remove_gen(&row->Root, (GUI_LinkedList_t *)gui_linkedlist_getnext_gen(&row->Root, NULL))) != NULL) {
-                    __GUI_MEMFREE(item);
+                    GUI_MEMFREE(item);
                 }
-                __GUI_MEMFREE(row);                 /* Remove actual row entry */
+                GUI_MEMFREE(row);                   /* Remove actual row entry */
                 i++;
             }
             
@@ -362,9 +361,9 @@ gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
              */
             if (o->Cols) {
                 for (i = 0; i < o->ColsCount; i++) {
-                    __GUI_MEMFREE(o->Cols[i]);      /* Remove column object */
+                    GUI_MEMFREE(o->Cols[i]);        /* Remove column object */
                 }
-                __GUI_MEMFREE(o->Cols);             /* Remove block of pointers to columns */
+                GUI_MEMFREE(o->Cols);               /* Remove block of pointers to columns */
             }
             return 1;
         }
@@ -384,7 +383,7 @@ gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
                 GUI_iDim_t diff;
                 
                 diff = tY - ts->RelY[0];            /* Check Y difference */
-                if (__GUI_ABS(diff) > height) {     /* Difference must be greater than 1 height entry */
+                if (GUI_ABS(diff) > height) {       /* Difference must be greater than 1 height entry */
                     slide(h, diff > 0 ? 1 : -1);    /* Slide widget */
                     tY = ts->RelY[0];               /* Save pointer */
                 }
@@ -396,7 +395,7 @@ gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
                     diff = tX - ts->RelX[0];        /* Check X difference too */
                     for (i = 0; i < o->ColsCount; i++) {    /* Check X position for column first */
                         sum += o->Cols[i]->Width;   /* Check width */
-                        if (__GUI_ABS(tX - sum) < 10) {
+                        if (GUI_ABS(tX - sum) < 10) {
                             break;
                         }
                     }
@@ -479,7 +478,7 @@ gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
             return 1;
         }
         default:                                    /* Handle default option */
-            __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
+            GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
     }
 }
@@ -490,19 +489,47 @@ gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
+
+/**
+ * \brief           Create new list view widget
+ * \param[in]       id: Widget unique ID to use for identity for callback processing
+ * \param[in]       x: Widget X position relative to parent widget
+ * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       width: Widget width in units of pixels
+ * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
+ * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       flags: Flags for widget creation
+ * \retval          > 0: \ref GUI_HANDLE_p object of created widget
+ * \retval          0: Widget creation failed
+ */
 GUI_HANDLE_p
 gui_listview_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
+/**
+ * \brief           Set color to list view widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Index in array of colors. This parameter can be a value of \ref GUI_LISTVIEW_COLOR_t enumeration
+ * \param[in]       color: Actual color code to set
+ * \retval          1: Color was set ok
+ * \retval          0: Color was not set
+ */
 uint8_t
 gui_listview_setcolor(GUI_HANDLE_p h, GUI_LISTVIEW_COLOR_t index, GUI_Color_t color) {
-    uint8_t ret;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    ret = gui_widget_setcolor__(h, (uint8_t)index, color);  /* Set color */
-    return ret;
+    return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }
 
+/**
+ * \brief           Add new column to listview
+ * \param[in]       h: Widget handle
+ * \param[in]       *text: Text to display on top
+ * \param[in]       width: Width of column in units of pixels
+ * \retval          1: Column was added
+ * \retval          0: Column was not added
+ */
 uint8_t
 gui_listview_addcolumn(GUI_HANDLE_p h, const GUI_Char* text, GUI_Dim_t width) {
     uint8_t ret = 0;
@@ -512,10 +539,10 @@ gui_listview_addcolumn(GUI_HANDLE_p h, const GUI_Char* text, GUI_Dim_t width) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    cols = __GUI_MEMREALLOC(__GL(h)->Cols, sizeof(*__GL(h)->Cols) * (__GL(h)->ColsCount + 2));  /* Allocate new memory block for new pointers of columns */
+    cols = GUI_MEMREALLOC(__GL(h)->Cols, sizeof(*__GL(h)->Cols) * (__GL(h)->ColsCount + 2));/* Allocate new memory block for new pointers of columns */
     if (cols) {
         __GL(h)->Cols = cols;                       /* Save new pointer of memory */
-        col = __GUI_MEMALLOC(sizeof(*col));         /* Allocate memory for new column structure */
+        col = GUI_MEMALLOC(sizeof(*col));           /* Allocate memory for new column structure */
         if (col) {
             __GL(h)->Cols[__GL(h)->ColsCount++] = col;  /* Add column to array list */
             __GL(h)->Cols[__GL(h)->ColsCount] = 0;  /* Add zero to the end of array */
@@ -530,6 +557,14 @@ gui_listview_addcolumn(GUI_HANDLE_p h, const GUI_Char* text, GUI_Dim_t width) {
     return ret;
 }
 
+/**
+ * \brief           Set column width in units of pixels
+ * \param[in]       h: Widget handle
+ * \param[in]       index: Index for column number. First column has index 0
+ * \param[in]       width: Width of column in units of pixels
+ * \retval          1: Column was added
+ * \retval          0: Column was not added
+ */
 uint8_t
 gui_listview_setcolumnwidth(GUI_HANDLE_p h, uint16_t index, GUI_Dim_t width) {
     uint8_t ret = 0;
@@ -547,24 +582,38 @@ gui_listview_setcolumnwidth(GUI_HANDLE_p h, uint16_t index, GUI_Dim_t width) {
     return ret;
 }
 
+/**
+ * \brief           Add new empty row
+ * \param[in]       h: Widget handle
+ * \retval          Row object handle
+ */
 GUI_LISTVIEW_ROW_p
 gui_listview_addrow(GUI_HANDLE_p h) {
     GUI_LISTVIEW_ROW_t* row;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);   /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
 
-    row = __GUI_MEMALLOC(sizeof(*row));             /* Allocate memory for new row(s) */
+    row = GUI_MEMALLOC(sizeof(*row));               /* Allocate memory for new row(s) */
     if (row) {
+        __GUI_ENTER();                              /* Enter GUI */
         gui_linkedlist_add_gen(&__GL(h)->Root, (GUI_LinkedList_t *)row);/* Add new row to linked list */
         __GL(h)->Count++;                           /* Increase number of rows */
         check_values(h);                            /* Check values situation */
+        __GUI_LEAVE();                                  /* Leave GUI */
     }
-
-    __GUI_LEAVE();                                  /* Leave GUI */
+    
     return (GUI_LISTVIEW_ROW_p)row;
 }
 
+/**
+ * \brief           Set item string for specific row and column
+ * \param[in]       h: Widget handle
+ * \param[in]       row: Row object handle, previously returned with \ref GUI_LISTVIEW_AddRow function
+ * \param[in]       col: Column number to set. First column is on index = 0
+ * \param[in]       *text: Text to use for item
+ * \retval          1: Item string was set ok
+ * \retval          0: Item string was not set
+ */
 uint8_t
 gui_listview_setitemstring(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row, uint16_t col, const GUI_Char* text) {
     uint8_t ret = 0;
@@ -577,7 +626,7 @@ gui_listview_setitemstring(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row, uint16_t col,
     col++;
     while (col--) {                                 /* Find proper column */
         if (!item) {
-            item = __GUI_MEMALLOC(sizeof(*item));   /* Allocate for item */
+            item = GUI_MEMALLOC(sizeof(*item));     /* Allocate for item */
             if (!item) {
                 break;
             }
@@ -596,6 +645,15 @@ gui_listview_setitemstring(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row, uint16_t col,
     return ret;
 }
 
+/**
+ * \brief           Set auto mode for slider
+ * \note            When it is enabled, slider will only appear if needed to show more entries on list
+ * \param[in,out]   h: Widget handle
+ * \param[in]       autoMode: Auto mode status. Set to 1 for auto mode or 0 for manual mode
+ * \retval          1: Set OK
+ * \retval          0: Set ERROR
+ * \sa              gui_listview_setslidervisibility
+ */
 uint8_t
 gui_listview_setsliderauto(GUI_HANDLE_p h, uint8_t autoMode) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -613,6 +671,15 @@ gui_listview_setsliderauto(GUI_HANDLE_p h, uint8_t autoMode) {
     return 1;
 }
 
+/**
+ * \brief           Set manual visibility for slider
+ * \note            Slider must be in manual mode in order to get this to work
+ * \param[in,out]   h: Widget handle
+ * \param[in]       visible: Slider visible status, 1 or 0
+ * \retval          1: Set to desired value
+ * \retval          0: Not set to desired value
+ * \sa              gui_listview_setsliderauto
+ */
 uint8_t
 gui_listview_setslidervisibility(GUI_HANDLE_p h, uint8_t visible) {
     uint8_t ret = 0;
@@ -636,6 +703,13 @@ gui_listview_setslidervisibility(GUI_HANDLE_p h, uint8_t visible) {
     return ret;
 }
 
+/**
+ * \brief           Scroll list if possible
+ * \param[in,out]   h: Widget handle
+ * \param[in]       step: Step to scroll. Positive step will scroll up, negative will scroll down
+ * \retval          1: Scroll successful
+ * \retval          0: Scroll not successful
+ */
 uint8_t
 gui_listview_scroll(GUI_HANDLE_p h, int16_t step) {
     volatile int16_t start;
@@ -658,6 +732,13 @@ gui_listview_scroll(GUI_HANDLE_p h, int16_t step) {
     return (uint8_t)start;
 }
 
+/**
+ * \brief           Set selected row number
+ * \param[in,out]   h: Widget handle
+ * \param[in]       selection: Set to -1 to invalidate selection or 0 - count-1 for specific selection 
+ * \retval          1: Selection changed
+ * \retval          0: Selection not changed
+ */
 uint8_t
 gui_listview_setselection(GUI_HANDLE_p h, int16_t selection) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -671,6 +752,11 @@ gui_listview_setselection(GUI_HANDLE_p h, int16_t selection) {
     return 1;
 }
 
+/**
+ * \brief           Get selected row number
+ * \param[in,out]   h: Widget handle
+ * \retval          Selection number or -1 if no selection
+ */
 int16_t
 gui_listview_getselection(GUI_HANDLE_p h) {
     int16_t selection;
@@ -684,6 +770,16 @@ gui_listview_getselection(GUI_HANDLE_p h) {
     return selection;
 }
 
+/**
+ * \brief           Get item text value from row index and column index
+ * \param[in,out]   h: Widget handle
+ * \param[in]       rindex: Row index
+ * \param[in]       cindex: Column index
+ * \param[in]       *dst: Pointer to \ref GUI_Char variable to save text to it
+ * \param[in]       length: Length of destination array
+ * \retval          1: Text was found and copied
+ * \retval          0: Text was not found
+ */
 uint8_t
 gui_listview_getitemvalue(GUI_HANDLE_p h, uint16_t rindex, uint16_t cindex, GUI_Char* dst, size_t length) {
     int16_t ret = 0;

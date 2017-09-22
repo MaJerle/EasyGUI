@@ -333,7 +333,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
         }
 #endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
         default:                                    /* Handle default option */
-            __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
+            GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
     }
 }
@@ -367,17 +367,47 @@ static void graph_invalidate(GUI_GRAPH_DATA_p data) {
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
+
+/**
+ * \brief           Create new graph widget
+ * \param[in]       id: Widget unique ID to use for identity for callback processing
+ * \param[in]       x: Widget X position relative to parent widget
+ * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       width: Widget width in units of pixels
+ * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
+ * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       flags: Flags for create procedure
+ * \retval          > 0: \ref GUI_HANDLE_p object of created widget
+ * \retval          0: Widget creation failed
+ */
 GUI_HANDLE_p
 gui_graph_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
+/**
+ * \brief           Set color to specific part of widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Color index. This parameter can be a value of \ref GUI_GRAPH_COLOR_t enumeration
+ * \param[in]       color: Color value
+ * \retval          1: Color was set ok
+ * \retval          0: Color was not set
+ */
 uint8_t
 gui_graph_setcolor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }
 
+/**
+ * \brief           Attach new data object to graph widget
+ * \param[in,out]   h: Graph widget handle
+ * \param[in]       data: Data object handle
+ * \retval          1: Attaching was successful
+ * \retval          0: Attaching failed
+ * \sa              gui_graph_detachdata
+ */
 uint8_t
 gui_graph_attachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -401,6 +431,14 @@ gui_graph_attachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
     return 1;
 }
 
+/**
+ * \brief           Detach existing data object from graph widget
+ * \param[in,out]   h: Graph widget handle
+ * \param[in]       data: Data object handle
+ * \retval          1: Detaching was successful
+ * \retval          0: Detaching failed
+ * \sa              gui_graph_attachdata
+ */
 uint8_t
 gui_graph_detachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget && data);    /* Check input parameters */
@@ -424,36 +462,83 @@ gui_graph_detachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
     return 1;
 }
 
+/**
+ * \brief           Set minimal X value of plot
+ * \param[in,out]   h: Widget handle
+ * \param[in]       v: New minimal X value
+ * \retval          1: Value was set ok
+ * \retval          0: Value was not set
+ * \sa              gui_graph_setmaxx, gui_graph_setminy, gui_graph_setmaxy
+ */
 uint8_t
 gui_graph_setminx(GUI_HANDLE_p h, float v) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_MIN_X, &v, 1, 0);   /* Set parameter */
 }
 
+/**
+ * \brief           Set maximal X value of plot
+ * \param[in,out]   h: Widget handle
+ * \param[in]       v: New maximal X value
+ * \retval          1: Value was set ok
+ * \retval          0: Value was not set
+ * \sa              gui_graph_setminx, gui_graph_setminy, gui_graph_setmaxy
+ */
 uint8_t
 gui_graph_setmaxx(GUI_HANDLE_p h, float v) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_MAX_X, &v, 1, 0);   /* Set parameter */
 }
 
+/**
+ * \brief           Set minimal Y value of plot
+ * \param[in,out]   h: Widget handle
+ * \param[in]       v: New minimal Y value
+ * \retval          1: Value was set ok
+ * \retval          0: Value was not set
+ * \sa              gui_graph_setminx, gui_graph_setmaxx, gui_graph_setmaxy
+ */
 uint8_t
 gui_graph_setminy(GUI_HANDLE_p h, float v) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_MIN_Y, &v, 1, 0);   /* Set parameter */
 }
 
+/**
+ * \brief           Set maximal Y value of plot
+ * \param[in,out]   h: Widget handle
+ * \param[in]       v: New maximal Y value
+ * \retval          1: Value was set ok
+ * \retval          0: Value was not set
+ * \sa              gui_graph_setminx, gui_graph_setmaxx, gui_graph_setminy
+ */
 uint8_t
 gui_graph_setmaxy(GUI_HANDLE_p h, float v) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_MAX_Y, &v, 1, 0);   /* Set parameter */
 }
 
+/**
+ * \brief           Reset zoom of widget
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Zoom was reseted
+ * \retval          0: Zoom was not reseted
+ */
 uint8_t
 gui_graph_zoomreset(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_ZOOM_RESET, NULL, 1, 0);  /* Set parameter */
 }
 
+/**
+ * \brief           Zoom widget display data
+ * \param[in,out]   h: Widget handle
+ * \param[in]       zoom: Zoom coeficient. Use 2.0f to double zoom, use 0.5 to unzoom 2 times, etc.
+ * \param[in]       x: X coordinate on plot where zoom focus will apply. Valid value between 0 and 1 relative to width area. Use 0.5 to zoom to center
+ * \param[in]       y: Y coordinate on plot where zoom focus will apply. Valid value between 0 and 1 relative to height area. Use 0.5 to zoom to center
+ * \retval          1: Zoom was reseted
+ * \retval          0: Zoom was not reseted
+ */
 uint8_t
 gui_graph_zoom(GUI_HANDLE_p h, float zoom, float x, float y) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -468,22 +553,33 @@ gui_graph_zoom(GUI_HANDLE_p h, float zoom, float x, float y) {
 /*************************/
 /* GRAPH DATA functions  */
 /*************************/
+
+/**
+ * \brief           Creates data object according to specific type
+ * \note            Data type used in graph widget is 2-byte (short int)
+ * 
+ * \note            When \arg GUI_GRAPH_TYPE_XY is used, 2 * length * sizeof(short int) of bytes is allocated for X and Y value
+ * \param[in]       type: Type of data. According to selected type different allocation size will occur
+ * \param[in]       length: Number of points on plot.
+ * \retval          > 0: \ref GUI_GRAPH_DATA_p object of created widget
+ * \retval          0: Data creation failed
+ */
 GUI_GRAPH_DATA_p
 gui_graph_data_create(GUI_GRAPH_TYPE_t type, size_t length) {
     GUI_GRAPH_DATA_t* data;
 
-    data = __GUI_MEMALLOC(sizeof(*data));           /* Allocate memory for basic widget */
+    data = GUI_MEMALLOC(sizeof(*data));             /* Allocate memory for basic widget */
     if (data) {
         __GUI_ENTER();                              /* Enter GUI */
         data->Type = type;
         data->Length = length;
         if (type == GUI_GRAPH_TYPE_YT) {            /* Only Y values are stored */
-            data->Data = __GUI_MEMALLOC(length * sizeof(*data->Data));
+            data->Data = GUI_MEMALLOC(length * sizeof(*data->Data));    /* Store Y values for plot */
         } else {
-            data->Data = __GUI_MEMALLOC(length * 2 * sizeof(*data->Data));  /* Store X and Y value for plot */
+            data->Data = GUI_MEMALLOC(length * 2 * sizeof(*data->Data));    /* Store X and Y values for plot */
         }
         if (!data->Data) {
-            __GUI_MEMFREE(data);                    /* Remove widget because data memory could not be allocated */
+            GUI_MEMFREE(data);                      /* Remove widget because data memory could not be allocated */
         }
         __GUI_LEAVE();                              /* Leave GUI */
     }
@@ -491,6 +587,14 @@ gui_graph_data_create(GUI_GRAPH_TYPE_t type, size_t length) {
     return (GUI_GRAPH_DATA_p)data;
 }
 
+/**
+ * \brief           Add new value to the end of data object
+ * \param[in]       data: Data object handle
+ * \param[in]       x: X position for point. Used only in case data type is \ref GUI_GRAPH_TYPE_XY, otherwise it is ignored
+ * \param[in]       y: Y position for point. Always used no matter of data type
+ * \retval          1: Value was added to data object ok
+ * \retval          0: Value was not added to data object
+ */
 uint8_t
 gui_graph_data_addvalue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y) {
     __GUI_ASSERTPARAMS(data);                       /* Check input parameters */

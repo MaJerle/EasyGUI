@@ -79,7 +79,7 @@ static DDList_t*
 add_to_active_dialogs(GUI_HANDLE_p h) {
     DDList_t* l;
     
-    l = __GUI_MEMALLOC(sizeof(*l));                 /* Allocate memory for dismissed dialog list */
+    l = GUI_MEMALLOC(sizeof(*l));                   /* Allocate memory for dismissed dialog list */
     if (l) {
         l->h = h;
         l->id = gui_widget_getid__(h);
@@ -92,8 +92,7 @@ add_to_active_dialogs(GUI_HANDLE_p h) {
 static void
 remove_from_active_dialogs(DDList_t* l) {
     gui_linkedlist_remove_gen(&DDList, &l->list);   /* Remove entry from linked list first */
-    
-    __GUI_MEMFREE(l);                               /* Free memory */
+    GUI_MEMFREE(l);                                 /* Free memory */
 }
 
 /* Get entry from linked list for specific dialog */
@@ -126,11 +125,11 @@ gui_dialog_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
         }
         case GUI_WC_OnDismiss: {
             int dv = *(int *)param;                 /* Get dismiss parameter value */
-            __GUI_UNUSED(dv);                       /* Unused parameters */
+            GUI_UNUSED(dv);                         /* Unused parameters */
             return 1;
         }
         default:                                    /* Handle default option */
-            __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
+            GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
     }
 }
@@ -140,6 +139,20 @@ gui_dialog_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
+
+/**
+ * \brief           Create new dialog base element without any "design" style
+ * \param[in]       id: Widget unique ID to use for identity for callback processing
+ * \param[in]       x: Widget X position relative to parent widget
+ * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       width: Widget width in units of pixels
+ * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       func: Widget create function used as dialog base. In most cases \ref GUI_CONTAINER_Create will be used to create empty container
+ * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       flags: Flags for widget creation
+ * \retval          > 0: \ref GUI_HANDLE_p object of created widget
+ * \retval          0: Widget creation failed
+ */
 GUI_HANDLE_p
 gui_dialog_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_HANDLE_p ptr;
@@ -159,7 +172,22 @@ gui_dialog_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_
     return (GUI_HANDLE_p)ptr;
 }
 
-#if GUI_OS
+#if GUI_OS || defined(DOXYGEN)
+/**
+ * \brief           Create new dialog base element without any "design" style and wait for dismiss status
+ * \note            Function will block thread until dialog is dismissed using \ref GUI_DIALOG_Dismiss function by user
+ *
+ * \param[in]       id: Widget unique ID to use for identity for callback processing
+ * \param[in]       x: Widget X position relative to parent widget
+ * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       width: Widget width in units of pixels
+ * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       func: Widget create function used as dialog base. In most cases \ref GUI_CONTAINER_Create will be used to create empty container
+ * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       flags: Flags for widget creation
+ * \retval          -1: Widget creation fail
+ * \retval          int: Value passed to \ref GUI_DIALOG_Dismiss when dialog is dismissed
+ */
 int
 gui_dialog_createblocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_HANDLE_p ptr;
@@ -193,6 +221,13 @@ gui_dialog_createblocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t wid
 }
 #endif /* GUI_OS */
 
+/**
+ * \brief           Dismiss (close) dialog with status
+ * \param[in]       h: Widget handle
+ * \param[in]       status: Dismiss status. Do not use value -1 as it is reserved for error detection
+ * \retval          1: Dialog was dismissed ok
+ * \retval          0: Dialog was not dismissed
+ */
 uint8_t
 gui_dialog_dismiss(GUI_HANDLE_p h, int status) {
     DDList_t* l;

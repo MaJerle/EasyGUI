@@ -49,62 +49,10 @@ extern "C" {
  * \brief           Common mathematical functions used by GUI
  * \{
  */
-
-/**
- * \brief           Calculate square of input value
- *
- *                  \f$\ y=sqrt{(x)}\f$
- *
- * \param[in]       x: Number to calculate square from
- * \param[out]      *result: Pointer to float variable to store result to
- * \retval          1: Function succedded, result is valid
- * \retval          0: Function failed, result is not valid
- */
+    
 uint8_t gui_math_sqrt(float x, float* result);
-
-/**
- * \brief           Calculate reverse square of input value
- *
- *                  \f$\ y=\frac{1}{sqrt{(x)}}\f$
- *
- * \param[in]       x: Number to calculate reverse square from
- * \param[out]      *result: Pointer to float variable to store result to
- * \retval          1: Function succedded, result is valid
- * \retval          0: Function failed, result is not valid
- */
 uint8_t gui_math_rsqrt(float x, float* result);
-
-/**
- * \brief           Calculate distance between 2 XY points
- *
- *                  \f$\ y=sqrt{((x_1-x_2)^2+(y_1-y_2)^2)}\f$
- *
- * \param[in]       x1: X position of point 1
- * \param[in]       y1: Y position of point 1
- * \param[in]       x2: X position of point 2
- * \param[in]       y2: Y position of point 2
- * \param[out]      *result: Pointer to float variable to store result to
- * \retval          1: Function succedded, result is valid
- * \retval          0: Function failed, result is not valid
- */
 uint8_t gui_math_distancebetweenxy(float x1, float y1, float x2, float y2, float* result);
-
-/**
- * \brief           Calculate center XY coordinate between 2 XY points
- *
- *                  \f$\ c_x=\frac{x_1+x_2}{2}\f$
- *
- *                  \f$\ c_y=\frac{y_1+y_2}{2}\f$
- *
- * \param[in]       x1: X position of point 1
- * \param[in]       y1: Y position of point 1
- * \param[in]       x2: X position of point 2
- * \param[in]       y2: Y position of point 2
- * \param[out]      *resultX: Pointer to float variable to store result about X position to
- * \param[out]      *resultY: Pointer to float variable to store result about Y position to
- * \retval          1: Function succedded, results are valid
- * \retval          0: Function failed, results are not valid
- */
 uint8_t gui_math_centerofxy(float x1, float y1, float x2, float y2, float* resultX, float* resultY);
     
 /**

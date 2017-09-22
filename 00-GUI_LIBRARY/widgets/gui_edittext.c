@@ -169,7 +169,7 @@ gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
         }
 #endif /* GUI_USE_KEYBOARD */
         default:                                    /* Handle default option */
-            __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
+            GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
     }
 }
@@ -181,29 +181,73 @@ gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
+
+/**
+ * \brief           Create new edit text widget
+ * \param[in]       id: Widget unique ID to use for identity for callback processing
+ * \param[in]       x: Widget X position relative to parent widget
+ * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       width: Widget width in units of pixels
+ * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
+ * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       flags: Flags for widget creation
+ * \retval          > 0: \ref GUI_HANDLE_p object of created widget
+ * \retval          0: Widget creation failed
+ */
 GUI_HANDLE_p
 gui_edittext_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
+/**
+ * \brief           Set color to specific part of widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Color index. This parameter can be a value of \ref GUI_EDITTEXT_COLOR_t enumeration
+ * \param[in]       color: Color value
+ * \retval          1: Color was set ok
+ * \retval          0: Color was not set
+ */
 uint8_t
 gui_edittext_setcolor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setcolor__(h, (uint8_t)index, color);  /* Set color */
 }
 
+/**
+ * \brief           Set edit text to multi line mode
+ * \note            When multiline is enabled, vertical text alignment is always top positioned
+ * \param[in,out]   h: Widget handle
+ * \param[in]       multiline: Set to 1 to enable multiline or 0 to disable
+ * \retval          1: Color was set ok
+ * \retval          0: Color was not set
+ */
 uint8_t
 gui_edittext_setmultiline(GUI_HANDLE_p h, uint8_t multiline) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_MULTILINE, &multiline, 1, 0);   /* Set parameter */
 }
 
+/**
+ * \brief           Set vertical align for text inside text box
+ * \param[in,out]   h: Widget handle
+ * \param[in]       align: Vertical align. This parameter can be a value of \ref GUI_EDITTEXT_VALIGN_t enumeration
+ * \retval          1: Align was set ok
+ * \retval          0: Align was not set
+ */
 uint8_t
 gui_edittext_setvalign(GUI_HANDLE_p h, GUI_EDITTEXT_VALIGN_t align) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setparam__(h, CFG_VALIGN, &align, 1, 1);  /* Set parameter */
 }
 
+/**
+ * \brief           Set horizontal align for text inside text box
+ * \param[in,out]   h: Widget handle
+ * \param[in]       align: Vertical align. This parameter can be a value of \ref GUI_EDITTEXT_HALIGN_t enumeration
+ * \retval          1: Align was set ok
+ * \retval          0: Align was not set
+ */
 uint8_t
 gui_edittext_sethalign(GUI_HANDLE_p h, GUI_EDITTEXT_HALIGN_t align) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */

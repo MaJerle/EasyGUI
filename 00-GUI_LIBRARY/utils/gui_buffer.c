@@ -26,6 +26,16 @@
 #define GUI_INTERNAL
 #include "gui_buffer.h"
 
+/**
+ * \brief  Initializes buffer structure for work
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure to initialize
+ * \param  Size: Size of buffer in units of bytes
+ * \param  *BufferPtr: Pointer to array for buffer storage. Its length should be equal to \param Size parameter.
+ *           If NULL is passed as parameter, internal memory management will be used to allocate memory
+ * \retval Buffer initialization status:
+ *            - 0: Buffer initialized OK
+ *            - > 0: Buffer initialization error. Malloc has failed with allocation
+ */
 uint8_t
 gui_buffer_init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr) {
 	if (Buffer == NULL) {									/* Check buffer structure */
@@ -35,10 +45,9 @@ gui_buffer_init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr) {
     
 	Buffer->Size = Size;                        			/* Set default values */
 	Buffer->Buffer = BufferPtr;
-	Buffer->StringDelimiter = '\n';
 	
 	if (!Buffer->Buffer) {                      			/* Check if malloc should be used */
-		Buffer->Buffer = __GUI_MEMALLOC(Size * sizeof(uint8_t));    /* Try to allocate memory for buffer */
+		Buffer->Buffer = GUI_MEMALLOC(Size * sizeof(uint8_t));  /* Try to allocate memory for buffer */
 		if (!Buffer->Buffer) {                  			/* Check if allocated */    
 			Buffer->Size = 0;                   			/* Reset size */
 			return 1;                           			/* Return error */
@@ -51,18 +60,31 @@ gui_buffer_init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr) {
 	return 0;												/* Initialized OK */
 }
 
+/**
+ * \brief  Free memory for buffer allocated using dynamic memory allocation
+ * \note   This function has sense only if dynamic allocation was used for memory buffer
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
+ * \retval None
+ */
 void 
 gui_buffer_free(GUI_BUFFER_t* Buffer) {
 	if (Buffer == NULL) {									/* Check buffer structure */
 		return;
 	}
 	if (Buffer->Flags & GUI_BUFFER_MALLOC) {			    /* If malloc was used for allocation */
-		__GUI_MEMFREE(Buffer->Buffer);						/* Free memory */
+		GUI_MEMFREE(Buffer->Buffer);                        /* Free memory */
 	}
 	Buffer->Flags = 0;
 	Buffer->Size = 0;
 }
 
+/**
+ * \brief  Writes data to buffer
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
+ * \param  *Data: Pointer to data to be written
+ * \param  count: Number of elements of type unsigned char to write
+ * \retval Number of elements written in buffer 
+ */
 uint32_t gui_buffer_write(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count) {
 	uint32_t i = 0;
 	uint32_t free;
@@ -115,41 +137,13 @@ uint32_t gui_buffer_write(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count
 #endif
 }
 
-uint32_t
-gui_buffer_writetotop(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count) {
-	uint32_t i = 0;
-	uint32_t free;
-    uint8_t *d = (uint8_t *)Data;
-
-	if (Buffer == NULL || count == 0) {						/* Check buffer structure */
-		return 0;
-	}
-	if (Buffer->In >= Buffer->Size) {						/* Check input pointer */
-		Buffer->In = 0;
-	}
-	if (Buffer->Out >= Buffer->Size) {						/* Check output pointer */
-		Buffer->Out = 0;
-	}
-	free = gui_buffer_getfree(Buffer);							/* Get free memory */
-	if (free < count) {										/* Check available memory */
-		if (free == 0) {									/* If no memory, stop execution */
-			return 0;
-		}
-		count = free;										/* Set values for write */
-	}
-	d += count - 1;										    /* Start on bottom */
-	while (count--) {										/* Go through all elements */
-		if (Buffer->Out == 0) {								/* Check output pointer */
-			Buffer->Out = Buffer->Size - 1;
-		} else {
-			Buffer->Out--;
-		}
-		Buffer->Buffer[Buffer->Out] = *d--;				    /* Add to buffer */
-		i++;												/* Increase pointers */
-	}
-	return i;												/* Return number of elements written */
-}
-
+/**
+ * \brief  Reads data from buffer
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
+ * \param  *Data: Pointer to data where read values will be stored
+ * \param  count: Number of elements of type unsigned char to read
+ * \retval Number of elements read from buffer 
+ */
 uint32_t
 gui_buffer_read(GUI_BUFFER_t* Buffer, void* Data, uint32_t count) {
 	uint32_t i = 0, full;
@@ -200,6 +194,11 @@ gui_buffer_read(GUI_BUFFER_t* Buffer, void* Data, uint32_t count) {
 #endif
 }
 
+/**
+ * \brief  Gets number of free elements in buffer 
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
+ * \retval Number of free elements in buffer
+ */
 uint32_t
 gui_buffer_getfree(GUI_BUFFER_t* Buffer) {
 	uint32_t size = 0, in, out;
@@ -219,6 +218,11 @@ gui_buffer_getfree(GUI_BUFFER_t* Buffer) {
 	return size - 1;										/* Return free memory */
 }
 
+/**
+ * \brief  Gets number of elements in buffer 
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
+ * \retval Number of elements in buffer
+ */
 uint32_t
 gui_buffer_getfull(GUI_BUFFER_t* Buffer) {
 	uint32_t in, out, size;
@@ -238,18 +242,11 @@ gui_buffer_getfull(GUI_BUFFER_t* Buffer) {
 	return size;											/* Return number of elements in buffer */
 }
 
-uint32_t
-gui_buffer_getfullfast(GUI_BUFFER_t* Buffer) {
-	uint32_t in, out;
-	
-	if (Buffer == NULL) {									/* Check buffer structure */
-		return 0;
-	}
-	in = Buffer->In;										/* Save values */
-	out = Buffer->Out;
-	return (Buffer->Size + in - out) % Buffer->Size;
-}
-
+/**
+ * \brief  Resets (clears) buffer pointers
+ * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
+ * \retval None
+ */
 void
 gui_buffer_reset(GUI_BUFFER_t* Buffer) {
 	if (Buffer == NULL) {									/* Check buffer structure */
@@ -257,135 +254,4 @@ gui_buffer_reset(GUI_BUFFER_t* Buffer) {
 	}
 	Buffer->In = 0;											/* Reset values */
 	Buffer->Out = 0;
-}
-
-int32_t
-gui_buffer_findelement(GUI_BUFFER_t* Buffer, uint8_t Element) {
-	uint32_t Num, Out, retval = 0;
-	
-	if (Buffer == NULL) {									/* Check buffer structure */
-		return -1;
-	}
-	
-	Num = gui_buffer_getfull(Buffer);							/* Create temporary variables */
-	Out = Buffer->Out;
-	while (Num > 0) {										/* Go through input elements */
-		if (Out >= Buffer->Size) {							/* Check output overflow */
-			Out = 0;
-		}
-		if ((uint8_t)Buffer->Buffer[Out] == (uint8_t)Element) {	/* Check for element */
-			return retval;									/* Element found, return position in buffer */
-		}
-		Out++;												/* Set new variables */
-		Num--;
-		retval++;
-	}
-	return -1;												/* Element is not in buffer */
-}
-
-int32_t
-gui_buffer_find(GUI_BUFFER_t* Buffer, const void* Data, uint32_t Size) {
-	uint32_t Num, Out, i, retval = 0;
-	uint8_t found = 0;
-    uint8_t* d = (uint8_t *)Data;
-
-	if (Buffer == NULL || (Num = gui_buffer_getfull(Buffer)) < Size) {	/* Check buffer structure and number of elements in buffer */
-		return -1;
-	}
-	Out = Buffer->Out;										/* Create temporary variables */
-	while (Num > 0) {										/* Go through input elements in buffer */
-		if (Out >= Buffer->Size) {							/* Check output overflow */
-			Out = 0;
-		}
-		if ((uint8_t)Buffer->Buffer[Out] == d[0]) {	        /* Check if current element in buffer matches first element in data array */
-			found = 1;
-		}
-		
-		Out++;												/* Set new variables */
-		Num--;
-		retval++;
-		if (found) {										/* We have found first element */
-			i = 1;											/* First character found */
-			while (i < Size && Num > 0) {					/* Check others */	
-				if (Out >= Buffer->Size) {					/* Check output overflow */
-					Out = 0;
-				}
-				if ((uint8_t)Buffer->Buffer[Out] != d[i]) {	/* Check if current character in buffer matches character in string */
-					retval += i - 1;
-					break;
-				}
-				Out++;										/* Set new variables */
-				Num--;
-				i++;
-			}
-			if (i == Size) {								/* We have found data sequence in buffer */
-				return retval - 1;
-			}
-		}
-	}
-	return -1;												/* Data sequence is not in buffer */
-}
-
-uint32_t
-gui_buffer_writestring(GUI_BUFFER_t* Buffer, const char* buff) {
-	return gui_buffer_write(Buffer, (uint8_t *)buff, strlen(buff));	/* Write string to buffer */
-}
-
-uint32_t
-gui_buffer_readstring(GUI_BUFFER_t* Buffer, char* buff, uint32_t buffsize) {
-	uint32_t i = 0, freeMem, fullMem;
-	uint8_t ch;
-	if (Buffer == NULL) {
-		return 0;											/* Check value buffer */
-	}
-	
-	freeMem = gui_buffer_getfree(Buffer);					/* Get free memory */
-	fullMem = gui_buffer_getfull(Buffer);				    /* Get full memory */
-	if (													/* Check for any data in buffer */
-		fullMem == 0 ||                                 	/* Buffer empty */
-		(
-			gui_buffer_findelement(Buffer, Buffer->StringDelimiter) < 0 && 	/* String delimiter is not in buffer */
-			freeMem != 0 &&                                 /* Buffer is not full */
-			fullMem < buffsize                              /* User buffer size is larger than number of elements in buffer */
-		)
-	) {
-		return 0;											/* Return with no elements read */
-	}
-	while (i < (buffsize - 1)) {							/* If available buffer size is more than 0 characters */
-		gui_buffer_read(Buffer, &ch, 1);						/* We have available data */
-		buff[i] = (char)ch;									/* Save character */
-		if ((char)buff[i] == (char)Buffer->StringDelimiter) {	/* Check for end of string */
-			break;											/* Done */
-		}
-		i++;												/* Increase */
-	}
-	if (i == (buffsize - 1)) {								/* Add zero to the end of string */
-		buff[i] = 0;
-	} else {
-		buff[++i] = 0;
-	}
-	return i;												/* Return number of characters in buffer */
-}
-
-int8_t
-gui_buffer_checkelement(GUI_BUFFER_t* Buffer, uint32_t pos, uint8_t* element) {
-	uint32_t In, Out, i = 0;
-	if (Buffer == NULL) {									/* Check value buffer */
-		return 0;
-	}
-	
-	In = Buffer->In;										/* Read current values */
-	Out = Buffer->Out;
-	while (i < pos && (In != Out)) {						/* Set pointers to right location */
-		Out++;												/* Increase output pointer */
-		i++;
-		if (Out >= Buffer->Size) {							/* Check overflow */
-			Out = 0;
-		}
-	}
-	if (i == pos) {											/* If positions match */	
-		*element = Buffer->Buffer[Out];						/* Save element */	
-		return 1;											/* Return OK */
-	}
-	return 0;												/* Return zero */
 }

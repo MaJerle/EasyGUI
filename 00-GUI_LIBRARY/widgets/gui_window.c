@@ -258,7 +258,7 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
         }
 #endif /* GUI_USE_KEYBOARD */
         default:                                    /* Handle default option */
-            __GUI_UNUSED3(h, param, result);        /* Unused elements to prevent compiler warnings */
+            GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
     }
 }
@@ -269,11 +269,32 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
+  
+/**
+ * \brief           Create new base widget window with desktop window as a parent
+ * \param           id: Widget unique ID to use for identity for callback processing
+ * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \retval          > 0: \ref GUI_HANDLE_p object of created widget
+ * \retval          0: Widget creation failed
+ */
 GUI_HANDLE_p
 gui_window_createdesktop(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, 0, 0, GUI.LCD.Width, GUI.LCD.Height, 0, cb, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);   /* Allocate memory for basic widget */
 }
 
+/**
+ * \brief           Create new window widget
+ * \param[in]       id: Widget unique ID to use for identity for callback processing
+ * \param[in]       x: Widget X position relative to parent widget
+ * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       width: Widget width in units of pixels
+ * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
+ * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       flags: Flags for widget creation
+ * \retval          > 0: \ref GUI_HANDLE_p object of created widget
+ * \retval          0: Widget creation failed
+ */
 GUI_HANDLE_p
 gui_window_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_WINDOW_t* ptr;
@@ -293,14 +314,26 @@ gui_window_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_
     return (GUI_HANDLE_p)ptr;
 }
 
+/**
+ * \brief           Set color to specific part of widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Color index. This parameter can be a value of \ref GUI_WINDOW_COLOR_t enumeration
+ * \param[in]       color: Color value
+ * \retval          1: Color was set ok
+ * \retval          0: Color was not set
+ */
 uint8_t
 gui_window_setcolor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color) {
-    uint8_t ret;
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    ret = gui_widget_setcolor__(h, (uint8_t)index, color);  /* Set color */
-    return ret;
+    return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }
-
+ 
+/**
+ * \brief           Set active window for future widgets and for current top window
+ * \param[in]       h: Widget handle to set as active window
+ * \retval          1: Widget was set ok
+ * \retval          0: Widget was not set
+ */
 uint8_t
 gui_window_setactive(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -316,6 +349,10 @@ gui_window_setactive(GUI_HANDLE_p h) {
     return 1;
 }
 
+/**
+ * \brief           Get desktop window
+ * \retval          Widget handle of desktop window
+ */
 GUI_HANDLE_p
 gui_window_getdesktop(void) {
     return (GUI_HANDLE_p)gui_linkedlist_getnext_gen(&GUI.Root, NULL);   /* Return desktop window */

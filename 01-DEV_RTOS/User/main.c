@@ -268,10 +268,10 @@ user_thread(void const * arg) {
         if (pressed) {
             pressed = gui_dialog_createblocking(ID_WIN_DIALOG, 50, 10, 300, 150, gui_container_create, dialog_callback, 0);
             if (pressed == 1) {
-                __GUI_DEBUG("Confirmed\r\n");
+                GUI_DEBUG("Confirmed\r\n");
                 TM_DISCO_LedToggle(LED_GREEN);
             } else if (pressed == 0) {
-                __GUI_DEBUG("Canceled\r\n");
+                GUI_DEBUG("Canceled\r\n");
             }
             pressed = 0;
         }
@@ -965,8 +965,8 @@ void read_touch(void) {
         update = 1;
     } else {
         for (i = 0; i < t.Count; i++) {
-            diffx = __GUI_ABS(p.X[i] - t.X[i]);
-            diffy = __GUI_ABS(p.Y[i] - t.Y[i]);
+            diffx = GUI_ABS(p.X[i] - t.X[i]);
+            diffy = GUI_ABS(p.Y[i] - t.Y[i]);
             if (diffx > 2 || diffy > 2) {
                 update = 1;
                 break;
