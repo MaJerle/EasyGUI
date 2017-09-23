@@ -1,27 +1,32 @@
 /**	
- * |----------------------------------------------------------------------
- * | Copyright (c) 2017 Tilen Majerle
- * |  
- * | Permission is hereby granted, free of charge, to any person
- * | obtaining a copy of this software and associated documentation
- * | files (the "Software"), to deal in the Software without restriction,
- * | including without limitation the rights to use, copy, modify, merge,
- * | publish, distribute, sublicense, and/or sell copies of the Software, 
- * | and to permit persons to whom the Software is furnished to do so, 
- * | subject to the following conditions:
- * | 
- * | The above copyright notice and this permission notice shall be
- * | included in all copies or substantial portions of the Software.
- * | 
- * | THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * | EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * | OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
- * | AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * | HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * | WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
- * | FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * | OTHER DEALINGS IN THE SOFTWARE.
- * |----------------------------------------------------------------------
+ * \file            gui_widget.c
+ * \brief           Widget specific core functions
+ */
+ 
+/*
+ * Copyright (c) 2017 Tilen Majerle
+ *  
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge,
+ * publish, distribute, sublicense, and/or sell copies of the Software, 
+ * and to permit persons to whom the Software is furnished to do so, 
+ * subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
 #include "gui_widget.h"
@@ -33,7 +38,7 @@
 /******************************************************************************/
 /******************************************************************************/
 typedef struct {
-    const GUI_FONT_t* Font;
+    const GUI_FONT_t* Font;                 /*!< Pointer to font structure */
 } GUI_WIDGET_Def_t;
 GUI_WIDGET_Def_t WIDGET_Default;
 
@@ -538,6 +543,16 @@ gui_widget_active_set(GUI_HANDLE_p h) {
 /******************************************************************************/
 /******************************************************************************/
 
+/**
+ * \brief           Get total width of widget in units of pixels
+ *                     Function returns width of widget according to current widget setup (expanded, fill, percent, etc.)
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ *
+ * \note            Even if percentage width is used, function will always return value in pixels
+ * \param[in]       h: Pointer to \ref GUI_HANDLE_p structure
+ * \retval          Total width in units of pixels
+ * \sa              __gui_widget_getinnerwidth
+ */
 GUI_Dim_t
 gui_widget_getwidth__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -558,6 +573,17 @@ gui_widget_getwidth__(GUI_HANDLE_p h) {
     return 0;
 }
 
+/**
+ * \brief           Get total height of widget
+ *                     Function returns height of widget according to current widget setup (expanded, fill, percent, etc.)
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ *
+ * \note            Even if percentage height is used, function will always return value in pixels
+ * \param[in]       h: Pointer to \ref GUI_HANDLE_p structure
+ * \retval          Total height in units of pixels
+ * \sa              __gui_widget_getinnerheight
+ * \hideinitializer
+ */
 GUI_Dim_t
 gui_widget_getheight__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -577,6 +603,13 @@ gui_widget_getheight__(GUI_HANDLE_p h) {
     return 0;
 }
 
+/**
+ * \brief           Get absolute X position on LCD for specific widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          X position on LCD
+ * \hideinitializer
+ */
 GUI_iDim_t
 gui_widget_getabsolutex__(GUI_HANDLE_p h) {
     GUI_HANDLE_p w = 0;
@@ -597,6 +630,13 @@ gui_widget_getabsolutex__(GUI_HANDLE_p h) {
     return out;
 }
 
+/**
+ * \brief           Get absolute Y position on LCD for specific widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          Y position on LCD
+ * \hideinitializer
+ */
 GUI_iDim_t
 gui_widget_getabsolutey__(GUI_HANDLE_p h) {
     GUI_HANDLE_p w = 0;
@@ -617,6 +657,15 @@ gui_widget_getabsolutey__(GUI_HANDLE_p h) {
     return out;
 }
 
+/**
+ * \brief           Get absolute inner X position of parent widget
+ * \note            This function returns inner X position in absolute form.
+ *                     Imagine parent absolute X is 10, and left padding is 2. Function returns 12.
+ *
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle for which parent should be calculated
+ * \retval          Parent absolute inner X position
+ */
 GUI_iDim_t
 gui_widget_getparentabsolutex__(GUI_HANDLE_p h) {
     GUI_Dim_t out = 0;
@@ -633,6 +682,15 @@ gui_widget_getparentabsolutex__(GUI_HANDLE_p h) {
     return out;
 }
 
+/**
+ * \brief           Get absolute inner Y position of parent widget
+ * \note            This function returns inner Y position in absolute form.
+ *                     Imagine parent absolute Y is 10, and top padding is 2. Function returns 12.
+ *
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle for which parent should be calculated
+ * \retval          Parent absolute inner Y position
+ */
 GUI_iDim_t
 gui_widget_getparentabsolutey__(GUI_HANDLE_p h) {
     GUI_Dim_t out = 0;
@@ -649,6 +707,14 @@ gui_widget_getparentabsolutey__(GUI_HANDLE_p h) {
     return out;
 }
 
+/**
+ * \brief           Invalidate widget for redraw 
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Successful
+ * \retval          0: Failed
+ * \hideinitializer
+ */
 uint8_t
 gui_widget_invalidate__(GUI_HANDLE_p h) {
     uint8_t ret;
@@ -670,6 +736,14 @@ gui_widget_invalidate__(GUI_HANDLE_p h) {
     return ret;
 }
 
+/**
+ * \brief           Invalidate widget and parent widget for redraw 
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Successful
+ * \retval          0: Failed
+ * \hideinitializer
+ */
 uint8_t
 gui_widget_invalidatewithparent__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -680,6 +754,15 @@ gui_widget_invalidatewithparent__(GUI_HANDLE_p h) {
     return 1;
 }
 
+/**
+ * \brief           Set if parent widget should be invalidated when we invalidate primary widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            Useful for widgets where there is no background: Transparent images, textview, slider, etc
+ * \param[in]       h: Widget handle
+ * \param[in]       value: Value either to enable or disable. 0 = disable, > 0 = enable
+ * \retval          1: Value was set ok
+ * \retval          0: Value was not set
+ */
 uint8_t
 gui_widget_setinvalidatewithparent__(GUI_HANDLE_p h, uint8_t value) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -691,6 +774,14 @@ gui_widget_setinvalidatewithparent__(GUI_HANDLE_p h, uint8_t value) {
     return 1;
 }
 
+/**
+ * \brief           Set 3D mode on widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       enable: Value to enable, either 1 or 0
+ * \retval          1: Successful
+ * \retval          0: Failed
+ */
 uint8_t
 gui_widget_set3dstyle__(GUI_HANDLE_p h, uint8_t enable) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -707,6 +798,23 @@ gui_widget_set3dstyle__(GUI_HANDLE_p h, uint8_t enable) {
 /*******************************************/
 /**  Widget create and remove management  **/
 /*******************************************/
+
+/**
+ * \brief           Create new widget and add it to linked list to parent object
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in]       *widget: Pointer to \ref GUI_WIDGET_t structure with widget description
+ * \param[in]       id: Widget unique ID to use for identity for callback processing
+ * \param[in]       x: Widget X position relative to parent widget
+ * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       width: Widget width in units of pixels
+ * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
+ * \param[in]       cb: Widget callback function. Set to NULL to use default widget specific callback
+ * \param[in]       flags: Flags for create procedure
+ * \retval          > 0: Pointer to allocated memory for widget with default settings
+ * \retval          0: Widget creation failed
+ * \sa              __gui_widget_remove
+ */
 void*
 gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_HANDLE_p h;
@@ -789,6 +897,18 @@ gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_i
     return (void *)h;
 }
 
+/**
+ * \brief           Remove widget and all of its children widgets
+ *  
+ *                  Function checks widget and all its children if they can be deleted. 
+ *                  If so, flag for delete will be set and procedure will be executed later when all other processing is done
+ *
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param           *h: Widget handle to remove
+ * \retval          0: Failed
+ * \retval          1: Success
+ * \sa              __gui_widget_create, gui_widget_remove
+ */
 uint8_t
 gui_widget_remove__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -809,8 +929,16 @@ gui_widget_remove__(GUI_HANDLE_p h) {
 /*******************************************/
 /**    Widget text and font management    **/
 /*******************************************/
+/**
+ * \brief           Set font used for widget drawing
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       *font: Pointer to \ref GUI_FONT_t structure with font information
+ * \retval          1: Successful
+ * \retval          0: Failed
+ */
 uint8_t
-gui_widget_setfont__(GUI_HANDLE_p h, GUI_Const GUI_FONT_t* font) {
+gui_widget_setfont__(GUI_HANDLE_p h, const GUI_FONT_t* font) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     if (__GH(h)->Font != font) {                    /* Any parameter changed */
         __GH(h)->Font = font;                       /* Set parameter */
@@ -819,6 +947,19 @@ gui_widget_setfont__(GUI_HANDLE_p h, GUI_Const GUI_FONT_t* font) {
     return 1;
 }
 
+/**
+ * \brief           Set text for widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ *
+ * \note            When memory for text is dynamically allocated, text will be copied to allocated memory,
+ *                     otherwise it will just set the pointer to new text.
+ *                     Any changes on this text after function call will affect on later results
+ *
+ * \param[in,out]   h: Widget handle
+ * \param[in]       *text: Pointer to text to set
+ * \retval          1: Successful
+ * \retval          0: Failed
+ */
 uint8_t
 gui_widget_settext__(GUI_HANDLE_p h, const GUI_Char* text) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -850,8 +991,18 @@ gui_widget_settext__(GUI_HANDLE_p h, const GUI_Char* text) {
     return 1;
 }
 
+/**
+ * \brief           Allocate text memory for widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       size: Number of bytes to allocate
+ * \retval          1: Successful
+ * \retval          0: Failed
+ * \sa              gui_widget_freetextmemory__, gui_widget_alloctextmemory, gui_widget_freetextmemory
+ * \hideinitializer
+ */
 uint8_t
-gui_widget_allocatetextmemory__(GUI_HANDLE_p h, uint32_t size) {
+gui_widget_alloctextmemory__(GUI_HANDLE_p h, uint32_t size) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     if (gui_widget_getflag__(h, GUI_FLAG_DYNAMICTEXTALLOC) && __GH(h)->Text) {  /* Check if already allocated */
         GUI_MEMFREE(__GH(h)->Text);                 /* Free memory first */
@@ -872,6 +1023,15 @@ gui_widget_allocatetextmemory__(GUI_HANDLE_p h, uint32_t size) {
     return 1;
 }
 
+/**
+ * \brief           Free text memory for widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Successful
+ * \retval          0: Failed
+ * \sa              __gui_widget_alloctextmemory, gui_widget_alloctextmemory, gui_widget_freetextmemory
+ * \hideinitializer
+ */
 uint8_t
 gui_widget_freetextmemory__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -886,12 +1046,27 @@ gui_widget_freetextmemory__(GUI_HANDLE_p h) {
     return 1;
 }
 
+/**
+ * \brief           Check if widget has set font and text
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in]       h: Widget handle
+ * \retval          1: Widget has font and text set
+ * \retval          0: Widget does not have font or text set
+ */
 uint8_t
 gui_widget_isfontandtextset__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     return __GH(h)->Text && __GH(h)->Text[0] && __GH(h)->Font && gui_string_length(__GH(h)->Text);  /* Check if conditions are met for drawing string */
 }
 
+/**
+ * \brief           Process text key (add character, remove it, move cursor, etc)
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       *kb: Pointer to \ref __GUI_KeyboardData_t structure
+ * \retval          1: Key processed
+ * \retval          0: Key not processed
+ */
 uint8_t
 gui_widget_processtextkey__(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
     size_t len, tlen;
@@ -950,6 +1125,12 @@ gui_widget_processtextkey__(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
     return 0;
 }
 
+/**
+ * \brief           Get text from widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          Pointer to text from widget
+ */
 const GUI_Char*
 gui_widget_gettext__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -963,6 +1144,12 @@ gui_widget_gettext__(GUI_HANDLE_p h) {
     return __GH(h)->Text;                           /* Return text for widget */
 }
 
+/**
+ * \brief           Get font from widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          Pointer to font used for widget
+ */
 const GUI_FONT_t*
 gui_widget_getfont__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -972,6 +1159,15 @@ gui_widget_getfont__(GUI_HANDLE_p h) {
 /*******************************************/
 /**         Widget size management        **/
 /*******************************************/
+/**
+ * \brief           Set width of widget in units of pixels
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       width: Width in units of pixels
+ * \retval          1: Successful
+ * \retval          1: Failed
+ * \sa              gui_widget_setheight, gui_widget_setwidthpercent, gui_widget_setheightpercent
+ */
 uint8_t
 gui_widget_setwidth__(GUI_HANDLE_p h, GUI_Dim_t width) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -982,6 +1178,15 @@ gui_widget_setwidth__(GUI_HANDLE_p h, GUI_Dim_t width) {
     return set_widget_size(h, width, __GH(h)->Height);  /* Set new height */
 }
 
+/**
+ * \brief           Set height of widget in units of pixels
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       height: Height in units of pixels
+ * \retval          1: Successful
+ * \retval          1: Failed
+ * \sa              gui_widget_setwidth, gui_widget_setwidthpercent, gui_widget_setheightpercent
+ */
 uint8_t
 gui_widget_setheight__(GUI_HANDLE_p h, GUI_Dim_t height) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -992,6 +1197,15 @@ gui_widget_setheight__(GUI_HANDLE_p h, GUI_Dim_t height) {
     return set_widget_size(h, __GH(h)->Width, height);  /* Set new height */
 }
 
+/**
+ * \brief           Set width of widget in percentage relative to parent widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       width: Width in percentage
+ * \retval          1: Successful
+ * \retval          1: Failed
+ * \sa              gui_widget_setwidth, gui_widget_setheight, gui_widget_setheightpercent
+ */
 uint8_t
 gui_widget_setwidthpercent__(GUI_HANDLE_p h, float width) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -1002,6 +1216,15 @@ gui_widget_setwidthpercent__(GUI_HANDLE_p h, float width) {
     return set_widget_size(h, width, __GH(h)->Height);  /* Set new width */
 }
 
+/**
+ * \brief           Set height of widget in percentage relative to parent widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       height: Height in percentage
+ * \retval          1: Successful
+ * \retval          1: Failed
+ * \sa              gui_widget_setwidth, gui_widget_setheight, gui_widget_setwidthpercent
+ */
 uint8_t
 gui_widget_setheightpercent__(GUI_HANDLE_p h, float height) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -1012,6 +1235,15 @@ gui_widget_setheightpercent__(GUI_HANDLE_p h, float height) {
     return set_widget_size(h, __GH(h)->Width, height);  /* Set new height */
 }
 
+/**
+ * \brief           Set widget size in units of pixels
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       wi: Widget width
+ * \param[in]       hi: Widget height
+ * \retval          1: Successful
+ * \retval          0: Failed
+ */
 uint8_t
 gui_widget_setsize__(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t hi) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -1024,6 +1256,15 @@ gui_widget_setsize__(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t hi) {
     return set_widget_size(h, wi, hi);              /* Set widget size */
 }
 
+/**
+ * \brief           Set widget size in units of percent
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       wi: Widget width
+ * \param[in]       hi: Widget height
+ * \retval          1: Successful
+ * \retval          0: Failed
+ */
 uint8_t
 gui_widget_setsizepercent__(GUI_HANDLE_p h, float wi, float hi) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -1036,12 +1277,27 @@ gui_widget_setsizepercent__(GUI_HANDLE_p h, float wi, float hi) {
     return set_widget_size(h, wi, hi);              /* Set widget size */
 }
 
+/**
+ * \brief           Toggle expandend (maximized) mode of widget (mostly of windows)
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget expandend status toggled ok
+ * \retval          0: Widget expandend status was not toggled
+ */
 uint8_t
 gui_widget_toggleexpanded__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     return gui_widget_setexpanded__(h, !gui_widget_isexpanded__(h));    /* Invert expanded mode */
 }
 
+/**
+ * \brief           Set expandend mode on widget. When enabled, widget will be at X,Y = 0,0 relative to parent and will have width,height = 100%,100%
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       state: State for expanded mode
+ * \retval          1: Widget expandend status set ok
+ * \retval          0: Widget expandend status was not set
+ */
 uint8_t
 gui_widget_setexpanded__(GUI_HANDLE_p h, uint8_t state) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -1058,6 +1314,16 @@ gui_widget_setexpanded__(GUI_HANDLE_p h, uint8_t state) {
 /*******************************************/
 /**       Widget position management      **/
 /*******************************************/
+/**
+ * \brief           Set widget position relative to parent object in units of pixels
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: X position relative to parent object
+ * \param[in]       y: Y position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              gui_widget_setpositionpercent
+ */
 uint8_t
 gui_widget_setposition__(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -1069,7 +1335,17 @@ gui_widget_setposition__(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
     }  
     return set_widget_position(h, x, y);            /* Set widget position */
 }
-
+ 
+/**
+ * \brief           Set widget position relative to parent object in units of percent
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: X position relative to parent object
+ * \param[in]       y: Y position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              gui_widget_setposition
+ */
 uint8_t
 gui_widget_setpositionpercent__(GUI_HANDLE_p h, float x, float y) {  
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */   
@@ -1081,7 +1357,16 @@ gui_widget_setpositionpercent__(GUI_HANDLE_p h, float x, float y) {
     }
     return set_widget_position(h, x, y);            /* Set widget position */
 }
-
+ 
+/**
+ * \brief           Set widget X position relative to parent object in units of pixels
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: X position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              gui_widget_setxpositionpercent
+ */
 uint8_t
 gui_widget_setxposition__(GUI_HANDLE_p h, GUI_iDim_t x) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -1091,7 +1376,16 @@ gui_widget_setxposition__(GUI_HANDLE_p h, GUI_iDim_t x) {
     }
     return set_widget_position(h, x, __GH(h)->Y);   /* Set widget position */
 }
-
+ 
+/**
+ * \brief           Set widget X position relative to parent object in units of percent
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: X position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              gui_widget_setxposition
+ */
 uint8_t
 gui_widget_setxpositionpercent__(GUI_HANDLE_p h, float x) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -1101,7 +1395,16 @@ gui_widget_setxpositionpercent__(GUI_HANDLE_p h, float x) {
     }
     return set_widget_position(h, x, __GH(h)->Y);   /* Set widget position */
 }
-
+ 
+/**
+ * \brief           Set widget Y position relative to parent object in units of pixels
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       y: Y position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              gui_widget_setypositionpercent
+ */
 uint8_t
 gui_widget_setyposition__(GUI_HANDLE_p h, GUI_iDim_t y) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -1111,7 +1414,16 @@ gui_widget_setyposition__(GUI_HANDLE_p h, GUI_iDim_t y) {
     }
     return set_widget_position(h, __GH(h)->X, y);   /* Set widget position */
 }
-
+ 
+/**
+ * \brief           Set widget Y position relative to parent object in units of percent
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       y: Y position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              gui_widget_setyposition
+ */
 uint8_t
 gui_widget_setypositionpercent__(GUI_HANDLE_p h, float y) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -1125,6 +1437,14 @@ gui_widget_setypositionpercent__(GUI_HANDLE_p h, float y) {
 /*******************************************/
 /**                  .....                **/
 /*******************************************/
+/**
+ * \brief           Show widget from visible area
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget shown
+ * \retval          0: Widget not shown
+ * \sa              __gui_widget_hide
+ */
 uint8_t
 gui_widget_show__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -1136,6 +1456,14 @@ gui_widget_show__(GUI_HANDLE_p h) {
     return 1;
 }
 
+/**
+ * \brief           Hide widget from visible area
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget hidden
+ * \retval          0: Widget not hidden
+ * \sa              __gui_widget_show
+ */
 uint8_t
 gui_widget_hide__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -1158,6 +1486,14 @@ gui_widget_hide__(GUI_HANDLE_p h) {
     return 1;
 }
 
+/**
+ * \brief           Check if widget is children of parent
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in]       h: Widget handle to test
+ * \param[in]       parent: Parent widget handle to test if is parent
+ * \retval          1: Widget handle is in tree of parent handle
+ * \retval          0: Widget handle is not in tree of parent handle
+ */
 uint8_t
 gui_widget_ischildof__(GUI_HANDLE_p h, GUI_HANDLE_p parent) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h) && gui_widget_iswidget__(parent));  /* Check valid parameter */
@@ -1170,11 +1506,21 @@ gui_widget_ischildof__(GUI_HANDLE_p h, GUI_HANDLE_p parent) {
     return 0;
 }
 
+/**
+ * \brief           Set z-Index for widgets on the same level. This feature applies on widgets which are not dialogs
+ * \note            Larger z-index value means greater position on screen. In case of multiple widgets on same z-index level, they are automatically modified for correct display
+ *
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       zindex: Z-Index value for widget. Any value can be used
+ * \retval          1: New value is different than previous and modification has been done
+ * \retval          0: New value was not set
+ */
 uint8_t
 gui_widget_setzindex__(GUI_HANDLE_p h, int32_t zindex) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
-    
     uint8_t ret = 1;
+    
     if (__GH(h)->ZIndex != zindex) {                /* There was a change in z-index value */
         int32_t current = __GH(h)->ZIndex;
         __GH(h)->ZIndex = zindex;                   /* Set new index */
@@ -1187,6 +1533,15 @@ gui_widget_setzindex__(GUI_HANDLE_p h, int32_t zindex) {
     return ret;
 }
 
+/**
+ * \brief           Set transparency level to widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       trans: Transparency level, where 0x00 means hidden and 0xFF means totally visible widget
+ * \retval          1: Transparency set ok
+ * \retval          0: Transparency was not set
+ * \sa              __gui_widget_settransparency
+ */
 uint8_t
 gui_widget_settransparency__(GUI_HANDLE_p h, uint8_t trans) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -1199,6 +1554,15 @@ gui_widget_settransparency__(GUI_HANDLE_p h, uint8_t trans) {
     return 1;
 }
 
+/**
+ * \brief           Set color to widget specific index
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Index in array of colors
+ * \param[in]       color: Actual color code to set
+ * \retval          1: Color was set ok
+ * \retval          0: Color was not set
+ */
 uint8_t
 gui_widget_setcolor__(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color) {
     uint8_t ret = 1;
@@ -1228,11 +1592,31 @@ gui_widget_setcolor__(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color) {
     return ret;
 }
 
+/**
+ * \brief           Get first widget handle by ID
+ * \note            If multiple widgets have the same ID, first found will be used
+ *
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   id: Widget ID to search for
+ * \retval          > 0: Widget handle when widget found
+ * \retval          0: Widget not found
+ */
 GUI_HANDLE_p
 gui_widget_getbyid__(GUI_ID_t id) {
     return get_widget_by_id(NULL, id, 1);            /* Find widget by ID */ 
 }
 
+/**
+ * \brief           Set custom user data to widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ *
+ * \note            Specially useful in callback processing if required
+ * \param[in,out]   h: Widget handle
+ * \param[in]       data: Pointer to custom user data
+ * \retval          1: Data were set OK
+ * \retval          0: Data were not set
+ * \sa              gui_widget_getuserdata__
+ */
 uint8_t
 gui_widget_setuserdata__(GUI_HANDLE_p h, void* data) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */    
@@ -1240,6 +1624,13 @@ gui_widget_setuserdata__(GUI_HANDLE_p h, void* data) {
     return 1;
 }
 
+/**
+ * \brief           Get custom user data from widget previously set with \ref gui_widget_setuserdata
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          Pointer to user data
+ * \sa              __gui_widget_setuserdata
+ */
 void*
 gui_widget_getuserdata__(GUI_HANDLE_p h) {
     void* data;
@@ -1249,114 +1640,16 @@ gui_widget_getuserdata__(GUI_HANDLE_p h) {
     return data;
 }
 
-/******************************************************************************/
-/******************************************************************************/
-/***                  Thread safe version of public API                      **/
-/******************************************************************************/
-/******************************************************************************/
-uint8_t
-gui_widget_remove(GUI_HANDLE_p* h) {
-    __GUI_ASSERTPARAMS(h && gui_widget_iswidget__(*h));     /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-
-    gui_widget_remove__(*h);                        /* Remove widget */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return 1;                                       /* Removev successfully */
-}
-
-/*******************************************/
-/**         Widget text management        **/
-/*******************************************/
-uint32_t gui_widget_alloctextmemory(GUI_HANDLE_p h, uint32_t size) {
-    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h) && size > 1);   /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    gui_widget_allocatetextmemory__(h, size);       /* Allocate memory for text */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    
-    return __GH(h)->TextMemSize;                    /* Return number of bytes allocated */
-}
-
-uint8_t
-gui_widget_freetextmemory(GUI_HANDLE_p h) {
-    uint8_t res;
-    
-    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    res = gui_widget_freetextmemory__(h);           /* Free memory for text */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return res;
-}
-
-uint8_t
-gui_widget_settext(GUI_HANDLE_p h, const GUI_Char* text) {
-    uint8_t res;
-    
-    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    res = gui_widget_settext__(h, text);            /* Set text for widget */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return res;
-}
-
-const GUI_Char*
-gui_widget_gettext(GUI_HANDLE_p h) {
-    const GUI_Char* t;
-    
-    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    t = gui_widget_gettext__(h);                    /* Return text */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return t;
-}
-
-const GUI_Char*
-gui_widget_gettextcopy(GUI_HANDLE_p h, GUI_Char* dst, uint32_t len) {
-    const GUI_Char* t;
-    
-    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    t = gui_widget_gettext__(h);                    /* Return text */
-    gui_string_copyn(dst, t, len);                  /* Copy text after */
-    dst[len] = 0;                                   /* Set trailling zero */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return t;  
-}
-
-uint8_t
-gui_widget_setfont(GUI_HANDLE_p h, const GUI_FONT_t* font) {
-    uint8_t res;
-    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    res = gui_widget_setfont__(h, font);            /* Set widget font */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return res;
-}
-
-const GUI_FONT_t*
-gui_widget_getfont(GUI_HANDLE_p h) {
-    const GUI_FONT_t* font;
-    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    font = gui_widget_getfont__(h);                 /* Get widget font */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return font;
-}
-
+/**
+ * \brief           Set widget parameter in OS secure way
+ * \param[in,out]   h: Widget handle
+ * \param[in]       cfg: Configuration to use, passed later to callback function
+ * \param[in]       *data: Custom data to pass later to configuration callback
+ * \param[in]       invalidate: Flag if widget should be invalidated after parameter change
+ * \param[in]       invalidateparent: change if parent widget should be invalidated after parameter change
+ * \retval          Pointer to user data
+ * \sa              __gui_widget_setuserdata
+ */
 uint8_t
 gui_widget_setparam__(GUI_HANDLE_p h, uint16_t cfg, const void* data, uint8_t invalidate, uint8_t invalidateparent) {
     GUI_WIDGET_Param_t p;
@@ -1376,9 +1669,190 @@ gui_widget_setparam__(GUI_HANDLE_p h, uint16_t cfg, const void* data, uint8_t in
     return 1;
 }
 
+/******************************************************************************/
+/******************************************************************************/
+/***                  Thread safe version of public API                      **/
+/******************************************************************************/
+/******************************************************************************/
+
+/**
+ * \brief           Remove widget from memory
+ * \note            If widget has child widgets, they will be removed too
+ * \param[in,out]   *h: Pointer to widget handle. If removed, pointer will be invalidated and set to NULL
+ * \retval          1: Widget deleted
+ * \retval          0: Delete failed
+ */
+uint8_t
+gui_widget_remove(GUI_HANDLE_p* h) {
+    __GUI_ASSERTPARAMS(h && gui_widget_iswidget__(*h));     /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+
+    gui_widget_remove__(*h);                        /* Remove widget */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;                                       /* Removev successfully */
+}
+
+/*******************************************/
+/**         Widget text management        **/
+/*******************************************/
+/**
+ * \brief           Allocate memory for text operations if text will be dynamic
+ * \note            When unicode feature is enabled, memory should be 4x required characters because unicode can store up to 4 bytes for single character
+ * \param[in,out]   h: Widget handle
+ * \param[in]       size: Number of bytes to allocate
+ * \retval          Number of bytes allocated
+ * \sa              gui_widget_freetextmemory
+ */
+uint32_t gui_widget_alloctextmemory(GUI_HANDLE_p h, uint32_t size) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h) && size > 1);   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    gui_widget_alloctextmemory__(h, size);          /* Allocate memory for text */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    
+    return __GH(h)->TextMemSize;                    /* Return number of bytes allocated */
+}
+
+/**
+ * \brief           Frees memory previously allocated for text
+ * \param[in,out]   h: Widget handle to free memory on
+ * \retval          1: Free was ok
+ * \retval          0: Free was not ok
+ * \sa              gui_widget_alloctextmemory
+ */
+uint8_t
+gui_widget_freetextmemory(GUI_HANDLE_p h) {
+    uint8_t res;
+    
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    res = gui_widget_freetextmemory__(h);           /* Free memory for text */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return res;
+}
+
+/**
+ * \brief           Set text to widget
+ * \note            If dynamic memory allocation was used then content will be copied to allocated memory
+ *                     otherwise only pointer to input text will be used 
+ *                     and each further change of input pointer text will affect to output
+ * \param[in,out]   h: Widget handle
+ * \param[in]       *text: Pointer to text to set to widget
+ * \retval          1: Text was set ok
+ * \retval          0: Text was not set
+ * \sa              gui_widget_alloctextmemory, gui_widget_freetextmemory, gui_widget_setfont, gui_widget_gettext, gui_widget_gettextcopy
+ */
+uint8_t
+gui_widget_settext(GUI_HANDLE_p h, const GUI_Char* text) {
+    uint8_t res;
+    
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    res = gui_widget_settext__(h, text);            /* Set text for widget */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return res;
+}
+
+/**
+ * \brief           Get text from widget
+ * \note            It will return pointer to text which cannot be modified directly.
+ * \param[in,out]   h: Widget handle
+ * \retval          Pointer to text from widget
+ * \sa              gui_widget_settext, gui_widget_gettextcopy
+ */
+const GUI_Char*
+gui_widget_gettext(GUI_HANDLE_p h) {
+    const GUI_Char* t;
+    
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    t = gui_widget_gettext__(h);                    /* Return text */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return t;
+}
+
+/**
+ * \brief           Get text from widget
+ * \note            Text from widget is copied to input pointer
+ * \param[in,out]   h: Widget handle
+ * \param[out]      *dst: Destination pointer
+ * \param[in]       len: Size of output buffer in units of \ref GUI_Char
+ * \retval          Pointer to text from widget
+ * \sa              gui_widget_settext, gui_widget_gettext
+ */
+const GUI_Char*
+gui_widget_gettextcopy(GUI_HANDLE_p h, GUI_Char* dst, uint32_t len) {
+    const GUI_Char* t;
+    
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    t = gui_widget_gettext__(h);                    /* Return text */
+    gui_string_copyn(dst, t, len);                  /* Copy text after */
+    dst[len] = 0;                                   /* Set trailling zero */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return t;  
+}
+
+/**
+ * \brief           Set widget font for drawing operations
+ * \param[in,out]   h: Widget handle
+ * \param[in]       *font: Pointer to \ref GUI_FONT_t object for font
+ * \retval          1: Font was set ok
+ * \retval          0: Font was not set
+ * \sa              gui_widget_settext, gui_widget_gettext
+ */
+uint8_t
+gui_widget_setfont(GUI_HANDLE_p h, const GUI_FONT_t* font) {
+    uint8_t res;
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    res = gui_widget_setfont__(h, font);            /* Set widget font */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return res;
+}
+
+/**
+ * \brief           Get font from widget
+ * \note            Since this function is private, it can only be used by user inside GUI library
+ * \param[in,out]   h: Widget handle
+ * \retval          Pointer to font used for widget
+ */
+const GUI_FONT_t*
+gui_widget_getfont(GUI_HANDLE_p h) {
+    const GUI_FONT_t* font;
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    font = gui_widget_getfont__(h);                 /* Get widget font */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return font;
+}
+
 /*******************************************/
 /**         Widget size management        **/
 /*******************************************/
+/**
+ * \brief           Set widget size in units of pixels
+ * \param[in,out]   h: Widget handle
+ * \param[in]       width: Width value
+ * \param[in]       height: Height value
+ * \retval          1: Size was set ok
+ * \retval          0: Size was not set
+ * \sa              gui_widget_setsizepercent
+ */
 uint8_t
 gui_widget_setsize(GUI_HANDLE_p h, GUI_Dim_t width, GUI_Dim_t height) {
     uint8_t res;
@@ -1392,6 +1866,15 @@ gui_widget_setsize(GUI_HANDLE_p h, GUI_Dim_t width, GUI_Dim_t height) {
     return res;
 }
 
+/**
+ * \brief           Set widget size in units of percent
+ * \param[in,out]   h: Widget handle
+ * \param[in]       width: Width value
+ * \param[in]       height: Height value
+ * \retval          1: Size was set ok
+ * \retval          0: Size was not set
+ * \sa              gui_widget_setsize
+ */
 uint8_t
 gui_widget_setsizepercent(GUI_HANDLE_p h, float width, float height) {
     uint8_t res;
@@ -1405,6 +1888,14 @@ gui_widget_setsizepercent(GUI_HANDLE_p h, float width, float height) {
     return res;
 }
 
+/**
+ * \brief           Set width of widget in units of pixels
+ * \param[in,out]   h: Widget handle
+ * \param[in]       width: Width in units of pixels
+ * \retval          1: Width was set ok
+ * \retval          0: Width was not set
+ * \sa              gui_widget_setheight, gui_widget_setwidthpercent, gui_widget_setheightpercent
+ */
 uint8_t
 gui_widget_setwidth(GUI_HANDLE_p h, GUI_Dim_t width) {
     uint8_t res;
@@ -1418,6 +1909,14 @@ gui_widget_setwidth(GUI_HANDLE_p h, GUI_Dim_t width) {
     return res;
 }
 
+/**
+ * \brief           Set height of widget in units of pixels
+ * \param[in,out]   h: Widget handle
+ * \param[in]       height: Height in units of pixels
+ * \retval          1: Height was set ok
+ * \retval          0: Height was not set
+ * \sa              gui_widget_setwidth, gui_widget_setwidthpercent, gui_widget_setheightpercent
+ */
 uint8_t
 gui_widget_setheight(GUI_HANDLE_p h, GUI_Dim_t height) {
     uint8_t res;
@@ -1431,6 +1930,14 @@ gui_widget_setheight(GUI_HANDLE_p h, GUI_Dim_t height) {
     return res;
 }
 
+/**
+ * \brief           Set width of widget in percentage relative to parent widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       width: Width in percentage
+ * \retval          1: Width was set ok
+ * \retval          0: Width was not set
+ * \sa              gui_widget_setwidth, gui_widget_setheight, gui_widget_setheightpercent
+ */
 uint8_t
 gui_widget_setwidthpercent(GUI_HANDLE_p h, float width) {
     uint8_t res;
@@ -1443,6 +1950,14 @@ gui_widget_setwidthpercent(GUI_HANDLE_p h, float width) {
     return res;
 }
 
+/**
+ * \brief           Set height of widget in percentage relative to parent widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       height: Height in percentage
+ * \retval          1: Height was set ok
+ * \retval          0: Height was not set
+ * \sa              gui_widget_setwidth, gui_widget_setheight, gui_widget_setwidthpercent
+ */
 uint8_t
 gui_widget_setheightpercent(GUI_HANDLE_p h, float height) {
     uint8_t res;
@@ -1455,6 +1970,14 @@ gui_widget_setheightpercent(GUI_HANDLE_p h, float height) {
     return res;
 }
 
+/**
+ * \brief           Get total width of widget effective on screen in units of pixels
+ *                     Function returns width of widget according to current widget setup (expanded, fill, percent, etc.)
+ * \note            Even if percentage width is used, function will always return value in pixels
+ * \param[in]       h: Pointer to \ref GUI_HANDLE_p structure
+ * \retval          Total width in units of pixels
+ * \sa              gui_widget_getheight, gui_widget_setwidth
+ */
 GUI_Dim_t
 gui_widget_getwidth(GUI_HANDLE_p h) {
     GUI_Dim_t res;
@@ -1467,6 +1990,16 @@ gui_widget_getwidth(GUI_HANDLE_p h) {
     return res;
 }
 
+/**
+ * \brief           Get total height of widget effective on screen in units of pixels
+ *                     Function returns height of widget according to current widget setup (expanded, fill, percent, etc.)
+ *
+ * \note            Even if percentage height is used, function will always return value in pixels
+ * \param[in]       h: Pointer to \ref GUI_HANDLE_p structure
+ * \retval          Total height in units of pixels
+ * \sa              gui_widget_getwidth, gui_widget_setheight
+ * \hideinitializer
+ */
 GUI_Dim_t
 gui_widget_getheight(GUI_HANDLE_p h) {
     GUI_Dim_t res;
@@ -1479,6 +2012,14 @@ gui_widget_getheight(GUI_HANDLE_p h) {
     return res;
 }
 
+/**
+ * \brief           Set expandend mode on widget. When enabled, widget will be at X,Y = 0,0 relative to parent and will have width,height = 100%,100%
+ * \param[in,out]   h: Widget handle
+ * \param[in]       state: State for expanded mode
+ * \retval          1: Widget expandend status set ok
+ * \retval          0: Widget expandend status was not set
+ * \sa              gui_widget_isexpanded
+ */
 uint8_t
 gui_widget_setexpanded(GUI_HANDLE_p h, uint8_t state) {
     uint8_t ret;
@@ -1492,6 +2033,13 @@ gui_widget_setexpanded(GUI_HANDLE_p h, uint8_t state) {
     return ret;
 }
 
+/**
+ * \brief           Get widget expanded status
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget is expanded
+ * \retval          0: Widget is not expanded
+ * \sa              gui_widget_setexpanded
+ */
 uint8_t
 gui_widget_isexpanded(GUI_HANDLE_p h) {
     uint8_t ret;
@@ -1508,6 +2056,16 @@ gui_widget_isexpanded(GUI_HANDLE_p h) {
 /*******************************************/
 /**       Widget position management      **/
 /*******************************************/
+
+/**
+ * \brief           Set widget position relative to parent object in units of pixels
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: X position relative to parent object
+ * \param[in]       y: Y position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              gui_widget_setpositionpercent
+ */
 uint8_t
 gui_widget_setposition(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
     uint8_t res;
@@ -1520,6 +2078,15 @@ gui_widget_setposition(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
     return res;
 }
 
+/**
+ * \brief           Set widget position relative to parent object in units of percent
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: X position relative to parent object
+ * \param[in]       y: Y position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              gui_widget_setposition
+ */
 uint8_t
 gui_widget_setpositionpercent(GUI_HANDLE_p h, float x, float y) {
     uint8_t res;
@@ -1532,6 +2099,14 @@ gui_widget_setpositionpercent(GUI_HANDLE_p h, float x, float y) {
     return res;
 }
 
+/**
+ * \brief           Set widget X position relative to parent object in units of pixels
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: X position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              gui_widget_setxpositionpercent
+ */
 uint8_t
 gui_widget_setxposition(GUI_HANDLE_p h, GUI_iDim_t x) {
     uint8_t res;
@@ -1544,6 +2119,14 @@ gui_widget_setxposition(GUI_HANDLE_p h, GUI_iDim_t x) {
     return res;
 }
 
+/**
+ * \brief           Set widget X position relative to parent object in units of percent
+ * \param[in,out]   h: Widget handle
+ * \param[in]       x: X position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              gui_widget_setxposition
+ */
 uint8_t
 gui_widget_setxpositionpercent(GUI_HANDLE_p h, float x) {
     uint8_t res;
@@ -1556,6 +2139,14 @@ gui_widget_setxpositionpercent(GUI_HANDLE_p h, float x) {
     return res;
 }
 
+/**
+ * \brief           Set widget Y position relative to parent object in units of pixels
+ * \param[in,out]   h: Widget handle
+ * \param[in]       y: Y position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              gui_widget_setypositionpercent
+ */
 uint8_t
 gui_widget_setyposition(GUI_HANDLE_p h, GUI_iDim_t y) {
     uint8_t res;
@@ -1568,6 +2159,14 @@ gui_widget_setyposition(GUI_HANDLE_p h, GUI_iDim_t y) {
     return res;
 }
 
+/**
+ * \brief           Set widget Y position relative to parent object in units of percent
+ * \param[in,out]   h: Widget handle
+ * \param[in]       y: Y position relative to parent object
+ * \retval          1: Position was set ok
+ * \retval          0: Position was not set
+ * \sa              gui_widget_setyposition
+ */
 uint8_t
 gui_widget_setypositionpercent(GUI_HANDLE_p h, float y) {
     uint8_t res;
@@ -1580,6 +2179,12 @@ gui_widget_setypositionpercent(GUI_HANDLE_p h, float y) {
     return res;
 }
 
+/**
+ * \brief           Invalidate widget object and prepare to new redraw
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget was invalidated ok
+ * \retval          0: Widget was not invalidated
+ */
 uint8_t
 gui_widget_invalidate(GUI_HANDLE_p h) {
     uint8_t res;
@@ -1592,6 +2197,13 @@ gui_widget_invalidate(GUI_HANDLE_p h) {
     return res;
 }
 
+/**
+ * \brief           Show widget from visible area
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Text was shown ok
+ * \retval          0: Text was not shown
+ * \sa              gui_widget_hide
+ */
 uint8_t
 gui_widget_show(GUI_HANDLE_p h) {
     uint8_t res;
@@ -1604,6 +2216,13 @@ gui_widget_show(GUI_HANDLE_p h) {
     return res;
 }
 
+/**
+ * \brief           Put widget to front view and put it to focused state
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget was put ok
+ * \retval          0: Widget was not put
+ * \sa              gui_widget_hide
+ */
 uint8_t
 gui_widget_putonfront(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -1616,6 +2235,13 @@ gui_widget_putonfront(GUI_HANDLE_p h) {
     return 1;
 }
 
+/**
+ * \brief           Hide widget from visible area
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget was hidden ok
+ * \retval          0: Widget was not hidden
+ * \sa              gui_widget_show, gui_widget_putonfront
+ */
 uint8_t
 gui_widget_hide(GUI_HANDLE_p h) {
     uint8_t res;
@@ -1628,12 +2254,24 @@ gui_widget_hide(GUI_HANDLE_p h) {
     return res;
 }
 
+/**
+ * \brief           Get widget ID
+ * \param[in,out]   h: Widget handle
+ * \retval          Widget ID
+ */
 GUI_ID_t
 gui_widget_getid(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     return gui_widget_getid__(h);                   /* Return widget ID */
 }
 
+/**
+ * \brief           Get first widget handle by ID
+ * \note            If multiple widgets have the same ID, first found will be used
+ * \param[in,out]   id: Widget ID to search for
+ * \retval          > 0: Widget handle when widget found
+ * \retval          0: Widget not found
+ */
 GUI_HANDLE_p
 gui_widget_getbyid(GUI_ID_t id) {
     GUI_HANDLE_p h;
@@ -1645,23 +2283,28 @@ gui_widget_getbyid(GUI_ID_t id) {
     return h; 
 }
 
+/**
+ * \brief           Check if widget is children of parent
+ * \param[in]       h: Widget handle to test
+ * \param[in]       parent: Parent widget handle to test if is parent
+ * \retval          1: Widget handle is in tree of parent handle
+ * \retval          0: Widget handle is not in tree of parent handle
+ */
 uint8_t
 gui_widget_ischildof(GUI_HANDLE_p h, GUI_HANDLE_p parent) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h) && gui_widget_iswidget__(parent));  /* Check valid parameter */
     return gui_widget_ischildof__(h, parent);       /* Return status */
 }
 
-uint8_t
-gui_widget_setcallback(GUI_HANDLE_p h, GUI_WIDGET_CALLBACK_t callback) {
-    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    __GH(h)->Callback = callback;                   /* Set callback function */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return 1;
-}
-
+/**
+ * \brief           Set custom user data to widget
+ * \note            Specially useful in callback processing if required
+ * \param[in,out]   h: Widget handle
+ * \param[in]       data: Pointer to custom user data
+ * \retval          1: Data were set OK
+ * \retval          0: Data were not set
+ * \sa              gui_widget_getuserdata
+ */
 uint8_t
 gui_widget_setuserdata(GUI_HANDLE_p h, void* data) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -1673,6 +2316,12 @@ gui_widget_setuserdata(GUI_HANDLE_p h, void* data) {
     return 1;
 }
 
+/**
+ * \brief           Get custom user data from widget previously set with \ref gui_widget_setuserdata
+ * \param[in,out]   h: Widget handle
+ * \retval          Pointer to user data
+ * \sa              gui_widget_setuserdata
+ */
 void*
 gui_widget_getuserdata(GUI_HANDLE_p h) {
     void* data;
@@ -1686,6 +2335,19 @@ gui_widget_getuserdata(GUI_HANDLE_p h) {
     return data;
 }
 
+/**
+ * \brief           Widget callback function for all events
+ * \note            Called either from GUI stack or from widget itself to notify user
+ *
+ * \note            Call this function inside custom callback widget function for unhandled events
+ *                     It will automatically call required function according to input widget
+ * \param[in,out]   h: Widget handle where callback occurred
+ * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
+ * \param[in]       *param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
+ * \param[out]      *result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
+ * \retval          1: Command has been processed
+ * \retval          0: Command has not been processed
+ */
 uint8_t
 gui_widget_processdefaultcallback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     uint8_t ret;
@@ -1699,6 +2361,39 @@ gui_widget_processdefaultcallback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, vo
     return ret;
 }
 
+/**
+ * \brief           Set callback function to widget
+ * \param[in,out]   h: Widget handle object
+ * \param[in]       callback: Callback function for widget
+ * \retval          1: Callback was set ok
+ * \retval          1: Callback was not set
+ * \sa              gui_widget_processdefaultcallback, gui_widget_callback
+ */
+uint8_t
+gui_widget_setcallback(GUI_HANDLE_p h, GUI_WIDGET_CALLBACK_t callback) {
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    __GH(h)->Callback = callback;                   /* Set callback function */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
+}
+
+/**
+ * \brief           Widget callback function for all events
+ * \note            Called from user outside callback. For calling default callback
+ *                      inside custom callback for widget, use \ref gui_widget_processdefaultcallback instead.
+ *                      If called from inside widget callback, it may result in recursive calls.
+ *
+ * \param[in,out]   h: Widget handle where callback occurred
+ * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
+ * \param[in]       *param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
+ * \param[out]      *result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
+ * \retval          1: Command has been processed
+ * \retval          0: Command has not been processed
+ * \sa              gui_widget_setcallback
+ */
 uint8_t
 gui_widget_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     uint8_t ret;
@@ -1712,6 +2407,15 @@ gui_widget_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
     return ret;
 }
 
+/**
+ * \brief           Set widget scroll on X axis
+ * \note            This is possible on widgets with children support (windows) to have scroll on X and Y
+ * \param[in,out]   h: Widget handle
+ * \param[in]       scroll: Scroll value for X direction
+ * \retval          1: Scroll was set ok
+ * \retval          0: Scroll was not set
+ * \sa              gui_widget_setscrolly
+ */
 uint8_t
 gui_widget_setscrollx(GUI_HANDLE_p h, GUI_iDim_t scroll) {
     uint8_t ret = 0;
@@ -1729,6 +2433,15 @@ gui_widget_setscrollx(GUI_HANDLE_p h, GUI_iDim_t scroll) {
     return ret;
 }
 
+/**
+ * \brief           Set widget scroll on Y axis
+ * \note            This is possible on widgets with children support (windows) to have scroll on X and Y
+ * \param[in,out]   h: Widget handle
+ * \param[in]       scroll: Scroll value for Y direction
+ * \retval          1: Scroll was set ok
+ * \retval          0: Scroll was not set
+ * \sa              gui_widget_setscrollx
+ */
 uint8_t
 gui_widget_setscrolly(GUI_HANDLE_p h, GUI_iDim_t scroll) {
     uint8_t ret = 0;
@@ -1746,6 +2459,12 @@ gui_widget_setscrolly(GUI_HANDLE_p h, GUI_iDim_t scroll) {
     return ret;
 }
 
+/**
+ * \brief           Manually set widget in focus
+ * \param[in,out]   h: Widget handle
+ * \retval          1: Widget set to focus
+ * \retval          0: Widget was not set to focus
+ */
 uint8_t
 gui_widget_setfocus(GUI_HANDLE_p h) {
     uint8_t ret = 1;
@@ -1758,12 +2477,26 @@ gui_widget_setfocus(GUI_HANDLE_p h) {
     return ret;
 }
 
+/**
+ * \brief           Set default font for widgets used on widget creation
+ * \param[in]       *font: Pointer to \ref GUI_FONT_t with font
+ * \retval          1: Font was set ok
+ * \retval          0: Font was not set
+ */
 uint8_t
 gui_widget_setfontdefault(const GUI_FONT_t* font) {
     WIDGET_Default.Font = font;                     /* Set default font */
     return 1;
 }
 
+/**
+ * \brief           Increase selection for widget
+ * \note            Widget must implement \ref GUI_WC_IncSelection command in callback function and process it
+ * \param[in,out]   h: Widget handle
+ * \param[in]       dir: Increase direction. Positive number means number of increases, negative is number of decreases
+ * \retval          1: Increase/Decrease was ok
+ * \retval          0: Increase/Decrease was not ok
+ */
 uint8_t
 gui_widget_incselection(GUI_HANDLE_p h, int16_t dir) {
     uint8_t ret = 0;
@@ -1777,6 +2510,15 @@ gui_widget_incselection(GUI_HANDLE_p h, int16_t dir) {
     return ret;
 }
 
+/**
+ * \brief           Set z-Index for widgets on the same level. This feature applies on widgets which are not dialogs
+ * \note            Larger z-index value means greater position on screen. In case of multiple widgets on same z-index level, they are automatically modified for correct display
+ * \param[in,out]   h: Widget handle
+ * \param[in]       zindex: Z-Index value for widget. Any value can be used
+ * \retval          1: New value is different than previous and modification has been done
+ * \retval          0: New value was not set
+ * \sa              gui_widget_getzindex
+ */
 uint8_t
 gui_widget_setzindex(GUI_HANDLE_p h, int32_t zindex) {
     uint8_t ret;
@@ -1790,6 +2532,12 @@ gui_widget_setzindex(GUI_HANDLE_p h, int32_t zindex) {
     return ret;
 }
 
+/**
+ * \brief           Get z-index value from widget
+ * \param[in,out]   h: Widget handle
+ * \retval          z-index value
+ * \sa              gui_widget_setzindex
+ */
 int32_t
 gui_widget_getzindex(GUI_HANDLE_p h) {
     int32_t ret;
@@ -1803,6 +2551,14 @@ gui_widget_getzindex(GUI_HANDLE_p h) {
     return ret;
 }
 
+/**
+ * \brief           Set transparency level to widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       trans: Transparency level, where 0x00 means hidden and 0xFF means totally visible widget
+ * \retval          1: Transparency set ok
+ * \retval          0: Transparency was not set
+ * \sa              gui_widget_gettransparency
+ */
 uint8_t
 gui_widget_settransparency(GUI_HANDLE_p h, uint8_t trans) {
     uint8_t ret;
@@ -1816,6 +2572,16 @@ gui_widget_settransparency(GUI_HANDLE_p h, uint8_t trans) {
     return ret;
 }
 
+/**
+ * \brief           Get widget transparency value
+ * \note            Value between 0 and 0xFF is used:
+ *                      - 0x00: Widget is hidden
+ *                      - 0xFF: Widget is fully visible
+ *                      - between: Widget has transparency value
+ * \param[in,out]   h: Widget handle
+ * \retval          Trasparency value
+ * \sa              gui_widget_settransparency
+ */
 uint8_t
 gui_widget_gettransparency(GUI_HANDLE_p h) {
     uint8_t trans;
@@ -1829,6 +2595,13 @@ gui_widget_gettransparency(GUI_HANDLE_p h) {
     return trans;
 }
 
+/**
+ * \brief           Set 3D mode on widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       enable: Value to enable, either 1 or 0
+ * \retval          1: Successful
+ * \retval          0: Failed
+ */
 uint8_t
 gui_widget_set3dstyle(GUI_HANDLE_p h, uint8_t enable) {
     uint8_t ret;

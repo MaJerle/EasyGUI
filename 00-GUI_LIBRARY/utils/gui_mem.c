@@ -1,27 +1,32 @@
-/**    
- * |----------------------------------------------------------------------
- * | Copyright (c) 2017 Tilen Majerle
- * |  
- * | Permission is hereby granted, free of charge, to any person
- * | obtaining a copy of this software and associated documentation
- * | files (the "Software"), to deal in the Software without restriction,
- * | including without limitation the rights to use, copy, modify, merge,
- * | publish, distribute, sublicense, and/or sell copies of the Software, 
- * | and to permit persons to whom the Software is furnished to do so, 
- * | subject to the following conditions:
- * | 
- * | The above copyright notice and this permission notice shall be
- * | included in all copies or substantial portions of the Software.
- * | 
- * | THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * | EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * | OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
- * | AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * | HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * | WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
- * | FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * | OTHER DEALINGS IN THE SOFTWARE.
- * |----------------------------------------------------------------------
+/**	
+ * \file            gui_mem.c
+ * \brief           Memory manager
+ */
+ 
+/*
+ * Copyright (c) 2017 Tilen Majerle
+ *  
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge,
+ * publish, distribute, sublicense, and/or sell copies of the Software, 
+ * and to permit persons to whom the Software is furnished to do so, 
+ * subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
 #include "gui_mem.h"
@@ -418,7 +423,7 @@ gui_mem_alloc(uint32_t size) {
  * \note            After new memory is allocated, content of old one is copied to new allocated memory
  *
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       *ptr: Pointer to current allocated memory to resize, returned using \ref GUI_MEM_Alloc, \ref GUI_MEM_Calloc or \ref GUI_MEM_Realloc functions
+ * \param[in]       *ptr: Pointer to current allocated memory to resize, returned using \ref gui_mem_alloc, \ref gui_mem_calloc or \ref gui_mem_realloc functions
  * \param[in]       size: Number of bytes to allocate on new memory
  * \retval          0: Allocation failed
  * \retval          >0: Pointer to allocated memory
@@ -458,7 +463,7 @@ gui_mem_calloc(size_t num, size_t size) {
 
 /**
  * \brief           Free memory
- * \param[in]       *ptr: Pointer to memory previously returned using \ref GUI_MEM_Alloc, \ref GUI_MEM_Calloc or \ref GUI_MEM_Realloc functions
+ * \param[in]       *ptr: Pointer to memory previously returned using \ref gui_mem_alloc, \ref gui_mem_calloc or \ref gui_mem_realloc functions
  */
 void
 gui_mem_free(void* ptr) {
@@ -511,11 +516,12 @@ gui_mem_getminfree(void) {
  * \brief           Assign memory region(s) for allocation functions
  * \note            You can allocate multiple regions by assigning start address and region size in units of bytes
  * \param[in]       *regions: Pointer to list of regions to use for allocations
- * \param[in]       size: Number of regions to use
+ * \param[in]       len: Number of regions to use
  * \retval          1: Memory assigned ok
  * \retval          0: Memory was not assigned
  */
-uint8_t gui_mem_assignmemory(const GUI_MEM_Region_t* regions, size_t len) {
+uint8_t
+gui_mem_assignmemory(const GUI_MEM_Region_t* regions, size_t len) {
     uint8_t ret;
     __GUI_ENTER();                                  /* Enter GUI */
     ret = mem_assignmem(regions, len);              /* Assign memory */

@@ -1,27 +1,32 @@
 /**	
- * |----------------------------------------------------------------------
- * | Copyright (c) 2017 Tilen Majerle
- * |  
- * | Permission is hereby granted, free of charge, to any person
- * | obtaining a copy of this software and associated documentation
- * | files (the "Software"), to deal in the Software without restriction,
- * | including without limitation the rights to use, copy, modify, merge,
- * | publish, distribute, sublicense, and/or sell copies of the Software, 
- * | and to permit persons to whom the Software is furnished to do so, 
- * | subject to the following conditions:
- * | 
- * | The above copyright notice and this permission notice shall be
- * | included in all copies or substantial portions of the Software.
- * | 
- * | THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * | EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * | OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
- * | AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * | HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * | WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
- * | FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * | OTHER DEALINGS IN THE SOFTWARE.
- * |----------------------------------------------------------------------
+ * \file            gui_string.c
+ * \brief           String manager
+ */
+ 
+/*
+ * Copyright (c) 2017 Tilen Majerle
+ *  
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge,
+ * publish, distribute, sublicense, and/or sell copies of the Software, 
+ * and to permit persons to whom the Software is furnished to do so, 
+ * subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
 #include "gui_string.h"
@@ -228,7 +233,7 @@ gui_string_compare(const GUI_Char* s1, const GUI_Char* s2) {
 }
 
 /**
- * \brief           Prepare string before it can be used with \ref GUI_STRING_GetCh or \ref GUI_STRING_GetChReverse functions
+ * \brief           Prepare string before it can be used with \ref gui_string_getch or \ref gui_string_getchreverse functions
  * \param[in,out]   *s: Pointer to \ref GUI_STRING_t as base string object
  * \param[in]       *str: Pointer to \ref GUI_Char with string used for manupulation
  * \retval          1: String prepared and ready to use
@@ -261,7 +266,7 @@ while (gui_string_getch(&s, &ch, &i)) {         //Go through entire string
 \endcode
  * 
  * \note            When \ref GUI_USE_UNICODE is set to 1, multiple bytes may be used for single character
- * \param[in,out]   *str: Pointer to \ref GUI_STRING_t structure with input string. 
+ * \param[in,out]   *s: Pointer to \ref GUI_STRING_t structure with input string. 
                         Function will internally change pointer of actual string where it points to to next character
  * \param[out]      *out: Pointer to output memory where output character will be saved
  * \param[out]      *len: Pointer to output memory where number of bytes for string will be saved
@@ -304,7 +309,7 @@ gui_string_getch(GUI_STRING_t* s, uint32_t* out, uint8_t* len) {
 
 /**
  * \brief           Get character by character from end of string up
- * \note            Functionality is the same as \ref GUI_STRING_GetCh except order is swapped
+ * \note            Functionality is the same as \ref gui_string_getch except order is swapped
  * 
  * \note            String must be at the last character before function is first time called
  *
@@ -385,7 +390,7 @@ gui_string_getchreverse(GUI_STRING_t* str, uint32_t* out, uint8_t* len) {
 /**
  *
  * \brief           Set character pointer to the last character in sequence
- * \param[in,out]   **str: Pointer to pointer to source string to modify pointing location
+ * \param[in,out]   *str: Pointer to \ref GUI_STRING_t structure with string informations
  * \retval          1: Pointer set to last character
  * \retval          0: Pointer was not set to last character
  * \sa              gui_string_getchreverse

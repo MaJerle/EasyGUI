@@ -575,7 +575,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
             case ID_WIN_TEXTVIEW: {     /* Text view */
                 size_t i = 0;
                 static const GUI_Char* texts[] = {
-                    _GT("Text majkemi moje\neeeeeon screen"),
+                    _GT("Text with top left align"),
                     _GT("Text\nview with\ntop center alignment on screen"),
                     _GT("Text view with top right alignment on screen"),
                     _GT("Text view                          with middle left alignment on screen"),
@@ -628,14 +628,14 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 break;
             }
             case ID_WIN_IMAGE: {
-//                handle = gui_button_create(0, 10, 10, 300, 50, h, 0, 0);
-//                gui_widget_settext(handle, _GT("Button"));
-//                handle = gui_image_create(0, 2, 2, bmimage_brand.xSize, bmimage_brand.ySize, h, 0, 0);
-//                gui_image_setsource(handle, &bmimage_brand);
-//                handle = gui_image_create(0, 200, 40, bmimage_voyo.xSize, bmimage_voyo.ySize, h, 0, 0);
-//                gui_image_setsource(handle, &bmimage_voyo);
-//                handle = gui_image_create(0, 350, 10, bmimage_voyo565.xSize, bmimage_voyo565.ySize, h, 0, 0);
-//                gui_image_setsource(handle, &bmimage_voyo565);
+                handle = gui_button_create(0, 10, 10, 300, 50, h, 0, 0);
+                gui_widget_settext(handle, _GT("Button"));
+                handle = gui_image_create(0, 2, 2, bmimage_brand.xSize, bmimage_brand.ySize, h, 0, 0);
+                gui_image_setsource(handle, &bmimage_brand);
+                handle = gui_image_create(0, 200, 40, bmimage_voyo.xSize, bmimage_voyo.ySize, h, 0, 0);
+                gui_image_setsource(handle, &bmimage_voyo);
+                handle = gui_image_create(0, 350, 10, bmimage_voyo565.xSize, bmimage_voyo565.ySize, h, 0, 0);
+                gui_image_setsource(handle, &bmimage_voyo565);
                 break;
             }
             case ID_WIN_SLIDER: {

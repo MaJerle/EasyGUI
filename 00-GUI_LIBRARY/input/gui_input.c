@@ -1,27 +1,32 @@
 /**	
- * |----------------------------------------------------------------------
- * | Copyright (c) 2017 Tilen Majerle
- * |  
- * | Permission is hereby granted, free of charge, to any person
- * | obtaining a copy of this software and associated documentation
- * | files (the "Software"), to deal in the Software without restriction,
- * | including without limitation the rights to use, copy, modify, merge,
- * | publish, distribute, sublicense, and/or sell copies of the Software, 
- * | and to permit persons to whom the Software is furnished to do so, 
- * | subject to the following conditions:
- * | 
- * | The above copyright notice and this permission notice shall be
- * | included in all copies or substantial portions of the Software.
- * | 
- * | THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * | EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * | OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
- * | AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * | HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * | WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
- * | FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * | OTHER DEALINGS IN THE SOFTWARE.
- * |----------------------------------------------------------------------
+ * \file            gui_input.c
+ * \brief           Input manager
+ */
+ 
+/*
+ * Copyright (c) 2017 Tilen Majerle
+ *  
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge,
+ * publish, distribute, sublicense, and/or sell copies of the Software, 
+ * and to permit persons to whom the Software is furnished to do so, 
+ * subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
 #include "gui_input.h"
@@ -64,7 +69,7 @@ static GUI_Byte_t KBBufferData[GUI_TOUCH_BUFFER_SIZE * sizeof(GUI_KeyboardData_t
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-#if GUI_USE_TOUCH
+#if GUI_USE_TOUCH || defined(DOXYGEN)
 
 /**
  * \brief           Add new touch data to internal buffer for further processing
@@ -109,10 +114,10 @@ gui_input_touchavailable(void) {
     return gui_buffer_getfull(&TSBuffer) > 0;       /* Check if any available touch */
 }
 
-#endif /* GUI_USE_TOUCH */
+#endif /* GUI_USE_TOUCH || defined(DOXYGEN) */
 
 
-#if GUI_USE_KEYBOARD
+#if GUI_USE_KEYBOARD || defined(DOXYGEN)
 
 /**
  * \brief           Add new key data to internal buffer for further processing
@@ -146,10 +151,10 @@ gui_input_keyread(GUI_KeyboardData_t* kb) {
     }
     return 0;
 }
-#endif /* GUI_USE_KEYBOARD */
+#endif /* GUI_USE_KEYBOARD || defined(DOXYGEN) */
 
 /**
- * \brief           Initialize input part of GUI
+ * \brief           Initialize input manager for GUI
  */
 void
 gui_input_init(void) {

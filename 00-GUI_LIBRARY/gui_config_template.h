@@ -1,7 +1,7 @@
 /**
- * \author  Tilen Majerle
+ * \author  Tilen Majerle <tilen@majerle.eu>
  * \brief   GUI configuration
- *	
+ *  
 \verbatim
    ----------------------------------------------------------------------
     Copyright (c) 2017 Tilen Majerle
@@ -41,6 +41,11 @@
  * \brief           GUI configuration setup
  * \{
  */
+ 
+/**
+ * \brief           Enables (1) or disables (0) OS support for library
+ */
+#define GUI_OS                          1
 
 /**
  * \brief           Enables (1) or disables (0) touch support
@@ -86,13 +91,33 @@
 #define GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE       1
 
 /**
- * \brief           Enables (1) or disables (0) widget mode inside parent only.
- *
- *                  When mode is enabled and widget is outside parent, it won't be visible
+ * \brief           Enables (1) or disables (0) widget mode inside parent only
+ *                  
+ *                  When enabled, widget can only be inside parent widget's visible area,
+ *                  otherwise widget with width,height = 100,100 may be at x,y = -10,-10 relative to parent
+ *                  and only part of widget will be visible
  *
  * \note            This can be used for scrolling mode when necessary
  */
 #define GUI_WIDGET_INSIDE_PARENT        0
+
+/**
+ * \brief           Enables (1) or disables (0) automatic translations on widget text
+ *
+ * \note            When enabled, source and active languages must be set in \ref GUI_TRANSLATE module
+ */
+#define GUI_USE_TRANSLATE               1
+
+/**
+ * \brief           Memory alignment setup, used for memory allocation in systems where unaligned memory access is not allowed
+ * \note            Value must be power of 2, in most cases number 4 will be ok.
+ *
+ *                  1: No memory alignment
+ *                  2: Align memory to 2 bytes
+ *                  4: Align memory to 4 bytes
+ *                  8: Align memory to 8 bytes
+ */
+#define GUI_MEM_ALIGNMENT               4
 
 /**
  * \}

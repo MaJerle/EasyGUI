@@ -4808,24 +4808,24 @@ const uint16_t _acvoyo_565[] = {
         0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF
 };
 
-//const GUI_IMAGE_DESC_t bmimage_brand = {
-//    .xSize = 220, // xSize
-//    .ySize = 351, // ySize
-//    .BPP = 32, // BitsPerPixel
-//    .Image = (uint8_t *)_acimage_brand,  // Pointer to picture data
-//};
+const GUI_IMAGE_DESC_t bmimage_brand = {
+    .xSize = 220, // xSize
+    .ySize = 351, // ySize
+    .BPP = 32, // BitsPerPixel
+    .Image = (uint8_t *)_acimage_brand,  // Pointer to picture data
+};
 
-//const GUI_IMAGE_DESC_t bmimage_voyo = {
-//    .xSize = 100, // xSize
-//    .ySize = 70, // ySize
-//    .BPP = 24, // BitsPerPixel
-//    .Image = (uint8_t *)_acvoyo_img,  // Pointer to picture data
-//};
+const GUI_IMAGE_DESC_t bmimage_voyo = {
+    .xSize = 100, // xSize
+    .ySize = 70, // ySize
+    .BPP = 24, // BitsPerPixel
+    .Image = (uint8_t *)_acvoyo_img,  // Pointer to picture data
+};
 
-//const GUI_IMAGE_DESC_t bmimage_voyo565 = {
-//    .xSize = 100, // xSize
-//    .ySize = 70, // ySize
-//    .BPP = 16, // BitsPerPixel
-//    .Image = (uint8_t *)_acvoyo_565,  // Pointer to picture data
-//};
+const GUI_IMAGE_DESC_t bmimage_voyo565 = {
+    .xSize = 100, // xSize
+    .ySize = 70, // ySize
+    .BPP = 16, // BitsPerPixel
+    .Image = (uint8_t *)_acvoyo_565,  // Pointer to picture data
+};
 

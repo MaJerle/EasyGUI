@@ -85,7 +85,7 @@
  * \brief           Enables (1) or disables (0) automatic invalidation of graph widgets
  *                    when graph dataset changes
  *
- * \note            It requires additional memory because each grpah data saves reference
+ * \note            It requires additional memory because each graph data saves reference
  *                    to parent graph widget for invalidation
  */
 #define GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE       1
