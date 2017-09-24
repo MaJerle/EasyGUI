@@ -74,7 +74,7 @@ static const GUI_WIDGET_t Widget = {
 /******************************************************************************/
 #define c                   ((GUI_RADIO_t *)(h))
 static uint8_t
-gui_radio_setactive__(GUI_HANDLE_p h) {
+set_active(GUI_HANDLE_p h) {
     GUI_HANDLE_p handle;
     
     if (__GR(h)->Flags & GUI_FLAG_RADIO_DISABLED) { /* Check if it can be enabled */
@@ -108,7 +108,7 @@ gui_radio_setactive__(GUI_HANDLE_p h) {
 
 /* Set disabled status */
 static uint8_t
-__SetDisabled(GUI_HANDLE_p h, uint8_t state) {
+set_disabled(GUI_HANDLE_p h, uint8_t state) {
     if (state && !(c->Flags & GUI_FLAG_RADIO_DISABLED)) {
         c->Flags |= GUI_FLAG_RADIO_DISABLED;        /* Set flag */
         gui_widget_invalidate__(h);
@@ -185,7 +185,7 @@ gui_radio_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
         }
 #endif /* GUI_USE_TOUCH */
         case GUI_WC_Click: {
-            gui_radio_setactive__(h);               /* Set widget as active */
+            set_active(h);                          /* Set widget as active */
             gui_widget_invalidate__(h);             /* Invalidate widget */
         }
         default:                                    /* Handle default option */
@@ -307,7 +307,7 @@ gui_radio_setvalue(GUI_HANDLE_p h, uint32_t value) {
     if (__GR(h)->Value != value) {
         __GR(h)->Value = value;                     /* Set new value */
         if (__GR(h)->Flags & GUI_FLAG_RADIO_CHECKED) {
-            gui_radio_setactive__(h);               /* Check active radio widgets */
+            set_active(h);                          /* Check active radio widgets */
         }
     }
     
@@ -346,7 +346,7 @@ uint8_t gui_radio_setselected(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = gui_radio_setactive__(h);                 /* Set radio active */
+    ret = set_active(h);                            /* Set radio active */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -385,7 +385,7 @@ gui_radio_setdisabled(GUI_HANDLE_p h, uint8_t disabled) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
-    ret = __SetDisabled(h, disabled);               /* Set checked status */
+    ret = set_disabled(h, disabled);                /* Set checked status */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;

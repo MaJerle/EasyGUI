@@ -78,7 +78,7 @@ gui_image_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
             x = gui_widget_getabsolutex__(h);       /* Get absolute X coordinate */
             y = gui_widget_getabsolutey__(h);       /* Get absolute Y coordinate */
             
-            gui_draw_image(disp, x, y, o->Image);
+            gui_draw_image(disp, x, y, o->Image);   /* Draw actual image on screen */
             return 1;
         }
         default:                                    /* Handle default option */

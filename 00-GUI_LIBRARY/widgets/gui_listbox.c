@@ -200,7 +200,7 @@ check_values(GUI_HANDLE_p h) {
 
 /* Delete list item box by index */
 static uint8_t
-__DeleteItem(GUI_HANDLE_p h, uint16_t index) {
+delete_item(GUI_HANDLE_p h, uint16_t index) {
     GUI_LISTBOX_ITEM_t* item;
     
     item = get_item(h, index);                      /* Get list item from handle */
@@ -496,7 +496,7 @@ gui_listbox_deletefirststring(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __DeleteItem(h, 0);                       /* Delete first item */
+    ret = delete_item(h, 0);                        /* Delete first item */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -516,7 +516,7 @@ gui_listbox_deletelaststring(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __DeleteItem(h, __GL(h)->Count - 1);      /* Delete last item */
+    ret = delete_item(h, __GL(h)->Count - 1);       /* Delete last item */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -537,7 +537,7 @@ gui_listbox_deletestring(GUI_HANDLE_p h, uint16_t index) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __DeleteItem(h, index);                   /* Delete item */
+    ret = delete_item(h, index);                    /* Delete item */
 
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;

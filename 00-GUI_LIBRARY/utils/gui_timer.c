@@ -114,7 +114,7 @@ gui_timer_remove__(GUI_TIMER_t** t) {
     __GUI_ASSERTPARAMS(t && *t);                    /* Check input parameters */  
     gui_linkedlist_remove_gen(&GUI.Timers.List, (GUI_LinkedList_t *)(*t));  /* Remove timer from linked list */
     GUI_MEMFREE(*t);                                /* Free memory for timer */
-    *t = 0;                                         /* Restore pointer */
+    *t = 0;                                         /* Clear pointer */
     
     return 1;
 }

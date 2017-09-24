@@ -80,17 +80,17 @@ static const GUI_WIDGET_t Widget = {
 #define o       ((GUI_SLIDER_t *)(h))
 
 /* Check if slider is horizontal */
-#define __IsHorizontal(h)   (o->Mode == GUI_SLIDER_MODE_LEFT_RIGHT || o->Mode == GUI_SLIDER_MODE_RIGHT_LEFT)
+#define is_horizontal(h)   (o->Mode == GUI_SLIDER_MODE_LEFT_RIGHT || o->Mode == GUI_SLIDER_MODE_RIGHT_LEFT)
 
 /* Get delta value from widget */
 static GUI_Dim_t
-__GetDelta(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t he) {
+get_delta(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t he) {
     return wi > he ? he : wi;
 }
 
 /* Set slider value */
-static void 
-__SetValue(GUI_HANDLE_p h, int32_t value) {
+static uint8_t 
+set_value(GUI_HANDLE_p h, int32_t value) {
     if (value > o->Max) {
         value = o->Max;
     } else if (value < o->Min) {
@@ -99,20 +99,22 @@ __SetValue(GUI_HANDLE_p h, int32_t value) {
     if (value != o->Value) {                        /* Check difference in values */
         o->Value = value;                           /* Set new value */
         gui_widget_callback__(h, GUI_WC_ValueChanged, 0, 0);    /* Callback process */
+        return 1;
     }
+    return 0;
 }
 
 /* Process touch event */
-static void
-__TouchHandle(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
+static uint8_t
+touch_handle(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
     GUI_Dim_t pos, delta, deltaH, width, height;
     int32_t value;
             
     width = ts->WidgetWidth;
     height = ts->WidgetHeight;
-    delta = __GetDelta(h, ts->WidgetWidth, ts->WidgetHeight);   /* Get delta value */
+    delta = get_delta(h, ts->WidgetWidth, ts->WidgetHeight);   /* Get delta value */
     deltaH = delta >> 1;
-    if (__IsHorizontal(h)) {                        /* Horizontal widget */
+    if (is_horizontal(h)) {                         /* Horizontal widget */
         if (o->Mode == GUI_SLIDER_MODE_LEFT_RIGHT) {/* Inverted version to normal */
             pos = ts->RelX[0];                      /* Invert position */
         } else {
@@ -146,13 +148,12 @@ __TouchHandle(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
         value = (int32_t)(((float)(o->Max - o->Min)) * (float)pos / (float)height) + o->Min;
     }
     
-    __SetValue(h, value);                           /* Set new value */
-    gui_widget_invalidate__(h);                     /* Invalidate with parent */
+    return set_value(h, value);                     /* Set new value */
 }
 
 /* Timer callback function for slider widget */
 static void
-__TimerCallback(GUI_TIMER_t* timer) {
+timer_callback(GUI_TIMER_t* timer) {
     GUI_HANDLE_p h = (GUI_HANDLE_p)gui_timer_getparams__(timer);    /* Get user parameters */
     if (gui_widget_isactive__(h)) {                 /* Timer is in focus */
         if (__GS(h)->CurrentSize < __GS(h)->MaxSize) {
@@ -181,7 +182,7 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
             
             o->MaxSize = 4;
             o->CurrentSize = 0;
-            o->C.Timer = gui_timer_create__(30, __TimerCallback, o);    /* Create timer for widget, when widget is deleted, timer will be automatically deleted too */
+            o->C.Timer = gui_timer_create__(30, timer_callback, o);    /* Create timer for widget, when widget is deleted, timer will be automatically deleted too */
             if (!o->C.Timer) {                      /* Check if timer created */
                 *(uint8_t *)result = 0;             /* Failed, widget will be deleted */
             }
@@ -195,14 +196,14 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
                     o->Mode = *(GUI_SLIDER_MODE_t *)v->Data;
                     break;
                 case CFG_VALUE:                     /* Set current progress value */
-                    __SetValue(h, *(int32_t *)v->Data);
+                    set_value(h, *(int32_t *)v->Data);
                     break;
                 case CFG_MAX:                       /* Set maximal value */
                     tmp = *(int32_t *)v->Data;
                     if (tmp > o->Min) {
                         o->Max = tmp;
                         if (o->Value > o->Max) {
-                            __SetValue(h, tmp);
+                            set_value(h, tmp);
                         }
                     }
                     break;
@@ -211,7 +212,7 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
                     if (tmp < o->Max) {
                         o->Min = tmp;
                         if (o->Value < o->Min) {
-                            __SetValue(h, tmp);
+                            set_value(h, tmp);
                         }
                     }
                     break;
@@ -231,7 +232,7 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
             width = gui_widget_getwidth__(h);       /* Get widget width */
             height = gui_widget_getheight__(h);     /* Get widget height */
             
-            delta = __GetDelta(h, width, height);   /* Get delta value */
+            delta = get_delta(h, width, height);    /* Get delta value */
             deltaH = delta >> 1;                    /* Half of delta */
             recParam = delta >> 2;                  /* Set rectangle height */
             if (recParam == 0) {                    /* Check value */
@@ -250,7 +251,7 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
             circleSize = (deltaH >> 2) + o->CurrentSize * (deltaH - (deltaH >> 2)) / o->MaxSize;    /* Get circle size */
             
             /* Draw bottom rectangle */
-            if (__IsHorizontal(h)) {                /* Horizontal slider */
+            if (is_horizontal(h)) {                 /* Horizontal slider */
                 offset = 0;                         /* Make start offset */
                 width -= delta;
                 if (o->Mode == GUI_SLIDER_MODE_RIGHT_LEFT) {/* Right left version */
@@ -284,13 +285,13 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
         }
 #if GUI_USE_TOUCH
         case GUI_WC_TouchStart: {                   /* Touch down event */
-            __TouchHandle(h, (__GUI_TouchData_t *)param);   /* Handle touch */
+            touch_handle(h, (__GUI_TouchData_t *)param);    /* Handle touch */
             
             *(__GUI_TouchStatus_t *)result = touchHANDLED;  /* Set touch status */
             return 1;
         }
-        case GUI_WC_TouchMove: {                    /* Touch move event */            
-            __TouchHandle(h, (__GUI_TouchData_t *)param);   /* Handle touch */
+        case GUI_WC_TouchMove: {                    /* Touch move event */
+            *(__GUI_TouchStatus_t *)result = touch_handle(h, (__GUI_TouchData_t *)param) ? touchHANDLED : touchCONTINUE;
             return 1;
         }
         case GUI_WC_TouchEnd:

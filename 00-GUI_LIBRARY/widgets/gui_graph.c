@@ -79,7 +79,7 @@ static const GUI_WIDGET_t Widget = {
 /***                            Private functions                            **/
 /******************************************************************************/
 /******************************************************************************/
-#define g       ((GUI_GRAPH_t *)h)
+#define g       ((GUI_GRAPH_t *)(h))
 
 /* Reset zoom control on graph */
 static void

@@ -86,9 +86,9 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
             return 1;
         }
         case GUI_WC_Draw: {
+            uint8_t inFocus;
             GUI_Display_t* disp = (GUI_Display_t *)param;
             GUI_iDim_t x, y, wi, hi, pt, topH;
-            uint8_t inFocus;
             
             pt = gui_widget_getpaddingtop__(h);
             

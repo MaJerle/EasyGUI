@@ -81,11 +81,11 @@ static const GUI_WIDGET_t Widget = {
 /******************************************************************************/
 /******************************************************************************/
 #define p           ((GUI_PROGBAR_t *)h)
-#define __isAnim(h) (!!(__GP(h)->Flags & GUI_PROGBAR_FLAG_ANIMATE))
+#define is_anim(h) (!!(__GP(h)->Flags & GUI_PROGBAR_FLAG_ANIMATE))
 
 /* Set value for widget */
-static void
-__SetValue(GUI_HANDLE_p h, int32_t val) {
+static uint8_t
+set_value(GUI_HANDLE_p h, int32_t val) {
     if (p->DesiredValue != val && val >= p->Min && val <= p->Max) { /* Value has changed */
         p->DesiredValue = val;                      /* Set value */
         if (p->CurrentValue < p->Min) {
@@ -93,19 +93,21 @@ __SetValue(GUI_HANDLE_p h, int32_t val) {
         } else if (p->CurrentValue > p->Max) {
             p->CurrentValue = p->Max;
         }
-        if (__isAnim(h) && __GH(h)->Timer) {        /* In case of animation and timer availability */
+        if (is_anim(h) && __GH(h)->Timer) {         /* In case of animation and timer availability */
             gui_timer_start__(__GH(h)->Timer);      /* Start timer */
         } else {
             p->CurrentValue = p->DesiredValue;      /* Set values to the same */
         }
         gui_widget_invalidate__(h);                 /* Redraw widget */
         gui_widget_callback__(h, GUI_WC_ValueChanged, NULL, NULL);  /* Process callback */
+        return 1;
     }
+    return 0;
 }
 
 /* Timer callback for widget */
 static void
-__TimerCallback(GUI_TIMER_t* t) {
+timer_callback(GUI_TIMER_t* t) {
     GUI_HANDLE_p h = gui_timer_getparams__(t);      /* Get timer parameters */
     if (h) {
         if (p->CurrentValue != p->DesiredValue) {   /* Check difference */
@@ -128,7 +130,7 @@ uint8_t gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
         case GUI_WC_PreInit: {
             __GP(h)->Min = __GP(h)->CurrentValue = 0;
             __GP(h)->Max = 100;
-            __SetValue(h, 50);
+            set_value(h, 50);
             return 1;
         }
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
@@ -136,14 +138,14 @@ uint8_t gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
             int32_t tmp;
             switch (v->Type) {
                 case CFG_VALUE:                     /* Set current progress value */
-                    __SetValue(h, *(int32_t *)v->Data);
+                    set_value(h, *(int32_t *)v->Data);
                     break;
                 case CFG_MAX:                       /* Set maximal value */
                     tmp = *(int32_t *)v->Data;
                     if (tmp > p->Min) {
                         p->Max = tmp;
                         if (p->DesiredValue > p->Max || p->CurrentValue > p->Max) {
-                            __SetValue(h, tmp);
+                            set_value(h, tmp);
                         }
                     }
                     break;
@@ -152,7 +154,7 @@ uint8_t gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                     if (tmp < p->Max) {
                         p->Min = tmp;
                         if (p->DesiredValue < p->Min || p->CurrentValue < p->Min) {
-                            __SetValue(h, tmp);
+                            set_value(h, tmp);
                         }
                     }
                     break;
@@ -166,14 +168,17 @@ uint8_t gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                 case CFG_ANIM:
                     if (*(uint8_t *)v->Data) {
                         if (!__GH(h)->Timer) {
-                            __GH(h)->Timer = gui_timer_create__(10, __TimerCallback, h);    /* Create animation timer */
+                            __GH(h)->Timer = gui_timer_create__(10, timer_callback, h); /* Create animation timer */
                         }
                         if (__GH(h)->Timer) {       /* Check timer response */
                             __GP(h)->Flags |= GUI_PROGBAR_FLAG_ANIMATE; /* Enable animations */
                         }
                     } else {
                         __GP(h)->Flags &= ~GUI_PROGBAR_FLAG_ANIMATE;    /* Disable animation */
-                        __SetValue(h, p->DesiredValue); /* Reset value */
+                        if (__GH(h)->Timer) {
+                            gui_timer_remove__(&__GH(h)->Timer);    /* Remove timer */
+                        }
+                        set_value(h, p->DesiredValue);  /* Reset value */
                     }
                     break;
                 default: break;

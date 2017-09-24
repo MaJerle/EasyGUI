@@ -490,11 +490,11 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 //Create data objects
                 if (!graphdata1) {
                     graphdata1 = gui_graph_data_create(GUI_GRAPH_TYPE_XY, len);
-                    graphdata1->Color = GUI_COLOR_RED;
+                    gui_graph_data_setcolor(graphdata1, GUI_COLOR_RED);
                 }
                 if (!graphdata2) {
-                    graphdata2 = gui_graph_data_create(GUI_GRAPH_TYPE_YT, len / 2);
-                    graphdata2->Color = GUI_COLOR_GREEN;
+                    graphdata2 = gui_graph_data_create(GUI_GRAPH_TYPE_YT, len);
+                    gui_graph_data_setcolor(graphdata2, GUI_COLOR_GREEN);
                 }
 
                 //Fill data objects
@@ -518,7 +518,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
             case ID_WIN_EDIT: {         /* Edit text */
                 handle = gui_edittext_create(1, 10, 10, 400, 40, h, 0, 0);
                 gui_widget_alloctextmemory(handle, 255);
-                gui_widget_settext(handle, _GT("Edit text very long text OLA CIKAS OLA CIKAS OLA CIKASS"));
+                gui_widget_settext(handle, _GT("Single line edit text"));
                 gui_widget_setfont(handle, &GUI_Font_Arial_Narrow_Italic_21_AA);
                 
                 /* Create text field first to hold view of edit text*/
@@ -529,7 +529,7 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 gui_widget_alloctextmemory(handle, 255);
                 gui_edittext_setmultiline(handle, 1);
                 gui_edittext_setvalign(handle, GUI_EDITTEXT_VALIGN_TOP);
-                gui_widget_settext(handle, _GT("Edit\ntext\nmultiline\n\n\n\nTextText\nTexttttt\nOLAAA\nOLAAAAAAA\n\nEvenMoreText\nMoreee\n"));
+                gui_widget_settext(handle, _GT("Multi line\n edit text with auto new line support"));
                 break;
             }
             case ID_WIN_PROGBAR: {      /* Progress bar */

@@ -83,12 +83,12 @@ static const GUI_WIDGET_t Widget = {
 #define is_dir_up(h)        (__GD(h)->Flags & GUI_FLAG_DROPDOWN_OPEN_UP)
 
 /* Height increase when opened */
-#define __HeightConst(h)    4
+#define HEIGHT_CONST(h)    4
 
 /* Get Y position for main and expandend mode and height for both */
 static void
 get_opened_positions(GUI_HANDLE_p h, GUI_iDim_t* y, GUI_iDim_t* height, GUI_iDim_t* y1, GUI_iDim_t* height1) {
-    *height1 = *height / __HeightConst(h);          /* Height of main part */
+    *height1 = *height / HEIGHT_CONST(h);           /* Height of main part */
     if (is_dir_up(h)) {
         *y1 = *y + *height - *height1;              /* Position of opened part, add difference in height values */
     } else {
@@ -115,9 +115,9 @@ int16_t nr_entries_pp(GUI_HANDLE_p h) {
     if (__GH(h)->Font) {                            /* Font is responsible for this setup */
         GUI_iDim_t height = gui_widget_getheight__(h);  /* Get item height */
         if (!is_opened(h)) {
-            height *= __HeightConst(h) - 1;         /* Get height of opened area part */
+            height *= HEIGHT_CONST(h) - 1;          /* Get height of opened area part */
         } else {
-            height -= height / __HeightConst(h);    /* Subtract height for default size */
+            height -= height / HEIGHT_CONST(h);     /* Subtract height for default size */
         }
         res = height / item_height(h, NULL);        /* Calculate entries */
     }
@@ -132,9 +132,9 @@ uint8_t open_close(GUI_HANDLE_p h, uint8_t state) {
         o->OldHeight = o->C.Height;                 /* Save height for restore */
         o->OldY = o->C.Y;                           /* Save Y position for restore */
         if (is_dir_up(h)) {                         /* On up direction */
-            o->C.Y = o->C.Y - (__HeightConst(h) - 1) * o->C.Height; /* Go up for 3 height values */
+            o->C.Y = o->C.Y - (HEIGHT_CONST(h) - 1) * o->C.Height; /* Go up for 3 height values */
         }
-        o->C.Height = __HeightConst(h) * o->C.Height;
+        o->C.Height = HEIGHT_CONST(h) * o->C.Height;
         gui_widget_invalidate__(h);                 /* Invalidate widget */
         return 1;
     } else if (!state && (o->Flags & GUI_FLAG_DROPDOWN_OPENED)) {
@@ -275,7 +275,7 @@ delete_item(GUI_HANDLE_p h, uint16_t index) {
             set_selection(h, -1);
         }
         
-        check_values(h);                           /* Check widget values */
+        check_values(h);                            /* Check widget values */
         gui_widget_invalidate__(h);
         return 1;
     }
