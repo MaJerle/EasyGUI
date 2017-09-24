@@ -1091,6 +1091,7 @@ typedef GUI_HANDLE_p (*GUI_WIDGET_CreateFunc_t)(GUI_ID_t, GUI_iDim_t, GUI_iDim_t
 
 /**
  * \addtogroup      GUI_TRANSLATE
+ * \{
  */
 
 /**
