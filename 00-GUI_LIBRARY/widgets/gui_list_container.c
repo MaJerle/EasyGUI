@@ -98,8 +98,8 @@ calculate_limits(GUI_HANDLE_p h) {
         }
     }
 
-    width = gui_widget_getwidth__(h);               /* Get widget width */
-    height = gui_widget_getheight__(h);             /* Get widget height */
+    width = gui_widget_getinnerwidth__(h);          /* Get widget width */
+    height = gui_widget_getinnerheight__(h);        /* Get widget height */
     
     l->MaxScrollX = 0;
     l->MaxScrollY = 0;
