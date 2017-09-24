@@ -710,15 +710,14 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 gui_widget_setsizepercent__(handle, 100, 100);
                 for (state = 0; state < GUI_COUNT_OF(frontedWidgets); state++) {
                     h = frontedWidgets[state].createFunc(frontedWidgets[state].id,
-                        10, state * 35, 150, 30,
+                        0, state * 35, 150, 30,
                         handle, 
                         frontedWidgets[state].cbFunc, 0
                     );
                     gui_widget_settext(h, frontedWidgets[state].text);
                     gui_widget_setuserdata(h, &frontedWidgets[state].data);
                     gui_widget_set3dstyle(h, 0);
-                    gui_widget_setxpositionpercent(h, 1);
-                    gui_widget_setwidthpercent(h, 98);
+                    gui_widget_setwidthpercent(h, 100);
                 }
                 break;
             }

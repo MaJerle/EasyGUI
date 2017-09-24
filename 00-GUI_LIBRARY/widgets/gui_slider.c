@@ -148,6 +148,7 @@ touch_handle(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
         value = (int32_t)(((float)(o->Max - o->Min)) * (float)pos / (float)height) + o->Min;
     }
     
+    gui_widget_invalidate__(h);                     /* Redraw widget */
     return set_value(h, value);                     /* Set new value */
 }
 

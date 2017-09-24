@@ -82,6 +82,9 @@ calculate_limits(GUI_HANDLE_p h) {
     GUI_Dim_t x, y, width, height;
     GUI_Dim_t cmx = 0, cmy = 0;
     
+    /**
+     * Scan all children widgets and check for maximal possible scroll
+     */
     for (w = gui_linkedlist_widgetgetnext((GUI_HANDLE_ROOT_t *)h, NULL); w;
             w = gui_linkedlist_widgetgetnext(NULL, w)) {
 
@@ -127,13 +130,6 @@ gui_listcontainer_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
             return 1;
         }
         case GUI_WC_ChildWidgetCreated: {           /* Child widget has been created */
-//            GUI_Dim_t x, y, width, height;
-//            
-//            x = gui_widget_getabsolutex__(param);   /* Get absolute position on screen */
-//            y = gui_widget_getabsolutey__(param);   /* Get absolute position on screen */
-//            width = gui_widget_getwidth__(param);   /* Get widget width */
-//            height = gui_widget_getheight__(param); /* Get widget height */
-            
             return 1;
         }
         case GUI_WC_Draw: {
@@ -146,11 +142,6 @@ gui_listcontainer_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
             y = gui_widget_getabsolutey__(h);       /* Get absolute position on screen */
             width = gui_widget_getwidth__(h);       /* Get widget width */
             height = gui_widget_getheight__(h);     /* Get widget height */
-            
-            if (width != l->LastWidth && height != l->LastHeight) {
-                l->LastWidth = width;
-                l->LastHeight = height;
-            }
             
             gui_draw_filledrectangle(disp, x, y, width, height, gui_widget_getcolor__(h, GUI_LIST_CONTAINER_COLOR_BG));
             return 1;                               /* */
