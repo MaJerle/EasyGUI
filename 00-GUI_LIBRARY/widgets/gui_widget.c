@@ -555,7 +555,11 @@ gui_widget_active_set(GUI_HANDLE_p h) {
  */
 GUI_Dim_t
 gui_widget_getwidth__(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    //__GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    
+    if (!(gui_widget_iswidget__(h)) || !(GUI.Initialized)) {
+        return 0;                                   \
+    }
     
     if (gui_widget_getflag__(h, GUI_FLAG_EXPANDED)) {   /* Maximize window over parent */
         return gui_widget_getparentinnerwidth__(h); /* Return parent inner width */
@@ -586,7 +590,10 @@ gui_widget_getwidth__(GUI_HANDLE_p h) {
  */
 GUI_Dim_t
 gui_widget_getheight__(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    //__GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    if (!(gui_widget_iswidget__(h)) || !(GUI.Initialized)) {
+        return 0;                                   \
+    }
     
     if (gui_widget_getflag__(h, GUI_FLAG_EXPANDED)) {   /* Maximize window over parent */
         return gui_widget_getparentinnerheight__(h);/* Return parent inner height */
@@ -652,7 +659,7 @@ gui_widget_getabsolutey__(GUI_HANDLE_p h) {
     /* Process all parent widgets to get real absolute screen value */
     for (w = __GH(h)->Parent; w; w = __GH(w)->Parent) { /* Go through all parent windows */
         out += gui_widget_getrelativey__(w) + gui_widget_getpaddingtop__(w);    /* Add X offset from parent and left padding of parent */
-        out -= __GHR(w)->ScrollX;                   /* Decrease by scroll value */
+        out -= __GHR(w)->ScrollY;                   /* Decrease by scroll value */
     }
     return out;
 }
@@ -886,6 +893,10 @@ gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_i
         }
         gui_widget_callback__(h, GUI_WC_Init, NULL, NULL);  /* Notify user about init successful */
         gui_widget_invalidate__(h);                 /* Invalidate object */
+        
+        if (__GH(h)->Parent) {                      /* If widget has parent */
+            gui_widget_callback__(__GH(h)->Parent, GUI_WC_ChildWidgetCreated, h, NULL); /* Notify user about init successful */
+        }
         
 #if GUI_OS
         static gui_mbox_msg_t msg = {GUI_SYS_MBOX_TYPE_WIDGET_CREATED};
@@ -1477,10 +1488,10 @@ gui_widget_hide__(GUI_HANDLE_p h) {
      * TODO: Check if active/focused widget is maybe children of this widget
      */
     
-    if (GUI.FocusedWidget == h || gui_widget_ischildof__(GUI.FocusedWidget, h)) {   /* Clear focus */
+    if (GUI.FocusedWidget && (GUI.FocusedWidget == h || gui_widget_ischildof__(GUI.FocusedWidget, h))) {    /* Clear focus */
         gui_widget_focus_set(__GH(h)->Parent);      /* Set parent widget as focused now */
     }
-    if (GUI.ActiveWidget == h || gui_widget_ischildof__(GUI.ActiveWidget, h)) { /* Clear active */
+    if (GUI.ActiveWidget && (GUI.ActiveWidget == h || gui_widget_ischildof__(GUI.ActiveWidget, h))) {   /* Clear active */
         gui_widget_active_clear();
     }
     return 1;
@@ -1496,7 +1507,11 @@ gui_widget_hide__(GUI_HANDLE_p h) {
  */
 uint8_t
 gui_widget_ischildof__(GUI_HANDLE_p h, GUI_HANDLE_p parent) {
-    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h) && gui_widget_iswidget__(parent));  /* Check valid parameter */
+    //__GUI_ASSERTPARAMS(gui_widget_iswidget__(h) && gui_widget_iswidget__(parent));  /* Check valid parameter */
+    
+    if (!(gui_widget_iswidget__(h) && gui_widget_iswidget__(parent)) || !(GUI.Initialized)) {
+        return 0;                                   \
+    }
     
     for (h = __GH(h)->Parent; h; h = __GH(h)->Parent) { /* Check widget parent objects */
         if (parent == h) {                          /* If they matches */
@@ -2420,10 +2435,10 @@ uint8_t
 gui_widget_setscrollx(GUI_HANDLE_p h, GUI_iDim_t scroll) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h) && gui_widget_allowchildren__(h));  /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (gui_widget_allowchildren__(h) && __GHR(h)->ScrollX != scroll) { /* Only widgets with children support can set scroll */
+    if (__GHR(h)->ScrollX != scroll) {              /* Only widgets with children support can set scroll */
         __GHR(h)->ScrollX = scroll;
         gui_widget_invalidate__(h);
         ret = 1;
@@ -2446,10 +2461,10 @@ uint8_t
 gui_widget_setscrolly(GUI_HANDLE_p h, GUI_iDim_t scroll) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h) && gui_widget_allowchildren__(h));  /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (gui_widget_allowchildren__(h) && __GHR(h)->ScrollY != scroll) { /* Only widgets with children support can set scroll */
+    if (__GHR(h)->ScrollY != scroll) {              /* Only widgets with children support can set scroll */
         __GHR(h)->ScrollY = scroll;
         gui_widget_invalidate__(h);
         ret = 1;
@@ -2457,6 +2472,96 @@ gui_widget_setscrolly(GUI_HANDLE_p h, GUI_iDim_t scroll) {
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
+}
+
+/**
+ * \brief           Increase widget scroll on X axis
+ * \note            This is possible on widgets with children support (windows) to have scroll on X and Y
+ * \param[in,out]   h: Widget handle
+ * \param[in]       scroll: Scroll increase in units of pixels. Use negative value to decrease scroll
+ * \retval          1: Scroll was set ok
+ * \retval          0: Scroll was not set
+ * \sa              gui_widget_incscrolly
+ */
+uint8_t
+gui_widget_incscrollx(GUI_HANDLE_p h, GUI_iDim_t scroll) {
+    uint8_t ret = 0;
+    
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h) && gui_widget_allowchildren__(h));  /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    if (scroll) {                                   /* Only widgets with children support can set scroll */
+        __GHR(h)->ScrollX += scroll;
+        gui_widget_invalidate__(h);
+        ret = 1;
+    }
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
+}
+
+/**
+ * \brief           Increase widget scroll on Y axis
+ * \note            This is possible on widgets with children support (windows) to have scroll on X and Y
+ * \param[in,out]   h: Widget handle
+ * \param[in]       scroll: Scroll increase in units of pixels. Use negative value to decrease scroll
+ * \retval          1: Scroll was set ok
+ * \retval          0: Scroll was not set
+ * \sa              gui_widget_incscrollx
+ */
+uint8_t
+gui_widget_incscrolly(GUI_HANDLE_p h, GUI_iDim_t scroll) {
+    uint8_t ret = 0;
+    
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h) && gui_widget_allowchildren__(h));  /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    if (scroll) {                                   /* Only widgets with children support can set scroll */
+        __GHR(h)->ScrollY += scroll;
+        gui_widget_invalidate__(h);
+        ret = 1;
+    }
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return ret;
+}
+
+/**
+ * \brief           Get widget scroll on X axis
+ * \param[in,out]   h: Widget handle
+ * \return          Widget scroll in units of pixels
+ * \sa              gui_widget_getscrolly
+ */
+GUI_iDim_t
+gui_widget_getscrollx(GUI_HANDLE_p h) {
+    GUI_iDim_t value = 0;
+    
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h) && gui_widget_allowchildren__(h));  /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    value = __GHR(h)->ScrollX;
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return value;
+}
+
+/**
+ * \brief           Get widget scroll on Y axis
+ * \param[in,out]   h: Widget handle
+ * \return          Widget scroll in units of pixels
+ * \sa              gui_widget_getscrollx
+ */
+GUI_iDim_t
+gui_widget_getscrolly(GUI_HANDLE_p h) {
+    GUI_iDim_t value = 0;
+    
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h) && gui_widget_allowchildren__(h));  /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    value = __GHR(h)->ScrollY;
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return value;
 }
 
 /**

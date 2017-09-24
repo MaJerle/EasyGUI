@@ -699,6 +699,10 @@ uint8_t gui_widget_setyposition(GUI_HANDLE_p h, GUI_iDim_t y);
 uint8_t gui_widget_setypositionpercent(GUI_HANDLE_p h, float y);
 uint8_t gui_widget_setscrollx(GUI_HANDLE_p h, GUI_iDim_t scroll);
 uint8_t gui_widget_setscrolly(GUI_HANDLE_p h, GUI_iDim_t scroll);
+uint8_t gui_widget_incscrollx(GUI_HANDLE_p h, GUI_iDim_t scroll);
+uint8_t gui_widget_incscrolly(GUI_HANDLE_p h, GUI_iDim_t scroll);
+GUI_iDim_t gui_widget_getscrollx(GUI_HANDLE_p h);
+GUI_iDim_t gui_widget_getscrolly(GUI_HANDLE_p h);
 
 /**
  * \}

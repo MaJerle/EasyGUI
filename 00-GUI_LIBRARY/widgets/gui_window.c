@@ -175,7 +175,9 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
 #if GUI_USE_TOUCH
         case GUI_WC_TouchStart: {
             __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param; /* Get touch parameters */
-
+            if (!gui_widget_getparent__(h)) {       /* Ignore on base window */
+                return 1;
+            }
             if (ts->TS.Count == 1 && gui_widget_getflag__(h, GUI_FLAG_CHILD)) { /* For children widgets only on single touch */
                 GUI_iDim_t pt, wi;
                 pt = gui_widget_getpaddingtop__(h); /* Get top padding */
@@ -188,6 +190,7 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
                 }
                 *(__GUI_TouchStatus_t *)result = touchHANDLED;  /* Set handled status */
             } else {
+                Mode = 0;
                 *(__GUI_TouchStatus_t *)result = touchHANDLEDNOFOCUS;   /* Set handled status */
             }
             return 1;
@@ -195,7 +198,7 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
         case GUI_WC_TouchMove: {
             __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param; /* Get touch parameters */
             
-            if (Mode == 1) {
+            if (Mode == 1 && gui_widget_getflag__(h, GUI_FLAG_CHILD)) {
                 GUI_iDim_t pX, pY;
                 pX = gui_widget_getparentabsolutex__(__GH(h));
                 pY = gui_widget_getparentabsolutey__(__GH(h));

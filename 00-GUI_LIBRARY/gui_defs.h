@@ -273,6 +273,8 @@ typedef struct __GUI_TouchData_t {
     GUI_TouchData_t TS;                     /*!< Touch structure from outside */
     GUI_iDim_t RelX[GUI_TOUCH_MAX_PRESSES]; /*!< Relative X position to current widget */
     GUI_iDim_t RelY[GUI_TOUCH_MAX_PRESSES]; /*!< Relative Y position to current widget */
+    GUI_iDim_t RelOldX[GUI_TOUCH_MAX_PRESSES];  /*!< Relative X position to current widget */
+    GUI_iDim_t RelOldY[GUI_TOUCH_MAX_PRESSES];  /*!< Relative Y position to current widget */
     GUI_Dim_t WidgetWidth;                  /*!< Save widget width value */
     GUI_Dim_t WidgetHeight;                 /*!< Save widget height value */
 #if GUI_TOUCH_MAX_PRESSES > 1 || defined(DOXYGEN)
@@ -800,12 +802,20 @@ typedef enum GUI_WC_t {
      * \brief       Widget has been created and ready to init for future setup
      *
      * \note        Default values for widget can be set here.
-     *              Example: CHeckbox check can be made and default checkbox value should be set if required
+     *              Example: Checkbox check can be made and default checkbox value should be set if required
      *
      * \param[in]   *param: None
      * \param[out]  *result: None
      */
     GUI_WC_Init = 0x05,
+    
+    /**
+     * \brief       A new child widget has been added to parent's linked list. It is called on parent widget
+     *
+     * \param[in]   *param: Child widget handle
+     * \param[out]  *result: None
+     */
+    GUI_WC_ChildWidgetCreated,
     
     /**
      * \brief       Draw widget on screen

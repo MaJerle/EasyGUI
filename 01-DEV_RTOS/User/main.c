@@ -74,6 +74,7 @@ CTS         PA3                 RTS from ST to CTS from GSM
 #include "gui_keyboard.h"
 #include "gui_container.h"
 #include "gui_lcd.h"
+#include "gui_list_container.h"
 
 #include "math.h"
 
@@ -145,6 +146,7 @@ bulk_init_t frontedWidgets[] = {
     {ID_BTN_WIN_ZINDEX,     _GT("z-index"),         gui_button_create,      button_callback,    {ID_WIN_ZINDEX, _GT("z-index test page")}},
     {ID_BTN_WIN_TRANSP,     _GT("Transparency"),    gui_button_create,      button_callback,    {ID_WIN_TRANSP, _GT("Transparency presentation")}},
     {ID_BTN_WIN_WINDOW,     _GT("Window"),          gui_button_create,      button_callback,    {ID_WIN_WINDOW, _GT("Window")}},
+    {ID_BTN_WIN_LISTCONT,   _GT("List container"),  gui_button_create,      button_callback,    {ID_WIN_LISTCONT, _GT("List container")}},
     {ID_PROGBAR_CPUUSAGE,   _GT("CPU Usage"),       gui_progbar_create,     progbar_callback,   {0}},
 };
 
@@ -199,7 +201,7 @@ int main(void) {
     TM_DISCO_LedInit();                         /* Init leds */
     TM_DISCO_ButtonInit();                      /* Init button */
     TM_DELAY_Init();                            /* Init delay */
-    TM_USART_Init(DISCO_USART, DISCO_USART_PP, 115200);   /* Init USART for debug purpose */
+    TM_USART_Init(DISCO_USART, DISCO_USART_PP, 921600); /* Init USART for debug purpose */
     
     /* Print first screen message */
     printf("GUI; Compiled: %s %s\r\n", __DATE__, __TIME__);
@@ -701,6 +703,25 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 gui_slider_setvalue(handle, 0x80);
                 break;
             }
+            case ID_WIN_LISTCONT: {
+                uint8_t state;
+    
+                handle = gui_listcontainer_create(0, 0, 0, gui_lcd_getwidth(), gui_lcd_getheight(), h, 0, 0);
+                gui_widget_setsizepercent__(handle, 100, 100);
+                for (state = 0; state < GUI_COUNT_OF(frontedWidgets); state++) {
+                    h = frontedWidgets[state].createFunc(frontedWidgets[state].id,
+                        10, state * 35, 150, 30,
+                        handle, 
+                        frontedWidgets[state].cbFunc, 0
+                    );
+                    gui_widget_settext(h, frontedWidgets[state].text);
+                    gui_widget_setuserdata(h, &frontedWidgets[state].data);
+                    gui_widget_set3dstyle(h, 0);
+                    gui_widget_setxpositionpercent(h, 1);
+                    gui_widget_setwidthpercent(h, 98);
+                }
+                break;
+            }
             default:
                 break;  
         }
@@ -798,7 +819,8 @@ uint8_t button_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result)
                 case ID_BTN_WIN_SLIDER:
                 case ID_BTN_WIN_ZINDEX:
                 case ID_BTN_WIN_TRANSP: 
-                case ID_BTN_WIN_WINDOW: {
+                case ID_BTN_WIN_WINDOW: 
+                case ID_BTN_WIN_LISTCONT: {
                     btn_user_data_t* data = gui_widget_getuserdata(h);
                     uint32_t diff = id - ID_BTN_WIN_BTN;
                     if (data) {

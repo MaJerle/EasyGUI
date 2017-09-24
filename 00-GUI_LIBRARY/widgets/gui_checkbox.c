@@ -149,7 +149,7 @@ gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
             gui_draw_filledrectangle(disp, sx + 1, sy + 1, size - 2, size - 2, c1);
             gui_draw_rectangle3d(disp, sx, sy, size, size, GUI_DRAW_3D_State_Lowered);
             
-            if (gui_widget_isfocused__(h)) {        /* When in focus */
+            if (gui_widget_isfocused__(h) && !(c->Flags & GUI_FLAG_CHECKBOX_DISABLED)) {    /* When in focus */
                 gui_draw_rectangle(disp, sx + 2, sy + 2, size - 4, size - 4, gui_widget_getcolor__(h, GUI_CHECKBOX_COLOR_FG));
             }
             
@@ -180,18 +180,10 @@ gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
             
             return 1;
         }
-#if GUI_USE_TOUCH 
-        case GUI_WC_TouchStart: {
-            if (c->Flags & GUI_FLAG_CHECKBOX_DISABLED) {    /* Check if widget is disabled */
-                *(__GUI_TouchStatus_t *)result = touchHANDLEDNOFOCUS;   /* Handle touch without focus */
-            } else {
-                *(__GUI_TouchStatus_t *)result = touchHANDLED;  /* Touch is handled and in focus */
-            }
-            return 1;
-        }
-#endif /* GUI_USE_TOUCH */
         case GUI_WC_Click: {
-            set_checked(h, (c->Flags & GUI_FLAG_CHECKBOX_CHECKED) ? 0 : 1);    /* Toggle checked state */
+            if (!(c->Flags & GUI_FLAG_CHECKBOX_DISABLED)) { 
+                set_checked(h, (c->Flags & GUI_FLAG_CHECKBOX_CHECKED) ? 0 : 1); /* Toggle checked state */
+            }
             return 1;
         }
         default:                                    /* Handle default option */

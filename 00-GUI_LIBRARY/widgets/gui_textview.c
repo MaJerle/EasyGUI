@@ -125,12 +125,6 @@ gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
             }
             return 1;
         }
-#if GUI_USE_TOUCH
-        case GUI_WC_TouchStart: {
-            *(__GUI_TouchStatus_t *)result = touchHANDLED;  /* Touch has been handled */
-            return 1;
-        }
-#endif /* GUI_USE_TOUCH */
 #if GUI_USE_KEYBOARD
         case GUI_WC_KeyPress: {
             __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;

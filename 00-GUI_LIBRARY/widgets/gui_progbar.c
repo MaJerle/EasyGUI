@@ -229,12 +229,6 @@ uint8_t gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                 }
             }
         }
-#if GUI_USE_TOUCH
-        case GUI_WC_TouchStart: {
-            *(__GUI_TouchStatus_t *)result = touchHANDLEDNOFOCUS;
-            return 1;
-        }
-#endif /* GUI_USE_TOUCH */
         default:                                    /* Handle default option */
             GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */

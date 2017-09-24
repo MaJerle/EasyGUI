@@ -33,6 +33,7 @@
 #define ID_WIN_ZINDEX           (ID_BASE_WIN + 0x0F)
 #define ID_WIN_TRANSP           (ID_BASE_WIN + 0x10)
 #define ID_WIN_WINDOW           (ID_BASE_WIN + 0x11)
+#define ID_WIN_LISTCONT         (ID_BASE_WIN + 0x12)
 
 /* List of base buttons IDs */
 #define ID_BTN_WIN_BTN          (ID_BASE_BTN + 0x01)
@@ -52,6 +53,7 @@
 #define ID_BTN_WIN_ZINDEX       (ID_BASE_BTN + 0x0F)
 #define ID_BTN_WIN_TRANSP       (ID_BASE_BTN + 0x10)
 #define ID_BTN_WIN_WINDOW       (ID_BASE_BTN + 0x11)
+#define ID_BTN_WIN_LISTCONT     (ID_BASE_BTN + 0x12)
 
 #define ID_BTN_DIALOG_CONFIRM   (ID_BASE_BTN + 0x20)
 #define ID_BTN_DIALOG_CANCEL    (ID_BASE_BTN + 0x21)

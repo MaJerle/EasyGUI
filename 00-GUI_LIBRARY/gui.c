@@ -325,6 +325,8 @@ static void
 set_relative_coordinate(__GUI_TouchData_t* ts, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height) {
     uint8_t i = 0;
     for (i = 0; i < ts->TS.Count; i++) {
+        ts->RelOldX[i] = ts->RelX[i];               /* Save old on X value */
+        ts->RelOldY[i] = ts->RelY[i];               /* Save old on Y value */
         ts->RelX[i] = ts->TS.X[i] - x;              /* Get relative coordinate on widget */
         ts->RelY[i] = ts->TS.Y[i] - y;              /* Get relative coordinate on widget */
     }
@@ -480,11 +482,35 @@ gui_process_touch(void) {
             if (GUI.Touch.TS.Status && GUI.TouchOld.TS.Status) {
                 if (GUI.ActiveWidget) {             /* If active widget exists */
                     if (GUI.Touch.TS.Count == GUI.TouchOld.TS.Count) {
-                        uint8_t result = gui_widget_callback__(GUI.ActiveWidget, GUI_WC_TouchMove, &GUI.Touch, &tStat); /* The same amount of touch events currently */
-                        if (result) {               /* Check if touch move processed */
-                            gui_widget_setflag__(GUI.ActiveWidget, GUI_FLAG_TOUCH_MOVE);    /* Touch move has been processed */
-                        } else {
-                            gui_widget_clrflag__(GUI.ActiveWidget, GUI_FLAG_TOUCH_MOVE);    /* Touch move has not been processed */
+                        GUI_HANDLE_p aw = GUI.ActiveWidget; /* Temporary set active widget */
+                        tStat = touchCONTINUE;      /* Set to continue mode */
+                        do {
+                            uint8_t result = gui_widget_callback__(aw, GUI_WC_TouchMove, &GUI.Touch, &tStat); /* The same amount of touch events currently */
+                            if (result) {           /* Check if touch move processed */
+                                gui_widget_setflag__(aw, GUI_FLAG_TOUCH_MOVE);    /* Touch move has been processed */
+                            } else {
+                                gui_widget_clrflag__(aw, GUI_FLAG_TOUCH_MOVE);    /* Touch move has not been processed */
+                            }
+                            if (tStat != touchCONTINUE) {
+                                break;
+                            }
+                            aw = gui_widget_getparent__(aw);    /* Get parent widget */
+                            if (aw) {
+                                set_relative_coordinate(&GUI.Touch, /* Set relative touch (for widget) from current touch */
+                                    gui_widget_getabsolutex__(aw), gui_widget_getabsolutey__(aw), 
+                                    gui_widget_getwidth__(aw), gui_widget_getheight__(aw)
+                                );
+                                /* Reset relative coordinates here! */
+                                memcpy(GUI.Touch.RelOldX, GUI.Touch.RelX, sizeof(GUI.Touch.RelOldX));
+                                memcpy(GUI.Touch.RelOldY, GUI.Touch.RelY, sizeof(GUI.Touch.RelOldY));
+                            }
+                        } while (aw);
+                        /**
+                         * In case touch move widget was detected on another widget,
+                         * set this new widget to active from now on
+                         */
+                        if (aw && aw != GUI.ActiveWidget) {
+                            gui_widget_active_set(aw);  /* Set new active widget */
                         }
                     } else {
                         gui_widget_callback__(GUI.ActiveWidget, GUI_WC_TouchStart, &GUI.Touch, &tStat); /* New amount of touch elements happened */

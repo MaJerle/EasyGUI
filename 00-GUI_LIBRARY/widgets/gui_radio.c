@@ -149,7 +149,7 @@ gui_radio_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
             gui_draw_filledcircle(disp, sx + size / 2, sy + size / 2, size / 2, c1);
             gui_draw_circle(disp, sx + size / 2, sy + size / 2, size / 2, gui_widget_getcolor__(h, GUI_RADIO_COLOR_BORDER));
             
-            if (gui_widget_isfocused__(h)) {        /* When in focus */
+            if (gui_widget_isfocused__(h) && !(c->Flags & GUI_FLAG_RADIO_DISABLED)) {   /* When in focus */
                 gui_draw_circle(disp, sx + size / 2, sy + size / 2, size / 2 - 2, gui_widget_getcolor__(h, GUI_RADIO_COLOR_FG));
             }
 
@@ -174,19 +174,12 @@ gui_radio_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
             
             return 1;
         }
-#if GUI_USE_TOUCH 
-        case GUI_WC_TouchStart: {
-            if (__GR(h)->Flags & GUI_FLAG_RADIO_DISABLED) { /* Ignore disabled state */
-                *(__GUI_TouchStatus_t *)result = touchHANDLEDNOFOCUS;
-            } else {
-                *(__GUI_TouchStatus_t *)result = touchHANDLED;
+        case GUI_WC_Click: {
+            if (!(c->Flags & GUI_FLAG_RADIO_DISABLED)) {
+                set_active(h);                      /* Set widget as active */
+                gui_widget_invalidate__(h);         /* Invalidate widget */
             }
             return 1;
-        }
-#endif /* GUI_USE_TOUCH */
-        case GUI_WC_Click: {
-            set_active(h);                          /* Set widget as active */
-            gui_widget_invalidate__(h);             /* Invalidate widget */
         }
         default:                                    /* Handle default option */
             GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */

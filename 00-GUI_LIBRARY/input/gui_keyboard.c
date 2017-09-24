@@ -512,12 +512,12 @@ keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) 
             /***************************/
             /*   Configure keyboard    */
             /***************************/
-            gui_widget_setsizepercent__(h, 100, 50);    /* Set keyboard size */
+            gui_widget_setsizepercent__(h, 100, 50);/* Set keyboard size */
             gui_widget_setpositionpercent__(h, 0, 100); /* Set position of keyboard outside visible area */
             gui_widget_setzindex__(h, GUI_WIDGET_ZINDEX_MAX);   /* Set to maximal z-index */
-            gui_widget_hide__(h);                       /* Hide keyboard by default */
+            gui_widget_hide__(h);                   /* Hide keyboard by default */
             
-            Kbd.DefaultFont = __GH(h)->Font;            /* Save current font */
+            Kbd.DefaultFont = __GH(h)->Font;        /* Save current font */
             
             /***************************/
             /* Create keyboard layouts */
