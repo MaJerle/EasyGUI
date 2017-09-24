@@ -156,8 +156,10 @@ uint8_t gui_graph_zoomreset(GUI_HANDLE_p h);
 uint8_t gui_graph_zoom(GUI_HANDLE_p h, float zoom, float x, float y);
 uint8_t gui_graph_attachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
 uint8_t gui_graph_detachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data);
+
 GUI_GRAPH_DATA_p gui_graph_data_create(GUI_GRAPH_TYPE_t type, size_t length);
 uint8_t gui_graph_data_addvalue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y);
+uint8_t gui_graph_data_setcolor(GUI_GRAPH_DATA_p data, GUI_Color_t color);
  
 /**
  * \}

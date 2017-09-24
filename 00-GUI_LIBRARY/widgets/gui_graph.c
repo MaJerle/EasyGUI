@@ -406,68 +406,6 @@ gui_graph_setcolor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t color) {
 }
 
 /**
- * \brief           Attach new data object to graph widget
- * \param[in,out]   h: Graph widget handle
- * \param[in]       data: Data object handle
- * \retval          1: Attaching was successful
- * \retval          0: Attaching failed
- * \sa              gui_graph_detachdata
- */
-uint8_t
-gui_graph_attachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    /**
-     * Linked list of data plots for this graph
-     */
-    gui_linkedlist_multi_add_gen(&__GG(h)->Root, data);
-
-#if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
-    /**
-     * Linked list of graphs for this data plot
-     * This linked list is not on top!
-     * Must subtract list element offset when using graphs from data
-     */
-    gui_linkedlist_multi_add_gen(&data->Root, h);
-#endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return 1;
-}
-
-/**
- * \brief           Detach existing data object from graph widget
- * \param[in,out]   h: Graph widget handle
- * \param[in]       data: Data object handle
- * \retval          1: Detaching was successful
- * \retval          0: Detaching failed
- * \sa              gui_graph_attachdata
- */
-uint8_t
-gui_graph_detachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget && data);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    /**
-     * Linked list of data plots for this graph
-     * Remove data from graph's linked list
-     */
-    gui_linkedlist_multi_find_remove(&__GG(h)->Root, data);
-
-#if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
-    /**
-     * Linked list of graphs for this data plot
-     * Remove graph from data linked list
-     */
-    gui_linkedlist_multi_find_remove(&data->Root, h);
-#endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return 1;
-}
-
-/**
  * \brief           Set minimal X value of plot
  * \param[in,out]   h: Widget handle
  * \param[in]       v: New minimal X value
@@ -555,6 +493,68 @@ gui_graph_zoom(GUI_HANDLE_p h, float zoom, float x, float y) {
     return 1;
 }
 
+/**
+ * \brief           Attach new data object to graph widget
+ * \param[in,out]   h: Graph widget handle
+ * \param[in]       data: Data object handle
+ * \retval          1: Attaching was successful
+ * \retval          0: Attaching failed
+ * \sa              gui_graph_detachdata
+ */
+uint8_t
+gui_graph_attachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    /**
+     * Linked list of data plots for this graph
+     */
+    gui_linkedlist_multi_add_gen(&__GG(h)->Root, data);
+
+#if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
+    /**
+     * Linked list of graphs for this data plot
+     * This linked list is not on top!
+     * Must subtract list element offset when using graphs from data
+     */
+    gui_linkedlist_multi_add_gen(&data->Root, h);
+#endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
+}
+
+/**
+ * \brief           Detach existing data object from graph widget
+ * \param[in,out]   h: Graph widget handle
+ * \param[in]       data: Data object handle
+ * \retval          1: Detaching was successful
+ * \retval          0: Detaching failed
+ * \sa              gui_graph_attachdata
+ */
+uint8_t
+gui_graph_detachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget && data);    /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    /**
+     * Linked list of data plots for this graph
+     * Remove data from graph's linked list
+     */
+    gui_linkedlist_multi_find_remove(&__GG(h)->Root, data);
+
+#if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
+    /**
+     * Linked list of graphs for this data plot
+     * Remove graph from data linked list
+     */
+    gui_linkedlist_multi_find_remove(&data->Root, h);
+#endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
+}
+
 /*************************/
 /* GRAPH DATA functions  */
 /*************************/
@@ -620,6 +620,29 @@ gui_graph_data_addvalue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y) {
 #if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
     graph_invalidate(data);                         /* Invalidate graphs attached to this data object */
 #endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
+}
+
+/**
+ * \brief           Set color for graph data
+ * \param[in,out]   data: Pointer to \ref GUI_GRAPH_DATA_p structure with valid data
+ * \param[in]       color: New color for data
+ * \retval          1: New color set ok
+ * \retval          0: New color was not set
+ */
+uint8_t
+gui_graph_data_setcolor(GUI_GRAPH_DATA_p data, GUI_Color_t color) {
+    __GUI_ASSERTPARAMS(data);                       /* Check input parameters */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    if (data->Color != color) {                     /* Check color change */
+        data->Color = color;                        /* Set new color */
+#if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
+        graph_invalidate(data);                     /* Invalidate graphs attached to this data object */
+#endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
+    }
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;
