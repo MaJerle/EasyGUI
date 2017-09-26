@@ -56,6 +56,8 @@ extern "C" {
  * Memory management can be used in multiple regions which may optimize RAM usage, for example:
  *  - Use TCM/CCM RAM for widget structures (low amount of bytes, up to ~150, but depends on widget)
  *  - Use of large amount of memory (ex. temporary frame buffers) on external RAM (SDRAM) module if supported by embedded device
+ *
+ * \note            All functions are thread safe and can be used by application if required
  */
 
 /**
@@ -70,14 +72,6 @@ typedef struct mem_region_t {
  * \brief           Wrapper for memory region for GUI
  */
 typedef mem_region_t GUI_MEM_Region_t;
-    
-/**
- * \defgroup        GUI_MEM_Int Internal functions
- * \note            Internal functions are not thread safe but since GUI API is thread safe,
- *                  they can be easily used inside API for fast processing without locking check
- * \brief           Internal functions API which is not thread safe
- * \{
- */
 
 void* gui_mem_alloc(uint32_t size);
 void* gui_mem_realloc(void* ptr, size_t size);
@@ -86,10 +80,6 @@ void gui_mem_free(void* ptr);
 size_t gui_mem_getfree(void);
 size_t gui_mem_getfull(void);
 size_t gui_mem_getminfree(void);
-  
-/**
- * \}
- */
 
 uint8_t gui_mem_assignmemory(const GUI_MEM_Region_t* regions, size_t size);
     

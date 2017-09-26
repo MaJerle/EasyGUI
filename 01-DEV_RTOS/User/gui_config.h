@@ -109,6 +109,13 @@
 #define GUI_USE_TRANSLATE               1
 
 /**
+ * \brief           Enables (1) or disables (0) library custom allocation algorithm.
+ *      
+ *                  When set to 0, malloc and free functions must be provided by system and sufficient dynamic memory must be resolved by user.
+ */
+#define GUI_USE_MEM                     1
+
+/**
  * \brief           Memory alignment setup, used for memory allocation in systems where unaligned memory access is not allowed
  * \note            Value must be power of 2, in most cases number 4 will be ok.
  *

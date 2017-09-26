@@ -41,9 +41,6 @@ typedef struct MemBlock {
     size_t Size;                                    /*!< Size of block */
 } MemBlock_t;
 
-
-#define GUI_USE_MEM                 1               /*!< Use internal memory allocation */
-
 /**
  * \brief           Memory alignment bits and absolute number
  */
@@ -231,7 +228,7 @@ mem_assignmem(const mem_region_t* regions, size_t len) {
     return 1;                                       /* Regions set as expected */
 }
 
-void*
+static void*
 mem_alloc(size_t size) {
     MemBlock_t *Prev, *Curr, *Next;
     void* retval = 0;
@@ -305,7 +302,7 @@ mem_alloc(size_t size) {
     return retval;
 }
 
-void
+static void
 mem_free(void* ptr) {
     MemBlock_t* block;
 
@@ -331,7 +328,7 @@ mem_free(void* ptr) {
 }
 
 /* Get size of user memory from input pointer */
-size_t
+static size_t
 mem_getusersize(void* ptr) {
     MemBlock_t* block;
     
@@ -346,7 +343,7 @@ mem_getusersize(void* ptr) {
 }
 
 /* Allocate memory and set it to 0 */
-void*
+static void*
 mem_calloc(size_t num, size_t size) {
     void* ptr;
     size_t tot_len = num * size;
@@ -358,7 +355,7 @@ mem_calloc(size_t num, size_t size) {
 }
 
 /* Reallocate previously allocated memory */
-void*
+static void*
 mem_realloc(void* ptr, size_t size) {
     void* newPtr;
     size_t oldSize;
@@ -377,17 +374,17 @@ mem_realloc(void* ptr, size_t size) {
     return 0;
 }
 
-size_t
+static size_t
 mem_getfree(void) {
     return MemAvailableBytes;                       /* Return free bytes available for allocation */
 }
 
-size_t
+static size_t
 mem_getfull(void) {
     return MemTotalSize - MemAvailableBytes;        /* Return remaining bytes */
 }
 
-size_t
+static size_t
 mem_getminfree(void) {
     return MemMinAvailableBytes;                    /* Return minimal bytes ever available */
 }

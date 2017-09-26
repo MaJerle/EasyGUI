@@ -44,8 +44,9 @@ extern "C" {
 #include "gui.h"
 
 /**
- * \defgroup        GUI_LCD
+ * \defgroup        GUI_LCD LCD
  * \brief           LCD info specific functions
+ * \{
  */
 
 GUI_iDim_t gui_lcd_getwidth(void);

@@ -49,7 +49,7 @@ extern "C" {
  *
  * This widget supports scrolling (similar to ListView in Android).
  * When subwidgets are put to it and if they don't support touch move event,
- * even will be forwarded to next widget level (List container) and in 
+ * event will be forwarded to next widget level (List container) and in 
  * case there are widgets outside visible area, they will be scrolled.
  */
 
