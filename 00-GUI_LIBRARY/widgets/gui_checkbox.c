@@ -47,7 +47,7 @@
 #define CFG_CHECK           0x01
 #define CFG_DISABLE         0x02
 
-static uint8_t gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -109,10 +109,10 @@ set_disabled(GUI_HANDLE_p h, uint8_t state) {
 }
 
 static uint8_t
-gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
-            GUI_WIDGET_Param_t* p = (GUI_WIDGET_Param_t *)param;
+            GUI_WIDGET_Param_t* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
             switch (p->Type) {
                 case CFG_CHECK:                     /* Set current progress value */
                     set_checked(h, *(uint8_t *)p->Data);
@@ -122,11 +122,11 @@ gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
                     break;
                 default: break;
             }
-            *(uint8_t *)result = 1;                 /* Save result */
+            GUI_WIDGET_RESULTTYPE_U8(result) = 1;                 /* Save result */
             return 1;
         }
         case GUI_WC_Draw: {
-            GUI_Display_t* disp = (GUI_Display_t *)param;
+            GUI_Display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
             GUI_Color_t c1;
             GUI_Dim_t x, y, width, height, size, sx, sy;
             

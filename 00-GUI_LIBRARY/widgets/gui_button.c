@@ -46,7 +46,7 @@
 
 #define CFG_BORDER_RADIUS   0x01
 
-static uint8_t gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
     
 /******************************************************************************/
 /******************************************************************************/
@@ -76,7 +76,7 @@ static const GUI_WIDGET_t Widget = {
 #define b                   ((GUI_BUTTON_t *)(h))
 
 static uint8_t
-gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
@@ -84,16 +84,16 @@ gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
             return 1;
         }
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
-            GUI_WIDGET_Param_t* p = (GUI_WIDGET_Param_t *)param;
+            GUI_WIDGET_Param_t* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
             switch (p->Type) {
                 case CFG_BORDER_RADIUS: b->BorderRadius = *(GUI_Dim_t *)p->Data; break; /* Set max X value to widget */
                 default: break;
             }
-            *(uint8_t *)result = 1;                 /* Save result */
+            GUI_WIDGET_RESULTTYPE_U8(result) = 1;                 /* Save result */
             return 1;
         }
         case GUI_WC_Draw: {
-            GUI_Display_t* disp = (GUI_Display_t *)param;
+            GUI_Display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
             GUI_Color_t c1, c2;
             GUI_Dim_t x, y, width, height;
             
@@ -142,10 +142,10 @@ gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
         }
 #if GUI_USE_KEYBOARD
         case GUI_WC_KeyPress: {
-            __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;
+            __GUI_KeyboardData_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (kb->KB.Keys[0] == GUI_KEY_CR || kb->KB.Keys[0] == GUI_KEY_LF) {
                 gui_widget_callback__(h, GUI_WC_Click, 0, 0);   /* Process click */
-                *(__GUI_KeyboardStatus_t *)result = keyHANDLED; /* Key handled */
+                GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }
             return 1;
         }

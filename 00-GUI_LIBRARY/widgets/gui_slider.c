@@ -49,7 +49,7 @@
 #define CFG_MIN             0x03
 #define CFG_MAX             0x04
 
-static uint8_t gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -173,7 +173,7 @@ timer_callback(GUI_TIMER_t* timer) {
 
 /* Callback function */
 static uint8_t
-gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) { 
+gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) { 
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
@@ -185,12 +185,12 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
             o->CurrentSize = 0;
             o->C.Timer = gui_timer_create__(30, timer_callback, o);    /* Create timer for widget, when widget is deleted, timer will be automatically deleted too */
             if (!o->C.Timer) {                      /* Check if timer created */
-                *(uint8_t *)result = 0;             /* Failed, widget will be deleted */
+                GUI_WIDGET_RESULTTYPE_U8(result) = 0;             /* Failed, widget will be deleted */
             }
             return 1;
         }
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
-            GUI_WIDGET_Param_t* v = (GUI_WIDGET_Param_t *)param;
+            GUI_WIDGET_Param_t* v = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
             int32_t tmp;
             switch (v->Type) {
                 case CFG_MODE:                      /* Set current progress value */
@@ -219,11 +219,11 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
                     break;
                 default: break;
             }
-            *(uint8_t *)result = 1;                 /* Save result */
+            GUI_WIDGET_RESULTTYPE_U8(result) = 1;                 /* Save result */
             return 1;
         }
         case GUI_WC_Draw: {
-            GUI_Display_t* disp = (GUI_Display_t *)param;
+            GUI_Display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
             GUI_Dim_t x, y, width, height, delta, deltaH, recParam, offset;
             GUI_Color_t c1, c2;
             GUI_Dim_t circleSize;
@@ -286,13 +286,13 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
         }
 #if GUI_USE_TOUCH
         case GUI_WC_TouchStart: {                   /* Touch down event */
-            touch_handle(h, (__GUI_TouchData_t *)param);    /* Handle touch */
+            touch_handle(h, GUI_WIDGET_PARAMTYPE_TOUCH(param));    /* Handle touch */
             
-            *(__GUI_TouchStatus_t *)result = touchHANDLED;  /* Set touch status */
+            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;  /* Set touch status */
             return 1;
         }
         case GUI_WC_TouchMove: {                    /* Touch move event */
-            *(__GUI_TouchStatus_t *)result = touch_handle(h, (__GUI_TouchData_t *)param) ? touchHANDLED : touchCONTINUE;
+            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touch_handle(h, GUI_WIDGET_PARAMTYPE_TOUCH(param)) ? touchHANDLED : touchCONTINUE;
             return 1;
         }
         case GUI_WC_TouchEnd:

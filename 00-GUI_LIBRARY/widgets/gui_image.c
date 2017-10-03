@@ -44,7 +44,7 @@
 /******************************************************************************/
 #define __GI(x)             ((GUI_IMAGE_t *)(x))
 
-static uint8_t gui_image_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_image_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -68,11 +68,11 @@ static const GUI_WIDGET_t Widget = {
 #define o       ((GUI_IMAGE_t *)(h))
 
 static uint8_t
-gui_image_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+gui_image_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
-            GUI_Display_t* disp = (GUI_Display_t *)param;
+            GUI_Display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
             GUI_Dim_t x, y;
 
             x = gui_widget_getabsolutex__(h);       /* Get absolute X coordinate */

@@ -54,7 +54,7 @@ typedef struct DDList_t {
 /******************************************************************************/
 #define __GW(x)             ((GUI_WINDOW_t *)(x))
 
-static uint8_t gui_dialog_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_dialog_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
 static
 GUI_LinkedListRoot_t DDList;                        /*!< List of dismissed dialog elements which are not read yet */
@@ -119,7 +119,7 @@ get_dialog(GUI_HANDLE_p h) {
 
 /* Default dialog callback */
 static uint8_t
-gui_dialog_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+gui_dialog_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Remove: {
@@ -129,7 +129,7 @@ gui_dialog_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
             return 1;
         }
         case GUI_WC_OnDismiss: {
-            int dv = *(int *)param;                 /* Get dismiss parameter value */
+            int dv = GUI_WIDGET_PARAMTYPE_INT(param);   /* Get dismiss parameter value */
             GUI_UNUSED(dv);                         /* Unused parameters */
             return 1;
         }
@@ -237,6 +237,7 @@ uint8_t
 gui_dialog_dismiss(GUI_HANDLE_p h, int status) {
     DDList_t* l;
     uint8_t ret = 0;
+    GUI_WIDGET_PARAM_t param = {0};
     
     /* Do not check widget type as it is not dialog type but create function widget type */
     __GUI_ASSERTPARAMS(h);                          /* Check input parameters */
@@ -245,7 +246,9 @@ gui_dialog_dismiss(GUI_HANDLE_p h, int status) {
     l = get_dialog(h);                              /* Get entry from list */
     if (l) {
         l->status = status;                         /* Save status for later */
-        gui_widget_callback__(h, GUI_WC_OnDismiss, (int *)&l->status, 0);   /* Process callback */
+        
+        GUI_WIDGET_PARAMTYPE_INT(&param) = l->status;
+        gui_widget_callback__(h, GUI_WC_OnDismiss, &param, NULL);   /* Process callback */
 #if GUI_OS
         if (l->ib && gui_sys_sem_isvalid(&l->sem)) {/* Check if semaphore is valid */
             gui_sys_sem_release(&l->sem);           /* Release locked semaphore */

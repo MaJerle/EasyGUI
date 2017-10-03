@@ -231,6 +231,11 @@ void myFunc(drv_t* drv) {
 #define             gui_containerof(ptr, type, memb)      (type *)((char *)(ptr) - (char *)offsetof(type, memb))
 
 /**
+ * \brief           Global event callback function declaration
+ */
+typedef void (*GUI_EventCallback_t)(void);
+
+/**
  * \brief           Color gradient definition
  */
 typedef struct GUI_Gradient_t {
@@ -790,7 +795,7 @@ typedef enum GUI_WC_t {
     GUI_WC_SetParam = 0x03,
     
     /**
-     * \brief       Get parameter fror widget
+     * \brief       Get parameter for widget
      *
      * \param[in]   *param: Pointer to \ref GUI_WIDGET_Param_t structure with identification and memory where to save parameter value
      * \param[out]  *result: None
@@ -1005,15 +1010,46 @@ typedef enum GUI_WC_t {
     GUI_WC_OnDismiss,
 } GUI_WC_t;
 
-/**
- * \brief           Structure declaration
- */
 struct GUI_HANDLE;
 
 /**
  * \brief           Handle object for GUI widget
  */
 typedef struct GUI_HANDLE* GUI_HANDLE_p;
+
+/**
+ * \brief           Structure used in setting and getting parameter values from widgets using callbacks
+ */
+typedef struct GUI_WIDGET_Param {
+    uint16_t Type;                          /*!< Type of command to set or get */
+    void* Data;                             /*!< Pointer to actual data to set or get to for specific widget */
+} GUI_WIDGET_Param_t;
+
+/**
+ * \brief           Structure of input parameters for widget callback
+ */
+typedef struct GUI_WIDGET_PARAM {
+    union {
+        GUI_Display_t* disp;                /*!< Pointer to input display data */
+        __GUI_TouchData_t* td;              /*!< Pointer to input touch data */
+        __GUI_KeyboardData_t* kd;           /*!< Pointer to input keyboard data */
+        struct GUI_WIDGET_Param* wp;        /*!< Widget parameter */
+        int16_t i16;                        /*!< Signed 16-bit value */
+        GUI_HANDLE_p h;                     /*!< Widget handle */
+        int i;
+    } u;                                    /*!< Union of possible parameters */
+} GUI_WIDGET_PARAM_t;
+
+/**
+ * \brief           Structure of output results for widget callback
+ */
+typedef struct GUI_WIDGET_RESULT {
+    union {
+        uint8_t u8;                         /*!< Unsigned char result */
+        __GUI_TouchStatus_t ts;             /*!< Touch status result */
+        __GUI_KeyboardStatus_t ks;          /*!< Keyboard status result */
+    } u;                                    /*!< Union of possible results */
+} GUI_WIDGET_RESULT_t;
 
 /**
  * \brief           Callback function for widget
@@ -1026,7 +1062,19 @@ typedef struct GUI_HANDLE* GUI_HANDLE_p;
  *                      - Value change, selection change
  *                      - and more
  */
-typedef uint8_t (*GUI_WIDGET_CALLBACK_t) (GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result);
+typedef uint8_t (*GUI_WIDGET_CALLBACK_t) (GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
+
+#define GUI_WIDGET_PARAMTYPE_DISP(x)            (x)->u.disp
+#define GUI_WIDGET_PARAMTYPE_TOUCH(x)           (x)->u.td
+#define GUI_WIDGET_PARAMTYPE_KEYBOARD(x)        (x)->u.kd
+#define GUI_WIDGET_PARAMTYPE_WIDGETPARAM(x)     (x)->u.wp
+#define GUI_WIDGET_PARAMTYPE_I16(x)             (x)->u.i16
+#define GUI_WIDGET_PARAMTYPE_HANDLE(x)          (x)->u.h
+#define GUI_WIDGET_PARAMTYPE_INT(x)             (x)->u.i
+
+#define GUI_WIDGET_RESULTTYPE_TOUCH(x)          (x)->u.ts
+#define GUI_WIDGET_RESULTTYPE_KEYBOARD(x)       (x)->u.ks
+#define GUI_WIDGET_RESULTTYPE_U8(x)             (x)->u.u8
 
 /**
  * \brief           Structure for each widget type
@@ -1080,14 +1128,6 @@ typedef struct GUI_HANDLE_ROOT {
     GUI_iDim_t ScrollX;                     /*!< Scroll of widgets in horizontal direction in units of pixels */
     GUI_iDim_t ScrollY;                     /*!< Scroll of widgets in vertical direction in units of pixels */
 } GUI_HANDLE_ROOT_t;
-
-/**
- * \brief           Structure used in setting and getting parameter values from widgets using callbacks
- */
-typedef struct GUI_WIDGET_Param_t {
-    uint16_t Type;                          /*!< Type of command to set or get */
-    void* Data;                             /*!< Pointer to actual data to set or get to for specific widget */
-} GUI_WIDGET_Param_t;
 #endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
 /**

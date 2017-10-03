@@ -48,7 +48,7 @@
 #define CFG_VALIGN          0x02
 #define CFG_HALIGN          0x03
     
-static uint8_t gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
     
 /******************************************************************************/
 /******************************************************************************/
@@ -82,7 +82,7 @@ static const GUI_WIDGET_t Widget = {
 
 /* Widget callback */
 static uint8_t
-gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
@@ -91,7 +91,7 @@ gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
             return 1;
         }
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
-            GUI_WIDGET_Param_t* p = (GUI_WIDGET_Param_t *)param;
+            GUI_WIDGET_Param_t* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
             switch (p->Type) {
                 case CFG_MULTILINE:                 /* Enable/Disable multiline */
                     if (*(uint8_t *)p->Data && !is_multiline(h)) {
@@ -108,12 +108,12 @@ gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
                     break;
                 default: break;
             }
-            *(uint8_t *)result = 1;                 /* Save result */
+            GUI_WIDGET_RESULTTYPE_U8(result) = 1;                 /* Save result */
             return 1;
         }
         case GUI_WC_Draw: {
             GUI_Dim_t x, y, width, height;
-            GUI_Display_t* disp = (GUI_Display_t *)param;
+            GUI_Display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
     
             x = gui_widget_getabsolutex__(h);       /* Get absolute X coordinate */
             y = gui_widget_getabsolutey__(h);       /* Get absolute Y coordinate */
@@ -160,15 +160,15 @@ gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
             return 1;
 #if GUI_USE_TOUCH
         case GUI_WC_TouchStart: {
-            *(__GUI_TouchStatus_t *)result = touchHANDLED;
+            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
         }
 #endif /* GUI_USE_TOUCH */
 #if GUI_USE_KEYBOARD
         case GUI_WC_KeyPress: {
-            __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;
+            __GUI_KeyboardData_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (gui_widget_processtextkey__(h, kb)) {
-                *(__GUI_KeyboardStatus_t *)result = keyHANDLED; /* Key handled */
+                GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }
             return 1;
         }

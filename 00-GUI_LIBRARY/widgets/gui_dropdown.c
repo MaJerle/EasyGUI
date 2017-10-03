@@ -44,7 +44,7 @@
 /******************************************************************************/
 #define __GD(x)             ((GUI_DROPDOWN_t *)(x))
 
-static uint8_t gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -317,7 +317,7 @@ process_click(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
 }
 
 static uint8_t
-gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
 #if GUI_USE_TOUCH
     static GUI_iDim_t tY;
 #endif /* GUI_USE_TOUCH */
@@ -330,7 +330,7 @@ gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
             return 1;
         }
         case GUI_WC_Draw: {
-            GUI_Display_t* disp = (GUI_Display_t *)param;
+            GUI_Display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
             GUI_iDim_t x, y, width, height;
             GUI_iDim_t y1, height1;                 /* Position of main widget part, when widget is opened */
             
@@ -449,14 +449,14 @@ gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
         }
 #if GUI_USE_TOUCH
         case GUI_WC_TouchStart: {
-            __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
+            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             tY = ts->RelY[0];                       /* Save relative Y position */
             
-            *(__GUI_TouchStatus_t *)result = touchHANDLED;
+            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
         }
         case GUI_WC_TouchMove: {
-            __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
+            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             if (__GH(h)->Font) {
                 GUI_Dim_t height = item_height(h, NULL);   /* Get element height */
                 GUI_iDim_t diff = tY - ts->RelY[0];
@@ -470,7 +470,7 @@ gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
         }
 #endif /* GUI_USE_TOUCH */
         case GUI_WC_Click: {
-            __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
+            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             if (!is_opened(h)) {                    /* Check widget status */
                 open_close(h, 1);                   /* Open widget */
             } else {                                /* Widget opened, process data */
@@ -484,20 +484,20 @@ gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) 
         }
 #if GUI_USE_KEYBOARD
         case GUI_WC_KeyPress: {
-            __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;
+            __GUI_KeyboardData_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (kb->KB.Keys[0] == GUI_KEY_DOWN) {   /* On pressed down */
                 inc_selection(h, 1);                /* Increase selection */
-                *(__GUI_KeyboardStatus_t *)result = keyHANDLED; /* Key has been pressed */
+                GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             } else if (kb->KB.Keys[0] == GUI_KEY_UP) {
                 inc_selection(h, -1);               /* Decrease selection */
-                *(__GUI_KeyboardStatus_t *)result = keyHANDLED; /* Key has been pressed */
+                GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }
             return 1;
         }
 #endif /* GUI_USE_KEYBOARD */
         case GUI_WC_IncSelection: {
-            inc_selection(h, *(int16_t *)param);    /* Increase selection */
-            *(uint8_t *)result = 1;                 /* Set operation result */
+            inc_selection(h, GUI_WIDGET_PARAMTYPE_I16(param));  /* Increase selection */
+            GUI_WIDGET_RESULTTYPE_U8(result) = 1;                 /* Set operation result */
             return 1;
         }
         default:                                    /* Handle default option */

@@ -13,7 +13,7 @@
 #define LCD_WIDTH                   480
 #define LCD_HEIGHT                  272
 
-#define LCD_COLOR_FORMAT_ARGB8888//RGB565
+#define LCD_COLOR_FORMAT_RGB565
 #endif /* defined(STM32F7_DISCOVERY) */
 
 /*****************************/

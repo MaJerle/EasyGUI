@@ -284,6 +284,9 @@ typedef struct GUI_t {
     
     GUI_LinkedListRoot_t RootFonts;         /*!< Root linked list of font widgets */
     
+    GUI_WIDGET_PARAM_t WidgetParam;
+    GUI_WIDGET_RESULT_t WidgetResult;
+    
 #if GUI_USE_TOUCH || defined(DOXYGEN)
     __GUI_TouchData_t TouchOld;             /*!< Old touch data, used for event management */
     __GUI_TouchData_t Touch;                /*!< Current touch data and processing tool */
@@ -298,6 +301,8 @@ typedef struct GUI_t {
 #if GUI_OS
     GUI_OS_t OS;                            /*!< Operating system dependant structure */
 #endif /* GUI_OS */
+
+    GUI_EventCallback_t EventCb;            /*!< Pointer to global GUI event callback function */
     
     uint8_t Initialized;                    /*!< Status indicating GUI is initialized */
 } GUI_t;
@@ -312,6 +317,7 @@ extern GUI_t GUI;
 
 GUI_Result_t gui_init(void);
 int32_t gui_process(void);
+uint8_t gui_seteventcallback(GUI_EventCallback_t cb);
  
 /**
  * \}

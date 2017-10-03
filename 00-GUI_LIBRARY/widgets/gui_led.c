@@ -48,7 +48,7 @@
 #define CFG_SET             0x02
 #define CFG_TYPE            0x03
 
-static uint8_t gui_led_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_led_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
     
 /******************************************************************************/
 /******************************************************************************/
@@ -79,11 +79,11 @@ static const GUI_WIDGET_t Widget = {
 #define l           ((GUI_LED_t *)(h))
 
 static uint8_t
-gui_led_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+gui_led_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
-            GUI_WIDGET_Param_t* p = (GUI_WIDGET_Param_t *)param;
+            GUI_WIDGET_Param_t* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
             switch (p->Type) {
                 case CFG_SET:
                     if (*(uint8_t *)p->Data) {
@@ -100,11 +100,11 @@ gui_led_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
                     break;
                 default: break;
             }
-            *(uint8_t *)result = 1;                 /* Save result */
+            GUI_WIDGET_RESULTTYPE_U8(result) = 1;                 /* Save result */
             return 1;
         }
         case GUI_WC_Draw: {
-            GUI_Display_t* disp = (GUI_Display_t *)param;
+            GUI_Display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
             GUI_Color_t c1, c2;
             GUI_Dim_t x, y, width, height;
             

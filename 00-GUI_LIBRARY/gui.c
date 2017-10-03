@@ -149,7 +149,8 @@ redraw_widgets(GUI_HANDLE_p parent) {
                 /**
                  * Draw widget itself normally, don't care on layer offset and size
                  */
-                gui_widget_callback__(h, GUI_WC_Draw, &GUI.DisplayTemp, NULL);  /* Draw widget */
+                GUI_WIDGET_PARAMTYPE_DISP(&GUI.WidgetParam) = &GUI.DisplayTemp;  /* Set parameter */
+                gui_widget_callback__(h, GUI_WC_Draw, &GUI.WidgetParam, &GUI.WidgetResult); /* Draw widget */
                 
                 /* Check if there are children widgets in this widget */
                 if (gui_widget_allowchildren__(h)) {
@@ -321,6 +322,7 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
     PT_END(&ts->pt);                                /* Stop thread execution */
 }
 
+/* Set relative coordinates from touch press for selected widget */
 static void
 set_relative_coordinate(__GUI_TouchData_t* ts, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height) {
     uint8_t i = 0;
@@ -342,6 +344,7 @@ set_relative_coordinate(__GUI_TouchData_t* ts, GUI_iDim_t x, GUI_iDim_t y, GUI_i
 #endif /* GUI_TOUCH_MAX_PRESSES > 1 */
 }
 
+/** Process touch entry */
 static __GUI_TouchStatus_t
 process_touch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;
@@ -395,7 +398,9 @@ process_touch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent) {
                 ); 
             
                 /* Call touch start callback to see if widget accepts touches */
-                gui_widget_callback__(h, GUI_WC_TouchStart, touch, &tStat);
+                GUI_WIDGET_PARAMTYPE_TOUCH(&GUI.WidgetParam) = touch;
+                gui_widget_callback__(h, GUI_WC_TouchStart, &GUI.WidgetParam, &GUI.WidgetResult);
+                tStat = GUI_WIDGET_RESULTTYPE_TOUCH(&GUI.WidgetResult);
                 if (tStat == touchCONTINUE) {       /* Check result status */
                     tStat = touchHANDLED;           /* If command is processed, touchCONTINUE can't work */
                 }
@@ -449,10 +454,12 @@ process_touch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent) {
 }
 
 #define __ProcessAfterTouchEventsThread() do {\
-    if (result != 0) {                  /* Valid event occurred */\
-        uint8_t ret = gui_widget_callback__(GUI.ActiveWidget, result, &GUI.Touch, NULL);\
-        if (result == GUI_WC_DblClick && !ret) {    /* If double click was not recorded, proceed with normal click again */\
-            gui_widget_callback__(GUI.ActiveWidget, GUI_WC_Click, &GUI.Touch, NULL);    /* Check for normal click now */\
+    if (rresult != 0) {                             /* Valid event occurred */\
+        uint8_t ret;                                \
+        GUI_WIDGET_PARAMTYPE_TOUCH(&param) = &GUI.Touch;    \
+        ret = gui_widget_callback__(GUI.ActiveWidget, rresult, &param, NULL);\
+        if (rresult == GUI_WC_DblClick && !ret) {   /* If double click was not recorded, proceed with normal click again */\
+            gui_widget_callback__(GUI.ActiveWidget, GUI_WC_Click, &param, NULL);    /* Check for normal click now */\
         }\
     }\
 } while (0)
@@ -462,8 +469,9 @@ process_touch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent) {
  */
 static void
 gui_process_touch(void) {
-    __GUI_TouchStatus_t tStat;
-    GUI_WC_t result;
+    GUI_WIDGET_PARAM_t param = {0};
+    GUI_WIDGET_RESULT_t result = {0};
+    GUI_WC_t rresult;
     
     if (gui_input_touchavailable()) {               /* Check if any touch available */
         while (gui_input_touchread(&GUI.Touch.TS)) {/* Process all touch events possible */
@@ -483,17 +491,23 @@ gui_process_touch(void) {
                 if (GUI.ActiveWidget) {             /* If active widget exists */
                     if (GUI.Touch.TS.Count == GUI.TouchOld.TS.Count) {
                         GUI_HANDLE_p aw = GUI.ActiveWidget; /* Temporary set active widget */
-                        tStat = touchCONTINUE;      /* Set to continue mode */
                         do {
-                            uint8_t result = gui_widget_callback__(aw, GUI_WC_TouchMove, &GUI.Touch, &tStat); /* The same amount of touch events currently */
-                            if (result) {           /* Check if touch move processed */
+                            uint8_t r;
+                            GUI_WIDGET_PARAMTYPE_TOUCH(&param) = &GUI.Touch;
+                            GUI_WIDGET_RESULTTYPE_TOUCH(&result) = touchCONTINUE;
+                            r = gui_widget_callback__(aw, GUI_WC_TouchMove, &param, &result);   /* The same amount of touch events currently */
+                            if (r) {                /* Check if touch move processed */
                                 gui_widget_setflag__(aw, GUI_FLAG_TOUCH_MOVE);    /* Touch move has been processed */
                             } else {
                                 gui_widget_clrflag__(aw, GUI_FLAG_TOUCH_MOVE);    /* Touch move has not been processed */
                             }
-                            if (tStat != touchCONTINUE) {
+                            if (GUI_WIDGET_RESULTTYPE_TOUCH(&result) != touchCONTINUE) {
                                 break;
                             }
+                            /**
+                             * If widget does not detect touch start, then forward touch start to parent widget.
+                             * With this approach, you can achieve slider on parent widget
+                             */
                             aw = gui_widget_getparent__(aw);    /* Get parent widget */
                             if (aw) {
                                 set_relative_coordinate(&GUI.Touch, /* Set relative touch (for widget) from current touch */
@@ -513,7 +527,9 @@ gui_process_touch(void) {
                             gui_widget_active_set(aw);  /* Set new active widget */
                         }
                     } else {
-                        gui_widget_callback__(GUI.ActiveWidget, GUI_WC_TouchStart, &GUI.Touch, &tStat); /* New amount of touch elements happened */
+                        GUI_WIDGET_PARAMTYPE_TOUCH(&param) = &GUI.Touch;
+                        GUI_WIDGET_RESULTTYPE_TOUCH(&result) = touchCONTINUE;
+                        gui_widget_callback__(GUI.ActiveWidget, GUI_WC_TouchStart, &param, &result);    /* New amount of touch elements happened */
                     }
                 }
             }
@@ -534,7 +550,7 @@ gui_process_touch(void) {
              * Periodical check for events on active widget
              */
             if (GUI.ActiveWidget) {
-                __TouchEvents_Thread(&GUI.Touch, &GUI.TouchOld, 1, &result);    /* Call thread for touch process */
+                __TouchEvents_Thread(&GUI.Touch, &GUI.TouchOld, 1, &rresult);   /* Call thread for touch process */
                 __ProcessAfterTouchEventsThread();  /* Process after event macro */
             }
             
@@ -545,7 +561,9 @@ gui_process_touch(void) {
              */
             if (!GUI.Touch.TS.Status && GUI.TouchOld.TS.Status) {
                 if (GUI.ActiveWidget) {             /* Check if active widget */
-                    gui_widget_callback__(GUI.ActiveWidget, GUI_WC_TouchEnd, &GUI.Touch, &tStat);   /* Process callback function */
+                    GUI_WIDGET_PARAMTYPE_TOUCH(&param) = &GUI.Touch;
+                    GUI_WIDGET_RESULTTYPE_TOUCH(&result) = touchCONTINUE;
+                    gui_widget_callback__(GUI.ActiveWidget, GUI_WC_TouchEnd, &param, &result);  /* Process callback function */
                     gui_widget_active_clear();      /* Clear active widget */
                 }
             }
@@ -553,7 +571,7 @@ gui_process_touch(void) {
             memcpy((void *)&GUI.TouchOld, (void *)&GUI.Touch, sizeof(GUI.Touch));   /* Copy current touch to last touch status */
         }
     } else {                                        /* No new touch events, periodically call touch event thread */
-        __TouchEvents_Thread(&GUI.Touch, &GUI.TouchOld, 0, &result);    /* Call thread for touch process periodically, handle long presses or timeouts */
+        __TouchEvents_Thread(&GUI.Touch, &GUI.TouchOld, 0, &rresult);   /* Call thread for touch process periodically, handle long presses or timeouts */
         __ProcessAfterTouchEventsThread();          /* Process after event macro */
     }
 }
@@ -563,15 +581,18 @@ gui_process_touch(void) {
 static void
 process_keyboard(void) {
     __GUI_KeyboardData_t key;
-    __GUI_KeyboardStatus_t kStat;
+    
+    GUI_WIDGET_PARAM_t param = {0};
+    GUI_WIDGET_RESULT_t result = {0};
     
     while (gui_input_keyread(&key.KB)) {            /* Read all keyboard entires */
         if (GUI.FocusedWidget) {                    /* Check if any widget is in focus already */
-            kStat = keyCONTINUE;
-            gui_widget_callback__(GUI.FocusedWidget, GUI_WC_KeyPress, &key, &kStat);
-            if (kStat != keyHANDLED) {
+            GUI_WIDGET_PARAMTYPE_KEYBOARD(&param) = &key;
+            GUI_WIDGET_RESULTTYPE_KEYBOARD(&result) = keyCONTINUE;
+            gui_widget_callback__(GUI.FocusedWidget, GUI_WC_KeyPress, &param, &result);
+            if (GUI_WIDGET_RESULTTYPE_KEYBOARD(&result) != keyHANDLED) {
                 if (key.KB.Keys[0] == GUI_KEY_TAB) {/* Tab key pressed, set next widget as focused */
-                    GUI_HANDLE_p h = gui_linkedlist_widgetgetnext(NULL, GUI.FocusedWidget);   /* Get next widget if possible */
+                    GUI_HANDLE_p h = gui_linkedlist_widgetgetnext(NULL, GUI.ActiveWidget);  /* Get next widget if possible */
                     if (h && gui_widget_ishidden__(h)) {    /* Ignore hidden widget */
                         h = 0;
                     }
@@ -641,6 +662,14 @@ process_redraw(void) {
     GUI.Display.Y2 = 0x8000;
 }
 
+/**
+ * \brief           Default global callback function
+ */
+static void
+gui_default_event_cb(void) {
+
+}
+
 #if GUI_OS
 /**
  * \brief           GUI main thread for RTOS
@@ -678,6 +707,8 @@ gui_init(void) {
     uint8_t result;
     
     memset((void *)&GUI, 0x00, sizeof(GUI_t));      /* Reset GUI structure */
+    
+    gui_seteventcallback(NULL);                     /* Set event callback */
     
 #if GUI_OS
     /* Init system */
@@ -724,6 +755,7 @@ gui_init(void) {
 
 /**
  * \brief           Processes all drawing operations for GUI
+ * \note            When GUI_OS is set to 0, then user has to call this function in main loop, otherwise it is processed in separated thread by GUI (GUI_OS != 0)
  * \retval          Number of jobs done in current call
  */
 int32_t
@@ -755,4 +787,19 @@ gui_process(void) {
     __GUI_SYS_UNPROTECT();                          /* Release protection */
     
     return 0;                                       /* Return number of elements updated on GUI */
+}
+
+/**
+ * \brief           Set callback for global events from GUI
+ * \param[in]       cb: Callback function
+ * \return          0 on failure, non-zero otherwise
+ */
+uint8_t
+gui_seteventcallback(GUI_EventCallback_t cb) {
+    if (cb) {
+        GUI.EventCb = cb;                           /*!< Set user callback */
+    } else {
+        GUI.EventCb = gui_default_event_cb;         /*!< Set default callback */
+    }
+    return 1;
 }

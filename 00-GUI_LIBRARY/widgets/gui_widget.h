@@ -52,31 +52,30 @@ extern "C" {
  *
  * \par Next widget link
  *
- * Next widget in linked list is used to get next widget for drawing operation
+ * Next widget in linked list is used to get next widget for drawing operation.
  * Widget which is at the end of linked list is later visible on top on LCD.
- *
- * Drawing operations starts with 
  *
  * \par Previous widget link
  *
  * Previous link is used to get widget which is "behind" current widget. 
- * This link is used for touch management where widget at the end of linked list is first checked for events (touch, mouse, etc)
+ * This link is used for touch management where widget at the end of linked list is first checked for events (touch, mouse, etc) because it is visible on top
  *
  * \par Parent widget
  * 
- * Link to parent widget is always required to calculate currect widget position on LCD and for other tasks (like percentage width relative to parent, etc)
+ * Link to parent widget is always required to calculate currect widget position on LCD and for other tasks (like percentage width, etc)
  *
  * \par Children first widget
  *
  * Children links are supported on widgets which implement \ref GUI_HANDLE_ROOT_t structure to handle children widgets (such as windows).
- * It hold link to less important widget (drawed first, less visible in some cases)
+ * It holds link to first children widget on the list.
  *
  * \par Children last widget
  *
  * Children last widget is used for events processing (touch, mouse, etc)
  *
- *
- * Any operation on widgets structure (change Z-index, put on front, etc) is only moving widgets on linked list.
+ * <hr />
+ * Any operation on widget structure (change Z-index, put on front, etc) is only moving widgets on linked list.
+ * With this, you can change visible order and also order how events are processed (touch, keyboard).
  * Linked list is most important part of GUI library therefore it is designed in robust way.
  */
     
@@ -790,9 +789,9 @@ uint8_t gui_widget_remove(GUI_HANDLE_p* h);
  * \{
  */
 
-uint8_t gui_widget_processdefaultcallback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+uint8_t gui_widget_processdefaultcallback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 uint8_t gui_widget_setcallback(GUI_HANDLE_p h, GUI_WIDGET_CALLBACK_t callback);
-uint8_t gui_widget_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+uint8_t gui_widget_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
 /**
  * \}

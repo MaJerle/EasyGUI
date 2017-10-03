@@ -309,7 +309,7 @@ KeyboardInfo_t Kbd = {.ActionValue = 10};   /* Set action value to max */
 /******************************************************************************/
 /* Callback for keyboard button */
 static uint8_t
-keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
+keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     switch (cmd) {                                  /* Process commands */
         case GUI_WC_Draw: {
             GUI_Char str[10] = {0};
@@ -458,7 +458,7 @@ keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
 
 /* Callback for keyboard base widget */
 static uint8_t
-keyboard_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
+keyboard_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     switch (cmd) {
         case GUI_WC_Init: {
             return 1;
@@ -493,12 +493,12 @@ keyboard_timer_callback(GUI_TIMER_t* timer) {
 
 /* Callback function for base element of keyboard */
 static uint8_t
-keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, void* param, void* result) {
+keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     switch (cmd) {
         case GUI_WC_PreInit: {
             __GH(h)->Timer = gui_timer_create__(60, keyboard_timer_callback, 0);    /* Create timer */
             if (!__GH(h)->Timer) {
-                *(uint8_t *)result = 0;             /* Failed, stop and clear memory */
+                GUI_WIDGET_RESULTTYPE_U8(result) = 0;             /* Failed, stop and clear memory */
             }
             return 1;
         }

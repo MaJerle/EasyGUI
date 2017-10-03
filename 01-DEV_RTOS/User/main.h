@@ -73,6 +73,7 @@
 
 #define ID_SLIDER_0             (ID_BASE_SLIDER + 0x01)
 #define ID_SLIDER_1             (ID_BASE_SLIDER + 0x02)
+#define ID_SLIDER_2             (ID_BASE_SLIDER + 0x03)
 
 #define ID_BUTTON_0             (ID_BASE_BTN + 0x040)
 #define ID_BUTTON_1             (ID_BASE_BTN + 0x041)

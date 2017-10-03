@@ -44,7 +44,7 @@
 /******************************************************************************/
 #define __GL(x)             ((GUI_LISTBOX_t *)(x))
 
-static uint8_t gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -220,7 +220,7 @@ delete_item(GUI_HANDLE_p h, uint16_t index) {
 }
 
 static uint8_t
-gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
 #if GUI_USE_TOUCH
     static GUI_iDim_t tY;
 #endif /* GUI_USE_TOUCH */
@@ -233,7 +233,7 @@ gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
             return 1;
         }
         case GUI_WC_Draw: {
-            GUI_Display_t* disp = (GUI_Display_t *)param;
+            GUI_Display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
             GUI_Dim_t x, y, width, height;
             
             x = gui_widget_getabsolutex__(h);       /* Get absolute X coordinate */
@@ -317,14 +317,14 @@ gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
         }
 #if GUI_USE_TOUCH
         case GUI_WC_TouchStart: {
-            __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
+            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             tY = ts->RelY[0];
             
-            *(__GUI_TouchStatus_t *)result = touchHANDLED;
+            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
         }
         case GUI_WC_TouchMove: {
-            __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
+            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             if (__GH(h)->Font) {
                 GUI_Dim_t height = item_height(h, NULL);   /* Get element height */
                 GUI_iDim_t diff = tY - ts->RelY[0];
@@ -338,7 +338,7 @@ gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
         }
 #endif /* GUI_USE_TOUCH */
         case GUI_WC_Click: {
-            __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
+            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             uint8_t handled = 0;
             GUI_Dim_t width = gui_widget_getwidth__(h); /* Get widget widget */
             GUI_Dim_t height = gui_widget_getheight__(h);   /* Get widget height */
@@ -367,7 +367,7 @@ gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
         }
 #if GUI_USE_KEYBOARD
         case GUI_WC_KeyPress: {
-            __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;
+            __GUI_KeyboardData_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (kb->KB.Keys[0] == GUI_KEY_DOWN) {   /* On pressed down */
                 inc_selection(h, 1);                /* Increase selection */
             } else if (kb->KB.Keys[0] == GUI_KEY_UP) {
@@ -377,8 +377,8 @@ gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
         }
 #endif /* GUI_USE_KEYBOARD */
         case GUI_WC_IncSelection: {
-            inc_selection(h, *(int16_t *)param);    /* Increase selection */
-            *(uint8_t *)result = 1;                 /* Set operation result */
+            inc_selection(h, GUI_WIDGET_PARAMTYPE_I16(param));  /* Increase selection */
+            GUI_WIDGET_RESULTTYPE_U8(result) = 1;                 /* Set operation result */
             return 1;
         }
         default:                                    /* Handle default option */

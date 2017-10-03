@@ -51,7 +51,7 @@
 #define CFG_MAX_Y           0x04
 #define CFG_ZOOM_RESET      0x05
 
-static uint8_t gui_graph_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_graph_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -104,7 +104,7 @@ graph_zoom(GUI_HANDLE_p h, float zoom, float xpos, float ypos) {
 }
 
 static uint8_t
-gui_graph_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+gui_graph_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
 #if GUI_USE_TOUCH
 static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
 #endif /* GUI_USE_TOUCH */    
@@ -126,7 +126,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
             return 1;
         }
         case GUI_WC_SetParam: {                     /* Set parameter from widget */
-            GUI_WIDGET_Param_t* p = (GUI_WIDGET_Param_t *)param;
+            GUI_WIDGET_Param_t* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
             switch (p->Type) {
                 case CFG_MIN_X: g->MinX = *(float *)p->Data; break; /* Set max X value to widget */
                 case CFG_MAX_X: g->MaxX = *(float *)p->Data; break; /* Set max X value to widget */
@@ -135,7 +135,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 case CFG_ZOOM_RESET: graph_reset(h); break; /* Reset zoom */
                 default: break;
             }
-            *(uint8_t *)result = 1;                 /* Save result */
+            GUI_WIDGET_RESULTTYPE_U8(result) = 1;                 /* Save result */
             return 1;
         }
         case GUI_WC_Draw: {                         /* Draw widget */
@@ -143,7 +143,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
             GUI_LinkedListMulti_t* link;
             GUI_iDim_t bt, br, bb, bl, x, y, width, height;
             uint8_t i;
-            GUI_Display_t* disp = (GUI_Display_t *)param;   /* Get display pointer */
+            GUI_Display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);   /* Get display pointer */
             
             bt = g->Border[GUI_GRAPH_BORDER_TOP];
             br = g->Border[GUI_GRAPH_BORDER_RIGHT];
@@ -266,17 +266,17 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
         }
 #if GUI_USE_TOUCH
         case GUI_WC_TouchStart: {                   /* Touch down event */
-            __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
+            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             uint8_t i = 0;
             for (i = 0; i < ts->TS.Count; i++) {
                 tX[i] = ts->RelX[i];                /* Relative X position on widget */
                 tY[i] = ts->RelY[i];                /* Relative Y position on widget */
             }
-            *(__GUI_TouchStatus_t *)result = touchHANDLED;  /* Set touch status */
+            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;  /* Set touch status */
             return 1;
         }
         case GUI_WC_TouchMove: {                    /* Touch move event */
-            __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param;
+            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             uint8_t i;
             GUI_iDim_t x, y;
             float diff, step;

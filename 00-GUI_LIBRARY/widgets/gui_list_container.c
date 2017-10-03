@@ -48,7 +48,7 @@
 #define CFG_SET             0x02
 #define CFG_TYPE            0x03
 
-static uint8_t gui_listcontainer_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_listcontainer_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
     
 /******************************************************************************/
 /******************************************************************************/
@@ -122,7 +122,7 @@ calculate_limits(GUI_HANDLE_p h) {
 }
 
 static uint8_t
-gui_listcontainer_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+gui_listcontainer_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
@@ -133,7 +133,7 @@ gui_listcontainer_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
             return 1;
         }
         case GUI_WC_Draw: {
-            GUI_Display_t* disp = (GUI_Display_t *)param;
+            GUI_Display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
             GUI_Dim_t x, y, width, height;
             
             calculate_limits(h);                    /* Calculate new limits for scrolling */
@@ -148,12 +148,12 @@ gui_listcontainer_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* res
         }
 #if GUI_USE_TOUCH
         case GUI_WC_TouchStart: {
-            *(__GUI_TouchStatus_t *)result = touchHANDLED;
+            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
         }
         case GUI_WC_TouchMove: {
-            __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param; /* Get touch parameters */
-            *(__GUI_TouchStatus_t *)result = touchHANDLED;
+            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
+            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
             gui_widget_incscrolly(h, ts->RelOldY[0] - ts->RelY[0]);
             if (gui_widget_getscrolly(h) < 0) {
                 gui_widget_setscrolly(h, 0);

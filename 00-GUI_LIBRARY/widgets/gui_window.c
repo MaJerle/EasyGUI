@@ -44,7 +44,7 @@
 /******************************************************************************/
 #define __GW(x)             ((GUI_WINDOW_t *)(x))
 
-static uint8_t gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
     
 /******************************************************************************/
 /******************************************************************************/
@@ -74,7 +74,7 @@ static const GUI_WIDGET_t Widget = {
 /******************************************************************************/
 #define w          ((GUI_WINDOW_t *)h)
 static uint8_t
-gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
 #if GUI_USE_TOUCH
    static GUI_iDim_t tX, tY, Mode = 0;
 #endif /* GUI_USE_TOUCH */
@@ -87,7 +87,7 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
         }
         case GUI_WC_Draw: {
             uint8_t inFocus;
-            GUI_Display_t* disp = (GUI_Display_t *)param;
+            GUI_Display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
             GUI_iDim_t x, y, wi, hi, pt, topH;
             
             pt = gui_widget_getpaddingtop__(h);
@@ -174,7 +174,7 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
         }
 #if GUI_USE_TOUCH
         case GUI_WC_TouchStart: {
-            __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param; /* Get touch parameters */
+            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             if (!gui_widget_getparent__(h)) {       /* Ignore on base window */
                 return 1;
             }
@@ -188,15 +188,15 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
                     tX = ts->RelX[0];
                     tY = ts->RelY[0];
                 }
-                *(__GUI_TouchStatus_t *)result = touchHANDLED;  /* Set handled status */
+                GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;  /* Set handled status */
             } else {
                 Mode = 0;
-                *(__GUI_TouchStatus_t *)result = touchHANDLEDNOFOCUS;   /* Set handled status */
+                GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLEDNOFOCUS;   /* Set handled status */
             }
             return 1;
         }
         case GUI_WC_TouchMove: {
-            __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param; /* Get touch parameters */
+            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             
             if (Mode == 1 && gui_widget_getflag__(h, GUI_FLAG_CHILD)) {
                 GUI_iDim_t pX, pY;
@@ -218,7 +218,7 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
 #endif /* GUI_USE_TOUCH */
         case GUI_WC_Click: {
             GUI_iDim_t pt, wi;
-            __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param; /* Get touch parameters */
+            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             
             pt = gui_widget_getpaddingtop__(h);     /* Get top padding */
             wi = gui_widget_getwidth__(h);          /* Get widget width */
@@ -237,7 +237,7 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
         }
         case GUI_WC_DblClick: {
             GUI_iDim_t pt;
-            __GUI_TouchData_t* ts = (__GUI_TouchData_t *)param; /* Get touch parameters */
+            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             
             pt = gui_widget_getpaddingtop__(h);     /* Get top padding */
             
@@ -248,19 +248,19 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
         }
 #if GUI_USE_KEYBOARD
         case GUI_WC_KeyPress: {
-            __GUI_KeyboardData_t* kb = (__GUI_KeyboardData_t *)param;
+            __GUI_KeyboardData_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (kb->KB.Keys[0] == GUI_KEY_DOWN) {
                 gui_widget_setposition__(h, __GH(h)->X, __GH(h)->Y + 1);
-                *(__GUI_KeyboardStatus_t *)result = keyHANDLED;
+                GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             } else if (kb->KB.Keys[0] == GUI_KEY_UP) {
                 gui_widget_setposition__(h, __GH(h)->X, __GH(h)->Y - 1);
-                *(__GUI_KeyboardStatus_t *)result = keyHANDLED;
+                GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             } else if (kb->KB.Keys[0] == GUI_KEY_LEFT) {
                 gui_widget_setposition__(h, __GH(h)->X - 1, __GH(h)->Y);
-                *(__GUI_KeyboardStatus_t *)result = keyHANDLED;
+                GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             } else if (kb->KB.Keys[0] == GUI_KEY_RIGHT) {
                 gui_widget_setposition__(h, __GH(h)->X + 1, __GH(h)->Y);
-                *(__GUI_KeyboardStatus_t *)result = keyHANDLED;
+                GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }
             return 1;
         }

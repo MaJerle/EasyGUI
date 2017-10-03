@@ -198,8 +198,15 @@ set_clipping_region(GUI_HANDLE_p h) {
     
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
-    /* Get visible widget part and absolute position on screen */
+    /**
+     * TODO: If widget is visible only part of it (below other widgets)
+     * find this part and set clipping region according to actual visible area
+     */
+    
+    /* Get visible widget part and absolute position on screen according to parent */
     get_lcd_abs_position_and_visible_width_height(h, &x1, &y1, &x2, &y2);
+    
+    /* TODO Get actual visible widget part according to other widgets above current one */
     
     /* Set invalid clipping region */
     if (GUI.Display.X1 > x1)    { GUI.Display.X1 = x1; }
@@ -233,7 +240,7 @@ invalidate_widget(GUI_HANDLE_p h, uint8_t setclipping) {
     /**
      * Invalid only widget with higher Z-index (lowered on linked list) of current object
      * 
-     * If widget should be redrawn, then any widget above it should be redrawn too, otherwise z-index match will fail
+     * If widget should be redrawn, then any widget above it should be redrawn too, otherwise z-index match will fail.
      *
      * Widget may not need redraw operation if positions don't match
      *
@@ -363,7 +370,7 @@ set_widget_position(GUI_HANDLE_p h, float x, float y) {
 /* Check if widget can be (or not) removed for some reason */
 static uint8_t
 can_remove_widget(GUI_HANDLE_p h) {
-    uint8_t r = 1;
+    GUI_WIDGET_RESULT_t result = {0};
     
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
@@ -377,14 +384,15 @@ can_remove_widget(GUI_HANDLE_p h) {
     /**
      * Check widget status itself
      */
-    if (!gui_widget_callback__(h, GUI_WC_Remove, 0, &r) || r) { /* If command was not processed, allow delete */
-        r = 1;                                      /* Manually allow delete */
+    GUI_WIDGET_RESULTTYPE_U8(&result) = 1;
+    if (!gui_widget_callback__(h, GUI_WC_Remove, NULL, &result) || GUI_WIDGET_RESULTTYPE_U8(&result)) { /* If command was not processed, allow delete */
+        GUI_WIDGET_RESULTTYPE_U8(&result) = 1;      /* Manually allow delete */
     }
     
     /**
      * Check children widgets recursively
      */
-    if (r && gui_widget_allowchildren__(h)) {       /* Check if we can delete all children widgets */
+    if (GUI_WIDGET_RESULTTYPE_U8(&result) && gui_widget_allowchildren__(h)) {   /* Check if we can delete all children widgets */
         GUI_HANDLE_p h1;
         for (h1 = gui_linkedlist_widgetgetnext((GUI_HANDLE_ROOT_t *)h, NULL); h1;
                 h1 = gui_linkedlist_widgetgetnext(NULL, h1)) {
@@ -394,7 +402,7 @@ can_remove_widget(GUI_HANDLE_p h) {
         }
     }
     
-    return r;
+    return GUI_WIDGET_RESULTTYPE_U8(&result);
 }
 
 /* Check if widget is inside LCD invalidate region */
@@ -727,7 +735,7 @@ gui_widget_invalidate__(GUI_HANDLE_p h) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
-    ret = invalidate_widget(h, 1);                /* Invalidate widget with clipping */
+    ret = invalidate_widget(h, 1);                  /* Invalidate widget with clipping */
     
     if (
         (
@@ -735,7 +743,7 @@ gui_widget_invalidate__(GUI_HANDLE_p h) {
             gui_widget_getcoreflag__(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT) ||
             gui_widget_istransparent__(h)           /* At least little transparent */
         ) && __GH(h)->Parent) {
-        invalidate_widget(__GH(h)->Parent, 0); /* Invalidate parent object too but without clipping */
+        invalidate_widget(__GH(h)->Parent, 0);      /* Invalidate parent object too but without clipping */
     }
 #if GUI_OS
     gui_sys_mbox_putnow(&GUI.OS.mbox, &msg_widget_invalidate);
@@ -825,7 +833,6 @@ gui_widget_set3dstyle__(GUI_HANDLE_p h, uint8_t enable) {
 void*
 gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_HANDLE_p h;
-    GUI_Byte result = 0;
     
     __GUI_ASSERTPARAMS(widget && widget->Callback); /* Check input parameters */
     
@@ -842,6 +849,9 @@ gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_i
     
     h = GUI_MEMALLOC(widget->Size);                 /* Allocate memory for widget */
     if (h) {
+        GUI_WIDGET_PARAM_t param = {0};
+        GUI_WIDGET_RESULT_t result = {0};
+    
         __GUI_ENTER();                              /* Enter GUI */
         memset(h, 0x00, widget->Size);              /* Set memory to 0 */
         
@@ -868,10 +878,10 @@ gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_i
             }
         }
         
-        result = 1;                                 /* We are OK at starting point */
+        GUI_WIDGET_RESULTTYPE_U8(&result) = 1;
         gui_widget_callback__(h, GUI_WC_PreInit, NULL, &result);    /* Notify internal widget library about init successful */
         
-        if (!result) {                              /* Check result */
+        if (!GUI_WIDGET_RESULTTYPE_U8(&result)) {   /* Check result */
             GUI_MEMFREE(h);                         /* Clear widget memory */
             h = 0;                                  /* Reset handle */
             return 0;                               /* Stop execution at this point */
@@ -886,16 +896,17 @@ gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_i
         gui_widget_clrflag__(h, GUI_FLAG_IGNORE_INVALIDATE);    /* Include invalidation process */
         gui_widget_invalidate__(h);                 /* Invalidate properly now when everything is set correctly = set for valid clipping region part */
 
-        result = 0;
-        gui_widget_callback__(h, GUI_WC_ExcludeLinkedList, 0, &result);
-        if (!result) {                              /* Check if widget should be added to linked list */
+        GUI_WIDGET_RESULTTYPE_U8(&result) = 0;
+        gui_widget_callback__(h, GUI_WC_ExcludeLinkedList, NULL, &result);
+        if (!GUI_WIDGET_RESULTTYPE_U8(&result)) {   /* Check if widget should be added to linked list */
             gui_linkedlist_widgetadd((GUI_HANDLE_ROOT_t *)__GH(h)->Parent, h);  /* Add entry to linkedlist of parent widget */
         }
         gui_widget_callback__(h, GUI_WC_Init, NULL, NULL);  /* Notify user about init successful */
         gui_widget_invalidate__(h);                 /* Invalidate object */
         
         if (__GH(h)->Parent) {                      /* If widget has parent */
-            gui_widget_callback__(__GH(h)->Parent, GUI_WC_ChildWidgetCreated, h, NULL); /* Notify user about init successful */
+            GUI_WIDGET_PARAMTYPE_HANDLE(&param) = h;
+            gui_widget_callback__(__GH(h)->Parent, GUI_WC_ChildWidgetCreated, &param, NULL);    /* Notify user about init successful */
         }
         
 #if GUI_OS
@@ -1668,12 +1679,18 @@ gui_widget_getuserdata__(GUI_HANDLE_p h) {
 uint8_t
 gui_widget_setparam__(GUI_HANDLE_p h, uint16_t cfg, const void* data, uint8_t invalidate, uint8_t invalidateparent) {
     GUI_WIDGET_Param_t p;
-    uint8_t result = 1;
+    GUI_WIDGET_PARAM_t param = {0};
+    GUI_WIDGET_RESULT_t result = {0};
+    
+    GUI_WIDGET_PARAMTYPE_WIDGETPARAM(&param) = &p;
+    GUI_WIDGET_RESULTTYPE_U8(&result) = 1;
     
     p.Type = cfg;
     p.Data = (void *)data;
+    
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
-    gui_widget_callback__(h, GUI_WC_SetParam, &p, &result); /* Process callback function */
+    gui_widget_callback__(h, GUI_WC_SetParam, &param, &result); /* Process callback function */
     if (invalidateparent) {
         gui_widget_invalidatewithparent__(h);       /* Invalidate widget and parent */
     } else if (invalidate) {
@@ -2364,7 +2381,7 @@ gui_widget_getuserdata(GUI_HANDLE_p h) {
  * \retval          0: Command has not been processed
  */
 uint8_t
-gui_widget_processdefaultcallback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+gui_widget_processdefaultcallback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -2410,7 +2427,7 @@ gui_widget_setcallback(GUI_HANDLE_p h, GUI_WIDGET_CALLBACK_t callback) {
  * \sa              gui_widget_setcallback
  */
 uint8_t
-gui_widget_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+gui_widget_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -2605,11 +2622,15 @@ gui_widget_setfontdefault(const GUI_FONT_t* font) {
 uint8_t
 gui_widget_incselection(GUI_HANDLE_p h, int16_t dir) {
     uint8_t ret = 0;
+    GUI_WIDGET_PARAM_t param = {0};
+    GUI_WIDGET_RESULT_t result = {0};
+    
+    GUI_WIDGET_PARAMTYPE_I16(&param) = dir;         /* Set parameter */
     
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = gui_widget_callback__(h, GUI_WC_IncSelection, &dir, &ret);    /* Increase selection for specific amount */
+    ret = gui_widget_callback__(h, GUI_WC_IncSelection, &param, &result);   /* Increase selection for specific amount */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;

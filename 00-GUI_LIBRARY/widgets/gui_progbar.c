@@ -53,7 +53,7 @@
 #define CFG_PERCENT         0x04
 #define CFG_ANIM            0x05
 
-static uint8_t gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result);
+static uint8_t gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -124,7 +124,7 @@ timer_callback(GUI_TIMER_t* t) {
 
 /* Main widget callback */
 static
-uint8_t gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* result) {
+uint8_t gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
@@ -134,7 +134,7 @@ uint8_t gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
             return 1;
         }
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
-            GUI_WIDGET_Param_t* v = (GUI_WIDGET_Param_t *)param;
+            GUI_WIDGET_Param_t* v = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
             int32_t tmp;
             switch (v->Type) {
                 case CFG_VALUE:                     /* Set current progress value */
@@ -183,12 +183,12 @@ uint8_t gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, void* param, void* r
                     break;
                 default: break;
             }
-            *(uint8_t *)result = 1;                 /* Save result */
+            GUI_WIDGET_RESULTTYPE_U8(result) = 1;                 /* Save result */
             return 1;
         }
         case GUI_WC_Draw: {
             GUI_Dim_t x, y, w, width, height;
-            GUI_Display_t* disp = (GUI_Display_t *)param;
+            GUI_Display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
     
             x = gui_widget_getabsolutex__(h);       /* Get absolute position on screen */
             y = gui_widget_getabsolutey__(h);       /* Get absolute position on screen */
