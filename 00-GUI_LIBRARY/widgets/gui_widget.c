@@ -87,6 +87,9 @@ remove_widget(GUI_HANDLE_p h) {
     if (GUI.ActiveWidgetPrev == h) {
         GUI.ActiveWidgetPrev = __GH(h)->Parent;     /* Set widget as previous active */
     }
+    if (GUI.WindowActive && h == GUI.WindowActive) {    /* Check for parent window */
+        GUI.WindowActive = __GH(GUI.WindowActive)->Parent;
+    }
     
     gui_widget_invalidatewithparent__(h);           /* Invalidate object and its parent */
     gui_widget_freetextmemory__(h);                 /* Free text memory */
@@ -247,9 +250,11 @@ invalidate_widget(GUI_HANDLE_p h, uint8_t setclipping) {
      * If widget is transparent, check all widgets, even those which are below current widget in list
      * Get first element of parent linked list for checking
      */
+#if GUI_USE_TRANSPARENCY
     if (gui_widget_istransparent__(h1)) {
         invalidate_widget(__GH(h1)->Parent, 0);     /* Invalidate parent widget */
     }
+#endif /* GUI_USE_TRANSPARENCY */
     for (; h1; h1 = gui_linkedlist_widgetgetnext(NULL, h1)) {
         get_lcd_abs_position_and_visible_width_height(h1, &h1x1, &h1y1, &h1x2, &h1y2); /* Get visible position on LCD for widget */
         for (h2 = gui_linkedlist_widgetgetnext(NULL, h1); h2;
@@ -275,7 +280,8 @@ invalidate_widget(GUI_HANDLE_p h, uint8_t setclipping) {
     if (__GH(h)->Parent && !gui_linkedlist_iswidgetlast(__GH(h)->Parent)) {
         invalidate_widget(__GH(h)->Parent, 0);
     }
-    
+
+#if GUI_USE_TRANSPARENCY    
     /**
      * Check if any of parent widgets has transparency = should be invalidated too
      *
@@ -287,6 +293,7 @@ invalidate_widget(GUI_HANDLE_p h, uint8_t setclipping) {
             break;
         }
     }
+#endif /* GUI_USE_TRANSPARENCY */
     
     return 1;
 }
@@ -740,8 +747,10 @@ gui_widget_invalidate__(GUI_HANDLE_p h) {
     if (
         (
             gui_widget_getflag__(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT) || 
-            gui_widget_getcoreflag__(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT) ||
-            gui_widget_istransparent__(h)           /* At least little transparent */
+            gui_widget_getcoreflag__(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT)
+#if GUI_USE_TRANSPARENCY
+            || gui_widget_istransparent__(h)        /* At least little transparent */
+#endif /* GUI_USE_TRANSPARENCY */
         ) && __GH(h)->Parent) {
         invalidate_widget(__GH(h)->Parent, 0);      /* Invalidate parent object too but without clipping */
     }
@@ -859,7 +868,9 @@ gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_i
         __GH(h)->Widget = widget;                   /* Widget object structure */
         __GH(h)->Footprint = GUI_WIDGET_FOOTPRINT;  /* Set widget footprint */
         __GH(h)->Callback = cb;                     /* Set widget callback */
+#if GUI_USE_TRANSPARENCY
         __GH(h)->Transparency = 0xFF;               /* Set full transparency by default */
+#endif /* GUI_USE_TRANSPARENCY */
         
         /**
          * Parent window check
@@ -1559,6 +1570,7 @@ gui_widget_setzindex__(GUI_HANDLE_p h, int32_t zindex) {
     return ret;
 }
 
+#if GUI_USE_TRANSPARENCY || defined(DOXYGEN)
 /**
  * \brief           Set transparency level to widget
  * \note            Since this function is private, it can only be used by user inside GUI library
@@ -1579,6 +1591,7 @@ gui_widget_settransparency__(GUI_HANDLE_p h, uint8_t trans) {
     
     return 1;
 }
+#endif /* GUI_USE_TRANSPARENCY */
 
 /**
  * \brief           Set color to widget specific index
@@ -2677,6 +2690,7 @@ gui_widget_getzindex(GUI_HANDLE_p h) {
     return ret;
 }
 
+#if GUI_USE_TRANSPARENCY || defined(DOXYGEN)
 /**
  * \brief           Set transparency level to widget
  * \param[in,out]   h: Widget handle
@@ -2720,6 +2734,7 @@ gui_widget_gettransparency(GUI_HANDLE_p h) {
     __GUI_LEAVE();                                  /* Leave GUI */
     return trans;
 }
+#endif /* GUI_USE_TRANSPARENCY || defined(DOXYGEN) */
 
 /**
  * \brief           Set 3D mode on widget

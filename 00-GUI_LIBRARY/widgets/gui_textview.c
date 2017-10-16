@@ -89,7 +89,7 @@ gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
                     break;
                 default: break;
             }
-            GUI_WIDGET_RESULTTYPE_U8(result) = 1;                 /* Save result */
+            GUI_WIDGET_RESULTTYPE_U8(result) = 1;   /* Save result */
             return 1;
         }
         case GUI_WC_Draw: {

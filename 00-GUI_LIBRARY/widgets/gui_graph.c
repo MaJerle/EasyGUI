@@ -135,7 +135,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 case CFG_ZOOM_RESET: graph_reset(h); break; /* Reset zoom */
                 default: break;
             }
-            GUI_WIDGET_RESULTTYPE_U8(result) = 1;                 /* Save result */
+            GUI_WIDGET_RESULTTYPE_U8(result) = 1;   /* Save result */
             return 1;
         }
         case GUI_WC_Draw: {                         /* Draw widget */

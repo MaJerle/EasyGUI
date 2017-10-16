@@ -1010,12 +1010,15 @@ typedef enum GUI_WC_t {
     GUI_WC_OnDismiss,
 } GUI_WC_t;
 
+/**
+ * \brief           Basic widget structure
+ */
 struct GUI_HANDLE;
 
 /**
  * \brief           Handle object for GUI widget
  */
-typedef struct GUI_HANDLE* GUI_HANDLE_p;
+typedef struct GUI_HANDLE* GUI_HANDLE_p;    /*!< Handle object for GUI widget */
 
 /**
  * \brief           Structure used in setting and getting parameter values from widgets using callbacks
@@ -1030,13 +1033,13 @@ typedef struct GUI_WIDGET_Param {
  */
 typedef struct GUI_WIDGET_PARAM {
     union {
+        int i;                              /*!< Integer value */
+        int16_t i16;                        /*!< Signed 16-bit value */
         GUI_Display_t* disp;                /*!< Pointer to input display data */
         __GUI_TouchData_t* td;              /*!< Pointer to input touch data */
         __GUI_KeyboardData_t* kd;           /*!< Pointer to input keyboard data */
         struct GUI_WIDGET_Param* wp;        /*!< Widget parameter */
-        int16_t i16;                        /*!< Signed 16-bit value */
         GUI_HANDLE_p h;                     /*!< Widget handle */
-        int i;
     } u;                                    /*!< Union of possible parameters */
 } GUI_WIDGET_PARAM_t;
 
@@ -1107,7 +1110,9 @@ typedef struct GUI_HANDLE {
     uint32_t Padding;                       /*!< 4-bytes long padding, each byte of one side, MSB = top padding, LSB = left padding.
                                                     Used for children widgets if virtual padding should be used */
     int32_t ZIndex;                         /*!< Z-Index value of widget, which can be set by user. All widgets with same z-index are changeable when active on visible area */
+#if GUI_USE_TRANSPARENCY
     uint8_t Transparency;                   /*!< Transparency of widget relative to parent widget */
+#endif /* GUI_USE_TRANSPARENCY */
     uint32_t Flags;                         /*!< All possible flags for specific widget */
     GUI_Const GUI_FONT_t* Font;             /*!< Font used for widget drawings */
     GUI_Char* Text;                         /*!< Pointer to widget text if exists */

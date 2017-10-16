@@ -479,7 +479,7 @@ gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
 #endif /* GUI_USE_KEYBOARD */
         case GUI_WC_IncSelection: {
             inc_selection(h, GUI_WIDGET_PARAMTYPE_I16(param));  /* Increase selection */
-            GUI_WIDGET_RESULTTYPE_U8(result) = 1;                 /* Set operation result */
+            GUI_WIDGET_RESULTTYPE_U8(result) = 1;   /* Set operation result */
             return 1;
         }
         default:                                    /* Handle default option */

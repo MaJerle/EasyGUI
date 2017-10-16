@@ -22,7 +22,7 @@ typedef osPriority          gui_sys_thread_prio_t;
 #define SYS_SEM_NULL        (osSemaphoreId)0
 #define SYS_TIMEOUT         ((uint32_t)osWaitForever)
 #define SYS_THREAD_PRIO     (osPriorityNormal)
-#define SYS_THREAD_SS       (4 * configMINIMAL_STACK_SIZE)
+#define SYS_THREAD_SS       (4 * configMINIMAL_STACK_SIZE)  /*!< Thread stack size must be taken into consideration and depends on number of children widgets you will have as entire processing is done recursively. */
     
 uint8_t gui_sys_init(void);
 uint8_t gui_sys_protect(void);

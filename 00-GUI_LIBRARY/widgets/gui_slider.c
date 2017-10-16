@@ -98,7 +98,7 @@ set_value(GUI_HANDLE_p h, int32_t value) {
     }
     if (value != o->Value) {                        /* Check difference in values */
         o->Value = value;                           /* Set new value */
-        gui_widget_callback__(h, GUI_WC_ValueChanged, 0, 0);    /* Callback process */
+        gui_widget_callback__(h, GUI_WC_ValueChanged, NULL, NULL);  /* Callback process */
         return 1;
     }
     return 0;
@@ -185,7 +185,7 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
             o->CurrentSize = 0;
             o->C.Timer = gui_timer_create__(30, timer_callback, o);    /* Create timer for widget, when widget is deleted, timer will be automatically deleted too */
             if (!o->C.Timer) {                      /* Check if timer created */
-                GUI_WIDGET_RESULTTYPE_U8(result) = 0;             /* Failed, widget will be deleted */
+                GUI_WIDGET_RESULTTYPE_U8(result) = 0;   /* Failed, widget will be deleted */
             }
             return 1;
         }
@@ -219,7 +219,7 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
                     break;
                 default: break;
             }
-            GUI_WIDGET_RESULTTYPE_U8(result) = 1;                 /* Save result */
+            GUI_WIDGET_RESULTTYPE_U8(result) = 1;   /* Save result */
             return 1;
         }
         case GUI_WC_Draw: {

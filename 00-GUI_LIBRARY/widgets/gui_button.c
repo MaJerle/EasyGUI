@@ -89,7 +89,7 @@ gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
                 case CFG_BORDER_RADIUS: b->BorderRadius = *(GUI_Dim_t *)p->Data; break; /* Set max X value to widget */
                 default: break;
             }
-            GUI_WIDGET_RESULTTYPE_U8(result) = 1;                 /* Save result */
+            GUI_WIDGET_RESULTTYPE_U8(result) = 1;   /* Save result */
             return 1;
         }
         case GUI_WC_Draw: {
@@ -144,7 +144,7 @@ gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
         case GUI_WC_KeyPress: {
             __GUI_KeyboardData_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (kb->KB.Keys[0] == GUI_KEY_CR || kb->KB.Keys[0] == GUI_KEY_LF) {
-                gui_widget_callback__(h, GUI_WC_Click, 0, 0);   /* Process click */
+                gui_widget_callback__(h, GUI_WC_Click, NULL, NULL); /* Process click */
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }
             return 1;

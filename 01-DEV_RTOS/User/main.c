@@ -686,11 +686,16 @@ uint8_t window_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param,
             case ID_WIN_TRANSP: {
                 handle = gui_button_create(ID_BUTTON_2, 10, 30, 250, 40, 0, 0, 0);
                 gui_widget_settext(handle, _GT("Opaque button"));
+                
+#if GUI_USE_TRANSPARENCY
                 gui_widget_settransparency(handle, 0xFF);
+#endif /* GUI_USE_TRANSPARENCY */
                 
                 handle = gui_button_create(ID_BUTTON_1, 5, 5, 250, 40, 0, 0, 0);
                 gui_widget_settext(handle, _GT("Transparent button"));
+#if GUI_USE_TRANSPARENCY
                 gui_widget_settransparency(handle, 0x80);
+#endif /* GUI_USE_TRANSPARENCY */
                 
                 handle = gui_slider_create(ID_SLIDER_1, 10, 80, 250, 50, 0, slider_callback, 0);
                 gui_slider_setmin(handle, 0);
@@ -917,7 +922,9 @@ uint8_t slider_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param,
                     GUI_HANDLE_p tmp;
                     tmp = gui_widget_getbyid(ID_BUTTON_1);
                     if (tmp) {
+#if GUI_USE_TRANSPARENCY
                         gui_widget_settransparency(tmp, value);
+#endif /* GUI_USE_TRANSPARENCY */
                     }
                     break;
                 }
@@ -925,7 +932,9 @@ uint8_t slider_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param,
                     GUI_HANDLE_p tmp;
                     tmp = gui_widget_getbyid(ID_WIN_TRANSP);
                     if (tmp) {
+#if GUI_USE_TRANSPARENCY
                         gui_widget_settransparency(tmp, value);
+#endif /* GUI_USE_TRANSPARENCY */
                     }
                     break;
                 }

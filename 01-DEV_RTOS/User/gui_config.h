@@ -127,6 +127,13 @@
 #define GUI_MEM_ALIGNMENT               4
 
 /**
+ * \brief           Enables (1) or disables (0) transparency option for widgets
+ *
+ *                  When enabled, widgets can overlay each other and bottom widget can be visible below top one
+ */
+#define GUI_USE_TRANSPARENCY            1
+
+/**
  * \}
  */
  

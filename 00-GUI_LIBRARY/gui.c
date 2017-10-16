@@ -112,8 +112,10 @@ redraw_widgets(GUI_HANDLE_p parent) {
         if (gui_widget_isinsideclippingregion(h)) { /* If widget is inside clipping region */
             /* Draw main widget if required */
             if (gui_widget_getflag__(h, GUI_FLAG_REDRAW)) { /* Check if redraw required */
+#if GUI_USE_TRANSPARENCY
                 GUI_Layer_t* layerPrev = GUI.LCD.DrawingLayer;  /* Save drawing layer */
                 uint8_t transparent = 0;
+#endif /* GUI_USE_TRANSPARENCY */
                 
                 gui_widget_clrflag__(h, GUI_FLAG_REDRAW);   /* Clear flag for drawing on widget */
                 
@@ -121,7 +123,8 @@ redraw_widgets(GUI_HANDLE_p parent) {
                  * Prepare clipping region for this widget drawing
                  */
                 check_disp_clipping(h);             /* Check coordinates for drawings only particular widget */
-                
+
+#if GUI_USE_TRANSPARENCY
                 /**
                  * Check transparency and check if blending function exists to merge layers later together
                  */
@@ -145,6 +148,7 @@ redraw_widgets(GUI_HANDLE_p parent) {
                         GUI.LCD.DrawingLayer = layerPrev;   /* Reset layer back */
                     }
                 }
+#endif /* GUI_USE_TRANSPARENCY */
                 
                 /**
                  * Draw widget itself normally, don't care on layer offset and size
@@ -167,6 +171,7 @@ redraw_widgets(GUI_HANDLE_p parent) {
                     level--;
                 }
                 
+#if GUI_USE_TRANSPARENCY
                 /**
                  * If transparent mode is used on widget, copy content back
                  */
@@ -184,6 +189,7 @@ redraw_widgets(GUI_HANDLE_p parent) {
                     GUI_MEMFREE(GUI.LCD.DrawingLayer);  /* Free memory for virtual layer */
                     GUI.LCD.DrawingLayer = layerPrev;   /* Reset layer pointer */
                 }
+#endif /* GUI_USE_TRANSPARENCY */
                 
             /**
              * Check if any widget from children should be redrawn
@@ -640,7 +646,7 @@ process_redraw(void) {
         active->Width - (dispA->X2 - dispA->X1),    /* Offline source */
         drawing->Width - (dispA->X2 - dispA->X1)    /* Offline destination */
     );
-     
+    
     redraw_widgets(NULL);                           /* Redraw all widgets now on drawing layer */
     drawing->Pending = 1;                           /* Set drawing layer as pending */
     

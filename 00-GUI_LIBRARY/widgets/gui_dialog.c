@@ -122,17 +122,6 @@ static uint8_t
 gui_dialog_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
-        case GUI_WC_Remove: {
-            return 1;
-        }
-        case GUI_WC_PreInit: {
-            return 1;
-        }
-        case GUI_WC_OnDismiss: {
-            int dv = GUI_WIDGET_PARAMTYPE_INT(param);   /* Get dismiss parameter value */
-            GUI_UNUSED(dv);                         /* Unused parameters */
-            return 1;
-        }
         default:                                    /* Handle default option */
             GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
@@ -224,7 +213,7 @@ gui_dialog_createblocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t wid
     
     return resp;
 }
-#endif /* GUI_OS */
+#endif /* GUI_OS || defined(DOXYGEN) */
 
 /**
  * \brief           Dismiss (close) dialog with status

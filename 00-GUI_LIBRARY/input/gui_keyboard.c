@@ -498,7 +498,7 @@ keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param, 
         case GUI_WC_PreInit: {
             __GH(h)->Timer = gui_timer_create__(60, keyboard_timer_callback, 0);    /* Create timer */
             if (!__GH(h)->Timer) {
-                GUI_WIDGET_RESULTTYPE_U8(result) = 0;             /* Failed, stop and clear memory */
+                GUI_WIDGET_RESULTTYPE_U8(result) = 0;   /* Failed, stop and clear memory */
             }
             return 1;
         }

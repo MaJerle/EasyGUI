@@ -501,7 +501,11 @@ extern "C" {
  * \sa              __gui_widget_ishidden
  * \hideinitializer
  */
+#if GUI_USE_TRANSPARENCY
 #define gui_widget_isvisible__(h)                   (!gui_widget_getflag__(h, GUI_FLAG_HIDDEN) && __GH(h)->Transparency)
+#else
+#define gui_widget_isvisible__(h)                   (!gui_widget_getflag__(h, GUI_FLAG_HIDDEN))
+#endif
 
 /**
  * \brief           Check if widget is hidden
@@ -554,6 +558,7 @@ extern "C" {
  */
 #define gui_widget_isactive__(h)                    (!!gui_widget_getflag__(h, GUI_FLAG_ACTIVE))
 
+#if GUI_USE_TRANSPARENCY || defined(DOXYGEN)
 /**
  * \brief           Check is widget has transparency
  * \note            Check if widget is visible and transparency is not set to 1 (full view)
@@ -579,6 +584,7 @@ extern "C" {
  * \hideinitializer
  */
 #define gui_widget_gettransparency__(h)             ((uint8_t)(__GH(h)->Transparency))
+#endif /* GUI_USE_TRANSPARENCY || defined(DOXYGEN) */
 
 /**
  * \brief           Get z-index value from widget
