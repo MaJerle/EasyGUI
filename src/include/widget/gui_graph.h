@@ -110,7 +110,7 @@ typedef enum GUI_GRAPH_TYPE_t {
  * \brief           Graph data widget structure
  */
 typedef struct GUI_GRAPH_DATA_p {
-#if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE || defined(DOXYGEN)
+#if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE || __DOXYGEN__
     GUI_LinkedListRoot_t Root;              /*!< Root linked list object of graph widgets */
 #endif /* GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     
@@ -124,7 +124,7 @@ typedef struct GUI_GRAPH_DATA_p {
 
 typedef GUI_GRAPH_DATA_t *  GUI_GRAPH_DATA_p;   /*!< GUI Graph data pointer */
 
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
 /**
  * \brief           Graph widget structure
  */
@@ -144,7 +144,7 @@ typedef struct GUI_GRAPH_t {
     float VisibleMinY;                      /*!< Visible minimal Y value for plot */
     float VisibleMaxY;                      /*!< Visible maximal Y value for plot */
 } GUI_GRAPH_t;
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 GUI_HANDLE_p gui_graph_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 uint8_t gui_graph_setcolor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t color);

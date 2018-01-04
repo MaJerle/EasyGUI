@@ -1,6 +1,6 @@
 /**	
- * \file            gui_lcd.h
- * \brief           LCD specific functions
+ * \file            gui_ll_template.h
+ * \brief           Low-level LCD part template file
  */
  
 /*
@@ -28,8 +28,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_LCD_H
-#define __GUI_LCD_H
+#ifndef __GUI_LL_H
+#define __GUI_LL_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -37,27 +37,46 @@ extern "C" {
 #endif
 
 /**
- * \addtogroup      GUI_UTILS
+ * \addtogroup      GUI_PORT
+ * \{
+ */
+
+/**
+ * \defgroup        GUI_LL Low-level layer
  * \brief       
  * \{
  */
 
 #include "gui/gui.h"
+#include "gui/gui_lcd.h"
 
 /**
- * \defgroup        GUI_LCD LCD
- * \brief           LCD info specific functions
- * \{
+ * \brief           Initialize LCD low-level display driver
+ *
+ *                  - Set up width and height
+ *                  - Set up number of layers for drawing
+ *                  - Set up drawing functions
+ *
+ * \param[in,out]   LCD: Pointer to \ref GUI_LCD_t structure for LCD properties
+ * \param[in,out]   LL: Pointer to \ref GUI_LL_t structure with drawing functions
+ * \return          0 on success, non-zero otherwise
  */
+uint8_t gui_ll_init(GUI_LCD_t* LCD, GUI_LL_t* LL);
 
-GUI_iDim_t gui_lcd_getwidth(void);
-GUI_iDim_t gui_lcd_getheight(void);
-void gui_lcd_confirmactivelayer(uint8_t layer_num);
-
+/**
+ * \brief           Send command to for LCD from GUI
+ * \param[in,out]   LCD: Pointer to \ref GUI_LCD_t structure with LCD properties
+ * \param[in]       cmd: Command to be executed. This parameter can be a value of \ref GUI_LL_Command_t enumeration
+ * \param[in]       param: Optional data included in command. Check \ref GUI_LL_Command_t enumeration what is used for each command
+ * \param[out]      result: Result from command
+ * \return          0 on success, non-zero otherwise
+ */
+uint8_t gui_ll_control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* result);
+ 
 /**
  * \}
  */
- 
+
 /**
  * \}
  */
@@ -67,4 +86,4 @@ void gui_lcd_confirmactivelayer(uint8_t layer_num);
 }
 #endif
 
-#endif /* __GUI_LCD_H */
+#endif /* __GUI_LL_H */

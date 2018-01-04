@@ -102,7 +102,7 @@ typedef enum GUI_LISTBOX_COLOR_t {
     GUI_LISTBOX_COLOR_SEL_NOFOC_BG,         /*!< Background color of selected item when widget is not in focus */
 } GUI_LISTBOX_COLOR_t;
 
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
     
 #define GUI_FLAG_LISTBOX_SLIDER_ON      0x01/*!< Slider is currently active */
 #define GUI_FLAG_LISTBOX_SLIDER_AUTO    0x02/*!< Show right slider automatically when required, otherwise, manual mode is used */
@@ -130,7 +130,7 @@ typedef struct GUI_LISTBOX_t {
     GUI_Dim_t SliderWidth;                  /*!< Slider width in units of pixels */
     uint8_t Flags;                          /*!< Widget flags */
 } GUI_LISTBOX_t;
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 GUI_HANDLE_p gui_listbox_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 uint8_t gui_listbox_setcolor(GUI_HANDLE_p h, GUI_LISTBOX_COLOR_t index, GUI_Color_t color);

@@ -46,24 +46,10 @@ extern "C" {
 /**
  * \defgroup        GUI_LINKEDLIST Linked list
  * \brief           Linked list generic functions
- *
- * \par Doubly linked list
- *
- * Library operates with <b>doubly</b> linked list type since each element in list has next and previous element known. This allows loop from first to last and from last to first easily.
- *
- * Linked list link structure is statically allocated which does not add addditional overhead.
- *
- * \par Multi linked list
- *
- * Second support is <b>multi</b> linked list. This approach allows single element to be part of multiple linked lists.
- * 
- * In relation to first, this approach needs dynamic link memory allocation for each linked list it exists.
- *
- * \note            This functions can only be used inside GUI library
  * \{
  */
 
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
 
 /**
  * \brief           Get data from multi linked list object
@@ -137,7 +123,7 @@ GUI_HANDLE_p gui_linkedlist_widgetgetprev(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_
 uint8_t gui_linkedlist_widgetmovetobottom(GUI_HANDLE_p h);
 uint8_t gui_linkedlist_widgetmovetotop(GUI_HANDLE_p h);
  
-#endif /* GUI_INTERNAL || defined(DOXYGEN) */
+#endif /* GUI_INTERNAL || __DOXYGEN__ */
 
 /**
  * \}

@@ -49,7 +49,7 @@ extern "C" {
  * \{
  */
 
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
     
 
 /**
@@ -71,7 +71,7 @@ uint8_t gui_timer_reset__(GUI_TIMER_t* t);
 uint32_t gui_timer_getactivecount(void);
 void gui_timer_process(void);
 
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 /**
  * \}

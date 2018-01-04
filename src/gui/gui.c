@@ -29,36 +29,16 @@
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
+#include "gui/gui_private.h"
 #include "gui/gui.h"
-#include "system/gui_system.h"
+#include "system/gui_sys.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
 GUI_t GUI;
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
-
-
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
-/* Clip widget before draw/touch operation */
+/**
+ * \brief           Clip are required to draw widget
+ * \param[in]       h: Widget handle
+ */
 static void
 check_disp_clipping(GUI_HANDLE_p h) {
     GUI_iDim_t x, y;
@@ -95,7 +75,11 @@ check_disp_clipping(GUI_HANDLE_p h) {
     }
 }
 
-/* Redraw widgets */
+/**
+ * \brief           Redraw all widgets of selected parent
+ * \param[in]       parent: Parent widget handle to draw widgets on
+ * \return          Number of widgets redrawn
+ */
 static uint32_t
 redraw_widgets(GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;
@@ -233,6 +217,16 @@ redraw_widgets(GUI_HANDLE_p parent) {
  *
  * This is all handled by this "thread" function
  */
+/**
+ * \brief           Touch event proto thread 
+ *
+ *                  Designed as non-blocking event thread for processing input touch events.
+ * \param[in]       ts: Touch information with X and Y positions
+ * \param[in]       old: Old touch information
+ * \param[in]       v: Is input value valid or is just "check" call
+ * \param[out]      result: Result of event, if any
+ * \return          PT thread result
+ */
 static
 PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, uint8_t v, GUI_WC_t* result)) {
     static volatile uint32_t Time;
@@ -328,7 +322,14 @@ PT_THREAD(__TouchEvents_Thread(__GUI_TouchData_t* ts, __GUI_TouchData_t* old, ui
     PT_END(&ts->pt);                                /* Stop thread execution */
 }
 
-/* Set relative coordinates from touch press for selected widget */
+/**
+ * \brief           Set relative coordinate of touch on widget
+ * \param[in,out]   ts: Raw touch data with X and Y position
+ * \param[in]       x: Absolute X position of widget
+ * \param[in]       y: Absolute Y position of widget
+ * \param[in]       width: Width of widget
+ * \param[in]       height: Height of widget
+ */
 static void
 set_relative_coordinate(__GUI_TouchData_t* ts, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height) {
     uint8_t i = 0;
@@ -350,7 +351,16 @@ set_relative_coordinate(__GUI_TouchData_t* ts, GUI_iDim_t x, GUI_iDim_t y, GUI_i
 #endif /* GUI_CFG_TOUCH_MAX_PRESSES > 1 */
 }
 
-/* Process touch entry */
+/**
+ * \brief           Process input touch event
+ *                  
+ *                  Scan all widgets from top to bottom which will be first on valid 
+ *                  position for touch and call callback function to this widget
+ *
+ * \param[in]       touch: Touch data info
+ * \param[in]       parent: Parent widget where to check for touch
+ * \return          Member of \ref __GUI_TouchStatus_t enumeration about success
+ */
 static __GUI_TouchStatus_t
 process_touch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent) {
     GUI_HANDLE_p h;
@@ -366,6 +376,11 @@ process_touch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent) {
             continue;
         }
         
+        /*
+         * Dialogs are placed as children of main window
+         * If level 1 is current and dialog is detected,
+         * stop process of other widgets except if widget is inside dialog
+         */
         if (deep == 1) {                            /* On base elements list = children of base window element */
             if (gui_widget_isdialogbase__(h)) {     /* We found dialog element */
                 dialogOnly = 1;                     /* Check only widgets which are dialog based */
@@ -389,7 +404,7 @@ process_touch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent) {
             deep--;                                 /* Go back to normal level */
         }
         
-        /**
+        /*
          * Children widgets were not detected
          */
         if (tStat == touchCONTINUE) {               /* Do we still have to check this widget? */
@@ -472,6 +487,9 @@ process_touch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent) {
 
 /**
  * \brief           Process touch inputs
+ * 
+ *                  Reads all input touches written so far to buffer 
+ *                  and goes one by one
  */
 static void
 gui_process_touch(void) {
@@ -583,7 +601,12 @@ gui_process_touch(void) {
 }
 #endif /* GUI_CFG_USE_TOUCH */
 
-#if GUI_CFG_USE_KEYBOARD
+#if GUI_CFG_USE_KEYBOARD || __DOXYGEN__
+/**
+ * \brief           Process input keyboard data
+ * 
+ *                  Check all input keyboard data and process entry by entry to relevant widget
+ */
 static void
 process_keyboard(void) {
     __GUI_KeyboardData_t key;
@@ -619,7 +642,7 @@ process_keyboard(void) {
         }
     }
 }
-#endif /* GUI_CFG_USE_KEYBOARD */
+#endif /* GUI_CFG_USE_KEYBOARD || __DOXYGEN__ */
 
 /**
  * \brief           Process redraw of all widgets
@@ -676,7 +699,7 @@ gui_default_event_cb(void) {
 
 }
 
-#if GUI_CFG_OS
+#if GUI_CFG_OS || __DOXYGEN__
 /**
  * \brief           GUI main thread for RTOS
  * \param[in]       *argument: Pointer to user specific argument
@@ -687,20 +710,7 @@ gui_thread(void * const argument) {
         gui_process();                              /* Process graphical update */
     }
 }
-#endif
-
-/******************************************************************************/
-/******************************************************************************/
-/***                              Protothreads                               **/
-/******************************************************************************/
-/******************************************************************************/
-
-
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
+#endif /* GUI_CFG_OS || __DOXYGEN__ */
 
 /**
  * \brief           Initializes GUI stack.
@@ -753,7 +763,9 @@ gui_init(void) {
     
 #if GUI_CFG_OS
     /* Create graphical thread */
-    GUI.OS.thread_id = gui_sys_thread_create("gui_thread", gui_thread, NULL, SYS_THREAD_SS, SYS_THREAD_PRIO);
+    if (GUI.OS.thread_id == NULL) {
+        gui_sys_thread_create(&GUI.OS.thread_id, "gui_thread", gui_thread, NULL, GUI_SYS_THREAD_SS, GUI_SYS_THREAD_PRIO);
+    }
 #endif
     
     return guiOK;
@@ -774,10 +786,10 @@ gui_process(void) {
     time = gui_sys_mbox_get(&GUI.OS.mbox, (void **)&msg, tmr_cnt ? 10 : 0); /* Get value from message queue */
     GUI_UNUSED(time);                               /* Unused variable */
     
-    __GUI_SYS_PROTECT();                            /* Release protection */
+    __GUI_SYS_PROTECT();                            /* Protect from multiple access */
 #endif /* GUI_CFG_OS */
    
-    /**
+    /*
      * Periodically process everything
      */
 #if GUI_CFG_USE_TOUCH
@@ -790,7 +802,9 @@ gui_process(void) {
     gui_widget_executeremove();                     /* Delete widgets */
     process_redraw();                               /* Redraw widgets */
     
+#if GUI_CFG_OS
     __GUI_SYS_UNPROTECT();                          /* Release protection */
+#endif /* GUI_CFG_OS */
     
     return 0;                                       /* Return number of elements updated on GUI */
 }

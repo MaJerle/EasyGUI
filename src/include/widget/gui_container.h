@@ -59,7 +59,7 @@ typedef enum {
     GUI_CONTAINER_COLOR_BG = 0x00,          /*!< Background color index */
 } GUI_CONTAINER_COLOR_t;
 
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
 /**
  * \brief           Container object structure
  */
@@ -67,7 +67,7 @@ typedef struct GUI_CONTAINER_t {
     GUI_HANDLE_ROOT_t C;                    /*!< GUI handle object, must always be first on list */
 } GUI_CONTAINER_t;
 
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 GUI_HANDLE_p gui_container_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 uint8_t gui_container_setcolor(GUI_HANDLE_p h, GUI_CONTAINER_COLOR_t index, GUI_Color_t color);

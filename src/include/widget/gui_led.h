@@ -90,7 +90,7 @@ typedef enum GUI_LED_TYPE_t {
     GUI_LED_TYPE_CIRCLE = 0x01              /*!< Led is circle */
 } GUI_LED_TYPE_t;
 
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
 
 #define GUI_LED_FLAG_ON             0x01    /*!< Indicates LED is on */
 
@@ -103,7 +103,7 @@ typedef struct GUI_LED_t {
     GUI_LED_TYPE_t Type;                    /*!< Led shape type */
     GUI_Byte Flags;                         /*!< Flags management for LED */
 } GUI_LED_t;
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 GUI_HANDLE_p gui_led_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 uint8_t gui_led_setcolor(GUI_HANDLE_p h, GUI_LED_COLOR_t index, GUI_Color_t color);

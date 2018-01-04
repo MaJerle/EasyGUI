@@ -78,7 +78,7 @@ typedef enum GUI_SLIDER_MODE_t {
     GUI_SLIDER_MODE_TOP_BOTTOM,             /*!< Slider is horizontal, min on the top, max on the bottom */
 } GUI_SLIDER_MODE_t;
 
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
     
 /**
  * \brief           SLIDER object structure
@@ -96,7 +96,7 @@ typedef struct GUI_SLIDER_t {
     
     uint8_t Flags;                          /*!< Widget flags */
 } GUI_SLIDER_t;
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 GUI_HANDLE_p gui_slider_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 uint8_t gui_slider_setcolor(GUI_HANDLE_p h, GUI_SLIDER_COLOR_t index, GUI_Color_t color);

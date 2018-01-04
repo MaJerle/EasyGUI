@@ -29,6 +29,7 @@
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
+#include "gui/gui_private.h"
 #include "gui/gui_draw.h"
 
 /******************************************************************************/

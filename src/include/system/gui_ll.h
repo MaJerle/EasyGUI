@@ -37,10 +37,16 @@ extern "C" {
 #endif
 
 /**
+ * \addtogroup      GUI_PORT
+ * \{
+ */
+
+/**
  * \defgroup        GUI_LL Low-level layer
  * \brief       
  * \{
  */
+
 #include "gui/gui.h"
 #include "gui/gui_lcd.h"
 
@@ -67,6 +73,10 @@ uint8_t gui_ll_init(GUI_LCD_t* LCD, GUI_LL_t* LL);
  */
 uint8_t gui_ll_control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* result);
  
+/**
+ * \}
+ */
+
 /**
  * \}
  */

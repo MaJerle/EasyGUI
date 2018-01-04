@@ -83,7 +83,7 @@ typedef enum GUI_RADIO_COLOR_t {
     GUI_RADIO_COLOR_DISABLED_BG,            /*!< Background color index when disabled */
 } GUI_RADIO_COLOR_t;
     
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
     
 #define GUI_FLAG_RADIO_CHECKED              0x01    /*!< Indicates radio is currently checked */
 #define GUI_FLAG_RADIO_DISABLED             0x02    /*!< Indicates radio is currently disabled */
@@ -100,7 +100,7 @@ typedef struct GUI_RADIO_t {
                                                     All Widgets in the same group share the same value in this field all the time */
     uint8_t Flags;                          /*!< Flags for checkbox */
 } GUI_RADIO_t;
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 GUI_HANDLE_p gui_radio_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 uint8_t gui_radio_setcolor(GUI_HANDLE_p h, GUI_RADIO_COLOR_t index, GUI_Color_t color);

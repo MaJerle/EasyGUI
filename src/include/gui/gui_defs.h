@@ -282,10 +282,10 @@ typedef struct __GUI_TouchData_t {
     GUI_iDim_t RelOldY[GUI_CFG_TOUCH_MAX_PRESSES];  /*!< Relative Y position to current widget */
     GUI_Dim_t WidgetWidth;                  /*!< Save widget width value */
     GUI_Dim_t WidgetHeight;                 /*!< Save widget height value */
-#if GUI_CFG_TOUCH_MAX_PRESSES > 1 || defined(DOXYGEN)
+#if GUI_CFG_TOUCH_MAX_PRESSES > 1 || __DOXYGEN__
     float Distance;                         /*!< Distance between 2 points when 2 touch elements are detected */
     float DistanceOld;                      /*!< Old distance between 2 points */
-#endif /* GUI_CFG_TOUCH_MAX_PRESSES > 1 || defined(DOXYGEN) */
+#endif /* GUI_CFG_TOUCH_MAX_PRESSES > 1 || __DOXYGEN__ */
     struct pt pt;                           /*!< Protothreads structure */
 } __GUI_TouchData_t;
 
@@ -293,7 +293,7 @@ typedef struct __GUI_TouchData_t {
  * \brief           Single key data structure
  */
 typedef struct GUI_KeyboardData_t {
-#if GUI_CFG_USE_UNICODE || defined(DOXYGEN)
+#if GUI_CFG_USE_UNICODE || __DOXYGEN__
     GUI_Char Keys[4];                       /*!< Key pressed, plain unicode bytes, up to 4 bytes */
 #else
     GUI_Char Keys[1];                       /*!< Key pressed, no unicode support */
@@ -452,7 +452,7 @@ typedef struct {
 #define GUI_FLAG_FONT_MULTILINE         ((uint8_t)0x04) /*!< Indicates multi line support on widget */
 #define GUI_FLAG_FONT_EDITMODE          ((uint8_t)0x08) /*!< Edit mode is enabled on text */
 
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
 /**
  * \brief           Char temporary entry stored in RAM for faster copy with blending operations
  */
@@ -461,9 +461,9 @@ typedef struct GUI_FONT_CharEntry_t {
     const GUI_FONT_CharInfo_t* Ch;          /*!< Character value */
     const GUI_FONT_t* Font;                 /*!< Pointer to font structure */
 } GUI_FONT_CharEntry_t;
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-#if !defined(DOXYGEN)
+#if !__DOXYGEN__
 #define ________                        0x00
 #define _______X                        0x01
 #define ______X_                        0x02
@@ -720,7 +720,7 @@ typedef struct GUI_FONT_CharEntry_t {
 #define XXXXXX_X                        0xFD
 #define XXXXXXX_                        0xFE
 #define XXXXXXXX                        0xFF
-#endif /* !defined(DOXYGEN) */
+#endif /* !__DOXYGEN__ */
 
 /**
  * \}
@@ -767,7 +767,7 @@ typedef GUI_TIMER_t* GUI_TIMER_p;
  */
 typedef enum GUI_WC_t {
     GUI_WC_None = 0x00,
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
     /**
      * \brief       Called just after widget has been created. Used for internal widget purpose only
      *
@@ -801,7 +801,7 @@ typedef enum GUI_WC_t {
      * \param[out]  *result: None
      */
     GUI_WC_GetParam = 0x04,
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
     
     /**
      * \brief       Widget has been created and ready to init for future setup
@@ -1091,7 +1091,7 @@ typedef struct GUI_WIDGET_t {
     uint8_t ColorsCount;                    /*!< Number of colors used in widget */
 } GUI_WIDGET_t;
 
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
 
 /**
  * \brief           Common GUI values for widgets
@@ -1110,7 +1110,7 @@ typedef struct GUI_HANDLE {
     uint32_t Padding;                       /*!< 4-bytes long padding, each byte of one side, MSB = top padding, LSB = left padding.
                                                     Used for children widgets if virtual padding should be used */
     int32_t ZIndex;                         /*!< Z-Index value of widget, which can be set by user. All widgets with same z-index are changeable when active on visible area */
-#if GUI_CFG_USE_TRANSPARENCY || defined(DOXYGEN)
+#if GUI_CFG_USE_TRANSPARENCY || __DOXYGEN__
     uint8_t Transparency;                   /*!< Widget transparency relative to parent widget */
 #endif /* GUI_CFG_USE_TRANSPARENCY */
     uint32_t Flags;                         /*!< All possible flags for specific widget */
@@ -1133,7 +1133,7 @@ typedef struct GUI_HANDLE_ROOT {
     GUI_iDim_t ScrollX;                     /*!< Scroll of widgets in horizontal direction in units of pixels */
     GUI_iDim_t ScrollY;                     /*!< Scroll of widgets in vertical direction in units of pixels */
 } GUI_HANDLE_ROOT_t;
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 /**
  * \brief           Widget create function footprint for structures as callbacks
@@ -1158,7 +1158,7 @@ typedef struct GUI_TRANSLATE_Language_t {
     size_t Count;                           /*!< Number of entries in translated array */
 } GUI_TRANSLATE_Language_t;
 
-//#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+//#if defined(GUI_INTERNAL) || __DOXYGEN__
 /**
  * \brief           Basic translation structure for internal use
  */
@@ -1167,7 +1167,7 @@ typedef struct GUI_TRANSLATE_t {
     const GUI_TRANSLATE_Language_t* Active; /*!< Pointer to current language table */
 } GUI_TRANSLATE_t;
 
-//#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+//#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 /**
  * \}

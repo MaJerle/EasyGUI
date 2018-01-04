@@ -60,7 +60,7 @@ typedef enum GUI_LIST_CONTAINER_COLOR_t {
     GUI_LIST_CONTAINER_COLOR_BG = 0x00,     /*!< Color index for LED on status */
 } GUI_LIST_CONTAINER_COLOR_t;
 
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
 
 /**
  * \brief           LIST CONTAINER object structure
@@ -71,7 +71,7 @@ typedef struct GUI_LIST_CONTAINER_t {
     GUI_iDim_t MaxScrollX;                  /*!< Maximal scroll on X axis */
     GUI_iDim_t MaxScrollY;                  /*!< Maximal scroll on Y axis */
 } GUI_LIST_CONTAINER_t;
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 GUI_HANDLE_p gui_listcontainer_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 

@@ -1,76 +1,49 @@
 /**	
- * |----------------------------------------------------------------------
- * | Copyright (c) 2017 Tilen Majerle
- * |  
- * | Permission is hereby granted, free of charge, to any person
- * | obtaining a copy of this software and associated documentation
- * | files (the "Software"), to deal in the Software without restriction,
- * | including without limitation the rights to use, copy, modify, merge,
- * | publish, distribute, sublicense, and/or sell copies of the Software, 
- * | and to permit persons to whom the Software is furnished to do so, 
- * | subject to the following conditions:
- * | 
- * | The above copyright notice and this permission notice shall be
- * | included in all copies or substantial portions of the Software.
- * | 
- * | THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * | EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * | OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
- * | AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * | HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * | WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
- * | FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * | OTHER DEALINGS IN THE SOFTWARE.
- * |----------------------------------------------------------------------
+ * \file            gui_ll_stm32_dma2d.c
+ * \brief           Low-Level driver for STM32 and DMA2D peripheral
+ */
+ 
+/*
+ * Copyright (c) 2017 Tilen Majerle
+ *  
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge,
+ * publish, distribute, sublicense, and/or sell copies of the Software, 
+ * and to permit persons to whom the Software is furnished to do so, 
+ * subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
+#include "gui/gui_private.h"
 #include "system/gui_ll.h"
 
 #include "lcd_discovery.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
-    
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
 GUI_Layer_t Layers[GUI_LAYERS];
 static DMA2D_HandleTypeDef DMA2DHandle;
 uint16_t startAddress;
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
 #define DMA2D_START(type) do {                  \
     DMA2D->CR = (type);                         \
     DMA2D->CR |= 0 | 0;             \
     DMA2D->CR |= DMA2D_CR_START;                /* Start the transmission */\
 } while (0)
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                              Interrupt API                              **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                             LCD specific API                            **/
-/******************************************************************************/
-/******************************************************************************/
 static
 void LCD_Init(GUI_LCD_t* LCD) {
     TM_SDRAM_Init();                                /* Init SDRAM */
@@ -280,20 +253,6 @@ void LCD_CopyChar(GUI_LCD_t* LCD, GUI_Layer_t* layer, const void* src, void* dst
     DMA2D->NLR = (uint32_t)(xSize << 16) | (uint16_t)ySize; 
     
     DMA2D_START(DMA2D_M2M_BLEND);                   /* Start DMA2D transfer */
-    
-//    do {
-//        GUI_iDim_t x, y;
-//        uint8_t* ptr = (uint8_t *)src;
-//        for (y = 0; y < ySize; y++) {
-//            for (x = 0; x < xSize; x++) {
-//                __GUI_DEBUG("%c", *ptr == 0xFF ? 'X' : ' ');
-//                ptr++;
-//            }
-//            __GUI_DEBUG("\r\n");
-//            ptr += offLineSrc;
-//        }
-//        __GUI_DEBUG("\r\n\r\n");
-//    } while (0);
 }
 
 static

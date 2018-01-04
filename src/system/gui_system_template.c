@@ -1,5 +1,5 @@
 #define GUI_INTERNAL
-#include "gui_system.h"
+#include "gui_sys.h"
 #include "stm32f7xx_hal.h"
 
 #define VAL_MUTEX_INVALID           (osMutexId)0
@@ -22,7 +22,7 @@ gui_sys_now(void) {
     return HAL_GetTick();                       /* Get current tick in units of milliseconds */
 }
 
-#if GUI_OS || defined(DOXYGEN)
+#if GUI_OS || __DOXYGEN__
 uint8_t
 gui_sys_init(void) {
     sys_mutex = osMutexCreate(osMutex(sys_mutex));  /* Create main system mutex for protection */
@@ -222,7 +222,7 @@ gui_sys_thread_create(const char* name, void (*thread_func)(void *), void* const
     return osThreadCreate(&thread_def, arg);    /* Create thread */
 }
 
-#endif /* GUI_OS || defined(DOXYGEN) */
+#endif /* GUI_OS || __DOXYGEN__ */
 
 /**
  * \}

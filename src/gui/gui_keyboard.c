@@ -29,15 +29,11 @@
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
+#include "gui/gui_private.h"
 #include "gui/gui_keyboard.h"
 #include "widget/gui_container.h"
 #include "widget/gui_button.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
 typedef struct {
     uint32_t C;                                     /*!< Character to print */
     uint32_t CS;                                    /*!< Character on shift */
@@ -70,11 +66,6 @@ typedef struct {
     uint8_t ActionValue;                            /*!< Action custom value */
 } KeyboardInfo_t;
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
 #define SPECIAL_123                     ((uint32_t)0x01)
 #define SPECIAL_ABC                     ((uint32_t)0x02)
 #define SPECIAL_CALC                    ((uint32_t)0x03)
@@ -94,11 +85,6 @@ typedef struct {
 #define ACTION_HIDE                     0x01
 #define ACTION_SHOW                     0x02
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
 /***************************/
 /*   Layout 1 descriptors  */
 /***************************/
@@ -162,8 +148,8 @@ const KeyboardRow_t KeyboardL1Rows[] = {
 /***************************/
 /*   Layout 2 descriptors  */
 /***************************/
-static 
-const KeyboardBtn_t ButtonsL2R1[] = {
+static const
+KeyboardBtn_t ButtonsL2R1[] = {
     {.C = ((uint32_t)'1'), .X = 0.5, .W = 9},
     {.C = ((uint32_t)'2'), .X = 10.5, .W = 9},
     {.C = ((uint32_t)'3'), .X = 20.5, .W = 9},
@@ -176,8 +162,8 @@ const KeyboardBtn_t ButtonsL2R1[] = {
     {.C = ((uint32_t)'0'), .X = 90.5, .W = 9}
 };
 
-static 
-const KeyboardBtn_t ButtonsL2R2[] = {
+static const
+KeyboardBtn_t ButtonsL2R2[] = {
     {.C = ((uint32_t)'-'), .X = 0.5, .W = 9},
     {.C = ((uint32_t)'/'), .X = 10.5, .W = 9},
     {.C = ((uint32_t)':'), .X = 20.5, .W = 9},
@@ -190,8 +176,8 @@ const KeyboardBtn_t ButtonsL2R2[] = {
     {.C = ((uint32_t)'"'), .X = 90.5, .W = 9}
 };
 
-static 
-const KeyboardBtn_t ButtonsL2R3[] = {
+static const
+KeyboardBtn_t ButtonsL2R3[] = {
     {.C = 0, .X = 0.5, .W = 14, .S = SPECIAL_CALC},
     {.C = ((uint32_t)'.'), .X = 15.5, .W = 13},
     {.C = ((uint32_t)','), .X = 29.5, .W = 13},
@@ -201,8 +187,8 @@ const KeyboardBtn_t ButtonsL2R3[] = {
     {.C = 0, .X = 85.5, .W = 14, .S = SPECIAL_BACKSPACE},
 };
 
-static 
-const KeyboardBtn_t ButtonsL2R4[] = {
+static const
+KeyboardBtn_t ButtonsL2R4[] = {
     {.C = 0, .X = 0.5, .W = 9, .S = ((uint32_t)SPECIAL_ABC)},
     {.C = ((uint32_t)' '), .X = 10.5, .W = 59},
     {.C = ((uint32_t)'.'), .X = 70.5, .W = 9},
@@ -210,8 +196,8 @@ const KeyboardBtn_t ButtonsL2R4[] = {
     {.C = 0, .X = 90.5, .W = 9, .S = ((uint32_t)SPECIAL_HIDE)},
 };
 
-static
-const KeyboardRow_t KeyboardL2Rows[] = {
+static const
+KeyboardRow_t KeyboardL2Rows[] = {
     {.xOffset = 1, .Btns = ButtonsL2R1, .BtnsCount = GUI_COUNT_OF(ButtonsL2R1)},
     {.xOffset = 1, .Btns = ButtonsL2R2, .BtnsCount = GUI_COUNT_OF(ButtonsL2R2)},
     {.xOffset = 1, .Btns = ButtonsL2R3, .BtnsCount = GUI_COUNT_OF(ButtonsL2R3)},
@@ -221,8 +207,8 @@ const KeyboardRow_t KeyboardL2Rows[] = {
 /***************************/
 /*   Layout 2 descriptors  */
 /***************************/
-static 
-const KeyboardBtn_t ButtonsL3R1[] = {
+static const
+KeyboardBtn_t ButtonsL3R1[] = {
     {.C = ((uint32_t)'['), .X = 0.5, .W = 9},
     {.C = ((uint32_t)']'), .X = 10.5, .W = 9},
     {.C = ((uint32_t)'{'), .X = 20.5, .W = 9},
@@ -235,8 +221,8 @@ const KeyboardBtn_t ButtonsL3R1[] = {
     {.C = ((uint32_t)'='), .X = 90.5, .W = 9}
 };
 
-static 
-const KeyboardBtn_t ButtonsL3R2[] = {
+static const
+KeyboardBtn_t ButtonsL3R2[] = {
     {.C = ((uint32_t)'_'), .X = 0.5, .W = 9},
     {.C = ((uint32_t)'\\'), .X = 10.5, .W = 9},
     {.C = ((uint32_t)'|'), .X = 20.5, .W = 9},
@@ -249,8 +235,8 @@ const KeyboardBtn_t ButtonsL3R2[] = {
     {.C = ((uint32_t)'-'), .X = 90.5, .W = 9}
 };
 
-static 
-const KeyboardBtn_t ButtonsL3R3[] = {
+static const
+KeyboardBtn_t ButtonsL3R3[] = {
     {.C = 0, .X = 0.5, .W = 14, .S = SPECIAL_123},
     {.C = ((uint32_t)'.'), .X = 15.5, .W = 13},
     {.C = ((uint32_t)','), .X = 29.5, .W = 13},
@@ -260,8 +246,8 @@ const KeyboardBtn_t ButtonsL3R3[] = {
     {.C = 0, .X = 85.5, .W = 14, .S = SPECIAL_BACKSPACE},
 };
 
-static 
-const KeyboardBtn_t ButtonsL3R4[] = {
+static const
+KeyboardBtn_t ButtonsL3R4[] = {
     {.C = 0, .X = 0.5, .W = 9, .S = ((uint32_t)SPECIAL_ABC)},
     {.C = ((uint32_t)' '), .X = 10.5, .W = 59},
     {.C = ((uint32_t)'.'), .X = 70.5, .W = 9},
@@ -269,8 +255,8 @@ const KeyboardBtn_t ButtonsL3R4[] = {
     {.C = 0, .X = 90.5, .W = 9, .S = ((uint32_t)SPECIAL_HIDE)},
 };
 
-static
-const KeyboardRow_t KeyboardL3Rows[] = {
+static const
+KeyboardRow_t KeyboardL3Rows[] = {
     {.xOffset = 1, .Btns = ButtonsL3R1, .BtnsCount = GUI_COUNT_OF(ButtonsL3R1)},
     {.xOffset = 1, .Btns = ButtonsL3R2, .BtnsCount = GUI_COUNT_OF(ButtonsL3R2)},
     {.xOffset = 1, .Btns = ButtonsL3R3, .BtnsCount = GUI_COUNT_OF(ButtonsL3R3)},
@@ -280,7 +266,8 @@ const KeyboardRow_t KeyboardL3Rows[] = {
 /************************/
 /*  Layouts descriptor  */
 /************************/
-static const KeyboardLayout_t KeyboardLayouts[] = {
+static const
+KeyboardLayout_t KeyboardLayouts[] = {
     {.ID = GUI_ID_KEYBOARD_LAYOUT_ABC, .Rows = KeyboardL1Rows, .RowsCount = GUI_COUNT_OF(KeyboardL1Rows)},
     {.ID = GUI_ID_KEYBOARD_LAYOUT_123, .Rows = KeyboardL2Rows, .RowsCount = GUI_COUNT_OF(KeyboardL2Rows)},
     {.ID = GUI_ID_KEYBOARD_LAYOUT_CALC, .Rows = KeyboardL3Rows, .RowsCount = GUI_COUNT_OF(KeyboardL3Rows)},
@@ -561,12 +548,6 @@ keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param, 
             return gui_widget_processdefaultcallback(h, cmd, param, result);    /* Process default callback */
     }
 }
-
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
 
 /**
  * \brief           Hide opened virtual keyboard

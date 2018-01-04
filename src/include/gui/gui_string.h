@@ -103,9 +103,9 @@ uint8_t gui_string_unicode_encode(const uint32_t c, GUI_Char* out);
  */
 typedef struct GUI_STRING_t {
     const GUI_Char* Str;                /*!< Pointer to source string */
-#if GUI_CFG_USE_UNICODE || defined(DOXYGEN)
+#if GUI_CFG_USE_UNICODE || __DOXYGEN__
     GUI_STRING_UNICODE_t S;             /*!< Unicode processing structure */
-#endif /* GUI_CFG_USE_UNICODE || defined(DOXYGEN) */
+#endif /* GUI_CFG_USE_UNICODE || __DOXYGEN__ */
 } GUI_STRING_t;
 
 size_t gui_string_length(const GUI_Char* src);

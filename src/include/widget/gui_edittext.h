@@ -88,7 +88,7 @@ typedef enum GUI_EDITTEXT_HALIGN_t {
     GUI_EDITTEXT_HALIGN_RIGHT = GUI_HALIGN_RIGHT    /*!< Horizontal align right */
 } GUI_EDITTEXT_HALIGN_t;
     
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
 
 #define GUI_EDITTEXT_FLAG_MULTILINE         ((uint8_t)0x01) /*!< Defines widget as multi-line edit */
 
@@ -102,7 +102,7 @@ typedef struct GUI_EDITTEXT_t {
     GUI_EDITTEXT_VALIGN_t VAlign;           /*!< Vertical align setup */
     GUI_EDITTEXT_HALIGN_t HAlign;           /*!< Horizontal align setup */
 } GUI_EDITTEXT_t;
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 GUI_HANDLE_p gui_edittext_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 uint8_t gui_edittext_setcolor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color);

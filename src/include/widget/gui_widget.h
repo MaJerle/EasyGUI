@@ -558,7 +558,7 @@ extern "C" {
  */
 #define gui_widget_isactive__(h)                    (!!gui_widget_getflag__(h, GUI_FLAG_ACTIVE))
 
-#if GUI_CFG_USE_TRANSPARENCY || defined(DOXYGEN)
+#if GUI_CFG_USE_TRANSPARENCY || __DOXYGEN__
 /**
  * \brief           Check is widget has transparency
  * \note            Check if widget is visible and transparency is not set to 1 (full view)
@@ -584,7 +584,7 @@ extern "C" {
  * \hideinitializer
  */
 #define gui_widget_gettransparency__(h)             ((uint8_t)(__GH(h)->Transparency))
-#endif /* GUI_CFG_USE_TRANSPARENCY || defined(DOXYGEN) */
+#endif /* GUI_CFG_USE_TRANSPARENCY || __DOXYGEN__ */
 
 /**
  * \brief           Get z-index value from widget
@@ -803,7 +803,7 @@ uint8_t gui_widget_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* p
  * \}
  */
  
-#if defined(GUI_INTERNAL) && !defined(DOXYGEN)
+#if defined(GUI_INTERNAL) && !__DOXYGEN__
 //Strictly private functions by GUI
 //Widget initialization purpose
 void gui_widget_init(void);
@@ -821,7 +821,7 @@ void gui_widget_active_set(GUI_HANDLE_p h);
 
 //Execute actual widget remove process
 uint8_t gui_widget_executeremove(void);
-#endif /* !defined(DOXYGEN) */
+#endif /* !__DOXYGEN__ */
 
 /**
  * \}

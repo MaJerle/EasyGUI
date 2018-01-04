@@ -29,20 +29,10 @@
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
+#include "gui/gui_private.h"
 #include "gui/gui_input.h"
-#include "system/gui_system.h"
+#include "system/gui_sys.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/    
 #if GUI_CFG_USE_TOUCH
 static GUI_BUFFER_t TSBuffer;
 static GUI_Byte_t TSBufferData[GUI_CFG_TOUCH_BUFFER_SIZE * sizeof(GUI_TouchData_t) + 1];
@@ -52,24 +42,8 @@ static GUI_BUFFER_t KBBuffer;
 static GUI_Byte_t KBBufferData[GUI_CFG_KEYBOARD_BUFFER_SIZE * sizeof(GUI_KeyboardData_t) + 1];
 #endif /* GUI_CFG_USE_KEYBOARD */
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
-#if GUI_CFG_USE_TOUCH || defined(DOXYGEN)
+#if GUI_CFG_USE_TOUCH || __DOXYGEN__
 
 /**
  * \brief           Add new touch data to internal buffer for further processing
@@ -114,10 +88,10 @@ gui_input_touchavailable(void) {
     return gui_buffer_getfull(&TSBuffer) > 0;       /* Check if any available touch */
 }
 
-#endif /* GUI_CFG_USE_TOUCH || defined(DOXYGEN) */
+#endif /* GUI_CFG_USE_TOUCH || __DOXYGEN__ */
 
 
-#if GUI_CFG_USE_KEYBOARD || defined(DOXYGEN)
+#if GUI_CFG_USE_KEYBOARD || __DOXYGEN__
 
 /**
  * \brief           Add new key data to internal buffer for further processing
@@ -151,7 +125,7 @@ gui_input_keyread(GUI_KeyboardData_t* kb) {
     }
     return 0;
 }
-#endif /* GUI_CFG_USE_KEYBOARD || defined(DOXYGEN) */
+#endif /* GUI_CFG_USE_KEYBOARD || __DOXYGEN__ */
 
 /**
  * \brief           Initialize input manager for GUI

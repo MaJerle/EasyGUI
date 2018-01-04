@@ -69,7 +69,7 @@ typedef enum GUI_WINDOW_COLOR_t {
     GUI_WINDOW_COLOR_TOP_BG_NOFOC,          /*!< Top background color when widget not in focus */
 } GUI_WINDOW_COLOR_t;
 
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
 /**
  * \brief           Window object structure
  */
@@ -81,7 +81,7 @@ typedef struct GUI_WINDOW_t {
     GUI_Dim_t BorderRadius;                 /*!< Radius in units of pixels for children windows */
     GUI_Dim_t BorderWidth;                  /*!< Border width */
 } GUI_WINDOW_t;
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
   
 GUI_HANDLE_p gui_window_getdesktop(void);
 uint8_t gui_window_setactive(GUI_HANDLE_p h);

@@ -1571,7 +1571,7 @@ gui_widget_setzindex__(GUI_HANDLE_p h, int32_t zindex) {
     return ret;
 }
 
-#if GUI_CFG_USE_TRANSPARENCY || defined(DOXYGEN)
+#if GUI_CFG_USE_TRANSPARENCY || __DOXYGEN__
 /**
  * \brief           Set transparency level to widget
  * \note            Since this function is private, it can only be used by user inside GUI library
@@ -2691,7 +2691,7 @@ gui_widget_getzindex(GUI_HANDLE_p h) {
     return ret;
 }
 
-#if GUI_CFG_USE_TRANSPARENCY || defined(DOXYGEN)
+#if GUI_CFG_USE_TRANSPARENCY || __DOXYGEN__
 /**
  * \brief           Set transparency level to widget
  * \param[in,out]   h: Widget handle
@@ -2735,7 +2735,7 @@ gui_widget_gettransparency(GUI_HANDLE_p h) {
     __GUI_LEAVE();                                  /* Leave GUI */
     return trans;
 }
-#endif /* GUI_CFG_USE_TRANSPARENCY || defined(DOXYGEN) */
+#endif /* GUI_CFG_USE_TRANSPARENCY || __DOXYGEN__ */
 
 /**
  * \brief           Set 3D mode on widget

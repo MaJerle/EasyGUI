@@ -167,7 +167,7 @@ gui_dialog_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_
     return (GUI_HANDLE_p)ptr;
 }
 
-#if GUI_CFG_OS || defined(DOXYGEN)
+#if GUI_CFG_OS || __DOXYGEN__
 /**
  * \brief           Create new dialog base element without any "design" style and wait for dismiss status
  * \note            Function will block thread until dialog is dismissed using \ref gui_dialog_dismiss function by user
@@ -214,7 +214,7 @@ gui_dialog_createblocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t wid
     
     return resp;
 }
-#endif /* GUI_CFG_OS || defined(DOXYGEN) */
+#endif /* GUI_CFG_OS || __DOXYGEN__ */
 
 /**
  * \brief           Dismiss (close) dialog with status

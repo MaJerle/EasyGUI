@@ -68,7 +68,7 @@ gui_image_setsource(handle, &bmimage_voyo565);
 \endcode
  */
 
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
 /**
  * \brief           Image widget structure
  */
@@ -77,7 +77,7 @@ typedef struct GUI_IMAGE_t {
     
     const GUI_IMAGE_DESC_t* Image;          /*!< Pointer to image object to draw */
 } GUI_IMAGE_t;
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
     
 GUI_HANDLE_p gui_image_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 uint8_t gui_image_setsource(GUI_HANDLE_p h, const GUI_IMAGE_DESC_t* img);

@@ -62,7 +62,7 @@ typedef enum GUI_BUTTON_COLOR_t {
     GUI_BUTTON_COLOR_BORDER,                /*!< Border color index in array */
 } GUI_BUTTON_COLOR_t;
 
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
 /**
  * \brief           GUI button structure
  */
@@ -72,7 +72,7 @@ typedef struct GUI_BUTTON_t {
     GUI_Dim_t BorderWidth;                  /*!< Border width */
     GUI_Dim_t BorderRadius;                 /*!< Border radius */
 } GUI_BUTTON_t;
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 GUI_HANDLE_p gui_button_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 uint8_t gui_button_setcolor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color);

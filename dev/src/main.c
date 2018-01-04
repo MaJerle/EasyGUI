@@ -163,8 +163,6 @@ float x, y;
 
 int pressed = 0;
 
-extern GUI_t GUI;
-
 #define IMG_WIDTH           64
 #define IMG_HEIGHT          64
 
@@ -275,10 +273,6 @@ user_thread(void const * arg) {
                 case UNICODE_OK:
                     if (ch == 'l') {
                         gui_linkedlist_printlist();
-                        break;
-                    }
-                    if (ch == 'b') {
-                        TM_USART_Send(DISCO_USART, (uint8_t *)GUI.LCD.ActiveLayer->StartAddress, (size_t)GUI.LCD.ActiveLayer->Width * (size_t)GUI.LCD.ActiveLayer->Height * (size_t)GUI.LCD.PixelSize);
                         break;
                     }
                     if (ch == 'w') {

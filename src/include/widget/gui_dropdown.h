@@ -88,14 +88,14 @@ for (i = 0; i < COUNT_OF(listboxtexts); i++) {
 \endcode
  */
 
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
     
 #define GUI_FLAG_DROPDOWN_OPENED        0x01/*!< Dropdown is opened */
 #define GUI_FLAG_DROPDOWN_SLIDER_ON     0x02/*!< Slider is currently active */
 #define GUI_FLAG_DROPDOWN_SLIDER_AUTO   0x04/*!< Show right slider automatically when required, otherwise, manual mode is used */
 #define GUI_FLAG_DROPDOWN_OPEN_UP       0x08/*!< Open dropdown in top direction instead of bottom */
     
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
     
 /**
  * \brief           List of dropdown colors
@@ -117,7 +117,7 @@ typedef enum GUI_DROPDOWN_OPENDIR_t {
     GUI_DROPDOWN_OPENDIR_UP = 0x01          /*!< Dropdown will open up according to current position */
 } GUI_DROPDOWN_OPENDIR_t;
 
-#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+#if defined(GUI_INTERNAL) || __DOXYGEN__
 
 /**
  * \brief           Dropdown string item object
@@ -145,7 +145,7 @@ typedef struct GUI_DROPDOWN_t {
     GUI_Dim_t SliderWidth;                  /*!< Slider width in units of pixels */
     uint8_t Flags;                          /*!< Widget flags */
 } GUI_DROPDOWN_t;
-#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
+#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 GUI_HANDLE_p gui_dropdown_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 uint8_t gui_dropdown_setcolor(GUI_HANDLE_p h, GUI_DROPDOWN_COLOR_t index, GUI_Color_t color);

@@ -62,8 +62,9 @@ extern "C" {
 
 /* GUI Low-Level drivers */
 #include "system/gui_ll.h"
+#include "system/gui_sys.h"
 
-//#if defined(GUI_INTERNAL) || defined(DOXYGEN)
+//#if defined(GUI_INTERNAL) || __DOXYGEN__
 /**
  * \defgroup        GUI_Internal Internal macros 
  * \brief           List of internal macros which can be used only inside GUI library and are not visible by user outside GUI library
@@ -236,81 +237,7 @@ extern "C" {
 /**
  * \}
  */
-//#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
-
-#if GUI_CFG_OS
-#include "system/gui_system.h"
-
-#define GUI_SYS_MBOX_TYPE_TOUCH             0x01
-#define GUI_SYS_MBOX_TYPE_KEYBOARD          0x02
-#define GUI_SYS_MBOX_TYPE_REMOVE            0x03
-#define GUI_SYS_MBOX_TYPE_TIMER             0x04
-#define GUI_SYS_MBOX_TYPE_WIDGET_CREATED    0x05
-#define GUI_SYS_MBOX_TYPE_INVALIDATE        0x06
-
-/**
- * \brief           Message box data type
- */
-typedef struct gui_mbox_msg_t {
-    uint32_t type;                          /*!< Message type */
-} gui_mbox_msg_t;
-
-/**
- * \brief           OS dependant variables
- */
-typedef struct GUI_CFG_OS_t {
-    gui_sys_thread_t thread_id;             /*!< GUI thread ID */
-    gui_sys_mbox_t mbox;                    /*!< Operating system message box */
-} GUI_CFG_OS_t;
-#endif /* GUI_CFG_OS */
-
-/**
- * \brief           GUI main object structure
- */
-typedef struct GUI_t {
-    GUI_LCD_t LCD;                          /*!< LCD low-level settings */
-    GUI_LL_t LL;                            /*!< Low-level drawing routines for LCD */
-    
-    uint32_t Flags;                         /*!< Core GUI flags management */
-    
-    GUI_Display_t Display;                  /*!< Clipping management */
-    GUI_Display_t DisplayTemp;              /*!< Clipping for widgets for drawing and touch */
-    
-    GUI_HANDLE_p WindowActive;              /*!< Pointer to currently active window when creating new widgets */
-    GUI_HANDLE_p FocusedWidget;             /*!< Pointer to focused widget for keyboard events if any */
-    GUI_HANDLE_p FocusedWidgetPrev;         /*!< Pointer to previously focused widget */
-    
-    GUI_LinkedListRoot_t Root;              /*!< Root linked list of widgets */
-    GUI_TIMER_CORE_t Timers;                /*!< Software structure management */
-    
-    GUI_LinkedListRoot_t RootFonts;         /*!< Root linked list of font widgets */
-    
-    GUI_WIDGET_PARAM_t WidgetParam;
-    GUI_WIDGET_RESULT_t WidgetResult;
-    
-#if GUI_CFG_USE_TOUCH || defined(DOXYGEN)
-    __GUI_TouchData_t TouchOld;             /*!< Old touch data, used for event management */
-    __GUI_TouchData_t Touch;                /*!< Current touch data and processing tool */
-    GUI_HANDLE_p ActiveWidget;              /*!< Pointer to widget currently active by touch */
-    GUI_HANDLE_p ActiveWidgetPrev;          /*!< Previously active widget */
-#endif /* GUI_CFG_USE_TOUCH */
-
-#if GUI_CFG_USE_TRANSLATE
-    GUI_TRANSLATE_t Translate;              /*!< Translation management structure */
-#endif /* GUI_CFG_USE_TRANSLATE */
-    
-#if GUI_CFG_OS
-    GUI_CFG_OS_t OS;                            /*!< Operating system dependant structure */
-#endif /* GUI_CFG_OS */
-
-    GUI_EventCallback_t EventCb;            /*!< Pointer to global GUI event callback function */
-    
-    uint8_t Initialized;                    /*!< Status indicating GUI is initialized */
-} GUI_t;
-#if defined(GUI_INTERNAL)
-extern GUI_t GUI;
-
-#endif /* defined(GUI_INTERNAL) */
+//#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 /* Include widget structure */
 #include "widget/gui_widget.h"

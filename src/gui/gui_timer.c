@@ -29,8 +29,9 @@
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
+#include "gui/gui_private.h"
 #include "gui/gui_timer.h"
-#include "system/gui_system.h"
+#include "system/gui_sys.h"
 
 /******************************************************************************/
 /******************************************************************************/
