@@ -33,17 +33,6 @@
 #include "widget/gui_graph.h"
 #include "math.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
 #define __GG(x)             ((GUI_GRAPH_t *)(x))
 
 #define CFG_MIN_X           0x01
@@ -54,19 +43,22 @@
 
 static uint8_t gui_graph_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
-static const GUI_Color_t Colors[] = {
+/**
+ * \brief           List of default color in the same order of widget color enumeration
+ */
+static const
+GUI_Color_t Colors[] = {
     GUI_COLOR_GRAY,                                 /*!< Default background color */
     GUI_COLOR_BLACK,                                /*!< Default foreground color */
     GUI_COLOR_BLACK,                                /*!< Default border color */
     0xFF002F00,                                     /*!< Default grid color */
 };
 
-static const GUI_WIDGET_t Widget = {
+/**
+ * \brief           Widget initialization structure
+ */
+static const
+GUI_WIDGET_t Widget = {
     .Name = _GT("GRAPH"),                           /*!< Widget name */
     .Size = sizeof(GUI_GRAPH_t),                    /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
@@ -75,11 +67,6 @@ static const GUI_WIDGET_t Widget = {
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
 };
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
 #define g       ((GUI_GRAPH_t *)(h))
 
 /* Reset zoom control on graph */
@@ -104,10 +91,18 @@ graph_zoom(GUI_HANDLE_p h, float zoom, float xpos, float ypos) {
     g->VisibleMaxY -= (g->VisibleMaxY - g->VisibleMinY) * (zoom - 1.0f) * (1.0f - ypos);
 }
 
+/**
+ * \brief           Default widget callback function
+ * \param[in]       h: Widget handle
+ * \param[in]       ctr: Callback type
+ * \param[in]       param: Input parameters for callback type
+ * \param[out]      result: Result for callback type
+ * \return          1 if command processed, 0 otherwise
+ */
 static uint8_t
 gui_graph_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
 #if GUI_CFG_USE_TOUCH
-static GUI_iDim_t tX[GUI_CFG_TOUCH_MAX_PRESSES], tY[GUI_CFG_TOUCH_MAX_PRESSES];
+    static GUI_iDim_t tX[GUI_CFG_TOUCH_MAX_PRESSES], tY[GUI_CFG_TOUCH_MAX_PRESSES];
 #endif /* GUI_CFG_USE_TOUCH */    
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
@@ -347,32 +342,27 @@ static GUI_iDim_t tX[GUI_CFG_TOUCH_MAX_PRESSES], tY[GUI_CFG_TOUCH_MAX_PRESSES];
 
 #if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
 /* Invalidate graphs attached to data */
-static void graph_invalidate(GUI_GRAPH_DATA_p data) {
+static void
+graph_invalidate(GUI_GRAPH_DATA_p data) {
     GUI_HANDLE_p h;
     GUI_LinkedListMulti_t* link;
-    /**
+    /*
      * Invalidate all graphs attached to this data plot
      */
     for (link = gui_linkedlist_multi_getnext_gen(&data->Root, NULL); link;
             link = gui_linkedlist_multi_getnext_gen(NULL, link)) {
-        /**
+        /*
          * Linked list of graph member in data structure is not on top
          */
         h = (GUI_HANDLE_p)gui_linkedlist_multi_getdata(link); /* Get data from linked list object */
         
-        /**
+        /*
          * Invalidate each object attached to this data graph
          */
         gui_widget_invalidate__(h);
     }
 }
 #endif /* GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
-
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
 
 /**
  * \brief           Create new graph widget

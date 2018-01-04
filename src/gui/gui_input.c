@@ -42,14 +42,12 @@ static GUI_BUFFER_t KBBuffer;
 static GUI_Byte_t KBBufferData[GUI_CFG_KEYBOARD_BUFFER_SIZE * sizeof(GUI_KeyboardData_t) + 1];
 #endif /* GUI_CFG_USE_KEYBOARD */
 
-
 #if GUI_CFG_USE_TOUCH || __DOXYGEN__
 
 /**
  * \brief           Add new touch data to internal buffer for further processing
- * \param[in]       *ts: Pointer to \ref GUI_TouchData_t touch data with valid input
- * \retval          1: Success
- * \retval          0: Failure
+ * \param[in]       ts: Pointer to \ref GUI_TouchData_t touch data with valid input
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_input_touchadd(GUI_TouchData_t* ts) {
@@ -57,7 +55,11 @@ gui_input_touchadd(GUI_TouchData_t* ts) {
     __GUI_ASSERTPARAMS(ts);                         /* Check input parameters */
     ts->Time = gui_sys_now();                       /* Set event time */
     ret = gui_buffer_write(&TSBuffer, ts, sizeof(*ts)) ? 1 : 0; /* Write data to buffer */
+    
 #if GUI_CFG_OS
+    /*
+     * Notify OS to wakeup thread
+     */
     static gui_mbox_msg_t gui_touch_value = {GUI_SYS_MBOX_TYPE_TOUCH};  /* Enter some value, don't care about */
     gui_sys_mbox_putnow(&GUI.OS.mbox, &gui_touch_value);    /* Notify stack about new key added */
 #endif /* GUI_CFG_OS */
@@ -66,9 +68,8 @@ gui_input_touchadd(GUI_TouchData_t* ts) {
 
 /**
  * \brief           Reads new touch entry
- * \param[out]      *ts: Pointer to \ref GUI_TouchData_t structure to save touch into to
- * \retval          1: Valid data read
- * \retval          0: Data invalid
+ * \param[out]      ts: Pointer to \ref GUI_TouchData_t structure to save touch into to
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_input_touchread(GUI_TouchData_t* ts) {
@@ -80,8 +81,7 @@ gui_input_touchread(GUI_TouchData_t* ts) {
 
 /**
  * \brief           Checks if anything available for touch inputs
- * \retval          1: Touch available for read
- * \retval          0: Touch not available for read
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_input_touchavailable(void) {
@@ -90,14 +90,12 @@ gui_input_touchavailable(void) {
 
 #endif /* GUI_CFG_USE_TOUCH || __DOXYGEN__ */
 
-
 #if GUI_CFG_USE_KEYBOARD || __DOXYGEN__
 
 /**
  * \brief           Add new key data to internal buffer for further processing
- * \param[in]       *kb: Pointer to \ref GUI_KeyboardData_t key data
- * \retval          1: Success
- * \retval          0: Failure
+ * \param[in]       kb: Pointer to \ref GUI_KeyboardData_t key data
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_input_keyadd(GUI_KeyboardData_t* kb) {
@@ -105,7 +103,11 @@ gui_input_keyadd(GUI_KeyboardData_t* kb) {
     __GUI_ASSERTPARAMS(kb);                         /* Check input parameters */
     kb->Time = gui_sys_now();                       /* Set event time */
     ret = gui_buffer_write(&KBBuffer, kb, sizeof(*kb)) ? 1 : 0; /* Write data to buffer */
+    
 #if GUI_CFG_OS
+    /*
+     * Notify OS to wakeup thread
+     */
     static gui_mbox_msg_t gui_kbd_value = {GUI_SYS_MBOX_TYPE_KEYBOARD}; /* Enter some value, don't care about */
     gui_sys_mbox_putnow(&GUI.OS.mbox, &gui_kbd_value);   /* Notify stack about new key added */
 #endif /* GUI_CFG_OS */
@@ -114,9 +116,8 @@ gui_input_keyadd(GUI_KeyboardData_t* kb) {
 
 /**
  * \brief           Read keyboard entry from buffer
- * \param[out]      *kb: Pointer to \ref GUI_KeyboardData_t to save entry to
- * \retval          1: Entry valid
- * \retval          0: Entry invalid
+ * \param[out]      kb: Pointer to \ref GUI_KeyboardData_t to save entry to
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_input_keyread(GUI_KeyboardData_t* kb) {

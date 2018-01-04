@@ -32,11 +32,6 @@
 #include "gui/gui_private.h"
 #include "gui/gui_draw.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
 typedef struct GUI_StringRect_t {
     size_t Lines;                                   /*!< Number of lines processed */
     GUI_iDim_t Width;                               /*!< Rectangle width */
@@ -68,32 +63,16 @@ typedef struct GUI_StringRectVars_t {
     uint8_t Final;                                  /*!< Status indicating we should do line check and finish */
     uint8_t IsBreak;                                /*!< Status indicating break occurred */
 } GUI_StringRectVars_t;
-
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
 #define CH_CR           GUI_KEY_CR
 #define CH_LF           GUI_KEY_LF
 #define CH_WS           GUI_KEY_WS
 #define get_char_from_value(ch)      (uint32_t)((CH_CR == (ch) || CH_LF == (ch)) ? CH_WS : (ch))
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
 static GUI_StringRectVars_t var;
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
 /* Get character from font object array */
-static
-const GUI_FONT_CharInfo_t* __StringGetCharPtr(const GUI_FONT_t* font, uint32_t ch) {
+static const
+GUI_FONT_CharInfo_t* __StringGetCharPtr(const GUI_FONT_t* font, uint32_t ch) {
     ch = get_char_from_value(ch);                   /* Get char from char value */
     if (ch >= font->StartChar && ch <= font->EndChar) { /* Character is in font structure */
         return &font->Data[(ch) - font->StartChar]; /* Return character pointer from font */
@@ -104,8 +83,8 @@ const GUI_FONT_CharInfo_t* __StringGetCharPtr(const GUI_FONT_t* font, uint32_t c
 }
 
 /* Get dimensions for input character */
-static
-void __StringGetCharSize(const GUI_FONT_t* font, uint32_t ch, GUI_iDim_t* width, GUI_iDim_t* height) {
+static void
+__StringGetCharSize(const GUI_FONT_t* font, uint32_t ch, GUI_iDim_t* width, GUI_iDim_t* height) {
     const GUI_FONT_CharInfo_t* c = 0;
     
     c = __StringGetCharPtr(font, ch);               /* Get character from font */
@@ -190,8 +169,8 @@ process_string_rectangle_before_return(GUI_StringRectVars_t* var, GUI_StringRect
     rect->ReadTotal = var->cnt;                     /* Total number of characters to read from string */
 }
 
-static
-size_t string_rectangle(GUI_StringRect_t* rect, GUI_STRING_t* str, uint8_t onlyToNextLine) {
+static size_t
+string_rectangle(GUI_StringRect_t* rect, GUI_STRING_t* str, uint8_t onlyToNextLine) {
     GUI_iDim_t w, h, mW = 0, tH = 0;                /* Maximal width and total height */
     uint8_t i;
     const GUI_Char* lastS;
@@ -323,7 +302,7 @@ size_t string_rectangle(GUI_StringRect_t* rect, GUI_STRING_t* str, uint8_t onlyT
 }
 
 /* Get font char object from memory with alpha values */
-static GUI_FONT_CharEntry_t*
+static GUI_FONT_CharEntry_t *
 get_char_entry_from_font(const GUI_FONT_t* font, const GUI_FONT_CharInfo_t* c) {
     GUI_FONT_CharEntry_t* entry;
     for (entry = (GUI_FONT_CharEntry_t *)gui_linkedlist_getnext_gen(&GUI.RootFonts, NULL); entry;
@@ -336,7 +315,7 @@ get_char_entry_from_font(const GUI_FONT_t* font, const GUI_FONT_CharInfo_t* c) {
 }
 
 /* Create char and put it to RAM for fast drawing with memory to memory copy */
-static GUI_FONT_CharEntry_t*
+static GUI_FONT_CharEntry_t *
 create_char_entry_from_font(const GUI_FONT_t* font, const GUI_FONT_CharInfo_t* c) {
     GUI_FONT_CharEntry_t* entry = NULL;
     uint16_t columns;
@@ -577,7 +556,7 @@ draw_char(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_DRAW_FONT
 }
 
 /* Get string pointer start address for specific width of rectangle */
-static const GUI_Char*
+static const GUI_Char *
 string_get_pointer_for_width(const GUI_FONT_t* font, GUI_STRING_t* str, GUI_DRAW_FONT_t* draw) {
     GUI_iDim_t tot = 0, w, h;
     uint8_t i;
@@ -636,18 +615,6 @@ gui_draw_fill(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t 
     }
 }
 
-/******************************************************************************/
-/******************************************************************************/
-/***                              Protothreads                               **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
-
 /**
  * \brief           Initialize \ref GUI_DRAW_FONT_t structure for further usage
  * \param[in,out]   *f: Pointer to empty \ref GUI_DRAW_FONT_t structure
@@ -657,12 +624,6 @@ void
 gui_draw_font_init(GUI_DRAW_FONT_t* f) {
     memset((void *)f, 0x00, sizeof(*f));            /* Reset structure */
 }
-
-/******************************************************************************/
-/******************************************************************************/
-/***                    Functions with low-level communication               **/
-/******************************************************************************/
-/******************************************************************************/
 
 /**
  * \brief           Fill screen with color
@@ -1241,7 +1202,7 @@ gui_draw_filledcirclecorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t
  * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
  * \param[in]       x: Top left X position
  * \param[in]       y: Top left Y position
- * \param[in]       *img: Pointer to \ref GUI_IMAGE_DESC_t structure with image description
+ * \param[in]       img: Pointer to \ref GUI_IMAGE_DESC_t structure with image description
  * \retval          None
  */
 void
@@ -1311,7 +1272,7 @@ gui_draw_image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_IMAGE_
 /**
  * \brief           Draw polygon lines
  * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
- * \param[in]       *points: Pointer to array of \ref GUI_DRAW_Poly_t points to draw lines between
+ * \param[in]       points: Pointer to array of \ref GUI_DRAW_Poly_t points to draw lines between
  * \param[in]       len: Number of points in array. There must be at least 2 points
  * \param[in]       color: Color to use for drawing
  * \retval          None
@@ -1337,9 +1298,9 @@ gui_draw_poly(const GUI_Display_t* disp, const GUI_DRAW_Poly_t* points, size_t l
 /**
  * \brief           Write text to screen
  * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
- * \param[in]       *font: Pointer to \ref GUI_FONT_t structure with font to use
- * \param[in]       *str: Pointer to string to draw on screen
- * \param[in]       *draw: Pointer to \ref GUI_DRAW_FONT_t structure with specifications about drawing style
+ * \param[in]       font: Pointer to \ref GUI_FONT_t structure with font to use
+ * \param[in]       str: Pointer to string to draw on screen
+ * \param[in]       draw: Pointer to \ref GUI_DRAW_FONT_t structure with specifications about drawing style
  * \retval          None
  */
 void
@@ -1429,7 +1390,7 @@ gui_draw_writetext(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_
 
 /**
  * \brief           Initializes \ref GUI_DRAW_SB_t structure for drawing operations
- * \param[in]       *sb: Pointer to \ref GUI_DRAW_SB_t to initialize to default values
+ * \param[in]       sb: Pointer to \ref GUI_DRAW_SB_t to initialize to default values
  * \retval          None
  */
 void
@@ -1440,7 +1401,7 @@ gui_draw_scrollbar_init(GUI_DRAW_SB_t* sb) {
 /**
  * \brief           Draw scroll bar to screen
  * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
- * \param[in]       *sb: Pointer to \ref GUI_DRAW_SB_t parameters for scroll bar
+ * \param[in]       sb: Pointer to \ref GUI_DRAW_SB_t parameters for scroll bar
  * \retval          None
  */
 void

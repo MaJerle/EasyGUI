@@ -46,17 +46,6 @@ extern "C" {
  * \defgroup        GUI_WINDOW Window
  * \brief           Basic widget and core parent to all other widgets
  * \{
- *
- * Window is the Win98 styled widget which can support children widgets.
- *
- * \image html image_widget_window.png Default window widget
- *
- * Example code of image above:
- * \code{c}
-handle = gui_window_create(0, 40, 20, 300, 200, gui_window_getdesktop(), 0, 0);
-gui_widget_setexpanded(handle, 1);
-gui_widget_settext(handle, _GT("Window"));
-\endcode
  */
     
 /**

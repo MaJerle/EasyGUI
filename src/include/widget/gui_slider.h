@@ -46,16 +46,6 @@ extern "C" {
  * \defgroup        GUI_SLIDER Slider
  * \brief           Simple slider widget for user interaction
  * \{
- *
- * Simple slider widget to select range between 2 (min, max) values.
- *
- * \image html image_widget_slider.png Slider widget in different states. On top is passive state (touch not active) and bottom is when touch is active
- *
- * Example code of image above:
- * \code{c}
-//Create basic slider
-handle = gui_slider_create(0, 10, 10, 300, 50, 0, 0, 0);
-\endcode
  */
 
 /**

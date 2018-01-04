@@ -135,7 +135,7 @@ extern "C" {
  *
  * \par All boards and its defines
  *
-\code{.c}
+\code{c}
 //Use proper define for your board
 #define STM32F429_DISCOVERY
 #define STM32F401_DISCOVERY

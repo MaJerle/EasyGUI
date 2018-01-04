@@ -32,17 +32,6 @@
 #include "gui/gui_private.h"
 #include "widget/gui_checkbox.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
 #define __GC(x)             ((GUI_CHECKBOX_t *)(x))
 
 #define CFG_CHECK           0x01
@@ -50,12 +39,11 @@
 
 static uint8_t gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
-static const GUI_Color_t Colors[] = {
+/**
+ * \brief           List of default color in the same order of widget color enumeration
+ */
+static const
+GUI_Color_t Colors[] = {
     GUI_COLOR_WHITE,                                /*!< Default background color */
     GUI_COLOR_DARKGRAY,                             /*!< Default freground color */
     GUI_COLOR_BLACK,                                /*!< Default border color */
@@ -63,7 +51,11 @@ static const GUI_Color_t Colors[] = {
     GUI_COLOR_BLACK,                                /*!< Default text color for widget */
 };
 
-static const GUI_WIDGET_t Widget = {
+/**
+ * \brief           Widget initialization structure
+ */
+static const
+GUI_WIDGET_t Widget = {
     .Name = _GT("CHECKBOX"),                        /*!< Widget name */
     .Size = sizeof(GUI_CHECKBOX_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
@@ -72,11 +64,6 @@ static const GUI_WIDGET_t Widget = {
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
 };
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
 #define c                   ((GUI_CHECKBOX_t *)(h))
 
 /* Set checked status */
@@ -109,6 +96,14 @@ set_disabled(GUI_HANDLE_p h, uint8_t state) {
     return 0;
 }
 
+/**
+ * \brief           Default widget callback function
+ * \param[in]       h: Widget handle
+ * \param[in]       ctr: Callback type
+ * \param[in]       param: Input parameters for callback type
+ * \param[out]      result: Result for callback type
+ * \return          1 if command processed, 0 otherwise
+ */
 static uint8_t
 gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     switch (ctrl) {                                 /* Handle control function if required */
@@ -194,12 +189,6 @@ gui_checkbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
 }
 #undef c
 
-
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
 
 /**
  * \brief           Create new checkbox widget

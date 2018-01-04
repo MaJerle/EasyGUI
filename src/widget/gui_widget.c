@@ -33,11 +33,6 @@
 #include "widget/gui_widget.h"
 #include "widget/gui_window.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
 typedef struct {
     const GUI_FONT_t* Font;                 /*!< Pointer to font structure */
 } GUI_WIDGET_Def_t;
@@ -48,23 +43,7 @@ static gui_mbox_msg_t msg_widget_remove = {GUI_SYS_MBOX_TYPE_REMOVE};
 static gui_mbox_msg_t msg_widget_invalidate = {GUI_SYS_MBOX_TYPE_INVALIDATE};
 #endif /* GUI_CFG_OS */
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
 /* Removes widget and children widgets */
 static uint8_t
 remove_widget(GUI_HANDLE_p h) {
@@ -827,7 +806,7 @@ gui_widget_set3dstyle__(GUI_HANDLE_p h, uint8_t enable) {
 /**
  * \brief           Create new widget and add it to linked list to parent object
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       *widget: Pointer to \ref GUI_WIDGET_t structure with widget description
+ * \param[in]       widget: Pointer to \ref GUI_WIDGET_t structure with widget description
  * \param[in]       id: Widget unique ID to use for identity for callback processing
  * \param[in]       x: Widget X position relative to parent widget
  * \param[in]       y: Widget Y position relative to parent widget
@@ -967,7 +946,7 @@ gui_widget_remove__(GUI_HANDLE_p h) {
  * \brief           Set font used for widget drawing
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
- * \param[in]       *font: Pointer to \ref GUI_FONT_t structure with font information
+ * \param[in]       font: Pointer to \ref GUI_FONT_t structure with font information
  * \retval          1: Successful
  * \retval          0: Failed
  */
@@ -990,7 +969,7 @@ gui_widget_setfont__(GUI_HANDLE_p h, const GUI_FONT_t* font) {
  *                     Any changes on this text after function call will affect on later results
  *
  * \param[in,out]   h: Widget handle
- * \param[in]       *text: Pointer to text to set
+ * \param[in]       text: Pointer to text to set
  * \retval          1: Successful
  * \retval          0: Failed
  */
@@ -1097,7 +1076,7 @@ gui_widget_isfontandtextset__(GUI_HANDLE_p h) {
  * \brief           Process text key (add character, remove it, move cursor, etc)
  * \note            Since this function is private, it can only be used by user inside GUI library
  * \param[in,out]   h: Widget handle
- * \param[in]       *kb: Pointer to \ref __GUI_KeyboardData_t structure
+ * \param[in]       kb: Pointer to \ref __GUI_KeyboardData_t structure
  * \retval          1: Key processed
  * \retval          0: Key not processed
  */
@@ -1684,7 +1663,7 @@ gui_widget_getuserdata__(GUI_HANDLE_p h) {
  * \brief           Set widget parameter in OS secure way
  * \param[in,out]   h: Widget handle
  * \param[in]       cfg: Configuration to use, passed later to callback function
- * \param[in]       *data: Custom data to pass later to configuration callback
+ * \param[in]       data: Custom data to pass later to configuration callback
  * \param[in]       invalidate: Flag if widget should be invalidated after parameter change
  * \param[in]       invalidateparent: change if parent widget should be invalidated after parameter change
  * \retval          Pointer to user data
@@ -1787,7 +1766,7 @@ gui_widget_freetextmemory(GUI_HANDLE_p h) {
  *                     otherwise only pointer to input text will be used 
  *                     and each further change of input pointer text will affect to output
  * \param[in,out]   h: Widget handle
- * \param[in]       *text: Pointer to text to set to widget
+ * \param[in]       text: Pointer to text to set to widget
  * \retval          1: Text was set ok
  * \retval          0: Text was not set
  * \sa              gui_widget_alloctextmemory, gui_widget_freetextmemory, gui_widget_setfont, gui_widget_gettext, gui_widget_gettextcopy
@@ -1829,7 +1808,7 @@ gui_widget_gettext(GUI_HANDLE_p h) {
  * \brief           Get text from widget
  * \note            Text from widget is copied to input pointer
  * \param[in,out]   h: Widget handle
- * \param[out]      *dst: Destination pointer
+ * \param[out]      dst: Destination pointer
  * \param[in]       len: Size of output buffer in units of \ref GUI_Char
  * \retval          Pointer to text from widget
  * \sa              gui_widget_settext, gui_widget_gettext
@@ -1852,7 +1831,7 @@ gui_widget_gettextcopy(GUI_HANDLE_p h, GUI_Char* dst, uint32_t len) {
 /**
  * \brief           Set widget font for drawing operations
  * \param[in,out]   h: Widget handle
- * \param[in]       *font: Pointer to \ref GUI_FONT_t object for font
+ * \param[in]       font: Pointer to \ref GUI_FONT_t object for font
  * \retval          1: Font was set ok
  * \retval          0: Font was not set
  * \sa              gui_widget_settext, gui_widget_gettext
@@ -2389,8 +2368,8 @@ gui_widget_getuserdata(GUI_HANDLE_p h) {
  *                     It will automatically call required function according to input widget
  * \param[in,out]   h: Widget handle where callback occurred
  * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
- * \param[in]       *param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
- * \param[out]      *result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
+ * \param[in]       param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
+ * \param[out]      result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
  * \retval          1: Command has been processed
  * \retval          0: Command has not been processed
  */
@@ -2434,8 +2413,8 @@ gui_widget_setcallback(GUI_HANDLE_p h, GUI_WIDGET_CALLBACK_t callback) {
  *
  * \param[in,out]   h: Widget handle where callback occurred
  * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
- * \param[in]       *param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
- * \param[out]      *result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
+ * \param[in]       param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
+ * \param[out]      result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
  * \retval          1: Command has been processed
  * \retval          0: Command has not been processed
  * \sa              gui_widget_setcallback
@@ -2615,7 +2594,7 @@ gui_widget_setfocus(GUI_HANDLE_p h) {
 
 /**
  * \brief           Set default font for widgets used on widget creation
- * \param[in]       *font: Pointer to \ref GUI_FONT_t with font
+ * \param[in]       font: Pointer to \ref GUI_FONT_t with font
  * \retval          1: Font was set ok
  * \retval          0: Font was not set
  */

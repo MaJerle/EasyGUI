@@ -702,7 +702,7 @@ gui_default_event_cb(void) {
 #if GUI_CFG_OS || __DOXYGEN__
 /**
  * \brief           GUI main thread for RTOS
- * \param[in]       *argument: Pointer to user specific argument
+ * \param[in]       argument: Pointer to user specific argument
  */
 static void
 gui_thread(void * const argument) {

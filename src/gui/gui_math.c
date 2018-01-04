@@ -31,43 +31,13 @@
 #define GUI_INTERNAL
 #include "gui/gui_math.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
-
 /**
  * \brief           Calculate square of input value
  *
  *                  \f$\ y=sqrt{(x)}\f$
  *
  * \param[in]       x: Number to calculate square from
- * \param[out]      *result: Pointer to float variable to store result to
+ * \param[out]      result: Pointer to float variable to store result to
  * \retval          1: Function succedded, result is valid
  * \retval          0: Function failed, result is not valid
  */
@@ -86,7 +56,7 @@ gui_math_sqrt(float x, float* result) {
  *                  \f$\ y=\frac{1}{sqrt{(x)}}\f$
  *
  * \param[in]       x: Number to calculate reverse square from
- * \param[out]      *result: Pointer to float variable to store result to
+ * \param[out]      result: Pointer to float variable to store result to
  * \retval          1: Function succedded, result is valid
  * \retval          0: Function failed, result is not valid
  */
@@ -118,7 +88,7 @@ gui_math_rsqrt(float x, float* result) {
  * \param[in]       y1: Y position of point 1
  * \param[in]       x2: X position of point 2
  * \param[in]       y2: Y position of point 2
- * \param[out]      *result: Pointer to float variable to store result to
+ * \param[out]      result: Pointer to float variable to store result to
  * \retval          1: Function succedded, result is valid
  * \retval          0: Function failed, result is not valid
  */
@@ -138,8 +108,8 @@ gui_math_distancebetweenxy(float x1, float y1, float x2, float y2, float* result
  * \param[in]       y1: Y position of point 1
  * \param[in]       x2: X position of point 2
  * \param[in]       y2: Y position of point 2
- * \param[out]      *resultX: Pointer to float variable to store result about X position to
- * \param[out]      *resultY: Pointer to float variable to store result about Y position to
+ * \param[out]      resultX: Pointer to float variable to store result about X position to
+ * \param[out]      resultY: Pointer to float variable to store result about Y position to
  * \retval          1: Function succedded, results are valid
  * \retval          0: Function failed, results are not valid
  */

@@ -33,34 +33,26 @@
 #include "gui/gui_private.h"
 #include "widget/gui_window.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
 #define __GW(x)             ((GUI_WINDOW_t *)(x))
 
 static uint8_t gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
-    
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
-static const GUI_Color_t Colors[] = {
+
+/**
+ * \brief           List of default color in the same order of widget color enumeration
+ */
+static const
+GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_LIGHTGRAY,                        /*!< Default background color */
     GUI_COLOR_WIN_TEXT_TITLE,                       /*!< Default text color */
     GUI_COLOR_WIN_BLUE,                             /*!< Default top background color when widget in focus */
     GUI_COLOR_WIN_BLUE,                             /*!< Default top background color when widget not in focus */
 };
 
-static const GUI_WIDGET_t Widget = {
+/**
+ * \brief           Widget initialization structure
+ */
+static const
+GUI_WIDGET_t Widget = {
     .Name = _GT("WINDOW"),                          /*!< Widget name */
     .Size = sizeof(GUI_WINDOW_t),                   /*!< Size of widget for memory allocation */
     .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
@@ -69,16 +61,20 @@ static const GUI_WIDGET_t Widget = {
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
 };
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
 #define w          ((GUI_WINDOW_t *)h)
+
+/**
+ * \brief           Default widget callback function
+ * \param[in]       h: Widget handle
+ * \param[in]       ctr: Callback type
+ * \param[in]       param: Input parameters for callback type
+ * \param[out]      result: Result for callback type
+ * \return          1 if command processed, 0 otherwise
+ */
 static uint8_t
 gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
 #if GUI_CFG_USE_TOUCH
-   static GUI_iDim_t tX, tY, Mode = 0;
+    static GUI_iDim_t tX, tY, Mode = 0;
 #endif /* GUI_CFG_USE_TOUCH */
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -273,12 +269,6 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
     }
 }
 #undef w
-
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
   
 /**
  * \brief           Create new base widget window with desktop window as a parent

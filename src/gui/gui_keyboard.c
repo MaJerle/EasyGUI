@@ -88,8 +88,8 @@ typedef struct {
 /***************************/
 /*   Layout 1 descriptors  */
 /***************************/
-static 
-const KeyboardBtn_t ButtonsL1R1[] = {
+static const
+KeyboardBtn_t ButtonsL1R1[] = {
     {.C = ((uint32_t)'q'), .X = 0.5, .W = 9, .CS = ((uint32_t)'Q')},
     {.C = ((uint32_t)'w'), .X = 10.5, .W = 9, .CS = ((uint32_t)'W')},
     {.C = ((uint32_t)'e'), .X = 20.5, .W = 9, .CS = ((uint32_t)'E')},
@@ -102,8 +102,8 @@ const KeyboardBtn_t ButtonsL1R1[] = {
     {.C = ((uint32_t)'p'), .X = 90.5, .W = 9, .CS = ((uint32_t)'P')}
 };
 
-static 
-const KeyboardBtn_t ButtonsL1R2[] = {
+static const
+KeyboardBtn_t ButtonsL1R2[] = {
     {.C = ((uint32_t)'a'), .X = 5.5, .W = 9, .CS = ((uint32_t)'A')},
     {.C = ((uint32_t)'s'), .X = 15.5, .W = 9, .CS = ((uint32_t)'S')},
     {.C = ((uint32_t)'d'), .X = 25.5, .W = 9, .CS = ((uint32_t)'D')},
@@ -115,8 +115,8 @@ const KeyboardBtn_t ButtonsL1R2[] = {
     {.C = ((uint32_t)'l'), .X = 85.5, .W = 9, .CS = ((uint32_t)'L')}
 };
 
-static 
-const KeyboardBtn_t ButtonsL1R3[] = {
+static const
+KeyboardBtn_t ButtonsL1R3[] = {
     {.C = 0, .X = 0.5, .W = 14, .S = SPECIAL_SHIFT},
     {.C = ((uint32_t)'y'), .X = 15.5, .W = 9, .CS = ((uint32_t)'Y')},
     {.C = ((uint32_t)'x'), .X = 25.5, .W = 9, .CS = ((uint32_t)'X')},
@@ -128,8 +128,8 @@ const KeyboardBtn_t ButtonsL1R3[] = {
     {.C = 0, .X = 85.5, .W = 14, .S = SPECIAL_BACKSPACE},
 };
 
-static 
-const KeyboardBtn_t ButtonsL1R4[] = {
+static const
+KeyboardBtn_t ButtonsL1R4[] = {
     {.C = 0, .X = 0.5, .W = 9, .S = ((uint32_t)SPECIAL_123)},
     {.C = ((uint32_t)' '), .X = 10.5, .W = 59},
     {.C = ((uint32_t)'.'), .X = 70.5, .W = 9},
@@ -137,8 +137,8 @@ const KeyboardBtn_t ButtonsL1R4[] = {
     {.C = 0, .X = 90.5, .W = 9, .S = ((uint32_t)SPECIAL_HIDE)},
 };
 
-static
-const KeyboardRow_t KeyboardL1Rows[] = {
+static const
+KeyboardRow_t KeyboardL1Rows[] = {
     {.xOffset = 1, .Btns = ButtonsL1R1, .BtnsCount = GUI_COUNT_OF(ButtonsL1R1)},
     {.xOffset = 1, .Btns = ButtonsL1R2, .BtnsCount = GUI_COUNT_OF(ButtonsL1R2)},
     {.xOffset = 1, .Btns = ButtonsL1R3, .BtnsCount = GUI_COUNT_OF(ButtonsL1R3)},
@@ -288,12 +288,6 @@ KeyboardInfo_t Kbd = {.ActionValue = 10};   /* Set action value to max */
     Kbd.IsShift = !Kbd.IsShift;         \
     gui_widget_invalidate__(Kbd.MainLayoutHandle);  \
 } while (0)
-
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
 /* Callback for keyboard button */
 static uint8_t
 keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
@@ -585,12 +579,6 @@ gui_keyboard_show__(GUI_HANDLE_p h) {
     
     return 1;
 }
-
-/******************************************************************************/
-/******************************************************************************/
-/***                         Thread safe public API                          **/
-/******************************************************************************/
-/******************************************************************************/
 
 /**
  * \brief           Creates virtual keyboard for user interaction.

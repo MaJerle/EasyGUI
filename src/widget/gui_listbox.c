@@ -32,27 +32,15 @@
 #include "gui/gui_private.h"
 #include "widget/gui_listbox.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
 #define __GL(x)             ((GUI_LISTBOX_t *)(x))
 
 static uint8_t gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
-static const GUI_Color_t Colors[] = {
+/**
+ * \brief           List of default color in the same order of widget color enumeration
+ */
+static const
+GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_BG,
     GUI_COLOR_WIN_TEXT,
     GUI_COLOR_WIN_SEL_FOC,
@@ -61,7 +49,11 @@ static const GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_SEL_NOFOC_BG
 };
 
-static const GUI_WIDGET_t Widget = {
+/**
+ * \brief           Widget initialization structure
+ */
+static const
+GUI_WIDGET_t Widget = {
     .Name = _GT("LISTBOX"),                         /*!< Widget name */
     .Size = sizeof(GUI_LISTBOX_t),                  /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
@@ -70,11 +62,6 @@ static const GUI_WIDGET_t Widget = {
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Define number of colors */
 };
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
 #define o                   ((GUI_LISTBOX_t *)(h))
 
 /* Get item from listbox entry */
@@ -220,6 +207,14 @@ delete_item(GUI_HANDLE_p h, uint16_t index) {
     return 0;
 }
 
+/**
+ * \brief           Default widget callback function
+ * \param[in]       h: Widget handle
+ * \param[in]       ctr: Callback type
+ * \param[in]       param: Input parameters for callback type
+ * \param[out]      result: Result for callback type
+ * \return          1 if command processed, 0 otherwise
+ */
 static uint8_t
 gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
 #if GUI_CFG_USE_TOUCH
@@ -389,12 +384,6 @@ gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, G
 }
 #undef o
 
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
-
 /**
  * \brief           Create new listbox widget
  * \param[in]       id: Widget unique ID to use for identity for callback processing
@@ -430,7 +419,7 @@ gui_listbox_setcolor(GUI_HANDLE_p h, GUI_LISTBOX_COLOR_t index, GUI_Color_t colo
 /**
  * \brief           Add a new string to list box
  * \param[in,out]   h: Widget handle
- * \param[in]       *text: Pointer to text to add to list. Only pointer is saved to memory!
+ * \param[in]       text: Pointer to text to add to list. Only pointer is saved to memory!
  * \retval          1: String added to the end
  * \retval          0: String not added
  */
@@ -462,7 +451,7 @@ gui_listbox_addstring(GUI_HANDLE_p h, const GUI_Char* text) {
  * \brief           Set string value to already added string index
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Index (position) on list to set/change text
- * \param[in]       *text: Pointer to text to add to list. Only pointer is saved to memory!
+ * \param[in]       text: Pointer to text to add to list. Only pointer is saved to memory!
  * \retval          1: String changed
  * \retval          0: String not changed
  */

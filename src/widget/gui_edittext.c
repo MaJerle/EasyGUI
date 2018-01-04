@@ -37,17 +37,6 @@
 #include "gui/gui_keyboard.h"
 #endif /* GUI_CFG_USE_KEYBOARD */
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
 #define __GE(x)             ((GUI_EDITTEXT_t *)(x))
     
 #define CFG_MULTILINE       0x01
@@ -55,19 +44,22 @@
 #define CFG_HALIGN          0x03
     
 static uint8_t gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
-    
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
-static const GUI_Color_t Colors[] = {
+
+/**
+ * \brief           List of default color in the same order of widget color enumeration
+ */
+static const
+GUI_Color_t Colors[] = {
     GUI_COLOR_WHITE,                                /*!< Default background color index */
     GUI_COLOR_BLACK,                                /*!< Default foreground color index */
     GUI_COLOR_BLACK,                                /*!< Default border color index */
 };
 
-static const GUI_WIDGET_t Widget = {
+/**
+ * \brief           Widget initialization structure
+ */
+static const
+GUI_WIDGET_t Widget = {
     .Name = _GT("EDITTEXT"),                        /*!< Widget name */
     .Size = sizeof(GUI_EDITTEXT_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
@@ -76,17 +68,19 @@ static const GUI_WIDGET_t Widget = {
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
 };
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
 #define e          ((GUI_EDITTEXT_t *)h)
 
 /* Check if edit text is multiline */
 #define is_multiline(h)            (__GE(h)->Flags & GUI_EDITTEXT_FLAG_MULTILINE)
 
-/* Widget callback */
+/**
+ * \brief           Default widget callback function
+ * \param[in]       h: Widget handle
+ * \param[in]       ctr: Callback type
+ * \param[in]       param: Input parameters for callback type
+ * \param[out]      result: Result for callback type
+ * \return          1 if command processed, 0 otherwise
+ */
 static uint8_t
 gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -186,12 +180,6 @@ gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
 }
 
 #undef e
-
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
 
 /**
  * \brief           Create new edit text widget

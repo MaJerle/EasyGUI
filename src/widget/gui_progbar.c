@@ -32,17 +32,7 @@
 #include "gui/gui_private.h"
 #include "widget/gui_progbar.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
 #define GUI_PROGBAR_FLAG_PERCENT    0x01            /*!< Flag indicating percentages are enabled on view */
 #define GUI_PROGBAR_FLAG_ANIMATE    0x02            /*!< Animation for progress bar changes */
 
@@ -56,18 +46,21 @@
 
 static uint8_t gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
-static const GUI_Color_t Colors[] = {
+/**
+ * \brief           List of default color in the same order of widget color enumeration
+ */
+static const
+GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_MIDDLEGRAY,                       /*!< Default background color */
     GUI_COLOR_WIN_DARKGRAY,                         /*!< Default freground color */
     GUI_COLOR_BLACK,                                /*!< Default border color */
 };
 
-static const GUI_WIDGET_t Widget = {
+/**
+ * \brief           Widget initialization structure
+ */
+static const
+GUI_WIDGET_t Widget = {
     .Name = _GT("PROGBAR"),                         /*!< Widget name */
     .Size = sizeof(GUI_PROGBAR_t),                  /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
@@ -76,13 +69,8 @@ static const GUI_WIDGET_t Widget = {
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
 };
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
 #define p           ((GUI_PROGBAR_t *)h)
-#define is_anim(h) (!!(__GP(h)->Flags & GUI_PROGBAR_FLAG_ANIMATE))
+#define is_anim(h)  (!!(__GP(h)->Flags & GUI_PROGBAR_FLAG_ANIMATE))
 
 /* Set value for widget */
 static uint8_t
@@ -123,9 +111,16 @@ timer_callback(GUI_TIMER_t* t) {
     }
 }
 
-/* Main widget callback */
-static
-uint8_t gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
+/**
+ * \brief           Default widget callback function
+ * \param[in]       h: Widget handle
+ * \param[in]       ctr: Callback type
+ * \param[in]       param: Input parameters for callback type
+ * \param[out]      result: Result for callback type
+ * \return          1 if command processed, 0 otherwise
+ */
+static uint8_t
+gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
@@ -235,12 +230,6 @@ uint8_t gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* 
             return 0;                               /* Command was not processed */
     }
 }
-
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
 
 /**
  * \brief           Create new progress bar widget

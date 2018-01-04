@@ -32,27 +32,15 @@
 #include "gui/gui_private.h"
 #include "widget/gui_listview.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
 #define __GL(x)             ((GUI_LISTVIEW_t *)(x))
 
 static uint8_t gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
-static const GUI_Color_t Colors[] = {
+/**
+ * \brief           List of default color in the same order of widget color enumeration
+ */
+static const
+GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_BG,
     GUI_COLOR_WIN_TEXT,
     GUI_COLOR_WIN_SEL_FOC,
@@ -62,7 +50,11 @@ static const GUI_Color_t Colors[] = {
     GUI_COLOR_GRAY
 };
 
-static const GUI_WIDGET_t Widget = {
+/**
+ * \brief           Widget initialization structure
+ */
+static const
+GUI_WIDGET_t Widget = {
     .Name = _GT("LISTVIEW"),                        /*!< Widget name */
     .Size = sizeof(GUI_LISTVIEW_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
@@ -70,12 +62,6 @@ static const GUI_WIDGET_t Widget = {
     .Colors = Colors,                               /*!< List of default colors */
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Define number of colors */
 };
-
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
 #define o                   ((GUI_LISTVIEW_t *)(h))
 
 /* Get item from LISTVIEW entry */
@@ -207,6 +193,14 @@ check_values(GUI_HANDLE_p h) {
     }
 }
 
+/**
+ * \brief           Default widget callback function
+ * \param[in]       h: Widget handle
+ * \param[in]       ctr: Callback type
+ * \param[in]       param: Input parameters for callback type
+ * \param[out]      result: Result for callback type
+ * \return          1 if command processed, 0 otherwise
+ */
 static uint8_t
 gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
 #if GUI_CFG_USE_TOUCH
@@ -490,12 +484,6 @@ gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
 }
 #undef o
 
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
-
 /**
  * \brief           Create new list view widget
  * \param[in]       id: Widget unique ID to use for identity for callback processing
@@ -531,7 +519,7 @@ gui_listview_setcolor(GUI_HANDLE_p h, GUI_LISTVIEW_COLOR_t index, GUI_Color_t co
 /**
  * \brief           Add new column to listview
  * \param[in]       h: Widget handle
- * \param[in]       *text: Text to display on top
+ * \param[in]       text: Text to display on top
  * \param[in]       width: Width of column in units of pixels
  * \retval          1: Column was added
  * \retval          0: Column was not added
@@ -616,7 +604,7 @@ gui_listview_addrow(GUI_HANDLE_p h) {
  * \param[in]       h: Widget handle
  * \param[in]       row: Row object handle, previously returned with \ref gui_listview_addrow function
  * \param[in]       col: Column number to set. First column is on index = 0
- * \param[in]       *text: Text to use for item
+ * \param[in]       text: Text to use for item
  * \retval          1: Item string was set ok
  * \retval          0: Item string was not set
  */
@@ -781,7 +769,7 @@ gui_listview_getselection(GUI_HANDLE_p h) {
  * \param[in,out]   h: Widget handle
  * \param[in]       rindex: Row index
  * \param[in]       cindex: Column index
- * \param[in]       *dst: Pointer to \ref GUI_Char variable to save text to it
+ * \param[in]       dst: Pointer to \ref GUI_Char variable to save text to it
  * \param[in]       length: Length of destination array
  * \retval          1: Text was found and copied
  * \retval          0: Text was not found

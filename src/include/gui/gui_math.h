@@ -40,6 +40,7 @@ extern "C" {
  * \addtogroup      GUI_UTILS
  * \{
  */
+
 #include "gui_utils.h"
 #include "math.h"
 #include "errno.h"

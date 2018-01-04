@@ -45,28 +45,8 @@ extern "C" {
  * \defgroup        GUI_BUFFER Ring buffer
  * \brief           Generic cyclic buffer library
  * \{
- *
- * This buffer does not only feature basic read/write operations for cyclic buffers, it also has feature to read strings from buffer if needed.
- *
- * \par Read string procedure
- *
- * Each string in buffer has separator character, in most cases, Line Feed (0x0A) is used, and is also default value when buffer is initialized.
- * When reading as string from buffer, you have to know these things:
- *
-\verbatim
-- Buffer supports fast memory read/write operation using memory copy feature
-- Buffer will first check if string delimiter character exists in buffer. 
-    - If it exists, characters will be set to user buffer until delimiter is detected. 
-	- Delimiter is included in string!
-- If string delimiter is not in buffer, but cyclic buffer full, 
-    then string will be also filled into user buffer, because we need to free
-	some memory for future characters, including string delimiter character
-- If user buffer size is less than number of characters in buffer before string delimiter is found, 
-    string is also filled in user buffer
-- In all other cases, if there is no string delimiter in buffer, buffer will not return anything and will check for it first.
-\endverbatim
- *
  */
+ 
 #include "gui_utils.h"
 #include "stdlib.h"
 #include "string.h"

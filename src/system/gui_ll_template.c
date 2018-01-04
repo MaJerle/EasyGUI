@@ -28,27 +28,11 @@
 
 #include "lcd_discovery.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
-    
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
 GUI_Layer_t Layers[GUI_LAYERS];
 DMA2D_HandleTypeDef DMA2DHandle;
 LTDC_HandleTypeDef LTDCHandle;
 uint16_t startAddress;
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
 #define DMA2D_START(type) do {                  \
     startAddress = __LINE__;                    \
     DMA2D->CR = (type);                         \
@@ -57,25 +41,8 @@ uint16_t startAddress;
     while (DMA2D->CR & DMA2D_CR_START);         \
 } while (0)
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                              Interrupt API                              **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                             LCD specific API                            **/
-/******************************************************************************/
-/******************************************************************************/
-static
-void LCD_Init(GUI_LCD_t* LCD) {
+static void
+LCD_Init(GUI_LCD_t* LCD) {
     TM_SDRAM_Init();                                /* Init SDRAM */
 
     LTDCHandle.Instance = LTDC;
@@ -84,8 +51,8 @@ void LCD_Init(GUI_LCD_t* LCD) {
     _LCD_Init();                                    /* Init LCD */
 }
 
-static
-uint32_t GetPixelFormat(GUI_Layer_t* layer) {
+static uint32_t
+GetPixelFormat(GUI_Layer_t* layer) {
 #if defined(LCD_COLOR_FORMAT_ARGB8888)
     return DMA2D_OUTPUT_ARGB8888;                   /* ARGB8888 format */
 #else
@@ -93,13 +60,13 @@ uint32_t GetPixelFormat(GUI_Layer_t* layer) {
 #endif /* defined(LCD_COLOR_FORMAT_ARGB8888) */
 }
 
-static
-uint8_t LCD_Ready(GUI_LCD_t* LCD) {
+static uint8_t
+LCD_Ready(GUI_LCD_t* LCD) {
     return !(DMA2D->CR & DMA2D_CR_START);           /* Return status */
 }
 
-static
-GUI_Color_t LCD_GetPixel(GUI_LCD_t* LCD, GUI_Layer_t* layer, GUI_Dim_t x, GUI_Dim_t y) {
+static GUI_Color_t
+LCD_GetPixel(GUI_LCD_t* LCD, GUI_Layer_t* layer, GUI_Dim_t x, GUI_Dim_t y) {
 #if defined(LCD_COLOR_FORMAT_ARGB8888)
     return *(GUI_Color_t *)(layer->StartAddress + GUI.LCD.PixelSize * (layer->Width * y + x));
 #else
@@ -120,8 +87,8 @@ GUI_Color_t LCD_GetPixel(GUI_LCD_t* LCD, GUI_Layer_t* layer, GUI_Dim_t x, GUI_Di
 #endif /* defined(LCD_COLOR_FORMAT_ARGB8888) */
 }
 
-static
-void LCD_Fill(GUI_LCD_t* LCD, GUI_Layer_t* layer, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t OffLine, GUI_Color_t color) {
+static void
+LCD_Fill(GUI_LCD_t* LCD, GUI_Layer_t* layer, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t OffLine, GUI_Color_t color) {
 #if LCD_PIXEL_SIZE == 2
     uint8_t r, g, b;
 //    r = (color >> 20) & 0x0F;
@@ -146,8 +113,8 @@ void LCD_Fill(GUI_LCD_t* LCD, GUI_Layer_t* layer, void* dst, GUI_Dim_t xSize, GU
     DMA2D_START(DMA2D_R2M);                         /* Start DMA2D transfer */
 }
 
-static
-void LCD_Copy(GUI_LCD_t* LCD, GUI_Layer_t* layer, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
+static void
+LCD_Copy(GUI_LCD_t* LCD, GUI_Layer_t* layer, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
     uint32_t PixelFormat = GetPixelFormat(layer);
     
     if (!xSize || !ySize) {
@@ -169,8 +136,8 @@ void LCD_Copy(GUI_LCD_t* LCD, GUI_Layer_t* layer, const void* src, void* dst, GU
 }
 
 /* Copy layers with blending with alpha combine */
-static
-void LCD_CopyBlending(GUI_LCD_t* LCD, GUI_Layer_t* layer, const void* src, void* dst, uint8_t alphaSrc, uint8_t alphaDst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
+static void
+LCD_CopyBlending(GUI_LCD_t* LCD, GUI_Layer_t* layer, const void* src, void* dst, uint8_t alphaSrc, uint8_t alphaDst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
     uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait finished */
     DMA2D->FGMAR = (uint32_t)src;
@@ -191,8 +158,8 @@ void LCD_CopyBlending(GUI_LCD_t* LCD, GUI_Layer_t* layer, const void* src, void*
     DMA2D_START(DMA2D_M2M_BLEND);                   /* Start DMA2D transfer */
 }
 
-static
-void LCD_DrawImage16(GUI_LCD_t* LCD, GUI_Layer_t* layer, const GUI_IMAGE_DESC_t* img, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
+static void
+LCD_DrawImage16(GUI_LCD_t* LCD, GUI_Layer_t* layer, const GUI_IMAGE_DESC_t* img, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
     uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
     if (!xSize || !ySize) {
         return;
@@ -217,8 +184,8 @@ void LCD_DrawImage16(GUI_LCD_t* LCD, GUI_Layer_t* layer, const GUI_IMAGE_DESC_t*
     DMA2D_START(DMA2D_M2M_BLEND);                   /* Start DMA2D transfer */
 }
 
-static
-void LCD_DrawImage24(GUI_LCD_t* LCD, GUI_Layer_t* layer, const GUI_IMAGE_DESC_t* img, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
+static void
+LCD_DrawImage24(GUI_LCD_t* LCD, GUI_Layer_t* layer, const GUI_IMAGE_DESC_t* img, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
     uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait finished */
     DMA2D->FGMAR = (uint32_t)src;
@@ -240,8 +207,8 @@ void LCD_DrawImage24(GUI_LCD_t* LCD, GUI_Layer_t* layer, const GUI_IMAGE_DESC_t*
     DMA2D_START(DMA2D_M2M_BLEND);                   /* Start DMA2D transfer */
 }
 
-static
-void LCD_DrawImage32(GUI_LCD_t* LCD, GUI_Layer_t* layer, const GUI_IMAGE_DESC_t* img, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
+static void
+LCD_DrawImage32(GUI_LCD_t* LCD, GUI_Layer_t* layer, const GUI_IMAGE_DESC_t* img, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst) {
     uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait finished */
     DMA2D->FGMAR = (uint32_t)src;
@@ -263,8 +230,8 @@ void LCD_DrawImage32(GUI_LCD_t* LCD, GUI_Layer_t* layer, const GUI_IMAGE_DESC_t*
     DMA2D_START(DMA2D_M2M_BLEND);                   /* Start DMA2D transfer */
 }
 
-static
-void LCD_CopyChar(GUI_LCD_t* LCD, GUI_Layer_t* layer, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst, GUI_Color_t color) {
+static void
+LCD_CopyChar(GUI_LCD_t* LCD, GUI_Layer_t* layer, const void* src, void* dst, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Dim_t offLineSrc, GUI_Dim_t offLineDst, GUI_Color_t color) {
     uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
     
     if (!xSize || !ySize) {
@@ -284,63 +251,47 @@ void LCD_CopyChar(GUI_LCD_t* LCD, GUI_Layer_t* layer, const void* src, void* dst
     DMA2D->NLR = (uint32_t)(xSize << 16) | (uint16_t)ySize; 
     
     DMA2D_START(DMA2D_M2M_BLEND);                   /* Start DMA2D transfer */
-    
-//    do {
-//        GUI_iDim_t x, y;
-//        uint8_t* ptr = (uint8_t *)src;
-//        for (y = 0; y < ySize; y++) {
-//            for (x = 0; x < xSize; x++) {
-//                __GUI_DEBUG("%c", *ptr == 0xFF ? 'X' : ' ');
-//                ptr++;
-//            }
-//            __GUI_DEBUG("\r\n");
-//            ptr += offLineSrc;
-//        }
-//        __GUI_DEBUG("\r\n\r\n");
-//    } while (0);
 }
 
-static
-void LCD_DrawHLine(GUI_LCD_t* LCD, GUI_Layer_t* layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t length, GUI_Color_t color) {
+static void
+LCD_DrawHLine(GUI_LCD_t* LCD, GUI_Layer_t* layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t length, GUI_Color_t color) {
     uint32_t addr = layer->StartAddress + (LCD->PixelSize * (layer->Width * y + x));
     
     LCD_Fill(LCD, layer, (void *)addr, length, 1, layer->Width - length, color);
 }
 
-static
-void LCD_DrawVLine(GUI_LCD_t* LCD, GUI_Layer_t* layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t length, GUI_Color_t color) {
+static void
+LCD_DrawVLine(GUI_LCD_t* LCD, GUI_Layer_t* layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t length, GUI_Color_t color) {
     uint32_t addr = layer->StartAddress + (LCD->PixelSize * (layer->Width * y + x));
     
     LCD_Fill(LCD, layer, (void *)addr, 1, length, layer->Width - 1, color);
 }
 
-static
-void LCD_FillRect(GUI_LCD_t* LCD, GUI_Layer_t* layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Color_t color) {
+static void
+LCD_FillRect(GUI_LCD_t* LCD, GUI_Layer_t* layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Dim_t xSize, GUI_Dim_t ySize, GUI_Color_t color) {
     uint32_t addr = layer->StartAddress + (LCD->PixelSize * (layer->Width * y + x));
     
     LCD_Fill(LCD, layer, (void *)addr, xSize, ySize, layer->Width - xSize, color);
 }
 
-static
-void LCD_SetPixel(GUI_LCD_t* LCD, GUI_Layer_t* layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Color_t color) {
+static void
+LCD_SetPixel(GUI_LCD_t* LCD, GUI_Layer_t* layer, GUI_Dim_t x, GUI_Dim_t y, GUI_Color_t color) {
     LCD_DrawHLine(LCD, layer, x, y, 1, color);
 }
 
 /* Process DMA2D interrupt */
-void DMA2D_IRQHandler(void) {
+void
+DMA2D_IRQHandler(void) {
     HAL_DMA2D_IRQHandler(&DMA2DHandle);
 }
 
-void TransferErrorCallback(DMA2D_HandleTypeDef* hdma2d) {
+void
+TransferErrorCallback(DMA2D_HandleTypeDef* hdma2d) {
      while (1);
 }
 
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
-uint8_t gui_ll_control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* result) {
+uint8_t
+gui_ll_control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* result) {
     switch (cmd) {
         case GUI_LL_Command_Init: {
             uint8_t i = 0;

@@ -32,27 +32,15 @@
 #include "gui/gui_private.h"
 #include "widget/gui_image.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
 #define __GI(x)             ((GUI_IMAGE_t *)(x))
 
 static uint8_t gui_image_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
-static const GUI_WIDGET_t Widget = {
+/**
+ * \brief           Widget initialization structure
+ */
+static const
+GUI_WIDGET_t Widget = {
     .Name = _GT("IMAGE"),                           /*!< Widget name */
     .Size = sizeof(GUI_IMAGE_t),                    /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
@@ -60,14 +48,16 @@ static const GUI_WIDGET_t Widget = {
     .Colors = 0,                                    /*!< List of default colors */
     .ColorsCount = 0,                               /*!< Define number of colors */
 };
-
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
 #define o       ((GUI_IMAGE_t *)(h))
 
+/**
+ * \brief           Default widget callback function
+ * \param[in]       h: Widget handle
+ * \param[in]       ctr: Callback type
+ * \param[in]       param: Input parameters for callback type
+ * \param[out]      result: Result for callback type
+ * \return          1 if command processed, 0 otherwise
+ */
 static uint8_t
 gui_image_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -88,12 +78,6 @@ gui_image_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI
     }
 }
 #undef o
-
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
 
 /**
  * \brief           Create new image widget
@@ -116,7 +100,7 @@ gui_image_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_D
 /**
  * \brief           Set image source to draw
  * \param[in]       h: Widget handle
- * \param[in]       *img: Pointer to \ref GUI_IMAGE_DESC_t image object. Use NULL to clear image
+ * \param[in]       img: Pointer to \ref GUI_IMAGE_DESC_t image object. Use NULL to clear image
  * \retval          1: Image was set ok
  * \retval          0: Image was not set
  */

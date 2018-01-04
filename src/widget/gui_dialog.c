@@ -32,11 +32,6 @@
 #include "gui/gui_private.h"
 #include "widget/gui_dialog.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
 typedef struct DDList_t {
     GUI_LinkedList_t list;                          /*!< Linked list entry element, must always be first on list */
     GUI_ID_t id;                                    /*!< Dialog ID */
@@ -48,11 +43,6 @@ typedef struct DDList_t {
 #endif /* GUI_CFG_OS */
 } DDList_t;
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
 #define __GW(x)             ((GUI_WINDOW_t *)(x))
 
 static uint8_t gui_dialog_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
@@ -60,12 +50,11 @@ static uint8_t gui_dialog_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PAR
 static
 GUI_LinkedListRoot_t DDList;                        /*!< List of dismissed dialog elements which are not read yet */
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
-static const GUI_WIDGET_t Widget = {
+/**
+ * \brief           Widget initialization structure
+ */
+static const
+GUI_WIDGET_t Widget = {
     .Name = _GT("DIALOG"),                          /*!< Widget name */
     .Size = sizeof(GUI_DIALOG_t),                   /*!< Size of widget for memory allocation */
     .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN | GUI_FLAG_WIDGET_DIALOG_BASE,  /*!< List of widget flags */
@@ -74,11 +63,6 @@ static const GUI_WIDGET_t Widget = {
     .ColorsCount = 0,                               /*!< Number of colors */
 };
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
 
 /* Add widget to active dialogs (not yet dismissed) */
 static DDList_t*
@@ -118,7 +102,14 @@ get_dialog(GUI_HANDLE_p h) {
     return l;
 }
 
-/* Default dialog callback */
+/**
+ * \brief           Default widget callback function
+ * \param[in]       h: Widget handle
+ * \param[in]       ctr: Callback type
+ * \param[in]       param: Input parameters for callback type
+ * \param[out]      result: Result for callback type
+ * \return          1 if command processed, 0 otherwise
+ */
 static uint8_t
 gui_dialog_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -128,12 +119,6 @@ gui_dialog_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
             return 0;                               /* Command was not processed */
     }
 }
-
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
 
 /**
  * \brief           Create new dialog base element without any "design" style

@@ -32,27 +32,15 @@
 #include "gui/gui_private.h"
 #include "widget/gui_dropdown.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
 #define __GD(x)             ((GUI_DROPDOWN_t *)(x))
 
 static uint8_t gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
-static const GUI_Color_t Colors[] = {
+/**
+ * \brief           List of default color in the same order of widget color enumeration
+ */
+static const
+GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_BG,
     GUI_COLOR_WIN_TEXT,
     GUI_COLOR_WIN_SEL_FOC,
@@ -61,7 +49,11 @@ static const GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_SEL_NOFOC_BG
 };
 
-static const GUI_WIDGET_t Widget = {
+/**
+ * \brief           Widget initialization structure
+ */
+static const
+GUI_WIDGET_t Widget = {
     .Name = _GT("DROPDOWN"),                        /*!< Widget name */
     .Size = sizeof(GUI_DROPDOWN_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
@@ -70,11 +62,6 @@ static const GUI_WIDGET_t Widget = {
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Define number of colors */
 };
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
 #define o                   ((GUI_DROPDOWN_t *)(h))
 
 /* Check if status is opened */
@@ -100,8 +87,8 @@ get_opened_positions(GUI_HANDLE_p h, GUI_iDim_t* y, GUI_iDim_t* height, GUI_iDim
 }
 
 /* Get item height in dropdown list */
-static
-uint16_t item_height(GUI_HANDLE_p h, uint16_t* offset) {
+static uint16_t
+item_height(GUI_HANDLE_p h, uint16_t* offset) {
     uint16_t size = (float)__GH(h)->Font->Size * 1.3f;
     if (offset) {                                   /* Calculate top offset */
         *offset = (size - __GH(h)->Font->Size) >> 1;
@@ -110,8 +97,8 @@ uint16_t item_height(GUI_HANDLE_p h, uint16_t* offset) {
 }
 
 /* Get number of entries maximal on one page */
-static
-int16_t nr_entries_pp(GUI_HANDLE_p h) {
+static int16_t
+nr_entries_pp(GUI_HANDLE_p h) {
     int16_t res = 0;
     if (__GH(h)->Font) {                            /* Font is responsible for this setup */
         GUI_iDim_t height = gui_widget_getheight__(h);  /* Get item height */
@@ -126,8 +113,8 @@ int16_t nr_entries_pp(GUI_HANDLE_p h) {
 }
 
 /* Open or close dropdown widget */
-static
-uint8_t open_close(GUI_HANDLE_p h, uint8_t state) {
+static uint8_t
+open_close(GUI_HANDLE_p h, uint8_t state) {
     if (state && !is_opened(h)) {
         o->Flags |= GUI_FLAG_DROPDOWN_OPENED;
         o->OldHeight = o->C.Height;                 /* Save height for restore */
@@ -182,8 +169,8 @@ slide(GUI_HANDLE_p h, int16_t dir) {
 }
 
 /* Set selection for widget */
-static
-void set_selection(GUI_HANDLE_p h, int16_t selected) {
+static void
+set_selection(GUI_HANDLE_p h, int16_t selected) {
     if (o->Selected != selected) {                  /* Set selected value */
         o->Selected = selected;
         gui_widget_callback__(h, GUI_WC_SelectionChanged, NULL, NULL);  /* Notify about selection changed */
@@ -317,6 +304,14 @@ process_click(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
     open_close(h, 0);                               /* Close widget on click */
 }
 
+/**
+ * \brief           Default widget callback function
+ * \param[in]       h: Widget handle
+ * \param[in]       ctr: Callback type
+ * \param[in]       param: Input parameters for callback type
+ * \param[out]      result: Result for callback type
+ * \return          1 if command processed, 0 otherwise
+ */
 static uint8_t
 gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
 #if GUI_CFG_USE_TOUCH
@@ -507,11 +502,6 @@ gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
     }
 }
 #undef o
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
 
 /**
  * \brief           Create new dropdown widget
@@ -548,7 +538,7 @@ gui_dropdown_setcolor(GUI_HANDLE_p h, GUI_DROPDOWN_COLOR_t index, GUI_Color_t co
 /**
  * \brief           Add a new string to list box
  * \param[in,out]   h: Widget handle
- * \param[in]       *text: Pointer to text to add to list. Only pointer is saved to memory!
+ * \param[in]       text: Pointer to text to add to list. Only pointer is saved to memory!
  * \retval          1: String added to the end
  * \retval          0: String not added
  */
@@ -608,7 +598,7 @@ gui_dropdown_setopendirection(GUI_HANDLE_p h, GUI_DROPDOWN_OPENDIR_t dir) {
  * \brief           Set string value to already added string index
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Index (position) on list to set/change text
- * \param[in]       *text: Pointer to text to add to list. Only pointer is saved to memory!
+ * \param[in]       text: Pointer to text to add to list. Only pointer is saved to memory!
  * \retval          1: String changed
  * \retval          0: String not changed
  */

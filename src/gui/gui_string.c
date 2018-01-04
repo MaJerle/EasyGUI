@@ -31,40 +31,9 @@
 #define GUI_INTERNAL
 #include "gui/gui_string.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
-
 /**
  * \brief           Initialize unicode processing structure
- * \param[in]       *s: Pointer to \ref GUI_STRING_UNICODE_t to initialize to default values
- * \retval          None
+ * \param[in]       s: Pointer to \ref GUI_STRING_UNICODE_t to initialize to default values
  * \sa              gui_string_unicode_decode, gui_string_unicode_encode
  */
 void
@@ -125,7 +94,7 @@ gui_string_unicode_decode(GUI_STRING_UNICODE_t* s, const GUI_Char c) {
 /**
  * \brief           Encodes input character to UNICODE sequence of 1-4 bytes
  * \param[in]       c: Character to encode to UNICODE sequence
- * \param[out]      *out: Pointer to 4-bytes long array to store UNICODE information to
+ * \param[out]      out: Pointer to 4-bytes long array to store UNICODE information to
  * \retval          Number of bytes required for character encoding
  * \sa              gui_string_unicode_init, gui_string_unicode_decode
  */
@@ -158,7 +127,7 @@ gui_string_unicode_encode(const uint32_t c, GUI_Char* out) {
  *                  2. When \ref GUI_CFG_USE_UNICODE is set to 0, function will count all the bytes until string end is reached
  *                      and will return 9 on top input string
  *
- * \param[in]       *src: Pointer to source string to get length
+ * \param[in]       src: Pointer to source string to get length
  * \retval          Number of visible characters in string
  * \sa              gui_string_lengthtotal
  */
@@ -186,7 +155,7 @@ gui_string_length(const GUI_Char* src) {
  *      
  * \note            When \ref GUI_CFG_USE_UNICODE is set to 0, this function returns the same as \ref gui_string_length
  *
- * \param[in]       *src: Pointer to source string to get length
+ * \param[in]       src: Pointer to source string to get length
  * \retval          Number of visible characters in string
  * \sa              gui_string_length
  */
@@ -197,8 +166,8 @@ gui_string_lengthtotal(const GUI_Char* src) {
 
 /**
  * \brief           Copy string from source to destination no matter of \ref GUI_CFG_USE_UNICODE selection
- * \param[out]      *dst: Destination memory address
- * \param[in]       *src: Source memory address
+ * \param[out]      dst: Destination memory address
+ * \param[in]       src: Source memory address
  * \retval          Pointer to destination memory
  * \sa              gui_string_copyn
  */
@@ -209,8 +178,8 @@ gui_string_copy(GUI_Char* dst, const GUI_Char* src) {
 
 /**
  * \brief           Copy string from source to destination with selectable number of bytes
- * \param[out]      *dst: Destination memory address
- * \param[in]       *src: Source memory address
+ * \param[out]      dst: Destination memory address
+ * \param[in]       src: Source memory address
  * \param[in]       len: Number of bytes to copy
  * \retval          Pointer to destination memory
  * \sa              gui_string_copy
@@ -222,8 +191,8 @@ gui_string_copyn(GUI_Char* dst, const GUI_Char* src, size_t len) {
 
 /**
  * \brief           Compare 2 strings
- * \param[in]       *s1: First string address
- * \param[in]       *s2: Second string address
+ * \param[in]       s1: First string address
+ * \param[in]       s2: Second string address
  * \retval          0: Strings are the same
  * \retval          !=0: Strings are not the same
  */
@@ -235,7 +204,7 @@ gui_string_compare(const GUI_Char* s1, const GUI_Char* s2) {
 /**
  * \brief           Prepare string before it can be used with \ref gui_string_getch or \ref gui_string_getchreverse functions
  * \param[in,out]   *s: Pointer to \ref GUI_STRING_t as base string object
- * \param[in]       *str: Pointer to \ref GUI_Char with string used for manupulation
+ * \param[in]       str: Pointer to \ref GUI_Char with string used for manupulation
  * \retval          1: String prepared and ready to use
  * \retval          0: String was tno prepared
  */
@@ -251,25 +220,13 @@ gui_string_prepare(GUI_STRING_t* s, const GUI_Char* str) {
 /**
  * \brief           Get next decoded character from source string
  *
- * \code{c} 
-GUI_Char myStr[] = "EasyGUI\xDF\x8F\xDF\x8F";   //Source string to check
-GUI_STRING_t s;                                 //Create string variable
-uint32_t ch;                                    //Output character
-uint8_t i;                                      //Number of bytes required for character generation
-
-//GUI_CFG_USE_UNICODE = 1: string length = 9;  Length total: 11
-//GUI_CFG_USE_UNICODE = 0: string length = 11; Length total: 11
-gui_string_prepare(&s, myStr);                  //Prepare string for reading
-while (gui_string_getch(&s, &ch, &i)) {         //Go through entire string
-    printf("I: %d, ch %c (%d)\r\n", (int)i, ch, (int)ch);   //Print character by character
-}
-\endcode
+ * \include         _example_string_getch.c
  * 
  * \note            When \ref GUI_CFG_USE_UNICODE is set to 1, multiple bytes may be used for single character
  * \param[in,out]   *s: Pointer to \ref GUI_STRING_t structure with input string. 
                         Function will internally change pointer of actual string where it points to to next character
- * \param[out]      *out: Pointer to output memory where output character will be saved
- * \param[out]      *len: Pointer to output memory where number of bytes for string will be saved
+ * \param[out]      out: Pointer to output memory where output character will be saved
+ * \param[out]      len: Pointer to output memory where number of bytes for string will be saved
  * \retval          1: Character decoded OK
  * \retval          0: Error with character decode process or string has reach the end
  * \sa              gui_string_getchreverse
@@ -313,27 +270,13 @@ gui_string_getch(GUI_STRING_t* s, uint32_t* out, uint8_t* len) {
  * 
  * \note            String must be at the last character before function is first time called
  *
- * \code{c}
- //TODO: Update code!
-GUI_Char myStr[] = "EasyGUI\xDF\x8F\xDF\x8F";   //Source string to check
-GUI_STRING_t s;                                 //Create string variable
-uint32_t ch;                                    //Output character
-uint8_t i;                                      //Number of bytes required for character generation
-
-//GUI_CFG_USE_UNICODE = 1: string length = 9;  Length total: 11
-//GUI_CFG_USE_UNICODE = 0: string length = 11; Length total: 11
-gui_string_prepare(&s, myStr);                  //Prepare string for reading
-gui_string_gotoend(&ptr);                       //Go to last character of string
-while (gui_string_getchreverse(&s, &ch, &i)) {  //Go through entire string
-    printf("I: %d, ch %c (%d)\r\n", (int)i, ch, (int)ch);   //Print character by character
-}
-\endcode
+ * \include         _example_string_getchreverse.c
  *
  * \note            When \ref GUI_CFG_USE_UNICODE is set to 1, multiple bytes may be used for single character
  * \param[in,out]   *str: Pointer to \ref GUI_STRING_t structure with input string. 
                         Function will internally change pointer of actual string where it points to to next character
- * \param[out]      *out: Pointer to output memory where output character will be saved
- * \param[out]      *len: Pointer to output memory where number of bytes for string will be saved
+ * \param[out]      out: Pointer to output memory where output character will be saved
+ * \param[out]      len: Pointer to output memory where number of bytes for string will be saved
  * \retval          1: Character decoded OK
  * \retval          0: Error with character decode process or string has reach the start
  * \sa              gui_string_getch, gui_string_gotoend

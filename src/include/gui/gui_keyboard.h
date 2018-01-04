@@ -48,28 +48,11 @@ extern "C" {
  * \defgroup        GUI_KEYBOARD Virtual keyboard
  * \brief           Virtual keyboard on screen
  * \{
- *
- * \image html image_widget_keyboard_normal.png Characters layout
- * \image html image_widget_keyboard_numbers.png Numbers layout
- * \image html image_widget_keyboard_special.png Special characters layout
- *
- * Virtual keyboard consists of 2 types of widgets:
- *  
- *  - \ref GUI_CONTAINER widget as base element and
- *  - \ref GUI_BUTTON widget for each button
- *
- * Currently, it uses a lot of RAM as each button is separated widget.
- *
- * According to widget used by keyboard, it will choose the same font in keyboard.
  */
     
 /**
  * \defgroup        GUI_KEYBOARD_Private Private functions
- * \brief           Private keyboard functions
- *
- * \note            Since they are not thread safe, they can only be used when inside GUI library.
- *                  It means they can be used in custom widget implementations where thread safety is guaranteed
- *
+ * \brief           Private keyboard functions *
  * \{
  */
  

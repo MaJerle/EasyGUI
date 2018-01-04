@@ -32,17 +32,6 @@
 #include "gui/gui_private.h"
 #include "widget/gui_slider.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
 #define __GS(x)             ((GUI_SLIDER_t *)(x))
 
 #define CFG_MODE            0x01
@@ -52,19 +41,22 @@
 
 static uint8_t gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
-static const GUI_Color_t Colors[] = {
+/**
+ * \brief           List of default color in the same order of widget color enumeration
+ */
+static const
+GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_BG,                               /*!< Default background color on non-active part */
     GUI_COLOR_WIN_BLUE,                             /*!< Default background color on active part */
     GUI_COLOR_WIN_RED,                              /*!< Default circle (...) color */
     GUI_COLOR_WIN_DARKGRAY,                         /*!< Default border color */
 };
 
-static const GUI_WIDGET_t Widget = {
+/**
+ * \brief           Widget initialization structure
+ */
+static const
+GUI_WIDGET_t Widget = {
     .Name = _GT("SLIDER"),                          /*!< Widget name */
     .Size = sizeof(GUI_SLIDER_t),                   /*!< Size of widget for memory allocation */
     .Flags = GUI_FLAG_WIDGET_INVALIDATE_PARENT,     /*!< List of widget flags */
@@ -72,12 +64,6 @@ static const GUI_WIDGET_t Widget = {
     .Colors = Colors,                               /*!< List of default colors */
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Define number of colors */
 };
-
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
 #define o       ((GUI_SLIDER_t *)(h))
 
 /* Check if slider is horizontal */
@@ -172,7 +158,14 @@ timer_callback(GUI_TIMER_t* timer) {
     }
 }
 
-/* Callback function */
+/**
+ * \brief           Default widget callback function
+ * \param[in]       h: Widget handle
+ * \param[in]       ctr: Callback type
+ * \param[in]       param: Input parameters for callback type
+ * \param[out]      result: Result for callback type
+ * \return          1 if command processed, 0 otherwise
+ */
 static uint8_t
 gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) { 
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -313,12 +306,6 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
     }
 }
 #undef o
-
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
 
 /**
  * \brief           Create new slider widget

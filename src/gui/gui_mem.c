@@ -31,11 +31,6 @@
 #define GUI_INTERNAL
 #include "gui/gui_mem.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private structures                            **/
-/******************************************************************************/
-/******************************************************************************/
 typedef struct MemBlock {
     struct MemBlock* NextFreeBlock;                 /*!< Pointer to next free block */
     size_t Size;                                    /*!< Size of block */
@@ -50,17 +45,6 @@ typedef struct MemBlock {
 
 #define MEMBLOCK_METASIZE           MEM_ALIGN(sizeof(MemBlock_t))
 
-/******************************************************************************/
-/******************************************************************************/
-/***                           Private definitions                           **/
-/******************************************************************************/
-/******************************************************************************/
-
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private variables                            **/
-/******************************************************************************/
-/******************************************************************************/
 static MemBlock_t StartBlock;
 static MemBlock_t* EndBlock = 0;
 static size_t MemAvailableBytes = 0;
@@ -68,12 +52,6 @@ static size_t MemMinAvailableBytes = 0;
 static size_t MemAllocBit = 0;
 
 static size_t MemTotalSize = 0;                     /* Size of memory in units of bytes */
-
-/******************************************************************************/
-/******************************************************************************/
-/***                            Private functions                            **/
-/******************************************************************************/
-/******************************************************************************/
 /* Insert block to list of free blocks */
 static void
 mem_insertfreeblock(MemBlock_t* newBlock) {
@@ -389,12 +367,6 @@ mem_getminfree(void) {
     return MemMinAvailableBytes;                    /* Return minimal bytes ever available */
 }
 
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
-
 /**
  * \brief           Allocate memory of specific size
  * \note            Since this function is private, it can only be used by user inside GUI library
@@ -420,7 +392,7 @@ gui_mem_alloc(uint32_t size) {
  * \note            After new memory is allocated, content of old one is copied to new allocated memory
  *
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       *ptr: Pointer to current allocated memory to resize, returned using \ref gui_mem_alloc, \ref gui_mem_calloc or \ref gui_mem_realloc functions
+ * \param[in]       ptr: Pointer to current allocated memory to resize, returned using \ref gui_mem_alloc, \ref gui_mem_calloc or \ref gui_mem_realloc functions
  * \param[in]       size: Number of bytes to allocate on new memory
  * \retval          0: Allocation failed
  * \retval          >0: Pointer to allocated memory
@@ -460,7 +432,7 @@ gui_mem_calloc(size_t num, size_t size) {
 
 /**
  * \brief           Free memory
- * \param[in]       *ptr: Pointer to memory previously returned using \ref gui_mem_alloc, \ref gui_mem_calloc or \ref gui_mem_realloc functions
+ * \param[in]       ptr: Pointer to memory previously returned using \ref gui_mem_alloc, \ref gui_mem_calloc or \ref gui_mem_realloc functions
  */
 void
 gui_mem_free(void* ptr) {
@@ -512,7 +484,7 @@ gui_mem_getminfree(void) {
 /**
  * \brief           Assign memory region(s) for allocation functions
  * \note            You can allocate multiple regions by assigning start address and region size in units of bytes
- * \param[in]       *regions: Pointer to list of regions to use for allocations
+ * \param[in]       regions: Pointer to list of regions to use for allocations
  * \param[in]       len: Number of regions to use
  * \retval          1: Memory assigned ok
  * \retval          0: Memory was not assigned

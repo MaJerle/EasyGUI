@@ -289,12 +289,6 @@ void DMA2D_IRQHandler(void) {
 void TransferErrorCallback(DMA2D_HandleTypeDef* hdma2d) {
      while (1);
 }
-
-/******************************************************************************/
-/******************************************************************************/
-/***                                Public API                               **/
-/******************************************************************************/
-/******************************************************************************/
 uint8_t gui_ll_control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* result) {
     switch (cmd) {
         case GUI_LL_Command_Init: {

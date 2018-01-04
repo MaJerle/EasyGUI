@@ -215,7 +215,7 @@ int main(void) {
 
 /**
  * \brief           User thread for GUI
- * \param[in]       *arg: Pointer to argument for thread
+ * \param[in]       arg: Pointer to argument for thread
  */
 static void
 user_thread(void const * arg) {
@@ -304,7 +304,7 @@ osSemaphoreId touch_semaphore;
 
 /**
  * \brief           Read touch from controller
- * \param[in]       *arg: Pointer to user argument
+ * \param[in]       arg: Pointer to user argument
  */
 static void
 touch_thread(void const * arg) {

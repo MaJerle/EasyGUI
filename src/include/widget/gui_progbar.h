@@ -46,22 +46,6 @@ extern "C" {
  * \defgroup        GUI_PROGBAR Progress bar
  * \brief           Progress bar for progress visualization
  * \{
- *
- * Progress bar is used to show single progress value according to minimal, maximal and current values set to widget.
- *
- * \image html image_widget_progbar.png Progress bars
- *
- * Example code of image above:
- * \code{c}
-handle = gui_progbar_create(2, 10, 10, 400, 40, h, 0, 0);
-gui_widget_settext(handle, _GT("Progress bar with custom text"));
-
-handle = gui_progbar_create(2, 10, 60, 400, 40, h, 0, 0);
-gui_progbar_enablepercentages(handle);
-gui_progbar_setmin(handle, 20);
-gui_progbar_setmax(handle, 30);
-gui_progbar_setvalue(handle, 22);    
-\endcode
  */
 
 /**

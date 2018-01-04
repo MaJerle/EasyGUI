@@ -62,8 +62,8 @@ print_list(GUI_HANDLE_ROOT_t* root) {
  * \note            Element added to linkedlist must have \ref GUI_LinkedList_t as top structure
  *
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to add to base linked list
+ * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to add to base linked list
  * \retval          None
  * \sa              gui_linkedlist_remove_gen, gui_linkedlist_multi_add_gen, gui_linkedlist_multi_remove_gen
  */
@@ -85,8 +85,8 @@ gui_linkedlist_add_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
 /**
  * \brief           Remove element from doubly linked list
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to remove from base linked list
+ * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to remove from base linked list
  * \retval          Pointer to removed \ref GUI_LinkedList_t element
  * \sa              gui_linkedlist_add_gen, gui_linkedlist_multi_add_gen, gui_linkedlist_multi_remove_gen
  */
@@ -132,8 +132,8 @@ gui_linkedlist_remove_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element)
  *                  </table>
  *
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to get next element of
+ * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to get next element of
  * \retval          > 0: Pointer to next element
  * \retval          0: No elements anymore in list
  * \sa              gui_linkedlist_getprev_gen, gui_linkedlist_multi_getnext_gen, gui_linkedlist_multi_getprev_gen
@@ -162,8 +162,8 @@ gui_linkedlist_getnext_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element
  *                  </table>
  *
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to get next element of
+ * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to get next element of
  * \retval          > 0: Pointer to previous element
  * \retval          0: No elements anymore in list
  * \sa              gui_linkedlist_getnext_gen, gui_linkedlist_multi_getnext_gen, gui_linkedlist_multi_getprev_gen
@@ -183,8 +183,8 @@ gui_linkedlist_getprev_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element
 /**
  * \brief           Move widget down for one on doubly linked list
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to move down on base linked list
+ * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to move down on base linked list
  * \retval          1: Element moved down
  * \retval          0: Element was not moved down as it is already on bottom
  * \sa              gui_linkedlist_moveup_gen, gui_linkedlist_multi_moveup_gen, gui_linkedlist_multi_movedown_gen
@@ -233,8 +233,8 @@ gui_linkedlist_movedown_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* elemen
 /**
  * \brief           Move widget up for one on doubly linked list
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to move up on base linked list
+ * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to move up on base linked list
  * \retval          1: Element moved up
  * \retval          0: Element was not moved up as it is already on bottom
  * \sa              gui_linkedlist_movedown_gen, gui_linkedlist_multi_moveup_gen, gui_linkedlist_multi_movedown_gen
@@ -283,7 +283,7 @@ gui_linkedlist_moveup_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element)
 /**
  * \brief           Get item from linked list by index
  * \note            Index value is the number of item in list order
- * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       index: Number in list to get item
  * \retval          0: Element not found
  * \retval          > 0: Pointer to \ref GUI_LinkedList_t structure
@@ -302,8 +302,8 @@ gui_linkedlist_getnext_byindex_gen(GUI_LinkedListRoot_t* root, uint16_t index) {
  * \note            Element can be any type since \ref GUI_LinkedListMulti_t structure is dynamicall allocated
  *
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to add to base linked list
+ * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to add to base linked list
  * \retval          > 0: Pointer to allocated \ref GUI_LinkedListMulti_t structure with linked list entries
  * \retval          0: Failed to allocate memory for \ref GUI_LinkedListMulti_t structure
  * \sa              gui_linkedlist_add_gen, gui_linkedlist_remove_gen, gui_linkedlist_multi_remove_gen
@@ -325,8 +325,8 @@ gui_linkedlist_multi_add_gen(GUI_LinkedListRoot_t* root, void* element) {
 /**
  * \brief           Remove element from linked list in multi linked list
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       *element: Pointer to \ref GUI_LinkedList_t element to remove from base linked list
+ * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to remove from base linked list
  * \retval          1: Element removed and memory deallocated
  * \retval          0: Failed to remove element
  * \sa              gui_linkedlist_add_gen, gui_linkedlist_remove_gen, gui_linkedlist_multi_add_gen
@@ -353,8 +353,8 @@ gui_linkedlist_multi_remove_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_
  *                  </table>
  *
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       *element: Pointer to \ref GUI_LinkedListMulti_t element to get next element of
+ * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       element: Pointer to \ref GUI_LinkedListMulti_t element to get next element of
  * \retval          > 0: Pointer to next element
  * \retval          0: No elements anymore in list
  * \sa              gui_linkedlist_getnext_gen, gui_linkedlist_getprev_gen, gui_linkedlist_multi_getprev_gen
@@ -383,8 +383,8 @@ gui_linkedlist_multi_getnext_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti
  *                  </table>
  *
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       *element: Pointer to \ref GUI_LinkedListMulti_t element to get next element of
+ * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       element: Pointer to \ref GUI_LinkedListMulti_t element to get next element of
  * \retval          > 0: Pointer to previous element
  * \retval          0: No elements anymore in list
  * \sa              gui_linkedlist_getnext_gen, gui_linkedlist_getprev_gen, gui_linkedlist_multi_getnext_gen
@@ -404,8 +404,8 @@ gui_linkedlist_multi_getprev_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti
 /**
  * \brief           Move widget down for one on multi linked list
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       *element: Pointer to \ref GUI_LinkedListMulti_t element to move down on base linked list
+ * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       element: Pointer to \ref GUI_LinkedListMulti_t element to move down on base linked list
  * \retval          1: Element moved down
  * \retval          0: Element was not moved down as it is already on bottom
  * \sa              gui_linkedlist_moveup_gen, gui_linkedlist_movedown_gen, gui_linkedlist_multi_moveup_gen
@@ -418,8 +418,8 @@ gui_linkedlist_multi_movedown_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMult
 /**
  * \brief           Move widget up for one on multi linked list
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       *element: Pointer to \ref GUI_LinkedListMulti_t element to move up on base linked list
+ * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       element: Pointer to \ref GUI_LinkedListMulti_t element to move up on base linked list
  * \retval          1: Element moved up
  * \retval          0: Element was not moved up as it is already on bottom
  * \sa              gui_linkedlist_moveup_gen, gui_linkedlist_movedown_gen, gui_linkedlist_multi_movedown_gen
@@ -434,8 +434,8 @@ gui_linkedlist_multi_moveup_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_
  * \note            Delete by element pointer, not by list item. It searches in all entries for element pointers and deletes all links with that element pointer
  *
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       *root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       *element: Memory address in data part of linked list entry
+ * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       element: Memory address in data part of linked list entry
  * \retval          1: Element removed and memory deallocated
  * \retval          0: Failed to remove element
  * \sa              gui_linkedlist_remove_gen, gui_linkedlist_multi_remove_gen
@@ -465,7 +465,7 @@ gui_linkedlist_multi_find_remove(GUI_LinkedListRoot_t* root, void* element) {
 /**
  * \brief           Add new widget to linked list of parent widget
  * \note            Since this function is private, it can only be used by user inside GUI library
- * \param[in]       *root: Pointer to parent widget where to put this widget on list
+ * \param[in]       root: Pointer to parent widget where to put this widget on list
  * \param[in]       h: Widget handle to add to list
  * \retval          None
  * \sa              gui_linkedlist_widgetremove
@@ -542,18 +542,9 @@ gui_linkedlist_widgetmovedown(GUI_HANDLE_p h) {
  *
  * \note            Since this function is private, it can only be used by user inside GUI library
  *
- * \code{c}
-//Get all widgets of parent widget from first to last
-//Parent object must have GUI_HANDLE_ROOT_t data type
-void LoopWidgets(GUI_HANDLE_p parent) {
-    GUI_HANDLE_p h;         //Value holding widgets of parent
-
-    for (h = gui_linkedlist_widgetgetnext((GUI_HANDLE_ROOT_t *)parent, NULL); h; h = gui_linkedlist_widgetgetnext(NULL, h)) {
-        //Loop through each widget of parent
-    }
-}
-\endcode
- * \param[in]       *parent: Parent widget object for which you want to get first widget
+ * \include         _example_linkedlist_widgetgetnext.c 
+ *
+ * \param[in]       parent: Parent widget object for which you want to get first widget
  * \param[in]       h: Widget handle for which you want next widget
  * \retval          > 0: Next widget in linked list
  * \retval          0: No widget in linked list anymore
@@ -584,18 +575,9 @@ gui_linkedlist_widgetgetnext(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h) {
  *
  * \note            Since this function is private, it can only be used by user inside GUI library
  *
- * \code{c}
-//Get all widgets of parent widget in reverse order from last to first
-//Parent object must have GUI_HANDLE_ROOT_t data type
-void LoopWidgets(GUI_HANDLE_p parent) {
-    GUI_HANDLE_p h;         //Value holding widgets of parent
-    
-    for (h = gui_linkedlist_widgetgetprev((GUI_HANDLE_ROOT_t *)parent, 0); h; h = gui_linkedlist_widgetgetprev(NULL, h)) {
-        //Loop through each widget of parent
-    }
-}
-\endcode
- * \param[in]       *parent: Parent widget object for which you want to get first widget
+ * \include         _example_linkedlist_widgetgetprev.c 
+ *
+ * \param[in]       parent: Parent widget object for which you want to get first widget
  * \param[in]       h: Widget handle for which you want next widget
  * \retval          > 0: Next widget in linked list
  * \retval          0: No widget in linked list anymore
