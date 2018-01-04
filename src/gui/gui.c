@@ -112,10 +112,10 @@ redraw_widgets(GUI_HANDLE_p parent) {
         if (gui_widget_isinsideclippingregion(h)) { /* If widget is inside clipping region */
             /* Draw main widget if required */
             if (gui_widget_getflag__(h, GUI_FLAG_REDRAW)) { /* Check if redraw required */
-#if GUI_USE_TRANSPARENCY
+#if GUI_CFG_USE_TRANSPARENCY
                 GUI_Layer_t* layerPrev = GUI.LCD.DrawingLayer;  /* Save drawing layer */
                 uint8_t transparent = 0;
-#endif /* GUI_USE_TRANSPARENCY */
+#endif /* GUI_CFG_USE_TRANSPARENCY */
                 
                 gui_widget_clrflag__(h, GUI_FLAG_REDRAW);   /* Clear flag for drawing on widget */
                 
@@ -124,7 +124,7 @@ redraw_widgets(GUI_HANDLE_p parent) {
                  */
                 check_disp_clipping(h);             /* Check coordinates for drawings only particular widget */
 
-#if GUI_USE_TRANSPARENCY
+#if GUI_CFG_USE_TRANSPARENCY
                 /**
                  * Check transparency and check if blending function exists to merge layers later together
                  */
@@ -148,7 +148,7 @@ redraw_widgets(GUI_HANDLE_p parent) {
                         GUI.LCD.DrawingLayer = layerPrev;   /* Reset layer back */
                     }
                 }
-#endif /* GUI_USE_TRANSPARENCY */
+#endif /* GUI_CFG_USE_TRANSPARENCY */
                 
                 /**
                  * Draw widget itself normally, don't care on layer offset and size
@@ -171,7 +171,7 @@ redraw_widgets(GUI_HANDLE_p parent) {
                     level--;
                 }
                 
-#if GUI_USE_TRANSPARENCY
+#if GUI_CFG_USE_TRANSPARENCY
                 /**
                  * If transparent mode is used on widget, copy content back
                  */
@@ -189,7 +189,7 @@ redraw_widgets(GUI_HANDLE_p parent) {
                     GUI_MEMFREE(GUI.LCD.DrawingLayer);  /* Free memory for virtual layer */
                     GUI.LCD.DrawingLayer = layerPrev;   /* Reset layer pointer */
                 }
-#endif /* GUI_USE_TRANSPARENCY */
+#endif /* GUI_CFG_USE_TRANSPARENCY */
                 
             /**
              * Check if any widget from children should be redrawn
@@ -202,7 +202,7 @@ redraw_widgets(GUI_HANDLE_p parent) {
     return cnt;                                     /* Return number of redrawn objects */
 }
 
-#if GUI_USE_TOUCH
+#if GUI_CFG_USE_TOUCH
 /*
  * How touch events works
  *
@@ -342,12 +342,12 @@ set_relative_coordinate(__GUI_TouchData_t* ts, GUI_iDim_t x, GUI_iDim_t y, GUI_i
     ts->WidgetWidth = width;                        /* Get widget width */
     ts->WidgetHeight = height;                      /* Get widget height */
 
-#if GUI_TOUCH_MAX_PRESSES > 1
+#if GUI_CFG_TOUCH_MAX_PRESSES > 1
     if (ts->TS.Count == 2) {                        /* 2 points detected */
         ts->DistanceOld = ts->Distance;             /* Save old distance */
         gui_math_distancebetweenxy(ts->RelX[0], ts->RelY[0], ts->RelX[1], ts->RelY[1], &ts->Distance);  /* Calculate distance between 2 points */
     }
-#endif /* GUI_TOUCH_MAX_PRESSES > 1 */
+#endif /* GUI_CFG_TOUCH_MAX_PRESSES > 1 */
 }
 
 /* Process touch entry */
@@ -581,9 +581,9 @@ gui_process_touch(void) {
         __ProcessAfterTouchEventsThread();          /* Process after event macro */
     }
 }
-#endif /* GUI_USE_TOUCH */
+#endif /* GUI_CFG_USE_TOUCH */
 
-#if GUI_USE_KEYBOARD
+#if GUI_CFG_USE_KEYBOARD
 static void
 process_keyboard(void) {
     __GUI_KeyboardData_t key;
@@ -619,7 +619,7 @@ process_keyboard(void) {
         }
     }
 }
-#endif /* GUI_USE_KEYBOARD */
+#endif /* GUI_CFG_USE_KEYBOARD */
 
 /**
  * \brief           Process redraw of all widgets
@@ -676,7 +676,7 @@ gui_default_event_cb(void) {
 
 }
 
-#if GUI_OS
+#if GUI_CFG_OS
 /**
  * \brief           GUI main thread for RTOS
  * \param[in]       *argument: Pointer to user specific argument
@@ -716,11 +716,11 @@ gui_init(void) {
     
     gui_seteventcallback(NULL);                     /* Set event callback */
     
-#if GUI_OS
+#if GUI_CFG_OS
     /* Init system */
     gui_sys_init();                                 /* Init low-level system */
     gui_sys_mbox_create(&GUI.OS.mbox, 10);          /* Message box for 10 elements */
-#endif /* GUI_OS */
+#endif /* GUI_CFG_OS */
     
     /* Call LCD low-level function */
     result = 1;
@@ -751,7 +751,7 @@ gui_init(void) {
     GUI.Initialized = 1;                            /* GUI is initialized */
     gui_widget_init();                              /* Init widgets */
     
-#if GUI_OS
+#if GUI_CFG_OS
     /* Create graphical thread */
     GUI.OS.thread_id = gui_sys_thread_create("gui_thread", gui_thread, NULL, SYS_THREAD_SS, SYS_THREAD_PRIO);
 #endif
@@ -761,12 +761,12 @@ gui_init(void) {
 
 /**
  * \brief           Processes all drawing operations for GUI
- * \note            When GUI_OS is set to 0, then user has to call this function in main loop, otherwise it is processed in separated thread by GUI (GUI_OS != 0)
+ * \note            When GUI_CFG_OS is set to 0, then user has to call this function in main loop, otherwise it is processed in separated thread by GUI (GUI_CFG_OS != 0)
  * \retval          Number of jobs done in current call
  */
 int32_t
 gui_process(void) {
-#if GUI_OS
+#if GUI_CFG_OS
     gui_mbox_msg_t* msg;
     uint32_t time;
     uint32_t tmr_cnt = gui_timer_getactivecount();  /* Get number of active timers in system */
@@ -775,17 +775,17 @@ gui_process(void) {
     GUI_UNUSED(time);                               /* Unused variable */
     
     __GUI_SYS_PROTECT();                            /* Release protection */
-#endif /* GUI_OS */
+#endif /* GUI_CFG_OS */
    
     /**
      * Periodically process everything
      */
-#if GUI_USE_TOUCH
+#if GUI_CFG_USE_TOUCH
     gui_process_touch();                            /* Process touch inputs */
-#endif /* GUI_USE_TOUCH */
-#if GUI_USE_KEYBOARD
+#endif /* GUI_CFG_USE_TOUCH */
+#if GUI_CFG_USE_KEYBOARD
     process_keyboard();                             /* Process keyboard inputs */
-#endif /* GUI_USE_KEYBOARD */
+#endif /* GUI_CFG_USE_KEYBOARD */
     gui_timer_process();                            /* Process all timers */
     gui_widget_executeremove();                     /* Delete widgets */
     process_redraw();                               /* Redraw widgets */

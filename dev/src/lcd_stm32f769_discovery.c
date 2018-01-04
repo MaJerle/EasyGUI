@@ -40,6 +40,7 @@ int8_t pending_buffer = -1;
 
 GUI_Layer_t* currentLayer;
 
+#if 0
 /* ZONES of the screen */
 static uint8_t
 pCols[ZONES][4] = {
@@ -55,6 +56,7 @@ pCols[ZONES][4] = {
     {0x00, 0x00, 0x01, 0x3F}, /*   0 -> 799 */
 #endif  
 };
+#endif
 
 /**
  * @brief  BSP LCD Reset
@@ -357,7 +359,6 @@ _LCD_Init(void) {
   * @retval None
   */
 void HAL_DSI_EndOfRefreshCallback(DSI_HandleTypeDef *hdsi) {
-    uint8_t i = 0;
     if (pending_buffer >= 0) {
         if (active_area == LEFT_AREA) {
             /* Mask the TE */
@@ -372,7 +373,7 @@ void HAL_DSI_EndOfRefreshCallback(DSI_HandleTypeDef *hdsi) {
             HAL_DSI_Refresh(hdsi);    
 
         } else if (active_area == RIGHT_AREA) {
-            
+            /* Find next pending layer */
             uint8_t i = 0;
             for (i = 0; i < GUI_LAYERS; i++) {
                 if (Layers[i].Pending) {

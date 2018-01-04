@@ -31,7 +31,7 @@
 #define GUI_INTERNAL
 #include "gui/gui_translate.h"
 
-#if GUI_USE_TRANSLATE || defined(DOXYGEN)
+#if GUI_CFG_USE_TRANSLATE || defined(DOXYGEN)
 
 /******************************************************************************/
 /******************************************************************************/
@@ -116,4 +116,4 @@ gui_translate_setsourcelanguage(const GUI_TRANSLATE_Language_t* lang) {
     return 1;
 }
 
-#endif /* GUI_USE_TRANSLATE */
+#endif /* GUI_CFG_USE_TRANSLATE */

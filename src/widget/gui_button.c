@@ -141,7 +141,7 @@ gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
             }
             return 1;
         }
-#if GUI_USE_KEYBOARD
+#if GUI_CFG_USE_KEYBOARD
         case GUI_WC_KeyPress: {
             __GUI_KeyboardData_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (kb->KB.Keys[0] == GUI_KEY_CR || kb->KB.Keys[0] == GUI_KEY_LF) {
@@ -150,7 +150,7 @@ gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
             }
             return 1;
         }
-#endif /* GUI_USE_KEYBOARD */
+#endif /* GUI_CFG_USE_KEYBOARD */
         case GUI_WC_ActiveIn:
         case GUI_WC_ActiveOut: {
             gui_widget_invalidate__(h);             /* Invalidate widget */

@@ -43,14 +43,14 @@
 /***                           Private definitions                           **/
 /******************************************************************************/
 /******************************************************************************/    
-#if GUI_USE_TOUCH
+#if GUI_CFG_USE_TOUCH
 static GUI_BUFFER_t TSBuffer;
-static GUI_Byte_t TSBufferData[GUI_TOUCH_BUFFER_SIZE * sizeof(GUI_TouchData_t) + 1];
-#endif /* GUI_USE_TOUCH */
-#if GUI_USE_KEYBOARD
+static GUI_Byte_t TSBufferData[GUI_CFG_TOUCH_BUFFER_SIZE * sizeof(GUI_TouchData_t) + 1];
+#endif /* GUI_CFG_USE_TOUCH */
+#if GUI_CFG_USE_KEYBOARD
 static GUI_BUFFER_t KBBuffer;
-static GUI_Byte_t KBBufferData[GUI_TOUCH_BUFFER_SIZE * sizeof(GUI_KeyboardData_t) + 1];
-#endif /* GUI_USE_KEYBOARD */
+static GUI_Byte_t KBBufferData[GUI_CFG_KEYBOARD_BUFFER_SIZE * sizeof(GUI_KeyboardData_t) + 1];
+#endif /* GUI_CFG_USE_KEYBOARD */
 
 /******************************************************************************/
 /******************************************************************************/
@@ -69,7 +69,7 @@ static GUI_Byte_t KBBufferData[GUI_TOUCH_BUFFER_SIZE * sizeof(GUI_KeyboardData_t
 /***                                Public API                               **/
 /******************************************************************************/
 /******************************************************************************/
-#if GUI_USE_TOUCH || defined(DOXYGEN)
+#if GUI_CFG_USE_TOUCH || defined(DOXYGEN)
 
 /**
  * \brief           Add new touch data to internal buffer for further processing
@@ -83,10 +83,10 @@ gui_input_touchadd(GUI_TouchData_t* ts) {
     __GUI_ASSERTPARAMS(ts);                         /* Check input parameters */
     ts->Time = gui_sys_now();                       /* Set event time */
     ret = gui_buffer_write(&TSBuffer, ts, sizeof(*ts)) ? 1 : 0; /* Write data to buffer */
-#if GUI_OS
+#if GUI_CFG_OS
     static gui_mbox_msg_t gui_touch_value = {GUI_SYS_MBOX_TYPE_TOUCH};  /* Enter some value, don't care about */
     gui_sys_mbox_putnow(&GUI.OS.mbox, &gui_touch_value);    /* Notify stack about new key added */
-#endif /* GUI_OS */
+#endif /* GUI_CFG_OS */
     return ret;
 }
 
@@ -114,10 +114,10 @@ gui_input_touchavailable(void) {
     return gui_buffer_getfull(&TSBuffer) > 0;       /* Check if any available touch */
 }
 
-#endif /* GUI_USE_TOUCH || defined(DOXYGEN) */
+#endif /* GUI_CFG_USE_TOUCH || defined(DOXYGEN) */
 
 
-#if GUI_USE_KEYBOARD || defined(DOXYGEN)
+#if GUI_CFG_USE_KEYBOARD || defined(DOXYGEN)
 
 /**
  * \brief           Add new key data to internal buffer for further processing
@@ -131,10 +131,10 @@ gui_input_keyadd(GUI_KeyboardData_t* kb) {
     __GUI_ASSERTPARAMS(kb);                         /* Check input parameters */
     kb->Time = gui_sys_now();                       /* Set event time */
     ret = gui_buffer_write(&KBBuffer, kb, sizeof(*kb)) ? 1 : 0; /* Write data to buffer */
-#if GUI_OS
+#if GUI_CFG_OS
     static gui_mbox_msg_t gui_kbd_value = {GUI_SYS_MBOX_TYPE_KEYBOARD}; /* Enter some value, don't care about */
     gui_sys_mbox_putnow(&GUI.OS.mbox, &gui_kbd_value);   /* Notify stack about new key added */
-#endif /* GUI_OS */
+#endif /* GUI_CFG_OS */
     return ret;
 }
 
@@ -151,17 +151,17 @@ gui_input_keyread(GUI_KeyboardData_t* kb) {
     }
     return 0;
 }
-#endif /* GUI_USE_KEYBOARD || defined(DOXYGEN) */
+#endif /* GUI_CFG_USE_KEYBOARD || defined(DOXYGEN) */
 
 /**
  * \brief           Initialize input manager for GUI
  */
 void
 gui_input_init(void) {
-#if GUI_USE_TOUCH
+#if GUI_CFG_USE_TOUCH
     gui_buffer_init(&TSBuffer, sizeof(TSBufferData), TSBufferData);
-#endif /* GUI_USE_TOUCH */
-#if GUI_USE_KEYBOARD
+#endif /* GUI_CFG_USE_TOUCH */
+#if GUI_CFG_USE_KEYBOARD
     gui_buffer_init(&KBBuffer, sizeof(KBBufferData), KBBufferData);
-#endif /* GUI_USE_KEYBOARD */
+#endif /* GUI_CFG_USE_KEYBOARD */
 }

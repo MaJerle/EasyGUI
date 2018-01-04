@@ -285,7 +285,7 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
             
             return 1;
         }
-#if GUI_USE_TOUCH
+#if GUI_CFG_USE_TOUCH
         case GUI_WC_TouchStart: {                   /* Touch down event */
             touch_handle(h, GUI_WIDGET_PARAMTYPE_TOUCH(param));    /* Handle touch */
             
@@ -298,7 +298,7 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
         }
         case GUI_WC_TouchEnd:
             return 1;
-#endif /* GUI_USE_TOUCH */
+#endif /* GUI_CFG_USE_TOUCH */
         case GUI_WC_ActiveIn: {
             gui_timer_startperiodic__(o->C.Timer);  /* Start animation timer */
             return 1;

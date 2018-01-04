@@ -33,9 +33,9 @@
 #include "widget/gui_edittext.h"
 #include "widget/gui_widget.h"
 
-#if GUI_USE_KEYBOARD
+#if GUI_CFG_USE_KEYBOARD
 #include "gui/gui_keyboard.h"
-#endif /* GUI_USE_KEYBOARD */
+#endif /* GUI_CFG_USE_KEYBOARD */
 
 /******************************************************************************/
 /******************************************************************************/
@@ -155,22 +155,22 @@ gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
             return 1;
         }
         case GUI_WC_FocusIn:
-#if GUI_USE_KEYBOARD
+#if GUI_CFG_USE_KEYBOARD
             gui_keyboard_show__(h);                 /* Show keyboard */
-#endif /* GUI_USE_KEYBOARD */
+#endif /* GUI_CFG_USE_KEYBOARD */
             return 1;
         case GUI_WC_FocusOut:
-#if GUI_USE_KEYBOARD
+#if GUI_CFG_USE_KEYBOARD
             gui_keyboard_hide__();                  /* Hide keyboard */
-#endif /* GUI_USE_KEYBOARD */
+#endif /* GUI_CFG_USE_KEYBOARD */
             return 1;
-#if GUI_USE_TOUCH
+#if GUI_CFG_USE_TOUCH
         case GUI_WC_TouchStart: {
             GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
         }
-#endif /* GUI_USE_TOUCH */
-#if GUI_USE_KEYBOARD
+#endif /* GUI_CFG_USE_TOUCH */
+#if GUI_CFG_USE_KEYBOARD
         case GUI_WC_KeyPress: {
             __GUI_KeyboardData_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (gui_widget_processtextkey__(h, kb)) {
@@ -178,7 +178,7 @@ gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
             }
             return 1;
         }
-#endif /* GUI_USE_KEYBOARD */
+#endif /* GUI_CFG_USE_KEYBOARD */
         default:                                    /* Handle default option */
             GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */

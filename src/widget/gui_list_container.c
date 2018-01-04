@@ -147,7 +147,7 @@ gui_listcontainer_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* pa
             gui_draw_filledrectangle(disp, x, y, width, height, gui_widget_getcolor__(h, GUI_LIST_CONTAINER_COLOR_BG));
             return 1;                               /* */
         }
-#if GUI_USE_TOUCH
+#if GUI_CFG_USE_TOUCH
         case GUI_WC_TouchStart: {
             GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
@@ -161,7 +161,7 @@ gui_listcontainer_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* pa
             }
             return 1;
         }
-#endif /* GUI_USE_TOUCH */
+#endif /* GUI_CFG_USE_TOUCH */
         default:                                    /* Handle default option */
             GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */

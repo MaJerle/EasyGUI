@@ -106,9 +106,9 @@ graph_zoom(GUI_HANDLE_p h, float zoom, float xpos, float ypos) {
 
 static uint8_t
 gui_graph_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
-#if GUI_USE_TOUCH
-static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
-#endif /* GUI_USE_TOUCH */    
+#if GUI_CFG_USE_TOUCH
+static GUI_iDim_t tX[GUI_CFG_TOUCH_MAX_PRESSES], tY[GUI_CFG_TOUCH_MAX_PRESSES];
+#endif /* GUI_CFG_USE_TOUCH */    
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
             g->Border[GUI_GRAPH_BORDER_TOP] = 5;    /* Set borders */
@@ -265,7 +265,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
             }
             return 1;
         }
-#if GUI_USE_TOUCH
+#if GUI_CFG_USE_TOUCH
         case GUI_WC_TouchStart: {                   /* Touch down event */
             __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             uint8_t i = 0;
@@ -295,7 +295,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 diff = (float)(y - tY[0]) / step;
                 g->VisibleMinY += diff;
                 g->VisibleMaxY += diff;
-#if GUI_TOUCH_MAX_PRESSES > 1
+#if GUI_CFG_TOUCH_MAX_PRESSES > 1
             } else if (ts->TS.Count == 2) {         /* Scale widget on multiple widgets */
                 float centerX, centerY, zoom;
                 
@@ -303,7 +303,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
                 zoom = ts->Distance / ts->DistanceOld;  /* Calculate zoom value */
                 
                 graph_zoom(h, zoom, (float)centerX / (float)gui_widget_getwidth__(h), (float)centerY / (float)gui_widget_getheight__(h));
-#endif /* GUI_TOUCH_MAX_PRESSES > 1 */
+#endif /* GUI_CFG_TOUCH_MAX_PRESSES > 1 */
             }
             
             for (i = 0; i < ts->TS.Count; i++) {
@@ -316,12 +316,12 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
         }
         case GUI_WC_TouchEnd:
             return 1;
-#endif /* GUI_USE_TOUCH */
+#endif /* GUI_CFG_USE_TOUCH */
         case GUI_WC_DblClick:
             graph_reset(h);                         /* Reset zoom */
             gui_widget_invalidate__(h);             /* Invalidate widget */
             return 1;
-#if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
+#if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
         case GUI_WC_Remove: {                       /* When widget is about to be removed */
             GUI_GRAPH_DATA_p data;
             GUI_LinkedListMulti_t* link;
@@ -337,7 +337,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
             
             return 1;
         }
-#endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
+#endif /* GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
         default:                                    /* Handle default option */
             GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
@@ -345,7 +345,7 @@ static GUI_iDim_t tX[GUI_TOUCH_MAX_PRESSES], tY[GUI_TOUCH_MAX_PRESSES];
 }
 #undef g
 
-#if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
+#if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
 /* Invalidate graphs attached to data */
 static void graph_invalidate(GUI_GRAPH_DATA_p data) {
     GUI_HANDLE_p h;
@@ -366,7 +366,7 @@ static void graph_invalidate(GUI_GRAPH_DATA_p data) {
         gui_widget_invalidate__(h);
     }
 }
-#endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
+#endif /* GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
 
 /******************************************************************************/
 /******************************************************************************/
@@ -512,14 +512,14 @@ gui_graph_attachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
      */
     gui_linkedlist_multi_add_gen(&__GG(h)->Root, data);
 
-#if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
+#if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
     /**
      * Linked list of graphs for this data plot
      * This linked list is not on top!
      * Must subtract list element offset when using graphs from data
      */
     gui_linkedlist_multi_add_gen(&data->Root, h);
-#endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
+#endif /* GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;
@@ -544,13 +544,13 @@ gui_graph_detachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
      */
     gui_linkedlist_multi_find_remove(&__GG(h)->Root, data);
 
-#if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
+#if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
     /**
      * Linked list of graphs for this data plot
      * Remove graph from data linked list
      */
     gui_linkedlist_multi_find_remove(&data->Root, h);
-#endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
+#endif /* GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;
@@ -618,9 +618,9 @@ gui_graph_data_addvalue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y) {
         data->Ptr = 0;                              /* Reset read operation */
     }
     
-#if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
+#if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
     graph_invalidate(data);                         /* Invalidate graphs attached to this data object */
-#endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
+#endif /* GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;
@@ -640,9 +640,9 @@ gui_graph_data_setcolor(GUI_GRAPH_DATA_p data, GUI_Color_t color) {
     
     if (data->Color != color) {                     /* Check color change */
         data->Color = color;                        /* Set new color */
-#if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
+#if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
         graph_invalidate(data);                     /* Invalidate graphs attached to this data object */
-#endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
+#endif /* GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */

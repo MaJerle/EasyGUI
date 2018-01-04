@@ -265,8 +265,8 @@ typedef enum __GUI_TouchStatus_t {
  */
 typedef struct GUI_TouchData_t {
     uint8_t Count;                          /*!< Number of touches detected */
-    GUI_iDim_t X[GUI_TOUCH_MAX_PRESSES];    /*!< Touch X coordinate */
-    GUI_iDim_t Y[GUI_TOUCH_MAX_PRESSES];    /*!< Touch Y coordinate */
+    GUI_iDim_t X[GUI_CFG_TOUCH_MAX_PRESSES];/*!< Touch X coordinate */
+    GUI_iDim_t Y[GUI_CFG_TOUCH_MAX_PRESSES];/*!< Touch Y coordinate */
     GUI_TouchState_t Status;                /*!< Touch status, pressed or released */
     uint32_t Time;                          /*!< Time when touch was recorded */
 } GUI_TouchData_t;
@@ -276,16 +276,16 @@ typedef struct GUI_TouchData_t {
  */
 typedef struct __GUI_TouchData_t {
     GUI_TouchData_t TS;                     /*!< Touch structure from outside */
-    GUI_iDim_t RelX[GUI_TOUCH_MAX_PRESSES]; /*!< Relative X position to current widget */
-    GUI_iDim_t RelY[GUI_TOUCH_MAX_PRESSES]; /*!< Relative Y position to current widget */
-    GUI_iDim_t RelOldX[GUI_TOUCH_MAX_PRESSES];  /*!< Relative X position to current widget */
-    GUI_iDim_t RelOldY[GUI_TOUCH_MAX_PRESSES];  /*!< Relative Y position to current widget */
+    GUI_iDim_t RelX[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Relative X position to current widget */
+    GUI_iDim_t RelY[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Relative Y position to current widget */
+    GUI_iDim_t RelOldX[GUI_CFG_TOUCH_MAX_PRESSES];  /*!< Relative X position to current widget */
+    GUI_iDim_t RelOldY[GUI_CFG_TOUCH_MAX_PRESSES];  /*!< Relative Y position to current widget */
     GUI_Dim_t WidgetWidth;                  /*!< Save widget width value */
     GUI_Dim_t WidgetHeight;                 /*!< Save widget height value */
-#if GUI_TOUCH_MAX_PRESSES > 1 || defined(DOXYGEN)
+#if GUI_CFG_TOUCH_MAX_PRESSES > 1 || defined(DOXYGEN)
     float Distance;                         /*!< Distance between 2 points when 2 touch elements are detected */
     float DistanceOld;                      /*!< Old distance between 2 points */
-#endif /* GUI_TOUCH_MAX_PRESSES > 1 || defined(DOXYGEN) */
+#endif /* GUI_CFG_TOUCH_MAX_PRESSES > 1 || defined(DOXYGEN) */
     struct pt pt;                           /*!< Protothreads structure */
 } __GUI_TouchData_t;
 
@@ -293,7 +293,7 @@ typedef struct __GUI_TouchData_t {
  * \brief           Single key data structure
  */
 typedef struct GUI_KeyboardData_t {
-#if GUI_USE_UNICODE || defined(DOXYGEN)
+#if GUI_CFG_USE_UNICODE || defined(DOXYGEN)
     GUI_Char Keys[4];                       /*!< Key pressed, plain unicode bytes, up to 4 bytes */
 #else
     GUI_Char Keys[1];                       /*!< Key pressed, no unicode support */
@@ -1110,9 +1110,9 @@ typedef struct GUI_HANDLE {
     uint32_t Padding;                       /*!< 4-bytes long padding, each byte of one side, MSB = top padding, LSB = left padding.
                                                     Used for children widgets if virtual padding should be used */
     int32_t ZIndex;                         /*!< Z-Index value of widget, which can be set by user. All widgets with same z-index are changeable when active on visible area */
-#if GUI_USE_TRANSPARENCY || defined(DOXYGEN)
+#if GUI_CFG_USE_TRANSPARENCY || defined(DOXYGEN)
     uint8_t Transparency;                   /*!< Widget transparency relative to parent widget */
-#endif /* GUI_USE_TRANSPARENCY */
+#endif /* GUI_CFG_USE_TRANSPARENCY */
     uint32_t Flags;                         /*!< All possible flags for specific widget */
     GUI_Const GUI_FONT_t* Font;             /*!< Font used for widget drawings */
     GUI_Char* Text;                         /*!< Pointer to widget text if exists */

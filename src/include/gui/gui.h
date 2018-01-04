@@ -70,7 +70,7 @@ extern "C" {
  * \{
  */
 
-#if GUI_OS
+#if GUI_CFG_OS
 
 #define __GUI_SYS_PROTECT()     gui_sys_protect()
 #define __GUI_SYS_UNPROTECT()   gui_sys_unprotect()
@@ -84,7 +84,7 @@ extern "C" {
 #define __GUI_SYS_PROTECT()
 #define __GUI_SYS_UNPROTECT()
 
-#endif /* GUI_OS */
+#endif /* GUI_CFG_OS */
 
 /**
  * \brief           Debugging macro for inside GUI
@@ -227,18 +227,18 @@ extern "C" {
 #define GUI_ROUND(x)                ((float)(x) + 0.5f)
 
 /**
- * \brief           Align x value to specific number of bits, provided from \ref GUI_MEM_ALIGNMENT configuration
+ * \brief           Align x value to specific number of bits, provided from \ref GUI_CFG_MEM_ALIGNMENT configuration
  * \param[in]       x: Input value to align
  * \retval          Input value aligned to specific number of bytes
  */
-#define GUI_MEM_ALIGN(x)            ((x + (GUI_MEM_ALIGNMENT - 1)) & ~(GUI_MEM_ALIGNMENT - 1))
+#define GUI_MEM_ALIGN(x)            ((x + (GUI_CFG_MEM_ALIGNMENT - 1)) & ~(GUI_CFG_MEM_ALIGNMENT - 1))
 
 /**
  * \}
  */
 //#endif /* defined(GUI_INTERNAL) || defined(DOXYGEN) */
 
-#if GUI_OS
+#if GUI_CFG_OS
 #include "system/gui_system.h"
 
 #define GUI_SYS_MBOX_TYPE_TOUCH             0x01
@@ -258,11 +258,11 @@ typedef struct gui_mbox_msg_t {
 /**
  * \brief           OS dependant variables
  */
-typedef struct GUI_OS_t {
+typedef struct GUI_CFG_OS_t {
     gui_sys_thread_t thread_id;             /*!< GUI thread ID */
     gui_sys_mbox_t mbox;                    /*!< Operating system message box */
-} GUI_OS_t;
-#endif /* GUI_OS */
+} GUI_CFG_OS_t;
+#endif /* GUI_CFG_OS */
 
 /**
  * \brief           GUI main object structure
@@ -288,20 +288,20 @@ typedef struct GUI_t {
     GUI_WIDGET_PARAM_t WidgetParam;
     GUI_WIDGET_RESULT_t WidgetResult;
     
-#if GUI_USE_TOUCH || defined(DOXYGEN)
+#if GUI_CFG_USE_TOUCH || defined(DOXYGEN)
     __GUI_TouchData_t TouchOld;             /*!< Old touch data, used for event management */
     __GUI_TouchData_t Touch;                /*!< Current touch data and processing tool */
     GUI_HANDLE_p ActiveWidget;              /*!< Pointer to widget currently active by touch */
     GUI_HANDLE_p ActiveWidgetPrev;          /*!< Previously active widget */
-#endif /* GUI_USE_TOUCH */
+#endif /* GUI_CFG_USE_TOUCH */
 
-#if GUI_USE_TRANSLATE
+#if GUI_CFG_USE_TRANSLATE
     GUI_TRANSLATE_t Translate;              /*!< Translation management structure */
-#endif /* GUI_USE_TRANSLATE */
+#endif /* GUI_CFG_USE_TRANSLATE */
     
-#if GUI_OS
-    GUI_OS_t OS;                            /*!< Operating system dependant structure */
-#endif /* GUI_OS */
+#if GUI_CFG_OS
+    GUI_CFG_OS_t OS;                            /*!< Operating system dependant structure */
+#endif /* GUI_CFG_OS */
 
     GUI_EventCallback_t EventCb;            /*!< Pointer to global GUI event callback function */
     

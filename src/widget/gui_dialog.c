@@ -42,10 +42,10 @@ typedef struct DDList_t {
     GUI_ID_t id;                                    /*!< Dialog ID */
     GUI_HANDLE_p h;                                 /*!< Pointer to dialog address */
     volatile int status;                            /*!< Status on dismissed call */
-#if GUI_OS
+#if GUI_CFG_OS
     gui_sys_sem_t sem;                              /*!< Semaphore handle for blocking */
     uint8_t ib;                                     /*!< Indication if dialog is blocking */
-#endif /* GUI_OS */
+#endif /* GUI_CFG_OS */
 } DDList_t;
 
 /******************************************************************************/
@@ -167,7 +167,7 @@ gui_dialog_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_
     return (GUI_HANDLE_p)ptr;
 }
 
-#if GUI_OS || defined(DOXYGEN)
+#if GUI_CFG_OS || defined(DOXYGEN)
 /**
  * \brief           Create new dialog base element without any "design" style and wait for dismiss status
  * \note            Function will block thread until dialog is dismissed using \ref gui_dialog_dismiss function by user
@@ -214,7 +214,7 @@ gui_dialog_createblocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t wid
     
     return resp;
 }
-#endif /* GUI_OS || defined(DOXYGEN) */
+#endif /* GUI_CFG_OS || defined(DOXYGEN) */
 
 /**
  * \brief           Dismiss (close) dialog with status
@@ -239,11 +239,11 @@ gui_dialog_dismiss(GUI_HANDLE_p h, int status) {
         
         GUI_WIDGET_PARAMTYPE_INT(&param) = l->status;
         gui_widget_callback__(h, GUI_WC_OnDismiss, &param, NULL);   /* Process callback */
-#if GUI_OS
+#if GUI_CFG_OS
         if (l->ib && gui_sys_sem_isvalid(&l->sem)) {/* Check if semaphore is valid */
             gui_sys_sem_release(&l->sem);           /* Release locked semaphore */
         } else 
-#endif /* GUI_OS */
+#endif /* GUI_CFG_OS */
         {
             remove_from_active_dialogs(l);          /* Remove from active dialogs */
         }

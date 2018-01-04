@@ -319,9 +319,9 @@ process_click(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
 
 static uint8_t
 gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
-#if GUI_USE_TOUCH
+#if GUI_CFG_USE_TOUCH
     static GUI_iDim_t tY;
-#endif /* GUI_USE_TOUCH */
+#endif /* GUI_CFG_USE_TOUCH */
     
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
@@ -448,7 +448,7 @@ gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
             }
             return 1;
         }
-#if GUI_USE_TOUCH
+#if GUI_CFG_USE_TOUCH
         case GUI_WC_TouchStart: {
             __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             tY = ts->RelY[0];                       /* Save relative Y position */
@@ -469,7 +469,7 @@ gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
             }
             return 1;
         }
-#endif /* GUI_USE_TOUCH */
+#endif /* GUI_CFG_USE_TOUCH */
         case GUI_WC_Click: {
             __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             if (!is_opened(h)) {                    /* Check widget status */
@@ -483,7 +483,7 @@ gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
             open_close(h, 0);                       /* Close widget */
             return 1;
         }
-#if GUI_USE_KEYBOARD
+#if GUI_CFG_USE_KEYBOARD
         case GUI_WC_KeyPress: {
             __GUI_KeyboardData_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (kb->KB.Keys[0] == GUI_KEY_DOWN) {   /* On pressed down */
@@ -495,7 +495,7 @@ gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
             }
             return 1;
         }
-#endif /* GUI_USE_KEYBOARD */
+#endif /* GUI_CFG_USE_KEYBOARD */
         case GUI_WC_IncSelection: {
             inc_selection(h, GUI_WIDGET_PARAMTYPE_I16(param));  /* Increase selection */
             GUI_WIDGET_RESULTTYPE_U8(result) = 1;   /* Set operation result */

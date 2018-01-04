@@ -7,9 +7,9 @@
 #define VAL_SEM_INVALID             (osSemaphoreId)0
 #define VAL_MBOX_INVALID            (osMessageQId)0
 
-#if GUI_OS
+#if GUI_CFG_OS
 static osMutexId sys_mutex;                     /* Mutex ID for main protection */
-#endif /* GUI_OS */
+#endif /* GUI_CFG_OS */
 
 /**
  * \defgroup        SYS Port functions
@@ -22,7 +22,7 @@ gui_sys_now(void) {
     return HAL_GetTick();                       /* Get current tick in units of milliseconds */
 }
 
-#if GUI_OS || defined(DOXYGEN)
+#if GUI_CFG_OS || defined(DOXYGEN)
 uint8_t
 gui_sys_init(void) {
     gui_sys_mutex_create(&sys_mutex);           /* Create system mutex */
@@ -222,7 +222,7 @@ gui_sys_thread_create(const char* name, void (*thread_func)(void *), void* const
     return osThreadCreate(&thread_def, arg);    /* Create thread */
 }
 
-#endif /* GUI_OS || defined(DOXYGEN) */
+#endif /* GUI_CFG_OS || defined(DOXYGEN) */
 
 /**
  * \}

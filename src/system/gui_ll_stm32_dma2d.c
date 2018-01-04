@@ -40,14 +40,8 @@
 /******************************************************************************/
 /******************************************************************************/
 GUI_Layer_t Layers[GUI_LAYERS];
-DMA2D_HandleTypeDef DMA2DHandle;
-extern LTDC_HandleTypeDef LTDCHandle;
+static DMA2D_HandleTypeDef DMA2DHandle;
 uint16_t startAddress;
-
-osSemaphoreDef(sync_sem);
-osSemaphoreId sync_sem;
-
-void _LCD_SetActiveLayer(GUI_Layer_t* layer);
 
 /******************************************************************************/
 /******************************************************************************/
@@ -56,11 +50,8 @@ void _LCD_SetActiveLayer(GUI_Layer_t* layer);
 /******************************************************************************/
 #define DMA2D_START(type) do {                  \
     DMA2D->CR = (type);                         \
-    DMA2D->CR |= DMA2D_CR_TCIE | 0;             \
-    /* osSemaphoreWait(sync_sem, osWaitForever); */   /* Lock semaphore */\
+    DMA2D->CR |= 0 | 0;             \
     DMA2D->CR |= DMA2D_CR_START;                /* Start the transmission */\
-    /* osSemaphoreWait(sync_sem, osWaitForever); */   /* Wait semaphore to be released from interrupt */\
-    /* osSemaphoreRelease(sync_sem);  */              /* Release it it manually here */\
 } while (0)
 
 /******************************************************************************/
@@ -83,11 +74,8 @@ void _LCD_SetActiveLayer(GUI_Layer_t* layer);
 static
 void LCD_Init(GUI_LCD_t* LCD) {
     TM_SDRAM_Init();                                /* Init SDRAM */
-
-    LTDCHandle.Instance = LTDC;
-    DMA2DHandle.Instance = DMA2D;
     
-    sync_sem = osSemaphoreCreate(osSemaphore(sync_sem), 1);
+    DMA2DHandle.Instance = DMA2D;
     
     _LCD_Init();                                    /* Init LCD */
 }
@@ -336,7 +324,6 @@ void LCD_SetPixel(GUI_LCD_t* LCD, GUI_Layer_t* layer, GUI_Dim_t x, GUI_Dim_t y, 
 
 /* Process DMA2D interrupt */
 void DMA2D_IRQHandler(void) {
-   //osSemaphoreRelease(sync_sem);
     HAL_DMA2D_IRQHandler(&DMA2DHandle);
 }
 

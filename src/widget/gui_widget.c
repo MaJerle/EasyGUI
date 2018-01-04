@@ -43,10 +43,10 @@ typedef struct {
 } GUI_WIDGET_Def_t;
 GUI_WIDGET_Def_t WIDGET_Default;
 
-#if GUI_OS
+#if GUI_CFG_OS
 static gui_mbox_msg_t msg_widget_remove = {GUI_SYS_MBOX_TYPE_REMOVE};
 static gui_mbox_msg_t msg_widget_invalidate = {GUI_SYS_MBOX_TYPE_INVALIDATE};
-#endif /* GUI_OS */
+#endif /* GUI_CFG_OS */
 
 /******************************************************************************/
 /******************************************************************************/
@@ -150,11 +150,11 @@ remove_widgets(GUI_HANDLE_p parent) {
         h = gui_linkedlist_widgetgetnext(NULL, h);  /* Get next widget of current */
     }
     
-#if GUI_OS
+#if GUI_CFG_OS
     if (lvl == 0) {                                 /* Notify about remove execution */
         gui_sys_mbox_putnow(&GUI.OS.mbox, &msg_widget_remove);
     }
-#endif /* GUI_OS */
+#endif /* GUI_CFG_OS */
 }
 
 /* Get where on LCD is widget visible and what is visible width and height on screen for this widget */
@@ -251,11 +251,11 @@ invalidate_widget(GUI_HANDLE_p h, uint8_t setclipping) {
      * If widget is transparent, check all widgets, even those which are below current widget in list
      * Get first element of parent linked list for checking
      */
-#if GUI_USE_TRANSPARENCY
+#if GUI_CFG_USE_TRANSPARENCY
     if (gui_widget_istransparent__(h1)) {
         invalidate_widget(__GH(h1)->Parent, 0);     /* Invalidate parent widget */
     }
-#endif /* GUI_USE_TRANSPARENCY */
+#endif /* GUI_CFG_USE_TRANSPARENCY */
     for (; h1; h1 = gui_linkedlist_widgetgetnext(NULL, h1)) {
         get_lcd_abs_position_and_visible_width_height(h1, &h1x1, &h1y1, &h1x2, &h1y2); /* Get visible position on LCD for widget */
         for (h2 = gui_linkedlist_widgetgetnext(NULL, h1); h2;
@@ -282,7 +282,7 @@ invalidate_widget(GUI_HANDLE_p h, uint8_t setclipping) {
         invalidate_widget(__GH(h)->Parent, 0);
     }
 
-#if GUI_USE_TRANSPARENCY    
+#if GUI_CFG_USE_TRANSPARENCY    
     /**
      * Check if any of parent widgets has transparency = should be invalidated too
      *
@@ -294,7 +294,7 @@ invalidate_widget(GUI_HANDLE_p h, uint8_t setclipping) {
             break;
         }
     }
-#endif /* GUI_USE_TRANSPARENCY */
+#endif /* GUI_CFG_USE_TRANSPARENCY */
     
     return 1;
 }
@@ -749,15 +749,15 @@ gui_widget_invalidate__(GUI_HANDLE_p h) {
         (
             gui_widget_getflag__(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT) || 
             gui_widget_getcoreflag__(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT)
-#if GUI_USE_TRANSPARENCY
+#if GUI_CFG_USE_TRANSPARENCY
             || gui_widget_istransparent__(h)        /* At least little transparent */
-#endif /* GUI_USE_TRANSPARENCY */
+#endif /* GUI_CFG_USE_TRANSPARENCY */
         ) && __GH(h)->Parent) {
         invalidate_widget(__GH(h)->Parent, 0);      /* Invalidate parent object too but without clipping */
     }
-#if GUI_OS
+#if GUI_CFG_OS
     gui_sys_mbox_putnow(&GUI.OS.mbox, &msg_widget_invalidate);
-#endif /* GUI_OS */
+#endif /* GUI_CFG_OS */
     return ret;
 }
 
@@ -869,9 +869,9 @@ gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_i
         __GH(h)->Widget = widget;                   /* Widget object structure */
         __GH(h)->Footprint = GUI_WIDGET_FOOTPRINT;  /* Set widget footprint */
         __GH(h)->Callback = cb;                     /* Set widget callback */
-#if GUI_USE_TRANSPARENCY
+#if GUI_CFG_USE_TRANSPARENCY
         __GH(h)->Transparency = 0xFF;               /* Set full transparency by default */
-#endif /* GUI_USE_TRANSPARENCY */
+#endif /* GUI_CFG_USE_TRANSPARENCY */
         
         /**
          * Parent window check
@@ -921,10 +921,10 @@ gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_i
             gui_widget_callback__(__GH(h)->Parent, GUI_WC_ChildWidgetCreated, &param, NULL);    /* Notify user about init successful */
         }
         
-#if GUI_OS
+#if GUI_CFG_OS
         static gui_mbox_msg_t msg = {GUI_SYS_MBOX_TYPE_WIDGET_CREATED};
         gui_sys_mbox_putnow(&GUI.OS.mbox, &msg);    /* Post message queue */
-#endif /* GUI_OS */
+#endif /* GUI_CFG_OS */
         __GUI_LEAVE();                              /* Leave GUI */
     }
     
@@ -952,9 +952,9 @@ gui_widget_remove__(GUI_HANDLE_p h) {
         if (gui_widget_isfocused__(h)) {            /* In case current widget is in focus */
             gui_widget_focus_set(__GH(h)->Parent);  /* Set parent as focused */
         }
-#if GUI_OS
+#if GUI_CFG_OS
     gui_sys_mbox_putnow(&GUI.OS.mbox, &msg_widget_remove);  /* Put message to queue */
-#endif /* GUI_OS */
+#endif /* GUI_CFG_OS */
         return 1;                                   /* Widget will be deleted */
     }
     return 0;
@@ -1169,12 +1169,12 @@ const GUI_Char*
 gui_widget_gettext__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     /* Prepare for transpate support */
-#if GUI_USE_TRANSLATE
+#if GUI_CFG_USE_TRANSLATE
     /* For static texts only */
     if (!gui_widget_getflag__(h, GUI_FLAG_DYNAMICTEXTALLOC) && __GH(h)->Text) {
         return gui_translate_get(__GH(h)->Text);    /* Get translation entry */
     }
-#endif /* GUI_USE_TRANSLATE */
+#endif /* GUI_CFG_USE_TRANSLATE */
     return __GH(h)->Text;                           /* Return text for widget */
 }
 
@@ -1571,7 +1571,7 @@ gui_widget_setzindex__(GUI_HANDLE_p h, int32_t zindex) {
     return ret;
 }
 
-#if GUI_USE_TRANSPARENCY || defined(DOXYGEN)
+#if GUI_CFG_USE_TRANSPARENCY || defined(DOXYGEN)
 /**
  * \brief           Set transparency level to widget
  * \note            Since this function is private, it can only be used by user inside GUI library
@@ -1592,7 +1592,7 @@ gui_widget_settransparency__(GUI_HANDLE_p h, uint8_t trans) {
     
     return 1;
 }
-#endif /* GUI_USE_TRANSPARENCY */
+#endif /* GUI_CFG_USE_TRANSPARENCY */
 
 /**
  * \brief           Set color to widget specific index
@@ -2691,7 +2691,7 @@ gui_widget_getzindex(GUI_HANDLE_p h) {
     return ret;
 }
 
-#if GUI_USE_TRANSPARENCY || defined(DOXYGEN)
+#if GUI_CFG_USE_TRANSPARENCY || defined(DOXYGEN)
 /**
  * \brief           Set transparency level to widget
  * \param[in,out]   h: Widget handle
@@ -2735,7 +2735,7 @@ gui_widget_gettransparency(GUI_HANDLE_p h) {
     __GUI_LEAVE();                                  /* Leave GUI */
     return trans;
 }
-#endif /* GUI_USE_TRANSPARENCY || defined(DOXYGEN) */
+#endif /* GUI_CFG_USE_TRANSPARENCY || defined(DOXYGEN) */
 
 /**
  * \brief           Set 3D mode on widget

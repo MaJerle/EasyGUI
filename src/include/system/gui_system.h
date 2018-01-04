@@ -11,7 +11,7 @@ extern "C" {
     
 #include "gui_config.h"
 
-#if GUI_OS
+#if GUI_CFG_OS
 typedef osMutexId           gui_sys_mutex_t;
 typedef osSemaphoreId       gui_sys_sem_t;
 typedef osMessageQId        gui_sys_mbox_t;
@@ -51,7 +51,7 @@ uint8_t gui_sys_mbox_isvalid(gui_sys_mbox_t* b);
 uint8_t gui_sys_mbox_invalid(gui_sys_mbox_t* b);
     
 gui_sys_thread_t gui_sys_thread_create(const char* name, void (*thread_func)(void *), void* const arg, size_t stack_size, gui_sys_thread_prio_t prio);
-#endif /* GUI_OS */
+#endif /* GUI_CFG_OS */
 
 uint32_t gui_sys_now(void);
     

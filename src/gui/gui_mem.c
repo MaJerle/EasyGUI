@@ -44,8 +44,8 @@ typedef struct MemBlock {
 /**
  * \brief           Memory alignment bits and absolute number
  */
-#define MEM_ALIGN_BITS              ((size_t)(GUI_MEM_ALIGNMENT - 1))
-#define MEM_ALIGN_NUM               ((size_t)GUI_MEM_ALIGNMENT)
+#define MEM_ALIGN_BITS              ((size_t)(GUI_CFG_MEM_ALIGNMENT - 1))
+#define MEM_ALIGN_NUM               ((size_t)GUI_CFG_MEM_ALIGNMENT)
 #define MEM_ALIGN(x)                GUI_MEM_ALIGN(x)
 
 #define MEMBLOCK_METASIZE           MEM_ALIGN(sizeof(MemBlock_t))
@@ -406,7 +406,7 @@ void*
 gui_mem_alloc(uint32_t size) {
     void* ptr;
     __GUI_SYS_PROTECT();                            /* Lock system protection */
-#if GUI_USE_MEM
+#if GUI_CFG_USE_MEM
     ptr = mem_alloc(size);                          /* Allocate memory and return pointer */ 
 #else
     ptr = malloc(size);
@@ -428,7 +428,7 @@ gui_mem_alloc(uint32_t size) {
 void*
 gui_mem_realloc(void* ptr, size_t size) {
     __GUI_SYS_PROTECT();                            /* Lock system protection */
-#if GUI_USE_MEM
+#if GUI_CFG_USE_MEM
     ptr = mem_realloc(ptr, size);                   /* Reallocate and return pointer */
 #else
     ptr = realloc(ptr, size);
@@ -449,7 +449,7 @@ void*
 gui_mem_calloc(size_t num, size_t size) {
     void* ptr;
     __GUI_SYS_PROTECT();                            /* Lock system protection */
-#if GUI_USE_MEM
+#if GUI_CFG_USE_MEM
     ptr = mem_calloc(num, size);                   /* Allocate memory and clear it to 0. Then return pointer */
 #else
     ptr = calloc(num, size);
@@ -465,7 +465,7 @@ gui_mem_calloc(size_t num, size_t size) {
 void
 gui_mem_free(void* ptr) {
     __GUI_SYS_PROTECT();                            /* Lock system protection */
-#if GUI_USE_MEM
+#if GUI_CFG_USE_MEM
     mem_free(ptr);                                  /* Free already allocated memory */
 #else
     free(ptr);

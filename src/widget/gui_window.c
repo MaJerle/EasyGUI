@@ -77,9 +77,9 @@ static const GUI_WIDGET_t Widget = {
 #define w          ((GUI_WINDOW_t *)h)
 static uint8_t
 gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
-#if GUI_USE_TOUCH
+#if GUI_CFG_USE_TOUCH
    static GUI_iDim_t tX, tY, Mode = 0;
-#endif /* GUI_USE_TOUCH */
+#endif /* GUI_CFG_USE_TOUCH */
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
@@ -174,7 +174,7 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
             
             return 1;
         }
-#if GUI_USE_TOUCH
+#if GUI_CFG_USE_TOUCH
         case GUI_WC_TouchStart: {
             __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             if (!gui_widget_getparent__(h)) {       /* Ignore on base window */
@@ -217,7 +217,7 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
             Mode = 0;
             return 1;
         }
-#endif /* GUI_USE_TOUCH */
+#endif /* GUI_CFG_USE_TOUCH */
         case GUI_WC_Click: {
             GUI_iDim_t pt, wi;
             __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
@@ -248,7 +248,7 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
             }
             return 1;
         }
-#if GUI_USE_KEYBOARD
+#if GUI_CFG_USE_KEYBOARD
         case GUI_WC_KeyPress: {
             __GUI_KeyboardData_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (kb->KB.Keys[0] == GUI_KEY_DOWN) {
@@ -266,7 +266,7 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
             }
             return 1;
         }
-#endif /* GUI_USE_KEYBOARD */
+#endif /* GUI_CFG_USE_KEYBOARD */
         default:                                    /* Handle default option */
             GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */

@@ -110,9 +110,9 @@ typedef enum GUI_GRAPH_TYPE_t {
  * \brief           Graph data widget structure
  */
 typedef struct GUI_GRAPH_DATA_p {
-#if GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE || defined(DOXYGEN)
+#if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE || defined(DOXYGEN)
     GUI_LinkedListRoot_t Root;              /*!< Root linked list object of graph widgets */
-#endif /* GUI_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
+#endif /* GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     
     int16_t* Data;                          /*!< Pointer to actual data object */
     size_t Length;                          /*!< Size of data array */
