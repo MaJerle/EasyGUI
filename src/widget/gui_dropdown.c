@@ -550,7 +550,7 @@ gui_dropdown_addstring(GUI_HANDLE_p h, const GUI_Char* text) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     
     item = GUI_MEMALLOC(sizeof(*item));             /* Allocate memory for entry */
-    if (item) {
+    if (item != NULL) {
         __GUI_ENTER();                              /* Enter GUI */
         item->Text = (GUI_Char *)text;              /* Add text to entry */
         gui_linkedlist_add_gen(&__GD(h)->Root, &item->List);/* Add to linked list */

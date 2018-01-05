@@ -44,40 +44,45 @@ static gui_mbox_msg_t msg_widget_invalidate = {GUI_SYS_MBOX_TYPE_INVALIDATE};
 #endif /* GUI_CFG_OS */
 
 
-/* Removes widget and children widgets */
+/**
+ * \brief           Remove widget from memory
+ * \param[in]       h: Widget handle
+ * \return          1 on success, 0 otherwise
+ */
 static uint8_t
 remove_widget(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
     /* Check focus state */
     if (GUI.FocusedWidget == h) {
-        if (__GH(h)->Parent) {                      /* Should always happen as top parent (window) can't be removed */
+        if (__GH(h)->Parent != NULL) {              /* Should always happen as top parent (window) can't be removed */
             GUI.FocusedWidget = __GH(h)->Parent;    /* Set parent widget as focused */
         } else {
             gui_widget_focus_clear();               /* Clear all widgets from focused */
-            GUI.FocusedWidget = 0;
+            GUI.FocusedWidget = NULL;
         }
     }
     if (GUI.FocusedWidgetPrev == h) {
-        GUI.FocusedWidgetPrev = 0;
+        GUI.FocusedWidgetPrev = NULL;
     }
     if (GUI.ActiveWidget == h) {
-        GUI.ActiveWidget = 0;                       /* Invalidate active widget */
+        GUI.ActiveWidget = NULL;                    /* Invalidate active widget */
     }
     if (GUI.ActiveWidgetPrev == h) {
         GUI.ActiveWidgetPrev = __GH(h)->Parent;     /* Set widget as previous active */
     }
-    if (GUI.WindowActive && h == GUI.WindowActive) {    /* Check for parent window */
+    if (GUI.WindowActive && h == GUI.WindowActive) {/* Check for parent window */
         GUI.WindowActive = __GH(GUI.WindowActive)->Parent;
     }
     
     gui_widget_invalidatewithparent__(h);           /* Invalidate object and its parent */
     gui_widget_freetextmemory__(h);                 /* Free text memory */
-    if (__GH(h)->Timer) {                           /* Check timer memory */
+    if (__GH(h)->Timer != NULL) {                   /* Check timer memory */
         gui_timer_remove__(&__GH(h)->Timer);        /* Free timer memory */
     }
-    if (__GH(h)->Colors) {                          /* Check colors memory */
+    if (__GH(h)->Colors != NULL) {                  /* Check colors memory */
         GUI_MEMFREE(__GH(h)->Colors);               /* Free colors memory */
+        __GH(h)->Colors = NULL;
     }
     gui_linkedlist_widgetremove(h);                 /* Remove entry from linked list of parent widget */
     GUI_MEMFREE(h);                                 /* Free memory for widget */
@@ -85,23 +90,26 @@ remove_widget(GUI_HANDLE_p h) {
     return 1;                                       /* Widget deleted */
 }
 
-/* Recursive function to delete all widgets with checking for flag */
+/**
+ * \brief           Check and remove all widgets with delete flag enabled using recursion
+ * \param[in]       parent: Parent widget handle
+ */
 static void
 remove_widgets(GUI_HANDLE_p parent) {
     GUI_HANDLE_p h, next;
     static uint32_t lvl = 0;
     
-    /**
+    /*
      * Scan all widgets in system
      */
-    for (h = gui_linkedlist_widgetgetnext((GUI_HANDLE_ROOT_t *)parent, NULL); h; ) {        
+    for (h = gui_linkedlist_widgetgetnext((GUI_HANDLE_ROOT_t *)parent, NULL); h != NULL; ) {        
         if (gui_widget_getflag__(h, GUI_FLAG_REMOVE)) { /* Widget should be deleted */
             next = gui_linkedlist_widgetgetnext(NULL, h);   /* Get next widget of current */
             if (gui_widget_allowchildren__(h)) {    /* Children widgets are supported */
                 GUI_HANDLE_p tmp;
                 
                 /* Set remove flag to all widgets first... */
-                for (tmp = gui_linkedlist_widgetgetnext((GUI_HANDLE_ROOT_t *)h, NULL); tmp; 
+                for (tmp = gui_linkedlist_widgetgetnext((GUI_HANDLE_ROOT_t *)h, NULL); tmp != NULL; 
                         tmp = gui_linkedlist_widgetgetnext(NULL, tmp)) {
                     gui_widget_setflag__(tmp, GUI_FLAG_REMOVE); /* Set remove bit to all children elements */
                 }
@@ -112,13 +120,13 @@ remove_widgets(GUI_HANDLE_p parent) {
                 lvl--;
             }
             
-            /**
+            /*
              * Removing widget will also remove linked list chain
              * Therefore we have to save previous widget so we know next one
              */
             remove_widget(h);                       /* Remove widget itself */
             
-            /**
+            /*
              * Move widget pointer to next widget of already deleted and continue checking
              */
             h = next;                               /* Set current pointer to next one */
@@ -136,7 +144,18 @@ remove_widgets(GUI_HANDLE_p parent) {
 #endif /* GUI_CFG_OS */
 }
 
-/* Get where on LCD is widget visible and what is visible width and height on screen for this widget */
+/**
+ * \brief           Get vidget visible X, Y and width, height values on screen
+ * 
+ *                  It will calculate where widget is (including scrolling).
+ *
+ * \param[in]       h: Widget handle
+ * \param[out]      x1: Output variable to save top left X position on screen
+ * \param[out]      y1: Output variable to save top left Y position on screen
+ * \param[out]      x2: Output variable to save bottom right X position on screen
+ * \param[out]      y2: Output variable to save bottom right Y position on screen
+ * \return          1 on success, 0 otherwise
+ */
 static uint8_t
 get_lcd_abs_position_and_visible_width_height(GUI_HANDLE_p h, GUI_iDim_t* x1, GUI_iDim_t* y1, GUI_iDim_t* x2, GUI_iDim_t* y2) {
     GUI_iDim_t x, y, wi, hi;
@@ -148,7 +167,7 @@ get_lcd_abs_position_and_visible_width_height(GUI_HANDLE_p h, GUI_iDim_t* x1, GU
     wi = gui_widget_getwidth__(h);                  /* Get absolute width */
     hi = gui_widget_getheight__(h);                 /* Get absolute height */
     
-    /**
+    /*
      * Set widget visible positions with X and Y coordinates
      */
     *x1 = x;
@@ -156,7 +175,7 @@ get_lcd_abs_position_and_visible_width_height(GUI_HANDLE_p h, GUI_iDim_t* x1, GU
     *x2 = x + wi;
     *y2 = y + hi;
     
-    /**
+    /*
      * Check if widget is hidden by any parent or any parent is hidden by its parent
      */
     for (; h; h = __GH(h)->Parent) {
@@ -174,14 +193,18 @@ get_lcd_abs_position_and_visible_width_height(GUI_HANDLE_p h, GUI_iDim_t* x1, GU
     return 1;
 }
 
-/* Set widget clipping region */
+/**
+ * \brief           Set clipping region for visible part of widget
+ * \param[in]       h: Widget handle
+ * \return          1 on success, 0 otherwise
+ */
 static uint8_t
 set_clipping_region(GUI_HANDLE_p h) {
     GUI_Dim_t x1, y1, x2, y2;
     
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
-    /**
+    /*
      * TODO: If widget is visible only part of it (below other widgets)
      * find this part and set clipping region according to actual visible area
      */
@@ -200,7 +223,13 @@ set_clipping_region(GUI_HANDLE_p h) {
     return 1;
 }
 
-/* Invalidate widget procedure */
+/**
+ * \brief           Invalidate widget and set redraw flag
+ * \note            If widget is transparent, parent must be updated too. This function will handle these cases.
+ * \param[in]       h: Widget handle
+ * \param[in]       setclipping: When set to 1, clipping region will be expanded to widget size
+ * \return          1 on success, 0 otherwise
+ */
 static uint8_t
 invalidate_widget(GUI_HANDLE_p h, uint8_t setclipping) {
     GUI_HANDLE_p h1, h2;
@@ -220,7 +249,7 @@ invalidate_widget(GUI_HANDLE_p h, uint8_t setclipping) {
         set_clipping_region(h);                     /* Set clipping region for widget redrawing operation */
     }
     
-    /**
+    /*
      * Invalid only widget with higher Z-index (lowered on linked list) of current object
      * 
      * If widget should be redrawn, then any widget above it should be redrawn too, otherwise z-index match will fail.
@@ -252,7 +281,7 @@ invalidate_widget(GUI_HANDLE_p h, uint8_t setclipping) {
         }
     }
     
-    /**
+    /*
      * If widget is not the last on the linked list (top z-index)
      * check status of parent widget if it is last.
      * If it is not, process parent redraw and check similar parent widgets if are over our widget
@@ -262,12 +291,12 @@ invalidate_widget(GUI_HANDLE_p h, uint8_t setclipping) {
     }
 
 #if GUI_CFG_USE_TRANSPARENCY    
-    /**
+    /*
      * Check if any of parent widgets has transparency = should be invalidated too
      *
      * Since recursion is used, call function only once and recursion will take care for upper level of parent widgets
      */
-    for (h = __GH(h)->Parent; h; h = __GH(h)->Parent) {
+    for (h = __GH(h)->Parent; h != NULL; h = __GH(h)->Parent) {
         if (gui_widget_istransparent__(h)) {        /* If widget is transparent */
             invalidate_widget(h, 0);                /* Invalidate this parent too */
             break;
@@ -278,18 +307,24 @@ invalidate_widget(GUI_HANDLE_p h, uint8_t setclipping) {
     return 1;
 }
 
-/* Get first widget by given ID */
+/**
+ * \brief           Get widget by specific input parameters
+ * \param[in]       parent: Parent widget handle. Set to NULL to use root
+ * \param[in]       id: Widget id we are searching for in parent
+ * \param[in]       deep: Flag if searchi should go deeper to check for widget on parent tree
+ * \return          Widget handle
+ */
 static GUI_HANDLE_p
 get_widget_by_id(GUI_HANDLE_p parent, GUI_ID_t id, uint8_t deep) {
     GUI_HANDLE_p h;
     
-    for (h = gui_linkedlist_widgetgetnext(__GHR(parent), NULL); h;
+    for (h = gui_linkedlist_widgetgetnext(__GHR(parent), NULL); h != NULL;
             h = gui_linkedlist_widgetgetnext(NULL, h)) {
         if (gui_widget_getid__(h) == id) {          /* Compare ID values */
             return h;
         } else if (deep && gui_widget_allowchildren__(h)) { /* Check children if possible */
             GUI_HANDLE_p tmp = get_widget_by_id(h, id, deep);
-            if (tmp) {
+            if (tmp != NULL) {
                 return tmp;
             }
         }
@@ -297,15 +332,20 @@ get_widget_by_id(GUI_HANDLE_p parent, GUI_ID_t id, uint8_t deep) {
     return 0;
 }
 
-/* Returns first common widget between 2 widgets */
+/**
+ * \brief           Get first common widget between 2 widgets in a tree
+ * \param[in]       h1: First widget handle
+ * \param[in]       h2: Second widget handle
+ * \return          First common widget handle on tree
+ */
 static GUI_HANDLE_p
 get_common_parentwidget(GUI_HANDLE_p h1, GUI_HANDLE_p h2) {
     GUI_HANDLE_p tmp;
     
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h1) && gui_widget_iswidget__(h2)); /* Check valid parameter */
     
-    for (; h1; h1 = __GH(h1)->Parent) {             /* Process all entries */
-        for (tmp = h2; tmp; tmp = __GH(tmp)->Parent) {
+    for (; h1 != NULL; h1 = __GH(h1)->Parent) {     /* Process all entries */
+        for (tmp = h2; tmp != NULL; tmp = __GH(tmp)->Parent) {
             if (h1 == tmp) {
                 return tmp;
             }
@@ -314,7 +354,13 @@ get_common_parentwidget(GUI_HANDLE_p h1, GUI_HANDLE_p h2) {
     return GUI.Root.First;                          /* Return bottom widget on list */
 }
 
-/* Set widget size */
+/**
+ * \brief           Set widget size and invalidate approprite widgets if necessary
+ * \param[in]       h: Widget handle
+ * \param[in]       x: Width in units of pixels or percents
+ * \param[in]       y: Height in units of pixels or percents
+ * \return          1 on success, 0 otherwise
+ */
 static uint8_t
 set_widget_size(GUI_HANDLE_p h, float wi, float hi) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -336,7 +382,13 @@ set_widget_size(GUI_HANDLE_p h, float wi, float hi) {
     return 1;
 }
 
-/* Set widget position */
+/**
+ * \brief           Set widget position and invalidate approprite widgets if necessary
+ * \param[in]       h: Widget handle
+ * \param[in]       x: X position in units of pixels or percents
+ * \param[in]       y: Y position in units of pixels or percents
+ * \return          1 on success, 0 otherwise
+ */
 static uint8_t
 set_widget_position(GUI_HANDLE_p h, float x, float y) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -354,21 +406,25 @@ set_widget_position(GUI_HANDLE_p h, float x, float y) {
     return 1;
 }
 
-/* Check if widget can be (or not) removed for some reason */
+/**
+ * \brief           Check if widget can be removed
+ * \param[in]       h: Widget handle
+ * \return          1 if it can be removed, 0 otherwise
+ */
 static uint8_t
 can_remove_widget(GUI_HANDLE_p h) {
     GUI_WIDGET_RESULT_t result = {0};
     
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
-    /**
+    /*
      * Desktop window cannot be deleted
      */
     if (h == gui_window_getdesktop()) {             /* Root widget can not be deleted! */
         return 0;
     }
     
-    /**
+    /*
      * Check widget status itself
      */
     GUI_WIDGET_RESULTTYPE_U8(&result) = 1;
@@ -376,7 +432,7 @@ can_remove_widget(GUI_HANDLE_p h) {
         GUI_WIDGET_RESULTTYPE_U8(&result) = 1;      /* Manually allow delete */
     }
     
-    /**
+    /*
      * Check children widgets recursively
      */
     if (GUI_WIDGET_RESULTTYPE_U8(&result) && gui_widget_allowchildren__(h)) {   /* Check if we can delete all children widgets */
@@ -392,7 +448,11 @@ can_remove_widget(GUI_HANDLE_p h) {
     return GUI_WIDGET_RESULTTYPE_U8(&result);
 }
 
-/* Check if widget is inside LCD invalidate region */
+/**
+ * \brief           Check if visible part of widget is inside clipping region for redraw
+ * \param[in]       h: Widget handle
+ * \return          1 if inside, 0 otherwise
+ */
 uint8_t
 gui_widget_isinsideclippingregion(GUI_HANDLE_p h) {
     GUI_iDim_t x1, y1, x2, y2;
@@ -406,11 +466,19 @@ gui_widget_isinsideclippingregion(GUI_HANDLE_p h) {
     );
 }
 
+/**
+ * \brief           Init widget part of library
+ * \return          1 if flag for remove was set or 0 if not
+ */
 void
 gui_widget_init(void) {
     gui_window_createdesktop(GUI_ID_WINDOW_BASE, NULL); /* Create base window object */
 }
 
+/**
+ * \brief           Execute remove, check all widgets with remove status
+ * \return          1 if flag for remove was set or 0 if not
+ */
 uint8_t
 gui_widget_executeremove(void) {
     if (GUI.Flags & GUI_FLAG_REMOVE) {              /* Anything to remove? */
@@ -421,9 +489,13 @@ gui_widget_executeremove(void) {
     return 0;
 }
 
+/**
+ * \brief           Move widget down on linked list (put it as last, most visible on screen)
+ * \param[in]       h: Widget handle
+ */
 void
 gui_widget_movedowntree(GUI_HANDLE_p h) {              
-    /**
+    /*
      * Move widget to the end of parent linked list
      * This will allow widget to be first checked next time for touch detection
      * and will be drawn on top of al widgets as expected except if there is widget which allows children (new window or similar)
@@ -432,7 +504,7 @@ gui_widget_movedowntree(GUI_HANDLE_p h) {
         gui_widget_invalidate__(h);                 /* Invalidate object */
     }
     
-    /**
+    /*
      * Since linked list is threaded, we should move our widget to the end of parent list.
      * The same should be in the parent as it should also be on the end of its parent and so on.
      * With parent recursion this can be achieved
@@ -447,7 +519,10 @@ gui_widget_movedowntree(GUI_HANDLE_p h) {
     }
 }
 
-/* Clear widget focus */
+/**
+ * \brief           Clear focus on widget
+ * \param[in]       h: Widget handle
+ */
 void
 gui_widget_focus_clear(void) {
     if (GUI.FocusedWidget && GUI.FocusedWidget != GUI.Root.First) { /* First widget is always in focus */
@@ -462,7 +537,10 @@ gui_widget_focus_clear(void) {
     }
 }
 
-/* Set focus on widget */
+/**
+ * \brief           Set widget as focused
+ * \param[in]       h: Widget handle
+ */
 void
 gui_widget_focus_set(GUI_HANDLE_p h) {
     GUI_HANDLE_p common = NULL;
@@ -471,17 +549,17 @@ gui_widget_focus_set(GUI_HANDLE_p h) {
         return;
     }
     
-    /**
+    /*
      * TODO: Check if widget is in list for remove or any parent of it
      */
     
-    /**
+    /*
      * Step 1:
      *
      * Identify common parent from new and old focused widget
      * Remove focused flag on widget which are not in tree between old and new widgets
      */
-    if (GUI.FocusedWidget) {                        /* We already have one widget in focus */
+    if (GUI.FocusedWidget != NULL) {                /* We already have one widget in focus */
         common = get_common_parentwidget(GUI.FocusedWidget, h); /* Get first widget in common */
         if (common) {                               /* We have common object, invalidate only those which are not common in tree */
             for (; GUI.FocusedWidget && common && GUI.FocusedWidget != common; GUI.FocusedWidget = __GH(GUI.FocusedWidget)->Parent) {
@@ -494,7 +572,7 @@ gui_widget_focus_set(GUI_HANDLE_p h) {
         common = GUI.Root.First;                    /* Get bottom widget */
     }
     
-    /**
+    /*
      * Step 2:
      *
      * Set new widget as focused
@@ -509,10 +587,12 @@ gui_widget_focus_set(GUI_HANDLE_p h) {
     }
 }
 
-/* Clear active widget status */
+/**
+ * \brief           Clear active status on widget
+ */
 void
 gui_widget_active_clear(void) {
-    if (GUI.ActiveWidget) {
+    if (GUI.ActiveWidget != NULL) {
         gui_widget_callback__(GUI.ActiveWidget, GUI_WC_ActiveOut, NULL, NULL);  /* Notify user about change */
         gui_widget_clrflag__(GUI.ActiveWidget, GUI_FLAG_ACTIVE | GUI_FLAG_TOUCH_MOVE);  /* Clear all widget based flags */
         GUI.ActiveWidgetPrev = GUI.ActiveWidget;    /* Save as previous active */
@@ -520,28 +600,24 @@ gui_widget_active_clear(void) {
     }
 }
 
-/* Set active status to widget */
+/**
+ * \brief           Set widget as active
+ * \param[in]       h: Widget handle. When set to NULL, current active widget is cleared
+ */
 void
 gui_widget_active_set(GUI_HANDLE_p h) {
     gui_widget_active_clear();                      /* Clear active widget flag */
     GUI.ActiveWidget = h;                           /* Set new active widget */
-    if (h) {
+    if (h != NULL) {
         gui_widget_setflag__(GUI.ActiveWidget, GUI_FLAG_ACTIVE);    /* Set active widget flag */
         gui_widget_callback__(GUI.ActiveWidget, GUI_WC_ActiveIn, NULL, NULL);
     }
 }
 
-
-/******************************************************************************/
-/******************************************************************************/
-/***         Public functions (thread and non-thread safe versions)          **/
-/******************************************************************************/
-/******************************************************************************/
-
 /**
  * \brief           Get total width of widget in units of pixels
  *                     Function returns width of widget according to current widget setup (expanded, fill, percent, etc.)
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  *
  * \note            Even if percentage width is used, function will always return value in pixels
  * \param[in]       h: Pointer to \ref GUI_HANDLE_p structure
@@ -575,7 +651,7 @@ gui_widget_getwidth__(GUI_HANDLE_p h) {
 /**
  * \brief           Get total height of widget
  *                     Function returns height of widget according to current widget setup (expanded, fill, percent, etc.)
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  *
  * \note            Even if percentage height is used, function will always return value in pixels
  * \param[in]       h: Pointer to \ref GUI_HANDLE_p structure
@@ -607,7 +683,7 @@ gui_widget_getheight__(GUI_HANDLE_p h) {
 
 /**
  * \brief           Get absolute X position on LCD for specific widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          X position on LCD
  * \hideinitializer
@@ -634,7 +710,7 @@ gui_widget_getabsolutex__(GUI_HANDLE_p h) {
 
 /**
  * \brief           Get absolute Y position on LCD for specific widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          Y position on LCD
  * \hideinitializer
@@ -664,7 +740,7 @@ gui_widget_getabsolutey__(GUI_HANDLE_p h) {
  * \note            This function returns inner X position in absolute form.
  *                     Imagine parent absolute X is 10, and left padding is 2. Function returns 12.
  *
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle for which parent should be calculated
  * \retval          Parent absolute inner X position
  */
@@ -689,7 +765,7 @@ gui_widget_getparentabsolutex__(GUI_HANDLE_p h) {
  * \note            This function returns inner Y position in absolute form.
  *                     Imagine parent absolute Y is 10, and top padding is 2. Function returns 12.
  *
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle for which parent should be calculated
  * \retval          Parent absolute inner Y position
  */
@@ -711,7 +787,7 @@ gui_widget_getparentabsolutey__(GUI_HANDLE_p h) {
 
 /**
  * \brief           Invalidate widget for redraw 
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          1: Successful
  * \retval          0: Failed
@@ -742,7 +818,7 @@ gui_widget_invalidate__(GUI_HANDLE_p h) {
 
 /**
  * \brief           Invalidate widget and parent widget for redraw 
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          1: Successful
  * \retval          0: Failed
@@ -760,7 +836,7 @@ gui_widget_invalidatewithparent__(GUI_HANDLE_p h) {
 
 /**
  * \brief           Set if parent widget should be invalidated when we invalidate primary widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \note            Useful for widgets where there is no background: Transparent images, textview, slider, etc
  * \param[in]       h: Widget handle
  * \param[in]       value: Value either to enable or disable. 0 = disable, > 0 = enable
@@ -780,7 +856,7 @@ gui_widget_setinvalidatewithparent__(GUI_HANDLE_p h, uint8_t value) {
 
 /**
  * \brief           Set 3D mode on widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       enable: Value to enable, either 1 or 0
  * \retval          1: Successful
@@ -805,7 +881,7 @@ gui_widget_set3dstyle__(GUI_HANDLE_p h, uint8_t enable) {
 
 /**
  * \brief           Create new widget and add it to linked list to parent object
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       widget: Pointer to \ref GUI_WIDGET_t structure with widget description
  * \param[in]       id: Widget unique ID to use for identity for callback processing
  * \param[in]       x: Widget X position relative to parent widget
@@ -819,13 +895,13 @@ gui_widget_set3dstyle__(GUI_HANDLE_p h, uint8_t enable) {
  * \retval          0: Widget creation failed
  * \sa              __gui_widget_remove
  */
-void*
+void *
 gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_HANDLE_p h;
     
     __GUI_ASSERTPARAMS(widget && widget->Callback); /* Check input parameters */
     
-    /**
+    /*
      * Allocation size check:
      * 
      * - Size must be at least for widget size
@@ -837,7 +913,7 @@ gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_i
     }
     
     h = GUI_MEMALLOC(widget->Size);                 /* Allocate memory for widget */
-    if (h) {
+    if (h != NULL) {
         GUI_WIDGET_PARAM_t param = {0};
         GUI_WIDGET_RESULT_t result = {0};
     
@@ -852,7 +928,7 @@ gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_i
         __GH(h)->Transparency = 0xFF;               /* Set full transparency by default */
 #endif /* GUI_CFG_USE_TRANSPARENCY */
         
-        /**
+        /*
          * Parent window check
          *
          * - Dialog's parent widget is desktop widget
@@ -916,7 +992,7 @@ gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_i
  *                  Function checks widget and all its children if they can be deleted. 
  *                  If so, flag for delete will be set and procedure will be executed later when all other processing is done
  *
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param           *h: Widget handle to remove
  * \retval          0: Failed
  * \retval          1: Success
@@ -944,7 +1020,7 @@ gui_widget_remove__(GUI_HANDLE_p h) {
 /*******************************************/
 /**
  * \brief           Set font used for widget drawing
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       font: Pointer to \ref GUI_FONT_t structure with font information
  * \retval          1: Successful
@@ -962,7 +1038,7 @@ gui_widget_setfont__(GUI_HANDLE_p h, const GUI_FONT_t* font) {
 
 /**
  * \brief           Set text for widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  *
  * \note            When memory for text is dynamically allocated, text will be copied to allocated memory,
  *                     otherwise it will just set the pointer to new text.
@@ -1006,7 +1082,7 @@ gui_widget_settext__(GUI_HANDLE_p h, const GUI_Char* text) {
 
 /**
  * \brief           Allocate text memory for widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       size: Number of bytes to allocate
  * \retval          1: Successful
@@ -1025,7 +1101,7 @@ gui_widget_alloctextmemory__(GUI_HANDLE_p h, uint32_t size) {
     
     __GH(h)->TextMemSize = size * sizeof(GUI_Char); /* Allocate text memory */
     __GH(h)->Text = GUI_MEMALLOC(__GH(h)->TextMemSize); /* Allocate memory for text */
-    if (__GH(h)->Text) {                            /* Check if allocated */
+    if (__GH(h)->Text != NULL) {                    /* Check if allocated */
         gui_widget_setflag__(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Dynamically allocated */
     } else {
         __GH(h)->TextMemSize = 0;                   /* No dynamic bytes available */
@@ -1038,7 +1114,7 @@ gui_widget_alloctextmemory__(GUI_HANDLE_p h, uint32_t size) {
 
 /**
  * \brief           Free text memory for widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          1: Successful
  * \retval          0: Failed
@@ -1061,7 +1137,7 @@ gui_widget_freetextmemory__(GUI_HANDLE_p h) {
 
 /**
  * \brief           Check if widget has set font and text
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle
  * \retval          1: Widget has font and text set
  * \retval          0: Widget does not have font or text set
@@ -1074,7 +1150,7 @@ gui_widget_isfontandtextset__(GUI_HANDLE_p h) {
 
 /**
  * \brief           Process text key (add character, remove it, move cursor, etc)
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       kb: Pointer to \ref __GUI_KeyboardData_t structure
  * \retval          1: Key processed
@@ -1140,11 +1216,11 @@ gui_widget_processtextkey__(GUI_HANDLE_p h, __GUI_KeyboardData_t* kb) {
 
 /**
  * \brief           Get text from widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          Pointer to text from widget
  */
-const GUI_Char*
+const GUI_Char *
 gui_widget_gettext__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     /* Prepare for transpate support */
@@ -1159,11 +1235,11 @@ gui_widget_gettext__(GUI_HANDLE_p h) {
 
 /**
  * \brief           Get font from widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          Pointer to font used for widget
  */
-const GUI_FONT_t*
+const GUI_FONT_t *
 gui_widget_getfont__(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     return __GH(h)->Font;                           /* Return font for widget */
@@ -1174,7 +1250,7 @@ gui_widget_getfont__(GUI_HANDLE_p h) {
 /*******************************************/
 /**
  * \brief           Set width of widget in units of pixels
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       width: Width in units of pixels
  * \retval          1: Successful
@@ -1193,7 +1269,7 @@ gui_widget_setwidth__(GUI_HANDLE_p h, GUI_Dim_t width) {
 
 /**
  * \brief           Set height of widget in units of pixels
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       height: Height in units of pixels
  * \retval          1: Successful
@@ -1212,7 +1288,7 @@ gui_widget_setheight__(GUI_HANDLE_p h, GUI_Dim_t height) {
 
 /**
  * \brief           Set width of widget in percentage relative to parent widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       width: Width in percentage
  * \retval          1: Successful
@@ -1231,7 +1307,7 @@ gui_widget_setwidthpercent__(GUI_HANDLE_p h, float width) {
 
 /**
  * \brief           Set height of widget in percentage relative to parent widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       height: Height in percentage
  * \retval          1: Successful
@@ -1250,7 +1326,7 @@ gui_widget_setheightpercent__(GUI_HANDLE_p h, float height) {
 
 /**
  * \brief           Set widget size in units of pixels
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       wi: Widget width
  * \param[in]       hi: Widget height
@@ -1271,7 +1347,7 @@ gui_widget_setsize__(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t hi) {
 
 /**
  * \brief           Set widget size in units of percent
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       wi: Widget width
  * \param[in]       hi: Widget height
@@ -1292,7 +1368,7 @@ gui_widget_setsizepercent__(GUI_HANDLE_p h, float wi, float hi) {
 
 /**
  * \brief           Toggle expandend (maximized) mode of widget (mostly of windows)
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          1: Widget expandend status toggled ok
  * \retval          0: Widget expandend status was not toggled
@@ -1305,7 +1381,7 @@ gui_widget_toggleexpanded__(GUI_HANDLE_p h) {
 
 /**
  * \brief           Set expandend mode on widget. When enabled, widget will be at X,Y = 0,0 relative to parent and will have width,height = 100%,100%
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       state: State for expanded mode
  * \retval          1: Widget expandend status set ok
@@ -1329,13 +1405,13 @@ gui_widget_setexpanded__(GUI_HANDLE_p h, uint8_t state) {
 /*******************************************/
 /**
  * \brief           Set widget position relative to parent object in units of pixels
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       x: X position relative to parent object
  * \param[in]       y: Y position relative to parent object
  * \retval          1: Position was set ok
  * \retval          0: Position was not set
- * \sa              gui_widget_setpositionpercent
+ * \sa              gui_widget_setpositionpercent__
  */
 uint8_t
 gui_widget_setposition__(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
@@ -1351,13 +1427,13 @@ gui_widget_setposition__(GUI_HANDLE_p h, GUI_iDim_t x, GUI_iDim_t y) {
  
 /**
  * \brief           Set widget position relative to parent object in units of percent
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       x: X position relative to parent object
  * \param[in]       y: Y position relative to parent object
  * \retval          1: Position was set ok
  * \retval          0: Position was not set
- * \sa              gui_widget_setposition
+ * \sa              gui_widget_setposition__
  */
 uint8_t
 gui_widget_setpositionpercent__(GUI_HANDLE_p h, float x, float y) {  
@@ -1373,7 +1449,7 @@ gui_widget_setpositionpercent__(GUI_HANDLE_p h, float x, float y) {
  
 /**
  * \brief           Set widget X position relative to parent object in units of pixels
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       x: X position relative to parent object
  * \retval          1: Position was set ok
@@ -1392,7 +1468,7 @@ gui_widget_setxposition__(GUI_HANDLE_p h, GUI_iDim_t x) {
  
 /**
  * \brief           Set widget X position relative to parent object in units of percent
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       x: X position relative to parent object
  * \retval          1: Position was set ok
@@ -1411,7 +1487,7 @@ gui_widget_setxpositionpercent__(GUI_HANDLE_p h, float x) {
  
 /**
  * \brief           Set widget Y position relative to parent object in units of pixels
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       y: Y position relative to parent object
  * \retval          1: Position was set ok
@@ -1430,7 +1506,7 @@ gui_widget_setyposition__(GUI_HANDLE_p h, GUI_iDim_t y) {
  
 /**
  * \brief           Set widget Y position relative to parent object in units of percent
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       y: Y position relative to parent object
  * \retval          1: Position was set ok
@@ -1452,7 +1528,7 @@ gui_widget_setypositionpercent__(GUI_HANDLE_p h, float y) {
 /*******************************************/
 /**
  * \brief           Show widget from visible area
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          1: Widget shown
  * \retval          0: Widget not shown
@@ -1471,7 +1547,7 @@ gui_widget_show__(GUI_HANDLE_p h) {
 
 /**
  * \brief           Hide widget from visible area
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          1: Widget hidden
  * \retval          0: Widget not hidden
@@ -1501,7 +1577,7 @@ gui_widget_hide__(GUI_HANDLE_p h) {
 
 /**
  * \brief           Check if widget is children of parent
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle to test
  * \param[in]       parent: Parent widget handle to test if is parent
  * \retval          1: Widget handle is in tree of parent handle
@@ -1515,7 +1591,7 @@ gui_widget_ischildof__(GUI_HANDLE_p h, GUI_HANDLE_p parent) {
         return 0;                                   \
     }
     
-    for (h = __GH(h)->Parent; h; h = __GH(h)->Parent) { /* Check widget parent objects */
+    for (h = __GH(h)->Parent; h != NULL; h = __GH(h)->Parent) { /* Check widget parent objects */
         if (parent == h) {                          /* If they matches */
             return 1;
         }
@@ -1527,7 +1603,7 @@ gui_widget_ischildof__(GUI_HANDLE_p h, GUI_HANDLE_p parent) {
  * \brief           Set z-Index for widgets on the same level. This feature applies on widgets which are not dialogs
  * \note            Larger z-index value means greater position on screen. In case of multiple widgets on same z-index level, they are automatically modified for correct display
  *
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       zindex: Z-Index value for widget. Any value can be used
  * \retval          1: New value is different than previous and modification has been done
@@ -1553,7 +1629,7 @@ gui_widget_setzindex__(GUI_HANDLE_p h, int32_t zindex) {
 #if GUI_CFG_USE_TRANSPARENCY || __DOXYGEN__
 /**
  * \brief           Set transparency level to widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       trans: Transparency level, where 0x00 means hidden and 0xFF means totally visible widget
  * \retval          1: Transparency set ok
@@ -1575,7 +1651,7 @@ gui_widget_settransparency__(GUI_HANDLE_p h, uint8_t trans) {
 
 /**
  * \brief           Set color to widget specific index
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Index in array of colors
  * \param[in]       color: Actual color code to set
@@ -1591,7 +1667,7 @@ gui_widget_setcolor__(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color) {
     if (!__GH(h)->Colors) {                         /* Do we need to allocate color memory? */
         if (__GH(h)->Widget->ColorsCount) {         /* Check if at least some colors should be used */
             __GH(h)->Colors = GUI_MEMALLOC(sizeof(*__GH(h)->Colors) * __GH(h)->Widget->ColorsCount);
-            if (__GH(h)->Colors) {                  /* Copy all colors to new memory first */
+            if (__GH(h)->Colors != NULL) {          /* Copy all colors to new memory first */
                 memcpy(__GH(h)->Colors, __GH(h)->Widget->Colors, __GH(h)->Widget->ColorsCount * sizeof(*__GH(h)->Colors));
             } else {
                 ret = 0;
@@ -1615,7 +1691,7 @@ gui_widget_setcolor__(GUI_HANDLE_p h, uint8_t index, GUI_Color_t color) {
  * \brief           Get first widget handle by ID
  * \note            If multiple widgets have the same ID, first found will be used
  *
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   id: Widget ID to search for
  * \retval          > 0: Widget handle when widget found
  * \retval          0: Widget not found
@@ -1627,7 +1703,7 @@ gui_widget_getbyid__(GUI_ID_t id) {
 
 /**
  * \brief           Set custom user data to widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  *
  * \note            Specially useful in callback processing if required
  * \param[in,out]   h: Widget handle
@@ -1645,7 +1721,7 @@ gui_widget_setuserdata__(GUI_HANDLE_p h, void* data) {
 
 /**
  * \brief           Get custom user data from widget previously set with \ref gui_widget_setuserdata
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          Pointer to user data
  * \sa              __gui_widget_setuserdata
@@ -1850,7 +1926,7 @@ gui_widget_setfont(GUI_HANDLE_p h, const GUI_FONT_t* font) {
 
 /**
  * \brief           Get font from widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          Pointer to font used for widget
  */
@@ -2734,4 +2810,129 @@ gui_widget_set3dstyle(GUI_HANDLE_p h, uint8_t enable) {
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
+}
+
+uint8_t
+gui_widget_setpaddingtop(GUI_HANDLE_p h, GUI_Dim_t x) {    
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    gui_widget_setpaddingtop__(h, x);               /* Set padding */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
+}
+
+uint8_t
+gui_widget_setpaddingright(GUI_HANDLE_p h, GUI_Dim_t x) {    
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    gui_widget_setpaddingright__(h, x);             /* Set padding */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
+}
+
+uint8_t
+gui_widget_setpaddingbottom(GUI_HANDLE_p h, GUI_Dim_t x) {    
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    gui_widget_setpaddingbottom__(h, x);            /* Set padding */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
+}
+
+uint8_t
+gui_widget_setpaddingleft(GUI_HANDLE_p h, GUI_Dim_t x) {    
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    gui_widget_setpaddingleft__(h, x);              /* Set padding */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
+}
+
+uint8_t
+gui_widget_setpaddingtopbottom(GUI_HANDLE_p h, GUI_Dim_t x) {    
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    gui_widget_setpaddingtopbottom__(h, x);         /* Set padding */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
+}
+
+uint8_t
+gui_widget_setpaddingleftright(GUI_HANDLE_p h, GUI_Dim_t x) {    
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    gui_widget_setpaddingleftright__(h, x);         /* Set padding */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
+}
+
+uint8_t
+gui_widget_setpadding(GUI_HANDLE_p h, GUI_Dim_t x) {    
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    gui_widget_setpadding__(h, x);                  /* Set padding */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
+}
+
+GUI_Dim_t
+gui_widget_getpaddingtop(GUI_HANDLE_p h) {
+    GUI_Dim_t padding;
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    padding = gui_widget_getpaddingtop__(h);        /* Get padding */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return padding;
+}
+
+GUI_Dim_t
+gui_widget_getpaddingright(GUI_HANDLE_p h) {
+    GUI_Dim_t padding;
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    padding = gui_widget_getpaddingright__(h);      /* Get padding */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return padding;
+}
+
+GUI_Dim_t
+ui_widget_getpaddingbottom(GUI_HANDLE_p h) {
+    GUI_Dim_t padding;
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    padding = gui_widget_getpaddingbottom__(h);     /* Get padding */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return padding;
+}
+
+GUI_Dim_t
+gui_widget_getpaddingleft(GUI_HANDLE_p h) {
+    GUI_Dim_t padding;
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    padding = gui_widget_getpaddingleft__(h);       /* Get padding */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return padding;
 }

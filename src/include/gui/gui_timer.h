@@ -51,10 +51,9 @@ extern "C" {
 
 #if defined(GUI_INTERNAL) || __DOXYGEN__
     
-
 /**
  * \brief           Get parameters from timer
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       t: Timer structure
  * \retval          Timer parameters
  * \hideinitializer

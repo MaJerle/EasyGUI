@@ -70,7 +70,7 @@ add_to_active_dialogs(GUI_HANDLE_p h) {
     DDList_t* l;
     
     l = GUI_MEMALLOC(sizeof(*l));                   /* Allocate memory for dismissed dialog list */
-    if (l) {
+    if (l != NULL) {
         l->h = h;
         l->id = gui_widget_getid__(h);
         gui_linkedlist_add_gen(&DDList, &l->list);  /* Add entry to linked list */

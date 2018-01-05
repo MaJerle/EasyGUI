@@ -565,7 +565,7 @@ gui_graph_data_create(GUI_GRAPH_TYPE_t type, size_t length) {
     GUI_GRAPH_DATA_t* data;
 
     data = GUI_MEMALLOC(sizeof(*data));             /* Allocate memory for basic widget */
-    if (data) {
+    if (data != NULL) {
         __GUI_ENTER();                              /* Enter GUI */
         data->Type = type;
         data->Length = length;
@@ -574,8 +574,9 @@ gui_graph_data_create(GUI_GRAPH_TYPE_t type, size_t length) {
         } else {
             data->Data = GUI_MEMALLOC(length * 2 * sizeof(*data->Data));    /* Store X and Y values for plot */
         }
-        if (!data->Data) {
+        if (data->Data == NULL) {
             GUI_MEMFREE(data);                      /* Remove widget because data memory could not be allocated */
+            data = NULL;
         }
         __GUI_LEAVE();                              /* Leave GUI */
     }

@@ -53,7 +53,7 @@ extern "C" {
 
 /**
  * \brief           Get data from multi linked list object
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       element: Linked list element of \ref GUI_LinkedListMulti_t structure
  * \retval          Element in linked list
  * \hideinitializer
@@ -95,7 +95,7 @@ uint8_t gui_linkedlist_multi_find_remove(GUI_LinkedListRoot_t* root, void* eleme
 
 /**
  * \brief           Check if widget is first child element in linked list
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle
  * \retval          1: Widget is first child
  * \retval          0: Widget is not first child
@@ -106,7 +106,7 @@ uint8_t gui_linkedlist_multi_find_remove(GUI_LinkedListRoot_t* root, void* eleme
 
 /**
  * \brief           Check if widget is last child element in linked list
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle
  * \retval          1: Widget is last child
  * \retval          0: Widget is not last child

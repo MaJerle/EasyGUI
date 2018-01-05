@@ -537,7 +537,7 @@ gui_listview_addcolumn(GUI_HANDLE_p h, const GUI_Char* text, GUI_Dim_t width) {
     if (cols) {
         __GL(h)->Cols = cols;                       /* Save new pointer of memory */
         col = GUI_MEMALLOC(sizeof(*col));           /* Allocate memory for new column structure */
-        if (col) {
+        if (col != NULL) {
             __GL(h)->Cols[__GL(h)->ColsCount++] = col;  /* Add column to array list */
             __GL(h)->Cols[__GL(h)->ColsCount] = 0;  /* Add zero to the end of array */
             
@@ -588,7 +588,7 @@ gui_listview_addrow(GUI_HANDLE_p h) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);   /* Check input parameters */
 
     row = GUI_MEMALLOC(sizeof(*row));               /* Allocate memory for new row(s) */
-    if (row) {
+    if (row != NULL) {
         __GUI_ENTER();                              /* Enter GUI */
         gui_linkedlist_add_gen(&__GL(h)->Root, (GUI_LinkedList_t *)row);/* Add new row to linked list */
         __GL(h)->Count++;                           /* Increase number of rows */
@@ -621,7 +621,7 @@ gui_listview_setitemstring(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row, uint16_t col,
     while (col--) {                                 /* Find proper column */
         if (!item) {
             item = GUI_MEMALLOC(sizeof(*item));     /* Allocate for item */
-            if (!item) {
+            if (item == NULL) {
                 break;
             }
             gui_linkedlist_add_gen(&__GLR(row)->Root, (GUI_LinkedList_t *)item);/* Add element to linked list */

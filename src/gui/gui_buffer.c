@@ -53,8 +53,8 @@ gui_buffer_init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr) {
 	
 	if (!Buffer->Buffer) {                      			/* Check if malloc should be used */
 		Buffer->Buffer = GUI_MEMALLOC(Size * sizeof(uint8_t));  /* Try to allocate memory for buffer */
-		if (!Buffer->Buffer) {                  			/* Check if allocated */    
-			Buffer->Size = 0;                   			/* Reset size */
+		if (Buffer->Buffer == NULL) {                  	    /* Check if allocated */    
+			Buffer->Size = 0;                               /* Reset size */
 			return 1;                           			/* Return error */
 		} else {
 			Buffer->Flags |= GUI_BUFFER_MALLOC;     		/* Set flag for malloc */

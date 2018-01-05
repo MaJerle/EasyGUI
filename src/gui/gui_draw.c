@@ -327,7 +327,7 @@ create_char_entry_from_font(const GUI_FONT_t* font, const GUI_FONT_CharInfo_t* c
     
     memsize += GUI_MEM_ALIGN(memDataSize);          /* Align memory before increase */
     entry = GUI_MEMALLOC(memsize);                  /* Allocate memory for entry */
-    if (entry) {                                    /* Allocation was successful */
+    if (entry != NULL) {                            /* Allocation was successful */
         uint16_t i, x;
         uint8_t b, k, t;
         uint8_t* ptr = (uint8_t *)entry;            /* Go to memory size */

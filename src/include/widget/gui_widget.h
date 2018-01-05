@@ -40,66 +40,12 @@ extern "C" {
  * \defgroup        GUI_WIDGETS Widgets
  * \brief           Group for visible widgets on screen
  * \{
- *
- * \section sect_widgets Widget organization
- *
- * Widgets are organized in multi depth linked list of parent widgets where each widget has reference to:
- *  - Next widget
- *  - Previous widget
- *  - Parent widget
- *  - Children first widget
- *  - Children last widget
- *
- * \par Next widget link
- *
- * Next widget in linked list is used to get next widget for drawing operation.
- * Widget which is at the end of linked list is later visible on top on LCD.
- *
- * \par Previous widget link
- *
- * Previous link is used to get widget which is "behind" current widget. 
- * This link is used for touch management where widget at the end of linked list is first checked for events (touch, mouse, etc) because it is visible on top
- *
- * \par Parent widget
- * 
- * Link to parent widget is always required to calculate currect widget position on LCD and for other tasks (like percentage width, etc)
- *
- * \par Children first widget
- *
- * Children links are supported on widgets which implement \ref GUI_HANDLE_ROOT_t structure to handle children widgets (such as windows).
- * It holds link to first children widget on the list.
- *
- * \par Children last widget
- *
- * Children last widget is used for events processing (touch, mouse, etc)
- *
- * <hr />
- * Any operation on widget structure (change Z-index, put on front, etc) is only moving widgets on linked list.
- * With this, you can change visible order and also order how events are processed (touch, keyboard).
- * Linked list is most important part of GUI library therefore it is designed in robust way.
  */
     
 /**
  * \defgroup        GUI_WIDGETS_CORE Core widget functions
  * \brief           Core functions for all widgets
  * \{
- *
- * Use can use all function which do not start with <b>__GUI</b> which indicate private functions.
- * 
- * Core widget functions are common functions to all widgets. They can perform:
- *  - Set text to widget (Static text from non-volatile memory)
- *  - Preallocate memory for text on widget (dynamic text)
- *  - Set font type for drawing
- *  - Set dimentions and positions
- *  - Get dimensions and positions relative to parent or absolute on screen
- *  - Set or get Z index of widget
- *  - Set transparency
- *  - Set widget as visible or hidden
- *  - Delete widget
- *  - Manually widget invalidation
- *  - ..and more
- *
- * In general, each widget also uses custom based functions. These are provided in widget specific section.
  */
 #include "gui/gui.h"
 #include "gui/gui_draw.h"
@@ -123,7 +69,7 @@ extern "C" {
  */
  
 /**
- * \defgroup        WIDGET_CREATE_FLAGS Flags for widget create
+ * \defgroup        GUI_WIDGET_CREATE_FLAGS Flags for widget create
  * \brief           A list of flags supported for widget creation
  *
  * List of flags used on \ref gui_widget_create__ function when creating new widget
@@ -137,7 +83,7 @@ extern "C" {
  */
 
 /**
- * \defgroup        WIDGET_Private Private functions
+ * \defgroup        GUI_WIDGET_PRIVATE Private functions
  * \brief           Private widget functions and enumerations.
  *
  * \note            Since they are not thread safe, they can only be used when inside GUI library.
@@ -154,7 +100,7 @@ extern "C" {
  
 /**
  * \brief           Checks if inserted pointer is valid widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Input pointer to test for widget
  * \retval          1: Pointer is widget
  * \retval          0: Pointer is not widget
@@ -164,7 +110,7 @@ extern "C" {
 
 /**
  * \brief           Get widget relative X position according to parent widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          Relative X according to parent widget
  * \hideinitializer
@@ -175,7 +121,7 @@ extern "C" {
 
 /**
  * \brief           Get widget relative Y position according to parent widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          Relative Y according to parent widget
  * \hideinitializer
@@ -186,7 +132,7 @@ extern "C" {
 
 /**
  * \brief           Get widget top padding as 8-bit value
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle
  * \retval          Padding in units of pixels
  * \hideinitializer
@@ -195,7 +141,7 @@ extern "C" {
 
 /**
  * \brief           Get widget right padding as 8-bit value
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle
  * \retval          Padding in units of pixels
  * \hideinitializer
@@ -204,7 +150,7 @@ extern "C" {
 
 /**
  * \brief           Get widget bottom padding as 8-bit value
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle
  * \retval          Padding in units of pixels
  * \hideinitializer
@@ -213,7 +159,7 @@ extern "C" {
 
 /**
  * \brief           Get widget left padding as 8-bit value
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle
  * \retval          Padding in units of pixels
  * \hideinitializer
@@ -225,7 +171,7 @@ extern "C" {
  * \note            Padding is used mainly for internal purpose only to set value for children widgets
  *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
  *
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       x: Padding in byte format
  * \retval          None
@@ -238,7 +184,7 @@ extern "C" {
  * \note            Padding is used mainly for internal purpose only to set value for children widgets
  *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
  *
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       x: Padding in byte format
  * \retval          None
@@ -251,7 +197,7 @@ extern "C" {
  * \note            Padding is used mainly for internal purpose only to set value for children widgets
  *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
  *
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       x: Padding in byte format
  * \retval          None
@@ -264,7 +210,7 @@ extern "C" {
  * \note            Padding is used mainly for internal purpose only to set value for children widgets
  *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
  *
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       x: Padding in byte format
  * \retval          None
@@ -277,7 +223,7 @@ extern "C" {
  * \note            Padding is used mainly for internal purpose only to set value for children widgets
  *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
  *
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       x: Padding in byte format
  * \retval          None
@@ -293,7 +239,7 @@ extern "C" {
  * \note            Padding is used mainly for internal purpose only to set value for children widgets
  *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
  *
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       x: Padding in byte format
  * \retval          None
@@ -309,7 +255,7 @@ extern "C" {
  * \note            Padding is used mainly for internal purpose only to set value for children widgets
  *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
  *
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       x: Padding in byte format
  * \retval          None
@@ -324,7 +270,7 @@ extern "C" {
 
 /**
  * \brief           Get widget ID
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          Widget ID
  * \hideinitializer
@@ -333,7 +279,7 @@ extern "C" {
 
 /**
  * \brief           Get widget flag(s)
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       flag: Flag(s) to check
  * \retval          0: None flag is set
@@ -345,7 +291,7 @@ extern "C" {
 
 /**
  * \brief           Get widget core flag(s)
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       flag: Flag(s) to check
  * \retval          0: None flag is set
@@ -357,7 +303,7 @@ extern "C" {
 
 /**
  * \brief           Set widget flag(s)
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       flag: Flag(s) to set
  * \sa              __gui_widget_getflag, __gui_widget_clrflag
@@ -367,7 +313,7 @@ extern "C" {
 
 /**
  * \brief           Clear widget flag(s)
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       flag: Flag(s) to clear
  * \sa              __gui_widget_setflag, __gui_widget_getflag
@@ -377,7 +323,7 @@ extern "C" {
 
 /**
  * \brief           Checks if widget is expanded to maximum relative to parent widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          1: Widget is expandend
  * \retval          0: Widget is not expanded
@@ -387,7 +333,7 @@ extern "C" {
 
 /**
  * \brief           Checks if widget has enabled 3D mode
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          1: Widget has 3D mode
  * \retval          0: Widget doesn't have 3D mode
@@ -397,7 +343,7 @@ extern "C" {
 
 /**
  * \brief           Get pointer to parent widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          Pointer to parent widget
  * \hideinitializer
@@ -406,7 +352,7 @@ extern "C" {
 
 /**
  * \brief           Process widget callback with command, parameters and result pointers
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       cmd: Callback command. This parameter can be a value of \ref GUI_WC_t enumeration
  * \param[in]       param: Pointer to parameters if any for this command
@@ -420,7 +366,7 @@ extern "C" {
 /**
  * \brief           Get widget colors from list of colors
  *                  It takes colors from allocated memory if exists or from default widget setup for default
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index from color array for specific widget
  * \retval          Color index
@@ -430,7 +376,7 @@ extern "C" {
 
 /**
  * \brief           Get inner width (total width - padding left - padding right)
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Pointer to \ref GUI_HANDLE_p structure
  * \retval          Height in units of pixels
  * \sa              __gui_widget_getinnerheight
@@ -440,7 +386,7 @@ extern "C" {
 
 /**
  * \brief           Get inner height (total height - padding top - padding bottom)
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Pointer to \ref GUI_HANDLE_p structure
  * \retval          Inner height in units of pixels
  * \sa              __gui_widget_getinnerwidth
@@ -450,7 +396,7 @@ extern "C" {
 
 /**
  * \brief           Returns width of parent element. If parent does not exists, it returns LCD width
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Pointer to \ref GUI_HANDLE_p structure
  * \retval          Parent width in units of pixels
  * \sa              __gui_widget_getparentheight
@@ -460,7 +406,7 @@ extern "C" {
 
 /**
  * \brief           Returns height of parent element. If parent does not exists, it returns LCD height
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          Parent height in units of pixels
  * \sa              __gui_widget_getparentwidth
@@ -470,7 +416,7 @@ extern "C" {
 
 /**
  * \brief           Returns inner width of parent element. If parent does not exists, it returns LCD width
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  *
  * \note            It returns inner width = total width - padding left - padding right
  * \param[in]       h: Pointer to \ref GUI_HANDLE_p structure
@@ -482,7 +428,7 @@ extern "C" {
 
 /**
  * \brief           Returns inner height of parent element. If parent does not exists, it returns LCD height
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  *
  * \note            It returns inner height = total height - padding top - padding bottom
  * \param[in,out]   h: Widget handle
@@ -494,7 +440,7 @@ extern "C" {
 
 /**
  * \brief           Check if widget is visible in any way, either with transparency or hidden flag
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          1: Widget is visible
  * \retval          0: Widget is not visible
@@ -509,7 +455,7 @@ extern "C" {
 
 /**
  * \brief           Check if widget is hidden
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          1: Widget is hidden
  * \retval          0: Widget is not hidden
@@ -520,7 +466,7 @@ extern "C" {
 
 /**
  * \brief           Check if widget allows children widgets
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          1: Widget allows children widgets
  * \retval          0: Widget does not allow children widgets
@@ -530,7 +476,7 @@ extern "C" {
 
 /**
  * \brief           Check if widget is base for dialog
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          1: Widget is dialog base
  * \retval          0: Widget is not dialog
@@ -540,7 +486,7 @@ extern "C" {
 
 /**
  * \brief           Checks if widget handle is currently in focus
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          Status whether widget is in focus or not
  * \sa              __gui_widget_isactive
@@ -550,7 +496,7 @@ extern "C" {
 
 /**
  * \brief           Checks if widget handle is currently active
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          Status whether widget is active or not
  * \sa              __gui_widget_isfocused
@@ -563,7 +509,7 @@ extern "C" {
  * \brief           Check is widget has transparency
  * \note            Check if widget is visible and transparency is not set to 1 (full view)
  *
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          1: Widget is visible and has transparency
  * \retval          0: Widget is either hidden or with no transparency
@@ -577,7 +523,7 @@ extern "C" {
  *                      - 0xFF: Widget is fully visible
  *                      - between: Widget has transparency value
  *
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          Trasparency value
  * \sa              __gui_widget_settransparency
@@ -588,7 +534,7 @@ extern "C" {
 
 /**
  * \brief           Get z-index value from widget
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          z-index value
  * \hideinitializer
@@ -651,7 +597,7 @@ uint8_t gui_widget_getparam__(GUI_HANDLE_p h, uint16_t cfg, void* data);
  */
 
 /**
- * \defgroup        GUI_WIDGET_Text Text management
+ * \defgroup        GUI_WIDGET_TEXT Text management
  * \brief           Text and font management functions
  * \{
  */
@@ -670,7 +616,7 @@ uint8_t gui_widget_setfontdefault(const GUI_FONT_t* font);
  */
 
 /**
- * \defgroup        GUI_WIDGET_Size Size management
+ * \defgroup        GUI_WIDGET_SIZE Size management
  * \brief           Size management functions
  * \{
  */
@@ -691,7 +637,7 @@ uint8_t gui_widget_isexpanded(GUI_HANDLE_p h);
  */
 
 /**
- * \defgroup        GUI_WIDGET_Position Position management
+ * \defgroup        GUI_WIDGET_POSITION Position management
  * \brief           Position management functions
  * \{
  */
@@ -714,46 +660,9 @@ GUI_iDim_t gui_widget_getscrolly(GUI_HANDLE_p h);
  */
  
 /**
- * \defgroup        GUI_WIDGET_Visibility Visibility management
+ * \defgroup        GUI_WIDGET_VISIBILITY Visibility management
  * \brief           Visibility management functions
  * \{
- *
- * \section sect_gui_widget_transparency Widget transparency
- *
- * Library support transparency setup on widget. For this, 
- * special blending function must be enabled (best if support on hardware).
- *
- * \image html image_transparent_buttons.png Transparent of 0x80 on button over opaque button
- *
- * When transparency on widget should be used, additional RAM is used:
- *
- * \f$\ size=WidgetVisibleWidth*WidgetVisibleHeight*BytesPerPixel\f$
- *
- * The additional RAM usage is used if widget has transparency and its children has also custom transparency.
- * In this case, RAM used is for each widget separatelly and depends on number of tree length of widgets of transparency values.
- *
- * \par Blending technique for transparency
- *
- * Imagine this setup:
- *   - Desktop
- *      - <b>Widget 1</b>, children of desktop
- *         - <b>Widget 2</b>, children of Widget 1
- *            - <b>Widget 3</b>, children of Widget 2
- *
- * At some time, Widget1 has transparency = 0x80 (0.5) and Widget 3 has transparency = 0x40 (0.25)
- *
- * Drawing process would go like this:
- *
- * 1. Draw desktop widget on default drawing frame buffer
- * 2. Allocate memory for visible widget part for widget 1 and set RAM as drawing buffer
- * 3. Draw widget 1 on drawing buffer (allocated RAM)
- * 4. Draw widget 2 on drawing buffer (still allocated RAM of previous widget)
- * 5. Allocate memory for visible widget part for widget 3 and set RAM as drawing buffer
- * 6. Draw widget 3 on drawing buffer (latest allocated RAM of widget 3)
- * 7. With blending technique, merge widget 3 frame buffer with widget 1 frame buffer
- * 8. Set frame buffer back to widget 1 allocated RAM
- * 9. With blending technique, merge widget 1 frame buffer with desktop frame buffer
- * 10. Set frame buffer back to default drawing frame buffer
  */
 
 uint8_t gui_widget_show(GUI_HANDLE_p h);
@@ -767,7 +676,7 @@ uint8_t gui_widget_settransparency(GUI_HANDLE_p h, uint8_t trans);
  */
 
 /**
- * \defgroup        GUI_WIDGET_Misc Miscellaneous
+ * \defgroup        GUI_WIDGET_MISC Miscellaneous
  * \brief           Miscellaneous functions
  * \{
  */
@@ -798,6 +707,29 @@ uint8_t gui_widget_remove(GUI_HANDLE_p* h);
 uint8_t gui_widget_processdefaultcallback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 uint8_t gui_widget_setcallback(GUI_HANDLE_p h, GUI_WIDGET_CALLBACK_t callback);
 uint8_t gui_widget_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
+
+/**
+ * \}
+ */
+
+/**
+ * \defgroup        GUI_WIDGET_PADDING Padding
+ * \brief           Padding related functions
+ * \{
+ */
+ 
+uint8_t gui_widget_setpaddingtop(GUI_HANDLE_p h, GUI_Dim_t x);
+uint8_t gui_widget_setpaddingright(GUI_HANDLE_p h, GUI_Dim_t x);
+uint8_t gui_widget_setpaddingbottom(GUI_HANDLE_p h, GUI_Dim_t x);
+uint8_t gui_widget_setpaddingleft(GUI_HANDLE_p h, GUI_Dim_t x);
+uint8_t gui_widget_setpaddingtopbottom(GUI_HANDLE_p h, GUI_Dim_t x);      
+uint8_t gui_widget_setpaddingleftright(GUI_HANDLE_p h, GUI_Dim_t x);
+uint8_t gui_widget_setpadding(GUI_HANDLE_p h, GUI_Dim_t x);
+
+GUI_Dim_t gui_widget_getpaddingtop(GUI_HANDLE_p h);
+GUI_Dim_t gui_widget_getpaddingright(GUI_HANDLE_p h);
+GUI_Dim_t gui_widget_getpaddingbottom(GUI_HANDLE_p h);
+GUI_Dim_t gui_widget_getpaddingleft(GUI_HANDLE_p h);
 
 /**
  * \}

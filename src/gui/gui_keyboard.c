@@ -545,7 +545,7 @@ keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param, 
 
 /**
  * \brief           Hide opened virtual keyboard
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \retval          1: Keyboard hiding process started
  * \retval          0: Keyboard hiding process not started
  * \sa              __gui_keyboard_show
@@ -561,7 +561,7 @@ gui_keyboard_hide__(void) {
 
 /**
  * \brief           Show hidden virtual keyboard
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle for which keyboard will be opened
  * \retval          1: Keyboard opening process started
  * \retval          0: Keyboard opening process not started
@@ -589,7 +589,7 @@ GUI_HANDLE_p
 gui_keyboard_create(void) {    
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (!Kbd.Handle) {
+    if (Kbd.Handle == NULL) {
         Kbd.Handle = gui_container_create(GUI_ID_KEYBOARD_BASE, 0, 0, 1, 1, 0, keyboard_base_callback, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);  /* Create keyboard base element with desktop as parent */
     }
     

@@ -369,7 +369,7 @@ mem_getminfree(void) {
 
 /**
  * \brief           Allocate memory of specific size
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       size: Number of bytes to allocate
  * \retval          0: Allocation failed
  * \retval          >0: Pointer to allocated memory
@@ -391,7 +391,7 @@ gui_mem_alloc(uint32_t size) {
  * \brief           Allocate memory of specific size
  * \note            After new memory is allocated, content of old one is copied to new allocated memory
  *
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       ptr: Pointer to current allocated memory to resize, returned using \ref gui_mem_alloc, \ref gui_mem_calloc or \ref gui_mem_realloc functions
  * \param[in]       size: Number of bytes to allocate on new memory
  * \retval          0: Allocation failed
@@ -411,7 +411,7 @@ gui_mem_realloc(void* ptr, size_t size) {
 
 /**
  * \brief           Allocate memory of specific size and set memory to zero
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       num: Number of elements to allocate
  * \param[in]       size: Size of each element
  * \retval          0: Allocation failed
@@ -447,7 +447,7 @@ gui_mem_free(void* ptr) {
 
 /**
  * \brief           Get total free size still available in memory to allocate
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \retval          Number of bytes available to allocate
  */
 size_t
@@ -457,7 +457,7 @@ gui_mem_getfree(void) {
 
 /**
  * \brief           Get total currently allocated memory in regions
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \retval          Number of bytes in use
  */
 size_t
@@ -467,7 +467,7 @@ gui_mem_getfull(void) {
 
 /**
  * \brief           Get minimal available number of bytes ever for allocation
- * \note            Since this function is private, it can only be used by user inside GUI library
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \retval          Number of minimal available number of bytes ever
  */
 size_t

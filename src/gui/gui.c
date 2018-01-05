@@ -61,8 +61,11 @@ check_disp_clipping(GUI_HANDLE_p h) {
     if (GUI.DisplayTemp.Y1 < y)             { GUI.DisplayTemp.Y1 = y; }
     if (GUI.DisplayTemp.Y2 > y + hi)        { GUI.DisplayTemp.Y2 = y + hi; }
     
-    /* Check that widget is not drawn over any of parent widgets because of scrolling */
-    for (; h; h = __GH(h)->Parent) {
+    /*
+     * Check all parent widgets of current and make sure
+     * widget is not drawn over any of parent if scrolling is enabled
+     */
+    for (; h != NULL; h = __GH(h)->Parent) {
         x = gui_widget_getparentabsolutex__(h);     /* Parent absolute X position for inner widgets */
         y = gui_widget_getparentabsolutey__(h);     /* Parent absolute Y position for inner widgets */
         wi = gui_widget_getparentinnerwidth__(h);   /* Get parent inner width */
@@ -87,7 +90,7 @@ redraw_widgets(GUI_HANDLE_p parent) {
     static uint32_t level = 0;
 
     /* Go through all elements of parent */
-    for (h = gui_linkedlist_widgetgetnext((GUI_HANDLE_ROOT_t *)parent, NULL); h; 
+    for (h = gui_linkedlist_widgetgetnext((GUI_HANDLE_ROOT_t *)parent, NULL); h != NULL; 
             h = gui_linkedlist_widgetgetnext(NULL, h)) {
         if (!gui_widget_isvisible__(h)) {           /* Check if visible */
             gui_widget_clrflag__(h, GUI_FLAG_REDRAW);   /* Clear flag to be sure */
@@ -103,13 +106,13 @@ redraw_widgets(GUI_HANDLE_p parent) {
                 
                 gui_widget_clrflag__(h, GUI_FLAG_REDRAW);   /* Clear flag for drawing on widget */
                 
-                /**
+                /*
                  * Prepare clipping region for this widget drawing
                  */
                 check_disp_clipping(h);             /* Check coordinates for drawings only particular widget */
 
 #if GUI_CFG_USE_TRANSPARENCY
-                /**
+                /*
                  * Check transparency and check if blending function exists to merge layers later together
                  */
                 if (gui_widget_istransparent__(h) && GUI.LL.CopyBlend) {
@@ -121,7 +124,7 @@ redraw_widgets(GUI_HANDLE_p parent) {
                      */
                     GUI.LCD.DrawingLayer = GUI_MEMALLOC(sizeof(*GUI.LCD.DrawingLayer) + (size_t)width * (size_t)height * (size_t)GUI.LCD.PixelSize);
                     
-                    if (GUI.LCD.DrawingLayer) {     /* Check if allocation was successful */
+                    if (GUI.LCD.DrawingLayer != NULL) { /* Check if allocation was successful */
                         GUI.LCD.DrawingLayer->Width = width;
                         GUI.LCD.DrawingLayer->Height = height;
                         GUI.LCD.DrawingLayer->OffsetX = GUI.DisplayTemp.X1;
@@ -134,7 +137,7 @@ redraw_widgets(GUI_HANDLE_p parent) {
                 }
 #endif /* GUI_CFG_USE_TRANSPARENCY */
                 
-                /**
+                /*
                  * Draw widget itself normally, don't care on layer offset and size
                  */
                 GUI_WIDGET_PARAMTYPE_DISP(&GUI.WidgetParam) = &GUI.DisplayTemp;  /* Set parameter */
@@ -145,7 +148,7 @@ redraw_widgets(GUI_HANDLE_p parent) {
                     GUI_HANDLE_p tmp;
                     
                     /* Set drawing flag to all widgets  first... */
-                    for (tmp = gui_linkedlist_widgetgetnext((GUI_HANDLE_ROOT_t *)h, NULL); tmp; 
+                    for (tmp = gui_linkedlist_widgetgetnext((GUI_HANDLE_ROOT_t *)h, NULL); tmp != NULL; 
                             tmp = gui_linkedlist_widgetgetnext(NULL, tmp)) {
                         gui_widget_setflag__(tmp, GUI_FLAG_REDRAW); /* Set redraw bit to all children elements */
                     }
@@ -156,7 +159,7 @@ redraw_widgets(GUI_HANDLE_p parent) {
                 }
                 
 #if GUI_CFG_USE_TRANSPARENCY
-                /**
+                /*
                  * If transparent mode is used on widget, copy content back
                  */
                 if (transparent) {                  /* If we were in transparent mode */
@@ -175,7 +178,7 @@ redraw_widgets(GUI_HANDLE_p parent) {
                 }
 #endif /* GUI_CFG_USE_TRANSPARENCY */
                 
-            /**
+            /*
              * Check if any widget from children should be redrawn
              */
             } else if (gui_widget_allowchildren__(h)) {
@@ -370,7 +373,7 @@ process_touch(__GUI_TouchData_t* touch, GUI_HANDLE_p parent) {
     __GUI_TouchStatus_t tStat = touchCONTINUE;
     
     /* Check touches if any matches, go reverse on linked list */
-    for (h = gui_linkedlist_widgetgetprev((GUI_HANDLE_ROOT_t *)parent, NULL); h; 
+    for (h = gui_linkedlist_widgetgetprev((GUI_HANDLE_ROOT_t *)parent, NULL); h != NULL; 
             h = gui_linkedlist_widgetgetprev(NULL, h)) {
         if (gui_widget_ishidden__(h)) {             /* Ignore hidden widget */
             continue;
@@ -749,7 +752,7 @@ gui_init(void) {
         }
         GUI.LCD.ActiveLayer = &GUI.LCD.Layers[0];
         GUI.LCD.DrawingLayer = &GUI.LCD.Layers[0];
-        GUI.LL.Fill(&GUI.LCD, GUI.LCD.DrawingLayer, (void *)GUI.LCD.DrawingLayer->StartAddress, GUI.LCD.Width, GUI.LCD.Height, 0, 0xFFFF0000);
+        GUI.LL.Fill(&GUI.LCD, GUI.LCD.DrawingLayer, (void *)GUI.LCD.DrawingLayer->StartAddress, GUI.LCD.Width, GUI.LCD.Height, 0, GUI_COLOR_LIGHTGRAY);
         if (GUI.LCD.LayersCount > 1) {
             GUI.LCD.DrawingLayer = &GUI.LCD.Layers[1];
         }

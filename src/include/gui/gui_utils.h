@@ -41,6 +41,7 @@ extern "C" {
  * \brief           Group for various utilities functions and modules
  * \{
  */
+ 
 #include "gui/gui.h"
 
 /**

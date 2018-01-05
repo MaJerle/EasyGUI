@@ -30,6 +30,7 @@
  */
 #define GUI_INTERNAL
 #include "system/gui_sys.h"
+#include "stm32f7xx_hal.h"
 
 /*******************************************/
 /*******************************************/
