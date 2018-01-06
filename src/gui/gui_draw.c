@@ -63,6 +63,7 @@ typedef struct GUI_StringRectVars_t {
     uint8_t Final;                                  /*!< Status indicating we should do line check and finish */
     uint8_t IsBreak;                                /*!< Status indicating break occurred */
 } GUI_StringRectVars_t;
+
 #define CH_CR           GUI_KEY_CR
 #define CH_LF           GUI_KEY_LF
 #define CH_WS           GUI_KEY_WS
@@ -70,9 +71,14 @@ typedef struct GUI_StringRectVars_t {
 
 static GUI_StringRectVars_t var;
 
-/* Get character from font object array */
-static const
-GUI_FONT_CharInfo_t* __StringGetCharPtr(const GUI_FONT_t* font, uint32_t ch) {
+/**
+ * \brief           Get info structure from font for given character
+ * \param[in]       font: Font to use for drawing
+ * \param[in]       ch: Unicode decoded character for font
+ * \return          Char info of specific font and character code
+ */
+static const GUI_FONT_CharInfo_t *
+__StringGetCharPtr(const GUI_FONT_t* font, uint32_t ch) {
     ch = get_char_from_value(ch);                   /* Get char from char value */
     if (ch >= font->StartChar && ch <= font->EndChar) { /* Character is in font structure */
         return &font->Data[(ch) - font->StartChar]; /* Return character pointer from font */
@@ -82,13 +88,19 @@ GUI_FONT_CharInfo_t* __StringGetCharPtr(const GUI_FONT_t* font, uint32_t ch) {
     return 0;                                       /* No character in font */
 }
 
-/* Get dimensions for input character */
+/**
+ * \brief           Get width and height of specific character
+ * \param[in]       font: Font to use for drawing
+ * \param[in]       ch: Unicode decoded character for font
+ * \param[out]      width: Output width variable
+ * \param[out]      width: Output height variable
+ */
 static void
 __StringGetCharSize(const GUI_FONT_t* font, uint32_t ch, GUI_iDim_t* width, GUI_iDim_t* height) {
     const GUI_FONT_CharInfo_t* c = 0;
     
     c = __StringGetCharPtr(font, ch);               /* Get character from font */
-    if (c) {
+    if (c != NULL) {
         *width = c->xSize + c->xMargin;
         *height = c->ySize;
     } else {
@@ -104,9 +116,16 @@ __StringGetCharSize(const GUI_FONT_t* font, uint32_t ch, GUI_iDim_t* width, GUI_
     continue;                                       \
 }
 
+
+/**
+ * \brief           Optimize rectangle string
+ * \param[in]       var: String processing context
+ * \param[in]       rect: Rectangle parameters
+ * \param[in]       end: Flag set to 1 if this is last entry of string
+ */
 static void
 process_string_rectangle_before_return(GUI_StringRectVars_t* var, GUI_StringRect_t* rect, uint8_t end) {
-    /**
+    /*
      * If spaces are last elements
      */
     rect->ReadDraw = rect->ReadTotal = var->cnt;    /* Set number of total and drawing characters */
@@ -114,7 +133,7 @@ process_string_rectangle_before_return(GUI_StringRectVars_t* var, GUI_StringRect
         if (var->IsLineFeed) {                      /* Line feed forced new line */
             rect->ReadDraw--;                       /* Don't draw this character at all */
         }
-        /**
+        /*
          * If there was a word which was too long for single line, put it to next line
          */
         if (var->CharsIndex > var->SpaceIndex && !end) {    /* If characters are the last values */
@@ -127,21 +146,21 @@ process_string_rectangle_before_return(GUI_StringRectVars_t* var, GUI_StringRect
     }
     if (end) {                                      /* We received final line (end of string) */
         if (var->SpaceIndex > var->CharsIndex) {    /* When spaces are last characters */
-            /**
+            /*
              * When last line received, flush only white spaces and ignore other check
              */
             var->cW -= var->SpaceWidth;             /* Decrease effective rectangle width */
             rect->ReadDraw -= var->SpaceCount;      /* Decrease number of drawing characters by removing spaces */
         }
     } else if (var->SpaceIndex > var->CharsIndex) { /* When spaces are last characters */
-        /**
+        /*
          * - Leave number of characters to read to flush white spaces from string 
          * - Decrease effective rectangle size by ignored white spaces
          */
         var->cW -= var->SpaceWidth;                 /* Decrease effective rectangle width */
         rect->ReadDraw -= var->SpaceCount;          /* Decrease number of drawing characters by removing spaces */
     } else if (var->CharsIndex > var->SpaceIndex) { /* When non-spaces are last characters */
-        /**
+        /*
          * - Decrease number of characters to read as we don't want to flush non-white space characters
          * - Decrease effective rectangle size by ignored non-white space characters
          *
@@ -159,7 +178,7 @@ process_string_rectangle_before_return(GUI_StringRectVars_t* var, GUI_StringRect
             rect->ReadDraw -= var->SpaceCount;      /* Decrease number of characters we actually have to draw */
         }
     } else {
-        /**
+        /*
          * This can only happen if both indexes are zero which means,
          * that there is no white-spaces at all (or were stripped at beginning)
          * and word was too big for one line and was separated to multiple lines
@@ -169,6 +188,13 @@ process_string_rectangle_before_return(GUI_StringRectVars_t* var, GUI_StringRect
     rect->ReadTotal = var->cnt;                     /* Total number of characters to read from string */
 }
 
+/**
+ * \brief           Get a line of text for given rectangle
+ * \param[in]       rect: Rectangle parameters
+ * \param[in]       str: Current string pointer
+ * \param[in]       onlyToNextLine: Scan line only until next line is detected
+ * \return          Length of string in current line
+ */
 static size_t
 string_rectangle(GUI_StringRect_t* rect, GUI_STRING_t* str, uint8_t onlyToNextLine) {
     GUI_iDim_t w, h, mW = 0, tH = 0;                /* Maximal width and total height */
@@ -280,8 +306,7 @@ string_rectangle(GUI_StringRect_t* rect, GUI_STRING_t* str, uint8_t onlyToNextLi
             }
         }
         rect->Width = mW;                           /* Save rectangle width */
-    }
-    else {
+    } else {
         var.cW = 0;
         while (gui_string_getch(&var.s, &var.ch, &i)) { /* Get next character from string */
             __StringGetCharSize(rect->Font, var.ch, &w, &h);/* Get character width and height */
@@ -301,11 +326,16 @@ string_rectangle(GUI_StringRect_t* rect, GUI_STRING_t* str, uint8_t onlyToNextLi
     return var.cnt;                                 /* Return number of characters to read in current line */
 }
 
-/* Get font char object from memory with alpha values */
+/**
+ * \brief           Get character entry generated in memory for fast drawing
+ * \param[in]       font: Font used for character
+ * \param[in]       c: Character info handle
+ * \return          Character entry or NULL on failure
+ */
 static GUI_FONT_CharEntry_t *
 get_char_entry_from_font(const GUI_FONT_t* font, const GUI_FONT_CharInfo_t* c) {
     GUI_FONT_CharEntry_t* entry;
-    for (entry = (GUI_FONT_CharEntry_t *)gui_linkedlist_getnext_gen(&GUI.RootFonts, NULL); entry;
+    for (entry = (GUI_FONT_CharEntry_t *)gui_linkedlist_getnext_gen(&GUI.RootFonts, NULL); entry != NULL;
         entry = (GUI_FONT_CharEntry_t *)gui_linkedlist_getnext_gen(NULL, (GUI_LinkedList_t *)entry)) {
         if (entry->Font == font && entry->Ch == c) {
             return entry;
@@ -617,8 +647,7 @@ gui_draw_fill(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t 
 
 /**
  * \brief           Initialize \ref GUI_DRAW_FONT_t structure for further usage
- * \param[in,out]   *f: Pointer to empty \ref GUI_DRAW_FONT_t structure
- * \retval          None
+ * \param[in,out]   *f: Pointer to empty \ref GUI_DRAW_FONT_t structure 
  */
 void
 gui_draw_font_init(GUI_DRAW_FONT_t* f) {
@@ -628,8 +657,7 @@ gui_draw_font_init(GUI_DRAW_FONT_t* f) {
 /**
  * \brief           Fill screen with color
  * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
- * \param[in]       color: Color to use for filling screen
- * \retval          None
+ * \param[in]       color: Color to use for filling screen 
  */
 void
 gui_draw_fillscreen(const GUI_Display_t* disp, GUI_Color_t color) {
@@ -641,8 +669,7 @@ gui_draw_fillscreen(const GUI_Display_t* disp, GUI_Color_t color) {
  * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
  * \param[in]       x: X position on LCD
  * \param[in]       y: Y position on LCD
- * \param[in]       color: Color used for drawing operation
- * \retval          None
+ * \param[in]       color: Color used for drawing operation 
  * \sa              gui_draw_getpixel
  */
 void
@@ -672,8 +699,7 @@ gui_draw_getpixel(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y) {
  * \param[in]       x: Line top X position
  * \param[in]       y: Line top Y position
  * \param[in]       length: Length of vertical line
- * \param[in]       color: Color used for drawing operation
- * \retval          None
+ * \param[in]       color: Color used for drawing operation 
  * \sa              gui_draw_hline, gui_draw_line
  */
 void
@@ -698,7 +724,6 @@ gui_draw_vline(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t
  * \param[in]       y: Line left Y position
  * \param[in]       length: Length of horizontal line
  * \param[in]       color: Color used for drawing operation
- * \retval          None
  * \sa              gui_draw_vline, gui_draw_line
  */
 void
@@ -730,7 +755,6 @@ gui_draw_hline(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t
  * \param[in]       x2: Line end X position
  * \param[in]       y2: Line end Y position
  * \param[in]       color: Color used for drawing operation
- * \retval          None
  * \sa              gui_draw_vline, gui_draw_hline
  */
 void
@@ -814,7 +838,6 @@ gui_draw_line(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1, GUI_iDim_
  * \param[in]       width: Rectangle width
  * \param[in]       height: Rectangle height
  * \param[in]       color: Color used for drawing operation
- * \retval          None
  * \sa              gui_draw_filledrectangle, gui_draw_roundedrectangle, gui_draw_filledroundedrectangle
  */
 void
@@ -837,7 +860,6 @@ gui_draw_rectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iD
  * \param[in]       width: Rectangle width
  * \param[in]       height: Rectangle height
  * \param[in]       color: Color used for drawing operation
- * \retval          None
  * \sa              gui_draw_rectangle, gui_draw_roundedrectangle, gui_draw_filledroundedrectangle
  */
 void
@@ -853,7 +875,6 @@ gui_draw_filledrectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, 
  * \param[in]       width: Rectangle width
  * \param[in]       height: Rectangle height
  * \param[in]       state: 3D state. This parameter can be a value of \ref GUI_DRAW_3D_State_t enumeration
- * \retval          None
  */
 void
 gui_draw_rectangle3d(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_t width, GUI_iDim_t height, GUI_DRAW_3D_State_t state) {
@@ -886,7 +907,6 @@ gui_draw_rectangle3d(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_
  * \param[in]       height: Rectangle height
  * \param[in]       r: Corner radius, max value can be r = MIN(width, height) / 2
  * \param[in]       color: Color used for drawing operation
- * \retval          None
  * \sa              gui_draw_rectangle, gui_draw_filledrectangle, gui_draw_filledroundedrectangle
  */
 void
@@ -921,7 +941,6 @@ gui_draw_roundedrectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y,
  * \param[in]       height: Rectangle height
  * \param[in]       r: Corner radius, max value can be r = MIN(width, height) / 2
  * \param[in]       color: Color used for drawing operation
- * \retval          None
  * \sa              gui_draw_rectangle, gui_draw_filledrectangle, gui_draw_roundedrectangle
  */
 void
@@ -956,8 +975,7 @@ gui_draw_filledroundedrectangle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDi
  * \param[in]       x: X position of circle center
  * \param[in]       y: X position of circle center
  * \param[in]       r: Circle radius
- * \param[in]       color: Color used for drawing operation
- * \retval          None
+ * \param[in]       color: Color used for drawing operation 
  * \sa              gui_draw_filledcircle, gui_draw_circlecorner, gui_draw_filledcirclecorner
  */
 void
@@ -974,8 +992,7 @@ gui_draw_circle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_iDim_
  * \param[in]       x: X position of circle center
  * \param[in]       y: X position of circle center
  * \param[in]       r: Circle radius
- * \param[in]       color: Color used for drawing operation
- * \retval          None
+ * \param[in]       color: Color used for drawing operation 
  * \sa              gui_draw_circle, gui_draw_circlecorner, gui_draw_filledcirclecorner
  */
 void
@@ -995,8 +1012,7 @@ gui_draw_filledcircle(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI
  * \param[in]       y2: Triangle point 2 Y position
  * \param[in]       x3: Triangle point 3 X position
  * \param[in]       y3: Triangle point 3 Y position
- * \param[in]       color: Color used for drawing operation
- * \retval          None
+ * \param[in]       color: Color used for drawing operation 
  * \sa              gui_draw_filledtriangle
  */
 void
@@ -1015,8 +1031,7 @@ gui_draw_triangle(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1,  GUI_
  * \param[in]       y2: Triangle point 2 Y position
  * \param[in]       x3: Triangle point 3 X position
  * \param[in]       y3: Triangle point 3 Y position
- * \param[in]       color: Color used for drawing operation
- * \retval          None
+ * \param[in]       color: Color used for drawing operation 
  * \sa              gui_draw_triangle
  */
 void
@@ -1087,8 +1102,7 @@ gui_draw_filledtriangle(const GUI_Display_t* disp, GUI_iDim_t x1, GUI_iDim_t y1,
  *                     - \ref GUI_DRAW_CIRCLE_TR
  *                     - \ref GUI_DRAW_CIRCLE_BL
  *                     - \ref GUI_DRAW_CIRCLE_BR
- * \param[in]       color: Color used for drawing operation
- * \retval          None
+ * \param[in]       color: Color used for drawing operation 
  * \sa              gui_draw_circle, gui_draw_filledcircle, gui_draw_filledcirclecorner
  */
 void
@@ -1149,8 +1163,7 @@ gui_draw_circlecorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t y0, G
  *                     - \ref GUI_DRAW_CIRCLE_TR
  *                     - \ref GUI_DRAW_CIRCLE_BL
  *                     - \ref GUI_DRAW_CIRCLE_BR
- * \param[in]       color: Color used for drawing operation
- * \retval          None
+ * \param[in]       color: Color used for drawing operation 
  * \sa              gui_draw_circle, gui_draw_filledcircle, gui_draw_circlecorner
  */
 void
@@ -1202,8 +1215,7 @@ gui_draw_filledcirclecorner(const GUI_Display_t* disp, GUI_iDim_t x0, GUI_iDim_t
  * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
  * \param[in]       x: Top left X position
  * \param[in]       y: Top left Y position
- * \param[in]       img: Pointer to \ref GUI_IMAGE_DESC_t structure with image description
- * \retval          None
+ * \param[in]       img: Pointer to \ref GUI_IMAGE_DESC_t structure with image description 
  */
 void
 gui_draw_image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_IMAGE_DESC_t* img) {
@@ -1274,8 +1286,7 @@ gui_draw_image(GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, const GUI_IMAGE_
  * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
  * \param[in]       points: Pointer to array of \ref GUI_DRAW_Poly_t points to draw lines between
  * \param[in]       len: Number of points in array. There must be at least 2 points
- * \param[in]       color: Color to use for drawing
- * \retval          None
+ * \param[in]       color: Color to use for drawing 
  */
 void
 gui_draw_poly(const GUI_Display_t* disp, const GUI_DRAW_Poly_t* points, size_t len, GUI_Color_t color) {
@@ -1300,8 +1311,7 @@ gui_draw_poly(const GUI_Display_t* disp, const GUI_DRAW_Poly_t* points, size_t l
  * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
  * \param[in]       font: Pointer to \ref GUI_FONT_t structure with font to use
  * \param[in]       str: Pointer to string to draw on screen
- * \param[in]       draw: Pointer to \ref GUI_DRAW_FONT_t structure with specifications about drawing style
- * \retval          None
+ * \param[in]       draw: Pointer to \ref GUI_DRAW_FONT_t structure with specifications about drawing style 
  */
 void
 gui_draw_writetext(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_Char* str, GUI_DRAW_FONT_t* draw) {
@@ -1390,8 +1400,7 @@ gui_draw_writetext(const GUI_Display_t* disp, const GUI_FONT_t* font, const GUI_
 
 /**
  * \brief           Initializes \ref GUI_DRAW_SB_t structure for drawing operations
- * \param[in]       sb: Pointer to \ref GUI_DRAW_SB_t to initialize to default values
- * \retval          None
+ * \param[in]       sb: Pointer to \ref GUI_DRAW_SB_t to initialize to default values 
  */
 void
 gui_draw_scrollbar_init(GUI_DRAW_SB_t* sb) {
@@ -1401,8 +1410,7 @@ gui_draw_scrollbar_init(GUI_DRAW_SB_t* sb) {
 /**
  * \brief           Draw scroll bar to screen
  * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
- * \param[in]       sb: Pointer to \ref GUI_DRAW_SB_t parameters for scroll bar
- * \retval          None
+ * \param[in]       sb: Pointer to \ref GUI_DRAW_SB_t parameters for scroll bar 
  */
 void
 gui_draw_scrollbar(const GUI_Display_t* disp, GUI_DRAW_SB_t* sb) {

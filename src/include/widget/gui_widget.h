@@ -106,7 +106,7 @@ extern "C" {
  * \retval          0: Pointer is not widget
  * \hideinitializer
  */
-#define gui_widget_iswidget__(h)        ((h) && __GH(h)->Footprint == GUI_WIDGET_FOOTPRINT)
+#define gui_widget_iswidget__(h)        ((h != NULL) && __GH(h)->Footprint == GUI_WIDGET_FOOTPRINT)
 
 /**
  * \brief           Get widget relative X position according to parent widget
@@ -699,20 +699,6 @@ uint8_t gui_widget_remove(GUI_HANDLE_p* h);
  */
 
 /**
- * \defgroup        GUI_WIDGET_Callback Callback processing
- * \brief           Callback based functions
- * \{
- */
-
-uint8_t gui_widget_processdefaultcallback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
-uint8_t gui_widget_setcallback(GUI_HANDLE_p h, GUI_WIDGET_CALLBACK_t callback);
-uint8_t gui_widget_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
-
-/**
- * \}
- */
-
-/**
  * \defgroup        GUI_WIDGET_PADDING Padding
  * \brief           Padding related functions
  * \{
@@ -730,6 +716,20 @@ GUI_Dim_t gui_widget_getpaddingtop(GUI_HANDLE_p h);
 GUI_Dim_t gui_widget_getpaddingright(GUI_HANDLE_p h);
 GUI_Dim_t gui_widget_getpaddingbottom(GUI_HANDLE_p h);
 GUI_Dim_t gui_widget_getpaddingleft(GUI_HANDLE_p h);
+
+/**
+ * \}
+ */
+
+/**
+ * \defgroup        GUI_WIDGET_CALLBACK Callback processing
+ * \brief           Callback based functions
+ * \{
+ */
+
+uint8_t gui_widget_processdefaultcallback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
+uint8_t gui_widget_setcallback(GUI_HANDLE_p h, GUI_WIDGET_CALLBACK_t callback);
+uint8_t gui_widget_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
 /**
  * \}

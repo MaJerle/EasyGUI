@@ -63,8 +63,7 @@ print_list(GUI_HANDLE_ROOT_t* root) {
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to add to base linked list
- * \retval          None
+ * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to add to base linked list 
  * \sa              gui_linkedlist_remove_gen, gui_linkedlist_multi_add_gen, gui_linkedlist_multi_remove_gen
  */
 void
@@ -464,8 +463,7 @@ gui_linkedlist_multi_find_remove(GUI_LinkedListRoot_t* root, void* element) {
  * \brief           Add new widget to linked list of parent widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to parent widget where to put this widget on list
- * \param[in]       h: Widget handle to add to list
- * \retval          None
+ * \param[in]       h: Widget handle to add to list 
  * \sa              gui_linkedlist_widgetremove
  */
 void
@@ -482,8 +480,7 @@ gui_linkedlist_widgetadd(GUI_HANDLE_ROOT_t* root, GUI_HANDLE_p h) {
 /**
  * \brief           Remove widget from linked list of parent widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       h: Widget handle to remove from linked list
- * \retval          None
+ * \param[in]       h: Widget handle to remove from linked list 
  * \sa              gui_linkedlist_widgetadd
  */
 void
@@ -695,8 +692,7 @@ gui_linkedlist_widgetmovetotop(GUI_HANDLE_p h) {
 }
 
 /**
- * \brief           Prints widget structure from root tre
- * \retval          None
+ * \brief           Prints widget structure from root tre 
  */
 void
 gui_linkedlist_printlist(void) {

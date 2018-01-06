@@ -118,6 +118,56 @@ typedef struct GUI_t {
 
 extern GUI_t GUI;
 
+
+
+/**
+ * \brief           Check if 2 rectangle objects covers each other in any way
+ * \hideinitializer
+ */
+#define __GUI_RECT_MATCH(h1x1, h1y1, h1x2, h1y2, h2x1, h2y1, h2x2, h2y2)    \
+    !(                                                      \
+        (h1x1) > (h2x2) ||                                  \
+        (h1y1) > (h2y2) ||                                  \
+        (h2x1) > (h1x2) ||                                  \
+        (h2y1) > (h1y2)                                  \
+    )
+
+/**
+ * \brief           GUI Handle object from main object
+ * \retval          Pointer to GUI handle
+ * \hideinitializer
+ */ 
+#define __GH(x)                     ((struct GUI_HANDLE *)(x))
+
+/**
+ * \brief           GUI Handle root object from main object with children widgets
+ * \retval          Pointer to GUI root handle
+ * \hideinitializer
+ */ 
+#define __GHR(x)                    ((struct GUI_HANDLE_ROOT *)(x))
+
+/**
+ * \brief           Check input parameters and return value on failure
+ * \hideinitializer
+ */
+#define __GUI_ASSERTPARAMS(c)       do {            \
+    if (!(c) || !(GUI.Initialized)) {                                     \
+        GUI_DEBUG("Assert param failed in file %s and line %d\r\n", (const char *)__FILE__, (unsigned)__LINE__);  \
+        return 0;                                   \
+    }                                               \
+} while (0)
+
+/**
+ * \brief           Check if window is active for widget create
+ * \hideinitializer
+ */
+#define __GUI_ASSERTACTIVEWIN()     do {            \
+    if (!GUI.WindowActive) {                        \
+        __GUI_DEBUG("There is no active window for widget in file %s on line %d\r\n", __FILE__, __LINE__);  \
+        return NULL;                                \
+    }                                               \
+} while (0)
+
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 /**

@@ -162,8 +162,7 @@ gui_timer_reset__(GUI_TIMER_t* t) {
 /**
  * \brief           Internal processing called by GUI library
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \note            Processes all timers in loop and calls callback function if needed
- * \retval          None
+ * \note            Processes all timers in loop and calls callback function if needed 
  */
 void
 gui_timer_process(void) {

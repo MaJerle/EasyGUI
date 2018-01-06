@@ -693,7 +693,7 @@ gui_widget_getabsolutex__(GUI_HANDLE_p h) {
     GUI_HANDLE_p w = 0;
     GUI_iDim_t out = 0;
     
-    if (!h) {                                       /* Check input value */
+    if (h == NULL) {                                /* Check input value */
         return 0;                                   /* At left value */
     }
     
@@ -720,7 +720,7 @@ gui_widget_getabsolutey__(GUI_HANDLE_p h) {
     GUI_HANDLE_p w = 0;
     GUI_iDim_t out = 0;
     
-    if (!h) {                                       /* Check input value */
+    if (h == NULL) {                                /* Check input value */
         return 0;                                   /* At top value */
     }
     
@@ -750,7 +750,7 @@ gui_widget_getparentabsolutex__(GUI_HANDLE_p h) {
     
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
     
-    if (h) {                                        /* Check valid widget */
+    if (h != NULL) {                                /* Check input value */
         h = __GH(h)->Parent;                        /* Get parent of widget */
         if (h) {                                    /* Save left padding */
             out = gui_widget_getpaddingleft__(h);   /* Get left padding from parent widget */
@@ -2073,7 +2073,8 @@ gui_widget_setheightpercent(GUI_HANDLE_p h, float height) {
 
 /**
  * \brief           Get total width of widget effective on screen in units of pixels
- *                     Function returns width of widget according to current widget setup (expanded, fill, percent, etc.)
+ *                  
+ *                  Function returns width of widget according to current widget setup (expanded, fill, percent, etc.)
  * \note            Even if percentage width is used, function will always return value in pixels
  * \param[in]       h: Pointer to \ref GUI_HANDLE_p structure
  * \retval          Total width in units of pixels
@@ -2093,7 +2094,8 @@ gui_widget_getwidth(GUI_HANDLE_p h) {
 
 /**
  * \brief           Get total height of widget effective on screen in units of pixels
- *                     Function returns height of widget according to current widget setup (expanded, fill, percent, etc.)
+ *
+ *                  Function returns height of widget according to current widget setup (expanded, fill, percent, etc.)
  *
  * \note            Even if percentage height is used, function will always return value in pixels
  * \param[in]       h: Pointer to \ref GUI_HANDLE_p structure
@@ -2114,7 +2116,9 @@ gui_widget_getheight(GUI_HANDLE_p h) {
 }
 
 /**
- * \brief           Set expandend mode on widget. When enabled, widget will be at X,Y = 0,0 relative to parent and will have width,height = 100%,100%
+ * \brief           Set expandend mode on widget
+ *                  
+ *                  When enabled, widget will be at X,Y = 0,0 relative to parent and will have width,height = 100%,100%
  * \param[in,out]   h: Widget handle
  * \param[in]       state: State for expanded mode
  * \retval          1: Widget expandend status set ok
@@ -2751,8 +2755,7 @@ gui_widget_getzindex(GUI_HANDLE_p h) {
  * \brief           Set transparency level to widget
  * \param[in,out]   h: Widget handle
  * \param[in]       trans: Transparency level, where 0x00 means hidden and 0xFF means totally visible widget
- * \retval          1: Transparency set ok
- * \retval          0: Transparency was not set
+ * \return          1 on success, 0 otherwise
  * \sa              gui_widget_gettransparency
  */
 uint8_t
@@ -2796,8 +2799,7 @@ gui_widget_gettransparency(GUI_HANDLE_p h) {
  * \brief           Set 3D mode on widget
  * \param[in,out]   h: Widget handle
  * \param[in]       enable: Value to enable, either 1 or 0
- * \retval          1: Successful
- * \retval          0: Failed
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_widget_set3dstyle(GUI_HANDLE_p h, uint8_t enable) {
@@ -2812,6 +2814,12 @@ gui_widget_set3dstyle(GUI_HANDLE_p h, uint8_t enable) {
     return ret;
 }
 
+/**
+ * \brief           Set widget top padding
+ * \param[in]       h: Widget handle
+ * \param[in]       x: Padding in units of pixels
+ * \return          1 on success, 0 otherwise
+ */
 uint8_t
 gui_widget_setpaddingtop(GUI_HANDLE_p h, GUI_Dim_t x) {    
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -2823,6 +2831,12 @@ gui_widget_setpaddingtop(GUI_HANDLE_p h, GUI_Dim_t x) {
     return 1;
 }
 
+/**
+ * \brief           Set widget right padding
+ * \param[in]       h: Widget handle
+ * \param[in]       x: Padding in units of pixels
+ * \return          1 on success, 0 otherwise
+ */
 uint8_t
 gui_widget_setpaddingright(GUI_HANDLE_p h, GUI_Dim_t x) {    
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -2834,6 +2848,12 @@ gui_widget_setpaddingright(GUI_HANDLE_p h, GUI_Dim_t x) {
     return 1;
 }
 
+/**
+ * \brief           Set widget bottom padding
+ * \param[in]       h: Widget handle
+ * \param[in]       x: Padding in units of pixels
+ * \return          1 on success, 0 otherwise
+ */
 uint8_t
 gui_widget_setpaddingbottom(GUI_HANDLE_p h, GUI_Dim_t x) {    
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -2845,6 +2865,12 @@ gui_widget_setpaddingbottom(GUI_HANDLE_p h, GUI_Dim_t x) {
     return 1;
 }
 
+/**
+ * \brief           Set widget left padding
+ * \param[in]       h: Widget handle
+ * \param[in]       x: Padding in units of pixels
+ * \return          1 on success, 0 otherwise
+ */
 uint8_t
 gui_widget_setpaddingleft(GUI_HANDLE_p h, GUI_Dim_t x) {    
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -2856,6 +2882,12 @@ gui_widget_setpaddingleft(GUI_HANDLE_p h, GUI_Dim_t x) {
     return 1;
 }
 
+/**
+ * \brief           Set widget top and bottom paddings
+ * \param[in]       h: Widget handle
+ * \param[in]       x: Padding in units of pixels
+ * \return          1 on success, 0 otherwise
+ */
 uint8_t
 gui_widget_setpaddingtopbottom(GUI_HANDLE_p h, GUI_Dim_t x) {    
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -2867,6 +2899,12 @@ gui_widget_setpaddingtopbottom(GUI_HANDLE_p h, GUI_Dim_t x) {
     return 1;
 }
 
+/**
+ * \brief           Set widget left and right paddings
+ * \param[in]       h: Widget handle
+ * \param[in]       x: Padding in units of pixels
+ * \return          1 on success, 0 otherwise
+ */
 uint8_t
 gui_widget_setpaddingleftright(GUI_HANDLE_p h, GUI_Dim_t x) {    
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -2878,6 +2916,12 @@ gui_widget_setpaddingleftright(GUI_HANDLE_p h, GUI_Dim_t x) {
     return 1;
 }
 
+/**
+ * \brief           Set widget all paddings
+ * \param[in]       h: Widget handle
+ * \param[in]       x: Padding in units of pixels
+ * \return          1 on success, 0 otherwise
+ */
 uint8_t
 gui_widget_setpadding(GUI_HANDLE_p h, GUI_Dim_t x) {    
     __GUI_ASSERTPARAMS(gui_widget_iswidget__(h));   /* Check valid parameter */
@@ -2889,6 +2933,11 @@ gui_widget_setpadding(GUI_HANDLE_p h, GUI_Dim_t x) {
     return 1;
 }
 
+/**
+ * \brief           Get widget top padding in units of pixels
+ * \param[in]       h: Widget handle
+ * \return          Left padding in units of pixels
+ */
 GUI_Dim_t
 gui_widget_getpaddingtop(GUI_HANDLE_p h) {
     GUI_Dim_t padding;
@@ -2901,6 +2950,11 @@ gui_widget_getpaddingtop(GUI_HANDLE_p h) {
     return padding;
 }
 
+/**
+ * \brief           Get widget right padding in units of pixels
+ * \param[in]       h: Widget handle
+ * \return          Left padding in units of pixels
+ */
 GUI_Dim_t
 gui_widget_getpaddingright(GUI_HANDLE_p h) {
     GUI_Dim_t padding;
@@ -2913,6 +2967,11 @@ gui_widget_getpaddingright(GUI_HANDLE_p h) {
     return padding;
 }
 
+/**
+ * \brief           Get widget bottom padding in units of pixels
+ * \param[in]       h: Widget handle
+ * \return          Left padding in units of pixels
+ */
 GUI_Dim_t
 ui_widget_getpaddingbottom(GUI_HANDLE_p h) {
     GUI_Dim_t padding;
@@ -2925,6 +2984,11 @@ ui_widget_getpaddingbottom(GUI_HANDLE_p h) {
     return padding;
 }
 
+/**
+ * \brief           Get widget left padding in units of pixels
+ * \param[in]       h: Widget handle
+ * \return          Left padding in units of pixels
+ */
 GUI_Dim_t
 gui_widget_getpaddingleft(GUI_HANDLE_p h) {
     GUI_Dim_t padding;
