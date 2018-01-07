@@ -194,6 +194,35 @@ check_values(GUI_HANDLE_p h) {
 }
 
 /**
+ * \brief           Remove row items 
+ * \note            It does not remove row itself
+ * \param[in]       row: Row to remove items
+ */
+static void
+remove_row_items(GUI_LISTVIEW_ROW_t* row) {
+    GUI_LISTVIEW_ITEM_t* item;
+    
+    while ((item = (GUI_LISTVIEW_ITEM_t *)gui_linkedlist_remove_gen(&row->Root, (GUI_LinkedList_t *)gui_linkedlist_getnext_gen(&row->Root, NULL))) != NULL) {
+        GUI_MEMFREE(item);
+    }
+}
+
+/**
+ * \brief           Remove all rows from list view
+ * \param[in]       h: Widget handle
+ */
+static void
+remove_rows(GUI_HANDLE_p h) {
+    GUI_LISTVIEW_ROW_t* row;
+    
+    while ((row = (GUI_LISTVIEW_ROW_t *)gui_linkedlist_remove_gen(&o->Root, (GUI_LinkedList_t *)gui_linkedlist_getnext_gen(&o->Root, NULL))) != NULL) {
+        remove_row_items(row);              /* Remove row items */
+        GUI_MEMFREE(row);                   /* Remove actual row entry */
+    }
+    __GL(h)->Count = 0;
+}
+
+/**
  * \brief           Default widget callback function
  * \param[in]       h: Widget handle
  * \param[in]       ctr: Callback type
@@ -338,28 +367,14 @@ gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
             return 1;
         }
         case GUI_WC_Remove: {
-            GUI_LISTVIEW_ROW_t* row;
-            GUI_LISTVIEW_ITEM_t* item;
             uint16_t i = 0;
             
-            /**
-             * Remove all rows
-             */
-            while ((row = (GUI_LISTVIEW_ROW_t *)gui_linkedlist_remove_gen(&o->Root, (GUI_LinkedList_t *)gui_linkedlist_getnext_gen(&o->Root, NULL))) != NULL) {
-                /**
-                 * Remove all items in row first
-                 */
-                while ((item = (GUI_LISTVIEW_ITEM_t *)gui_linkedlist_remove_gen(&row->Root, (GUI_LinkedList_t *)gui_linkedlist_getnext_gen(&row->Root, NULL))) != NULL) {
-                    GUI_MEMFREE(item);
-                }
-                GUI_MEMFREE(row);                   /* Remove actual row entry */
-                i++;
-            }
+            remove_rows(h);                         /* Remove all rows from widget */
             
-            /**
+            /*
              * Remove all columns
              */
-            if (o->Cols) {
+            if (o->Cols != NULL) {
                 for (i = 0; i < o->ColsCount; i++) {
                     GUI_MEMFREE(o->Cols[i]);        /* Remove column object */
                 }
@@ -434,7 +449,7 @@ gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
                 
                 if (ts->RelY[0] > itemHeight) {     /* Check item height */
                     tmpSelected = (ts->RelY[0] - itemHeight) / itemHeight;  /* Get temporary selected index */
-                    if ((o->VisibleStartIndex + tmpSelected) <= o->Count) {
+                    if ((o->VisibleStartIndex + tmpSelected) < o->Count) {
                         set_selection(h, o->VisibleStartIndex + tmpSelected);
                         gui_widget_invalidate__(h); /* Choose new selection */
                     }
@@ -593,10 +608,50 @@ gui_listview_addrow(GUI_HANDLE_p h) {
         gui_linkedlist_add_gen(&__GL(h)->Root, (GUI_LinkedList_t *)row);/* Add new row to linked list */
         __GL(h)->Count++;                           /* Increase number of rows */
         check_values(h);                            /* Check values situation */
-        __GUI_LEAVE();                                  /* Leave GUI */
+        __GUI_LEAVE();                              /* Leave GUI */
     }
     
     return (GUI_LISTVIEW_ROW_p)row;
+}
+
+/**
+ * \brief           Remove row from list view
+ * \param[in]       h: Widget handle
+ * \param[in]       row: Row handle to delete from listview
+ * \return          1 on success, 0 otherwise
+ */
+uint8_t
+gui_listview_removerow(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row) {
+    __GUI_ASSERTPARAMS(h && row && __GH(h)->Widget == &Widget); /* Check input parameters */
+    
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    gui_linkedlist_remove_gen(&__GL(h)->Root, (GUI_LinkedList_t *)row);
+    remove_row_items(row);                          /* Remove row items */
+    GUI_MEMFREE(row);
+    __GL(h)->Count--;                               /* Decrease number of elements */
+    check_values(h);
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
+}
+
+/**
+ * \brief           Remove all rows from list view
+ * \param[in]       h: Widget handle
+ * \return          1 on success, 0 otherwise
+ */
+uint8_t
+gui_listview_removerows(GUI_HANDLE_p h) {
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget); /* Check input parameters */
+    
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    remove_rows(h);                                 /* Remove all rows */
+    check_values(h);
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return 1;
 }
 
 /**

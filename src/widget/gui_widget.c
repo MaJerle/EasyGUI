@@ -1559,10 +1559,10 @@ gui_widget_hide__(GUI_HANDLE_p h) {
     
     if (!gui_widget_getflag__(h, GUI_FLAG_HIDDEN)) {    /* If visible, hide it */
         gui_widget_setflag__(h, GUI_FLAG_HIDDEN);
-        gui_widget_invalidatewithparent__(h);       /* Invalidate it for redraw with parenta */
+        gui_widget_invalidatewithparent__(h);       /* Invalidate it for redraw with parent */
     }
     
-    /**
+    /*
      * TODO: Check if active/focused widget is maybe children of this widget
      */
     
@@ -1572,6 +1572,29 @@ gui_widget_hide__(GUI_HANDLE_p h) {
     if (GUI.ActiveWidget && (GUI.ActiveWidget == h || gui_widget_ischildof__(GUI.ActiveWidget, h))) {   /* Clear active */
         gui_widget_active_clear();
     }
+    return 1;
+}
+
+/**
+ * \brief           Hide widget from visible area
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \param[in,out]   h: Widget handle
+ * \return          1 on success, 0 otherwise
+ * \sa              __gui_widget_show
+ */
+uint8_t
+gui_widget_hidechildren__(GUI_HANDLE_p h) {
+    GUI_HANDLE_p t;
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h) && gui_widget_allowchildren__(h));  /* Check valid parameter */
+    
+    /*
+     * Scan all widgets of current widget and hide them
+     */
+    for (t = gui_linkedlist_widgetgetnext((GUI_HANDLE_ROOT_t *)h, NULL); t != NULL;
+        t = gui_linkedlist_widgetgetnext(NULL, t)) {
+        gui_widget_hide__(t);
+    }
+    
     return 1;
 }
 
@@ -2354,6 +2377,23 @@ gui_widget_hide(GUI_HANDLE_p h) {
     __GUI_ENTER();                                  /* Enter GUI */
     
     res = gui_widget_hide__(h);                     /* Hide widget */
+    
+    __GUI_LEAVE();                                  /* Leave GUI */
+    return res;
+}
+
+/**
+ * \brief           Hide children widgets
+ * \param[in,out]   h: Widget handle
+ * \sa              gui_widget_show, gui_widget_putonfront
+ */
+uint8_t
+gui_widget_hidechildren(GUI_HANDLE_p h) {
+    uint8_t res;
+    __GUI_ASSERTPARAMS(gui_widget_iswidget__(h) && gui_widget_allowchildren__(h));  /* Check valid parameter */
+    __GUI_ENTER();                                  /* Enter GUI */
+    
+    res = gui_widget_hidechildren__(h);             /* Hide children widget */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return res;

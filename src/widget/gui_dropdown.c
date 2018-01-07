@@ -200,7 +200,13 @@ get_item(GUI_HANDLE_p h, uint16_t index) {
     return item;
 }
 
-/* Check values */
+/**
+ * \brief           Check new values of widget.
+ *
+ *                  Scans new selected items, count, checks if valid selected item exists, etc
+ * 
+ * \param[in]       h: Widget handle
+ */
 static void
 check_values(GUI_HANDLE_p h) {
     int16_t mPP = nr_entries_pp(h);                 /* Get number of lines visible in widget at a time */

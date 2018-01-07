@@ -572,6 +572,7 @@ void* gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x,
 uint8_t gui_widget_remove__(GUI_HANDLE_p h);
 uint8_t gui_widget_show__(GUI_HANDLE_p h);
 uint8_t gui_widget_hide__(GUI_HANDLE_p h);
+uint8_t gui_widget_hidechildren__(GUI_HANDLE_p h);
 uint8_t gui_widget_toggleexpanded__(GUI_HANDLE_p h);
 uint8_t gui_widget_setexpanded__(GUI_HANDLE_p h, uint8_t state);
 uint8_t gui_widget_ischildof__(GUI_HANDLE_p h, GUI_HANDLE_p parent);
@@ -667,6 +668,7 @@ GUI_iDim_t gui_widget_getscrolly(GUI_HANDLE_p h);
 
 uint8_t gui_widget_show(GUI_HANDLE_p h);
 uint8_t gui_widget_hide(GUI_HANDLE_p h);
+uint8_t gui_widget_hidechildren(GUI_HANDLE_p h);
 uint8_t gui_widget_putonfront(GUI_HANDLE_p h);
 uint8_t gui_widget_gettransparency(GUI_HANDLE_p h);
 uint8_t gui_widget_settransparency(GUI_HANDLE_p h, uint8_t trans);

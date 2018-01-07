@@ -304,7 +304,7 @@ uint8_t gui_ll_control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* 
 #if defined(__GNUC__)
                 static uint8_t DTCMMemory1[0x10000];
 #else
-                static uint8_t DTCMMemory1[0x10000] __attribute__((at(0x20000000)));    /* TCM RAM */
+                static uint8_t DTCMMemory1[0x10000] __attribute__((at(0x20001000)));    /* TCM RAM */
 #endif
 #else
                 static uint8_t DTCMMemory1[0x10000] __attribute__((at(0x10000000)));    /* CCM RAM */
