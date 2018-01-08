@@ -42,6 +42,7 @@
  
 #define GUI_CFG_USE_KEYBOARD                    1
 #define GUI_CFG_USE_TRANSPARENCY                1
+#define GUI_CFG_USE_UNICODE                     1
 
 /* After user configuration, call default config to merge config together */
 #include "gui/gui_config_default.h"

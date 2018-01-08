@@ -20,7 +20,7 @@ create_desktop(void) {
     lcd_width = gui_lcd_getwidth();
     lcd_height = gui_lcd_getheight();
     
-    gui_widget_setfontdefault(&GUI_Font_Arial_Bold_18);
+    gui_widget_setfontdefault(&GUI_Font_Arial_Narrow_Italic_22);
     
     winbase = gui_window_getdesktop();          /* Get desktop window */
     if (winbase != NULL) {

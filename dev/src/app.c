@@ -41,3 +41,15 @@ user_thread(void const * arg) {
         osDelay(1000);
     }
 }
+
+/**
+ * \brief           Write text to console window
+ */
+void
+console_write(const char* str) {
+    GUI_HANDLE_p h;
+    h = gui_widget_getbyid(GUI_ID_DEBUGBOX_LOG);
+    if (h != NULL) {
+        gui_debugbox_addstring(h, _GT(str));
+    }
+}

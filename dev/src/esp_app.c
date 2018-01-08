@@ -65,7 +65,7 @@ start_mqtt(void) {
     if (mqtt_client == NULL) {
         mqtt_client = mqtt_client_new(256, 256);/* Create MQTT client */
     }
-    mqtt_client_connect(mqtt_client, "test.mosquitto.org", 1883, mqtt_client_evt_fn, &mqtt_client_info);
+    mqtt_client_connect(mqtt_client, "193.193.165.37" /* "mqtt.flespi.io" */, 1883, mqtt_client_evt_fn, &mqtt_client_info);
 }
 
 /**
@@ -78,18 +78,22 @@ mqtt_client_evt_fn(mqtt_client_t* client, mqtt_evt_t* evt) {
             mqtt_conn_status_t status = evt->evt.connect.status;
             
             if (status == MQTT_CONN_STATUS_ACCEPTED) {
+                console_write("MQTT connection accepted\r\n");
                 mqtt_client_subscribe(client, "stm32f7_topic", MQTT_QOS_EXACTLY_ONCE, NULL);
             } else if (status == MQTT_CONN_STATUS_TCP_FAILED) {
-                mqtt_client_connect(mqtt_client, "test.mosquitto.org", 1883, mqtt_client_evt_fn, &mqtt_client_info);
+                console_write("MQTT TCP failed. Reconnecting...\r\n");
+                start_mqtt();
             }
             break;
         }
         case MQTT_EVT_DISCONNECT: {
-            mqtt_client_connect(mqtt_client, "test.mosquitto.org", 1883, mqtt_client_evt_fn, &mqtt_client_info);
+            console_write("MQTT TCP disconnected. Reconnecting...\r\n");
+            start_mqtt();
             break;
         }
         case MQTT_EVT_SUBSCRIBE: {
             espr_t result = evt->evt.sub_unsub_scribed.res;
+            console_write("MQTT subscribed\r\n");
             if (result == espOK) {
                 if (is_publisher) {
                     mqtt_client_publish(client, "stm32f7_topic", "stm32f7_topic_data", 18, MQTT_QOS_EXACTLY_ONCE, 0, NULL);
@@ -99,6 +103,7 @@ mqtt_client_evt_fn(mqtt_client_t* client, mqtt_evt_t* evt) {
         }
         case MQTT_EVT_PUBLISHED: {
             printf("Published!\r\n");
+            console_write("MQTT packet published\r\n");
             if (is_publisher) {
                 mqtt_client_publish(client, "stm32f7_topic", "stm32f7_topic_data", 18, MQTT_QOS_EXACTLY_ONCE, 0, NULL);
             }
@@ -106,6 +111,7 @@ mqtt_client_evt_fn(mqtt_client_t* client, mqtt_evt_t* evt) {
         }
         case MQTT_EVT_PUBLISH_RECV: {
             printf("Publish received!\r\n");
+            console_write("MQTT publish received\r\n");
             break;
         }
         default:
@@ -145,10 +151,18 @@ esp_cb_func(esp_cb_t* cb) {
                         case ESP_ECN_WPA_WPA2_PSK: gui_listview_setitemstring(h, row, 1, _GT("WPA/2")); break;
                         default: break;
                     }
-                    
                 }
                 gui_widget_invalidate(h);
             }
+            console_write("WiFi access points listed\r\n");
+            break;
+        }
+        
+        /*
+         * Wifi connected
+         */
+        case ESP_CB_WIFI_CONNECTED: {
+            console_write("WiFi connected\r\n");
             break;
         }
         
@@ -158,8 +172,9 @@ esp_cb_func(esp_cb_t* cb) {
         case ESP_CB_WIFI_GOT_IP: {
             gui_image_setsource(gui_widget_getbyid(GUI_ID_IMAGE_WIFI_STATUS), &image_wifi_on);
             gui_widget_settext(gui_widget_getbyid(GUI_ID_BUTTON_WIFI_CONNECT), _GT("Disconnect"));
-            
             start_mqtt();
+            console_write("WiFi got IP address\r\n");
+            console_write("MQTT TCP connecting...\r\n");
             break;
         }
         
@@ -169,6 +184,7 @@ esp_cb_func(esp_cb_t* cb) {
         case ESP_CB_WIFI_DISCONNECTED: {
             gui_image_setsource(gui_widget_getbyid(GUI_ID_IMAGE_WIFI_STATUS), &image_wifi_off);
             gui_widget_settext(gui_widget_getbyid(GUI_ID_BUTTON_WIFI_CONNECT), _GT("Connect"));
+            console_write("WiFi disconnected\r\n");
             break;
         }
         default:

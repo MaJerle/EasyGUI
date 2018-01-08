@@ -51,6 +51,7 @@
 #include "widget/gui_image.h"
 #include "widget/gui_slider.h"
 #include "widget/gui_container.h"
+#include "widget/gui_debugbox.h"
 #include "widget/gui_list_container.h"
 #include "gui/gui_keyboard.h"
 #include "gui/gui_lcd.h"
@@ -73,6 +74,9 @@ void init_thread(void const * arg);
 /* Read touch function prototype */
 void read_touch(void);
 
+/* Application functions */
+void console_write(const char* str);
+
 /* ESP callback function */
 espr_t  esp_cb_func(esp_cb_t* cb);
 
@@ -87,6 +91,7 @@ uint8_t gui_image_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* pa
 uint8_t gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 uint8_t gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 uint8_t gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
+uint8_t gui_debugbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 uint8_t gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
 /* Access points visible to ESP device */
@@ -104,9 +109,11 @@ extern mqtt_client_t* mqtt_client;
 #define GUI_ID_CONTAINER_STATUS             (GUI_ID_USER + 0x0001)
 #define GUI_ID_CONTAINER_WIFI               (GUI_ID_USER + 0x0002)
 #define GUI_ID_CONTAINER_CONSOLE            (GUI_ID_USER + 0x0003)
+#define GUI_ID_CONTAINER_LOG                (GUI_ID_USER + 0x0004)
 
 #define GUI_ID_IMAGE_WIFI_STATUS            (GUI_ID_USER + 0x0101)
 #define GUI_ID_IMAGE_CONSOLE                (GUI_ID_USER + 0x0102)
+#define GUI_ID_IMAGE_LOG                    (GUI_ID_USER + 0x0103)
 
 #define GUI_ID_TEXTVIEW_TIME                (GUI_ID_USER + 0x0201)
 
@@ -117,12 +124,18 @@ extern mqtt_client_t* mqtt_client;
 
 #define GUI_ID_EDITTEXT_WIFI_PASSWORD       (GUI_ID_USER + 0x0501)
 
+#define GUI_ID_DEBUGBOX_LOG                 (GUI_ID_USER + 0x0601)
+
 /* Image descriptors */
 extern const GUI_IMAGE_DESC_t image_wifi_on;
 extern const GUI_IMAGE_DESC_t image_wifi_off;
 extern const GUI_IMAGE_DESC_t image_console;
+extern const GUI_IMAGE_DESC_t image_log;
 
 /* List of fonts */
 extern GUI_Const GUI_FONT_t GUI_Font_Arial_Bold_18;
+extern GUI_Const GUI_FONT_t GUI_Font_Comic_Sans_MS_Regular_22;
+extern GUI_Const GUI_FONT_t GUI_Font_Arial_Narrow_Italic_22;
+extern GUI_Const GUI_FONT_t GUI_Font_Calibri_Bold_8;
 
 #endif /* __APP_H */

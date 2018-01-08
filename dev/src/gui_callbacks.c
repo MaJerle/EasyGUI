@@ -5,8 +5,6 @@
 
 #include "app.h"
 
-
-
 /**
  * \brief           Window event function
  */
@@ -41,13 +39,14 @@ gui_container_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param,
                 gui_textview_create(GUI_ID_TEXTVIEW_TIME, width - 50, 0, 46, 40, h, gui_textview_callback, NULL);
                 gui_image_create(GUI_ID_IMAGE_WIFI_STATUS, width - 100 + 4, 4, 32, 32, h, gui_image_callback, 0);
                 gui_image_create(GUI_ID_IMAGE_CONSOLE, width - 140 + 4, 4, 32, 32, h, gui_image_callback, 0);
+                gui_image_create(GUI_ID_IMAGE_LOG, width - 180 + 4, 4, 32, 32, h, gui_image_callback, 0);
             } else if (GUI_ID_CONTAINER_WIFI == id) {
                 gui_listview_create(GUI_ID_LISTVIEW_WIFI_APS, 2, 2, 2, 2, h, gui_listview_callback, 0);
                 gui_button_create(GUI_ID_BUTTON_WIFI_RELOAD, 2, 2, 2, 2, h, gui_button_callback, 0);
                 gui_button_create(GUI_ID_BUTTON_WIFI_CONNECT, 2, 2, 2, 2, h, gui_button_callback, 0);
                 gui_edittext_create(GUI_ID_EDITTEXT_WIFI_PASSWORD, 2, 2, 2, 2, h, gui_edittext_callback, 0);
-            } else if (GUI_ID_CONTAINER_CONSOLE == id) {
-                
+            } else if (GUI_ID_CONTAINER_LOG == id) {
+                gui_debugbox_create(GUI_ID_DEBUGBOX_LOG, 2, 2, 2, 2, h, gui_debugbox_callback, 0);
             }
             break;
         }
@@ -75,6 +74,8 @@ gui_image_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI
                 gui_image_setsource(h, &image_wifi_off);
             } else if (GUI_ID_IMAGE_CONSOLE == id) {
                 gui_image_setsource(h, &image_console);
+            } else if (GUI_ID_IMAGE_LOG == id) {
+                gui_image_setsource(h, &image_log);
             }
             break;
         }
@@ -83,6 +84,8 @@ gui_image_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI
                 open_container(GUI_ID_CONTAINER_WIFI);
             } else if (GUI_ID_IMAGE_CONSOLE == id) {
                 open_container(GUI_ID_CONTAINER_CONSOLE);
+            } else if (GUI_ID_IMAGE_LOG == id) {
+                open_container(GUI_ID_CONTAINER_LOG);
             }
             break;
         }
@@ -157,8 +160,38 @@ gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
                         gui_widget_hide(tmp);
                     }
                 }
-                
             }
+        }
+        default:
+            break;
+    }
+    return res;
+}
+
+/**
+ * \brief           Debugbox event function
+ */
+uint8_t
+gui_debugbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
+    GUI_ID_t id;
+    uint8_t res;
+    GUI_Dim_t width;
+    
+    id = gui_widget_getid(h);                   /* Get widget ID */
+    width = gui_widget_getwidth(h);             /* Get widget callback */
+    
+    res = gui_widget_processdefaultcallback(h, ctrl, param, result);
+    switch (ctrl) {
+        case GUI_WC_Init: {                     /* Widget just created? */
+            if (GUI_ID_DEBUGBOX_LOG == id) {
+                gui_widget_setpositionpercent(h, 0.0f, 0.0f);
+                gui_widget_setsizepercent(h, 100.0f, 100.0f);
+                gui_widget_setfont(h, &GUI_Font_Arial_Bold_18);
+                
+                gui_debugbox_setmaxitems(h, 50);
+                gui_debugbox_addstring(h, _GT("Logging widget"));
+            }
+            break;
         }
         default:
             break;
@@ -198,6 +231,7 @@ gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
         case GUI_WC_Click: {
             if (id == GUI_ID_BUTTON_WIFI_RELOAD) {
                 list_access_points();           /* List access points */
+                console_write("Listing access points...\r\n");
             } else if (GUI_ID_BUTTON_WIFI_CONNECT == id) {
                 static GUI_Char password[24] = {0}, ssid[24] = {0};
                 int16_t selection = -1;
@@ -220,9 +254,11 @@ gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
                         
                         /* Start join process */
                         esp_sta_join((char *)ssid, (char *)password, NULL, 0, 0);
+                        console_write("Connecting to access point...\r\n");
                     }
                 } else {
                     esp_sta_quit(0);            /* Disconnect from AP */
+                    console_write("Quiting from access point...\r\n");
                 }
             }
             break;
@@ -251,7 +287,7 @@ gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
                 gui_widget_setpositionpercent(h, 50.5f, 55.5f);
                 gui_widget_setsizepercent(h, 49.0f, 14.0f);
                 gui_widget_alloctextmemory(h, 128);
-                gui_widget_settext(h, _GT("majerle_internet"));
+                gui_widget_settext(h, _GT("slikop2012"));
             }
             break;
         }
