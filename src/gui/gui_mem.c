@@ -371,8 +371,8 @@ mem_getminfree(void) {
  * \brief           Allocate memory of specific size
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       size: Number of bytes to allocate
- * \retval          0: Allocation failed
- * \retval          >0: Pointer to allocated memory
+ * \return          1 on success, 0 otherwise
+ * \return          >0: Pointer to allocated memory
  */
 void*
 gui_mem_alloc(uint32_t size) {
@@ -394,8 +394,7 @@ gui_mem_alloc(uint32_t size) {
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       ptr: Pointer to current allocated memory to resize, returned using \ref gui_mem_alloc, \ref gui_mem_calloc or \ref gui_mem_realloc functions
  * \param[in]       size: Number of bytes to allocate on new memory
- * \retval          0: Allocation failed
- * \retval          >0: Pointer to allocated memory
+ * \return          Allocated memory on success, NULL otherwise
  */
 void*
 gui_mem_realloc(void* ptr, size_t size) {
@@ -414,8 +413,7 @@ gui_mem_realloc(void* ptr, size_t size) {
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       num: Number of elements to allocate
  * \param[in]       size: Size of each element
- * \retval          0: Allocation failed
- * \retval          >0: Pointer to allocated memory
+ * \return          Allocated memory on success, NULL otherwise
  */
 void*
 gui_mem_calloc(size_t num, size_t size) {
@@ -448,7 +446,7 @@ gui_mem_free(void* ptr) {
 /**
  * \brief           Get total free size still available in memory to allocate
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \retval          Number of bytes available to allocate
+ * \return          Number of bytes available to allocate
  */
 size_t
 gui_mem_getfree(void) {
@@ -458,7 +456,7 @@ gui_mem_getfree(void) {
 /**
  * \brief           Get total currently allocated memory in regions
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \retval          Number of bytes in use
+ * \return          Number of bytes in use
  */
 size_t
 gui_mem_getfull(void) {
@@ -468,26 +466,19 @@ gui_mem_getfull(void) {
 /**
  * \brief           Get minimal available number of bytes ever for allocation
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \retval          Number of minimal available number of bytes ever
+ * \return          Number of minimal available number of bytes ever
  */
 size_t
 gui_mem_getminfree(void) {
     return mem_getminfree();                        /* Get minimal number of bytes ever available for allocation */
 }
 
-/******************************************************************************/
-/******************************************************************************/
-/***                  Thread safe version of public API                      **/
-/******************************************************************************/
-/******************************************************************************/
-
 /**
  * \brief           Assign memory region(s) for allocation functions
  * \note            You can allocate multiple regions by assigning start address and region size in units of bytes
  * \param[in]       regions: Pointer to list of regions to use for allocations
  * \param[in]       len: Number of regions to use
- * \retval          1: Memory assigned ok
- * \retval          0: Memory was not assigned
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_mem_assignmemory(const GUI_MEM_Region_t* regions, size_t len) {

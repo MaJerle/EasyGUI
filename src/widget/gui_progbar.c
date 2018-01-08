@@ -241,8 +241,7 @@ gui_progbar_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, G
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for create procedure
- * \retval          > 0: \ref GUI_HANDLE_p object of created widget
- * \retval          0: Widget creation failed
+ * \return          \ref GUI_HANDLE_p object of created widget on success, NULL otherwise
  */
 GUI_HANDLE_p
 gui_progbar_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
@@ -254,8 +253,7 @@ gui_progbar_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index. This parameter can be a value of \ref GUI_PROGBAR_COLOR_t enumeration
  * \param[in]       color: Color value
- * \retval          1: Color was set ok
- * \retval          0: Color vas not set
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_progbar_setcolor(GUI_HANDLE_p h, GUI_PROGBAR_COLOR_t index, GUI_Color_t color) {
@@ -267,8 +265,7 @@ gui_progbar_setcolor(GUI_HANDLE_p h, GUI_PROGBAR_COLOR_t index, GUI_Color_t colo
  * \brief           Set progress bar current value
  * \param[in,out]   h: Widget handle
  * \param[in]       val: New current value
- * \retval          1: Value was set ok
- * \retval          0: Value vas not set
+ * \return          1 on success, 0 otherwise
  * \sa              gui_progbar_setmin, gui_progbar_setmax, gui_progbar_getvalue, gui_progbar_getmin, gui_progbar_getmax  
  */
 uint8_t
@@ -281,8 +278,7 @@ gui_progbar_setvalue(GUI_HANDLE_p h, int32_t val) {
  * \brief           Set progress bar minimal value
  * \param[in,out]   h: Widget handle
  * \param[in]       val: New minimal value
- * \retval          1: Value was set ok
- * \retval          0: Value vas not set
+ * \return          1 on success, 0 otherwise
  * \sa              gui_progbar_setvalue, gui_progbar_setmax, gui_progbar_getvalue, gui_progbar_getmin, gui_progbar_getmax         
  */
 uint8_t
@@ -295,8 +291,7 @@ gui_progbar_setmin(GUI_HANDLE_p h, int32_t val) {
  * \brief           Set progress bar maximal value
  * \param[in,out]   h: Widget handle
  * \param[in]       val: New maximal value
- * \retval          1: Value was set ok
- * \retval          0: Value vas not set
+ * \return          1 on success, 0 otherwise
  * \sa              gui_progbar_setmin, gui_progbar_setvalue, gui_progbar_getvalue, gui_progbar_getmin, gui_progbar_getmax  
  */
 uint8_t
@@ -309,8 +304,7 @@ gui_progbar_setmax(GUI_HANDLE_p h, int32_t val) {
  * \brief           Sets percent mode. When in this mode, widget text is in percent according to current value between minimum and maximum
  * \param[in,out]   h: Widget handle
  * \param[in]       enable: Value either to enable or disable mode
- * \retval          1: Percentage mode was disabled ok
- * \retval          0: Percange mode was not disabled
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_progbar_setpercentmode(GUI_HANDLE_p h, uint8_t enable) {
@@ -322,8 +316,7 @@ gui_progbar_setpercentmode(GUI_HANDLE_p h, uint8_t enable) {
  * \brief           Set progress bar to animation mode
  * \param[in,out]   h: Widget handle
  * \param[in]       anim: New animation value either 1 (enable) or 0 (disable)
- * \retval          1: Animation was set ok
- * \retval          0: Animation vas not set
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_progbar_setanimation(GUI_HANDLE_p h, uint8_t anim) {
@@ -334,7 +327,7 @@ gui_progbar_setanimation(GUI_HANDLE_p h, uint8_t anim) {
 /**
  * \brief           Get progress bar minimal value
  * \param[in,out]   h: Widget handle
- * \retval          Minimal value
+ * \return          Minimal value
  * \sa              gui_progbar_setmin, gui_progbar_setvalue, gui_progbar_setmax, gui_progbar_getvalue, gui_progbar_getmax  
  */
 int32_t
@@ -352,7 +345,7 @@ gui_progbar_getmin(GUI_HANDLE_p h) {
 /**
  * \brief           Get progress bar maximal value
  * \param[in,out]   h: Widget handle
- * \retval          Maximal value
+ * \return          Maximal value
  * \sa              gui_progbar_setmin, gui_progbar_setvalue, gui_progbar_setmax, gui_progbar_getvalue, gui_progbar_getmin  
  */
 int32_t
@@ -370,7 +363,7 @@ gui_progbar_getmax(GUI_HANDLE_p h) {
 /**
  * \brief           Get progress bar current value
  * \param[in,out]   h: Widget handle
- * \retval          Current value
+ * \return          Current value
  * \sa              gui_progbar_setmin, gui_progbar_setvalue, gui_progbar_setmax, gui_progbar_getmin, gui_progbar_getmax  
  */
 int32_t

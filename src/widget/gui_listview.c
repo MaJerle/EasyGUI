@@ -509,8 +509,7 @@ gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
- * \retval          > 0: \ref GUI_HANDLE_p object of created widget
- * \retval          0: Widget creation failed
+ * \return          \ref GUI_HANDLE_p object of created widget on success, NULL otherwise
  */
 GUI_HANDLE_p
 gui_listview_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
@@ -522,8 +521,7 @@ gui_listview_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GU
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Index in array of colors. This parameter can be a value of \ref GUI_LISTVIEW_COLOR_t enumeration
  * \param[in]       color: Actual color code to set
- * \retval          1: Color was set ok
- * \retval          0: Color was not set
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_listview_setcolor(GUI_HANDLE_p h, GUI_LISTVIEW_COLOR_t index, GUI_Color_t color) {
@@ -536,8 +534,7 @@ gui_listview_setcolor(GUI_HANDLE_p h, GUI_LISTVIEW_COLOR_t index, GUI_Color_t co
  * \param[in]       h: Widget handle
  * \param[in]       text: Text to display on top
  * \param[in]       width: Width of column in units of pixels
- * \retval          1: Column was added
- * \retval          0: Column was not added
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_listview_addcolumn(GUI_HANDLE_p h, const GUI_Char* text, GUI_Dim_t width) {
@@ -571,8 +568,7 @@ gui_listview_addcolumn(GUI_HANDLE_p h, const GUI_Char* text, GUI_Dim_t width) {
  * \param[in]       h: Widget handle
  * \param[in]       index: Index for column number. First column has index 0
  * \param[in]       width: Width of column in units of pixels
- * \retval          1: Column was added
- * \retval          0: Column was not added
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_listview_setcolumnwidth(GUI_HANDLE_p h, uint16_t index, GUI_Dim_t width) {
@@ -594,7 +590,7 @@ gui_listview_setcolumnwidth(GUI_HANDLE_p h, uint16_t index, GUI_Dim_t width) {
 /**
  * \brief           Add new empty row
  * \param[in]       h: Widget handle
- * \retval          Row object handle
+ * \return          Row object handle on success, NULL otherwise
  */
 GUI_LISTVIEW_ROW_p
 gui_listview_addrow(GUI_HANDLE_p h) {
@@ -660,8 +656,7 @@ gui_listview_removerows(GUI_HANDLE_p h) {
  * \param[in]       row: Row object handle, previously returned with \ref gui_listview_addrow function
  * \param[in]       col: Column number to set. First column is on index = 0
  * \param[in]       text: Text to use for item
- * \retval          1: Item string was set ok
- * \retval          0: Item string was not set
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_listview_setitemstring(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row, uint16_t col, const GUI_Char* text) {
@@ -699,8 +694,7 @@ gui_listview_setitemstring(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row, uint16_t col,
  * \note            When it is enabled, slider will only appear if needed to show more entries on list
  * \param[in,out]   h: Widget handle
  * \param[in]       autoMode: Auto mode status. Set to 1 for auto mode or 0 for manual mode
- * \retval          1: Set OK
- * \retval          0: Set ERROR
+ * \return          1 on success, 0 otherwise
  * \sa              gui_listview_setslidervisibility
  */
 uint8_t
@@ -725,8 +719,7 @@ gui_listview_setsliderauto(GUI_HANDLE_p h, uint8_t autoMode) {
  * \note            Slider must be in manual mode in order to get this to work
  * \param[in,out]   h: Widget handle
  * \param[in]       visible: Slider visible status, 1 or 0
- * \retval          1: Set to desired value
- * \retval          0: Not set to desired value
+ * \return          1 on success, 0 otherwise
  * \sa              gui_listview_setsliderauto
  */
 uint8_t
@@ -756,8 +749,7 @@ gui_listview_setslidervisibility(GUI_HANDLE_p h, uint8_t visible) {
  * \brief           Scroll list if possible
  * \param[in,out]   h: Widget handle
  * \param[in]       step: Step to scroll. Positive step will scroll up, negative will scroll down
- * \retval          1: Scroll successful
- * \retval          0: Scroll not successful
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_listview_scroll(GUI_HANDLE_p h, int16_t step) {
@@ -785,8 +777,7 @@ gui_listview_scroll(GUI_HANDLE_p h, int16_t step) {
  * \brief           Set selected row number
  * \param[in,out]   h: Widget handle
  * \param[in]       selection: Set to -1 to invalidate selection or 0 - count-1 for specific selection 
- * \retval          1: Selection changed
- * \retval          0: Selection not changed
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_listview_setselection(GUI_HANDLE_p h, int16_t selection) {
@@ -804,7 +795,7 @@ gui_listview_setselection(GUI_HANDLE_p h, int16_t selection) {
 /**
  * \brief           Get selected row number
  * \param[in,out]   h: Widget handle
- * \retval          Selection number or -1 if no selection
+ * \return          Selection number on success, -1 otherwise
  */
 int16_t
 gui_listview_getselection(GUI_HANDLE_p h) {
@@ -826,8 +817,7 @@ gui_listview_getselection(GUI_HANDLE_p h) {
  * \param[in]       cindex: Column index
  * \param[in]       dst: Pointer to \ref GUI_Char variable to save text to it
  * \param[in]       length: Length of destination array
- * \retval          1: Text was found and copied
- * \retval          0: Text was not found
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_listview_getitemvalue(GUI_HANDLE_p h, uint16_t rindex, uint16_t cindex, GUI_Char* dst, size_t length) {

@@ -89,8 +89,7 @@ gui_image_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
- * \retval          > 0: \ref GUI_HANDLE_p object of created widget
- * \retval          0: Widget creation failed
+ * \return          \ref GUI_HANDLE_p object of created widget on success, NULL otherwise
  */
 GUI_HANDLE_p
 gui_image_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
@@ -101,8 +100,7 @@ gui_image_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_D
  * \brief           Set image source to draw
  * \param[in]       h: Widget handle
  * \param[in]       img: Pointer to \ref GUI_IMAGE_DESC_t image object. Use NULL to clear image
- * \retval          1: Image was set ok
- * \retval          0: Image was not set
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_image_setsource(GUI_HANDLE_p h, const GUI_IMAGE_DESC_t* img) {

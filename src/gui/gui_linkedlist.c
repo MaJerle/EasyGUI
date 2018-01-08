@@ -86,7 +86,7 @@ gui_linkedlist_add_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to remove from base linked list
- * \retval          Pointer to removed \ref GUI_LinkedList_t element
+ * \return          Removed element handle
  * \sa              gui_linkedlist_add_gen, gui_linkedlist_multi_add_gen, gui_linkedlist_multi_remove_gen
  */
 GUI_LinkedList_t*
@@ -133,8 +133,7 @@ gui_linkedlist_remove_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element)
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to get next element of
- * \retval          > 0: Pointer to next element
- * \retval          0: No elements anymore in list
+ * \return          Next element handle on success, NULL otherwise
  * \sa              gui_linkedlist_getprev_gen, gui_linkedlist_multi_getnext_gen, gui_linkedlist_multi_getprev_gen
  */
 GUI_LinkedList_t*
@@ -163,8 +162,7 @@ gui_linkedlist_getnext_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to get next element of
- * \retval          > 0: Pointer to previous element
- * \retval          0: No elements anymore in list
+ * \return          Previous element handle on success, NULL otherwise
  * \sa              gui_linkedlist_getnext_gen, gui_linkedlist_multi_getnext_gen, gui_linkedlist_multi_getprev_gen
  */
 GUI_LinkedList_t*
@@ -184,8 +182,7 @@ gui_linkedlist_getprev_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to move down on base linked list
- * \retval          1: Element moved down
- * \retval          0: Element was not moved down as it is already on bottom
+ * \return          1 on success, 0 otherwise
  * \sa              gui_linkedlist_moveup_gen, gui_linkedlist_multi_moveup_gen, gui_linkedlist_multi_movedown_gen
  */
 uint8_t
@@ -234,8 +231,7 @@ gui_linkedlist_movedown_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* elemen
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to move up on base linked list
- * \retval          1: Element moved up
- * \retval          0: Element was not moved up as it is already on bottom
+ * \return          1 on success, 0 otherwise
  * \sa              gui_linkedlist_movedown_gen, gui_linkedlist_multi_moveup_gen, gui_linkedlist_multi_movedown_gen
  */
 uint8_t
@@ -284,8 +280,7 @@ gui_linkedlist_moveup_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element)
  * \note            Index value is the number of item in list order
  * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       index: Number in list to get item
- * \retval          0: Element not found
- * \retval          > 0: Pointer to \ref GUI_LinkedList_t structure
+ * \return          Item handle on success, NULL otherwise
  */
 GUI_LinkedList_t*
 gui_linkedlist_getnext_byindex_gen(GUI_LinkedListRoot_t* root, uint16_t index) {
@@ -303,8 +298,7 @@ gui_linkedlist_getnext_byindex_gen(GUI_LinkedListRoot_t* root, uint16_t index) {
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to add to base linked list
- * \retval          > 0: Pointer to allocated \ref GUI_LinkedListMulti_t structure with linked list entries
- * \retval          0: Failed to allocate memory for \ref GUI_LinkedListMulti_t structure
+ * \return          Multi linked list handle on success, NULL otherwise
  * \sa              gui_linkedlist_add_gen, gui_linkedlist_remove_gen, gui_linkedlist_multi_remove_gen
  */
 GUI_LinkedListMulti_t*
@@ -324,8 +318,7 @@ gui_linkedlist_multi_add_gen(GUI_LinkedListRoot_t* root, void* element) {
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to remove from base linked list
- * \retval          1: Element removed and memory deallocated
- * \retval          0: Failed to remove element
+ * \return          1 on success, 0 otherwise
  * \sa              gui_linkedlist_add_gen, gui_linkedlist_remove_gen, gui_linkedlist_multi_add_gen
  */
 uint8_t
@@ -352,8 +345,7 @@ gui_linkedlist_multi_remove_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       element: Pointer to \ref GUI_LinkedListMulti_t element to get next element of
- * \retval          > 0: Pointer to next element
- * \retval          0: No elements anymore in list
+ * \return          Next element on success, NULL otherwise
  * \sa              gui_linkedlist_getnext_gen, gui_linkedlist_getprev_gen, gui_linkedlist_multi_getprev_gen
  */
 GUI_LinkedListMulti_t*
@@ -382,8 +374,7 @@ gui_linkedlist_multi_getnext_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       element: Pointer to \ref GUI_LinkedListMulti_t element to get next element of
- * \retval          > 0: Pointer to previous element
- * \retval          0: No elements anymore in list
+ * \return          Previous element on success, NULL otherwise
  * \sa              gui_linkedlist_getnext_gen, gui_linkedlist_getprev_gen, gui_linkedlist_multi_getnext_gen
  */
 GUI_LinkedListMulti_t*
@@ -403,8 +394,7 @@ gui_linkedlist_multi_getprev_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       element: Pointer to \ref GUI_LinkedListMulti_t element to move down on base linked list
- * \retval          1: Element moved down
- * \retval          0: Element was not moved down as it is already on bottom
+ * \return          1 on success, 0 otherwise
  * \sa              gui_linkedlist_moveup_gen, gui_linkedlist_movedown_gen, gui_linkedlist_multi_moveup_gen
  */
 uint8_t
@@ -417,8 +407,7 @@ gui_linkedlist_multi_movedown_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMult
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       element: Pointer to \ref GUI_LinkedListMulti_t element to move up on base linked list
- * \retval          1: Element moved up
- * \retval          0: Element was not moved up as it is already on bottom
+ * \return          1 on success, 0 otherwise
  * \sa              gui_linkedlist_moveup_gen, gui_linkedlist_movedown_gen, gui_linkedlist_multi_movedown_gen
  */
 uint8_t
@@ -433,8 +422,7 @@ gui_linkedlist_multi_moveup_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
  * \param[in]       element: Memory address in data part of linked list entry
- * \retval          1: Element removed and memory deallocated
- * \retval          0: Failed to remove element
+ * \return          1 on success, 0 otherwise
  * \sa              gui_linkedlist_remove_gen, gui_linkedlist_multi_remove_gen
  */
 uint8_t
@@ -452,12 +440,6 @@ gui_linkedlist_multi_find_remove(GUI_LinkedListRoot_t* root, void* element) {
     }
     return ret;
 }
-
-/******************************************************************************/
-/******************************************************************************/
-/***                          Widget linkedlist API                          **/
-/******************************************************************************/
-/******************************************************************************/
 
 /**
  * \brief           Add new widget to linked list of parent widget
@@ -496,8 +478,7 @@ gui_linkedlist_widgetremove(GUI_HANDLE_p h) {
  * \brief           Move widget up for one in linked list
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle to move up
- * \retval          1: Move has been successful
- * \retval          0: Move was not successful. Widget is on top and cannot be moved
+ * \return          1 on success, 0 otherwise
  * \sa              gui_linkedlist_widgetmovedown
  */
 uint8_t
@@ -512,8 +493,7 @@ gui_linkedlist_widgetmoveup(GUI_HANDLE_p h) {
  * \brief           Move widget down for one in linked list
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle to move down
- * \retval          1: Move has been successful
- * \retval          0: Move was not successful. Widget is on bottom and cannot be moved
+ * \return          1 on success, 0 otherwise
  * \sa              gui_linkedlist_widgetmoveup
  */
 uint8_t
@@ -541,8 +521,7 @@ gui_linkedlist_widgetmovedown(GUI_HANDLE_p h) {
  *
  * \param[in]       parent: Parent widget object for which you want to get first widget
  * \param[in]       h: Widget handle for which you want next widget
- * \retval          > 0: Next widget in linked list
- * \retval          0: No widget in linked list anymore
+ * \return          Previous widget on linked list on success, NULL otherwise
  * \sa              gui_linkedlist_widgetgetprev
  */
 GUI_HANDLE_p
@@ -574,8 +553,7 @@ gui_linkedlist_widgetgetnext(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h) {
  *
  * \param[in]       parent: Parent widget object for which you want to get first widget
  * \param[in]       h: Widget handle for which you want next widget
- * \retval          > 0: Next widget in linked list
- * \retval          0: No widget in linked list anymore
+ * \return          Next widget on linked list on success, NULL otherwise
  * \sa              gui_linkedlist_widgetgetnext
  */
 GUI_HANDLE_p
@@ -601,8 +579,7 @@ gui_linkedlist_widgetgetprev(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h) {
  * \brief           Move widget to bottom in linked list of parent widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget to move to bottom
- * \retval          1: Widget moved to bottom
- * \retval          0: Widget is already at bottom
+ * \return          1 on success, 0 otherwise
  * \sa              gui_linkedlist_widgetmovetotop
  */
 uint8_t
@@ -648,8 +625,7 @@ gui_linkedlist_widgetmovetobottom(GUI_HANDLE_p h) {
  * \brief           Move widget to top in linked list of parent widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget to move to top
- * \retval          1: Widget moved to top
- * \retval          0: Widget is already on top
+ * \return          1 on success, 0 otherwise
  * \sa              gui_linkedlist_widgetmovetobottom
  */
 uint8_t

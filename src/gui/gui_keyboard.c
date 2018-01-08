@@ -546,9 +546,8 @@ keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param, 
 /**
  * \brief           Hide opened virtual keyboard
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \retval          1: Keyboard hiding process started
- * \retval          0: Keyboard hiding process not started
- * \sa              __gui_keyboard_show
+ * \return          1 on success, 0 otherwise
+ * \sa              gui_keyboard_show__
  */
 uint8_t
 gui_keyboard_hide__(void) {
@@ -563,9 +562,8 @@ gui_keyboard_hide__(void) {
  * \brief           Show hidden virtual keyboard
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle for which keyboard will be opened
- * \retval          1: Keyboard opening process started
- * \retval          0: Keyboard opening process not started
- * \sa              __gui_keyboard_hide
+ * \return          1 on success, 0 otherwise
+ * \sa              gui_keyboard_hide__
  */
 uint8_t
 gui_keyboard_show__(GUI_HANDLE_p h) {
@@ -583,7 +581,7 @@ gui_keyboard_show__(GUI_HANDLE_p h) {
 /**
  * \brief           Creates virtual keyboard for user interaction.
  * \note            This function must be called by user after \ref gui_init is called to use virtual keyboard
- * \retval          Keyboard handle
+ * \return          Keyboard handle on success, NULL otherwise
  */
 GUI_HANDLE_p
 gui_keyboard_create(void) {    
@@ -599,8 +597,7 @@ gui_keyboard_create(void) {
 
 /**
  * \brief           Hide opened virtual keyboard
- * \retval          1: Keyboard hiding process started
- * \retval          0: Keyboard hiding process not started
+ * \return          1 on success, 0 otherwise
  * \sa              gui_keyboard_show
  */
 uint8_t
@@ -617,8 +614,7 @@ gui_keyboard_hide(void) {
 /**
  * \brief           Show hidden virtual keyboard
  * \param[in]       h: Widget handle for which keyboard will be opened
- * \retval          1: Keyboard opening process started
- * \retval          0: Keyboard opening process not started
+ * \return          1 on success, 0 otherwise
  * \sa              gui_keyboard_hide
  */
 uint8_t

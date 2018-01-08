@@ -49,8 +49,7 @@ static gui_mbox_msg_t timer_msg = {GUI_SYS_MBOX_TYPE_TIMER};
  * \param[in]       period: Timer period in units of milliseconds
  * \param[in]       callback: Pointer to timer callback
  * \param[in]       params: Pointer to user parameters used in callback
- * \retval          > 0: Timer created
- * \retval          0: Timer creation failed
+ * \return          Timer handle on success, NULL otherwise
  */
 GUI_TIMER_t*
 gui_timer_create__(uint16_t period, void (*callback)(GUI_TIMER_t *), void* params) {
@@ -79,8 +78,7 @@ gui_timer_create__(uint16_t period, void (*callback)(GUI_TIMER_t *), void* param
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       *t: Pointer to pointer to \ref GUI_TIMER_t structure.
  *                      After timer remove, pointer value where it points to will be changed
- * \retval          1: Timer was removed ok
- * \retval          0: Timer was not removed
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_timer_remove__(GUI_TIMER_t** t) {  
@@ -96,8 +94,7 @@ gui_timer_remove__(GUI_TIMER_t** t) {
  * \brief           Start timer
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       t: Pointer to \ref GUI_TIMER_t structure
- * \retval          1: Timer was started ok
- * \retval          0: Timer was not started
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_timer_start__(GUI_TIMER_t* t) {
@@ -116,8 +113,7 @@ gui_timer_start__(GUI_TIMER_t* t) {
  * \brief           Start timer periodically. It will start again when callback is called
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       t: Pointer to \ref GUI_TIMER_t structure
- * \retval          1: Timer was started ok
- * \retval          0: Timer was not started
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_timer_startperiodic__(GUI_TIMER_t* t) {
@@ -132,8 +128,7 @@ gui_timer_startperiodic__(GUI_TIMER_t* t) {
  * \brief           Stop timer
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       t: Pointer to \ref GUI_TIMER_t structure
- * \retval          1: Timer was stopped ok
- * \retval          0: Timer was not stopped
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_timer_stop__(GUI_TIMER_t* t) {
@@ -148,8 +143,7 @@ gui_timer_stop__(GUI_TIMER_t* t) {
  * \brief           Reset timer to zero
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       t: Pointer to \ref GUI_TIMER_t structure
- * \retval          1: Timer was reseted ok
- * \retval          0: Timer was not reseted
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_timer_reset__(GUI_TIMER_t* t) {

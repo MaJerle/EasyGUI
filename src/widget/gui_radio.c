@@ -196,8 +196,7 @@ gui_radio_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
- * \retval          > 0: \ref GUI_HANDLE_p object of created widget
- * \retval          0: Widget creation failed
+ * \return          \ref GUI_HANDLE_p object of created widget on success, NULL otherwise
  */
 GUI_HANDLE_p
 gui_radio_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
@@ -209,8 +208,7 @@ gui_radio_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_D
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index. This parameter can be a value of \ref GUI_RADIO_COLOR_t enumeration
  * \param[in]       color: Color value
- * \retval          1: Color was set ok
- * \retval          0: Color vas not set
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_radio_setcolor(GUI_HANDLE_p h, GUI_RADIO_COLOR_t index, GUI_Color_t color) {
@@ -223,8 +221,7 @@ gui_radio_setcolor(GUI_HANDLE_p h, GUI_RADIO_COLOR_t index, GUI_Color_t color) {
  * \note            Radio widgets with the same group must be on the same parent widget
  * \param[in,out]   h: Widget handle
  * \param[in]       groupId: Group ID for widget
- * \retval          1: Group set ok
- * \retval          0: Group was not set
+ * \return          1 on success, 0 otherwise
  * \sa              gui_radio_getgroup
  */
 uint8_t
@@ -235,7 +232,7 @@ gui_radio_setgroup(GUI_HANDLE_p h, uint8_t groupId) {
     if (__GR(h)->GroupId != groupId) {
         GUI_HANDLE_p handle;
         
-        /**
+        /*
          * Find radio widgets on the same parent 
          * and with the group the same as desired group ID
          *
@@ -260,7 +257,7 @@ gui_radio_setgroup(GUI_HANDLE_p h, uint8_t groupId) {
 /**
  * \brief           Get radio group for widget
  * \param[in,out]   h: Widget handle
- * \retval          Widget group
+ * \return          Widget group
  * \sa              gui_radio_setgroup
  */
 uint8_t
@@ -279,8 +276,7 @@ gui_radio_getgroup(GUI_HANDLE_p h) {
  * \brief           Set value for widget when pressed
  * \param[in,out]   h: Widget handle
  * \param[in]       value: Value of widget group when specific widget is selected
- * \retval          1: Value set ok
- * \retval          0: Value was not set
+ * \return          1 on success, 0 otherwise
  * \sa              gui_radio_getvalue
  */
 uint8_t
@@ -302,7 +298,7 @@ gui_radio_setvalue(GUI_HANDLE_p h, uint32_t value) {
 /**
  * \brief           Get value for specific widget
  * \param[in,out]   h: Widget handle
- * \retval          Widget value
+ * \return          Widget value
  * \sa              gui_radio_setvalue
  */
 uint32_t
@@ -321,8 +317,7 @@ gui_radio_getvalue(GUI_HANDLE_p h) {
 /**
  * \brief           Set radio widget selected in radio group
  * \param[in,out]   h: Widget handle
- * \retval          1: Widget selected ok
- * \retval          0: Widget was not selected
+ * \return          1 on success, 0 otherwise
  */
 uint8_t gui_radio_setselected(GUI_HANDLE_p h) {
     uint8_t ret;
@@ -340,7 +335,7 @@ uint8_t gui_radio_setselected(GUI_HANDLE_p h) {
  * \brief           Get value of selected widget from widget group
  * \note            If 3 widgets share the same group ID, no matter which widget is used in this function, result will be always the same
  * \param[in,out]   h: Widget handle
- * \retval          Widget selected value
+ * \return          Widget selected value
  */
 uint32_t
 gui_radio_getselectedvalue(GUI_HANDLE_p h) {
@@ -359,8 +354,7 @@ gui_radio_getselectedvalue(GUI_HANDLE_p h) {
  * \brief           Set disabled status to widget
  * \param[in,out]   h: Widget handle
  * \param[in]       disabled: Disabled status
- * \retval          1: Radio was set to desired disabled value
- * \retval          0: Radio was not set to desired disabled value
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_radio_setdisabled(GUI_HANDLE_p h, uint8_t disabled) {
@@ -378,8 +372,7 @@ gui_radio_setdisabled(GUI_HANDLE_p h, uint8_t disabled) {
 /**
  * \brief           Check if Radio is disabled
  * \param[in,out]   h: Widget handle
- * \retval          1: Radio is disabled
- * \retval          0: Radio is not disabled
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_radio_isdisabled(GUI_HANDLE_p h) {

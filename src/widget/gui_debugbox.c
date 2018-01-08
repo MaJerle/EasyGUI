@@ -1,6 +1,6 @@
 /**	
- * \file            gui_listbox.c
- * \brief           List box widget
+ * \file            gui_debugbox.c
+ * \brief           Debug box widget
  */
  
 /*
@@ -30,11 +30,11 @@
  */
 #define GUI_INTERNAL
 #include "gui/gui_private.h"
-#include "widget/gui_listbox.h"
+#include "widget/gui_debugbox.h"
 
-#define __GL(x)             ((GUI_LISTBOX_t *)(x))
+#define __GL(x)             ((GUI_DEBUGBOX_t *)(x))
 
-static uint8_t gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
+static uint8_t gui_debugbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -43,10 +43,6 @@ static const
 GUI_Color_t Colors[] = {
     GUI_COLOR_WIN_BG,
     GUI_COLOR_WIN_TEXT,
-    GUI_COLOR_WIN_SEL_FOC,
-    GUI_COLOR_WIN_SEL_NOFOC,
-    GUI_COLOR_WIN_SEL_FOC_BG,
-    GUI_COLOR_WIN_SEL_NOFOC_BG
 };
 
 /**
@@ -54,40 +50,17 @@ GUI_Color_t Colors[] = {
  */
 static const
 GUI_WIDGET_t Widget = {
-    .Name = _GT("LISTBOX"),                         /*!< Widget name */
-    .Size = sizeof(GUI_LISTBOX_t),                  /*!< Size of widget for memory allocation */
+    .Name = _GT("DEBUGBOX"),                         /*!< Widget name */
+    .Size = sizeof(GUI_DEBUGBOX_t),                  /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = gui_listbox_callback,               /*!< Callback function */
+    .Callback = gui_debugbox_callback,               /*!< Callback function */
     .Colors = Colors,
     .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Define number of colors */
 };
 
-#define o                   ((GUI_LISTBOX_t *)(h))
+#define o                   ((GUI_DEBUGBOX_t *)(h))
 
-/* Get item from listbox entry */
-static GUI_LISTBOX_ITEM_t*
-get_item(GUI_HANDLE_p h, uint16_t index) {
-    uint16_t i = 0;
-    GUI_LISTBOX_ITEM_t* item = 0;
-    
-    if (index >= o->Count) {                        /* Check if valid index */
-        return 0;
-    }
-    
-    if (index == 0) {                               /* Check for first element */
-        return (GUI_LISTBOX_ITEM_t *)gui_linkedlist_getnext_gen(&o->Root, NULL);/* Return first element */
-    } else if (index == o->Count - 1) {
-        return (GUI_LISTBOX_ITEM_t *)gui_linkedlist_getprev_gen(&o->Root, NULL);/* Return last element */
-    }
-    
-    item = (GUI_LISTBOX_ITEM_t *)gui_linkedlist_getnext_gen(&o->Root, NULL);
-    while (i++ < index) {
-        item = (GUI_LISTBOX_ITEM_t *)gui_linkedlist_getnext_gen(NULL, &item->List);
-    }
-    return item;
-}
-
-/* Get item height in listbox */
+/* Get item height in debugbox */
 static uint16_t
 item_height(GUI_HANDLE_p h, uint16_t* offset) {
     uint16_t size = (float)__GH(h)->Font->Size * 1.3f;
@@ -128,45 +101,11 @@ slide(GUI_HANDLE_p h, int16_t dir) {
     }
 }
 
-/* Set selection for widget */
-static void
-set_selection(GUI_HANDLE_p h, int16_t selected) {
-    if (o->Selected != selected) {                  /* Set selected value */
-        o->Selected = selected;
-        gui_widget_callback__(h, GUI_WC_SelectionChanged, NULL, NULL);  /* Notify about selection changed */
-    }                         
-}
-
-/* Increase or decrease selection */
-static void
-inc_selection(GUI_HANDLE_p h, int16_t dir) {
-    if (dir < 0) {                                  /* Slide elements up */
-        if ((o->Selected + dir) < 0) {
-            set_selection(h, 0);
-        } else {
-            set_selection(h, o->Selected + dir);
-        }
-        gui_widget_invalidate__(h);
-    } else if (dir > 0) {
-        if ((o->Selected + dir) > (o->Count - 1)) { /* Slide elements down */
-            set_selection(h, o->Count - 1);
-        } else {
-            set_selection(h, o->Selected + dir);
-        }
-        gui_widget_invalidate__(h);
-    }
-}
-
 /* Check values */
 static void
 check_values(GUI_HANDLE_p h) {
     int16_t mPP = nr_entries_pp(h);                 /* Get number of lines visible in widget at a time */
    
-    if (o->Selected >= 0) {                         /* Check for selected value range */
-        if (o->Selected >= o->Count) {
-            set_selection(h, o->Count - 1);
-        }
-    }
     if (o->VisibleStartIndex < 0) {                 /* Check visible start index position */
         o->VisibleStartIndex = 0;
     } else if (o->VisibleStartIndex > 0) {
@@ -174,37 +113,18 @@ check_values(GUI_HANDLE_p h) {
             if (o->VisibleStartIndex + mPP >= o->Count) {
                 o->VisibleStartIndex = o->Count - mPP;
             }
-        }
-    }
-    
-    if (o->Flags & GUI_FLAG_LISTBOX_SLIDER_AUTO) {  /* Check slider mode */
-        if (o->Count > mPP) {
-            o->Flags |= GUI_FLAG_LISTBOX_SLIDER_ON;
         } else {
-            o->Flags &= ~GUI_FLAG_LISTBOX_SLIDER_ON;
+            o->VisibleStartIndex = 0;
         }
     }
-}
-
-/* Delete list item box by index */
-static uint8_t
-delete_item(GUI_HANDLE_p h, uint16_t index) {
-    GUI_LISTBOX_ITEM_t* item;
     
-    item = get_item(h, index);                      /* Get list item from handle */
-    if (item) {
-        gui_linkedlist_remove_gen(&__GL(h)->Root, &item->List);
-        __GL(h)->Count--;                           /* Decrease count */
-        
-        if (o->Selected == index) {
-            set_selection(h, -1);
+    if (o->Flags & GUI_FLAG_DEBUGBOX_SLIDER_AUTO) {  /* Check slider mode */
+        if (o->Count > mPP) {
+            o->Flags |= GUI_FLAG_DEBUGBOX_SLIDER_ON;
+        } else {
+            o->Flags &= ~GUI_FLAG_DEBUGBOX_SLIDER_ON;
         }
-        
-        check_values(h);                           /* Check widget values */
-        gui_widget_invalidate__(h);
-        return 1;
     }
-    return 0;
 }
 
 /**
@@ -216,16 +136,16 @@ delete_item(GUI_HANDLE_p h, uint16_t index) {
  * \return          1 if command processed, 0 otherwise
  */
 static uint8_t
-gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
+gui_debugbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
 #if GUI_CFG_USE_TOUCH
     static GUI_iDim_t tY;
 #endif /* GUI_CFG_USE_TOUCH */
     
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
-            __GL(h)->Selected = -1;                 /* No selection */
             __GL(h)->SliderWidth = 30;              /* Set slider width */
-            __GL(h)->Flags |= GUI_FLAG_LISTBOX_SLIDER_AUTO;   /* Set auto mode for slider */
+            __GL(h)->MaxCount = 15;                 /* Number of maximal entries for debug */
+            __GL(h)->Flags |= GUI_FLAG_DEBUGBOX_SLIDER_AUTO;   /* Set auto mode for slider */
             return 1;
         }
         case GUI_WC_Draw: {
@@ -238,10 +158,10 @@ gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, G
             height = gui_widget_getheight__(h);     /* Get widget height */
             
             gui_draw_rectangle3d(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
-            gui_draw_filledrectangle(disp, x + 2, y + 2, width - 4, height - 4, gui_widget_getcolor__(h, GUI_LISTBOX_COLOR_BG));
+            gui_draw_filledrectangle(disp, x + 2, y + 2, width - 4, height - 4, gui_widget_getcolor__(h, GUI_DEBUGBOX_COLOR_BG));
             
             /* Draw side scrollbar */
-            if (o->Flags & GUI_FLAG_LISTBOX_SLIDER_ON) {
+            if (o->Flags & GUI_FLAG_DEBUGBOX_SLIDER_ON) {
                 GUI_DRAW_SB_t sb;
                 gui_draw_scrollbar_init(&sb);
                 
@@ -264,7 +184,7 @@ gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, G
             /* Draw text if possible */
             if (__GH(h)->Font && gui_linkedlist_hasentries(&__GL(h)->Root)) {   /* Is first set? */
                 GUI_DRAW_FONT_t f;
-                GUI_LISTBOX_ITEM_t* item;
+                GUI_DEBUGBOX_ITEM_t* item;
                 uint16_t itemHeight;                /* Get item height */
                 uint16_t index = 0;                 /* Start index */
                 GUI_iDim_t tmp;
@@ -285,17 +205,12 @@ gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, G
                     disp->Y2 = y + height - 2;
                 }
                 
-                for (index = 0, item = (GUI_LISTBOX_ITEM_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); item && f.Y <= disp->Y2;
-                        item = (GUI_LISTBOX_ITEM_t *)gui_linkedlist_getnext_gen(NULL, (GUI_LinkedList_t *)item), index++) {
+                for (index = 0, item = (GUI_DEBUGBOX_ITEM_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); item && f.Y <= disp->Y2;
+                        item = (GUI_DEBUGBOX_ITEM_t *)gui_linkedlist_getnext_gen(NULL, (GUI_LinkedList_t *)item), index++) {
                     if (index < o->VisibleStartIndex) { /* Check for start drawing index */
                         continue;
                     }
-                    if (index == __GL(h)->Selected) {
-                        gui_draw_filledrectangle(disp, x + 2, f.Y, width - 3, GUI_MIN(f.Height, itemHeight), gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_LISTBOX_COLOR_SEL_FOC_BG) : gui_widget_getcolor__(h, GUI_LISTBOX_COLOR_SEL_NOFOC_BG));
-                        f.Color1 = gui_widget_isfocused__(h) ? gui_widget_getcolor__(h, GUI_LISTBOX_COLOR_SEL_FOC) : gui_widget_getcolor__(h, GUI_LISTBOX_COLOR_SEL_NOFOC);
-                    } else {
-                        f.Color1 = gui_widget_getcolor__(h, GUI_LISTBOX_COLOR_TEXT);
-                    }
+                    f.Color1 = gui_widget_getcolor__(h, GUI_DEBUGBOX_COLOR_TEXT);
                     gui_draw_writetext(disp, gui_widget_getfont__(h), item->Text, &f);
                     f.Y += itemHeight;
                 }
@@ -305,8 +220,8 @@ gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, G
             return 1;
         }
         case GUI_WC_Remove: {
-            GUI_LISTBOX_ITEM_t* item;
-            while ((item = (GUI_LISTBOX_ITEM_t *)gui_linkedlist_remove_gen(&o->Root, (GUI_LinkedList_t *)gui_linkedlist_getnext_gen(&o->Root, NULL))) != NULL) {
+            GUI_DEBUGBOX_ITEM_t* item;
+            while ((item = (GUI_DEBUGBOX_ITEM_t *)gui_linkedlist_remove_gen(&o->Root, (GUI_LinkedList_t *)gui_linkedlist_getnext_gen(&o->Root, NULL))) != NULL) {
                 GUI_MEMFREE(item);                  /* Free memory */
             }
             return 1;
@@ -335,46 +250,18 @@ gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, G
 #endif /* GUI_CFG_USE_TOUCH */
         case GUI_WC_Click: {
             __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            uint8_t handled = 0;
             GUI_Dim_t width = gui_widget_getwidth__(h); /* Get widget widget */
             GUI_Dim_t height = gui_widget_getheight__(h);   /* Get widget height */
             
-            if (o->Flags & GUI_FLAG_LISTBOX_SLIDER_ON) {
+            if (o->Flags & GUI_FLAG_DEBUGBOX_SLIDER_ON) {
                 if (ts->RelX[0] > (width - o->SliderWidth)) {   /* Touch is inside slider */
                     if (ts->RelY[0] < o->SliderWidth) {
                         slide(h, -1);               /* Slide one value up */
                     } else if (ts->RelY[0] > (height - o->SliderWidth)) {
                         slide(h, 1);                /* Slide one value down */
                     }
-                    handled = 1;
                 }
             }
-            if (!handled && __GH(h)->Font) {
-                uint16_t height = item_height(h, NULL);    /* Get element height */
-                uint16_t tmpSelected;
-                
-                tmpSelected = ts->RelY[0] / height; /* Get temporary selected index */
-                if ((o->VisibleStartIndex + tmpSelected) <= o->Count) {
-                    set_selection(h, o->VisibleStartIndex + tmpSelected);
-                    gui_widget_invalidate__(h);     /* Choose new selection */
-                }
-            }
-            return 1;
-        }
-#if GUI_CFG_USE_KEYBOARD
-        case GUI_WC_KeyPress: {
-            __GUI_KeyboardData_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
-            if (kb->KB.Keys[0] == GUI_KEY_DOWN) {   /* On pressed down */
-                inc_selection(h, 1);                /* Increase selection */
-            } else if (kb->KB.Keys[0] == GUI_KEY_UP) {
-                inc_selection(h, -1);               /* Decrease selection */
-            }
-            return 1;
-        }
-#endif /* GUI_CFG_USE_KEYBOARD */
-        case GUI_WC_IncSelection: {
-            inc_selection(h, GUI_WIDGET_PARAMTYPE_I16(param));  /* Increase selection */
-            GUI_WIDGET_RESULTTYPE_U8(result) = 1;   /* Set operation result */
             return 1;
         }
         default:                                    /* Handle default option */
@@ -385,7 +272,7 @@ gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, G
 #undef o
 
 /**
- * \brief           Create new listbox widget
+ * \brief           Create new debugbox widget
  * \param[in]       id: Widget unique ID to use for identity for callback processing
  * \param[in]       x: Widget X position relative to parent widget
  * \param[in]       y: Widget Y position relative to parent widget
@@ -397,19 +284,19 @@ gui_listbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, G
  * \return          \ref GUI_HANDLE_p object of created widget on success, NULL otherwise
  */
 GUI_HANDLE_p
-gui_listbox_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+gui_debugbox_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
 /**
- * \brief           Set color to listbox
+ * \brief           Set color to debugbox
  * \param[in,out]   h: Widget handle
- * \param[in]       index: Index in array of colors. This parameter can be a value of \ref GUI_LISTBOX_COLOR_t enumeration
+ * \param[in]       index: Index in array of colors. This parameter can be a value of \ref GUI_DEBUGBOX_COLOR_t enumeration
  * \param[in]       color: Actual color code to set
  * \return          1 on success, 0 otherwise
  */
 uint8_t
-gui_listbox_setcolor(GUI_HANDLE_p h, GUI_LISTBOX_COLOR_t index, GUI_Color_t color) {
+gui_debugbox_setcolor(GUI_HANDLE_p h, GUI_DEBUGBOX_COLOR_t index, GUI_Color_t color) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
 }
@@ -421,19 +308,39 @@ gui_listbox_setcolor(GUI_HANDLE_p h, GUI_LISTBOX_COLOR_t index, GUI_Color_t colo
  * \return          1 on success, 0 otherwise
  */
 uint8_t
-gui_listbox_addstring(GUI_HANDLE_p h, const GUI_Char* text) {
-    GUI_LISTBOX_ITEM_t* item;
+gui_debugbox_addstring(GUI_HANDLE_p h, const GUI_Char* text) {
+    GUI_DEBUGBOX_ITEM_t* item;
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     
-    item = GUI_MEMALLOC(sizeof(*item));             /* Allocate memory for entry */
+    item = GUI_MEMALLOC(sizeof(*item) + gui_string_lengthtotal(text) + 1);  /* Allocate memory for entry */
     if (item != NULL) {
         __GUI_ENTER();                              /* Enter GUI */
-        item->Text = (GUI_Char *)text;              /* Add text to entry */
+        item->Text = (void *)((char *)item + sizeof(*item));/* Add text to entry */
+        gui_string_copy(item->Text, text);          /* Copy text */
         gui_linkedlist_add_gen(&__GL(h)->Root, &item->List);/* Add to linked list */
         __GL(h)->Count++;                           /* Increase number of strings */
         
+        /*
+         * Use while loop in case user later changed max
+         * number of entries to lower value.
+         *
+         * In this case we have to remove more than just one element
+         */
+        while (__GL(h)->Count > __GL(h)->MaxCount) {
+            GUI_DEBUGBOX_ITEM_t* firstItem;
+            firstItem = (GUI_DEBUGBOX_ITEM_t *)gui_linkedlist_getnext_gen(&__GL(h)->Root, NULL);
+            if (firstItem != NULL) {
+                gui_linkedlist_remove_gen(&__GL(h)->Root, (GUI_LinkedList_t *)firstItem);
+                GUI_MEMFREE(firstItem);
+                __GL(h)->Count--;
+            } else {
+                break;
+            }
+        }
+        
+        __GL(h)->VisibleStartIndex = __GL(h)->Count;/* Invalidate visible start index */
         check_values(h);                            /* Check values */
         gui_widget_invalidate__(h);                 /* Invalidate widget */
         __GUI_LEAVE();                              /* Leave GUI */
@@ -445,105 +352,23 @@ gui_listbox_addstring(GUI_HANDLE_p h, const GUI_Char* text) {
 }
 
 /**
- * \brief           Set string value to already added string index
- * \param[in,out]   h: Widget handle
- * \param[in]       index: Index (position) on list to set/change text
- * \param[in]       text: Pointer to text to add to list. Only pointer is saved to memory!
- * \return          1 on success, 0 otherwise
- */
-uint8_t
-gui_listbox_setstring(GUI_HANDLE_p h, uint16_t index, const GUI_Char* text) {
-    GUI_LISTBOX_ITEM_t* item;
-    
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    item = get_item(h, index);                      /* Get list item from handle */
-    if (item) {
-        item->Text = (GUI_Char *)text;              /* Set new text */
-        gui_widget_invalidate__(h);                 /* Invalidate widget */
-    }
-
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return item ? 1 : 0;
-}
-
-/**
- * \brief           Delete first string from list
- * \param[in,out]   h: Widget handle
- * \return          1 on success, 0 otherwise
- * \sa              gui_listbox_deletestring, gui_listbox_deletelaststring
- */
-uint8_t
-gui_listbox_deletefirststring(GUI_HANDLE_p h) {
-    uint8_t ret;
-    
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    ret = delete_item(h, 0);                        /* Delete first item */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return ret;
-}
-
-/**
- * \brief           Delete last string from list
- * \param[in,out]   h: Widget handle
- * \return          1 on success, 0 otherwise
- * \sa              gui_listbox_deletestring, gui_listbox_deletefirststring
- */
-uint8_t
-gui_listbox_deletelaststring(GUI_HANDLE_p h) {
-    uint8_t ret;
-    
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    ret = delete_item(h, __GL(h)->Count - 1);       /* Delete last item */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return ret;
-}
-
-/**
- * \brief           Delete specific entry from list
- * \param[in,out]   h: Widget handle
- * \param[in]       index: List index (position) to delete
- * \return          1 on success, 0 otherwise
- * \sa              gui_listbox_deletefirststring, gui_listbox_deletelaststring
- */
-uint8_t
-gui_listbox_deletestring(GUI_HANDLE_p h, uint16_t index) {
-    uint8_t ret;
-    
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    ret = delete_item(h, index);                    /* Delete item */
-
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return ret;
-}
-
-/**
  * \brief           Set auto mode for slider
  * \note            When it is enabled, slider will only appear if needed to show more entries on list
  * \param[in,out]   h: Widget handle
  * \param[in]       autoMode: Auto mode status. Set to 1 for auto mode or 0 for manual mode
  * \return          1 on success, 0 otherwise
- * \sa              gui_listbox_setslidervisibility
+ * \sa              gui_debugbox_setslidervisibility
  */
 uint8_t
-gui_listbox_setsliderauto(GUI_HANDLE_p h, uint8_t autoMode) {
+gui_debugbox_setsliderauto(GUI_HANDLE_p h, uint8_t autoMode) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (autoMode && !(__GL(h)->Flags & GUI_FLAG_LISTBOX_SLIDER_AUTO)) {
-        __GL(h)->Flags |= GUI_FLAG_LISTBOX_SLIDER_AUTO;
+    if (autoMode && !(__GL(h)->Flags & GUI_FLAG_DEBUGBOX_SLIDER_AUTO)) {
+        __GL(h)->Flags |= GUI_FLAG_DEBUGBOX_SLIDER_AUTO;
         gui_widget_invalidate__(h);                 /* Invalidate widget */
-    } else if (!autoMode && (__GL(h)->Flags & GUI_FLAG_LISTBOX_SLIDER_AUTO)) {
-        __GL(h)->Flags &= ~GUI_FLAG_LISTBOX_SLIDER_AUTO;
+    } else if (!autoMode && (__GL(h)->Flags & GUI_FLAG_DEBUGBOX_SLIDER_AUTO)) {
+        __GL(h)->Flags &= ~GUI_FLAG_DEBUGBOX_SLIDER_AUTO;
         gui_widget_invalidate__(h);                 /* Invalidate widget */
     }
     
@@ -557,22 +382,22 @@ gui_listbox_setsliderauto(GUI_HANDLE_p h, uint8_t autoMode) {
  * \param[in,out]   h: Widget handle
  * \param[in]       visible: Slider visible status, 1 or 0
  * \return          1 on success, 0 otherwise
- * \sa              gui_listbox_setsliderauto
+ * \sa              gui_debugbox_setsliderauto
  */
 uint8_t
-gui_listbox_setslidervisibility(GUI_HANDLE_p h, uint8_t visible) {
+gui_debugbox_setslidervisibility(GUI_HANDLE_p h, uint8_t visible) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (!(__GL(h)->Flags & GUI_FLAG_LISTBOX_SLIDER_AUTO)) {
-        if (visible && !(__GL(h)->Flags & GUI_FLAG_LISTBOX_SLIDER_ON)) {
-            __GL(h)->Flags |= GUI_FLAG_LISTBOX_SLIDER_ON;
+    if (!(__GL(h)->Flags & GUI_FLAG_DEBUGBOX_SLIDER_AUTO)) {
+        if (visible && !(__GL(h)->Flags & GUI_FLAG_DEBUGBOX_SLIDER_ON)) {
+            __GL(h)->Flags |= GUI_FLAG_DEBUGBOX_SLIDER_ON;
             gui_widget_invalidate__(h);             /* Invalidate widget */
             ret = 1;
-        } else if (!visible && (__GL(h)->Flags & GUI_FLAG_LISTBOX_SLIDER_ON)) {
-            __GL(h)->Flags &= ~GUI_FLAG_LISTBOX_SLIDER_ON;
+        } else if (!visible && (__GL(h)->Flags & GUI_FLAG_DEBUGBOX_SLIDER_ON)) {
+            __GL(h)->Flags &= ~GUI_FLAG_DEBUGBOX_SLIDER_ON;
             gui_widget_invalidate__(h);             /* Invalidate widget */
             ret = 1;
         }
@@ -589,7 +414,7 @@ gui_listbox_setslidervisibility(GUI_HANDLE_p h, uint8_t visible) {
  * \return          1 on success, 0 otherwise
  */
 uint8_t
-gui_listbox_scroll(GUI_HANDLE_p h, int16_t step) {
+gui_debugbox_scroll(GUI_HANDLE_p h, int16_t step) {
     volatile int16_t start;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
@@ -611,40 +436,20 @@ gui_listbox_scroll(GUI_HANDLE_p h, int16_t step) {
 }
 
 /**
- * \brief           Set selected value
+ * \brief           Set maximal number of items for debugbox
  * \param[in,out]   h: Widget handle
- * \param[in]       selection: Set to -1 to invalidate selection or 0 - count-1 for specific selection 
+ * \param[in]       max_items: Maximal number of items
  * \return          1 on success, 0 otherwise
- * \sa              gui_listbox_getselection
  */
 uint8_t
-gui_listbox_setselection(GUI_HANDLE_p h, int16_t selection) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+gui_debugbox_setmaxitems(GUI_HANDLE_p h, int16_t max_items) {
+    volatile int16_t start;
+    
+    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget && max_items > 0);   /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    set_selection(h, selection);                    /* Set selection */
-    check_values(h);                                /* Check values */
-    gui_widget_invalidate__(h);                     /* Invalidate widget */
+    __GL(h)->MaxCount = max_items;
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return 1;
-}
-
-/**
- * \brief           Get selected value
- * \param[in,out]   h: Widget handle
- * \return          Selection on success, -1 otherwise
- * \sa              gui_listbox_setselection
- */
-int16_t
-gui_listbox_getselection(GUI_HANDLE_p h) {
-    int16_t selection;
-    
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
-    
-    selection = __GL(h)->Selected;                  /* Read selection */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return selection;
+    return 0;
 }

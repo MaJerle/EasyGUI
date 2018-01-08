@@ -168,8 +168,7 @@ gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
- * \retval          > 0: \ref GUI_HANDLE_p object of created widget
- * \retval          0: Widget creation failed
+ * \return          \ref GUI_HANDLE_p object of created widget on success, NULL otherwise
  */
 GUI_HANDLE_p
 gui_button_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
@@ -181,8 +180,7 @@ gui_button_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index. This parameter can be a value of \ref GUI_BUTTON_COLOR_t enumeration
  * \param[in]       color: Color value
- * \retval          1: Color was set ok
- * \retval          0: Color was not set
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_button_setcolor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color) {
@@ -194,8 +192,7 @@ gui_button_setcolor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color)
  * \brief           Set border radius size
  * \param[in,out]   h: Widget handle
  * \param[in]       size: Border radius size
- * \retval          1: Border radius was set ok
- * \retval          0: Border radius was not set
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_button_setborderradius(GUI_HANDLE_p h, GUI_Dim_t size) {

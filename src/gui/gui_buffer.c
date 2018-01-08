@@ -37,7 +37,7 @@
  * \param  Size: Size of buffer in units of bytes
  * \param  *BufferPtr: Pointer to array for buffer storage. Its length should be equal to \param Size parameter.
  *           If NULL is passed as parameter, internal memory management will be used to allocate memory
- * \retval Buffer initialization status:
+ * \return Buffer initialization status:
  *            - 0: Buffer initialized OK
  *            - > 0: Buffer initialization error. Malloc has failed with allocation
  */
@@ -69,7 +69,7 @@ gui_buffer_init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr) {
  * \brief  Free memory for buffer allocated using dynamic memory allocation
  * \note   This function has sense only if dynamic allocation was used for memory buffer
  * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
- * \retval None
+ * \return None
  */
 void 
 gui_buffer_free(GUI_BUFFER_t* Buffer) {
@@ -88,7 +88,7 @@ gui_buffer_free(GUI_BUFFER_t* Buffer) {
  * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \param  *Data: Pointer to data to be written
  * \param  count: Number of elements of type unsigned char to write
- * \retval Number of elements written in buffer 
+ * \return Number of elements written in buffer 
  */
 uint32_t gui_buffer_write(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count) {
 	uint32_t i = 0;
@@ -147,7 +147,7 @@ uint32_t gui_buffer_write(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count
  * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
  * \param  *Data: Pointer to data where read values will be stored
  * \param  count: Number of elements of type unsigned char to read
- * \retval Number of elements read from buffer 
+ * \return Number of elements read from buffer 
  */
 uint32_t
 gui_buffer_read(GUI_BUFFER_t* Buffer, void* Data, uint32_t count) {
@@ -202,7 +202,7 @@ gui_buffer_read(GUI_BUFFER_t* Buffer, void* Data, uint32_t count) {
 /**
  * \brief  Gets number of free elements in buffer 
  * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
- * \retval Number of free elements in buffer
+ * \return Number of free elements in buffer
  */
 uint32_t
 gui_buffer_getfree(GUI_BUFFER_t* Buffer) {
@@ -226,7 +226,7 @@ gui_buffer_getfree(GUI_BUFFER_t* Buffer) {
 /**
  * \brief  Gets number of elements in buffer 
  * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
- * \retval Number of elements in buffer
+ * \return Number of elements in buffer
  */
 uint32_t
 gui_buffer_getfull(GUI_BUFFER_t* Buffer) {
@@ -250,7 +250,7 @@ gui_buffer_getfull(GUI_BUFFER_t* Buffer) {
 /**
  * \brief  Resets (clears) buffer pointers
  * \param  *Buffer: Pointer to \ref GUI_BUFFER_t structure
- * \retval None
+ * \return None
  */
 void
 gui_buffer_reset(GUI_BUFFER_t* Buffer) {

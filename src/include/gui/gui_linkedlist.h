@@ -77,7 +77,7 @@ uint8_t gui_linkedlist_multi_find_remove(GUI_LinkedListRoot_t* root, void* eleme
 /**
  * \brief           Checks if linked list has any entries
  * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \retval          0: No entries
+ * \return          1 on success, 0 otherwise No entries
  * \retval          > 0: Has entries
  * \hideinitializer
  */
@@ -97,8 +97,8 @@ uint8_t gui_linkedlist_multi_find_remove(GUI_LinkedListRoot_t* root, void* eleme
  * \brief           Check if widget is first child element in linked list
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle
- * \retval          1: Widget is first child
- * \retval          0: Widget is not first child
+ * \return          1 on success, 0 otherwise Widget is first child
+ * \return          1 on success, 0 otherwise Widget is not first child
  * \sa              gui_linkedlist_iswidgetlast
  * \hideinitializer
  */
@@ -108,8 +108,8 @@ uint8_t gui_linkedlist_multi_find_remove(GUI_LinkedListRoot_t* root, void* eleme
  * \brief           Check if widget is last child element in linked list
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle
- * \retval          1: Widget is last child
- * \retval          0: Widget is not last child
+ * \return          1 on success, 0 otherwise Widget is last child
+ * \return          1 on success, 0 otherwise Widget is not last child
  * \sa              gui_linkedlist_iswidgetfirst
  * \hideinitializer
  */

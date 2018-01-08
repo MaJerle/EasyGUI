@@ -519,8 +519,7 @@ gui_dropdown_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
- * \retval          > 0: \ref GUI_HANDLE_p object of created widget
- * \retval          0: Widget creation failed
+ * \return          \ref GUI_HANDLE_p object of created widget on success, NULL otherwise
  */
 GUI_HANDLE_p
 gui_dropdown_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
@@ -532,8 +531,7 @@ gui_dropdown_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GU
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Index in array of colors. This parameter can be a value of \ref GUI_DROPDOWN_COLOR_t enumeration
  * \param[in]       color: Actual color code to set
- * \retval          1: Color was set ok
- * \retval          0: Color was not set
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_dropdown_setcolor(GUI_HANDLE_p h, GUI_DROPDOWN_COLOR_t index, GUI_Color_t color) {
@@ -545,8 +543,7 @@ gui_dropdown_setcolor(GUI_HANDLE_p h, GUI_DROPDOWN_COLOR_t index, GUI_Color_t co
  * \brief           Add a new string to list box
  * \param[in,out]   h: Widget handle
  * \param[in]       text: Pointer to text to add to list. Only pointer is saved to memory!
- * \retval          1: String added to the end
- * \retval          0: String not added
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_dropdown_addstring(GUI_HANDLE_p h, const GUI_Char* text) {
@@ -576,8 +573,7 @@ gui_dropdown_addstring(GUI_HANDLE_p h, const GUI_Char* text) {
  * \brief           Set opening direction for dropdown list
  * \param[in,out]   h: Widget handle
  * \param[in]       dir: Opening direction. This parameter can be a value of \ref GUI_DROPDOWN_OPENDIR_t enumeration
- * \retval          1: Open direction has been changed 
- * \retval          0: Open direction has not been changed
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_dropdown_setopendirection(GUI_HANDLE_p h, GUI_DROPDOWN_OPENDIR_t dir) {
@@ -605,8 +601,7 @@ gui_dropdown_setopendirection(GUI_HANDLE_p h, GUI_DROPDOWN_OPENDIR_t dir) {
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Index (position) on list to set/change text
  * \param[in]       text: Pointer to text to add to list. Only pointer is saved to memory!
- * \retval          1: String changed
- * \retval          0: String not changed
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_dropdown_setstring(GUI_HANDLE_p h, uint16_t index, const GUI_Char* text) {
@@ -629,8 +624,7 @@ gui_dropdown_setstring(GUI_HANDLE_p h, uint16_t index, const GUI_Char* text) {
 /**
  * \brief           Delete first string from list
  * \param[in,out]   h: Widget handle
- * \retval          1: String deleted
- * \retval          0: String not deleted
+ * \return          1 on success, 0 otherwise
  * \sa              gui_dropdown_deletestring, gui_dropdown_deletelaststring
  */
 uint8_t
@@ -649,8 +643,7 @@ gui_dropdown_deletefirststring(GUI_HANDLE_p h) {
 /**
  * \brief           Delete last string from list
  * \param[in,out]   h: Widget handle
- * \retval          1: String deleted
- * \retval          0: String not deleted
+ * \return          1 on success, 0 otherwise
  * \sa              gui_dropdown_deletestring, gui_dropdown_deletefirststring
  */
 uint8_t
@@ -670,8 +663,7 @@ gui_dropdown_deletelaststring(GUI_HANDLE_p h) {
  * \brief           Delete specific entry from list
  * \param[in,out]   h: Widget handle
  * \param[in]       index: List index (position) to delete
- * \retval          1: String deleted
- * \retval          0: String not deleted
+ * \return          1 on success, 0 otherwise
  * \sa              gui_dropdown_deletefirststring, gui_dropdown_deletelaststring
  */
 uint8_t
@@ -692,8 +684,7 @@ gui_dropdown_deletestring(GUI_HANDLE_p h, uint16_t index) {
  * \note            When it is enabled, slider will only appear if needed to show more entries on list
  * \param[in,out]   h: Widget handle
  * \param[in]       autoMode: Auto mode status. Set to 1 for auto mode or 0 for manual mode
- * \retval          1: Set OK
- * \retval          0: Set ERROR
+ * \return          1 on success, 0 otherwise
  * \sa              gui_dropdown_setslidervisibility
  */
 uint8_t
@@ -718,8 +709,7 @@ gui_dropdown_setsliderauto(GUI_HANDLE_p h, uint8_t autoMode) {
  * \note            Slider must be in manual mode in order to get this to work
  * \param[in,out]   h: Widget handle
  * \param[in]       visible: Slider visible status, 1 or 0
- * \retval          1: Set to desired value
- * \retval          0: Not set to desired value
+ * \return          1 on success, 0 otherwise
  * \sa              gui_dropdown_setsliderauto
  */
 uint8_t
@@ -749,8 +739,7 @@ gui_dropdown_setslidervisibility(GUI_HANDLE_p h, uint8_t visible) {
  * \brief           Scroll list if possible
  * \param[in,out]   h: Widget handle
  * \param[in]       step: Step to scroll. Positive step will scroll up, negative will scroll down
- * \retval          1: Scroll successful
- * \retval          0: Scroll not successful
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_dropdown_scroll(GUI_HANDLE_p h, int16_t step) {
@@ -778,8 +767,7 @@ gui_dropdown_scroll(GUI_HANDLE_p h, int16_t step) {
  * \brief           Set selected value
  * \param[in,out]   h: Widget handle
  * \param[in]       selection: Set to -1 to invalidate selection or 0 - count-1 for specific selection 
- * \retval          1: Selection changed
- * \retval          0: Selection not changed
+ * \return          1 on success, 0 otherwise
  * \sa              gui_dropdown_getselection
  */
 uint8_t
@@ -798,7 +786,7 @@ gui_dropdown_setselection(GUI_HANDLE_p h, int16_t selection) {
 /**
  * \brief           Get selected value
  * \param[in,out]   h: Widget handle
- * \retval          Selection number or -1 if no selection
+ * \return          Selection number or -1 if no selection
  * \sa              gui_dropdown_setselection
  */
 int16_t

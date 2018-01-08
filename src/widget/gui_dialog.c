@@ -130,8 +130,7 @@ gui_dialog_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
  * \param[in]       func: Widget create function used as dialog base. In most cases \ref gui_container_create will be used to create empty container
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
- * \retval          > 0: \ref GUI_HANDLE_p object of created widget
- * \retval          0: Widget creation failed
+ * \return          \ref GUI_HANDLE_p object of created widget on success, NULL otherwise
  */
 GUI_HANDLE_p
 gui_dialog_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
@@ -165,8 +164,7 @@ gui_dialog_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_
  * \param[in]       func: Widget create function used as dialog base. In most cases \ref gui_container_create will be used to create empty container
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
- * \retval          -1: Widget creation fail
- * \retval          int: Value passed to \ref gui_dialog_dismiss when dialog is dismissed
+ * \return          Value passed to \ref gui_dialog_dismiss when dialog is dismissed on success, -1 otherwise
  */
 int
 gui_dialog_createblocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
@@ -205,8 +203,7 @@ gui_dialog_createblocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t wid
  * \brief           Dismiss (close) dialog with status
  * \param[in]       h: Widget handle
  * \param[in]       status: Dismiss status. Do not use value -1 as it is reserved for error detection
- * \retval          1: Dialog was dismissed ok
- * \retval          0: Dialog was not dismissed
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_dialog_dismiss(GUI_HANDLE_p h, int status) {

@@ -102,8 +102,8 @@ extern "C" {
  * \brief           Checks if inserted pointer is valid widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Input pointer to test for widget
- * \retval          1: Pointer is widget
- * \retval          0: Pointer is not widget
+ * \return          1 on success, 0 otherwise Pointer is widget
+ * \return          1 on success, 0 otherwise Pointer is not widget
  * \hideinitializer
  */
 #define gui_widget_iswidget__(h)        ((h != NULL) && __GH(h)->Footprint == GUI_WIDGET_FOOTPRINT)
@@ -282,7 +282,7 @@ extern "C" {
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       flag: Flag(s) to check
- * \retval          0: None flag is set
+ * \return          1 on success, 0 otherwise None flag is set
  * \retval          > 0: At least one flag is set
  * \sa              __gui_widget_setflag, __gui_widget_clrflag
  * \hideinitializer
@@ -294,7 +294,7 @@ extern "C" {
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \param[in]       flag: Flag(s) to check
- * \retval          0: None flag is set
+ * \return          1 on success, 0 otherwise None flag is set
  * \retval          > 0: At least one flag is set
  * \sa              __gui_widget_setflag, __gui_widget_clrflag
  * \hideinitializer
@@ -325,8 +325,8 @@ extern "C" {
  * \brief           Checks if widget is expanded to maximum relative to parent widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
- * \retval          1: Widget is expandend
- * \retval          0: Widget is not expanded
+ * \return          1 on success, 0 otherwise Widget is expandend
+ * \return          1 on success, 0 otherwise Widget is not expanded
  * \hideinitializer
  */
 #define gui_widget_isexpanded__(h)                  (!!gui_widget_getflag__(h, GUI_FLAG_EXPANDED))
@@ -335,8 +335,8 @@ extern "C" {
  * \brief           Checks if widget has enabled 3D mode
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
- * \retval          1: Widget has 3D mode
- * \retval          0: Widget doesn't have 3D mode
+ * \return          1 on success, 0 otherwise Widget has 3D mode
+ * \return          1 on success, 0 otherwise Widget doesn't have 3D mode
  * \hideinitializer
  */
 #define gui_widget_is3d__(h)                        (!!gui_widget_getflag__(h, GUI_FLAG_3D))
@@ -357,8 +357,8 @@ extern "C" {
  * \param[in]       cmd: Callback command. This parameter can be a value of \ref GUI_WC_t enumeration
  * \param[in]       param: Pointer to parameters if any for this command
  * \param[out]      result: Pointer to result pointer where calback can store result
- * \retval          1: Command processed by widget
- * \retval          0: Command was not processed by widget
+ * \return          1 on success, 0 otherwise Command processed by widget
+ * \return          1 on success, 0 otherwise Command was not processed by widget
  * \hideinitializer
  */
 #define gui_widget_callback__(h, cmd, param, result)    (__GH(h)->Callback ? __GH(h)->Callback(h, cmd, param, result) : __GH(h)->Widget->Callback(h, cmd, param, result))
@@ -442,8 +442,8 @@ extern "C" {
  * \brief           Check if widget is visible in any way, either with transparency or hidden flag
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
- * \retval          1: Widget is visible
- * \retval          0: Widget is not visible
+ * \return          1 on success, 0 otherwise Widget is visible
+ * \return          1 on success, 0 otherwise Widget is not visible
  * \sa              __gui_widget_ishidden
  * \hideinitializer
  */
@@ -457,8 +457,8 @@ extern "C" {
  * \brief           Check if widget is hidden
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
- * \retval          1: Widget is hidden
- * \retval          0: Widget is not hidden
+ * \return          1 on success, 0 otherwise Widget is hidden
+ * \return          1 on success, 0 otherwise Widget is not hidden
  * \sa              __gui_widget_isvisible
  * \hideinitializer
  */
@@ -468,8 +468,8 @@ extern "C" {
  * \brief           Check if widget allows children widgets
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
- * \retval          1: Widget allows children widgets
- * \retval          0: Widget does not allow children widgets
+ * \return          1 on success, 0 otherwise Widget allows children widgets
+ * \return          1 on success, 0 otherwise Widget does not allow children widgets
  * \hideinitializer
  */
 #define gui_widget_allowchildren__(h)               (!!gui_widget_getcoreflag__(h, GUI_FLAG_WIDGET_ALLOW_CHILDREN))
@@ -478,8 +478,8 @@ extern "C" {
  * \brief           Check if widget is base for dialog
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
- * \retval          1: Widget is dialog base
- * \retval          0: Widget is not dialog
+ * \return          1 on success, 0 otherwise Widget is dialog base
+ * \return          1 on success, 0 otherwise Widget is not dialog
  * \hideinitializer
  */
 #define gui_widget_isdialogbase__(h)                (!!gui_widget_getcoreflag__(h, GUI_FLAG_WIDGET_DIALOG_BASE) || !!gui_widget_getflag__(h, GUI_FLAG_WIDGET_DIALOG_BASE))
@@ -511,8 +511,8 @@ extern "C" {
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
- * \retval          1: Widget is visible and has transparency
- * \retval          0: Widget is either hidden or with no transparency
+ * \return          1 on success, 0 otherwise Widget is visible and has transparency
+ * \return          1 on success, 0 otherwise Widget is either hidden or with no transparency
  */
 #define gui_widget_istransparent__(h)               (gui_widget_isvisible__(h) && gui_widget_gettransparency__(h) < 0xFF)
 

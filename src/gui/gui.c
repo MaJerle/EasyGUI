@@ -719,7 +719,7 @@ gui_thread(void * const argument) {
  * \brief           Initializes GUI stack.
  *                    In addition, it prepares memory for work with widgets on later usage and
  *                    calls low-layer functions to initialize LCD or custom driver for LCD
- * \retval          Member of \ref guir_t enumeration
+ * \return          Member of \ref guir_t enumeration
  */
 guir_t
 gui_init(void) {
@@ -777,7 +777,7 @@ gui_init(void) {
 /**
  * \brief           Processes all drawing operations for GUI
  * \note            When GUI_CFG_OS is set to 0, then user has to call this function in main loop, otherwise it is processed in separated thread by GUI (GUI_CFG_OS != 0)
- * \retval          Number of jobs done in current call
+ * \return          Number of jobs done in current call
  */
 int32_t
 gui_process(void) {

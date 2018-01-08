@@ -191,8 +191,7 @@ gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
- * \retval          > 0: \ref GUI_HANDLE_p object of created widget
- * \retval          0: Widget creation failed
+ * \return          \ref GUI_HANDLE_p object of created widget on success, NULL otherwise
  */
 GUI_HANDLE_p
 gui_edittext_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
@@ -204,8 +203,7 @@ gui_edittext_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GU
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index. This parameter can be a value of \ref GUI_EDITTEXT_COLOR_t enumeration
  * \param[in]       color: Color value
- * \retval          1: Color was set ok
- * \retval          0: Color was not set
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_edittext_setcolor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color) {
@@ -218,8 +216,7 @@ gui_edittext_setcolor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t co
  * \note            When multiline is enabled, vertical text alignment is always top positioned
  * \param[in,out]   h: Widget handle
  * \param[in]       multiline: Set to 1 to enable multiline or 0 to disable
- * \retval          1: Color was set ok
- * \retval          0: Color was not set
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_edittext_setmultiline(GUI_HANDLE_p h, uint8_t multiline) {
@@ -231,8 +228,7 @@ gui_edittext_setmultiline(GUI_HANDLE_p h, uint8_t multiline) {
  * \brief           Set vertical align for text inside text box
  * \param[in,out]   h: Widget handle
  * \param[in]       align: Vertical align. This parameter can be a value of \ref GUI_EDITTEXT_VALIGN_t enumeration
- * \retval          1: Align was set ok
- * \retval          0: Align was not set
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_edittext_setvalign(GUI_HANDLE_p h, GUI_EDITTEXT_VALIGN_t align) {
@@ -244,8 +240,7 @@ gui_edittext_setvalign(GUI_HANDLE_p h, GUI_EDITTEXT_VALIGN_t align) {
  * \brief           Set horizontal align for text inside text box
  * \param[in,out]   h: Widget handle
  * \param[in]       align: Vertical align. This parameter can be a value of \ref GUI_EDITTEXT_HALIGN_t enumeration
- * \retval          1: Align was set ok
- * \retval          0: Align was not set
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_edittext_sethalign(GUI_HANDLE_p h, GUI_EDITTEXT_HALIGN_t align) {

@@ -374,8 +374,7 @@ graph_invalidate(GUI_GRAPH_DATA_p data) {
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for create procedure
- * \retval          > 0: \ref GUI_HANDLE_p object of created widget
- * \retval          0: Widget creation failed
+ * \return          \ref GUI_HANDLE_p object of created widget on success, NULL otherwise
  */
 GUI_HANDLE_p
 gui_graph_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
@@ -387,8 +386,7 @@ gui_graph_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_D
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index. This parameter can be a value of \ref GUI_GRAPH_COLOR_t enumeration
  * \param[in]       color: Color value
- * \retval          1: Color was set ok
- * \retval          0: Color was not set
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_graph_setcolor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t color) {
@@ -400,8 +398,7 @@ gui_graph_setcolor(GUI_HANDLE_p h, GUI_GRAPH_COLOR_t index, GUI_Color_t color) {
  * \brief           Set minimal X value of plot
  * \param[in,out]   h: Widget handle
  * \param[in]       v: New minimal X value
- * \retval          1: Value was set ok
- * \retval          0: Value was not set
+ * \return          1 on success, 0 otherwise
  * \sa              gui_graph_setmaxx, gui_graph_setminy, gui_graph_setmaxy
  */
 uint8_t
@@ -414,8 +411,7 @@ gui_graph_setminx(GUI_HANDLE_p h, float v) {
  * \brief           Set maximal X value of plot
  * \param[in,out]   h: Widget handle
  * \param[in]       v: New maximal X value
- * \retval          1: Value was set ok
- * \retval          0: Value was not set
+ * \return          1 on success, 0 otherwise
  * \sa              gui_graph_setminx, gui_graph_setminy, gui_graph_setmaxy
  */
 uint8_t
@@ -428,8 +424,7 @@ gui_graph_setmaxx(GUI_HANDLE_p h, float v) {
  * \brief           Set minimal Y value of plot
  * \param[in,out]   h: Widget handle
  * \param[in]       v: New minimal Y value
- * \retval          1: Value was set ok
- * \retval          0: Value was not set
+ * \return          1 on success, 0 otherwise
  * \sa              gui_graph_setminx, gui_graph_setmaxx, gui_graph_setmaxy
  */
 uint8_t
@@ -442,8 +437,7 @@ gui_graph_setminy(GUI_HANDLE_p h, float v) {
  * \brief           Set maximal Y value of plot
  * \param[in,out]   h: Widget handle
  * \param[in]       v: New maximal Y value
- * \retval          1: Value was set ok
- * \retval          0: Value was not set
+ * \return          1 on success, 0 otherwise
  * \sa              gui_graph_setminx, gui_graph_setmaxx, gui_graph_setminy
  */
 uint8_t
@@ -455,8 +449,7 @@ gui_graph_setmaxy(GUI_HANDLE_p h, float v) {
 /**
  * \brief           Reset zoom of widget
  * \param[in,out]   h: Widget handle
- * \retval          1: Zoom was reseted
- * \retval          0: Zoom was not reseted
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_graph_zoomreset(GUI_HANDLE_p h) {
@@ -467,11 +460,10 @@ gui_graph_zoomreset(GUI_HANDLE_p h) {
 /**
  * \brief           Zoom widget display data
  * \param[in,out]   h: Widget handle
- * \param[in]       zoom: Zoom coeficient. Use 2.0f to double zoom, use 0.5 to unzoom 2 times, etc.
- * \param[in]       x: X coordinate on plot where zoom focus will apply. Valid value between 0 and 1 relative to width area. Use 0.5 to zoom to center
- * \param[in]       y: Y coordinate on plot where zoom focus will apply. Valid value between 0 and 1 relative to height area. Use 0.5 to zoom to center
- * \retval          1: Zoom was reseted
- * \retval          0: Zoom was not reseted
+ * \param[in]       zoom: Zoom coeficient. Use 2.0f to double zoom, use 0.5f to unzoom 2 times, etc.
+ * \param[in]       x: X coordinate on plot where zoom focus will apply. Valid value between 0 and 1 relative to width area. Use 0.5f to zoom into center area
+ * \param[in]       y: Y coordinate on plot where zoom focus will apply. Valid value between 0 and 1 relative to height area. Use 0.5f to zoom into center area
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_graph_zoom(GUI_HANDLE_p h, float zoom, float x, float y) {
@@ -488,8 +480,7 @@ gui_graph_zoom(GUI_HANDLE_p h, float zoom, float x, float y) {
  * \brief           Attach new data object to graph widget
  * \param[in,out]   h: Graph widget handle
  * \param[in]       data: Data object handle
- * \retval          1: Attaching was successful
- * \retval          0: Attaching failed
+ * \return          1 on success, 0 otherwise
  * \sa              gui_graph_detachdata
  */
 uint8_t
@@ -497,13 +488,13 @@ gui_graph_attachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    /**
+    /*
      * Linked list of data plots for this graph
      */
     gui_linkedlist_multi_add_gen(&__GG(h)->Root, data);
 
 #if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
-    /**
+    /*
      * Linked list of graphs for this data plot
      * This linked list is not on top!
      * Must subtract list element offset when using graphs from data
@@ -519,8 +510,7 @@ gui_graph_attachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
  * \brief           Detach existing data object from graph widget
  * \param[in,out]   h: Graph widget handle
  * \param[in]       data: Data object handle
- * \retval          1: Detaching was successful
- * \retval          0: Detaching failed
+ * \return          1 on success, 0 otherwise
  * \sa              gui_graph_attachdata
  */
 uint8_t
@@ -528,14 +518,14 @@ gui_graph_detachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
     __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget && data);    /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    /**
+    /*
      * Linked list of data plots for this graph
      * Remove data from graph's linked list
      */
     gui_linkedlist_multi_find_remove(&__GG(h)->Root, data);
 
 #if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
-    /**
+    /*
      * Linked list of graphs for this data plot
      * Remove graph from data linked list
      */
@@ -546,10 +536,6 @@ gui_graph_detachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
     return 1;
 }
 
-/*************************/
-/* GRAPH DATA functions  */
-/*************************/
-
 /**
  * \brief           Creates data object according to specific type
  * \note            Data type used in graph widget is 2-byte (short int)
@@ -557,8 +543,7 @@ gui_graph_detachdata(GUI_HANDLE_p h, GUI_GRAPH_DATA_p data) {
  * \note            When \arg GUI_GRAPH_TYPE_XY is used, 2 * length * sizeof(short int) of bytes is allocated for X and Y value
  * \param[in]       type: Type of data. According to selected type different allocation size will occur
  * \param[in]       length: Number of points on plot.
- * \retval          > 0: \ref GUI_GRAPH_DATA_p object of created widget
- * \retval          0: Data creation failed
+ * \return          Graph data handle on success, NULL otherwise
  */
 GUI_GRAPH_DATA_p
 gui_graph_data_create(GUI_GRAPH_TYPE_t type, size_t length) {
@@ -589,8 +574,7 @@ gui_graph_data_create(GUI_GRAPH_TYPE_t type, size_t length) {
  * \param[in]       data: Data object handle
  * \param[in]       x: X position for point. Used only in case data type is \ref GUI_GRAPH_TYPE_XY, otherwise it is ignored
  * \param[in]       y: Y position for point. Always used no matter of data type
- * \retval          1: Value was added to data object ok
- * \retval          0: Value was not added to data object
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_graph_data_addvalue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y) {
@@ -621,8 +605,7 @@ gui_graph_data_addvalue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y) {
  * \brief           Set color for graph data
  * \param[in,out]   data: Pointer to \ref GUI_GRAPH_DATA_p structure with valid data
  * \param[in]       color: New color for data
- * \retval          1: New color set ok
- * \retval          0: New color was not set
+ * \return          1 on success, 0 otherwise
  */
 uint8_t
 gui_graph_data_setcolor(GUI_GRAPH_DATA_p data, GUI_Color_t color) {

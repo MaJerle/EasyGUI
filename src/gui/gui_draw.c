@@ -685,7 +685,7 @@ gui_draw_setpixel(const GUI_Display_t* disp, GUI_iDim_t x, GUI_iDim_t y, GUI_Col
  * \param[in,out]   *disp: Pointer to \ref GUI_Display_t structure for display operations
  * \param[in]       x: X position on LCD
  * \param[in]       y: Y position on LCD
- * \retval          Pixel color at desired position
+ * \return          Pixel color at desired position
  * \sa              gui_draw_setpixel
  */
 GUI_Color_t
