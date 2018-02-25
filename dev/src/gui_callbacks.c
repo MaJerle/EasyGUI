@@ -36,6 +36,7 @@ gui_container_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param,
                 gui_container_setcolor(h, GUI_CONTAINER_COLOR_BG, GUI_COLOR_LIGHTGRAY);
             }
             if (GUI_ID_CONTAINER_STATUS == id) {
+                gui_textview_create(GUI_ID_TEXTVIEW_CPU_USAGE, 10, 0, 150, 40, h, gui_textview_callback, NULL);
                 gui_textview_create(GUI_ID_TEXTVIEW_TIME, width - 50, 0, 46, 40, h, gui_textview_callback, NULL);
                 gui_image_create(GUI_ID_IMAGE_WIFI_STATUS, width - 100 + 4, 4, 32, 32, h, gui_image_callback, 0);
                 gui_image_create(GUI_ID_IMAGE_CONSOLE, width - 140 + 4, 4, 32, 32, h, gui_image_callback, 0);
@@ -45,6 +46,7 @@ gui_container_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param,
                 gui_button_create(GUI_ID_BUTTON_WIFI_RELOAD, 2, 2, 2, 2, h, gui_button_callback, 0);
                 gui_button_create(GUI_ID_BUTTON_WIFI_CONNECT, 2, 2, 2, 2, h, gui_button_callback, 0);
                 gui_edittext_create(GUI_ID_EDITTEXT_WIFI_PASSWORD, 2, 2, 2, 2, h, gui_edittext_callback, 0);
+                gui_textview_create(GUI_ID_TEXTVIEW_IP_ADDR, 2, 2, 2, 2, h, gui_textview_callback, NULL);
             } else if (GUI_ID_CONTAINER_LOG == id) {
                 gui_debugbox_create(GUI_ID_DEBUGBOX_LOG, 2, 2, 2, 2, h, gui_debugbox_callback, 0);
             }
@@ -112,6 +114,17 @@ gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
                 gui_textview_sethalign(h, GUI_TEXTVIEW_HALIGN_RIGHT);
                 gui_textview_setcolor(h, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_TRANS);
                 gui_widget_settext(h, _GT("15:55"));
+            } else if (id == GUI_ID_TEXTVIEW_CPU_USAGE) {
+                gui_textview_setvalign(h, GUI_TEXTVIEW_VALIGN_CENTER);
+                gui_textview_sethalign(h, GUI_TEXTVIEW_HALIGN_LEFT);
+                gui_textview_setcolor(h, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_TRANS);
+                gui_widget_settext(h, _GT("EasyGUI by TM"));
+            } else if (id == GUI_ID_TEXTVIEW_IP_ADDR) {
+                gui_textview_setcolor(h, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_TRANS);
+                gui_widget_setpositionpercent(h, 50.5f, 45.5f);
+                gui_widget_setsizepercent(h, 49.0f, 10.0f);
+                gui_widget_alloctextmemory(h, 24);
+                gui_widget_settext(h, _GT("IP: not connected"));
             }
         }
         default:
@@ -141,8 +154,6 @@ gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
                 /* Set columns */
                 gui_listview_addcolumn(h, _GT("Access point"), 300);
                 gui_listview_addcolumn(h, _GT("Security"), 100);
-                
-                list_access_points();           /* Start scanning access points */
             }
             break;
         }
@@ -150,7 +161,6 @@ gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
             int16_t sel = gui_listview_getselection(h);
             if (sel >= 0 && id == GUI_ID_LISTVIEW_WIFI_APS) {
                 esp_ecn_t ecn = access_points[sel].ecn;
-                char* ssid = access_points[sel].ssid;
                 
                 tmp = gui_widget_getbyid(GUI_ID_EDITTEXT_WIFI_PASSWORD);    /* Get password edit text */
                 if (tmp != NULL) {
@@ -175,15 +185,13 @@ uint8_t
 gui_debugbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     GUI_ID_t id;
     uint8_t res;
-    GUI_Dim_t width;
     
     id = gui_widget_getid(h);                   /* Get widget ID */
-    width = gui_widget_getwidth(h);             /* Get widget callback */
     
     res = gui_widget_processdefaultcallback(h, ctrl, param, result);
     switch (ctrl) {
         case GUI_WC_Init: {                     /* Widget just created? */
-            if (GUI_ID_DEBUGBOX_LOG == id) {
+            if (id == GUI_ID_DEBUGBOX_LOG) {
                 gui_widget_setpositionpercent(h, 0.0f, 0.0f);
                 gui_widget_setsizepercent(h, 100.0f, 100.0f);
                 gui_widget_setfont(h, &GUI_Font_Arial_Bold_18);
@@ -214,13 +222,13 @@ gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
     switch (ctrl) {
         case GUI_WC_Init: {                     /* Init widget callback */
             if (id == GUI_ID_BUTTON_WIFI_RELOAD) {
-                gui_widget_setpositionpercent(h, 50.5f, 85.5f);
+                gui_widget_setpositionpercent(h, 50.5f, 30.5f);
                 gui_widget_setsizepercent(h, 49.0f, 14.0f);
                 gui_widget_settext(h, _GT("Scan access points"));
             } else if (id == GUI_ID_BUTTON_WIFI_CONNECT) {
-                gui_widget_setpositionpercent(h, 50.5f, 70.5f);
+                gui_widget_setpositionpercent(h, 50.5f, 15.5f);
                 gui_widget_setsizepercent(h, 49.0f, 14.0f);
-                if (esp_sta_has_ip() == espOK) {
+                if (esp_sta_is_joined()) {
                     gui_widget_settext(h, _GT("Disconnect"));
                 } else {
                     gui_widget_settext(h, _GT("Connect"));
@@ -232,11 +240,11 @@ gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
             if (id == GUI_ID_BUTTON_WIFI_RELOAD) {
                 list_access_points();           /* List access points */
                 console_write("Listing access points...\r\n");
-            } else if (GUI_ID_BUTTON_WIFI_CONNECT == id) {
+            } else if (id == GUI_ID_BUTTON_WIFI_CONNECT) {
                 static GUI_Char password[24] = {0}, ssid[24] = {0};
                 int16_t selection = -1;
                 
-                if (esp_sta_has_ip() != espOK) {    /* If there is no AP, try to join */
+                if (!esp_sta_is_joined()) {     /* If there is no AP, try to join */
                     /* Get selection from listview of access points */
                     tmp = gui_widget_getbyid(GUI_ID_LISTVIEW_WIFI_APS);
                     if (tmp != NULL) {
@@ -276,7 +284,6 @@ uint8_t
 gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
     GUI_ID_t id;
     uint8_t res;
-    GUI_HANDLE_p tmp;
     
     id = gui_widget_getid(h);                   /* Get widget ID */
     
@@ -284,10 +291,10 @@ gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
     switch (ctrl) {
         case GUI_WC_Init: {                     /* Init widget callback */
             if (id == GUI_ID_EDITTEXT_WIFI_PASSWORD) {
-                gui_widget_setpositionpercent(h, 50.5f, 55.5f);
+                gui_widget_setpositionpercent(h, 50.5f, 0.5f);
                 gui_widget_setsizepercent(h, 49.0f, 14.0f);
                 gui_widget_alloctextmemory(h, 128);
-                gui_widget_settext(h, _GT("slikop2012"));
+                gui_widget_settext(h, _GT("majerle_internet"));
             }
             break;
         }

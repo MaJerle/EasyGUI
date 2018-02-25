@@ -55,12 +55,13 @@
 #include "widget/gui_list_container.h"
 #include "gui/gui_keyboard.h"
 #include "gui/gui_lcd.h"
+#include "netconn_server.h"
 
 #include "tm_stm32_touch.h"
 
 /* ESP library */
 #include "esp/esp.h"
-#include "apps/esp_mqtt_client.h"
+#include "esp/apps/esp_mqtt_client.h"
 
 #include "gui_app.h"
 #include "esp_app.h"
@@ -101,6 +102,9 @@ extern size_t access_points_count;
 /* ESP APP based functions */
 void    list_access_points(void);
 void    enable_wifi_access_point(void);
+espr_t  mqtt_send_data(const void* data, size_t len);
+espr_t  start_server(void);
+void    lcd_update_up(esp_ip_t* ip);
 
 /* MQTT client */
 extern mqtt_client_t* mqtt_client;
@@ -116,6 +120,8 @@ extern mqtt_client_t* mqtt_client;
 #define GUI_ID_IMAGE_LOG                    (GUI_ID_USER + 0x0103)
 
 #define GUI_ID_TEXTVIEW_TIME                (GUI_ID_USER + 0x0201)
+#define GUI_ID_TEXTVIEW_CPU_USAGE           (GUI_ID_USER + 0x0202)
+#define GUI_ID_TEXTVIEW_IP_ADDR             (GUI_ID_USER + 0x0203)
 
 #define GUI_ID_LISTVIEW_WIFI_APS            (GUI_ID_USER + 0x0301)
 

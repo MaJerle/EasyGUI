@@ -505,6 +505,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_usart.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f7xx_hal_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f7xx_hal_adc_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_adc_ex.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -565,6 +575,11 @@
         <Group>
           <GroupName>User</GroupName>
           <Files>
+            <File>
+              <FileName>netconn_server.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\netconn_server.c</FilePath>
+            </File>
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
@@ -1212,9 +1227,9 @@
               <FilePath>..\esp\src\system\esp_ll_stm32f769_discovery.c</FilePath>
             </File>
             <File>
-              <FileName>esp_sys_stm32_cmsis_os.c</FileName>
+              <FileName>esp_sys_cmsis_os.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\esp\src\system\esp_sys_stm32_cmsis_os.c</FilePath>
+              <FilePath>..\esp\src\system\esp_sys_cmsis_os.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1735,6 +1750,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_usart.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f7xx_hal_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f7xx_hal_adc_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_adc_ex.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1795,6 +1820,11 @@
         <Group>
           <GroupName>User</GroupName>
           <Files>
+            <File>
+              <FileName>netconn_server.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\netconn_server.c</FilePath>
+            </File>
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
@@ -2474,9 +2504,9 @@
               <FilePath>..\esp\src\system\esp_ll_stm32f769_discovery.c</FilePath>
             </File>
             <File>
-              <FileName>esp_sys_stm32_cmsis_os.c</FileName>
+              <FileName>esp_sys_cmsis_os.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\esp\src\system\esp_sys_stm32_cmsis_os.c</FilePath>
+              <FilePath>..\esp\src\system\esp_sys_cmsis_os.c</FilePath>
             </File>
           </Files>
         </Group>

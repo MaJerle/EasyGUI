@@ -48,6 +48,11 @@ main(void) {
 	}
 }
 
+void
+vApplicationStackOverflowHook( TaskHandle_t xTask, char *pcTaskName ) {
+    printf("Task overflow!: %s\r\n", pcTaskName);
+}
+
 /* 1ms handler */
 void
 TM_DELAY_1msHandler() {

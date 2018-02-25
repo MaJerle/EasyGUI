@@ -27,7 +27,11 @@ create_desktop(void) {
         /* Create status bar */
         gui_container_create(GUI_ID_CONTAINER_STATUS, 0, 0, lcd_width, 40, NULL, gui_container_callback, 0);
     }
-    open_container(GUI_ID_CONTAINER_WIFI);      /* Open WiFi container */
+    
+    /* Fake opening containers to create them */
+    open_container(GUI_ID_CONTAINER_CONSOLE);
+    open_container(GUI_ID_CONTAINER_LOG);
+    open_container(GUI_ID_CONTAINER_WIFI);      /* Open WiFi container as last one */
 }
 
 /**

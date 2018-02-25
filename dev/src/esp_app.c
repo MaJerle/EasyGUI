@@ -19,6 +19,9 @@ mqtt_client_info = {
 
 uint8_t is_publisher;
 
+/* Station IP address */
+esp_ip_t esp_ip;
+
 /**
  * \brief           List access points 
  */
@@ -38,23 +41,46 @@ list_access_points(void) {
 }
 
 /**
+ * \brief           Start netconn server
+ */
+espr_t
+start_server(void) {
+    /* Start server */
+    esp_sys_thread_create(NULL, "esp_server_netconn", (esp_sys_thread_fn)netconn_server_thread, NULL, ESP_SYS_THREAD_SS, ESP_SYS_THREAD_PRIO);
+    return espOK;
+}
+
+/**
  * \brief           Enable WiFi access point
  */
 void
 enable_wifi_access_point(void) {
-    uint8_t mac[6];
-    char ssid[24];
+    esp_mac_t mac;
+    static char ssid[24];
     
     esp_set_wifi_mode(ESP_MODE_STA_AP, 1);      /* Set mode to station and access point */
-    esp_ap_getmac(mac, 0, 1);
+    esp_ap_getmac(&mac, 0, 1);
     
     /* Configure SSID name */
-    sprintf(ssid, "ESP_%02X%02X%02X%02X%02X%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-    
-    is_publisher = mac[3] == 0x99;
+    sprintf(ssid, "ESP_%02X%02X%02X%02X%02X%02X", mac.mac[0], mac.mac[1], mac.mac[2], mac.mac[3], mac.mac[4], mac.mac[5]);
     
     /* Configure access point */
-    esp_ap_configure(ssid, "esp_pwd_123", 13, ESP_ECN_WPA2_PSK, 4, 0, 1, 1);
+    if (esp_ap_configure(ssid, "esp_pwd_123", 13, ESP_ECN_WPA2_PSK, 4, 0, 1, 1) == espOK) {
+        printf("Access point configured and enabled\r\n");
+    } else {
+        printf("Cannot configure access point\r\n");
+    }
+}
+
+/**
+ * \brief           Send data over MQTT protocol
+ * \param[in]       data: Data to send
+ * \param[in]       len: Data length
+ * \return          espOK on success, member of \ref espr_t otherwise
+ */
+espr_t
+mqtt_send_data(const void* data, size_t len) {
+    return mqtt_client_publish(mqtt_client, "stm32f7_topic", data, len, MQTT_QOS_EXACTLY_ONCE, 0, NULL);
 }
 
 /**
@@ -65,7 +91,11 @@ start_mqtt(void) {
     if (mqtt_client == NULL) {
         mqtt_client = mqtt_client_new(256, 256);/* Create MQTT client */
     }
-    mqtt_client_connect(mqtt_client, "193.193.165.37" /* "mqtt.flespi.io" */, 1883, mqtt_client_evt_fn, &mqtt_client_info);
+    if (esp_sta_is_joined()) {
+        mqtt_client_connect(mqtt_client, "test.mosquitto.org" /* "mqtt.flespi.io" */, 1883, mqtt_client_evt_fn, &mqtt_client_info);
+    } else {
+        console_write("MQTT WiFi not connected. Waiting for WIFI network..\r\n");
+    }
 }
 
 /**
@@ -79,7 +109,7 @@ mqtt_client_evt_fn(mqtt_client_t* client, mqtt_evt_t* evt) {
             
             if (status == MQTT_CONN_STATUS_ACCEPTED) {
                 console_write("MQTT connection accepted\r\n");
-                mqtt_client_subscribe(client, "stm32f7_topic", MQTT_QOS_EXACTLY_ONCE, NULL);
+                mqtt_client_subscribe(client, "stm32f7_topic0", MQTT_QOS_EXACTLY_ONCE, NULL);
             } else if (status == MQTT_CONN_STATUS_TCP_FAILED) {
                 console_write("MQTT TCP failed. Reconnecting...\r\n");
                 start_mqtt();
@@ -93,25 +123,29 @@ mqtt_client_evt_fn(mqtt_client_t* client, mqtt_evt_t* evt) {
         }
         case MQTT_EVT_SUBSCRIBE: {
             espr_t result = evt->evt.sub_unsub_scribed.res;
-            console_write("MQTT subscribed\r\n");
-            if (result == espOK) {
-                if (is_publisher) {
-                    mqtt_client_publish(client, "stm32f7_topic", "stm32f7_topic_data", 18, MQTT_QOS_EXACTLY_ONCE, 0, NULL);
-                }
-            }
+            ESP_UNUSED(result);
+            console_write("MQTT subscribe event\r\n");
             break;
         }
         case MQTT_EVT_PUBLISHED: {
             printf("Published!\r\n");
             console_write("MQTT packet published\r\n");
-            if (is_publisher) {
-                mqtt_client_publish(client, "stm32f7_topic", "stm32f7_topic_data", 18, MQTT_QOS_EXACTLY_ONCE, 0, NULL);
-            }
             break;
         }
         case MQTT_EVT_PUBLISH_RECV: {
+            char str[20];
+            const char* t = evt->evt.publish_recv.payload;
             printf("Publish received!\r\n");
             console_write("MQTT publish received\r\n");
+            sprintf(str, "%.*s", evt->evt.publish_recv.payload_len, t);
+            console_write(str);
+            
+            sprintf(str, "%.*s", evt->evt.publish_recv.topic_len, evt->evt.publish_recv.topic);
+            //mqtt_client_publish(client, str, evt->evt.publish_recv.payload, evt->evt.publish_recv.payload_len, MQTT_QOS_EXACTLY_ONCE,  0, NULL);
+            break;
+        }
+        case MQTT_EVT_KEEP_ALIVE: {
+            console_write("MQTT keep-alive\r\n");
             break;
         }
         default:
@@ -151,10 +185,16 @@ esp_cb_func(esp_cb_t* cb) {
                         case ESP_ECN_WPA_WPA2_PSK: gui_listview_setitemstring(h, row, 1, _GT("WPA/2")); break;
                         default: break;
                     }
+                    if (!strcmp(cb->cb.sta_list_ap.aps[i].ssid, "TilenM_ST")) {
+                        esp_sta_join(cb->cb.sta_list_ap.aps[i].ssid, "its private", NULL, 0, 0);
+                    }
                 }
                 gui_widget_invalidate(h);
             }
             console_write("WiFi access points listed\r\n");
+            if (cb->cb.sta_list_ap.len == 0) {
+                list_access_points();
+            }
             break;
         }
         
@@ -170,11 +210,7 @@ esp_cb_func(esp_cb_t* cb) {
          * Wifi has an IP address
          */
         case ESP_CB_WIFI_GOT_IP: {
-            gui_image_setsource(gui_widget_getbyid(GUI_ID_IMAGE_WIFI_STATUS), &image_wifi_on);
-            gui_widget_settext(gui_widget_getbyid(GUI_ID_BUTTON_WIFI_CONNECT), _GT("Disconnect"));
-            start_mqtt();
-            console_write("WiFi got IP address\r\n");
-            console_write("MQTT TCP connecting...\r\n");
+            esp_sta_getip(&esp_ip, NULL, NULL, 0, 0);   /* Get current station IP address */
             break;
         }
         
@@ -185,6 +221,35 @@ esp_cb_func(esp_cb_t* cb) {
             gui_image_setsource(gui_widget_getbyid(GUI_ID_IMAGE_WIFI_STATUS), &image_wifi_off);
             gui_widget_settext(gui_widget_getbyid(GUI_ID_BUTTON_WIFI_CONNECT), _GT("Connect"));
             console_write("WiFi disconnected\r\n");
+            break;
+        }
+        
+        case ESP_CB_WIFI_IP_ACQUIRED: {
+            char sp[50];
+            gui_image_setsource(gui_widget_getbyid(GUI_ID_IMAGE_WIFI_STATUS), &image_wifi_on);
+            gui_widget_settext(gui_widget_getbyid(GUI_ID_BUTTON_WIFI_CONNECT), _GT("Disconnect"));
+            sprintf(sp, "WiFi got IP address: %d.%d.%d.%d\r\n", esp_ip.ip[0], esp_ip.ip[1], esp_ip.ip[2], esp_ip.ip[3]);
+            lcd_update_up(&esp_ip);
+            console_write(sp);
+            console_write("MQTT TCP connecting...\r\n");
+            start_mqtt();
+            break;
+        }
+        
+        /*
+         * Event relative to manual connection to access point
+         */
+        case ESP_CB_JOIN_AP: {
+            espr_t status = cb->cb.sta_join.status;
+            
+            switch (status) {
+                case espOK: console_write("ESP_JOIN: Joined OK!\r\n"); break;
+                case espERRCONNTIMEOUT: console_write("ESP_JOIN: Connection timeout!\r\n"); break;
+                case espERRPASS: console_write("ESP_JOIN: Wrong password!\r\n"); break;
+                case espERRNOAP: console_write("ESP_JOIN: No access point with desired name!\r\n"); break;
+                case espERRCONNFAIL: console_write("ESP_JOIN: Connection fail!\r\n"); break;
+                default: console_write("ESP_JOIN: Unknown status!\r\n");
+            }
             break;
         }
         default:
