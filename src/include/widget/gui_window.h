@@ -74,7 +74,7 @@ typedef struct GUI_WINDOW_t {
   
 GUI_HANDLE_p gui_window_getdesktop(void);
 uint8_t gui_window_setactive(GUI_HANDLE_p h);
-GUI_HANDLE_p gui_window_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_window_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 uint8_t gui_window_setcolor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color);
 
 #if defined(GUI_INTERNAL)

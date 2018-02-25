@@ -344,7 +344,7 @@ mem_realloc(void* ptr, size_t size) {
     
     oldSize = mem_getusersize(ptr);                 /* Get size of old pointer */
     newPtr = mem_alloc(size);                       /* Try to allocate new memory block */
-    if (newPtr) {                                   /* Check success */
+    if (newPtr != NULL) {                           /* Check success */
         memcpy(newPtr, ptr, size > oldSize ? oldSize : size);   /* Copy old data to new array */
         mem_free(ptr);                              /* Free old pointer */
         return newPtr;                              /* Return new pointer */

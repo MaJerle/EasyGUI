@@ -74,14 +74,17 @@ extern "C" {
 #define GUI_FLAG_TOUCH_MOVE                 ((uint32_t)0x00008000)  /*!< Indicates widget callback has processed touch move event. This parameter works in conjunction with \ref GUI_FLAG_ACTIVE flag */
 #define GUI_FLAG_XPOS_PERCENT               ((uint32_t)0x00010000)  /*!< Indicates widget X position is in percent relative to parent width */
 #define GUI_FLAG_YPOS_PERCENT               ((uint32_t)0x00020000)  /*!< Indicates widget Y position is in percent relative to parent height */
+
 /**
  * \defgroup        GUI_WIDGETS_CORE_FLAGS Widget type flags
  * \brief           Flags used for widget type description
  * \{
  */
+
 #define GUI_FLAG_WIDGET_ALLOW_CHILDREN      ((uint32_t)0x00040000)  /*!< Widget allows children widgets */
 #define GUI_FLAG_WIDGET_DIALOG_BASE         ((uint32_t)0x00080000)  /*!< Widget is dialog base. When it is active, no other widget around dialog can be pressed */
 #define GUI_FLAG_WIDGET_INVALIDATE_PARENT   ((uint32_t)0x00100000)  /*!< Anytime widget is invalidated, parent should be invalidated too */
+
 /**
  * \}
  */

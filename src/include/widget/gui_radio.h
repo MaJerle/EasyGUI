@@ -77,7 +77,7 @@ typedef struct GUI_RADIO_t {
 } GUI_RADIO_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-GUI_HANDLE_p gui_radio_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_radio_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 uint8_t gui_radio_setcolor(GUI_HANDLE_p h, GUI_RADIO_COLOR_t index, GUI_Color_t color);
 uint8_t gui_radio_setgroup(GUI_HANDLE_p h, uint8_t groupId);
 uint8_t gui_radio_getgroup(GUI_HANDLE_p h);

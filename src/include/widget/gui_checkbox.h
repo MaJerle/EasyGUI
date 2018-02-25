@@ -74,7 +74,7 @@ typedef struct GUI_CHECKBOX_t {
 } GUI_CHECKBOX_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-GUI_HANDLE_p gui_checkbox_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_checkbox_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 uint8_t gui_checkbox_setcolor(GUI_HANDLE_p h, GUI_CHECKBOX_COLOR_t index, GUI_Color_t color);
 uint8_t gui_checkbox_setchecked(GUI_HANDLE_p h, uint8_t checked);
 uint8_t gui_checkbox_ischecked(GUI_HANDLE_p h);

@@ -118,8 +118,6 @@ typedef struct GUI_t {
 
 extern GUI_t GUI;
 
-
-
 /**
  * \brief           Check if 2 rectangle objects covers each other in any way
  * \hideinitializer

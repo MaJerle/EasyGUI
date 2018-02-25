@@ -59,7 +59,7 @@ typedef struct GUI_IMAGE_t {
 } GUI_IMAGE_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
     
-GUI_HANDLE_p gui_image_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_image_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 uint8_t gui_image_setsource(GUI_HANDLE_p h, const GUI_IMAGE_DESC_t* img);
 
 /**

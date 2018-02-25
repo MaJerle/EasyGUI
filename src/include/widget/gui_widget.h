@@ -568,7 +568,7 @@ const GUI_FONT_t* gui_widget_getfont__(GUI_HANDLE_p h);
 
 uint8_t gui_widget_alloctextmemory__(GUI_HANDLE_p h, uint32_t size);
 uint8_t gui_widget_freetextmemory__(GUI_HANDLE_p h);
-void* gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+void* gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 uint8_t gui_widget_remove__(GUI_HANDLE_p h);
 uint8_t gui_widget_show__(GUI_HANDLE_p h);
 uint8_t gui_widget_hide__(GUI_HANDLE_p h);

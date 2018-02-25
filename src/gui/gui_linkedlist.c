@@ -450,7 +450,7 @@ gui_linkedlist_multi_find_remove(GUI_LinkedListRoot_t* root, void* element) {
  */
 void
 gui_linkedlist_widgetadd(GUI_HANDLE_ROOT_t* root, GUI_HANDLE_p h) {    
-    if (root) {
+    if (root != NULL) {
         gui_linkedlist_add_gen(&root->RootList, (GUI_LinkedList_t *)h);
     } else {
         gui_linkedlist_add_gen(&GUI.Root, (GUI_LinkedList_t *)h);
@@ -467,7 +467,7 @@ gui_linkedlist_widgetadd(GUI_HANDLE_ROOT_t* root, GUI_HANDLE_p h) {
  */
 void
 gui_linkedlist_widgetremove(GUI_HANDLE_p h) {    
-    if (__GH(h)->Parent) {
+    if (__GH(h)->Parent != NULL) {
         gui_linkedlist_remove_gen(&((GUI_HANDLE_ROOT_t *)__GH(h)->Parent)->RootList, (GUI_LinkedList_t *)h);
     } else {
         gui_linkedlist_remove_gen(&GUI.Root, (GUI_LinkedList_t *)h);
@@ -483,7 +483,7 @@ gui_linkedlist_widgetremove(GUI_HANDLE_p h) {
  */
 uint8_t
 gui_linkedlist_widgetmoveup(GUI_HANDLE_p h) {
-    if (__GH(h)->Parent) {
+    if (__GH(h)->Parent != NULL) {
         return gui_linkedlist_moveup_gen(&__GHR(__GH(h)->Parent)->RootList, (GUI_LinkedList_t *)h);
     }
     return gui_linkedlist_moveup_gen(&GUI.Root, (GUI_LinkedList_t *)h);
@@ -498,7 +498,7 @@ gui_linkedlist_widgetmoveup(GUI_HANDLE_p h) {
  */
 uint8_t
 gui_linkedlist_widgetmovedown(GUI_HANDLE_p h) {
-    if (__GH(h)->Parent) {
+    if (__GH(h)->Parent != NULL) {
         return gui_linkedlist_movedown_gen(&__GHR(__GH(h)->Parent)->RootList, (GUI_LinkedList_t *)h);
     }
     return gui_linkedlist_movedown_gen(&GUI.Root, (GUI_LinkedList_t *)h);
@@ -526,8 +526,8 @@ gui_linkedlist_widgetmovedown(GUI_HANDLE_p h) {
  */
 GUI_HANDLE_p
 gui_linkedlist_widgetgetnext(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h) {
-    if (!h) {                                       /* Get first widget on list */
-        if (parent) {                               /* If parent exists... */
+    if (h == NULL) {                                /* Get first widget on list */
+        if (parent != NULL) {                       /* If parent exists... */
             return (GUI_HANDLE_p)parent->RootList.First;    /* ...get first widget on parent */
         } else {
             return (GUI_HANDLE_p)GUI.Root.First;    /* Get first widget in GUI */
@@ -558,8 +558,8 @@ gui_linkedlist_widgetgetnext(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h) {
  */
 GUI_HANDLE_p
 gui_linkedlist_widgetgetprev(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h) {
-    if (!h) {                                       /* Get last widget on list */
-        if (parent) {                               /* If parent exists... */
+    if (h == NULL) {                                /* Get last widget on list */
+        if (parent != NULL) {                       /* If parent exists... */
             return (GUI_HANDLE_p)parent->RootList.Last; /* ...get last widget on parent */
         } else {
             return (GUI_HANDLE_p)GUI.Root.Last;     /* Get last widget in GUI */
@@ -584,10 +584,10 @@ gui_linkedlist_widgetgetprev(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h) {
  */
 uint8_t
 gui_linkedlist_widgetmovetobottom(GUI_HANDLE_p h) {
-    if (!__GH(h)->List.Next) {
+    if (__GH(h)->List.Next == NULL) {
         return 0;
     }
-    while (__GH(h)->List.Next) {                    /* While device has next element */
+    while (__GH(h)->List.Next != NULL) {            /* While device has next element */
         if (gui_widget_isdialogbase__(h)) {         /* Widget is dialog base element */
             if (!gui_linkedlist_widgetmovedown(h)) {    /* Move down */
                 return 0;
@@ -630,10 +630,10 @@ gui_linkedlist_widgetmovetobottom(GUI_HANDLE_p h) {
  */
 uint8_t
 gui_linkedlist_widgetmovetotop(GUI_HANDLE_p h) {
-    if (!__GH(h)->List.Prev) {
+    if (__GH(h)->List.Prev == NULL) {
         return 0;
     }
-    while (__GH(h)->List.Prev) {                    /* While device has previous element */
+    while (__GH(h)->List.Prev != NULL) {            /* While device has previous element */
         if (gui_widget_isdialogbase__(h)) {         /* Widget is dialog base element */
             if (gui_widget_isdialogbase__(__GH(__GH(h)->List.Prev))) {  /* If previous widget is dialog base too */
                 if (!gui_linkedlist_widgetmoveup(h)) {  /* Move up widget */

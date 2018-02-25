@@ -92,7 +92,7 @@ typedef struct GUI_EDITTEXT_t {
 } GUI_EDITTEXT_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-GUI_HANDLE_p gui_edittext_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_edittext_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 uint8_t gui_edittext_setcolor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color);
 uint8_t gui_edittext_setmultiline(GUI_HANDLE_p h, uint8_t multiline);
 uint8_t gui_edittext_setvalign(GUI_HANDLE_p h, GUI_EDITTEXT_VALIGN_t align);

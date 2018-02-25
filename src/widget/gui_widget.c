@@ -890,7 +890,7 @@ gui_widget_set3dstyle__(GUI_HANDLE_p h, uint8_t enable) {
  * \sa              __gui_widget_remove
  */
 void *
-gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+gui_widget_create__(const GUI_WIDGET_t* widget, GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_HANDLE_p h;
     
     __GUI_ASSERTPARAMS(widget && widget->Callback); /* Check input parameters */
@@ -1054,11 +1054,9 @@ gui_widget_settext__(GUI_HANDLE_p h, const GUI_Char* text) {
             gui_widget_callback__(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
         }
     } else {                                        /* Memory allocated by user */
-        if (__GH(h)->Text && __GH(h)->Text == text) {   /* In case the same pointer is passed to WIDGET */
-            if (gui_string_compare(__GH(h)->Text, text)) {  /* If strings does not match, source string updated? */
-                gui_widget_invalidate__(h);         /* Redraw object */
-                gui_widget_callback__(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
-            }
+        if (__GH(h)->Text != NULL && __GH(h)->Text == text) {   /* In case the same pointer is passed to WIDGET */
+            gui_widget_invalidate__(h);         /* Redraw object */
+            gui_widget_callback__(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
         }
         
         if (__GH(h)->Text != text) {                /* Check if pointer do not match */

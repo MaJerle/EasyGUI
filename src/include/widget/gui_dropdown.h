@@ -107,7 +107,7 @@ typedef struct GUI_DROPDOWN_t {
 } GUI_DROPDOWN_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-GUI_HANDLE_p gui_dropdown_create(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+GUI_HANDLE_p gui_dropdown_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 uint8_t gui_dropdown_setcolor(GUI_HANDLE_p h, GUI_DROPDOWN_COLOR_t index, GUI_Color_t color);
 uint8_t gui_dropdown_addstring(GUI_HANDLE_p h, const GUI_Char* text);
 uint8_t gui_dropdown_deletefirststring(GUI_HANDLE_p h);
