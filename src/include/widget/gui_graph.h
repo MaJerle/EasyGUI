@@ -36,13 +36,10 @@
 extern "C" {
 #endif
 
-/**
- * \addtogroup      GUI_WIDGETS
- * \{
- */
 #include "gui_widget.h"
 
 /**
+ * \ingroup         GUI_WIDGETS
  * \defgroup        GUI_GRAPH Graph
  * \brief           Graph which can display plots
  * \{
@@ -117,7 +114,7 @@ typedef struct GUI_GRAPH_t {
 } GUI_GRAPH_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p gui_graph_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+gui_handle_p gui_graph_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
 uint8_t gui_graph_setcolor(gui_handle_p h, GUI_GRAPH_COLOR_t index, gui_color_t color);
 uint8_t gui_graph_setminx(gui_handle_p h, float v);
 uint8_t gui_graph_setmaxx(gui_handle_p h, float v);
@@ -132,10 +129,6 @@ GUI_GRAPH_DATA_p gui_graph_data_create(GUI_GRAPH_TYPE_t type, size_t length);
 uint8_t gui_graph_data_addvalue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y);
 uint8_t gui_graph_data_setcolor(GUI_GRAPH_DATA_p data, gui_color_t color);
  
-/**
- * \}
- */
-
 /**
  * \}
  */

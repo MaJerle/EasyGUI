@@ -1,10 +1,10 @@
 #include "gui/gui.h"
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0020[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0020[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0021[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0021[16] = {
     ___XX___, 
     __XX____, 
     __XX____, 
@@ -23,7 +23,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0021[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0022[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0022[6] = {
     _XX_XX__, 
     _X__X___, 
     XX_XX___, 
@@ -32,7 +32,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0022[6] = {
     X__X____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0023[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0023[32] = {
     ____X___, X_______, 
     ___XX__X, X_______, 
     ___XX__X, X_______, 
@@ -51,7 +51,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0023[32] = {
     _X___X__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0024[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0024[38] = {
     ______X_, ________, 
     ____XXX_, ________, 
     __XXXXXX, X_______, 
@@ -73,7 +73,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0024[38] = {
     ___X____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0025[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0025[34] = {
     __XX____, ___X____, 
     _XXXX___, __XX____, 
     XX__X___, __X_____, 
@@ -93,7 +93,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0025[34] = {
     _X______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0026[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0026[32] = {
     _____XXX, ________, 
     ____XXXX, X_______, 
     ___XX___, X_______, 
@@ -112,7 +112,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0026[32] = {
     __XXXXX_, _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0027[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0027[6] = {
     _XX_____, 
     _X______, 
     XX______, 
@@ -121,7 +121,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0027[6] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0028[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0028[21] = {
     ____X___, 
     ___X____, 
     ___X____, 
@@ -145,7 +145,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0028[21] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0029[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0029[21] = {
     ____X___, 
     ____X___, 
     ____X___, 
@@ -169,7 +169,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0029[21] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_002a[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_002a[6] = {
     __XX____, 
     __X_____, 
     XXX_XX__, 
@@ -178,7 +178,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_002a[6] = {
     _X_XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_002b[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_002b[20] = {
     ____X___, ________, 
     ____X___, ________, 
     ____X___, ________, 
@@ -191,7 +191,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_002b[20] = {
     ____X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_002c[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_002c[5] = {
     XX______, 
     XX______, 
     _X______, 
@@ -199,17 +199,17 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_002c[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_002d[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_002d[2] = {
     XXXXX___, 
     XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_002e[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_002e[2] = {
     XX______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_002f[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_002f[16] = {
     _______X, 
     ______XX, 
     ______X_, 
@@ -228,7 +228,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_002f[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0030[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0030[32] = {
     ____XXX_, ________, 
     ___XXXXX, ________, 
     __XX___X, X_______, 
@@ -247,7 +247,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0030[32] = {
     __XXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0031[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0031[16] = {
     _____X__, 
     ____X___, 
     ___XX___, 
@@ -266,7 +266,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0031[16] = {
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0032[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0032[32] = {
     ____XXX_, ________, 
     ___XXXXX, ________, 
     __XX___X, X_______, 
@@ -285,7 +285,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0032[32] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0033[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0033[32] = {
     ____XXX_, ________, 
     ___XXXXX, ________, 
     __XX___X, X_______, 
@@ -304,7 +304,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0033[32] = {
     __XXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0034[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0034[32] = {
     _______X, X_______, 
     ______XX, ________, 
     ______XX, ________, 
@@ -323,7 +323,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0034[32] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0035[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0035[32] = {
     ___XXXXX, X_______, 
     ___XXXXX, X_______, 
     ___X____, ________, 
@@ -342,7 +342,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0035[32] = {
     __XXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0036[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0036[16] = {
     ____XX__, 
     __XXXXXX, 
     __XX__XX, 
@@ -361,7 +361,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0036[16] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0037[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0037[32] = {
     XXXXXXXX, X_______, 
     XXXXXXXX, X_______, 
     ______XX, ________, 
@@ -380,7 +380,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0037[32] = {
     _X______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0038[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0038[32] = {
     ____XXX_, ________, 
     ___XXXXX, ________, 
     __XX___X, X_______, 
@@ -399,7 +399,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0038[32] = {
     __XXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0039[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0039[32] = {
     ____XXX_, ________, 
     __XXXXXX, ________, 
     __XX___X, ________, 
@@ -418,7 +418,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0039[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_003a[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_003a[11] = {
     __XX____, 
     __X_____, 
     ________, 
@@ -432,7 +432,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_003a[11] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_003b[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_003b[14] = {
     __XX____, 
     __X_____, 
     ________, 
@@ -449,7 +449,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_003b[14] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_003c[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_003c[22] = {
     _______X, X_______, 
     _____XXX, X_______, 
     ___XXXX_, ________, 
@@ -463,7 +463,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_003c[22] = {
     ________, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_003d[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_003d[14] = {
     XXXXXXXX, X_______, 
     XXXXXXXX, X_______, 
     ________, ________, 
@@ -473,7 +473,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_003d[14] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_003e[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_003e[20] = {
     X_______, ________, 
     XXX_____, ________, 
     _XXXX___, ________, 
@@ -486,7 +486,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_003e[20] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_003f[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_003f[16] = {
     ___XXX__, 
     _XXXXXX_, 
     _XX___XX, 
@@ -505,7 +505,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_003f[16] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0040[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0040[42] = {
     ______XX, XXXX____, 
     ____XXXX, XXXXX___, 
     ___XX___, ____XX__, 
@@ -529,7 +529,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0040[42] = {
     _______X, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0041[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0041[32] = {
     _______X, X_______, 
     ______XX, X_______, 
     ______XX, X_______, 
@@ -548,7 +548,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0041[32] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0042[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0042[32] = {
     __XXXXXX, X_______, 
     __XXXXXX, XX______, 
     __XX____, _XX_____, 
@@ -567,7 +567,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0042[32] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0043[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0043[32] = {
     ____XXXX, X_______, 
     ___XXXXX, XX______, 
     __XX____, XXX_____, 
@@ -586,7 +586,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0043[32] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0044[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0044[32] = {
     ___XXXXX, X_______, 
     __XXXXXX, XX______, 
     __XX____, _XX_____, 
@@ -605,7 +605,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0044[32] = {
     XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0045[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0045[32] = {
     ___XXXXX, XXXX____, 
     __XXXXXX, XXXX____, 
     __XX____, ________, 
@@ -624,7 +624,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0045[32] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0046[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0046[32] = {
     ___XXXXX, XXX_____, 
     __XXXXXX, XXX_____, 
     __XX____, ________, 
@@ -643,7 +643,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0046[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0047[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0047[32] = {
     ____XXXX, X_______, 
     ___XXXXX, XX______, 
     __XX____, _XX_____, 
@@ -662,7 +662,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0047[32] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0048[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0048[32] = {
     __XX____, ___XX___, 
     __XX____, ___X____, 
     __XX____, __XX____, 
@@ -681,7 +681,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0048[32] = {
     XX______, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0049[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0049[16] = {
     ___X____, 
     __XX____, 
     __XX____, 
@@ -700,7 +700,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0049[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_004a[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_004a[32] = {
     _______X, X_______, 
     _______X, X_______, 
     _______X, ________, 
@@ -719,7 +719,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_004a[32] = {
     _XXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_004b[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_004b[32] = {
     ___X____, __XX____, 
     __XX____, _XX_____, 
     __XX____, XX______, 
@@ -738,7 +738,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_004b[32] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_004c[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_004c[16] = {
     __XX____, 
     __XX____, 
     __XX____, 
@@ -757,7 +757,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_004c[16] = {
     XXXXXXXX, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_004d[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_004d[32] = {
     __XXX___, ____XXX_, 
     __XXX___, ____XXX_, 
     __XXX___, ____XX__, 
@@ -776,7 +776,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_004d[32] = {
     XX___XX_, ___X____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_004e[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_004e[32] = {
     ___X____, ___XX___, 
     __XXX___, ___X____, 
     __XXX___, ___X____, 
@@ -795,7 +795,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_004e[32] = {
     XX______, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_004f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_004f[32] = {
     ____XXXX, X_______, 
     ___XXXXX, XX______, 
     __XX____, _XX_____, 
@@ -814,7 +814,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_004f[32] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0050[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0050[32] = {
     ___XXXXX, XX______, 
     __XXXXXX, XXX_____, 
     __XX____, _XX_____, 
@@ -833,7 +833,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0050[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0051[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0051[34] = {
     ____XXXX, X_______, 
     ___XXXXX, XX______, 
     __XX____, _XX_____, 
@@ -853,7 +853,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0051[34] = {
     ________, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0052[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0052[32] = {
     ___XXXXX, XX______, 
     __XXXXXX, XXX_____, 
     __XX____, __XX____, 
@@ -872,7 +872,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0052[32] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0053[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0053[32] = {
     ____XXXX, X_______, 
     ___XXXXX, XX______, 
     __XX____, _XX_____, 
@@ -891,7 +891,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0053[32] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0054[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0054[32] = {
     _XXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     ____XX__, ________, 
@@ -910,7 +910,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0054[32] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0055[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0055[32] = {
     __X_____, __XX____, 
     _XX_____, __X_____, 
     _XX_____, _XX_____, 
@@ -929,7 +929,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0055[32] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0056[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0056[32] = {
     XX______, __XX____, 
     XX______, _XX_____, 
     _X______, _XX_____, 
@@ -948,7 +948,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0056[32] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0057[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0057[48] = {
     XX______, XX_____X, X_______, 
     XX_____X, XX_____X, X_______, 
     XX_____X, XX____XX, ________, 
@@ -967,7 +967,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0057[48] = {
     _XX_____, _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0058[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0058[32] = {
     __XX____, ___XXX__, 
     ___X____, ___XX___, 
     ___XX___, __XX____, 
@@ -986,7 +986,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0058[32] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0059[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0059[32] = {
     XX______, __XX____, 
     _XX_____, _XX_____, 
     _XX_____, XXX_____, 
@@ -1005,7 +1005,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0059[32] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_005a[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_005a[32] = {
     ___XXXXX, XXX_____, 
     __XXXXXX, XXX_____, 
     ________, _XX_____, 
@@ -1024,7 +1024,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_005a[32] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_005b[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_005b[20] = {
     ___XXXX_, 
     ___XXXX_, 
     ___XX___, 
@@ -1047,7 +1047,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_005b[20] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_005c[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_005c[16] = {
     X_______, 
     X_______, 
     X_______, 
@@ -1066,7 +1066,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_005c[16] = {
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_005d[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_005d[20] = {
     ___XXXX_, 
     ___XXXX_, 
     _____XX_, 
@@ -1089,7 +1089,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_005d[20] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_005e[9] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_005e[9] = {
     __XX____, 
     __XX____, 
     __XXX___, 
@@ -1101,17 +1101,17 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_005e[9] = {
     X____XX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_005f[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_005f[2] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0060[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0060[3] = {
     XX______, 
     XX______, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0061[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0061[24] = {
     ____XX__, ________, 
     __XXXXXX, ________, 
     _XX____X, X_______, 
@@ -1126,7 +1126,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0061[24] = {
     _XXXX_XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0062[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0062[32] = {
     __XX____, ________, 
     __XX____, ________, 
     __XX____, ________, 
@@ -1145,7 +1145,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0062[32] = {
     X_XXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0063[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0063[12] = {
     ____XX__, 
     __XXXXX_, 
     _XX___XX, 
@@ -1160,7 +1160,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0063[12] = {
     _XXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0064[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0064[32] = {
     ________, XX______, 
     ________, XX______, 
     ________, XX______, 
@@ -1179,7 +1179,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0064[32] = {
     _XXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0065[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0065[24] = {
     ____XX__, ________, 
     __XXXXXX, ________, 
     _XX___XX, ________, 
@@ -1194,7 +1194,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0065[24] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0066[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0066[16] = {
     ___XXX__, 
     __XXXX__, 
     __XX____, 
@@ -1213,7 +1213,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0066[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0067[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0067[34] = {
     _____X__, ________, 
     ___XXXXX, XX______, 
     __XX___X, XX______, 
@@ -1233,7 +1233,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0067[34] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0068[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0068[32] = {
     __XX____, ________, 
     __XX____, ________, 
     __XX____, ________, 
@@ -1252,7 +1252,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0068[32] = {
     X_____X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0069[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0069[16] = {
     __XX____, 
     __XX____, 
     ________, 
@@ -1271,7 +1271,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0069[16] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_006a[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_006a[21] = {
     _____XX_, 
     _____XX_, 
     ________, 
@@ -1295,7 +1295,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_006a[21] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_006b[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_006b[16] = {
     __XX____, 
     __XX____, 
     __XX____, 
@@ -1314,7 +1314,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_006b[16] = {
     X____XX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_006c[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_006c[16] = {
     __XX____, 
     __XX____, 
     __X_____, 
@@ -1333,7 +1333,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_006c[16] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_006d[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_006d[24] = {
     _____XX_, __XX____, 
     _XX_XXXX, _XXXX___, 
     _XXX__XX, X___XX__, 
@@ -1348,7 +1348,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_006d[24] = {
     X____XX_, ___X____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_006e[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_006e[24] = {
     _____XX_, ________, 
     _XX_XXXX, ________, 
     _XXX___X, X_______, 
@@ -1363,7 +1363,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_006e[24] = {
     X_____X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_006f[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_006f[24] = {
     ____XX__, ________, 
     __XXXXXX, ________, 
     _XX___XX, ________, 
@@ -1378,7 +1378,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_006f[24] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0070[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0070[32] = {
     ______X_, ________, 
     __XXXXXX, X_______, 
     __XXX__X, X_______, 
@@ -1397,7 +1397,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0070[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0071[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0071[32] = {
     ___XX___, ________, 
     __XXXX_X, X_______, 
     _XX___XX, ________, 
@@ -1416,7 +1416,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0071[32] = {
     _____X__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0072[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0072[12] = {
     _____X__, 
     _XX_XX__, 
     _XXX____, 
@@ -1431,7 +1431,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0072[12] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0073[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0073[12] = {
     ___XXX__, 
     __XXXXX_, 
     _XX___XX, 
@@ -1446,7 +1446,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0073[12] = {
     _XXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0074[15] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0074[15] = {
     ___X____, 
     __XX____, 
     __X_____, 
@@ -1464,7 +1464,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0074[15] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0075[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0075[22] = {
     _XX____X, X_______, 
     _XX____X, X_______, 
     _XX____X, X_______, 
@@ -1478,7 +1478,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0075[22] = {
     _XXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0076[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0076[11] = {
     X_____XX, 
     X_____X_, 
     X____XX_, 
@@ -1492,7 +1492,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0076[11] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0077[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0077[22] = {
     XX___XXX, ___XX___, 
     _X___XXX, ___X____, 
     _X___XXX, __XX____, 
@@ -1506,7 +1506,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0077[22] = {
     _XX____X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0078[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0078[22] = {
     __XX___X, X_______, 
     __XX___X, ________, 
     ___XX_XX, ________, 
@@ -1520,7 +1520,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0078[22] = {
     XX____XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0079[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0079[32] = {
     __X_____, XX______, 
     __X_____, X_______, 
     __XX___X, X_______, 
@@ -1539,7 +1539,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0079[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_007a[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_007a[22] = {
     __XXXXXX, X_______, 
     ______XX, X_______, 
     ______XX, ________, 
@@ -1553,7 +1553,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_007a[22] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_007b[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_007b[21] = {
     _____XX_, 
     ____XXX_, 
     ____X___, 
@@ -1577,7 +1577,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_007b[21] = {
     __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_007c[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_007c[21] = {
     X_______, 
     X_______, 
     X_______, 
@@ -1601,7 +1601,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_007c[21] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_007d[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_007d[21] = {
     ___XX___, 
     ___XXX__, 
     ____XX__, 
@@ -1625,17 +1625,17 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_007d[21] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_007e[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_007e[6] = {
     XXXXX___, X_______, 
     XXXXXXXX, X_______, 
     _____XXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_007f[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_007f[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0080[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0080[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1652,7 +1652,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0080[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0081[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0081[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1669,7 +1669,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0081[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0082[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0082[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1686,7 +1686,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0082[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0083[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0083[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1703,7 +1703,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0083[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0084[7] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0084[7] = {
     __X_____, 
     __X_____, 
     __X_____, 
@@ -1713,11 +1713,11 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0084[7] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0085[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0085[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0086[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0086[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1734,7 +1734,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0086[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0087[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0087[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1751,7 +1751,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0087[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0088[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0088[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1768,7 +1768,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0088[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0089[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0089[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1785,7 +1785,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0089[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_008a[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_008a[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1802,7 +1802,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_008a[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_008b[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_008b[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1819,7 +1819,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_008b[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_008c[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_008c[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1836,7 +1836,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_008c[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_008d[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_008d[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1853,7 +1853,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_008d[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_008e[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_008e[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1870,7 +1870,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_008e[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_008f[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_008f[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1887,7 +1887,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_008f[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0090[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0090[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1904,7 +1904,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0090[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0091[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0091[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1921,7 +1921,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0091[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0092[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0092[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1938,7 +1938,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0092[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0093[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0093[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1955,7 +1955,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0093[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0094[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0094[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1972,7 +1972,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0094[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0095[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0095[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -1989,7 +1989,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0095[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0096[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0096[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -2006,7 +2006,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0096[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0097[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0097[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -2023,7 +2023,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0097[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0098[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0098[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -2040,7 +2040,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0098[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0099[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0099[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -2057,7 +2057,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0099[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_009a[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_009a[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -2074,7 +2074,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_009a[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_009b[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_009b[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -2091,7 +2091,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_009b[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_009c[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_009c[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -2108,7 +2108,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_009c[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_009d[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_009d[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -2125,7 +2125,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_009d[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_009e[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_009e[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -2142,7 +2142,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_009e[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_009f[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_009f[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -2159,11 +2159,11 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_009f[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a0[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00a0[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a1[15] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00a1[15] = {
     __XX____, 
     __XX____, 
     ________, 
@@ -2181,7 +2181,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a1[15] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a2[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00a2[40] = {
     _______X, ________, 
     _______X, ________, 
     ______XX, ________, 
@@ -2204,7 +2204,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a2[40] = {
     _X______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a3[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00a3[32] = {
     ____XXXX, ________, 
     ___XXXXX, X_______, 
     __XX____, XX______, 
@@ -2223,7 +2223,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a3[32] = {
     X___XXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a4[10] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00a4[10] = {
     X______X, 
     XXXXXXXX, 
     _XX_XXX_, 
@@ -2236,7 +2236,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a4[10] = {
     X__XX_XX, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a5[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00a5[32] = {
     _XX_____, _XX_____, 
     _XX_____, XX______, 
     __X_____, XX______, 
@@ -2255,7 +2255,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a5[32] = {
     ___X____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a6[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00a6[21] = {
     X_______, 
     X_______, 
     X_______, 
@@ -2279,7 +2279,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a6[21] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a7[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00a7[42] = {
     ____XXXX, ________, 
     ___XXXXX, ________, 
     __XX___X, X_______, 
@@ -2303,12 +2303,12 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a7[42] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a8[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00a8[2] = {
     XX__X___, 
     XX_XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a9[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00a9[32] = {
     ____XXXX, X_______, 
     ___XX___, XXX_____, 
     __XX____, __X_____, 
@@ -2327,7 +2327,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00a9[32] = {
     ____XXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00aa[8] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00aa[8] = {
     __XXXX__, 
     _XX__X__, 
     _X___X__, 
@@ -2338,7 +2338,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00aa[8] = {
     _XXX_X__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ab[10] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00ab[10] = {
     ___X__XX, 
     __XX__X_, 
     _XX__X__, 
@@ -2351,7 +2351,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ab[10] = {
     _X__XX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ac[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00ac[12] = {
     XXXXXXXX, X_______, 
     XXXXXXXX, X_______, 
     _______X, X_______, 
@@ -2360,11 +2360,11 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ac[12] = {
     _______X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ad[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00ad[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ae[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00ae[32] = {
     ____XXXX, X_______, 
     ___XX___, XXX_____, 
     __XX____, __X_____, 
@@ -2383,12 +2383,12 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ae[32] = {
     ____XXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00af[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00af[4] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b0[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00b0[6] = {
     _XXXX___, 
     XX__XX__, 
     X____X__, 
@@ -2397,7 +2397,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b0[6] = {
     _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b1[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00b1[26] = {
     ____XX__, ________, 
     ____XX__, ________, 
     ____XX__, ________, 
@@ -2413,7 +2413,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b1[26] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b2[8] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00b2[8] = {
     _XXX____, 
     XX_XX___, 
     ____X___, 
@@ -2424,7 +2424,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b2[8] = {
     XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b3[8] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00b3[8] = {
     _XXX____, 
     XX__X___, 
     ____X___, 
@@ -2435,13 +2435,13 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b3[8] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b4[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00b4[3] = {
     __XX____, 
     _XX_____, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b5[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00b5[30] = {
     ___XX___, __XX____, 
     ___XX___, __XX____, 
     __XX____, __XX____, 
@@ -2459,7 +2459,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b5[30] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b6[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00b6[40] = {
     ___XXXXX, XX______, 
     _XXXXXXX, XX______, 
     XXXXX__X, X_______, 
@@ -2482,12 +2482,12 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b6[40] = {
     ____X__X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b7[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00b7[2] = {
     XX______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b8[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00b8[5] = {
     _XX_____, 
     _XXX____, 
     ___X____, 
@@ -2495,7 +2495,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b8[5] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b9[8] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00b9[8] = {
     ___X____, 
     __XX____, 
     _XXX____, 
@@ -2506,7 +2506,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00b9[8] = {
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ba[8] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00ba[8] = {
     __XXX___, 
     _XX_XX__, 
     _X___X__, 
@@ -2517,7 +2517,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ba[8] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00bb[10] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00bb[10] = {
     __X__X__, 
     __X__XX_, 
     __XX__X_, 
@@ -2530,7 +2530,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00bb[10] = {
     XX__X___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00bc[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00bc[34] = {
     ___X____, ___XX___, 
     __XX____, ___X____, 
     _XXX____, __X_____, 
@@ -2550,7 +2550,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00bc[34] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00bd[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00bd[34] = {
     ____X___, ____XX__, 
     ___XX___, ___XX___, 
     __XXX___, ___X____, 
@@ -2570,7 +2570,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00bd[34] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00be[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00be[34] = {
     _XXX____, ____X___, 
     XX__X___, ___X____, 
     ____X___, __XX____, 
@@ -2590,7 +2590,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00be[34] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00bf[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00bf[16] = {
     _____XX_, 
     _____XX_, 
     ________, 
@@ -2609,7 +2609,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00bf[16] = {
     ___XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c0[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00c0[40] = {
     ______XX, ________, 
     _______X, X_______, 
     ________, X_______, 
@@ -2632,7 +2632,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c0[40] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c1[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00c1[40] = {
     ________, XX______, 
     ________, X_______, 
     _______X, X_______, 
@@ -2655,7 +2655,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c1[40] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c2[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00c2[40] = {
     ________, XX______, 
     _______X, _X______, 
     ______XX, _X______, 
@@ -2678,7 +2678,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c2[40] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c3[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00c3[38] = {
     ______XX, XXX_____, 
     _____XX_, XXX_____, 
     ________, ________, 
@@ -2700,7 +2700,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c3[38] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c4[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00c4[38] = {
     ______XX, _XX_____, 
     ______X_, _XX_____, 
     ________, ________, 
@@ -2722,7 +2722,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c4[38] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c5[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00c5[40] = {
     _______X, X_______, 
     ______X_, _X______, 
     ______X_, _X______, 
@@ -2745,7 +2745,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c5[40] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c6[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00c6[48] = {
     _______X, XXXXXXXX, XXX_____, 
     _______X, XXXXXXXX, XXX_____, 
     ______XX, __XX____, ________, 
@@ -2764,7 +2764,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c6[48] = {
     X_______, XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c7[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00c7[42] = {
     ____XXXX, X_______, 
     ___XXXXX, XX______, 
     __XX____, XXX_____, 
@@ -2788,7 +2788,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c7[42] = {
     __XXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c8[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00c8[40] = {
     _____XX_, ________, 
     ______XX, ________, 
     _______X, ________, 
@@ -2811,7 +2811,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c8[40] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c9[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00c9[40] = {
     _______X, X_______, 
     _______X, ________, 
     ______XX, ________, 
@@ -2834,7 +2834,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00c9[40] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ca[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00ca[40] = {
     _______X, X_______, 
     ______X_, X_______, 
     _____XX_, X_______, 
@@ -2857,7 +2857,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ca[40] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00cb[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00cb[38] = {
     _____XX_, XX______, 
     _____X__, XX______, 
     ________, ________, 
@@ -2879,7 +2879,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00cb[38] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00cc[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00cc[20] = {
     __XX____, 
     ___X____, 
     ___XX___, 
@@ -2902,7 +2902,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00cc[20] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00cd[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00cd[20] = {
     ____XX__, 
     ___XX___, 
     ___X____, 
@@ -2925,7 +2925,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00cd[20] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ce[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00ce[20] = {
     ___XX___, 
     __XXXX__, 
     __X__X__, 
@@ -2948,7 +2948,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ce[20] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00cf[19] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00cf[19] = {
     _XX__X__, 
     _XX__X__, 
     ________, 
@@ -2970,7 +2970,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00cf[19] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d0[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00d0[32] = {
     ___XXXXX, X_______, 
     __XXXXXX, XX______, 
     __XX____, _XX_____, 
@@ -2989,7 +2989,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d0[32] = {
     XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d1[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00d1[40] = {
     ______X_, ________, 
     _____XXX, XXX_____, 
     _____X__, XX______, 
@@ -3012,7 +3012,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d1[40] = {
     XX______, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d2[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00d2[40] = {
     _____XX_, ________, 
     ______XX, ________, 
     _______X, ________, 
@@ -3035,7 +3035,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d2[40] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d3[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00d3[40] = {
     _______X, X_______, 
     _______X, ________, 
     ______XX, ________, 
@@ -3058,7 +3058,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d3[40] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d4[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00d4[40] = {
     _______X, X_______, 
     ______X_, X_______, 
     _____XX_, X_______, 
@@ -3081,7 +3081,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d4[40] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d5[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00d5[40] = {
     ______X_, ________, 
     _____XXX, XX______, 
     ____XX__, XX______, 
@@ -3104,7 +3104,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d5[40] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d6[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00d6[38] = {
     _____XX_, XX______, 
     _____X__, XX______, 
     ________, ________, 
@@ -3126,7 +3126,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d6[38] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d7[9] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00d7[9] = {
     _X____XX, 
     _XX__XXX, 
     __XX_XX_, 
@@ -3138,7 +3138,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d7[9] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d8[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00d8[36] = {
     ________, ___X____, 
     ____XXXX, X_XX____, 
     ___XXXXX, XXX_____, 
@@ -3159,7 +3159,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d8[36] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d9[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00d9[40] = {
     _____XX_, ________, 
     _____XX_, ________, 
     ______X_, ________, 
@@ -3182,7 +3182,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00d9[40] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00da[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00da[40] = {
     _______X, X_______, 
     ______XX, ________, 
     ______X_, ________, 
@@ -3205,7 +3205,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00da[40] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00db[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00db[40] = {
     ______XX, ________, 
     _____XXX, ________, 
     ____XX_X, X_______, 
@@ -3228,7 +3228,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00db[40] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00dc[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00dc[38] = {
     ____XX__, X_______, 
     ____XX_X, X_______, 
     ________, ________, 
@@ -3250,7 +3250,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00dc[38] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00dd[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00dd[40] = {
     ______XX, ________, 
     ______X_, ________, 
     _____XX_, ________, 
@@ -3273,7 +3273,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00dd[40] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00de[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00de[32] = {
     ___X____, ________, 
     __XX____, ________, 
     __XX____, ________, 
@@ -3292,7 +3292,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00de[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00df[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00df[32] = {
     ____XXXX, ________, 
     ___XXXXX, X_______, 
     __XX___X, X_______, 
@@ -3311,7 +3311,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00df[32] = {
     X___XXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e0[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00e0[32] = {
     ____XX__, ________, 
     _____X__, ________, 
     _____XX_, ________, 
@@ -3330,7 +3330,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e0[32] = {
     _XXXX_XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e1[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00e1[32] = {
     _____XX_, ________, 
     _____XX_, ________, 
     ____XX__, ________, 
@@ -3349,7 +3349,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e1[32] = {
     _XXXX_XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e2[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00e2[32] = {
     _____XX_, ________, 
     ____XXX_, ________, 
     ___XX_XX, ________, 
@@ -3368,7 +3368,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e2[32] = {
     _XXXX_XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e3[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00e3[32] = {
     ____X___, ________, 
     ___XXXXX, X_______, 
     ___X__XX, ________, 
@@ -3387,7 +3387,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e3[32] = {
     _XXXX_XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e4[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00e4[30] = {
     ___XX_XX, ________, 
     ___XX_XX, ________, 
     ________, ________, 
@@ -3405,7 +3405,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e4[30] = {
     _XXXX_XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e5[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00e5[32] = {
     ____XXX_, ________, 
     ____X_X_, ________, 
     ____X_X_, ________, 
@@ -3424,7 +3424,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e5[32] = {
     _XXXX_XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e6[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00e6[24] = {
     ____XX__, __XX____, 
     __XXXXXX, XXXXX___, 
     _XX___XX, X___XX__, 
@@ -3439,7 +3439,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e6[24] = {
     _XXXX___, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e7[17] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00e7[17] = {
     ____XX__, 
     __XXXXX_, 
     _XX___XX, 
@@ -3459,7 +3459,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e7[17] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e8[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00e8[32] = {
     ____XX__, ________, 
     _____X__, ________, 
     _____XX_, ________, 
@@ -3478,7 +3478,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e8[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e9[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00e9[32] = {
     _____XX_, ________, 
     _____X__, ________, 
     ____XX__, ________, 
@@ -3497,7 +3497,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00e9[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ea[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00ea[32] = {
     _____XX_, ________, 
     ____XXX_, ________, 
     ___XX_XX, ________, 
@@ -3516,7 +3516,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ea[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00eb[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00eb[30] = {
     ___XX_XX, ________, 
     ___XX_XX, ________, 
     ________, ________, 
@@ -3534,7 +3534,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00eb[30] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ec[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00ec[16] = {
     __XX____, 
     __XX____, 
     ___X____, 
@@ -3553,7 +3553,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ec[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ed[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00ed[16] = {
     ___XX___, 
     __XX____, 
     __X_____, 
@@ -3572,7 +3572,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ed[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ee[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00ee[16] = {
     ___XX___, 
     __X_X___, 
     _XX_X___, 
@@ -3591,7 +3591,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ee[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ef[15] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00ef[15] = {
     _X__XX__, 
     _X__X___, 
     ________, 
@@ -3609,7 +3609,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ef[15] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f0[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00f0[32] = {
     _____X__, ________, 
     _____XXX, ________, 
     ____XXXX, ________, 
@@ -3628,7 +3628,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f0[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f1[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00f1[32] = {
     ____X___, ________, 
     ___XXXXX, ________, 
     ___X__XX, ________, 
@@ -3647,7 +3647,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f1[32] = {
     X_____X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f2[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00f2[32] = {
     ____XX__, ________, 
     _____X__, ________, 
     _____XX_, ________, 
@@ -3666,7 +3666,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f2[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f3[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00f3[32] = {
     _____XX_, ________, 
     _____X__, ________, 
     ____XX__, ________, 
@@ -3685,7 +3685,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f3[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f4[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00f4[32] = {
     _____XX_, ________, 
     ____XXX_, ________, 
     ___XX_XX, ________, 
@@ -3704,7 +3704,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f4[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f5[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00f5[32] = {
     ____X___, ________, 
     ___XXXXX, ________, 
     __XX__XX, ________, 
@@ -3723,7 +3723,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f5[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f6[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00f6[30] = {
     ___XX_XX, ________, 
     ___X__XX, ________, 
     ________, ________, 
@@ -3741,7 +3741,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f6[30] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f7[18] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00f7[18] = {
     ____XX__, ________, 
     ____XX__, ________, 
     ________, ________, 
@@ -3753,7 +3753,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f7[18] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f8[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00f8[26] = {
     ____XXX_, X_______, 
     ___XXXXX, X_______, 
     __XX___X, X_______, 
@@ -3769,7 +3769,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f8[26] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f9[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00f9[32] = {
     ____XX__, ________, 
     _____X__, ________, 
     _____XX_, ________, 
@@ -3788,7 +3788,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00f9[32] = {
     _XXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00fa[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00fa[32] = {
     ______XX, ________, 
     _____XX_, ________, 
     _____X__, ________, 
@@ -3807,7 +3807,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00fa[32] = {
     _XXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00fb[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00fb[32] = {
     _____XX_, ________, 
     ____XXX_, ________, 
     ___XX_XX, ________, 
@@ -3826,7 +3826,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00fb[32] = {
     _XXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00fc[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00fc[30] = {
     ___XX_XX, ________, 
     ___XX_XX, ________, 
     ________, ________, 
@@ -3844,7 +3844,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00fc[30] = {
     _XXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00fd[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00fd[42] = {
     ______XX, ________, 
     ______X_, ________, 
     _____X__, ________, 
@@ -3868,7 +3868,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00fd[42] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00fe[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00fe[40] = {
     ___XX___, ________, 
     ___XX___, ________, 
     ___X____, ________, 
@@ -3891,7 +3891,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00fe[40] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ff[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_00ff[40] = {
     ____X__X, X_______, 
     ____X__X, X_______, 
     ________, ________, 
@@ -3914,7 +3914,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_00ff[40] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0100[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0100[36] = {
     _____XXX, XXX_____, 
     ________, ________, 
     _______X, X_______, 
@@ -3935,7 +3935,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0100[36] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0101[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0101[28] = {
     ___XXXXX, ________, 
     ________, ________, 
     ____XX__, ________, 
@@ -3952,7 +3952,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0101[28] = {
     _XXXX_XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0102[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0102[38] = {
     ______X_, __X_____, 
     ______XX, XX______, 
     _______X, ________, 
@@ -3974,7 +3974,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0102[38] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0103[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0103[30] = {
     ___X___X, ________, 
     ____XXX_, ________, 
     _____X__, ________, 
@@ -3992,7 +3992,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0103[30] = {
     _XXXX_XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0104[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0104[42] = {
     _______X, X_______, 
     ______XX, X_______, 
     ______XX, X_______, 
@@ -4016,7 +4016,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0104[42] = {
     ________, __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0105[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0105[34] = {
     ____XX__, ________, 
     __XXXXXX, ________, 
     _XX____X, X_______, 
@@ -4036,7 +4036,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0105[34] = {
     _______X, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0106[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0106[40] = {
     _______X, X_______, 
     _______X, ________, 
     ______X_, ________, 
@@ -4059,7 +4059,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0106[40] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0107[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0107[16] = {
     ______XX, 
     _____XX_, 
     _____X__, 
@@ -4078,7 +4078,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0107[16] = {
     _XXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0108[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0108[40] = {
     ______XX, ________, 
     _____XXX, X_______, 
     _____X__, X_______, 
@@ -4101,7 +4101,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0108[40] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0109[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0109[16] = {
     _____XX_, 
     ____XXX_, 
     ___XX_XX, 
@@ -4120,7 +4120,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0109[16] = {
     _XXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_010a[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_010a[40] = {
     ______XX, ________, 
     _____XX_, ________, 
     _____XX_, ________, 
@@ -4143,7 +4143,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_010a[40] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_010b[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_010b[16] = {
     ____XX__, 
     ____XX__, 
     ____XX__, 
@@ -4162,7 +4162,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_010b[16] = {
     _XXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_010c[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_010c[40] = {
     _____X__, XX______, 
     _____XXX, X_______, 
     ______XX, ________, 
@@ -4185,7 +4185,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_010c[40] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_010d[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_010d[16] = {
     ___XX__X, 
     ____X_XX, 
     ____XXX_, 
@@ -4204,7 +4204,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_010d[16] = {
     _XXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_010e[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_010e[40] = {
     _____X__, XX______, 
     _____X_X, X_______, 
     _____XXX, ________, 
@@ -4227,7 +4227,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_010e[40] = {
     XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_010f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_010f[32] = {
     ________, XX_X____, 
     ________, XX_X____, 
     ________, XXXX____, 
@@ -4246,7 +4246,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_010f[32] = {
     _XXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0110[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0110[32] = {
     ___XXXXX, X_______, 
     __XXXXXX, XX______, 
     __XX____, _XX_____, 
@@ -4265,7 +4265,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0110[32] = {
     XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0111[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0111[32] = {
     ________, XX______, 
     ________, XX______, 
     _____XXX, XXX_____, 
@@ -4284,7 +4284,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0111[32] = {
     _XXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0112[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0112[36] = {
     _____XXX, XX______, 
     ________, ________, 
     ___XXXXX, XXXX____, 
@@ -4305,7 +4305,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0112[36] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0113[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0113[28] = {
     __XXXXXX, ________, 
     ________, ________, 
     ____XX__, ________, 
@@ -4322,7 +4322,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0113[28] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0114[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0114[40] = {
     _____X__, _X______, 
     _____XX_, _X______, 
     ______XX, X_______, 
@@ -4345,7 +4345,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0114[40] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0115[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0115[32] = {
     ___X___X, ________, 
     ___X__XX, ________, 
     ___XXXX_, ________, 
@@ -4364,7 +4364,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0115[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0116[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0116[40] = {
     _______X, X_______, 
     _______X, X_______, 
     _______X, X_______, 
@@ -4387,7 +4387,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0116[40] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0117[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0117[32] = {
     _____XX_, ________, 
     ____XX__, ________, 
     ____XX__, ________, 
@@ -4406,7 +4406,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0117[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0118[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0118[42] = {
     ___XXXXX, XXXX____, 
     __XXXXXX, XXXX____, 
     __XX____, ________, 
@@ -4430,7 +4430,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0118[42] = {
     _______X, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0119[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0119[34] = {
     ____XX__, ________, 
     __XXXXXX, ________, 
     _XX___XX, ________, 
@@ -4450,7 +4450,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0119[34] = {
     ____X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_011a[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_011a[40] = {
     _____XX_, XX______, 
     ______X_, X_______, 
     ______XX, ________, 
@@ -4473,7 +4473,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_011a[40] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_011b[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_011b[32] = {
     ___XX_XX, ________, 
     ____X_X_, ________, 
     ____XXX_, ________, 
@@ -4492,7 +4492,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_011b[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_011c[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_011c[40] = {
     ______XX, ________, 
     ______XX, X_______, 
     _____X__, X_______, 
@@ -4515,7 +4515,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_011c[40] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_011d[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_011d[42] = {
     ______XX, ________, 
     _____X_X, ________, 
     ____XX_X, ________, 
@@ -4539,7 +4539,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_011d[42] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_011e[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_011e[38] = {
     _____X__, _X______, 
     _____XXX, X_______, 
     _______X, ________, 
@@ -4561,7 +4561,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_011e[38] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_011f[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_011f[40] = {
     ____X___, X_______, 
     _____XXX, X_______, 
     ______X_, ________, 
@@ -4584,7 +4584,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_011f[40] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0120[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0120[40] = {
     ______XX, ________, 
     ______XX, ________, 
     ______XX, ________, 
@@ -4607,7 +4607,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0120[40] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0121[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0121[42] = {
     ______XX, ________, 
     _____XX_, ________, 
     _____XX_, ________, 
@@ -4631,7 +4631,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0121[42] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0122[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0122[42] = {
     ____XXXX, X_______, 
     ___XXXXX, XX______, 
     __XX____, _XX_____, 
@@ -4655,7 +4655,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0122[42] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0123[44] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0123[44] = {
     _______X, ________, 
     ______X_, ________, 
     ______X_, ________, 
@@ -4680,7 +4680,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0123[44] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0124[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0124[40] = {
     _______X, X_______, 
     _______X, XX______, 
     ______X_, _X______, 
@@ -4703,7 +4703,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0124[40] = {
     XX______, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0125[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0125[40] = {
     ______XX, ________, 
     _____XXX, ________, 
     ____XX_X, X_______, 
@@ -4726,7 +4726,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0125[40] = {
     X_____X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0126[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0126[32] = {
     __XX____, ___XX___, 
     __XX____, ___X____, 
     __XX____, ___X____, 
@@ -4745,7 +4745,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0126[32] = {
     XX______, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0127[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0127[32] = {
     ___XX___, ________, 
     __XXXXXX, ________, 
     _XXXXXXX, ________, 
@@ -4764,7 +4764,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0127[32] = {
     XX____XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0128[19] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0128[19] = {
     __XXX_X_, 
     _XX_XXX_, 
     ________, 
@@ -4786,7 +4786,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0128[19] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0129[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0129[16] = {
     __X__X__, 
     _XXXXX__, 
     XX__X___, 
@@ -4805,7 +4805,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0129[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_012a[19] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_012a[19] = {
     _XXXXXX_, 
     _XXXXXX_, 
     ________, 
@@ -4827,7 +4827,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_012a[19] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_012b[15] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_012b[15] = {
     _XXXXX__, 
     XXXXXX__, 
     ________, 
@@ -4845,7 +4845,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_012b[15] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_012c[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_012c[20] = {
     __X___X_, 
     __X__X__, 
     __XXXX__, 
@@ -4868,7 +4868,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_012c[20] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_012d[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_012d[16] = {
     _X___X__, 
     _X__XX__, 
     _XXXX___, 
@@ -4887,7 +4887,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_012d[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_012e[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_012e[21] = {
     ___X____, 
     __XX____, 
     __XX____, 
@@ -4911,7 +4911,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_012e[21] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_012f[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_012f[21] = {
     ___XX___, 
     ___XX___, 
     ________, 
@@ -4935,7 +4935,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_012f[21] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0130[19] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0130[19] = {
     ___XX___, 
     ___XX___, 
     ________, 
@@ -4957,7 +4957,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0130[19] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0131[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0131[11] = {
     __XX____, 
     __X_____, 
     __X_____, 
@@ -4971,7 +4971,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0131[11] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0132[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0132[32] = {
     ___X____, ____XX__, 
     __XX____, ____XX__, 
     __XX____, ____X___, 
@@ -4990,7 +4990,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0132[32] = {
     XX____XX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0133[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0133[21] = {
     __XX__XX, 
     __XX__XX, 
     ________, 
@@ -5014,7 +5014,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0133[21] = {
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0134[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0134[40] = {
     _______X, X_______, 
     _______X, XX______, 
     ______X_, _X______, 
@@ -5037,7 +5037,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0134[40] = {
     _XXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0135[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0135[21] = {
     _____XX_, 
     ____XXX_, 
     ___XX_XX, 
@@ -5061,7 +5061,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0135[21] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0136[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0136[42] = {
     ___X____, __XX____, 
     __XX____, _XX_____, 
     __XX____, XX______, 
@@ -5085,7 +5085,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0136[42] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0137[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0137[21] = {
     __XX____, 
     __XX____, 
     __XX____, 
@@ -5109,7 +5109,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0137[21] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0138[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0138[11] = {
     _XX___XX, 
     _XX__XX_, 
     _XX_XX__, 
@@ -5123,7 +5123,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0138[11] = {
     X____XX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0139[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0139[20] = {
     _____XX_, 
     _____X__, 
     ____XX__, 
@@ -5146,7 +5146,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0139[20] = {
     XXXXXXXX, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_013a[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_013a[20] = {
     ___XX___, 
     ___XX___, 
     __XX____, 
@@ -5169,7 +5169,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_013a[20] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_013b[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_013b[21] = {
     __XX____, 
     __XX____, 
     __XX____, 
@@ -5193,7 +5193,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_013b[21] = {
     __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_013c[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_013c[21] = {
     ____XX__, 
     ____XX__, 
     ____X___, 
@@ -5217,7 +5217,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_013c[21] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_013d[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_013d[32] = {
     __XX____, X_______, 
     __XX____, X_______, 
     __XX____, X_______, 
@@ -5236,7 +5236,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_013d[32] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_013e[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_013e[16] = {
     __XX_X__, 
     __XXXX__, 
     __X__X__, 
@@ -5255,7 +5255,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_013e[16] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_013f[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_013f[16] = {
     __XX____, 
     __XX____, 
     __XX____, 
@@ -5274,7 +5274,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_013f[16] = {
     XXXXXXXX, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0140[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0140[16] = {
     __XX____, 
     __XX____, 
     __X_____, 
@@ -5293,7 +5293,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0140[16] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0141[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0141[32] = {
     ____X___, ________, 
     ___XX___, ________, 
     ___XX___, ________, 
@@ -5312,7 +5312,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0141[32] = {
     _XXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0142[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0142[16] = {
     ___XX___, 
     ___XX___, 
     ___X____, 
@@ -5331,7 +5331,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0142[16] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0143[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0143[40] = {
     ________, XX______, 
     ________, XX______, 
     _______X, X_______, 
@@ -5354,7 +5354,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0143[40] = {
     XX______, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0144[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0144[32] = {
     ______XX, ________, 
     _____XX_, ________, 
     ____XX__, ________, 
@@ -5373,7 +5373,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0144[32] = {
     X_____X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0145[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0145[42] = {
     ___X____, ___XX___, 
     __XXX___, ___X____, 
     __XXX___, ___X____, 
@@ -5397,7 +5397,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0145[42] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0146[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0146[34] = {
     _____XX_, ________, 
     _XX_XXXX, ________, 
     _XXX___X, X_______, 
@@ -5417,7 +5417,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0146[34] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0147[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0147[40] = {
     ______X_, _XX_____, 
     ______X_, XX______, 
     ______XX, X_______, 
@@ -5440,7 +5440,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0147[40] = {
     XX______, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0148[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0148[32] = {
     ___XX__X, ________, 
     ____X_XX, ________, 
     ____XXX_, ________, 
@@ -5459,7 +5459,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0148[32] = {
     X_____X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0149[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0149[32] = {
     XX______, ________, 
     XX______, ________, 
     _X______, ________, 
@@ -5478,7 +5478,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0149[32] = {
     _XX____X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_014a[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_014a[32] = {
     __XX__XX, XX______, 
     __XXXXXX, XXX_____, 
     __XXX___, _XX_____, 
@@ -5497,7 +5497,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_014a[32] = {
     XX__XXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_014b[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_014b[34] = {
     _____XX_, ________, 
     _XX_XXXX, ________, 
     _XXX___X, X_______, 
@@ -5517,7 +5517,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_014b[34] = {
     ____X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_014c[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_014c[38] = {
     ____XXXX, X_______, 
     ____XXXX, X_______, 
     ________, ________, 
@@ -5539,7 +5539,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_014c[38] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_014d[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_014d[30] = {
     __XXXXXX, ________, 
     __XXXXXX, ________, 
     ________, ________, 
@@ -5557,7 +5557,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_014d[30] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_014e[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_014e[40] = {
     ____X___, _X______, 
     _____X__, X_______, 
     _____XXX, X_______, 
@@ -5580,7 +5580,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_014e[40] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_014f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_014f[32] = {
     ___X___X, ________, 
     ___XX__X, ________, 
     ____XXX_, ________, 
@@ -5599,7 +5599,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_014f[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0150[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0150[40] = {
     ______XX, _XX_____, 
     _____XX_, XX______, 
     _____X__, X_______, 
@@ -5622,7 +5622,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0150[40] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0151[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0151[32] = {
     ____XX_X, X_______, 
     ___XX_XX, ________, 
     ___X__X_, ________, 
@@ -5641,7 +5641,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0151[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0152[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0152[48] = {
     _____XXX, X__XXXXX, XX______, 
     ___XXXXX, XXXXXXXX, XX______, 
     __XXX___, _XXX____, ________, 
@@ -5660,7 +5660,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0152[48] = {
     ___XXXX_, XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0153[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0153[24] = {
     ____XX__, ___XX___, 
     __XXXXXX, _XXXXX__, 
     _XX____X, XX___XX_, 
@@ -5675,7 +5675,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0153[24] = {
     __XXXX__, _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0154[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0154[40] = {
     _______X, X_______, 
     ______XX, ________, 
     ______X_, ________, 
@@ -5698,7 +5698,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0154[40] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0155[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0155[16] = {
     ____XX__, 
     ____X___, 
     ___XX___, 
@@ -5717,7 +5717,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0155[16] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0156[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0156[42] = {
     ___XXXXX, XX______, 
     __XXXXXX, XXX_____, 
     __XX____, __XX____, 
@@ -5741,7 +5741,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0156[42] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0157[17] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0157[17] = {
     _____X__, 
     _XX_XX__, 
     _XXX____, 
@@ -5761,7 +5761,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0157[17] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0158[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0158[40] = {
     _____X__, XX______, 
     _____XX_, X_______, 
     ______XX, ________, 
@@ -5784,7 +5784,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0158[40] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0159[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0159[16] = {
     __X__XX_, 
     __XX_X__, 
     ___XX___, 
@@ -5803,7 +5803,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0159[16] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_015a[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_015a[40] = {
     _______X, X_______, 
     _______X, X_______, 
     ______XX, ________, 
@@ -5826,7 +5826,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_015a[40] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_015b[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_015b[16] = {
     _____XX_, 
     ____XX__, 
     ____X___, 
@@ -5845,7 +5845,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_015b[16] = {
     _XXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_015c[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_015c[40] = {
     _______X, X_______, 
     ______X_, X_______, 
     _____XX_, X_______, 
@@ -5868,7 +5868,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_015c[40] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_015d[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_015d[16] = {
     _____XX_, 
     ____XXX_, 
     ___XX_XX, 
@@ -5887,7 +5887,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_015d[16] = {
     _XXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_015e[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_015e[42] = {
     ____XXXX, X_______, 
     ___XXXXX, XX______, 
     __XX____, _XX_____, 
@@ -5911,7 +5911,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_015e[42] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_015f[17] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_015f[17] = {
     ___XXX__, 
     __XXXXX_, 
     _XX___XX, 
@@ -5931,7 +5931,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_015f[17] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0160[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0160[40] = {
     _____X__, XX______, 
     _____XX_, X_______, 
     ______XX, ________, 
@@ -5954,7 +5954,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0160[40] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0161[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0161[16] = {
     ___X__XX, 
     ___XXXX_, 
     ____XX__, 
@@ -5973,7 +5973,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0161[16] = {
     _XXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0162[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0162[42] = {
     _XXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     ____XX__, ________, 
@@ -5997,7 +5997,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0162[42] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0163[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0163[20] = {
     ____X___, 
     ___XX___, 
     ___X____, 
@@ -6020,7 +6020,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0163[20] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0164[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0164[40] = {
     ____X__X, X_______, 
     ____X_XX, ________, 
     ____XXX_, ________, 
@@ -6043,7 +6043,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0164[40] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0165[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0165[16] = {
     ______XX, 
     ___X__X_, 
     __XX__X_, 
@@ -6062,7 +6062,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0165[16] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0166[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0166[32] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XX______, 
     ____XX__, ________, 
@@ -6081,7 +6081,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0166[32] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0167[15] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0167[15] = {
     ___XX___, 
     ___XX___, 
     ___X____, 
@@ -6099,7 +6099,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0167[15] = {
     _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0168[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0168[40] = {
     _____X__, _X______, 
     ____XXXX, XX______, 
     ____X__X, X_______, 
@@ -6122,7 +6122,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0168[40] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0169[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0169[32] = {
     ____X___, X_______, 
     ___XXXXX, X_______, 
     ___X__XX, ________, 
@@ -6141,7 +6141,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0169[32] = {
     _XXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_016a[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_016a[38] = {
     ____XXXX, XX______, 
     ____XXXX, X_______, 
     ________, ________, 
@@ -6163,7 +6163,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_016a[38] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_016b[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_016b[30] = {
     ___XXXXX, ________, 
     ___XXXXX, ________, 
     ________, ________, 
@@ -6181,7 +6181,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_016b[30] = {
     _XXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_016c[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_016c[40] = {
     ____X___, X_______, 
     ____XX__, X_______, 
     _____XXX, ________, 
@@ -6204,7 +6204,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_016c[40] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_016d[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_016d[30] = {
     ___X___X, ________, 
     ___XXXX_, ________, 
     _____X__, ________, 
@@ -6222,7 +6222,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_016d[30] = {
     _XXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_016e[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_016e[40] = {
     _____X_X, ________, 
     _____X_X, ________, 
     ______XX, ________, 
@@ -6245,7 +6245,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_016e[40] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_016f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_016f[32] = {
     ____XXX_, ________, 
     ___X__X_, ________, 
     ____X_X_, ________, 
@@ -6264,7 +6264,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_016f[32] = {
     _XXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0170[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0170[40] = {
     _____XX_, XX______, 
     _____X__, X_______, 
     ____XX_X, X_______, 
@@ -6287,7 +6287,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0170[40] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0171[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0171[32] = {
     ____XX_X, X_______, 
     ____X__X, ________, 
     ___XX_X_, ________, 
@@ -6306,7 +6306,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0171[32] = {
     _XXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0172[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0172[42] = {
     __X_____, __XX____, 
     _XX_____, __X_____, 
     _XX_____, _XX_____, 
@@ -6330,7 +6330,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0172[42] = {
     ____X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0173[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0173[32] = {
     _XX____X, X_______, 
     _XX____X, X_______, 
     _XX____X, X_______, 
@@ -6349,7 +6349,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0173[32] = {
     ______X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0174[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0174[60] = {
     ________, XX______, ________, 
     _______X, XXX_____, ________, 
     _______X, __X_____, ________, 
@@ -6372,7 +6372,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0174[60] = {
     _XX_____, _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0175[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0175[32] = {
     ______XX, ________, 
     ______XX, X_______, 
     _____X__, X_______, 
@@ -6391,7 +6391,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0175[32] = {
     _XX____X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0176[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0176[40] = {
     ______XX, ________, 
     _____XXX, ________, 
     ____XX_X, X_______, 
@@ -6414,7 +6414,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0176[40] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0177[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0177[42] = {
     ______XX, ________, 
     _____XXX, ________, 
     ____XX_X, X_______, 
@@ -6438,7 +6438,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0177[42] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0178[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0178[38] = {
     ____XX_X, X_______, 
     ____X__X, X_______, 
     ________, ________, 
@@ -6460,7 +6460,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0178[38] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0179[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0179[40] = {
     _______X, X_______, 
     _______X, ________, 
     ______X_, ________, 
@@ -6483,7 +6483,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0179[40] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_017a[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_017a[32] = {
     ______XX, ________, 
     _____XX_, ________, 
     _____X__, ________, 
@@ -6502,7 +6502,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_017a[32] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_017b[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_017b[38] = {
     ______XX, ________, 
     ______XX, ________, 
     ________, ________, 
@@ -6524,7 +6524,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_017b[38] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_017c[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_017c[30] = {
     _____XX_, ________, 
     _____XX_, ________, 
     ________, ________, 
@@ -6542,7 +6542,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_017c[30] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_017d[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_017d[40] = {
     ______X_, _XX_____, 
     ______X_, XX______, 
     ______XX, X_______, 
@@ -6565,7 +6565,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_017d[40] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_017e[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_017e[32] = {
     ____X__X, X_______, 
     ____X_XX, ________, 
     ____XXX_, ________, 
@@ -6584,7 +6584,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_017e[32] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_017f[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_017f[16] = {
     ___XXX__, 
     __XXXX__, 
     __XX____, 
@@ -6603,7 +6603,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_017f[16] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0180[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0180[32] = {
     ______XX, ________, 
     ____XXXX, XXX_____, 
     _____XX_, ________, 
@@ -6622,7 +6622,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0180[32] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0181[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0181[32] = {
     ___XXXXX, XXXXX___, 
     _XXXXXXX, XXXXXX__, 
     _XX_XX__, ____XXX_, 
@@ -6641,7 +6641,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0181[32] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0182[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0182[32] = {
     _____XXX, XXXXXXX_, 
     _____XXX, XXXXXXX_, 
     ____XX__, ________, 
@@ -6660,7 +6660,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0182[32] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0183[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0183[32] = {
     ______XX, XXXXXX__, 
     _____XXX, XXXXX___, 
     _____XX_, ________, 
@@ -6679,7 +6679,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0183[32] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0184[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0184[32] = {
     ______X_, ________, 
     _____XX_, ________, 
     ___XXX__, ________, 
@@ -6698,7 +6698,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0184[32] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0185[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0185[32] = {
     _______X, ________, 
     _____XX_, ________, 
     ___XXXX_, ________, 
@@ -6717,7 +6717,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0185[32] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0186[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0186[32] = {
     _______X, XXXXX___, 
     _____XXX, XXXXXX__, 
     ____XX__, ____XXX_, 
@@ -6736,7 +6736,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0186[32] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0187[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0187[32] = {
     ________, XXXXX___, 
     ______XX, XXXXXXXX, 
     ____XXX_, _____XXX, 
@@ -6755,7 +6755,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0187[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0188[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0188[24] = {
     _______X, X__X____, 
     ____XXXX, XXXX____, 
     ___XX___, _XXX____, 
@@ -6770,7 +6770,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0188[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0189[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0189[32] = {
     _____XXX, XXXXX___, 
     _____XXX, XXXXXXX_, 
     ____XX__, ____XXXX, 
@@ -6789,7 +6789,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0189[32] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_018a[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_018a[32] = {
     ___XXXXX, XXXX____, 
     _XXXXXXX, XXXXXXX_, 
     _XX_XX__, ____XXX_, 
@@ -6808,7 +6808,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_018a[32] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_018b[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_018b[32] = {
     ______XX, XXXXXXXX, 
     ______XX, XXXXXXXX, 
     ________, _____XX_, 
@@ -6827,7 +6827,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_018b[32] = {
     __XXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_018c[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_018c[32] = {
     ______XX, XXXXX___, 
     ______XX, XXXXX___, 
     ________, ___XX___, 
@@ -6846,7 +6846,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_018c[32] = {
     _XXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_018d[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_018d[32] = {
     ________, _XX_____, 
     ______XX, XXXXX___, 
     _____XXX, ___XXX__, 
@@ -6865,7 +6865,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_018d[32] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_018e[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_018e[48] = {
     ______XX, XXXXXXXX, X_______, 
     _____XXX, XXXXXXXX, X_______, 
     ________, ______XX, ________, 
@@ -6884,7 +6884,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_018e[48] = {
     XXXXXXXX, XXXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_018f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_018f[32] = {
     ________, XXXXXX__, 
     ______XX, XXXXXXX_, 
     _____XX_, _____XXX, 
@@ -6903,7 +6903,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_018f[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0190[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0190[32] = {
     ________, XXXXX___, 
     ______XX, XXXXXXX_, 
     _____XX_, _____XX_, 
@@ -6922,7 +6922,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0190[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0191[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0191[63] = {
     ________, _XXXXXXX, XXX_____, 
     ________, _XXXXXXX, XXX_____, 
     ________, XX______, ________, 
@@ -6946,7 +6946,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0191[63] = {
     XX______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0192[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0192[42] = {
     ______XX, X_______, 
     _____XXX, X_______, 
     _____X__, ________, 
@@ -6970,7 +6970,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0192[42] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0193[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0193[48] = {
     ________, XXXXXX__, ________, 
     ______XX, XXXXXXX_, X_______, 
     ____XXX_, _____XXX, X_______, 
@@ -6989,7 +6989,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0193[48] = {
     __XXXXXX, X__XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0194[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0194[42] = {
     _XXX____, _____X__, 
     __XX____, _____X__, 
     __XX____, ____XX__, 
@@ -7013,7 +7013,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0194[42] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0195[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0195[48] = {
     ______XX, ________, ________, 
     _____XX_, ________, ________, 
     _____XX_, ________, ________, 
@@ -7032,7 +7032,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0195[48] = {
     XXX_____, __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0196[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0196[16] = {
     ______X_, 
     _____XX_, 
     _____XX_, 
@@ -7051,7 +7051,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0196[16] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0197[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0197[16] = {
     _____XX_, 
     _____XX_, 
     _____XX_, 
@@ -7070,7 +7070,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0197[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0198[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0198[32] = {
     ______XX, XX_____X, 
     _____XXX, X____XXX, 
     ____XXX_, ____XXX_, 
@@ -7089,7 +7089,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0198[32] = {
     XX______, __XXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0199[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0199[32] = {
     _______X, XXX_____, 
     ______XX, XX______, 
     _____XX_, ________, 
@@ -7108,7 +7108,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0199[32] = {
     XXX____X, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_019a[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_019a[16] = {
     ______X_, 
     _____XX_, 
     _____XX_, 
@@ -7127,7 +7127,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_019a[16] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_019b[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_019b[32] = {
     ______XX, X__X____, 
     ______XX, XXXX____, 
     ________, XX______, 
@@ -7146,7 +7146,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_019b[32] = {
     XXX_____, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_019c[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_019c[48] = {
     _____XX_, ___XX___, __XX____, 
     ____XX__, ___XX___, __XX____, 
     ____XX__, ___XX___, _XX_____, 
@@ -7165,7 +7165,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_019c[48] = {
     _XXXX__X, XXXX_XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_019d[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_019d[63] = {
     ________, _XX_____, ___XX___, 
     ________, _XXX____, ___XX___, 
     ________, XXXX____, ___XX___, 
@@ -7189,7 +7189,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_019d[63] = {
     XX______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_019e[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_019e[32] = {
     ________, _XX_____, 
     ____XX_X, XXXX____, 
     ____XXX_, __XXX___, 
@@ -7208,7 +7208,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_019e[32] = {
     ______XX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_019f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_019f[32] = {
     ________, XXXXXX__, 
     ______XX, XXXXXXX_, 
     ____XXX_, _____XXX, 
@@ -7227,7 +7227,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_019f[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a0[51] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01a0[51] = {
     ________, ________, X_______, 
     ________, XXXXXX__, ________, 
     ______XX, XXXXXXX_, ________, 
@@ -7247,7 +7247,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a0[51] = {
     __XXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a1[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01a1[28] = {
     ________, ____X___, 
     ________, ___XX___, 
     _______X, X___X___, 
@@ -7264,7 +7264,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a1[28] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a2[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01a2[60] = {
     ________, XXXXXX__, __XX____, 
     ______XX, XXXXXXXX, XXX_____, 
     ____XXX_, _____XXX, XXX_____, 
@@ -7287,7 +7287,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a2[60] = {
     ________, ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a3[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01a3[32] = {
     _______X, XX______, 
     ____XXXX, XXXXXXXX, 
     ___XXX__, _XX__XX_, 
@@ -7306,7 +7306,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a3[32] = {
     ________, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a4[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01a4[32] = {
     ___XXXXX, XXXXXX__, 
     _XXXXXXX, XXXXXXX_, 
     _XX_XX__, _____XXX, 
@@ -7325,7 +7325,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a4[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a5[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01a5[40] = {
     ________, XXXX____, 
     _______X, XXX_____, 
     ______XX, ________, 
@@ -7348,7 +7348,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a5[40] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a6[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01a6[36] = {
     _____XX_, ________, 
     _____XX_, ________, 
     ____XXXX, XXXXXX__, 
@@ -7369,7 +7369,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a6[36] = {
     ________, _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a7[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01a7[32] = {
     ________, XXXXXX__, 
     ______XX, XXXXXXX_, 
     _____XX_, _____XX_, 
@@ -7388,7 +7388,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a7[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a8[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01a8[24] = {
     ______XX, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XX_____, 
@@ -7403,7 +7403,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a8[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a9[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01a9[32] = {
     _____XXX, XXXXXXXX, 
     _____XXX, XXXXXXXX, 
     _____XX_, ________, 
@@ -7422,7 +7422,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01a9[32] = {
     XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01aa[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01aa[21] = {
     ___XXX__, 
     _XXX_XX_, 
     _X___XX_, 
@@ -7446,7 +7446,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01aa[21] = {
     __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ab[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01ab[38] = {
     ______XX, X_______, 
     ______XX, ________, 
     ______XX, ________, 
@@ -7468,7 +7468,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ab[38] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ac[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01ac[32] = {
     ___XXXXX, XXXXX___, 
     __XXXXXX, XXXXX___, 
     _XX___XX, X_______, 
@@ -7487,7 +7487,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ac[32] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ad[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01ad[16] = {
     ______X_, 
     _____XX_, 
     ____XXX_, 
@@ -7506,7 +7506,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ad[16] = {
     _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ae[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01ae[42] = {
     _XXXXXXX, XXXX____, 
     XXXXXXXX, XXXX____, 
     _____XX_, ________, 
@@ -7530,7 +7530,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ae[42] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01af[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01af[32] = {
     ____XX__, ______XX, 
     ____XX__, ______XX, 
     ___XX___, ______XX, 
@@ -7549,7 +7549,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01af[32] = {
     _XXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b0[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01b0[28] = {
     ________, ____X___, 
     ________, ________, 
     ________, ____X___, 
@@ -7566,7 +7566,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b0[28] = {
     _XXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b1[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01b1[48] = {
     ___XXXXX, XX__XXXX, X_______, 
     ___XXXXX, X__XXXXX, X_______, 
     ______XX, ____XX__, ________, 
@@ -7585,7 +7585,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b1[48] = {
     __XXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b2[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01b2[32] = {
     ____XX__, ___XXXX_, 
     ____XX__, ___XXXXX, 
     ___XX___, _____XXX, 
@@ -7604,7 +7604,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b2[32] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b3[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01b3[32] = {
     XXX_____, ____XXX_, 
     _XX_____, ___XXXX_, 
     _XXX____, __XXX___, 
@@ -7623,7 +7623,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b3[32] = {
     _XXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b4[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01b4[36] = {
     ________, _____X__, 
     ________, _____X__, 
     ____XX__, ____XX__, 
@@ -7644,7 +7644,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b4[36] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b5[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01b5[48] = {
     _______X, XXXXXXXX, X_______, 
     ______XX, XXXXXXXX, X_______, 
     ________, ______XX, X_______, 
@@ -7663,7 +7663,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b5[48] = {
     XXXXXXXX, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b6[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01b6[22] = {
     ____XXXX, XXXXXX__, 
     ________, ___XX___, 
     ________, _XXX____, 
@@ -7677,7 +7677,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b6[22] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b7[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01b7[42] = {
     _______X, XXXXXXXX, 
     _______X, XXXXXXXX, 
     ________, ______XX, 
@@ -7701,7 +7701,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b7[42] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b8[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01b8[42] = {
     _____XXX, XXXXXX__, 
     _____XXX, XXXXXX__, 
     _____XX_, ________, 
@@ -7725,7 +7725,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b8[42] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b9[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01b9[32] = {
     ___XXXXX, XXXX____, 
     ___XXX__, ________, 
     ____XX__, ________, 
@@ -7744,7 +7744,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01b9[32] = {
     __XXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ba[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01ba[32] = {
     _____XXX, XXXXXX__, 
     ________, __XXX___, 
     ________, _XX_____, 
@@ -7763,7 +7763,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ba[32] = {
     __XXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01bb[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01bb[32] = {
     ________, XXXXX___, 
     ______XX, XXXXXX__, 
     _____XX_, ____XX__, 
@@ -7782,7 +7782,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01bb[32] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01bc[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01bc[32] = {
     ____XXXX, XXXXX___, 
     ___XXXXX, XXXXX___, 
     ____XX__, ________, 
@@ -7801,7 +7801,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01bc[32] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01bd[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01bd[22] = {
     ___XXXXX, XXXX____, 
     ____XX__, ________, 
     ___XX___, ________, 
@@ -7815,7 +7815,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01bd[22] = {
     XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01be[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01be[28] = {
     ____XXX_, ________, 
     ____XX__, ________, 
     ____XX_X, ________, 
@@ -7832,7 +7832,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01be[28] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01bf[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01bf[32] = {
     ________, __XX____, 
     _____XX_, XXXXXX__, 
     _____XXX, X__XXX__, 
@@ -7851,7 +7851,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01bf[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c0[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01c0[42] = {
     _______X, X_______, 
     _______X, X_______, 
     _______X, ________, 
@@ -7875,7 +7875,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c0[42] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c1[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01c1[42] = {
     _______X, ________, 
     ______XX, ________, 
     ______XX, _X______, 
@@ -7899,7 +7899,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c1[42] = {
     XX_XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c2[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01c2[42] = {
     ________, _XX_____, 
     ________, _XX_____, 
     ________, _X______, 
@@ -7923,7 +7923,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c2[42] = {
     ___X____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c3[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01c3[16] = {
     _____XX_, 
     _____XX_, 
     _____XX_, 
@@ -7942,7 +7942,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c3[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c4[80] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01c4[80] = {
     ________, ________, _______X, X__XXX__, 
     ________, ________, ________, XXXX____, 
     ________, ________, ________, XXX_____, 
@@ -7965,7 +7965,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c4[80] = {
     XXXXXXXX, _____XXX, XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c5[64] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01c5[64] = {
     _____XXX, XXXXX___, _____XX_, _XX_____, 
     _____XXX, XXXXXXX_, _____XX_, XX______, 
     ____XX__, ____XXXX, ______XX, X_______, 
@@ -7984,7 +7984,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c5[64] = {
     XXXXXXXX, _____XXX, XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c6[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01c6[48] = {
     ________, ____XX__, _XXX_XXX, 
     ________, ____XX__, __XXXX__, 
     ________, ___XX___, __XXX___, 
@@ -8003,7 +8003,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c6[48] = {
     _XXXXX_X, X_XXXXXX, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c7[64] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01c7[64] = {
     _____XX_, ________, ______XX, X_______, 
     _____XX_, ________, ______XX, ________, 
     ____XX__, ________, ______XX, ________, 
@@ -8022,7 +8022,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c7[64] = {
     XXXXXXXX, XX__XXXX, XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c8[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01c8[63] = {
     _____XX_, ________, _XX_____, 
     _____XX_, ________, _XX_____, 
     ____XX__, ________, X_______, 
@@ -8046,7 +8046,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c8[63] = {
     ________, XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c9[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01c9[42] = {
     ______XX, __X_____, 
     _____XX_, __X_____, 
     _____XX_, _X______, 
@@ -8070,7 +8070,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01c9[42] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ca[64] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01ca[64] = {
     _____XX_, _______X, X_______, _XXX____, 
     _____XXX, _______X, X_______, _XX_____, 
     ____XXXX, _______X, X_______, _XX_____, 
@@ -8089,7 +8089,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ca[64] = {
     XX______, __XX___X, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01cb[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01cb[63] = {
     _____XX_, _______X, X___X___, 
     _____XXX, _______X, X__XX___, 
     ____XXXX, _______X, X_______, 
@@ -8113,7 +8113,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01cb[63] = {
     ________, ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01cc[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01cc[63] = {
     ________, ________, _XX_____, 
     ________, ________, _XX_____, 
     ________, ________, ________, 
@@ -8137,7 +8137,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01cc[63] = {
     ________, XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01cd[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01cd[60] = {
     ________, __XXX__X, X_______, 
     ________, ___XX_XX, ________, 
     ________, ___XXXX_, ________, 
@@ -8160,7 +8160,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01cd[60] = {
     XXX_____, ____XXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ce[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01ce[32] = {
     ______XX, __XXX___, 
     _______X, XXX_____, 
     _______X, XX______, 
@@ -8179,7 +8179,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ce[32] = {
     XXXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01cf[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01cf[20] = {
     ____XXX_, 
     _____XX_, 
     _____XX_, 
@@ -8202,7 +8202,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01cf[20] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d0[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01d0[16] = {
     ___XXX__, 
     ____XX__, 
     _____XX_, 
@@ -8221,7 +8221,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d0[16] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d1[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01d1[40] = {
     ________, _XX__XXX, 
     ________, _XXXXX__, 
     ________, __XXX___, 
@@ -8244,7 +8244,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d1[40] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d2[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01d2[32] = {
     ______XX, X_XXX___, 
     _______X, XXX_____, 
     _______X, XX______, 
@@ -8263,7 +8263,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d2[32] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d3[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01d3[40] = {
     ________, XXX__XX_, 
     ________, _XX_XX__, 
     ________, _XXXX___, 
@@ -8286,7 +8286,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d3[40] = {
     _XXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d4[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01d4[32] = {
     ______XX, X_XXX___, 
     _______X, XXX_____, 
     _______X, XX______, 
@@ -8305,7 +8305,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d4[32] = {
     _XXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d5[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01d5[40] = {
     ________, XXXXXXX_, 
     ________, ________, 
     ________, XX__XX__, 
@@ -8328,7 +8328,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d5[40] = {
     _XXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d6[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01d6[36] = {
     _______X, XXXXX___, 
     ______X_, ________, 
     ______XX, __XX____, 
@@ -8349,7 +8349,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d6[36] = {
     _XXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d7[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01d7[40] = {
     ________, ___XXX__, 
     ________, __XX____, 
     ________, XX__XX__, 
@@ -8372,7 +8372,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d7[40] = {
     _XXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d8[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01d8[36] = {
     ________, __XXX___, 
     ________, _X______, 
     ______XX, __XX____, 
@@ -8393,7 +8393,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d8[36] = {
     _XXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d9[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01d9[40] = {
     ________, XXX_XXX_, 
     ________, __XX____, 
     ________, XX__XX__, 
@@ -8416,7 +8416,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01d9[40] = {
     _XXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01da[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01da[40] = {
     _______X, XX__X___, 
     ________, XX_XX___, 
     ________, XXXX____, 
@@ -8439,7 +8439,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01da[40] = {
     _XXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01db[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01db[40] = {
     ________, __XX____, 
     ________, ___X____, 
     ________, XX__XX__, 
@@ -8462,7 +8462,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01db[40] = {
     _XXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01dc[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01dc[36] = {
     ________, XX______, 
     ________, _XX_____, 
     ______XX, __XX____, 
@@ -8483,7 +8483,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01dc[36] = {
     _XXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01dd[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01dd[24] = {
     ______XX, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XXX____, 
@@ -8498,7 +8498,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01dd[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01de[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01de[60] = {
     ________, __XXXXXX, X_______, 
     ________, ________, ________, 
     ________, __XX__XX, ________, 
@@ -8521,7 +8521,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01de[60] = {
     XXX_____, ____XXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01df[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01df[36] = {
     _______X, XXXXX___, 
     ______X_, ________, 
     ______XX, __XX____, 
@@ -8542,7 +8542,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01df[36] = {
     XXXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e0[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01e0[60] = {
     ________, __XXXXXX, X_______, 
     ________, ________, ________, 
     ________, ____XX__, ________, 
@@ -8565,7 +8565,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e0[60] = {
     XXX_____, ____XXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e1[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01e1[36] = {
     _______X, XXXXX___, 
     ______X_, ________, 
     ________, XX______, 
@@ -8586,7 +8586,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e1[36] = {
     XXXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e2[76] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01e2[76] = {
     ________, ________, _XXXXXXX, ________, 
     ________, ________, _XXXXXXX, ________, 
     ________, ________, ________, ________, 
@@ -8608,7 +8608,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e2[76] = {
     XXX_____, __XXXXXX, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e3[45] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01e3[45] = {
     ________, _XXXXXXX, ________, 
     ________, ________, ________, 
     ________, ________, ________, 
@@ -8626,7 +8626,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e3[45] = {
     XXXXXX__, _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e4[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01e4[32] = {
     ________, XXXXXX__, 
     ______XX, XXXXXXX_, 
     ____XXX_, _____XXX, 
@@ -8645,7 +8645,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e4[32] = {
     __XXXXXX, X__XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e5[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01e5[34] = {
     ________, XXX___X_, 
     ______XX, XXXXXX__, 
     _____XX_, ___XXX__, 
@@ -8665,7 +8665,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e5[34] = {
     XXXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e6[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01e6[40] = {
     ________, _XX__XXX, 
     ________, _XXXXX__, 
     ________, __XXX___, 
@@ -8688,7 +8688,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e6[40] = {
     __XXXXXX, X__XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e7[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01e7[42] = {
     _______X, X__XXX__, 
     ________, XXXX____, 
     ________, XXX_____, 
@@ -8712,7 +8712,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e7[42] = {
     __XXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e8[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01e8[40] = {
     ________, _XXX__XX, 
     ________, __XX_XX_, 
     ________, __XXXX__, 
@@ -8735,7 +8735,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e8[40] = {
     XX______, __XXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e9[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01e9[40] = {
     ________, _XX_____, 
     ________, _XX_X___, 
     ________, __XXX___, 
@@ -8758,7 +8758,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01e9[40] = {
     XXX____X, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ea[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01ea[42] = {
     ________, XXXXXX__, 
     ______XX, XXXXXXX_, 
     ____XXX_, _____XXX, 
@@ -8782,7 +8782,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ea[42] = {
     ____X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01eb[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01eb[34] = {
     _______X, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XXX____, 
@@ -8802,7 +8802,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01eb[34] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ec[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01ec[48] = {
     ________, XXXXXXX_, 
     ________, XXXXXXX_, 
     ________, ________, 
@@ -8829,7 +8829,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ec[48] = {
     ____X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ed[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01ed[40] = {
     ______XX, XXXXX___, 
     ________, ________, 
     ________, ________, 
@@ -8852,7 +8852,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ed[40] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ee[50] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01ee[50] = {
     ________, __XXX__X, 
     ________, ___XX_XX, 
     ________, ___XXXX_, 
@@ -8880,7 +8880,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ee[50] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ef[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01ef[42] = {
     ________, XX__XXX_, 
     ________, _XXXX___, 
     ________, _XXX____, 
@@ -8904,7 +8904,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ef[42] = {
     __XXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f0[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01f0[42] = {
     _______X, X_______, 
     _______X, X_______, 
     ________, XX______, 
@@ -8928,7 +8928,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f0[42] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f1[64] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01f1[64] = {
     _____XXX, XXXXX___, ____XXXX, XXXXXX__, 
     _____XXX, XXXXXXX_, ___XXXXX, XXXXXX__, 
     ____XX__, ____XXXX, ________, ____XX__, 
@@ -8947,7 +8947,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f1[64] = {
     XXXXXXXX, _____XXX, XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f2[64] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01f2[64] = {
     _____XXX, XXXXX___, ________, ________, 
     _____XXX, XXXXXXX_, ________, ________, 
     ____XX__, ____XXXX, ________, ________, 
@@ -8966,7 +8966,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f2[64] = {
     XXXXXXXX, _____XXX, XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f3[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01f3[48] = {
     ________, ____XX__, ________, 
     ________, ____XX__, ________, 
     ________, ___XX___, ________, 
@@ -8985,7 +8985,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f3[48] = {
     _XXXXX_X, X_XXXXXX, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f4[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01f4[40] = {
     ________, ____XXX_, 
     ________, ___XX___, 
     ________, __XX____, 
@@ -9008,7 +9008,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f4[40] = {
     __XXXXXX, X__XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f5[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01f5[42] = {
     ________, __XXX___, 
     ________, _XX_____, 
     ________, XX______, 
@@ -9032,7 +9032,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f5[42] = {
     __XXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f6[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01f6[48] = {
     _____XX_, _______X, X_______, 
     _____XX_, _______X, X_______, 
     ____XX__, _______X, X_______, 
@@ -9051,7 +9051,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f6[48] = {
     XX______, ____XXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f7[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01f7[40] = {
     _______X, X_XXXXX_, 
     ______XX, XXXXXXX_, 
     ______XX, X____XX_, 
@@ -9074,7 +9074,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f7[40] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f8[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01f8[60] = {
     ________, __XX____, ________, 
     ________, __XX____, ________, 
     ________, ___XX___, ________, 
@@ -9097,7 +9097,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f8[60] = {
     XX______, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f9[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01f9[32] = {
     ________, XXX_____, 
     ________, _XX_____, 
     ________, _XX_____, 
@@ -9116,7 +9116,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01f9[32] = {
     XXX_____, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01fa[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01fa[40] = {
     _______X, X_______, 
     ______X_, _X______, 
     ______X_, _X______, 
@@ -9139,7 +9139,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01fa[40] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01fb[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01fb[38] = {
     ______XX, ________, 
     ______X_, ________, 
     _____XX_, ________, 
@@ -9161,7 +9161,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01fb[38] = {
     _XXXX_XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01fc[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01fc[60] = {
     ________, _____XX_, ________, 
     ________, ____XX__, ________, 
     ________, ____X___, ________, 
@@ -9184,7 +9184,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01fc[60] = {
     X_______, XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01fd[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01fd[32] = {
     ________, XX______, 
     ________, X_______, 
     _______X, X_______, 
@@ -9203,7 +9203,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01fd[32] = {
     _XXXX___, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01fe[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01fe[42] = {
     _______X, X_______, 
     ______XX, ________, 
     ______X_, ________, 
@@ -9227,7 +9227,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01fe[42] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ff[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_01ff[34] = {
     ______XX, ________, 
     _____XX_, ________, 
     _____X__, ________, 
@@ -9247,7 +9247,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_01ff[34] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0200[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0200[40] = {
     ________, _XX__XX_, 
     ________, _XXX_XX_, 
     ________, __XX__X_, 
@@ -9270,7 +9270,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0200[40] = {
     XXX_____, ____XXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0201[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0201[32] = {
     _____XXX, _XX_____, 
     ______XX, _XX_____, 
     ______XX, __XX____, 
@@ -9289,7 +9289,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0201[32] = {
     XXXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0202[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0202[40] = {
     ________, ____XXX_, 
     ________, ___XX_XX, 
     ________, __X____X, 
@@ -9312,7 +9312,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0202[40] = {
     XXX_____, ____XXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0203[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0203[32] = {
     ________, XXX_____, 
     ______XX, __XX____, 
     _____XX_, __XX____, 
@@ -9331,7 +9331,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0203[32] = {
     XXXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0204[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0204[40] = {
     ________, XXX_XX__, 
     ________, _XX_XX__, 
     ________, _XX__X__, 
@@ -9354,7 +9354,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0204[40] = {
     XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0205[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0205[32] = {
     _____XXX, _XX_____, 
     ______XX, _XX_____, 
     ______XX, __XX____, 
@@ -9373,7 +9373,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0205[32] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0206[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0206[40] = {
     ________, __XXXX__, 
     ________, _XX_XXX_, 
     ________, XX___XX_, 
@@ -9396,7 +9396,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0206[40] = {
     XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0207[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0207[32] = {
     ________, XXX_____, 
     ______XX, __XX____, 
     _____XX_, __XX____, 
@@ -9415,7 +9415,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0207[32] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0208[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0208[20] = {
     ___XXX__, 
     ____XX__, 
     ____XX__, 
@@ -9438,7 +9438,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0208[20] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0209[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0209[16] = {
     __XXX_X_, 
     ___XX___, 
     ___XX___, 
@@ -9457,7 +9457,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0209[16] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_020a[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_020a[20] = {
     ______X_, 
     _____XX_, 
     ____X___, 
@@ -9480,7 +9480,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_020a[20] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_020b[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_020b[16] = {
     _____XX_, 
     ____XX__, 
     ___X____, 
@@ -9499,7 +9499,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_020b[16] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_020c[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_020c[40] = {
     _______X, XX_XXX__, 
     ________, XX__XX__, 
     ________, XX__XX__, 
@@ -9522,7 +9522,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_020c[40] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_020d[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_020d[32] = {
     _____XX_, XXX_____, 
     _____XXX, _XX_____, 
     ______XX, __X_____, 
@@ -9541,7 +9541,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_020d[32] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_020e[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_020e[40] = {
     ________, __XXXX__, 
     ________, _XX_XXX_, 
     ________, XX___XX_, 
@@ -9564,7 +9564,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_020e[40] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_020f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_020f[32] = {
     ________, XXX_____, 
     ______XX, __XX____, 
     _____XX_, __XX____, 
@@ -9583,7 +9583,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_020f[32] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0210[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0210[40] = {
     _______X, XX_XXX__, 
     ________, XX__XX__, 
     ________, XX__XX__, 
@@ -9606,7 +9606,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0210[40] = {
     XX______, ___XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0211[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0211[32] = {
     ____XXX_, X_______, 
     _____XX_, ________, 
     ______X_, ________, 
@@ -9625,7 +9625,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0211[32] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0212[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0212[40] = {
     ________, __XXXX__, 
     ________, _XX_XXX_, 
     ________, XX___XX_, 
@@ -9648,7 +9648,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0212[40] = {
     XX______, ___XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0213[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0213[32] = {
     _______X, X_______, 
     ______XX, ________, 
     _____X__, ________, 
@@ -9667,7 +9667,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0213[32] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0214[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0214[40] = {
     _______X, XX_XX___, 
     ________, XX_XX___, 
     ________, XX__X___, 
@@ -9690,7 +9690,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0214[40] = {
     _XXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0215[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0215[32] = {
     _____XX_, XXX_____, 
     _____XX_, _XX_____, 
     ______XX, _XX_____, 
@@ -9709,7 +9709,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0215[32] = {
     _XXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0216[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0216[40] = {
     ________, __XXX___, 
     ________, XXX_XX__, 
     ________, X____X__, 
@@ -9732,7 +9732,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0216[40] = {
     _XXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0217[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0217[32] = {
     ________, XXX_____, 
     ______XX, __XX____, 
     _____XX_, __XX____, 
@@ -9751,7 +9751,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0217[32] = {
     _XXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0218[44] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0218[44] = {
     ____XXXX, X_______, 
     ___XXXXX, XX______, 
     __XX____, _XX_____, 
@@ -9776,7 +9776,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0218[44] = {
     ___X____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0219[17] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0219[17] = {
     ___XXX__, 
     __XXXXX_, 
     _XX___XX, 
@@ -9796,7 +9796,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0219[17] = {
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_021a[44] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_021a[44] = {
     _XXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     ____XX__, ________, 
@@ -9821,7 +9821,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_021a[44] = {
     _X______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_021b[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_021b[21] = {
     ____X___, 
     ___XX___, 
     ___X____, 
@@ -9845,7 +9845,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_021b[21] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_021c[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_021c[42] = {
     ________, XXXXX___, 
     ______XX, XXXXXX__, 
     _____XX_, ____XX__, 
@@ -9869,7 +9869,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_021c[42] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_021d[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_021d[34] = {
     _______X, XXX_____, 
     _____XXX, XXXX____, 
     _____X__, __XXX___, 
@@ -9889,7 +9889,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_021d[34] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_021e[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_021e[60] = {
     ________, _XXX__XX, ________, 
     ________, __XX_XX_, ________, 
     ________, ___XXX__, ________, 
@@ -9912,7 +9912,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_021e[60] = {
     XX______, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_021f[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_021f[40] = {
     ________, _XX__X__, 
     ________, _XX_XX__, 
     ________, __XXX___, 
@@ -9935,7 +9935,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_021f[40] = {
     XXX_____, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0220[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0220[40] = {
     _____XX_, _XXXXX__, 
     _____XXX, XXXXXXX_, 
     ____XXX_, _____XXX, 
@@ -9958,7 +9958,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0220[40] = {
     ________, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0221[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0221[42] = {
     ________, ____XX__, 
     ________, ____XX__, 
     ________, ___XX___, 
@@ -9982,7 +9982,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0221[42] = {
     _____X__, _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0222[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0222[32] = {
     ________, __XXX___, 
     ________, ___XXX__, 
     _____XXX, X___XX__, 
@@ -10001,7 +10001,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0222[32] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0223[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0223[32] = {
     ______XX, __XX____, 
     _____XX_, ___XX___, 
     ____XX__, ___XX___, 
@@ -10020,7 +10020,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0223[32] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0224[57] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0224[57] = {
     _______X, XXXXXXXX, X_______, 
     ______XX, XXXXXXXX, X_______, 
     ________, ______XX, X_______, 
@@ -10042,7 +10042,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0224[57] = {
     ________, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0225[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0225[28] = {
     ____XXXX, XXXXXX__, 
     ________, ___XX___, 
     ________, _XXX____, 
@@ -10059,7 +10059,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0225[28] = {
     _______X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0226[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0226[38] = {
     ________, ____XXX_, 
     ________, ____XX__, 
     ________, ________, 
@@ -10081,7 +10081,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0226[38] = {
     XXX_____, ____XXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0227[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0227[32] = {
     ________, XX______, 
     ________, XX______, 
     ________, XX______, 
@@ -10100,7 +10100,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0227[32] = {
     XXXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0228[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0228[42] = {
     _____XXX, XXXXXXXX, 
     _____XXX, XXXXXXXX, 
     ____XX__, ________, 
@@ -10124,7 +10124,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0228[42] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0229[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0229[34] = {
     _______X, X_______, 
     ____XXXX, XXX_____, 
     ___XXX__, _XXX____, 
@@ -10144,7 +10144,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0229[34] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_022a[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_022a[40] = {
     ________, _XXXXXXX, 
     ________, ________, 
     ________, _XX__XX_, 
@@ -10167,7 +10167,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_022a[40] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_022b[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_022b[36] = {
     _______X, XXXXX___, 
     ______X_, ________, 
     ______XX, __XX____, 
@@ -10188,7 +10188,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_022b[36] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_022c[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_022c[40] = {
     ________, _XXXXXXX, 
     ________, ________, 
     ________, XXXXXXX_, 
@@ -10211,7 +10211,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_022c[40] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_022d[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_022d[36] = {
     _______X, XXXXX___, 
     ______XX, XXXXX___, 
     _______X, ____X___, 
@@ -10232,7 +10232,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_022d[36] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_022e[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_022e[38] = {
     ________, ___XX___, 
     ________, __XX____, 
     ________, ________, 
@@ -10254,7 +10254,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_022e[38] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_022f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_022f[32] = {
     ________, XX______, 
     ________, XX______, 
     ________, XX______, 
@@ -10273,7 +10273,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_022f[32] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0230[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0230[40] = {
     ________, _XXXXXXX, 
     ________, X_______, 
     ________, __XXX___, 
@@ -10296,7 +10296,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0230[40] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0231[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0231[36] = {
     _______X, XXXXX___, 
     ______X_, ________, 
     ________, XX______, 
@@ -10317,7 +10317,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0231[36] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0232[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0232[38] = {
     _____XXX, XXXX____, 
     _____XXX, XXXX____, 
     ________, ________, 
@@ -10339,7 +10339,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0232[38] = {
     _XXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0233[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0233[40] = {
     _______X, XXXXXX__, 
     ________, ________, 
     ________, ________, 
@@ -10362,7 +10362,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0233[40] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0234[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0234[42] = {
     _______X, X_______, 
     ______XX, ________, 
     ______XX, ________, 
@@ -10386,7 +10386,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0234[42] = {
     X___X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0235[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0235[34] = {
     ________, _XX_____, 
     ____XX_X, XXXX____, 
     ____XXX_, __XXX___, 
@@ -10406,7 +10406,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0235[34] = {
     ______X_, __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0236[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0236[28] = {
     ____XXX_, ________, 
     ____XX__, ________, 
     ____XX_X, ________, 
@@ -10423,7 +10423,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0236[28] = {
     X_XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0237[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0237[32] = {
     _______X, X_______, 
     _______X, X_______, 
     ______XX, ________, 
@@ -10442,7 +10442,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0237[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0238[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0238[48] = {
     ________, ____XX__, ________, 
     ________, ____XX__, ________, 
     ________, ___XX___, ________, 
@@ -10461,7 +10461,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0238[48] = {
     _XXXXX_X, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0239[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0239[48] = {
     ______XX, X___X__X, X_______, 
     ____XXXX, XXXX_XXX, XXX_____, 
     ___XX___, _XXXX___, _XX_____, 
@@ -10480,7 +10480,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0239[48] = {
     _____XXX, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_023a[57] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_023a[57] = {
     ________, ________, _X______, 
     ________, ___XXX__, XX______, 
     ________, __XXXX_X, X_______, 
@@ -10502,7 +10502,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_023a[57] = {
     XX______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_023b[57] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_023b[57] = {
     ________, ________, _X______, 
     ________, __XXXXX_, XX______, 
     ________, XXXXXXXX, X_______, 
@@ -10524,7 +10524,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_023b[57] = {
     XX______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_023c[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_023c[28] = {
     ________, __XX__X_, 
     _______X, XXXXXX__, 
     ______XX, X___XX__, 
@@ -10541,7 +10541,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_023c[28] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_023d[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_023d[32] = {
     _____XX_, ________, 
     _____XX_, ________, 
     ____XX__, ________, 
@@ -10560,7 +10560,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_023d[32] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_023e[54] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_023e[54] = {
     ______XX, XXXXXXXX, X_______, 
     _____XXX, XXXXXXXX, X_______, 
     ________, __XX__XX, ________, 
@@ -10581,7 +10581,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_023e[54] = {
     XX______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_023f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_023f[32] = {
     ______XX, X_______, 
     ___XXXXX, XXX_____, 
     __XXX___, _XX_____, 
@@ -10600,7 +10600,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_023f[32] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0240[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0240[30] = {
     ____XXXX, XXXXXX__, 
     ________, ___XX___, 
     ________, _XXX____, 
@@ -10618,7 +10618,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0240[30] = {
     ______XX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0241[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0241[32] = {
     ____XXXX, XX______, 
     __XXXXXX, XXX_____, 
     _XX_____, _XXX____, 
@@ -10637,7 +10637,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0241[32] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0242[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0242[24] = {
     _____XXX, ________, 
     ___XXXXX, XX______, 
     __XX____, XXX_____, 
@@ -10652,7 +10652,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0242[24] = {
     XXXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0243[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0243[32] = {
     _____XXX, XXXXX___, 
     _____XXX, XXXXXX__, 
     ____XX__, ____XXX_, 
@@ -10671,7 +10671,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0243[32] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0244[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0244[32] = {
     ____XX__, ______XX, 
     ____XX__, ______XX, 
     ___XX___, ______XX, 
@@ -10690,7 +10690,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0244[32] = {
     _XXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0245[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0245[32] = {
     ________, ___XXX__, 
     ________, __XXXX__, 
     ________, __XXXX__, 
@@ -10709,7 +10709,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0245[32] = {
     XXX_____, ____XXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0246[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0246[40] = {
     ________, ______X_, 
     ________, _____X__, 
     _____XXX, XXXXXXXX, 
@@ -10732,7 +10732,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0246[40] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0247[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0247[34] = {
     ________, ___X____, 
     ________, __X_____, 
     _______X, XXX_____, 
@@ -10752,7 +10752,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0247[34] = {
     _X______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0248[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0248[32] = {
     ________, __XX____, 
     ________, __XX____, 
     ________, __XX____, 
@@ -10771,7 +10771,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0248[32] = {
     XXXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0249[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0249[42] = {
     ________, _X______, 
     ________, XX______, 
     ________, ________, 
@@ -10795,7 +10795,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0249[42] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_024a[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_024a[63] = {
     ________, XXXXX__X, X_______, 
     ______XX, XXXXXX_X, X_______, 
     ____XXX_, _____XXX, ________, 
@@ -10819,7 +10819,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_024a[63] = {
     ________, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_024b[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_024b[34] = {
     ______XX, X___X___, 
     ____XXXX, XXXX____, 
     ___XX___, _XXX____, 
@@ -10839,7 +10839,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_024b[34] = {
     _______X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_024c[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_024c[32] = {
     _____XXX, XXXXXXX_, 
     _____XXX, XXXXXXXX, 
     ____XX__, ______XX, 
@@ -10858,7 +10858,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_024c[32] = {
     XX______, ___XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_024d[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_024d[24] = {
     ________, X_______, 
     ____XX_X, X_______, 
     ____XXX_, ________, 
@@ -10873,7 +10873,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_024d[24] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_024e[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_024e[32] = {
     XXX_____, ____X___, 
     _XX_____, ___XX___, 
     _XXX____, __XXX___, 
@@ -10892,7 +10892,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_024e[32] = {
     _XXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_024f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_024f[32] = {
     ____XX__, ____XX__, 
     ____XX__, ___XX___, 
     ____XX__, __XXX___, 
@@ -10911,7 +10911,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_024f[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0250[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0250[24] = {
     ________, XXX_____, 
     ___XXXXX, XXXX____, 
     ___XXX__, __XX____, 
@@ -10926,7 +10926,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0250[24] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0251[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0251[24] = {
     ______XX, X____X__, 
     ____XXXX, XX_XX___, 
     ___XX___, _XXXX___, 
@@ -10941,7 +10941,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0251[24] = {
     _XXXXX__, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0252[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0252[24] = {
     ________, _XX_____, 
     ____XX_X, XXXXX___, 
     ____XXX_, ___XX___, 
@@ -10956,7 +10956,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0252[24] = {
     XX__XXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0253[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0253[32] = {
     _______X, XXX_____, 
     ______XX, XX______, 
     _____XX_, ________, 
@@ -10975,7 +10975,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0253[32] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0254[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0254[24] = {
     ______XX, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XX_____, 
@@ -10990,7 +10990,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0254[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0255[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0255[24] = {
     ________, _XX_____, 
     ______XX, XXXXX___, 
     _____XX_, ___XX___, 
@@ -11005,7 +11005,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0255[24] = {
     XX_XXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0256[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0256[42] = {
     ________, ____X___, 
     ________, ____X___, 
     ________, ___XX___, 
@@ -11029,7 +11029,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0256[42] = {
     _______X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0257[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0257[30] = {
     ________, ____X___, 
     ________, ___XX___, 
     ________, ___XX___, 
@@ -11047,7 +11047,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0257[30] = {
     _XXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0258[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0258[24] = {
     _______X, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XXX____, 
@@ -11062,7 +11062,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0258[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0259[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0259[24] = {
     ______XX, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XXX____, 
@@ -11077,7 +11077,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0259[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_025a[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_025a[24] = {
     ______XX, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XXX____, 
@@ -11092,7 +11092,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_025a[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_025b[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_025b[24] = {
     ______XX, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XX_____, 
@@ -11107,7 +11107,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_025b[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_025c[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_025c[24] = {
     _______X, XX______, 
     ____XXXX, XXXX____, 
     ___XX___, __XX____, 
@@ -11122,7 +11122,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_025c[24] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_025d[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_025d[24] = {
     _______X, XX______, 
     ____XXXX, XXXX____, 
     ___XX___, __XXXX__, 
@@ -11137,7 +11137,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_025d[24] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_025e[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_025e[24] = {
     _______X, XX______, 
     ____XXXX, XXX_____, 
     ___XXX__, _XXX____, 
@@ -11152,7 +11152,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_025e[24] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_025f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_025f[32] = {
     _______X, XX______, 
     _______X, X_______, 
     _______X, X_______, 
@@ -11171,7 +11171,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_025f[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0260[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0260[40] = {
     ________, _____X__, 
     ________, ____XX__, 
     ________, ____XX__, 
@@ -11194,7 +11194,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0260[40] = {
     __XXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0261[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0261[34] = {
     _______X, XX___X__, 
     _____XXX, XXXXX___, 
     ____XX__, __XXX___, 
@@ -11214,7 +11214,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0261[34] = {
     __XXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0262[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0262[24] = {
     _______X, XX______, 
     ____XXXX, XXX_____, 
     ___XX___, __XX____, 
@@ -11229,7 +11229,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0262[24] = {
     _XXXXXX_, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0263[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0263[30] = {
     __XX____, __XX____, 
     __XXX___, _XX_____, 
     __XXX___, XX______, 
@@ -11247,7 +11247,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0263[30] = {
     XXXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0264[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0264[24] = {
     __XX____, _XX_____, 
     _XXXX__X, XXXX____, 
     X__XX_XX, X_XX____, 
@@ -11262,7 +11262,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0264[24] = {
     _XXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0265[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0265[30] = {
     ___XX___, __XXX___, 
     ___XX___, __XX____, 
     __XX____, __XX____, 
@@ -11280,7 +11280,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0265[30] = {
     _____XXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0266[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0266[32] = {
     _______X, XXX_____, 
     ______XX, XX______, 
     _____XX_, ________, 
@@ -11299,7 +11299,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0266[32] = {
     XXX_____, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0267[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0267[42] = {
     _______X, XXX_____, 
     ______XX, XX______, 
     _____XX_, ________, 
@@ -11323,7 +11323,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0267[42] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0268[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0268[16] = {
     ______X_, 
     _____XX_, 
     ________, 
@@ -11342,7 +11342,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0268[16] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0269[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0269[11] = {
     ___XX___, 
     ___XX___, 
     __XX____, 
@@ -11356,7 +11356,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0269[11] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_026a[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_026a[11] = {
     ____XX__, 
     ____XX__, 
     ___XX___, 
@@ -11370,7 +11370,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_026a[11] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_026b[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_026b[16] = {
     _____XX_, 
     _____XX_, 
     ____XX__, 
@@ -11389,7 +11389,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_026b[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_026c[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_026c[16] = {
     _____X__, 
     ____XX__, 
     ____XX__, 
@@ -11408,7 +11408,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_026c[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_026d[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_026d[21] = {
     ______X_, 
     _____XX_, 
     _____XX_, 
@@ -11432,7 +11432,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_026d[21] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_026e[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_026e[42] = {
     ______XX, ________, 
     _____XX_, ________, 
     _____XX_, ________, 
@@ -11456,7 +11456,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_026e[42] = {
     __XXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_026f[33] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_026f[33] = {
     ___XX___, __XX____, XXX_____, 
     ___XX___, _XX_____, XX______, 
     __XX____, _XX_____, XX______, 
@@ -11470,7 +11470,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_026f[33] = {
     _XXXX__X, XXXX_XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0270[45] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0270[45] = {
     ___XX___, __XX____, XXX_____, 
     ___XX___, _XX_____, XX______, 
     __XX____, _XX_____, XX______, 
@@ -11488,7 +11488,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0270[45] = {
     ________, ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0271[51] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0271[51] = {
     ________, _XX____X, XX______, 
     ____XX_X, XXXX_XXX, XXX_____, 
     ____XXX_, __XXXX__, _XX_____, 
@@ -11508,7 +11508,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0271[51] = {
     ________, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0272[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0272[34] = {
     ________, ____XX__, 
     _______X, X_XXXXX_, 
     _______X, XX___XXX, 
@@ -11528,7 +11528,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0272[34] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0273[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0273[34] = {
     ________, _XX_____, 
     ____XX_X, XXXX____, 
     ____XXX_, __XXX___, 
@@ -11548,7 +11548,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0273[34] = {
     ________, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0274[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0274[22] = {
     ____XXX_, ___XX___, 
     ____XXX_, ___XX___, 
     ___XXXX_, __XX____, 
@@ -11562,7 +11562,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0274[22] = {
     XXX____X, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0275[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0275[24] = {
     _______X, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XXX____, 
@@ -11577,7 +11577,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0275[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0276[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0276[36] = {
     _______X, X_______, X_______, 
     ____XXXX, XXXXXXXX, ________, 
     ___XX___, _XXX____, ________, 
@@ -11592,7 +11592,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0276[36] = {
     _XXXXX_X, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0277[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0277[24] = {
     ________, XXX_____, 
     _____XXX, XXXXXX__, 
     ___XXX__, ___XXX__, 
@@ -11607,7 +11607,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0277[24] = {
     _XXXX__X, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0278[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0278[40] = {
     ________, XX______, 
     ________, XX______, 
     ________, XX______, 
@@ -11630,7 +11630,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0278[40] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0279[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0279[22] = {
     _______X, XX______, 
     _______X, X_______, 
     _______X, X_______, 
@@ -11644,7 +11644,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0279[22] = {
     XXX_XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_027a[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_027a[32] = {
     ________, _X______, 
     ________, _X______, 
     ________, XX______, 
@@ -11663,7 +11663,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_027a[32] = {
     XXX_XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_027b[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_027b[32] = {
     _______X, XX______, 
     _______X, X_______, 
     _______X, X_______, 
@@ -11682,7 +11682,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_027b[32] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_027c[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_027c[32] = {
     ________, _X______, 
     _____XX_, XX______, 
     _____XXX, ________, 
@@ -11701,7 +11701,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_027c[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_027d[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_027d[34] = {
     ________, X_______, 
     ____XX_X, X_______, 
     ____XXX_, ________, 
@@ -11721,7 +11721,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_027d[34] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_027e[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_027e[12] = {
     ______XX, 
     _____XXX, 
     ____XX__, 
@@ -11736,7 +11736,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_027e[12] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_027f[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_027f[16] = {
     ___XXX__, 
     __XXXXX_, 
     ____XXX_, 
@@ -11755,7 +11755,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_027f[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0280[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0280[22] = {
     ____XXXX, XXXX____, 
     ____XX__, __XXX___, 
     ___XX___, __XX____, 
@@ -11769,7 +11769,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0280[22] = {
     XXX_____, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0281[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0281[22] = {
     ____XX__, ___XXX__, 
     ____XX__, __XXX___, 
     ___XX___, __XX____, 
@@ -11783,7 +11783,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0281[22] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0282[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0282[34] = {
     ________, XXX_____, 
     _____XXX, XXXXX___, 
     ____XXX_, ___XX___, 
@@ -11803,7 +11803,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0282[34] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0283[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0283[42] = {
     ________, __X_____, 
     ________, _XX_____, 
     ________, _XX_____, 
@@ -11827,7 +11827,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0283[42] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0284[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0284[42] = {
     ________, __X_____, 
     ________, _XX_____, 
     ________, _XX_____, 
@@ -11851,7 +11851,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0284[42] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0285[17] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0285[17] = {
     __XXX___, 
     __XXXX__, 
     ____XX__, 
@@ -11871,7 +11871,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0285[17] = {
     __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0286[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0286[42] = {
     ________, _____X__, 
     ________, ____XX__, 
     ________, ___XXX__, 
@@ -11895,7 +11895,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0286[42] = {
     __X___X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0287[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0287[14] = {
     ____XXXX, 
     ___X_XX_, 
     _____XX_, 
@@ -11912,7 +11912,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0287[14] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0288[19] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0288[19] = {
     _____XXX, 
     _____XX_, 
     _____XX_, 
@@ -11934,7 +11934,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0288[19] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0289[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0289[22] = {
     ___XX___, __XXX___, 
     ___XX___, __XX____, 
     __XX____, __XX____, 
@@ -11948,7 +11948,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0289[22] = {
     _XXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_028a[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_028a[22] = {
     __XXXXXX, _XXXXX__, 
     _____XX_, _XX_____, 
     ___XX___, __XX____, 
@@ -11962,7 +11962,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_028a[22] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_028b[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_028b[24] = {
     ________, XXX_____, 
     ___XX__X, XXXX____, 
     ___XX___, __XX____, 
@@ -11977,7 +11977,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_028b[24] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_028c[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_028c[22] = {
     ________, XX______, 
     _______X, XX______, 
     ______XX, _X______, 
@@ -11991,7 +11991,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_028c[22] = {
     XXX_____, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_028d[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_028d[22] = {
     _______X, X_____XX, 
     ______XX, X____XXX, 
     ______XX, X___XXXX, 
@@ -12005,7 +12005,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_028d[22] = {
     XXX____X, X_____XX, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_028e[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_028e[32] = {
     ________, ____XX__, 
     ________, ___XXX__, 
     ________, __XX____, 
@@ -12024,7 +12024,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_028e[32] = {
     XXX_____, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_028f[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_028f[22] = {
     XX_____X, XX______, 
     XXX___XX, ________, 
     _XX__XXX, ________, 
@@ -12038,7 +12038,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_028f[22] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0290[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0290[32] = {
     ____XXXX, XXXXXX__, 
     ________, ___XX___, 
     ________, _XXX____, 
@@ -12057,7 +12057,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0290[32] = {
     ________, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0291[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0291[26] = {
     ____XXXX, XXXXXX__, 
     ________, ___XX___, 
     ________, _XXX____, 
@@ -12073,7 +12073,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0291[26] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0292[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0292[32] = {
     ______XX, XXXXXX__, 
     _____X__, ___XX___, 
     ________, __XX____, 
@@ -12092,7 +12092,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0292[32] = {
     __XXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0293[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0293[32] = {
     _____XXX, XXXXX___, 
     ____X___, __XX____, 
     ________, _XX_____, 
@@ -12111,7 +12111,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0293[32] = {
     _XXX___X, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0294[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0294[32] = {
     ____XXXX, X_______, 
     __XXXXXX, XX______, 
     _XX_____, XX______, 
@@ -12130,7 +12130,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0294[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0295[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0295[32] = {
     _____XXX, XX______, 
     ___XXXXX, XX______, 
     __XX____, _X______, 
@@ -12149,7 +12149,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0295[32] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0296[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0296[32] = {
     ________, XX______, 
     ________, XX______, 
     _______X, X_______, 
@@ -12168,7 +12168,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0296[32] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0297[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0297[34] = {
     ________, XX______, 
     _____XXX, XXXX____, 
     ____XX__, __XX____, 
@@ -12188,7 +12188,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0297[34] = {
     __XXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0298[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0298[32] = {
     ________, XXXXXX__, 
     ______XX, XXXXXXX_, 
     ____XXX_, _____XXX, 
@@ -12207,7 +12207,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0298[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0299[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0299[22] = {
     ____XXXX, XXXX____, 
     ____XX__, __XX____, 
     ___XX___, __XX____, 
@@ -12221,7 +12221,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0299[22] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_029a[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_029a[24] = {
     ______XX, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XX_____, 
@@ -12236,7 +12236,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_029a[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_029b[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_029b[26] = {
     ________, _____X__, 
     _______X, XX__X___, 
     ____XXXX, XXXXX___, 
@@ -12252,7 +12252,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_029b[26] = {
     _XXXXXX_, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_029c[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_029c[22] = {
     ____XX__, ___XXX__, 
     ____XX__, ___XX___, 
     ___XX___, ___XX___, 
@@ -12266,7 +12266,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_029c[22] = {
     XXX_____, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_029d[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_029d[42] = {
     ________, ___X____, 
     ________, ___X____, 
     ________, __X_____, 
@@ -12290,7 +12290,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_029d[42] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_029e[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_029e[30] = {
     ___XXX__, __XX____, 
     ____XX__, __XX____, 
     ____XX__, _XX_____, 
@@ -12308,7 +12308,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_029e[30] = {
     _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_029f[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_029f[11] = {
     ____XX__, 
     ____XX__, 
     ___XX___, 
@@ -12322,7 +12322,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_029f[11] = {
     XXXXXXXX, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a0[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02a0[38] = {
     ________, ____X___, 
     ________, ___XX___, 
     ________, ___XX___, 
@@ -12344,7 +12344,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a0[38] = {
     _____XXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a1[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02a1[32] = {
     ______XX, XXX_____, 
     ____XXXX, XXXX____, 
     ___XX___, __XX____, 
@@ -12363,7 +12363,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a1[32] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a2[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02a2[32] = {
     ______XX, XXX_____, 
     ____XXXX, XXX_____, 
     ___XX___, __X_____, 
@@ -12382,7 +12382,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a2[32] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a3[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02a3[48] = {
     ________, ____XX__, ________, 
     ________, ____XX__, ________, 
     ________, ___XX___, ________, 
@@ -12401,7 +12401,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a3[48] = {
     _XXXXX_X, XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a4[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02a4[63] = {
     ________, ____XX__, ________, 
     ________, ____XX__, ________, 
     ________, ___XX___, ________, 
@@ -12425,7 +12425,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a4[63] = {
     ________, XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a5[54] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02a5[54] = {
     ________, ____XX__, ________, 
     ________, ____XX__, ________, 
     ________, ___XX___, ________, 
@@ -12446,7 +12446,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a5[54] = {
     ________, ____X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a6[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02a6[28] = {
     ____XXX_, ________, 
     ____XX__, ________, 
     ____XX__, __XXXX__, 
@@ -12463,7 +12463,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a6[28] = {
     _XXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a7[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02a7[42] = {
     ________, ___X____, 
     _______X, __XX____, 
     _____XX_, _XX_____, 
@@ -12487,7 +12487,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a7[42] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a8[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02a8[42] = {
     ____XXX_, ________, ________, 
     ____XX__, ________, ________, 
     ____XX_X, ____XXX_, ________, 
@@ -12504,7 +12504,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a8[42] = {
     _XXXX__X, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a9[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02a9[40] = {
     ______XX, XX______, 
     _____XXX, X_______, 
     _____XX_, ________, 
@@ -12527,7 +12527,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02a9[40] = {
     ________, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02aa[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02aa[32] = {
     ______XX, ________, 
     _____XX_, ________, 
     _____XX_, ________, 
@@ -12546,7 +12546,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02aa[32] = {
     XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ab[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02ab[32] = {
     ______XX, ________, 
     _____XX_, ________, 
     _____XX_, ________, 
@@ -12565,7 +12565,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ab[32] = {
     XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ac[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02ac[32] = {
     ____X___, X_______, 
     ____X__X, X_______, 
     ___XX__X, X__X____, 
@@ -12584,7 +12584,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ac[32] = {
     XX___XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ad[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02ad[32] = {
     ______XX, XXXXXXX_, 
     _____XXX, XXXXXXX_, 
     _____XX_, ____XXX_, 
@@ -12603,7 +12603,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ad[32] = {
     XXX_____, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ae[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02ae[32] = {
     _XXX____, ________, 
     _XXXX___, ___XX___, 
     X__XX___, __XX____, 
@@ -12622,7 +12622,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ae[32] = {
     ______XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02af[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02af[34] = {
     _XXX____, ________, 
     _XXXX___, ___XX___, 
     X__XX___, __XX____, 
@@ -12642,7 +12642,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02af[34] = {
     ________, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b0[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02b0[11] = {
     ___XX___, 
     ___X____, 
     ___X____, 
@@ -12656,7 +12656,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b0[11] = {
     X____X__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b1[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02b1[11] = {
     ____XX__, 
     ___XX___, 
     ___X____, 
@@ -12670,7 +12670,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b1[11] = {
     X____X__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b2[13] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02b2[13] = {
     _____X__, 
     ________, 
     _____X__, 
@@ -12686,7 +12686,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b2[13] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b3[8] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02b3[8] = {
     __XXX___, 
     __XX____, 
     __X_____, 
@@ -12697,7 +12697,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b3[8] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b4[8] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02b4[8] = {
     _____X__, 
     _____X__, 
     ____XX__, 
@@ -12708,7 +12708,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b4[8] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b5[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02b5[11] = {
     _____X__, 
     _____X__, 
     ____XX__, 
@@ -12722,7 +12722,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b5[11] = {
     __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b6[8] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02b6[8] = {
     __XX___X, 
     __X___XX, 
     __X___X_, 
@@ -12733,7 +12733,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b6[8] = {
     XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b7[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02b7[16] = {
     XX___X__, _X______, 
     XX__XX__, _X______, 
     XX__XX__, X_______, 
@@ -12744,7 +12744,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b7[16] = {
     XX___X__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b8[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02b8[22] = {
     ___XX___, ________, 
     ____X___, X_______, 
     ____X__X, X_______, 
@@ -12758,21 +12758,21 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b8[22] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02b9[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02b9[4] = {
     __XX____, 
     __XX____, 
     _XX_____, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ba[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02ba[4] = {
     __XX____, 
     _XX_X___, 
     _XX_X___, 
     XX_XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02bb[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02bb[5] = {
     __X_____, 
     _XX_____, 
     _X______, 
@@ -12780,7 +12780,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02bb[5] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02bc[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02bc[6] = {
     __X_____, 
     _XX_____, 
     __X_____, 
@@ -12789,7 +12789,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02bc[6] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02bd[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02bd[6] = {
     _X______, 
     XX______, 
     X_______, 
@@ -12798,21 +12798,21 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02bd[6] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02be[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02be[4] = {
     _X______, 
     __X_____, 
     __X_____, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02bf[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02bf[4] = {
     _X______, 
     X_______, 
     X_______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02c0[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02c0[11] = {
     ___XXX__, 
     _XX__XX_, 
     _X____X_, 
@@ -12826,7 +12826,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02c0[11] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02c1[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02c1[11] = {
     ___XXXX_, 
     __X___X_, 
     _X____X_, 
@@ -12840,7 +12840,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02c1[11] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02c2[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02c2[22] = {
     ________, __XX____, 
     ________, XXXX____, 
     _____XXX, XX______, 
@@ -12854,7 +12854,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02c2[22] = {
     ________, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02c3[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02c3[22] = {
     ___XX___, ________, 
     ___XXXX_, ________, 
     ____XXXX, X_______, 
@@ -12868,7 +12868,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02c3[22] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02c4[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02c4[20] = {
     ________, XX______, 
     _______X, XX______, 
     ______XX, XX______, 
@@ -12881,7 +12881,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02c4[20] = {
     XXX_____, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02c5[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02c5[20] = {
     XX______, _XX_____, 
     _XX_____, XX______, 
     _XX____X, X_______, 
@@ -12894,43 +12894,43 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02c5[20] = {
     _XXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02c6[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02c6[3] = {
     __XX____, 
     _XXX____, 
     XX_XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02c7[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02c7[3] = {
     XX__X___, 
     _X_XX___, 
     _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02c8[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02c8[4] = {
     __X_____, 
     _XX_____, 
     _X______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02c9[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02c9[2] = {
     XXXXX___, 
     XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ca[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02ca[3] = {
     __X_____, 
     _XX_____, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02cb[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02cb[3] = {
     XXX_____, 
     _XX_____, 
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02cc[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02cc[5] = {
     __X_____, 
     _XX_____, 
     _XX_____, 
@@ -12938,23 +12938,23 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02cc[5] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02cd[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02cd[1] = {
     XXXXXXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ce[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02ce[3] = {
     XXX_____, 
     _XX_____, 
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02cf[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02cf[3] = {
     __XXX___, 
     _XXX____, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02d0[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02d0[11] = {
     ____XX__, 
     ____X___, 
     ________, 
@@ -12968,70 +12968,70 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02d0[11] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02d1[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02d1[2] = {
     XXX_____, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02d2[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02d2[4] = {
     _X______, 
     _X______, 
     _X______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02d3[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02d3[4] = {
     __X_____, 
     _X______, 
     X_______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02d4[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02d4[4] = {
     ___X____, 
     __XX____, 
     _XXXX___, 
     XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02d5[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02d5[4] = {
     XXXXX___, 
     _XX_____, 
     _XX_____, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02d6[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02d6[4] = {
     __X_____, 
     XXXX____, 
     XXXX____, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02d7[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02d7[2] = {
     _XXXXXXX, 
     XXXXXXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02d8[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02d8[3] = {
     X___X___, 
     XXXX____, 
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02d9[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02d9[2] = {
     XX______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02da[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02da[4] = {
     XXX_____, 
     X_X_____, 
     X_X_____, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02db[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02db[5] = {
     X_______, 
     X_______, 
     X_______, 
@@ -13039,23 +13039,23 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02db[5] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02dc[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02dc[3] = {
     _X______, 
     XXXXX___, 
     X__XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02dd[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02dd[3] = {
     _XX_XX__, 
     XX_XX___, 
     X__X____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02de[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02de[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02df[8] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02df[8] = {
     __X_____, 
     _XXX____, 
     __XX_XX_, 
@@ -13066,7 +13066,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02df[8] = {
     X____X__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e0[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02e0[11] = {
     _XX_____, 
     __X___X_, 
     __X__XX_, 
@@ -13080,7 +13080,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e0[11] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e1[8] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02e1[8] = {
     __X_____, 
     __X_____, 
     __X_____, 
@@ -13091,7 +13091,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e1[8] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e2[8] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02e2[8] = {
     ___XXXX_, 
     __XX__XX, 
     __X_____, 
@@ -13102,7 +13102,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e2[8] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e3[8] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02e3[8] = {
     ___X___X, 
     ___XX_XX, 
     ____XXX_, 
@@ -13113,7 +13113,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e3[8] = {
     XX___XX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e4[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02e4[11] = {
     ___XXXX_, 
     __X___X_, 
     _X____X_, 
@@ -13127,7 +13127,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e4[11] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e5[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02e5[16] = {
     __XXXXX_, 
     _XXXXXX_, 
     _____X__, 
@@ -13146,7 +13146,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e5[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e6[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02e6[16] = {
     _____XX_, 
     _____XX_, 
     _____X__, 
@@ -13165,7 +13165,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e6[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e7[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02e7[16] = {
     ______XX, 
     ______XX, 
     ______X_, 
@@ -13184,7 +13184,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e7[16] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e8[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02e8[32] = {
     _______X, X_______, 
     _______X, X_______, 
     _______X, ________, 
@@ -13203,7 +13203,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e8[32] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e9[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02e9[32] = {
     ________, XX______, 
     ________, XX______, 
     ________, X_______, 
@@ -13222,7 +13222,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02e9[32] = {
     XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ea[9] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02ea[9] = {
     ___X____, 
     ___X____, 
     __X_____, 
@@ -13234,7 +13234,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ea[9] = {
     XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02eb[9] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02eb[9] = {
     ___X____, 
     ___X____, 
     __X_____, 
@@ -13246,20 +13246,20 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02eb[9] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ec[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02ec[3] = {
     XX__XXX_, 
     XX_XX___, 
     _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ed[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02ed[4] = {
     _XXXX___, 
     X_______, 
     XXXXX___, 
     XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ee[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02ee[6] = {
     __XX_X__, 
     __XX_X__, 
     ___X____, 
@@ -13268,19 +13268,19 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ee[6] = {
     X___X___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ef[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02ef[3] = {
     XX_XX___, 
     _XX_____, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02f0[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02f0[3] = {
     __XX____, 
     _XXX____, 
     XX_XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02f1[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02f1[5] = {
     ___X____, 
     _XX_____, 
     XX______, 
@@ -13288,7 +13288,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02f1[5] = {
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02f2[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02f2[5] = {
     _X______, 
     _XX_____, 
     __X_____, 
@@ -13296,37 +13296,37 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02f2[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02f3[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02f3[4] = {
     _XXX____, 
     X__X____, 
     X_X_____, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02f4[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02f4[3] = {
     XXX_____, 
     _XX_____, 
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02f5[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02f5[3] = {
     XXX_XX__, 
     _XX_XX__, 
     _XX__X__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02f6[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02f6[3] = {
     __XXXXXX, 
     _XX__XX_, 
     XX_XXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02f7[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02f7[2] = {
     _XXX__XX, 
     XX_XXXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02f8[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02f8[12] = {
     ____XX__, 
     ____XX__, 
     ________, 
@@ -13341,35 +13341,35 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02f8[12] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02f9[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02f9[4] = {
     _XXX____, 
     _XXX____, 
     XX______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02fa[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02fa[4] = {
     XXX_____, 
     XXX_____, 
     __X_____, 
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02fb[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02fb[4] = {
     _X______, 
     XX______, 
     XX______, 
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02fc[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02fc[4] = {
     ___XX___, 
     ___XX___, 
     ___X____, 
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02fd[10] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02fd[10] = {
     _XX_____, X_______, 
     _X_____X, X_______, 
     XX_____X, X_______, 
@@ -13377,7 +13377,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02fd[10] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02fe[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02fe[5] = {
     _XX_____, 
     _X______, 
     XX______, 
@@ -13385,7 +13385,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02fe[5] = {
     XXXXXXXX, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ff[7] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_02ff[7] = {
     ___X____, 
     __X_____, 
     _X______, 
@@ -13395,116 +13395,116 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_02ff[7] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0300[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0300[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0301[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0301[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0302[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0302[1] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0303[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0303[2] = {
     _X______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0304[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0304[1] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0305[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0305[2] = {
     _XX_____, 
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0306[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0306[2] = {
     X_______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0307[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0307[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0308[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0308[3] = {
     X_______, 
     X_______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0309[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0309[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_030a[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_030a[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_030b[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_030b[2] = {
     _X______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_030c[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_030c[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_030d[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_030d[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_030e[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_030e[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_030f[2] = {
-    X_______, 
-    X_______, 
-};
-
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0310[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_030f[2] = {
     X_______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0311[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0310[2] = {
+    X_______, 
+    X_______, 
+};
+
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0311[2] = {
     _X______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0312[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0312[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0313[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0313[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0314[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0314[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0315[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0315[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0316[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0316[3] = {
     XX______, 
     XX______, 
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0317[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0317[3] = {
     __XXX___, 
     _XX_____, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0318[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0318[5] = {
     ___XX___, 
     ___XX___, 
     XXXX____, 
@@ -13512,7 +13512,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0318[5] = {
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0319[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0319[5] = {
     __X_____, 
     _XX_____, 
     _XXXX___, 
@@ -13520,23 +13520,23 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0319[5] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_031a[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_031a[2] = {
     _X______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_031b[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_031b[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_031c[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_031c[4] = {
     _XX_____, 
     X_______, 
     X_______, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_031d[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_031d[5] = {
     ___XX___, 
     ___X____, 
     __XX____, 
@@ -13544,7 +13544,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_031d[5] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_031e[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_031e[5] = {
     _XXXX___, 
     XXXXX___, 
     _XX_____, 
@@ -13552,7 +13552,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_031e[5] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_031f[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_031f[5] = {
     __XX____, 
     __X_____, 
     XXXX____, 
@@ -13560,11 +13560,11 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_031f[5] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0320[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0320[1] = {
     XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0321[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0321[6] = {
     ____XXX_, 
     ____XX__, 
     ___XX___, 
@@ -13573,7 +13573,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0321[6] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0322[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0322[6] = {
     _XXX____, 
     _XX_____, 
     _XX_____, 
@@ -13582,30 +13582,30 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0322[6] = {
     _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0323[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0323[2] = {
     _X______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0324[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0324[2] = {
     XX__XX__, 
     XX__XX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0325[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0325[4] = {
     _XXX____, 
     X__X____, 
     X_XX____, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0326[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0326[3] = {
     _XX_____, 
     XX______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0327[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0327[5] = {
     ___X____, 
     __XXX___, 
     ____X___, 
@@ -13613,7 +13613,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0327[5] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0328[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0328[5] = {
     __XX____, 
     _XX_____, 
     XX______, 
@@ -13621,7 +13621,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0328[5] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0329[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0329[5] = {
     _XX_____, 
     _X______, 
     XX______, 
@@ -13629,7 +13629,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0329[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_032a[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_032a[5] = {
     XXXXXXX_, 
     XXXXXXX_, 
     X_____X_, 
@@ -13637,69 +13637,69 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_032a[5] = {
     _____XX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_032b[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_032b[3] = {
     X__X__X_, 
     X_XX_X__, 
     _X__X___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_032c[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_032c[3] = {
     XX___XX_, 
     _XX_XX__, 
     _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_032d[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_032d[3] = {
     __XXX___, 
     _XXXX___, 
     XX_XXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_032e[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_032e[3] = {
     XX___XX_, 
     XX___X__, 
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_032f[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_032f[3] = {
     ___X____, 
     _XXXXX__, 
     X___XX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0330[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0330[2] = {
     XXXX_XX_, 
     X_XXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0331[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0331[1] = {
     XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0332[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0332[1] = {
     XXXXXXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0333[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0333[3] = {
     XXXXXXX_, 
     ________, 
     XXXXXXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0334[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0334[2] = {
     _XXX____, 
     XX_X____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0335[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0335[1] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0336[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0336[1] = {
     XXXXXXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0337[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0337[5] = {
     ____XX__, 
     ___XX___, 
     _XX_____, 
@@ -13707,7 +13707,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0337[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0338[9] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0338[9] = {
     _____X__, 
     _____X__, 
     ____XX__, 
@@ -13719,14 +13719,14 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0338[9] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0339[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0339[4] = {
     __X_____, 
     __X_____, 
     _XX_____, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_033a[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_033a[5] = {
     X_____X_, 
     X_____X_, 
     X_____X_, 
@@ -13734,7 +13734,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_033a[5] = {
     XXXXXXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_033b[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_033b[5] = {
     __XXXX__, 
     _X___X__, 
     _X__X___, 
@@ -13742,70 +13742,70 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_033b[5] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_033c[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_033c[3] = {
     _XX_XX__, 
     X_XX__X_, 
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_033d[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_033d[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_033e[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_033e[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_033f[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_033f[4] = {
     _XX_____, 
     _XX_____, 
     ________, 
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0340[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0340[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0341[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0341[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0342[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0342[2] = {
     _X______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0343[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0343[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0344[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0344[2] = {
     XX______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0345[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0345[3] = {
     _X______, 
     XX______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0346[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0346[4] = {
     _X______, 
     _X______, 
     XX______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0347[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0347[4] = {
     XXXXXXX_, 
     ________, 
     ________, 
     XXXXXXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0348[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0348[5] = {
     __X__X__, 
     _XX_XX__, 
     _X__X___, 
@@ -13813,7 +13813,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0348[5] = {
     XX_XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0349[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0349[5] = {
     _XXXX___, 
     XXXXX___, 
     ___X____, 
@@ -13821,24 +13821,24 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0349[5] = {
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_034a[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_034a[2] = {
     _X______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_034b[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_034b[2] = {
     _X______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_034c[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_034c[4] = {
     _X______, 
     ________, 
     _X______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_034d[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_034d[5] = {
     __X__X__, 
     _X___X__, 
     XXXXXX__, 
@@ -13846,7 +13846,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_034d[5] = {
     _X_X____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_034e[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_034e[5] = {
     __X_____, 
     XXXX____, 
     _XX_____, 
@@ -13854,7 +13854,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_034e[5] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_034f[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_034f[16] = {
     _XXXX___, 
     _X______, 
     _X______, 
@@ -13873,22 +13873,22 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_034f[16] = {
     __XXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0350[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0350[4] = {
     _X______, 
     ________, 
     _X______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0351[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0351[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0352[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0352[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0353[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0353[5] = {
     __X__X__, 
     _XXXX___, 
     __XX____, 
@@ -13896,7 +13896,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0353[5] = {
     _X_X____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0354[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0354[5] = {
     __X_____, 
     _XX_____, 
     X_______, 
@@ -13904,7 +13904,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0354[5] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0355[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0355[5] = {
     _X______, 
     _XX_____, 
     __XX____, 
@@ -13912,22 +13912,22 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0355[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0356[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0356[4] = {
     _X______, 
     _XX__X__, 
     _XX_X_X_, 
     X__X__X_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0357[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0357[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0358[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0358[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0359[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0359[5] = {
     __X_____, 
     X_X_X___, 
     _XXX____, 
@@ -13935,83 +13935,83 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0359[5] = {
     X_X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_035a[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_035a[4] = {
     XXXXXXX_, 
     X__X__X_, 
     X_XX_X__, 
     XX_XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_035b[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_035b[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_035c[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_035c[2] = {
     XXXXXXX_, 
     _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_035d[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_035d[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_035e[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_035e[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_035f[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_035f[1] = {
     XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0360[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0360[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0361[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0361[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0362[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0362[1] = {
     XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0363[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0363[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0364[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0364[2] = {
     X_______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0365[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0365[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0366[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0366[2] = {
     X_______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0367[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0367[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0368[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0368[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0369[2] = {
-    X_______, 
-    X_______, 
-};
-
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_036a[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0369[2] = {
     X_______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_036b[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_036a[2] = {
+    X_______, 
+    X_______, 
+};
+
+gui_const uint8_t Font_Arial_Narrow_Italic_22_036b[6] = {
     __X_____, 
     __X_____, 
     _X______, 
@@ -14020,23 +14020,23 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_036b[6] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_036c[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_036c[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_036d[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_036d[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_036e[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_036e[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_036f[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_036f[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0370[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0370[32] = {
     _____XX_, ________, 
     _____XX_, ________, 
     ____XX__, ________, 
@@ -14055,7 +14055,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0370[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0371[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0371[24] = {
     ___X____, ________, 
     __XXX___, ________, 
     _X_XX___, ________, 
@@ -14070,7 +14070,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0371[24] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0372[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0372[32] = {
     __XXXXXX, XXXXX___, 
     _XXXXXXX, XXXXX___, 
     _XX___XX, ___XX___, 
@@ -14089,7 +14089,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0372[32] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0373[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0373[32] = {
     ___XXXXX, X_______, 
     _XXXXXXX, X_______, 
     XX__XX__, X_______, 
@@ -14108,19 +14108,19 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0373[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0374[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0374[3] = {
     __XX____, 
     _XX_____, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0375[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0375[3] = {
     __XXX___, 
     _XX_____, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0376[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0376[48] = {
     _____XX_, _______X, X_______, 
     _____XX_, ______XX, X_______, 
     ____XX__, _____XXX, X_______, 
@@ -14139,7 +14139,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0376[48] = {
     XX______, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0377[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0377[22] = {
     ____XX__, ___XXX__, 
     ____XX__, __XXX___, 
     ___XX___, _XXXX___, 
@@ -14153,7 +14153,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0377[22] = {
     XXX_____, _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0378[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0378[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -14170,7 +14170,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0378[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0379[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0379[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -14187,13 +14187,13 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0379[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_037a[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_037a[3] = {
     _XX_____, 
     _XX_____, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_037b[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_037b[24] = {
     ______XX, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XX_____, 
@@ -14208,7 +14208,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_037b[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_037c[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_037c[24] = {
     _______X, X_______, 
     ____XXXX, XXX_____, 
     ___XXX__, _XX_____, 
@@ -14223,7 +14223,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_037c[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_037d[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_037d[24] = {
     ______XX, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XX_____, 
@@ -14238,7 +14238,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_037d[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_037e[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_037e[14] = {
     __XX____, 
     __X_____, 
     ________, 
@@ -14255,7 +14255,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_037e[14] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_037f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_037f[32] = {
     ________, __XX____, 
     ________, __XX____, 
     ________, __XX____, 
@@ -14274,7 +14274,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_037f[32] = {
     XXXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0380[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0380[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -14291,7 +14291,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0380[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0381[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0381[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -14308,7 +14308,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0381[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0382[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0382[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -14325,7 +14325,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0382[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0383[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0383[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -14342,19 +14342,19 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0383[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0384[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0384[3] = {
     _XX_____, 
     XX______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0385[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0385[3] = {
     ____X___, 
     XX_X__X_, 
     XXXX_XX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0386[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0386[32] = {
     ____XX_X, X_______, 
     ___XX_XX, X_______, 
     ___X__XX, X_______, 
@@ -14373,12 +14373,12 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0386[32] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0387[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0387[2] = {
     XX______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0388[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0388[32] = {
     _XX_XXXX, XXXXX___, 
     XX__XXXX, XXXXX___, 
     X__XX___, ________, 
@@ -14397,7 +14397,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0388[32] = {
     _XXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0389[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0389[32] = {
     _XX_X___, ____XX__, 
     XX__X___, ____XX__, 
     X__XX___, ____XX__, 
@@ -14416,7 +14416,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0389[32] = {
     _XX_____, __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_038a[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_038a[16] = {
     _XX_X___, 
     XX_XX___, 
     X__XX___, 
@@ -14435,7 +14435,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_038a[16] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_038b[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_038b[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -14452,7 +14452,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_038b[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_038c[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_038c[32] = {
     _XX__XXX, XX______, 
     _XX_XXXX, XXX_____, 
     XX_XX___, __XX____, 
@@ -14471,7 +14471,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_038c[32] = {
     ____XXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_038d[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_038d[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -14488,7 +14488,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_038d[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_038e[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_038e[32] = {
     _XX_XX__, _____XX_, 
     XX__XX__, _____XX_, 
     X____XX_, ____XX__, 
@@ -14507,7 +14507,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_038e[32] = {
     _______X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_038f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_038f[32] = {
     __XX__XX, XXX_____, 
     __XX_XXX, XXXX____, 
     _XX_XX__, ___XX___, 
@@ -14526,7 +14526,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_038f[32] = {
     XXXXXX__, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0390[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0390[16] = {
     ___XX___, 
     X__X_XX_, 
     X_X__X__, 
@@ -14545,7 +14545,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0390[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0391[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0391[32] = {
     _______X, X_______, 
     ______XX, X_______, 
     ______XX, X_______, 
@@ -14564,7 +14564,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0391[32] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0392[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0392[32] = {
     __XXXXXX, X_______, 
     __XXXXXX, XX______, 
     __XX____, _XX_____, 
@@ -14583,7 +14583,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0392[32] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0393[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0393[32] = {
     __XXXXXX, XXX_____, 
     __XXXXXX, XXX_____, 
     __XX____, ________, 
@@ -14602,7 +14602,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0393[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0394[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0394[32] = {
     _______X, X_______, 
     ______XX, X_______, 
     ______XX, X_______, 
@@ -14621,7 +14621,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0394[32] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0395[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0395[32] = {
     ___XXXXX, XXXX____, 
     __XXXXXX, XXXX____, 
     __XX____, ________, 
@@ -14640,7 +14640,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0395[32] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0396[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0396[32] = {
     ___XXXXX, XXX_____, 
     __XXXXXX, XXX_____, 
     ________, _XX_____, 
@@ -14659,7 +14659,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0396[32] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0397[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0397[32] = {
     __XX____, ___XX___, 
     __XX____, ___X____, 
     __XX____, __XX____, 
@@ -14678,7 +14678,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0397[32] = {
     XX______, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0398[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0398[32] = {
     ____XXXX, X_______, 
     ___XXXXX, XX______, 
     __XX____, _XX_____, 
@@ -14697,7 +14697,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0398[32] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0399[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0399[16] = {
     ___X____, 
     __XX____, 
     __XX____, 
@@ -14716,7 +14716,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0399[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_039a[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_039a[32] = {
     ___X____, __XX____, 
     __XX____, _XX_____, 
     __XX____, XX______, 
@@ -14735,7 +14735,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_039a[32] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_039b[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_039b[32] = {
     _______X, X_______, 
     ______XX, X_______, 
     ______XX, X_______, 
@@ -14754,7 +14754,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_039b[32] = {
     XX______, __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_039c[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_039c[32] = {
     __XXX___, ____XXX_, 
     __XXX___, ____XXX_, 
     __XXX___, ____XX__, 
@@ -14773,7 +14773,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_039c[32] = {
     XX___XX_, ___X____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_039d[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_039d[32] = {
     ___X____, ___XX___, 
     __XXX___, ___X____, 
     __XXX___, ___X____, 
@@ -14792,7 +14792,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_039d[32] = {
     XX______, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_039e[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_039e[32] = {
     ___XXXXX, XXXX____, 
     ___XXXXX, XXXX____, 
     ________, ________, 
@@ -14811,7 +14811,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_039e[32] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_039f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_039f[32] = {
     ____XXXX, X_______, 
     ___XXXXX, XX______, 
     __XX____, _XX_____, 
@@ -14830,7 +14830,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_039f[32] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a0[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03a0[32] = {
     __XXXXXX, XXXX____, 
     __XXXXXX, XXXX____, 
     __XX____, __XX____, 
@@ -14849,7 +14849,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a0[32] = {
     XX______, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a1[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03a1[32] = {
     ___XXXXX, XX______, 
     __XXXXXX, XXX_____, 
     __XX____, _XX_____, 
@@ -14868,7 +14868,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a1[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a2[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03a2[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -14885,7 +14885,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a2[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a3[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03a3[32] = {
     ___XXXXX, XXXX____, 
     ___XXXXX, XXXX____, 
     ___XX___, ________, 
@@ -14904,7 +14904,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a3[32] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a4[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03a4[32] = {
     _XXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     ____XX__, ________, 
@@ -14923,7 +14923,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a4[32] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a5[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03a5[32] = {
     XX______, __XX____, 
     _XX_____, _XX_____, 
     _XX_____, XXX_____, 
@@ -14942,7 +14942,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a5[32] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a6[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03a6[34] = {
     _______X, ________, 
     _______X, ________, 
     ___XXXXX, XX______, 
@@ -14962,7 +14962,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a6[34] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a7[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03a7[32] = {
     __XX____, ___XXX__, 
     ___X____, ___XX___, 
     ___XX___, __XX____, 
@@ -14981,7 +14981,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a7[32] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a8[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03a8[32] = {
     _XX____X, ____XX__, 
     _XX___XX, ____XX__, 
     _X____XX, ____XX__, 
@@ -15000,7 +15000,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a8[32] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a9[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03a9[32] = {
     ______XX, XX______, 
     _____XXX, XXXX____, 
     ____XX__, __XX____, 
@@ -15019,7 +15019,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03a9[32] = {
     XXXXX___, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03aa[19] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03aa[19] = {
     __X__XX_, 
     _XX__X__, 
     ________, 
@@ -15041,7 +15041,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03aa[19] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ab[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03ab[38] = {
     ____X__X, X_______, 
     ____X__X, X_______, 
     ________, ________, 
@@ -15063,7 +15063,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ab[38] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ac[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03ac[32] = {
     ______X_, ________, 
     _____XX_, ________, 
     ____XX__, ________, 
@@ -15082,7 +15082,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ac[32] = {
     _XXXX_XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ad[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03ad[16] = {
     _____XX_, 
     ____XX__, 
     ____X___, 
@@ -15101,7 +15101,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ad[16] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ae[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03ae[40] = {
     ______XX, ________, 
     _____XX_, ________, 
     _____X__, ________, 
@@ -15124,7 +15124,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ae[40] = {
     _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03af[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03af[16] = {
     ___XX___, 
     ___X____, 
     __XX____, 
@@ -15143,7 +15143,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03af[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b0[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03b0[32] = {
     ______X_, ________, 
     __XX_X__, X_______, 
     __XX_X_X, X_______, 
@@ -15162,7 +15162,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b0[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b1[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03b1[24] = {
     ___XX___, ________, 
     __XXXXX_, X_______, 
     _XX___XX, X_______, 
@@ -15177,7 +15177,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b1[24] = {
     _XXXX_XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b2[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03b2[40] = {
     _____XXX, X_______, 
     ____XXXX, XX______, 
     ___XX___, XX______, 
@@ -15200,7 +15200,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b2[40] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b3[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03b3[30] = {
     XX_____X, X_______, 
     _X____XX, ________, 
     _X____XX, ________, 
@@ -15218,7 +15218,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b3[30] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b4[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03b4[32] = {
     ___XXXXX, XX______, 
     __XXXXXX, X_______, 
     ___XX___, ________, 
@@ -15237,7 +15237,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b4[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b5[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03b5[12] = {
     ___XX___, 
     __XXXXX_, 
     _XX___X_, 
@@ -15252,7 +15252,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b5[12] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b6[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03b6[42] = {
     ___XXXXX, X_______, 
     ___XXXXX, X_______, 
     _____XX_, ________, 
@@ -15276,7 +15276,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b6[42] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b7[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03b7[32] = {
     _____XX_, ________, 
     _XX_XXXX, ________, 
     _XXX___X, ________, 
@@ -15295,7 +15295,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b7[32] = {
     _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b8[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03b8[32] = {
     ____XXX_, ________, 
     ___XXXXX, ________, 
     __XX___X, X_______, 
@@ -15314,7 +15314,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b8[32] = {
     __XXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b9[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03b9[11] = {
     __XX____, 
     __X_____, 
     __X_____, 
@@ -15328,7 +15328,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03b9[11] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ba[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03ba[11] = {
     _XX___XX, 
     _XX__XX_, 
     _XX_XX__, 
@@ -15342,7 +15342,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ba[11] = {
     X____XX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03bb[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03bb[16] = {
     _____X__, 
     _____X__, 
     _____X__, 
@@ -15361,7 +15361,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03bb[16] = {
     X_____XX, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03bc[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03bc[30] = {
     ___XX___, __XX____, 
     ___XX___, __XX____, 
     __XX____, __XX____, 
@@ -15379,7 +15379,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03bc[30] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03bd[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03bd[11] = {
     X_____XX, 
     X_____X_, 
     X____XX_, 
@@ -15393,7 +15393,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03bd[11] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03be[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03be[21] = {
     ____XXXX, 
     ___XXXXX, 
     __XX____, 
@@ -15417,7 +15417,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03be[21] = {
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03bf[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03bf[24] = {
     ____XX__, ________, 
     __XXXXXX, ________, 
     _XX___XX, ________, 
@@ -15432,7 +15432,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03bf[24] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c0[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03c0[22] = {
     XXXXXXXX, XXX_____, 
     _XX____X, ________, 
     _XX____X, ________, 
@@ -15446,7 +15446,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c0[22] = {
     XX___XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c1[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03c1[32] = {
     _____XXX, ________, 
     ____XXXX, X_______, 
     ___XX___, XX______, 
@@ -15465,7 +15465,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c1[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c2[17] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03c2[17] = {
     _____XXX, 
     ___XXXXX, 
     __XX____, 
@@ -15485,7 +15485,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c2[17] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c3[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03c3[24] = {
     ____XX__, ________, 
     __XXXXXX, XX______, 
     _XX___XX, ________, 
@@ -15500,7 +15500,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c3[24] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c4[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03c4[11] = {
     XXXXX___, 
     __X_____, 
     _XX_____, 
@@ -15514,7 +15514,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c4[11] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c5[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03c5[22] = {
     _XX____X, X_______, 
     _XX____X, X_______, 
     _XX____X, ________, 
@@ -15528,7 +15528,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c5[22] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c6[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03c6[32] = {
     ____X__X, X_______, 
     __XX__XX, XX______, 
     _XXX_XX_, _X______, 
@@ -15547,7 +15547,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c6[32] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c7[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03c7[30] = {
     ___XX___, _XX_____, 
     ___XX___, _X______, 
     ____X___, XX______, 
@@ -15565,7 +15565,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c7[30] = {
     XX_____X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c8[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03c8[30] = {
     _XX___XX, ___X____, 
     _XX___X_, __XX____, 
     _XX___X_, __XX____, 
@@ -15583,7 +15583,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c8[30] = {
     ____X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c9[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03c9[22] = {
     __XX____, ___XX___, 
     _XX_____, ___XX___, 
     _XX___XX, ___XX___, 
@@ -15597,7 +15597,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03c9[22] = {
     _XXXX__X, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ca[15] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03ca[15] = {
     _X__XX__, 
     _X__XX__, 
     ________, 
@@ -15615,7 +15615,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ca[15] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03cb[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03cb[30] = {
     ___XX_XX, ________, 
     ___XX_XX, ________, 
     ________, ________, 
@@ -15633,7 +15633,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03cb[30] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03cc[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03cc[32] = {
     _____XX_, ________, 
     _____XX_, ________, 
     ____XX__, ________, 
@@ -15652,7 +15652,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03cc[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03cd[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03cd[32] = {
     ______XX, ________, 
     _____XX_, ________, 
     ____XX__, ________, 
@@ -15671,7 +15671,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03cd[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ce[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03ce[32] = {
     ________, XX______, 
     _______X, X_______, 
     _______X, ________, 
@@ -15690,7 +15690,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ce[32] = {
     _XXXX__X, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03cf[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03cf[42] = {
     _____XX_, _______X, 
     _____XX_, _____XXX, 
     ____XX__, ____XXX_, 
@@ -15714,7 +15714,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03cf[42] = {
     _____X__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d0[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03d0[32] = {
     ______XX, XXX_____, 
     ____XXXX, XXXX____, 
     ____XX__, __XX____, 
@@ -15733,7 +15733,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d0[32] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d1[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03d1[34] = {
     ________, _XXX____, 
     ________, XXXX____, 
     _______X, X_XX____, 
@@ -15753,7 +15753,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d1[34] = {
     XXXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d2[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03d2[32] = {
     XXX_____, _____X__, 
     _XX_____, ___XXX__, 
     _XXX____, __XXX___, 
@@ -15772,7 +15772,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d2[32] = {
     _XXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d3[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03d3[48] = {
     __XXX_XX, ________, __XX____, 
     __XX__XX, X_______, _XXX____, 
     XXX____X, X_______, XX______, 
@@ -15791,7 +15791,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d3[48] = {
     _______X, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d4[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03d4[38] = {
     ______XX, __XX____, 
     _____XX_, _XX_____, 
     ________, ________, 
@@ -15813,7 +15813,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d4[38] = {
     _XXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d5[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03d5[40] = {
     ________, XX______, 
     ________, XX______, 
     ________, XX______, 
@@ -15836,7 +15836,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d5[40] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d6[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03d6[22] = {
     __XXXXXX, XXXXXXXX, 
     ___XX___, _____XX_, 
     __XX___X, XX___XX_, 
@@ -15850,7 +15850,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d6[22] = {
     _XXXX__X, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d7[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03d7[34] = {
     _____X__, _______X, 
     ____XXXX, ____XXX_, 
     ___X__XX, ___XXX__, 
@@ -15870,7 +15870,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d7[34] = {
     _______X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d8[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03d8[40] = {
     ________, XXXXXX__, 
     ______XX, XXXXXXX_, 
     ____XXX_, _____XXX, 
@@ -15893,7 +15893,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d8[40] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d9[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03d9[32] = {
     _______X, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XXX____, 
@@ -15912,7 +15912,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03d9[32] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03da[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03da[42] = {
     ________, XXXXX___, 
     ______XX, XXXXXXX_, 
     ____XXX_, _____XX_, 
@@ -15936,7 +15936,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03da[42] = {
     _XXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03db[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03db[34] = {
     ________, XX______, 
     _____XXX, XXXX____, 
     ____XX__, __XX____, 
@@ -15956,7 +15956,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03db[34] = {
     _XXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03dc[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03dc[32] = {
     _____XXX, XXXXXXX_, 
     _____XXX, XXXXXXX_, 
     ____XX__, ________, 
@@ -15975,7 +15975,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03dc[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03dd[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03dd[40] = {
     _______X, XXXXXX__, 
     ______XX, XXXXXX__, 
     ______XX, ________, 
@@ -15998,7 +15998,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03dd[40] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03de[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03de[32] = {
     __XXX___, ________, 
     __XXXX__, ________, 
     ____XX__, ________, 
@@ -16017,7 +16017,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03de[32] = {
     _______X, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03df[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03df[32] = {
     ______XX, ________, 
     _____XX_, ________, 
     ____XXX_, ________, 
@@ -16036,7 +16036,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03df[32] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e0[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03e0[40] = {
     _____XXX, XX______, 
     ___XXXXX, XXX_____, 
     __XXXXX_, _XXX____, 
@@ -16059,7 +16059,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e0[40] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e1[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03e1[20] = {
     __X_____, 
     XXXX____, 
     __XXXX__, 
@@ -16082,7 +16082,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e1[20] = {
     ___XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e2[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03e2[60] = {
     _____XX_, ___XX___, __XX____, 
     ____XX__, ___XX___, __XX____, 
     ____XX__, ___XX___, _XX_____, 
@@ -16105,7 +16105,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e2[60] = {
     XXXXXXXX, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e3[45] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03e3[45] = {
     ___XX___, __XX____, XXX_____, 
     ___XX___, _XX_____, XX______, 
     __XX____, _XX_____, XX______, 
@@ -16123,7 +16123,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e3[45] = {
     XXXXXXXX, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e4[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03e4[32] = {
     ____XXXX, ____XX__, 
     ___XXXXX, ____XX__, 
     __XX____, ____XX__, 
@@ -16142,7 +16142,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e4[32] = {
     _______X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e5[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03e5[32] = {
     ____XXXX, __X_____, 
     ___XXXX_, __X_____, 
     __XX____, _XX_____, 
@@ -16161,7 +16161,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e5[32] = {
     _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e6[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03e6[40] = {
     _______X, X_______, 
     _______X, X_______, 
     ______XX, ________, 
@@ -16184,7 +16184,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e6[40] = {
     XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e7[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03e7[24] = {
     ________, XXX___X_, 
     ______XX, XXXX_XX_, 
     _____XX_, __XXXX__, 
@@ -16199,7 +16199,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e7[24] = {
     XX_XXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e8[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03e8[32] = {
     ________, XXXXXX__, 
     ______XX, XXXXXXX_, 
     _____XX_, _____XX_, 
@@ -16218,7 +16218,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e8[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e9[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03e9[32] = {
     ________, XXXXXX__, 
     ______XX, XXXXXXX_, 
     _____XX_, _____XX_, 
@@ -16237,7 +16237,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03e9[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ea[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03ea[32] = {
     _____XXX, ____XXX_, 
     ___XXXXX, X__XXXX_, 
     ___X___X, X_XX__X_, 
@@ -16256,7 +16256,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ea[32] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03eb[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03eb[24] = {
     ___XX___, __XX____, 
     _XXXXX__, XXXXX___, 
     XX__XX__, XX__XX__, 
@@ -16271,7 +16271,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03eb[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ec[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03ec[32] = {
     ________, XXXXXXXX, 
     ______XX, XXXXXXXX, 
     ____XXXX, ________, 
@@ -16290,7 +16290,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ec[32] = {
     _XXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ed[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03ed[24] = {
     ________, __XXX___, 
     _____XXX, XXXX____, 
     ___XXXX_, ________, 
@@ -16305,7 +16305,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ed[24] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ee[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03ee[32] = {
     ______XX, X_______, 
     ______XX, ________, 
     ______XX, ________, 
@@ -16324,7 +16324,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ee[32] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ef[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03ef[32] = {
     ______X_, ________, 
     _____XXX, X_______, 
     _____XX_, ________, 
@@ -16343,7 +16343,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ef[32] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f0[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03f0[24] = {
     ____XXXX, _____XXX, 
     ___X__XX, ____XXX_, 
     ______XX, ___XXX__, 
@@ -16358,7 +16358,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f0[24] = {
     XXX_____, _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f1[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03f1[34] = {
     _______X, XX______, 
     _____XXX, XXX_____, 
     ___XXX__, _XXX____, 
@@ -16378,7 +16378,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f1[34] = {
     ______XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f2[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03f2[24] = {
     _______X, X_______, 
     ____XXXX, XXX_____, 
     ___XXX__, _XX_____, 
@@ -16393,7 +16393,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f2[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f3[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03f3[42] = {
     ________, _X______, 
     ________, XX______, 
     ________, ________, 
@@ -16417,7 +16417,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f3[42] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f4[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03f4[32] = {
     ________, XXXXXX__, 
     ______XX, XXXXXXX_, 
     ____XXX_, _____XXX, 
@@ -16436,7 +16436,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f4[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f5[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03f5[22] = {
     _____XXX, XXX_____, 
     ___XXX__, ________, 
     __XX____, ________, 
@@ -16450,7 +16450,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f5[22] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f6[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03f6[22] = {
     ____XXXX, XXX_____, 
     ________, _XXX____, 
     ________, _XXX____, 
@@ -16464,7 +16464,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f6[22] = {
     XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f7[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03f7[32] = {
     _____XX_, ________, 
     _____XX_, ________, 
     ____XX__, ________, 
@@ -16483,7 +16483,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f7[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f8[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03f8[40] = {
     _______X, X_______, 
     ______XX, ________, 
     ______XX, ________, 
@@ -16506,7 +16506,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f8[40] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f9[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03f9[32] = {
     ________, XXXXX___, 
     ______XX, XXXXXXX_, 
     ____XXX_, _____XX_, 
@@ -16525,7 +16525,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03f9[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03fa[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03fa[48] = {
     _____XXX, ________, _XXX____, 
     _____XXX, ________, XXX_____, 
     ____XXXX, _______X, XXX_____, 
@@ -16544,7 +16544,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03fa[48] = {
     XX____XX, _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03fb[45] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03fb[45] = {
     _____XXX, ______XX, XX______, 
     _____XXX, ______XX, X_______, 
     ____XX_X, _____XXX, X_______, 
@@ -16562,7 +16562,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03fb[45] = {
     XX______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03fc[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03fc[32] = {
     ________, __XXX___, 
     ________, XXXXXX__, 
     _______X, X___XXX_, 
@@ -16581,7 +16581,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03fc[32] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03fd[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03fd[32] = {
     _______X, XXXXX___, 
     _____XXX, XXXXXX__, 
     ____XX__, ____XXX_, 
@@ -16600,7 +16600,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03fd[32] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03fe[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03fe[32] = {
     ________, XXXXX___, 
     ______XX, XXXXXXX_, 
     ____XXX_, _____XX_, 
@@ -16619,7 +16619,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03fe[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ff[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_03ff[32] = {
     _______X, XXXXX___, 
     _____XXX, XXXXXX__, 
     ____XX__, ____XXX_, 
@@ -16638,7 +16638,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_03ff[32] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0400[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0400[40] = {
     ________, __XX____, 
     ________, __XX____, 
     ________, ___X____, 
@@ -16661,7 +16661,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0400[40] = {
     XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0401[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0401[38] = {
     ______X_, _XX_____, 
     _____XX_, _X______, 
     ________, ________, 
@@ -16683,7 +16683,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0401[38] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0402[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0402[32] = {
     XXXXXXXX, XX______, 
     XXXXXXXX, XX______, 
     ____XX__, ________, 
@@ -16702,7 +16702,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0402[32] = {
     __X___XX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0403[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0403[40] = {
     _______X, X_______, 
     _______X, X_______, 
     ______XX, ________, 
@@ -16725,7 +16725,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0403[40] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0404[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0404[32] = {
     _____XXX, X_______, 
     ___XXXXX, XX______, 
     __XXX___, _XX_____, 
@@ -16744,7 +16744,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0404[32] = {
     ___XXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0405[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0405[32] = {
     ____XXXX, X_______, 
     ___XXXXX, XX______, 
     __XX____, _XX_____, 
@@ -16763,7 +16763,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0405[32] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0406[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0406[16] = {
     ___X____, 
     __XX____, 
     __XX____, 
@@ -16782,7 +16782,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0406[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0407[19] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0407[19] = {
     __X__XX_, 
     __X__X__, 
     ________, 
@@ -16804,7 +16804,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0407[19] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0408[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0408[32] = {
     _______X, X_______, 
     _______X, X_______, 
     _______X, ________, 
@@ -16823,7 +16823,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0408[32] = {
     _XXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0409[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0409[48] = {
     ____XXXX, XXXX____, ________, 
     ____XXXX, XXXX____, ________, 
     ____XX__, __XX____, ________, 
@@ -16842,7 +16842,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0409[48] = {
     XXX_____, XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_040a[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_040a[32] = {
     __XX____, XX______, 
     __XX____, XX______, 
     __X_____, X_______, 
@@ -16861,7 +16861,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_040a[32] = {
     X_____XX, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_040b[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_040b[32] = {
     XXXXXXXX, XX______, 
     XXXXXXXX, XX______, 
     ____XX__, ________, 
@@ -16880,7 +16880,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_040b[32] = {
     __X_____, __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_040c[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_040c[40] = {
     _______X, X_______, 
     ______XX, ________, 
     ______X_, ________, 
@@ -16903,7 +16903,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_040c[40] = {
     X______X, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_040d[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_040d[60] = {
     ________, __XX____, ________, 
     ________, __XX____, ________, 
     ________, ___X____, ________, 
@@ -16926,7 +16926,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_040d[60] = {
     XX______, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_040e[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_040e[40] = {
     ___X___X, ________, 
     ___X___X, ________, 
     ____XXX_, ________, 
@@ -16949,7 +16949,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_040e[40] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_040f[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_040f[40] = {
     __XX____, ___X____, 
     __XX____, __XX____, 
     __XX____, __XX____, 
@@ -16972,7 +16972,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_040f[40] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0410[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0410[32] = {
     _______X, X_______, 
     ______XX, X_______, 
     ______XX, X_______, 
@@ -16991,7 +16991,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0410[32] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0411[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0411[32] = {
     __XXXXXX, XXX_____, 
     __XXXXXX, XX______, 
     __XX____, ________, 
@@ -17010,7 +17010,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0411[32] = {
     XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0412[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0412[32] = {
     __XXXXXX, X_______, 
     __XXXXXX, XX______, 
     __XX____, _XX_____, 
@@ -17029,7 +17029,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0412[32] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0413[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0413[32] = {
     __XXXXXX, XXX_____, 
     __XXXXXX, XXX_____, 
     __XX____, ________, 
@@ -17048,7 +17048,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0413[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0414[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0414[38] = {
     _____XXX, XXXXXX__, 
     _____XXX, XXXXXX__, 
     _____XX_, ____XX__, 
@@ -17070,7 +17070,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0414[38] = {
     X_______, __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0415[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0415[32] = {
     ___XXXXX, XXXX____, 
     __XXXXXX, XXXX____, 
     __XX____, ________, 
@@ -17089,7 +17089,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0415[32] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0416[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0416[48] = {
     ___XXX__, __XX____, XXX_____, 
     ___XXX__, __XX___X, XXX_____, 
     _____X__, __X____X, X_______, 
@@ -17108,7 +17108,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0416[48] = {
     XX______, X_____XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0417[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0417[32] = {
     ____XXXX, ________, 
     __XXXXXX, X_______, 
     __XX___X, X_______, 
@@ -17127,7 +17127,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0417[32] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0418[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0418[32] = {
     __XX____, __XX____, 
     __XX____, __XX____, 
     __X_____, _XXX____, 
@@ -17146,7 +17146,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0418[32] = {
     XX______, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0419[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0419[40] = {
     _____X__, _X______, 
     _____X__, XX______, 
     ______XX, X_______, 
@@ -17169,7 +17169,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0419[40] = {
     XX______, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_041a[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_041a[32] = {
     __XX____, XXX_____, 
     __XX___X, XXX_____, 
     __XX___X, X_______, 
@@ -17188,7 +17188,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_041a[32] = {
     X______X, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_041b[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_041b[32] = {
     ____XXXX, XXXXX___, 
     ____XXXX, XXXX____, 
     ____XX__, ___X____, 
@@ -17207,7 +17207,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_041b[32] = {
     XXX_____, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_041c[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_041c[32] = {
     __XXX___, ____XXX_, 
     __XXX___, ____XXX_, 
     __XXX___, ____XX__, 
@@ -17226,7 +17226,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_041c[32] = {
     XX___XX_, ___X____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_041d[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_041d[32] = {
     __XX____, ___XX___, 
     __XX____, ___X____, 
     __XX____, __XX____, 
@@ -17245,7 +17245,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_041d[32] = {
     XX______, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_041e[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_041e[32] = {
     ____XXXX, X_______, 
     ___XXXXX, XX______, 
     __XX____, _XX_____, 
@@ -17264,7 +17264,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_041e[32] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_041f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_041f[32] = {
     __XXXXXX, XXXX____, 
     __XXXXXX, XXXX____, 
     __XX____, __XX____, 
@@ -17283,7 +17283,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_041f[32] = {
     XX______, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0420[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0420[32] = {
     ___XXXXX, XX______, 
     __XXXXXX, XXX_____, 
     __XX____, _XX_____, 
@@ -17302,7 +17302,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0420[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0421[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0421[32] = {
     ____XXXX, X_______, 
     ___XXXXX, XX______, 
     __XX____, XXX_____, 
@@ -17321,7 +17321,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0421[32] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0422[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0422[32] = {
     _XXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     ____XX__, ________, 
@@ -17340,7 +17340,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0422[32] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0423[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0423[32] = {
     XX______, _XX_____, 
     XX______, _XX_____, 
     XX______, XX______, 
@@ -17359,7 +17359,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0423[32] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0424[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0424[32] = {
     _______X, X_______, 
     _______X, ________, 
     ___XXXXX, XXX_____, 
@@ -17378,7 +17378,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0424[32] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0425[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0425[32] = {
     __XX____, ___XXX__, 
     ___X____, ___XX___, 
     ___XX___, __XX____, 
@@ -17397,7 +17397,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0425[32] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0426[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0426[38] = {
     __XX____, ___X____, 
     __XX____, __XX____, 
     __XX____, __XX____, 
@@ -17419,7 +17419,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0426[38] = {
     ________, _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0427[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0427[32] = {
     _X______, _X______, 
     XX______, _X______, 
     XX______, XX______, 
@@ -17438,7 +17438,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0427[32] = {
     ______XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0428[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0428[32] = {
     __XX____, XX____XX, 
     __XX____, XX____XX, 
     __XX____, XX____XX, 
@@ -17457,7 +17457,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0428[32] = {
     XXXXXXXX, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0429[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0429[38] = {
     __XX____, XX____XX, 
     __XX____, XX____XX, 
     __XX____, XX____XX, 
@@ -17479,7 +17479,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0429[38] = {
     ________, ____XX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_042a[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_042a[32] = {
     XXXXXX__, ________, 
     XXXXX___, ________, 
     ____X___, ________, 
@@ -17498,7 +17498,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_042a[32] = {
     _XXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_042b[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_042b[32] = {
     __XX____, ______XX, 
     __XX____, ______XX, 
     __XX____, ______XX, 
@@ -17517,7 +17517,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_042b[32] = {
     XXXXXXX_, ____X___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_042c[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_042c[32] = {
     __XX____, ________, 
     __XX____, ________, 
     __XX____, ________, 
@@ -17536,7 +17536,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_042c[32] = {
     XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_042d[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_042d[32] = {
     ____XXXX, ________, 
     __XXXXXX, XX______, 
     __XX____, XX______, 
@@ -17555,7 +17555,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_042d[32] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_042e[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_042e[48] = {
     __XX____, __XXXX__, ________, 
     __XX____, XXXXXXX_, ________, 
     __XX___X, XX____XX, ________, 
@@ -17574,7 +17574,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_042e[48] = {
     X_______, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_042f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_042f[32] = {
     _____XXX, XXXXX___, 
     ___XXXXX, XXXX____, 
     __XXX___, ___X____, 
@@ -17593,7 +17593,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_042f[32] = {
     XX______, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0430[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0430[24] = {
     ____XX__, ________, 
     __XXXXXX, ________, 
     _XX____X, X_______, 
@@ -17608,7 +17608,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0430[24] = {
     _XXXX_XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0431[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0431[32] = {
     _____XXX, X_______, 
     ___XXXXX, X_______, 
     __XX____, ________, 
@@ -17627,7 +17627,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0431[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0432[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0432[12] = {
     ____XX__, 
     __XXXXX_, 
     _XX___XX, 
@@ -17642,7 +17642,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0432[12] = {
     _XXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0433[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0433[12] = {
     ____XX__, 
     __XXXXXX, 
     __X___XX, 
@@ -17657,7 +17657,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0433[12] = {
     _XXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0434[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0434[32] = {
     ___XXX__, ________, 
     ___XXXXX, ________, 
     ______XX, ________, 
@@ -17676,7 +17676,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0434[32] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0435[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0435[24] = {
     ____XX__, ________, 
     __XXXXXX, ________, 
     _XX___XX, ________, 
@@ -17691,7 +17691,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0435[24] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0436[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0436[22] = {
     __XXX__X, X__XXX__, 
     ____X__X, X__X____, 
     ____X__X, __XX____, 
@@ -17705,7 +17705,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0436[22] = {
     XX____X_, __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0437[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0437[12] = {
     ____XX__, 
     __XXXXX_, 
     __X___XX, 
@@ -17720,7 +17720,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0437[12] = {
     _XXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0438[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0438[22] = {
     _XX____X, X_______, 
     _XX____X, X_______, 
     _XX____X, X_______, 
@@ -17734,7 +17734,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0438[22] = {
     _XXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0439[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0439[30] = {
     ___X___X, ________, 
     ____XXX_, ________, 
     _____X__, ________, 
@@ -17752,7 +17752,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0439[30] = {
     _XXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_043a[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_043a[22] = {
     __XX__XX, X_______, 
     __XX__X_, ________, 
     __X__XX_, ________, 
@@ -17766,7 +17766,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_043a[22] = {
     XX____X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_043b[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_043b[22] = {
     ____XXXX, XXX_____, 
     ____X___, _XX_____, 
     ___XX___, _X______, 
@@ -17780,7 +17780,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_043b[22] = {
     XXX____X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_043c[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_043c[22] = {
     __XXX___, _XXX____, 
     __X_X___, _XXX____, 
     __X_X___, XXXX____, 
@@ -17794,7 +17794,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_043c[22] = {
     XX__XX__, _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_043d[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_043d[22] = {
     __XX____, XX______, 
     __X_____, X_______, 
     __X_____, X_______, 
@@ -17808,7 +17808,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_043d[22] = {
     XX____XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_043e[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_043e[24] = {
     ____XX__, ________, 
     __XXXXXX, ________, 
     _XX___XX, ________, 
@@ -17823,7 +17823,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_043e[24] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_043f[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_043f[24] = {
     _____XX_, ________, 
     _XX_XXXX, ________, 
     _XXX___X, X_______, 
@@ -17838,7 +17838,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_043f[24] = {
     X_____X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0440[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0440[32] = {
     ______X_, ________, 
     __XXXXXX, X_______, 
     __XXX__X, X_______, 
@@ -17857,7 +17857,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0440[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0441[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0441[12] = {
     ____XX__, 
     __XXXXX_, 
     _XX___XX, 
@@ -17872,7 +17872,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0441[12] = {
     _XXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0442[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0442[24] = {
     _____XX_, __XX____, 
     _XX_XXXX, _XXXX___, 
     _XXX__XX, X___XX__, 
@@ -17887,7 +17887,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0442[24] = {
     X____XX_, ___X____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0443[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0443[32] = {
     __X_____, XX______, 
     __X_____, X_______, 
     __XX___X, X_______, 
@@ -17906,7 +17906,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0443[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0444[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0444[40] = {
     _______X, X_______, 
     _______X, X_______, 
     _______X, X_______, 
@@ -17929,7 +17929,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0444[40] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0445[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0445[22] = {
     __XX___X, X_______, 
     __XX___X, ________, 
     ___XX_XX, ________, 
@@ -17943,7 +17943,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0445[22] = {
     XX____XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0446[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0446[28] = {
     _XX____X, X_______, 
     _X_____X, ________, 
     _X_____X, ________, 
@@ -17960,7 +17960,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0446[28] = {
     _______X, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0447[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0447[11] = {
     _X____XX, 
     XX____XX, 
     XX____XX, 
@@ -17974,7 +17974,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0447[11] = {
     _____X__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0448[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0448[22] = {
     _XX____X, ____XX__, 
     _XX___XX, ____X___, 
     _X____XX, ____X___, 
@@ -17988,7 +17988,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0448[22] = {
     XXXX__XX, X_XX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0449[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0449[28] = {
     _XX____X, ____XX__, 
     _XX___XX, ____X___, 
     _X____XX, ____X___, 
@@ -18005,7 +18005,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0449[28] = {
     ________, ____X___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_044a[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_044a[22] = {
     XXXX____, ________, 
     ___X____, ________, 
     __XX____, ________, 
@@ -18019,7 +18019,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_044a[22] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_044b[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_044b[22] = {
     __XX____, ____XX__, 
     __XX____, ____XX__, 
     __X_____, ____XX__, 
@@ -18033,7 +18033,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_044b[22] = {
     XXXXXXX_, ___X____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_044c[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_044c[22] = {
     __XX____, ________, 
     __XX____, ________, 
     __X_____, ________, 
@@ -18047,7 +18047,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_044c[22] = {
     XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_044d[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_044d[12] = {
     ____XX__, 
     __XXXXX_, 
     __X___XX, 
@@ -18062,7 +18062,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_044d[12] = {
     _XXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_044e[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_044e[24] = {
     ________, XXX_____, 
     __XX___X, XXXX____, 
     __XX__XX, ___XX___, 
@@ -18077,7 +18077,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_044e[24] = {
     XX____XX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_044f[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_044f[22] = {
     __XXXXXX, X_______, 
     __XX____, X_______, 
     _XX____X, X_______, 
@@ -18091,7 +18091,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_044f[22] = {
     XX____XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0450[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0450[32] = {
     _______X, X_______, 
     ________, XX______, 
     ________, XX______, 
@@ -18110,7 +18110,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0450[32] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0451[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0451[30] = {
     ___X__XX, ________, 
     __XX__X_, ________, 
     ________, ________, 
@@ -18128,7 +18128,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0451[30] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0452[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0452[42] = {
     ___XX___, ________, 
     __XXXXXX, ________, 
     _XXXXXXX, ________, 
@@ -18152,7 +18152,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0452[42] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0453[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0453[16] = {
     _____XX_, 
     ____XX__, 
     ____X___, 
@@ -18171,7 +18171,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0453[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0454[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0454[12] = {
     ___XXX__, 
     __XXXXX_, 
     _XX___XX, 
@@ -18186,7 +18186,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0454[12] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0455[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0455[12] = {
     ___XXX__, 
     __XXXXX_, 
     _XX___XX, 
@@ -18201,7 +18201,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0455[12] = {
     _XXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0456[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0456[16] = {
     __XX____, 
     __XX____, 
     ________, 
@@ -18220,7 +18220,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0456[16] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0457[15] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0457[15] = {
     _X__XX__, 
     _X__X___, 
     ________, 
@@ -18238,7 +18238,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0457[15] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0458[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0458[21] = {
     _____XX_, 
     _____XX_, 
     ________, 
@@ -18262,7 +18262,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0458[21] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0459[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0459[22] = {
     ____XXXX, XXXX____, 
     ____XX__, __X_____, 
     ____X___, __X_____, 
@@ -18276,7 +18276,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0459[22] = {
     XXX_____, XXXXXXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_045a[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_045a[22] = {
     __XX____, X_______, 
     __X____X, X_______, 
     __X____X, X_______, 
@@ -18290,7 +18290,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_045a[22] = {
     XX____XX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_045b[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_045b[32] = {
     ___XX___, ________, 
     __XXXXXX, ________, 
     _XXXXXXX, ________, 
@@ -18309,7 +18309,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_045b[32] = {
     XX____XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_045c[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_045c[32] = {
     ______XX, ________, 
     _____XX_, ________, 
     _____X__, ________, 
@@ -18328,7 +18328,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_045c[32] = {
     XX____X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_045d[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_045d[32] = {
     ________, XX______, 
     ________, XX______, 
     ________, _XX_____, 
@@ -18347,7 +18347,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_045d[32] = {
     XXX_____, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_045e[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_045e[40] = {
     ____X___, X_______, 
     ____XXXX, ________, 
     ________, ________, 
@@ -18370,7 +18370,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_045e[40] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_045f[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_045f[30] = {
     _XX____X, X_______, 
     _XX____X, ________, 
     _X_____X, ________, 
@@ -18388,7 +18388,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_045f[30] = {
     _X______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0460[64] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0460[64] = {
     ________, XXXXXX__, XXXXXX__, ________, 
     ______XX, XXXXXX__, XXXXXXXX, ________, 
     ____XXX_, _____X_X, ______XX, X_______, 
@@ -18407,7 +18407,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0460[64] = {
     __XXXXXX, XXXXXXXX, XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0461[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0461[22] = {
     XX___XXX, _____XXX, 
     XX___XX_, ____XX__, 
     XX___XX_, ____XX__, 
@@ -18421,7 +18421,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0461[22] = {
     XXX___XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0462[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0462[32] = {
     _____XX_, ________, 
     _____XX_, ________, 
     ____XXX_, ________, 
@@ -18440,7 +18440,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0462[32] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0463[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0463[32] = {
     _____XX_, ________, 
     _____XX_, ________, 
     _____XX_, ________, 
@@ -18459,7 +18459,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0463[32] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0464[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0464[48] = {
     _____XX_, ______XX, XXXX____, 
     _____XX_, ____XXXX, XXXXX___, 
     ____XX__, __XXX___, ___XXX__, 
@@ -18478,7 +18478,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0464[48] = {
     XX______, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0465[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0465[36] = {
     ________, ____XXX_, ________, 
     ____XX__, __XXXXXX, X_______, 
     ____XX__, _XX____X, X_______, 
@@ -18493,7 +18493,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0465[36] = {
     XXX____X, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0466[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0466[32] = {
     ________, ___XXX__, 
     ________, __XXXX__, 
     ________, __XXXX__, 
@@ -18512,7 +18512,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0466[32] = {
     XXX___XX, ____XX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0467[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0467[22] = {
     ________, XX______, 
     _______X, XX______, 
     ______XX, _X______, 
@@ -18526,7 +18526,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0467[22] = {
     XXX__XX_, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0468[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0468[48] = {
     _____XX_, ______XX, X_______, 
     _____XX_, _____XXX, X_______, 
     ____XX__, ____XXXX, X_______, 
@@ -18545,7 +18545,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0468[48] = {
     XX_XX___, _XX____X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0469[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0469[22] = {
     ____XX__, ___XX___, 
     ____XX__, __XXX___, 
     ___XX___, _XX_X___, 
@@ -18559,7 +18559,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0469[22] = {
     XXXXXX__, XX__XX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_046a[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_046a[48] = {
     _______X, XXXXXXXX, XXXXXXX_, 
     ________, XXXXXXXX, XXXXXX__, 
     ________, XXX_____, __XXX___, 
@@ -18578,7 +18578,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_046a[48] = {
     XXX_____, _XX_____, _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_046b[33] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_046b[33] = {
     _____XXX, XXXXXXXX, XX______, 
     ______XX, ______XX, ________, 
     _______X, X____XX_, ________, 
@@ -18592,7 +18592,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_046b[33] = {
     XXX____X, X____XXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_046c[64] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_046c[64] = {
     _____XX_, __XXXXXX, XXXXXXXX, XX______, 
     _____XX_, ___XXXXX, XXXXXXXX, X_______, 
     ____XX__, ___XXX__, _____XXX, ________, 
@@ -18611,7 +18611,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_046c[64] = {
     XX_XXX__, ____XX__, ____XXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_046d[33] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_046d[33] = {
     ____XX__, _XXXXXXX, XXXXXX__, 
     ____XX__, __XX____, __XX____, 
     ___XX___, __XXX___, XXX_____, 
@@ -18625,7 +18625,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_046d[33] = {
     XXX_XXX_, ___XX___, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_046e[50] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_046e[50] = {
     ________, XX__XXX_, 
     ________, _XXXX___, 
     ________, _XXX____, 
@@ -18653,7 +18653,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_046e[50] = {
     __XX____, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_046f[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_046f[42] = {
     _______X, XX_XXX__, 
     ________, XXXX____, 
     ________, XXX_____, 
@@ -18677,7 +18677,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_046f[42] = {
     __XX___X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0470[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0470[32] = {
     XX_____X, X_____X_, 
     XX_____X, X_____X_, 
     XX____XX, X____XX_, 
@@ -18696,7 +18696,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0470[32] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0471[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0471[30] = {
     _XX___XX, ___XXX__, 
     _XX___XX, ___XX___, 
     _XX__XXX, ___XX___, 
@@ -18714,7 +18714,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0471[30] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0472[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0472[32] = {
     ________, XXXXXX__, 
     ______XX, XXXXXXX_, 
     ____XXX_, _____XXX, 
@@ -18733,7 +18733,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0472[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0473[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0473[24] = {
     _______X, X_______, 
     ____XXXX, XXX_____, 
     ___XXX__, _XXX____, 
@@ -18748,7 +18748,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0473[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0474[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0474[32] = {
     XXX_____, _____XX_, 
     _XX_____, ____XXX_, 
     _XX_____, ___XX___, 
@@ -18767,7 +18767,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0474[32] = {
     _XXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0475[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0475[24] = {
     ________, __XX____, 
     XX______, XXXX____, 
     XX_____X, X__X____, 
@@ -18782,7 +18782,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0475[24] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0476[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0476[40] = {
     _____XX_, XXX_____, 
     _____XX_, _XX_____, 
     ______X_, _XX_____, 
@@ -18805,7 +18805,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0476[40] = {
     _XXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0477[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0477[32] = {
     ___XX_XX, X_______, 
     ___XX__X, X_______, 
     ____XX_X, X_______, 
@@ -18824,7 +18824,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0477[32] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0478[84] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0478[84] = {
     ________, XXXXXX__, ________, ________, 
     ______XX, XXXXXXX_, ________, ________, 
     ____XXX_, _____XXX, ________, ________, 
@@ -18848,7 +18848,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0478[84] = {
     ________, _____XX_, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0479[51] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0479[51] = {
     _______X, X_______, ________, 
     ____XXXX, XXX___XX, _____XX_, 
     ___XXX__, _XXX__XX, _____XX_, 
@@ -18868,7 +18868,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0479[51] = {
     ________, _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_047a[54] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_047a[54] = {
     ________, ____X___, ________, 
     ________, XXXXXXXX, ________, 
     ______XX, XXXXXXXX, XX______, 
@@ -18889,7 +18889,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_047a[54] = {
     _____XXX, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_047b[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_047b[26] = {
     _______X, XXXX____, 
     ____XXXX, XXXXXX__, 
     ___XXX__, ____XX__, 
@@ -18905,7 +18905,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_047b[26] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_047c[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_047c[60] = {
     ________, ___XX___, XXXX____, 
     ________, ______XX, ________, 
     ________, ______XX, ________, 
@@ -18928,7 +18928,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_047c[60] = {
     __XXXXXX, XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_047d[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_047d[36] = {
     ________, XXXXX___, 
     _______X, X__XXXXX, 
     ______XX, _____XXX, 
@@ -18949,7 +18949,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_047d[36] = {
     _XXXX_XX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_047e[80] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_047e[80] = {
     ________, ____XXXX, XXXXXX__, ________, 
     ________, ____X___, X__X____, ________, 
     ________, ________, ________, ________, 
@@ -18972,7 +18972,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_047e[80] = {
     __XXXXXX, XXXXXXXX, XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_047f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_047f[32] = {
     ____XXXX, XXXXXX__, 
     _____X__, X___X___, 
     ________, ________, 
@@ -18991,7 +18991,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_047f[32] = {
     XXX___XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0480[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0480[40] = {
     ________, XXXXX___, 
     ______XX, XXXXXXX_, 
     ____XXX_, _____XX_, 
@@ -19014,7 +19014,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0480[40] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0481[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0481[32] = {
     _______X, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XX_____, 
@@ -19033,7 +19033,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0481[32] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0482[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0482[32] = {
     ________, __XX____, 
     ________, __X_____, 
     ________, _XX_____, 
@@ -19052,29 +19052,29 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0482[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0483[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0483[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0484[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0484[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0485[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0485[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0486[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0486[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0487[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0487[6] = {
     __XXXX__, ________, 
     _XX_XXXX, XX______, 
     XX____XX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0488[18] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0488[18] = {
     ______X_, 
     XXX_____, 
     __X_____, 
@@ -19095,7 +19095,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0488[18] = {
     X___X___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0489[17] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0489[17] = {
     _X______, 
     X_X_____, 
     _XX_____, 
@@ -19115,7 +19115,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0489[17] = {
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_048a[72] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_048a[72] = {
     ________, _XX___XX, ________, 
     ________, _XX__XX_, ________, 
     ________, __XXXX__, ________, 
@@ -19142,7 +19142,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_048a[72] = {
     ________, _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_048b[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_048b[38] = {
     _______X, X___XX__, 
     _______X, X__XX___, 
     ________, XXX_____, 
@@ -19164,7 +19164,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_048b[38] = {
     _______X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_048c[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_048c[32] = {
     _____XX_, ________, 
     _____XX_, ________, 
     ____XX__, ________, 
@@ -19183,7 +19183,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_048c[32] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_048d[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_048d[32] = {
     ______XX, ________, 
     _____XX_, ________, 
     ____XXXX, X_______, 
@@ -19202,7 +19202,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_048d[32] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_048e[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_048e[32] = {
     _____XXX, XXXXXX__, 
     _____XXX, XXXXXXX_, 
     ____XX__, _____XXX, 
@@ -19221,7 +19221,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_048e[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_048f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_048f[32] = {
     ________, __XX____, 
     _____XX_, XXXXX___, 
     _____XXX, ___XXX__, 
@@ -19240,7 +19240,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_048f[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0490[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0490[38] = {
     ________, _X______, 
     ________, XX______, 
     ________, XX______, 
@@ -19262,7 +19262,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0490[38] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0491[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0491[14] = {
     ______X_, 
     ______X_, 
     ______X_, 
@@ -19279,7 +19279,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0491[14] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0492[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0492[32] = {
     _____XXX, XXXXXX__, 
     _____XXX, XXXXXX__, 
     ____XX__, ________, 
@@ -19298,7 +19298,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0492[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0493[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0493[22] = {
     ____XXXX, XXX_____, 
     ____XX__, ________, 
     ___XX___, ________, 
@@ -19312,7 +19312,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0493[22] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0494[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0494[42] = {
     _____XXX, XXXXXX__, 
     _____XXX, XXXXXX__, 
     ____XX__, ________, 
@@ -19336,7 +19336,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0494[42] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0495[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0495[32] = {
     _____XXX, XXXX____, 
     _____XX_, ________, 
     ____XX__, ________, 
@@ -19355,7 +19355,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0495[32] = {
     ___X____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0496[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0496[60] = {
     ______XX, X_____XX, ______XX, 
     _______X, X_____XX, ____XXX_, 
     _______X, XX___XXX, ___XXX__, 
@@ -19378,7 +19378,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0496[60] = {
     ________, ________, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0497[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0497[42] = {
     ____XXX_, __XXX__X, XXX_____, 
     _____XXX, __XX__XX, X_______, 
     ______XX, __XX_XX_, ________, 
@@ -19395,7 +19395,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0497[42] = {
     ________, _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0498[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0498[42] = {
     _______X, XXXXX___, 
     _____XXX, XXXXXX__, 
     ____XXX_, ____XX__, 
@@ -19419,7 +19419,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0498[42] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0499[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0499[34] = {
     _______X, XX______, 
     ____XXXX, XXXX____, 
     ___XX___, __XX____, 
@@ -19439,7 +19439,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0499[34] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_049a[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_049a[60] = {
     _____XX_, _______X, X_______, 
     _____XX_, _____XXX, ________, 
     ____XX__, ____XXX_, ________, 
@@ -19462,7 +19462,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_049a[60] = {
     ________, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_049b[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_049b[28] = {
     ____XX__, __XXX___, 
     ____XX__, XXX_____, 
     ___XX__X, XX______, 
@@ -19479,7 +19479,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_049b[28] = {
     _______X, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_049c[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_049c[32] = {
     _____XX_, _______X, 
     _____XX_, _____XXX, 
     ____XX__, ____XXX_, 
@@ -19498,7 +19498,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_049c[32] = {
     XX______, __XXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_049d[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_049d[22] = {
     ____XX_X, X_XXX___, 
     ____XX_X, XXX_____, 
     ___XX__X, XX______, 
@@ -19512,7 +19512,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_049d[22] = {
     XXX____X, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_049e[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_049e[32] = {
     _____XX_, _______X, 
     _____XX_, _____XXX, 
     ____XX__, ____XXX_, 
@@ -19531,7 +19531,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_049e[32] = {
     XX______, __XXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_049f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_049f[32] = {
     ______XX, ________, 
     _____XX_, ________, 
     ____XXXX, X_______, 
@@ -19550,7 +19550,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_049f[32] = {
     XXX____X, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a0[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04a0[48] = {
     XXXXXXXX, _______X, X_______, 
     XXXXXXX_, ______XX, X_______, 
     _____XX_, ____XXX_, ________, 
@@ -19569,7 +19569,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a0[48] = {
     XXX_____, __XXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a1[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04a1[22] = {
     _XXXXXX_, __XXX___, 
     X___XX__, _XX_____, 
     ____XX_X, XX______, 
@@ -19583,7 +19583,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a1[22] = {
     _XX_____, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a2[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04a2[60] = {
     _____XX_, _______X, X_______, 
     _____XX_, _______X, X_______, 
     ____XX__, _______X, X_______, 
@@ -19606,7 +19606,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a2[60] = {
     ________, ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a3[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04a3[28] = {
     ____XX__, ___XXX__, 
     ____XX__, ___XX___, 
     ___XX___, ___XX___, 
@@ -19623,7 +19623,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a3[28] = {
     ________, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a4[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04a4[48] = {
     _____XX_, _______X, XXXXX___, 
     _____XX_, _______X, XXXXX___, 
     ____XX__, _______X, X_______, 
@@ -19642,7 +19642,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a4[48] = {
     XX______, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a5[33] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04a5[33] = {
     ____XX__, ___XXXXX, X_______, 
     ____XX__, ___XX___, ________, 
     ___XX___, ___XX___, ________, 
@@ -19656,7 +19656,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a5[33] = {
     XXX_____, XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a6[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04a6[63] = {
     _____XXX, XXXXXXXX, X_______, 
     _____XXX, XXXXXXXX, X_______, 
     ____XX__, _______X, X_______, 
@@ -19680,7 +19680,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a6[63] = {
     ________, ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a7[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04a7[48] = {
     ____XXXX, XXXXXX__, ________, 
     ____XX__, ___XX___, ________, 
     ___XX___, ___XX___, ________, 
@@ -19699,7 +19699,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a7[48] = {
     ________, _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a8[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04a8[32] = {
     ________, XXX_____, 
     ______XX, XX______, 
     ____XXX_, ___XXXX_, 
@@ -19718,7 +19718,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a8[32] = {
     __XXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a9[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04a9[24] = {
     _______X, ________, 
     ____XXXX, ________, 
     ___XXX__, XXX_____, 
@@ -19733,7 +19733,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04a9[24] = {
     _XXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04aa[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04aa[42] = {
     ________, XXXXX___, 
     ______XX, XXXXXXX_, 
     ____XXX_, _____XX_, 
@@ -19757,7 +19757,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04aa[42] = {
     ___X____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ab[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04ab[34] = {
     _______X, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XX_____, 
@@ -19777,7 +19777,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ab[34] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ac[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04ac[40] = {
     _XXXXXXX, XXXX____, 
     XXXXXXXX, XXXX____, 
     _____XX_, ________, 
@@ -19800,7 +19800,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ac[40] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ad[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04ad[28] = {
     XXXXXXXX, X_______, 
     ___XX___, ________, 
     ___XX___, ________, 
@@ -19817,7 +19817,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ad[28] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ae[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04ae[32] = {
     XXX_____, ____X___, 
     _XX_____, ___XX___, 
     _XXX____, __XXX___, 
@@ -19836,7 +19836,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ae[32] = {
     _XXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04af[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04af[30] = {
     _XX_____, _XX_____, 
     _XX_____, XX______, 
     _XX____X, XX______, 
@@ -19854,7 +19854,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04af[30] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b0[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04b0[32] = {
     _XXX____, _____X__, 
     __XX____, ____XX__, 
     __XXX___, ___XXX__, 
@@ -19873,7 +19873,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b0[32] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b1[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04b1[30] = {
     ___XX___, ___XX___, 
     ___XX___, __XX____, 
     ___XX___, _XXX____, 
@@ -19891,7 +19891,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b1[30] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b2[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04b2[60] = {
     ______XX, X_______, _XX_____, 
     _______X, X______X, XX______, 
     _______X, X_____XX, X_______, 
@@ -19914,7 +19914,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b2[60] = {
     ________, ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b3[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04b3[28] = {
     ____XXX_, ___XXX__, 
     _____XX_, __XX____, 
     _____XXX, _XX_____, 
@@ -19931,7 +19931,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b3[28] = {
     ________, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b4[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04b4[60] = {
     XXXXXXXX, XXXXX___, XX______, 
     XXXXXXXX, XXXXX__X, XX______, 
     _____XX_, _______X, X_______, 
@@ -19954,7 +19954,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b4[60] = {
     ________, ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b5[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04b5[28] = {
     _XXXXXXX, XX_XXX__, 
     X___XX__, ___XX___, 
     ____XX__, ___XX___, 
@@ -19971,7 +19971,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b5[28] = {
     ________, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b6[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04b6[40] = {
     ___XX___, ____XX__, 
     __XX____, ____XX__, 
     __XX____, ____XX__, 
@@ -19994,7 +19994,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b6[40] = {
     ________, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b7[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04b7[28] = {
     __XX____, _XX_____, 
     _XX_____, XX______, 
     _XX_____, XX______, 
@@ -20011,7 +20011,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b7[28] = {
     ______XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b8[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04b8[32] = {
     ___XX___, ____XX__, 
     __XX____, ____XX__, 
     __XX____, ____XX__, 
@@ -20030,7 +20030,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b8[32] = {
     _______X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b9[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04b9[22] = {
     __XX____, _XX_____, 
     _XX_____, XX______, 
     _XX__X__, XX______, 
@@ -20044,7 +20044,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04b9[22] = {
     _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ba[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04ba[32] = {
     _____XX_, ________, 
     _____XX_, ________, 
     ____XX__, ________, 
@@ -20063,7 +20063,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ba[32] = {
     XX______, __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04bb[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04bb[32] = {
     ______XX, ________, 
     _____XX_, ________, 
     _____XX_, ________, 
@@ -20082,7 +20082,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04bb[32] = {
     XXX_____, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04bc[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04bc[48] = {
     ________, __XXXXXX, ________, 
     ________, XXXXXXXX, X_______, 
     _______X, XX_____X, XX______, 
@@ -20101,7 +20101,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04bc[48] = {
     ____XXXX, XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04bd[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04bd[24] = {
     ________, XXX_____, 
     _____XXX, XXXX____, 
     _X__XXX_, __XXX___, 
@@ -20116,7 +20116,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04bd[24] = {
     ___XXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04be[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04be[60] = {
     ________, __XXXXXX, ________, 
     ________, XXXXXXXX, X_______, 
     _______X, XX_____X, XX______, 
@@ -20139,7 +20139,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04be[60] = {
     _____XXX, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04bf[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04bf[30] = {
     ________, XXX_____, 
     _____XXX, XXXX____, 
     _X__XXX_, __XXX___, 
@@ -20157,7 +20157,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04bf[30] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c0[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04c0[16] = {
     _____XX_, 
     _____XX_, 
     _____XX_, 
@@ -20176,7 +20176,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c0[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c1[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04c1[60] = {
     ________, _____XX_, __XX____, 
     ________, _____XX_, _XX_____, 
     ________, ______XX, XX______, 
@@ -20199,7 +20199,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c1[60] = {
     XXX_____, _XX_____, _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c2[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04c2[48] = {
     ________, __X____X, ________, 
     ________, __XX_XX_, ________, 
     ________, ___XXX__, ________, 
@@ -20218,7 +20218,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c2[48] = {
     XXX____X, X____XXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c3[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04c3[42] = {
     _____XX_, _______X, 
     _____XX_, _____XXX, 
     ____XX__, ____XXX_, 
@@ -20242,7 +20242,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c3[42] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c4[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04c4[32] = {
     _____XX_, ___XXX__, 
     _____XX_, _XXX____, 
     ____XX__, XXX_____, 
@@ -20261,7 +20261,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c4[32] = {
     __XXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c5[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04c5[60] = {
     ________, XXXXXXXX, XXX_____, 
     ________, XXXXXXXX, XXX_____, 
     _______X, X_______, XX______, 
@@ -20284,7 +20284,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c5[60] = {
     ________, __XXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c6[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04c6[28] = {
     ______XX, XXXXXXX_, 
     ______XX, ____XX__, 
     _____XX_, ____XX__, 
@@ -20301,7 +20301,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c6[28] = {
     ________, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c7[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04c7[63] = {
     _____XX_, _______X, X_______, 
     _____XX_, _______X, X_______, 
     ____XX__, _______X, X_______, 
@@ -20325,7 +20325,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c7[63] = {
     ______XX, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c8[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04c8[32] = {
     ____XX__, ___XXX__, 
     ____XX__, ___XX___, 
     ___XX___, ___XX___, 
@@ -20344,7 +20344,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c8[32] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c9[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04c9[60] = {
     _____XX_, _______X, X_______, 
     _____XX_, _______X, X_______, 
     ____XX__, _______X, X_______, 
@@ -20367,7 +20367,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04c9[60] = {
     ________, _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ca[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04ca[28] = {
     ____XX__, ___XXX__, 
     ____XX__, ___XX___, 
     ___XX___, ___XX___, 
@@ -20384,7 +20384,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ca[28] = {
     _______X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04cb[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04cb[40] = {
     ___XX___, ____XX__, 
     __XX____, ____XX__, 
     __XX____, ____XX__, 
@@ -20407,7 +20407,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04cb[40] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04cc[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04cc[28] = {
     __XX____, _XX_____, 
     _XX_____, XX______, 
     _XX_____, XX______, 
@@ -20424,7 +20424,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04cc[28] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04cd[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04cd[60] = {
     _____XXX, ________, _XXX____, 
     _____XXX, ________, XXX_____, 
     ____XXXX, _______X, XXX_____, 
@@ -20447,7 +20447,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04cd[60] = {
     ________, ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ce[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04ce[42] = {
     ____XXX_, _____XXX, X_______, 
     ____XXX_, _____XXX, ________, 
     ___XX_X_, ____XXXX, ________, 
@@ -20464,7 +20464,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ce[42] = {
     ________, __XXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04cf[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04cf[16] = {
     ______X_, 
     _____XX_, 
     _____XX_, 
@@ -20483,7 +20483,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04cf[16] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d0[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04d0[60] = {
     ________, ___X____, X_______, 
     ________, ___X___X, ________, 
     ________, ___XXXX_, ________, 
@@ -20506,7 +20506,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d0[60] = {
     XXX_____, ____XXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d1[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04d1[32] = {
     ______XX, ___XX___, 
     ______XX, __XX____, 
     _______X, XX______, 
@@ -20525,7 +20525,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d1[32] = {
     XXXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d2[57] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04d2[57] = {
     ________, __XXX_XX, X_______, 
     ________, __XX__XX, ________, 
     ________, ________, ________, 
@@ -20547,7 +20547,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d2[57] = {
     XXX_____, ____XXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d3[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04d3[32] = {
     ______XX, __XX____, 
     ______XX, __XX____, 
     ______XX, __XX____, 
@@ -20566,7 +20566,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d3[32] = {
     XXXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d4[64] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04d4[64] = {
     ________, ______XX, XXXXXXXX, X_______, 
     ________, _____XXX, XXXXXXXX, X_______, 
     ________, ____XX_X, X_______, ________, 
@@ -20585,7 +20585,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d4[64] = {
     XXX_____, __XXXXXX, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d5[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04d5[36] = {
     ______XX, XX____XX, X_______, 
     ____XXXX, XXX_XXXX, XXX_____, 
     ___XX___, _XXXX___, _XX_____, 
@@ -20600,7 +20600,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d5[36] = {
     XXXXXX__, _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d6[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04d6[40] = {
     ________, _X____X_, 
     ________, _XX__XX_, 
     ________, _XXXXX__, 
@@ -20623,7 +20623,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d6[40] = {
     XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d7[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04d7[32] = {
     ______XX, ___XX___, 
     ______XX, __XX____, 
     _______X, XX______, 
@@ -20642,7 +20642,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d7[32] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d8[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04d8[32] = {
     ________, XXXXXX__, 
     ______XX, XXXXXXX_, 
     _____XX_, _____XXX, 
@@ -20661,7 +20661,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d8[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d9[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04d9[24] = {
     ______XX, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XXX____, 
@@ -20676,7 +20676,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04d9[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04da[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04da[38] = {
     ________, _XX__XX_, 
     ________, _XX_XXX_, 
     ________, ________, 
@@ -20698,7 +20698,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04da[38] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04db[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04db[32] = {
     ______XX, __XX____, 
     ______XX, __XX____, 
     _____XXX, _XX_____, 
@@ -20717,7 +20717,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04db[32] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04dc[57] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04dc[57] = {
     ________, _____XX_, _XX_____, 
     ________, _____XX_, _XX_____, 
     ________, ________, ________, 
@@ -20739,7 +20739,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04dc[57] = {
     XXX_____, _XX_____, _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04dd[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04dd[48] = {
     ________, __XX__XX, ________, 
     ________, __XX__XX, ________, 
     ________, _XX__XX_, ________, 
@@ -20758,7 +20758,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04dd[48] = {
     XXX____X, X____XXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04de[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04de[38] = {
     ________, XX__XX__, 
     ________, XX_XXX__, 
     ________, ________, 
@@ -20780,7 +20780,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04de[38] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04df[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04df[32] = {
     _______X, X__XX___, 
     ______XX, __XX____, 
     ______XX, __XX____, 
@@ -20799,7 +20799,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04df[32] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e0[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04e0[32] = {
     _____XXX, XXXXXX__, 
     _____XXX, XXXXXX__, 
     ________, ____XX__, 
@@ -20818,7 +20818,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e0[32] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e1[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04e1[32] = {
     ______XX, XXXXXX__, 
     _____X__, ___XX___, 
     ________, __XX____, 
@@ -20837,7 +20837,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e1[32] = {
     __XXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e2[57] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04e2[57] = {
     ________, _XXXXXXX, ________, 
     ________, _XXXXXX_, ________, 
     ________, ________, ________, 
@@ -20859,7 +20859,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e2[57] = {
     XX______, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e3[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04e3[30] = {
     _______X, XXXXXX__, 
     ________, ________, 
     ________, ________, 
@@ -20877,7 +20877,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e3[30] = {
     XXX_____, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e4[57] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04e4[57] = {
     ________, _XXX_XXX, ________, 
     ________, _XX__XX_, ________, 
     ________, ________, ________, 
@@ -20899,7 +20899,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e4[57] = {
     XX______, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e5[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04e5[32] = {
     _______X, X__XX___, 
     _______X, X__XX___, 
     _______X, X__XX___, 
@@ -20918,7 +20918,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e5[32] = {
     XXX_____, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e6[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04e6[38] = {
     ________, _XX__XX_, 
     ________, XXX_XX__, 
     ________, ________, 
@@ -20940,7 +20940,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e6[38] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e7[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04e7[32] = {
     ______XX, __XX____, 
     ______XX, __XX____, 
     ______XX, __XX____, 
@@ -20959,7 +20959,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e7[32] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e8[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04e8[32] = {
     ________, XXXXXX__, 
     ______XX, XXXXXXX_, 
     ____XXX_, _____XXX, 
@@ -20978,7 +20978,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e8[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e9[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04e9[24] = {
     _______X, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XXX____, 
@@ -20993,7 +20993,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04e9[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ea[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04ea[38] = {
     ________, _XX__XX_, 
     ________, XXX_XX__, 
     ________, ________, 
@@ -21015,7 +21015,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ea[38] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04eb[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04eb[32] = {
     ______XX, __XX____, 
     ______XX, __XX____, 
     ______XX, __XX____, 
@@ -21034,7 +21034,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04eb[32] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ec[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04ec[38] = {
     ________, _XX__XX_, 
     ________, XX__XX__, 
     ________, ________, 
@@ -21056,7 +21056,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ec[38] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ed[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04ed[32] = {
     ______XX, __XX____, 
     ______XX, __XX____, 
     ______XX, __XX____, 
@@ -21075,7 +21075,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ed[32] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ee[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04ee[38] = {
     ________, XXXXXXX_, 
     ________, XXXXXX__, 
     ________, ________, 
@@ -21097,7 +21097,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ee[38] = {
     XXXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ef[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04ef[40] = {
     _______X, XXXXXX__, 
     ________, ________, 
     ________, ________, 
@@ -21120,7 +21120,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ef[40] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f0[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04f0[38] = {
     ________, XXX_XXX_, 
     ________, XX__XX__, 
     ________, ________, 
@@ -21142,7 +21142,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f0[38] = {
     XXXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f1[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04f1[42] = {
     ________, XX__XX__, 
     _______X, X__XX___, 
     _______X, X__XX___, 
@@ -21166,7 +21166,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f1[42] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f2[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04f2[40] = {
     ________, __XXX_X_, 
     ________, _XX__XX_, 
     ________, XX__XX__, 
@@ -21189,7 +21189,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f2[40] = {
     XXXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f3[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04f3[42] = {
     ________, _XXX_X__, 
     ________, XX__XX__, 
     _______X, X__XX___, 
@@ -21213,7 +21213,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f3[42] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f4[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04f4[38] = {
     _______X, X__XX___, 
     ______XX, __XX____, 
     ________, ________, 
@@ -21235,7 +21235,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f4[38] = {
     _______X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f5[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04f5[32] = {
     _____XX_, _XX_____, 
     _____XX_, _XX_____, 
     ____XX__, XX______, 
@@ -21254,7 +21254,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f5[32] = {
     _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f6[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04f6[40] = {
     _____XXX, XXXXXX__, 
     _____XXX, XXXXXX__, 
     ____XX__, ________, 
@@ -21277,7 +21277,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f6[40] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f7[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04f7[28] = {
     ____XXXX, XXX_____, 
     ____XX__, ________, 
     ___XX___, ________, 
@@ -21294,7 +21294,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f7[28] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f8[57] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04f8[57] = {
     ________, ___XX__X, X_______, 
     ________, ___XX_XX, X_______, 
     ________, ________, ________, 
@@ -21316,7 +21316,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f8[57] = {
     XXXXXXXX, X_____XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f9[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04f9[48] = {
     ________, _XX__XX_, ________, 
     ________, _XX__XX_, ________, 
     ________, XX__XX__, ________, 
@@ -21335,7 +21335,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04f9[48] = {
     XXXXXXXX, ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04fa[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04fa[42] = {
     _______X, XXXXXXXX, 
     _______X, XXXXXXXX, 
     ______XX, ________, 
@@ -21359,7 +21359,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04fa[42] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04fb[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04fb[32] = {
     _____XXX, XXXX____, 
     _____XX_, ________, 
     ____XX__, ________, 
@@ -21378,7 +21378,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04fb[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04fc[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04fc[63] = {
     ______XX, X_______, _XX_____, 
     _______X, X______X, XX______, 
     _______X, X_____XX, X_______, 
@@ -21402,7 +21402,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04fc[63] = {
     ________, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04fd[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04fd[32] = {
     ____XXX_, ___XXX__, 
     _____XX_, __XX____, 
     _____XXX, _XX_____, 
@@ -21421,7 +21421,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04fd[32] = {
     ______XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04fe[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04fe[48] = {
     ______XX, X_______, _X______, 
     _______X, X______X, XX______, 
     _______X, X_____XX, X_______, 
@@ -21440,7 +21440,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04fe[48] = {
     XXX_____, ____XXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ff[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_04ff[22] = {
     ____XXX_, ___XXX__, 
     _____XX_, __XX____, 
     _____XXX, _XX_____, 
@@ -21454,7 +21454,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_04ff[22] = {
     XXX_____, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0500[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0500[32] = {
     ________, ______XX, 
     ________, _____XXX, 
     ________, _____XX_, 
@@ -21473,7 +21473,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0500[32] = {
     __XXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0501[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0501[32] = {
     ________, ____X___, 
     ________, ____X___, 
     ________, ___XX___, 
@@ -21492,7 +21492,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0501[32] = {
     _XXXXX_X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0502[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0502[48] = {
     ________, ______XX, ________, 
     ________, _____XXX, ________, 
     ________, _____XX_, ________, 
@@ -21511,7 +21511,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0502[48] = {
     _XXXXXXX, __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0503[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0503[48] = {
     ________, ____XX__, ________, 
     ________, ____XX__, ________, 
     ________, ___XX___, ________, 
@@ -21530,7 +21530,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0503[48] = {
     _XXXXX__, _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0504[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0504[48] = {
     ____XXXX, XX______, ________, 
     __XXXXXX, XXX_____, ________, 
     _XXX____, _XX_____, ________, 
@@ -21549,7 +21549,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0504[48] = {
     ________, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0505[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0505[36] = {
     ____XXX_, ________, _X______, 
     _XXXXXXX, X______X, X_______, 
     XX_____X, X______X, X_______, 
@@ -21564,7 +21564,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0505[36] = {
     ______XX, XXXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0506[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0506[40] = {
     ____XXXX, XX______, 
     __XXXXXX, XXX_____, 
     _XXX____, _XX_____, 
@@ -21587,7 +21587,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0506[40] = {
     ______XX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0507[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0507[30] = {
     ____XXX_, ________, 
     _XXXXXXX, X_______, 
     XX_____X, X_______, 
@@ -21605,7 +21605,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0507[30] = {
     _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0508[64] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0508[64] = {
     ________, XXXXXXXX, XXX_____, ________, 
     ________, XXXXXXXX, XXX_____, ________, 
     _______X, X_______, XX______, ________, 
@@ -21624,7 +21624,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0508[64] = {
     XXXX____, ______XX, XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0509[33] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0509[33] = {
     ______XX, XXXXXXX_, ____XX__, 
     ______XX, ____XX__, ____XX__, 
     _____XX_, ____XX__, ___XX___, 
@@ -21638,7 +21638,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0509[33] = {
     XXXX____, ___XXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_050a[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_050a[48] = {
     _____XX_, _______X, X_______, 
     _____XX_, _______X, X_______, 
     ____XX__, _______X, X_______, 
@@ -21657,7 +21657,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_050a[48] = {
     XX______, ____XXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_050b[33] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_050b[33] = {
     ____XX__, ___XXX__, ________, 
     ____XX__, ___XX___, ________, 
     ___XX___, ___XX___, ________, 
@@ -21671,7 +21671,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_050b[33] = {
     XXX_____, __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_050c[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_050c[32] = {
     ________, XXXXXX__, 
     ______XX, XXXXXXX_, 
     ____XXX_, _____XXX, 
@@ -21690,7 +21690,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_050c[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_050d[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_050d[24] = {
     _______X, XX______, 
     ____XXXX, XXX_____, 
     ___XX___, __XX____, 
@@ -21705,7 +21705,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_050d[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_050e[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_050e[32] = {
     _XXXXXXX, XXXXX___, 
     XXXXXXXX, XXXXX___, 
     _____XX_, ________, 
@@ -21724,7 +21724,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_050e[32] = {
     ___XXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_050f[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_050f[22] = {
     XXXXXXXX, XX______, 
     ___XX___, ________, 
     ___XX___, ________, 
@@ -21738,7 +21738,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_050f[22] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0510[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0510[32] = {
     ________, XXXXX___, 
     ______XX, XXXXXXX_, 
     _____XX_, _____XX_, 
@@ -21757,7 +21757,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0510[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0511[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0511[24] = {
     ______XX, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XX_____, 
@@ -21772,7 +21772,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0511[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0512[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0512[63] = {
     ________, XXXXXXXX, XXX_____, 
     ________, XXXXXXXX, XXX_____, 
     _______X, X_______, XX______, 
@@ -21796,7 +21796,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0512[63] = {
     ________, XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0513[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0513[32] = {
     ______XX, XXXXXXX_, 
     ______XX, ____XX__, 
     _____XX_, ____XX__, 
@@ -21815,7 +21815,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0513[32] = {
     _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0514[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0514[48] = {
     ________, XXXXXXX_, _______X, 
     ________, XXXXXXX_, _____XXX, 
     _______X, X____XX_, ____XXX_, 
@@ -21834,7 +21834,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0514[48] = {
     XXXX__XX, X_______, __XXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0515[33] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0515[33] = {
     ______XX, XXXX____, XXX_____, 
     ______XX, __XXX__X, XX______, 
     _____XX_, ___XX_XX, X_______, 
@@ -21848,7 +21848,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0515[33] = {
     XXXX_XXX, _____XXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0516[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0516[48] = {
     _____XXX, XXXX____, _XX_____, 
     _____XXX, XXXXX___, XXX_____, 
     ____XX__, ___XXX_X, XX______, 
@@ -21867,7 +21867,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0516[48] = {
     XX______, ____XXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0517[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0517[48] = {
     ________, __XX____, __X_____, 
     _____XX_, XXXXX___, XX______, 
     _____XXX, ___XXX_X, X_______, 
@@ -21886,7 +21886,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0517[48] = {
     XX______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0518[64] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0518[64] = {
     ________, _XXXXXXX, XXXXXXXX, XXXX____, 
     _______X, XXXXXXXX, XXXXXXXX, XXX_____, 
     ______XX, ________, XX______, ________, 
@@ -21905,7 +21905,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0518[64] = {
     XXX_____, ___XXXXX, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0519[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0519[36] = {
     ________, _______X, XX______, 
     _____XXX, XXXXXXXX, XXXX____, 
     ____XX__, ___XXX__, __XX____, 
@@ -21920,7 +21920,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0519[36] = {
     XX______, __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_051a[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_051a[34] = {
     ________, XXXXXX__, 
     ______XX, XXXXXXX_, 
     ____XXX_, _____XXX, 
@@ -21940,7 +21940,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_051a[34] = {
     ________, ___XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_051b[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_051b[32] = {
     ______XX, X___X___, 
     ____XXXX, XXXX____, 
     ___XX___, _XXX____, 
@@ -21959,7 +21959,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_051b[32] = {
     _____XXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_051c[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_051c[48] = {
     _XX_____, _XXX____, ________, 
     _XX_____, _XXX____, __X_____, 
     XXX_____, XXXX____, _XX_____, 
@@ -21978,7 +21978,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_051c[48] = {
     XX______, _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_051d[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_051d[22] = {
     XX____XX, X____XX_, 
     XX____XX, X___XX__, 
     XX___XXX, X___XX__, 
@@ -21992,7 +21992,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_051d[22] = {
     XX____XX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_051e[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_051e[32] = {
     _____XX_, _______X, 
     _____XX_, __XX_XXX, 
     ____XX__, __XXXXX_, 
@@ -22011,7 +22011,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_051e[32] = {
     XX______, __XXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_051f[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_051f[22] = {
     ____XX_X, X_XXX___, 
     ____XX__, XXX_____, 
     ___XX__X, XXX_____, 
@@ -22025,7 +22025,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_051f[22] = {
     XXX____X, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0520[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0520[63] = {
     ________, XXXXXXXX, X_______, 
     ________, XXXXXXXX, ________, 
     _______X, X_____XX, ________, 
@@ -22049,7 +22049,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0520[63] = {
     ________, _____XXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0521[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0521[48] = {
     ______XX, XXXXXXX_, ________, 
     ______XX, ____XX__, ________, 
     _____XX_, ____XX__, ________, 
@@ -22068,7 +22068,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0521[48] = {
     ________, ____XXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0522[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0522[63] = {
     _____XX_, _______X, X_______, 
     _____XX_, _______X, X_______, 
     ____XX__, _______X, X_______, 
@@ -22092,7 +22092,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0522[63] = {
     ________, ______XX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0523[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0523[48] = {
     ____XX__, ___XXX__, ________, 
     ____XX__, ___XX___, ________, 
     ___XX___, ___XX___, ________, 
@@ -22111,7 +22111,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0523[48] = {
     ________, ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0524[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0524[60] = {
     _____XXX, XXXXXXXX, X_______, 
     _____XXX, XXXXXXXX, X_______, 
     ____XX__, _______X, X_______, 
@@ -22134,7 +22134,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0524[60] = {
     ________, ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0525[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0525[28] = {
     ____XXXX, XXXXXX__, 
     ____XX__, ___XX___, 
     ___XX___, ___XX___, 
@@ -22151,7 +22151,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0525[28] = {
     ________, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0526[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0526[40] = {
     _____XX_, ________, 
     _____XX_, ________, 
     ____XX__, ________, 
@@ -22174,7 +22174,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0526[40] = {
     ________, ___XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0527[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0527[38] = {
     ______XX, ________, 
     _____XX_, ________, 
     _____XX_, ________, 
@@ -22196,7 +22196,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0527[38] = {
     ________, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0528[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0528[63] = {
     ________, _XX_____, ___XX___, 
     ________, _XX_____, ___XX___, 
     ________, XX______, ___XX___, 
@@ -22220,7 +22220,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0528[63] = {
     XX______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0529[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0529[48] = {
     _______X, X_____XX, X_______, 
     _______X, X_____XX, ________, 
     ______XX, ______XX, ________, 
@@ -22239,7 +22239,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0529[48] = {
     XX______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_052a[100] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_052a[100] = {
     ________, __XXXXXX, XXXXX___, _XX_____, __XX____, 
     ________, __XXXXXX, XXXX____, _XX_____, _XXX____, 
     ________, _XX_____, __XX____, XX______, XXX_____, 
@@ -22262,7 +22262,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_052a[100] = {
     XX______, ______XX, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_052b[56] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_052b[56] = {
     ________, XXXXXXXX, ___XX___, _XXX____, 
     _______X, X____XX_, ___XX__X, XX______, 
     _______X, X____XX_, __XX__XX, ________, 
@@ -22279,7 +22279,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_052b[56] = {
     XX______, ___XX___, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_052c[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_052c[60] = {
     ________, _XX_____, __XXX___, 
     ________, XXX_____, _XXX____, 
     ________, XX______, XXXX____, 
@@ -22302,7 +22302,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_052c[60] = {
     XX______, ______XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_052d[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_052d[28] = {
     _______X, X____XXX, 
     ______XX, ____XXXX, 
     ______XX, ___XXXX_, 
@@ -22319,7 +22319,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_052d[28] = {
     XX______, ___XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_052e[60] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_052e[60] = {
     ________, XXXXXXXX, XXX_____, 
     ________, XXXXXXXX, XXX_____, 
     _______X, X_______, XX______, 
@@ -22342,7 +22342,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_052e[60] = {
     ________, ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_052f[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_052f[28] = {
     ______XX, XXXXXXX_, 
     ______XX, ____XX__, 
     _____XX_, ____XX__, 
@@ -22359,7 +22359,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_052f[28] = {
     ________, __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0530[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0530[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -22376,7 +22376,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0530[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0531[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0531[30] = {
     __XX____, ___XX___, 
     _XX_____, ___XX___, 
     _XX_____, ___XX___, 
@@ -22394,7 +22394,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0531[30] = {
     __XXXXXX, ___XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0532[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0532[32] = {
     ______XX, XX______, 
     ____XXXX, XXXX____, 
     ___XXX__, __XX____, 
@@ -22413,7 +22413,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0532[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0533[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0533[32] = {
     _____XXX, ________, 
     ___XXXXX, XX______, 
     _XXX____, XXX_____, 
@@ -22432,7 +22432,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0533[32] = {
     ________, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0534[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0534[32] = {
     _____XXX, ________, 
     ___XXXXX, XX______, 
     __XX____, XXX_____, 
@@ -22451,7 +22451,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0534[32] = {
     ________, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0535[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0535[30] = {
     __XX____, ________, 
     _XX_____, ________, 
     _XX_____, ________, 
@@ -22469,7 +22469,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0535[30] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0536[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0536[36] = {
     _______X, XX______, 
     _____XXX, XXXXX___, 
     ____XXX_, ___XXX__, 
@@ -22490,7 +22490,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0536[36] = {
     XX______, ___XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0537[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0537[36] = {
     ___XX___, ________, 
     ___XX___, ________, 
     __XX____, ________, 
@@ -22511,7 +22511,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0537[36] = {
     _______X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0538[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0538[32] = {
     ______XX, XX______, 
     ____XXXX, XXXX____, 
     ___XXX__, __XX____, 
@@ -22530,7 +22530,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0538[32] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0539[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0539[32] = {
     ______XX, XX______, 
     ____XXXX, XXXX____, 
     ___XXX__, __XX____, 
@@ -22549,7 +22549,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0539[32] = {
     XX___XXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_053a[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_053a[30] = {
     ________, ___XX___, 
     ________, ___XX___, 
     ________, ___X____, 
@@ -22567,7 +22567,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_053a[30] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_053b[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_053b[30] = {
     ___XX___, ________, 
     ___X____, ________, 
     __XX____, ________, 
@@ -22585,7 +22585,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_053b[30] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_053c[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_053c[36] = {
     ___XX___, ________, 
     ___XX___, ________, 
     __XX____, ________, 
@@ -22606,7 +22606,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_053c[36] = {
     ______XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_053d[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_053d[30] = {
     ___XX___, ________, 
     ___XX___, ________, 
     __XX____, ________, 
@@ -22624,7 +22624,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_053d[30] = {
     XX_____X, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_053e[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_053e[32] = {
     ________, ___XXXX_, 
     ___XX__X, XXXXXXX_, 
     __XXXXXX, X_______, 
@@ -22643,7 +22643,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_053e[32] = {
     ___XXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_053f[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_053f[30] = {
     __X_____, ________, 
     _XX_____, ________, 
     _XX_____, ________, 
@@ -22661,7 +22661,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_053f[30] = {
     ________, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0540[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0540[38] = {
     ________, _X______, 
     ________, XX______, 
     ________, XX______, 
@@ -22683,7 +22683,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0540[38] = {
     ________, __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0541[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0541[34] = {
     ______XX, X_______, 
     ____XXXX, XXX_____, 
     __XXX___, __XX____, 
@@ -22703,7 +22703,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0541[34] = {
     ________, ___X____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0542[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0542[32] = {
     _____XXX, ________, 
     ___XXXXX, XX______, 
     __XX____, XXX_____, 
@@ -22722,7 +22722,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0542[32] = {
     ________, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0543[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0543[30] = {
     ________, _XXXXXX_, 
     ______XX, XXX_____, 
     _XXXXXXX, X_______, 
@@ -22740,7 +22740,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0543[30] = {
     XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0544[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0544[30] = {
     __XX____, ___XXXXX, 
     _XX_____, ___XX___, 
     _XX_____, ___XX___, 
@@ -22758,7 +22758,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0544[30] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0545[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0545[32] = {
     ______XX, X_______, 
     ____XXXX, XXX_____, 
     ___XXX__, __XX____, 
@@ -22777,7 +22777,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0545[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0546[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0546[30] = {
     XXXX____, ________, 
     __XX____, ________, 
     __XX____, ________, 
@@ -22795,7 +22795,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0546[30] = {
     ___XXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0547[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0547[32] = {
     ___X____, ________, 
     ___XXXX_, ________, 
     _____XXX, XX______, 
@@ -22814,7 +22814,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0547[32] = {
     ___XXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0548[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0548[32] = {
     ______XX, XX______, 
     ____XXXX, XXXX____, 
     ___XXX__, __XX____, 
@@ -22833,7 +22833,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0548[32] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0549[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0549[32] = {
     ______XX, XX______, 
     ____XXXX, XXXX____, 
     ___XXX__, __XX____, 
@@ -22852,7 +22852,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0549[32] = {
     ________, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_054a[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_054a[32] = {
     ______XX, XX______, 
     ___XXXXX, XXXX____, 
     __XXX__X, X_XXX___, 
@@ -22871,7 +22871,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_054a[32] = {
     ________, __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_054b[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_054b[36] = {
     ________, XXX_____, 
     _____XXX, XXXXX___, 
     ____XXX_, ___XXX__, 
@@ -22892,7 +22892,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_054b[36] = {
     XX______, ___XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_054c[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_054c[32] = {
     ______XX, XX______, 
     ____XXXX, XXXX____, 
     ___XXX__, __XX____, 
@@ -22911,7 +22911,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_054c[32] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_054d[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_054d[30] = {
     __XX____, ___XX___, 
     _XX_____, ___XX___, 
     _XX_____, ___XX___, 
@@ -22929,7 +22929,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_054d[30] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_054e[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_054e[30] = {
     ________, ___XX___, 
     ________, ___XX___, 
     ________, ___XX___, 
@@ -22947,7 +22947,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_054e[30] = {
     ________, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_054f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_054f[32] = {
     ______XX, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XXX____, 
@@ -22966,7 +22966,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_054f[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0550[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0550[32] = {
     ______XX, XX______, 
     ____XXXX, XXXX____, 
     ___XXX__, __XX____, 
@@ -22985,7 +22985,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0550[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0551[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0551[32] = {
     ______XX, X_______, 
     ____XXXX, XXX_____, 
     ___XX___, _XX_____, 
@@ -23004,7 +23004,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0551[32] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0552[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0552[30] = {
     ___XX___, ________, 
     ___X____, ________, 
     __XX____, ________, 
@@ -23022,7 +23022,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0552[30] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0553[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0553[32] = {
     ________, XX______, 
     ________, XX______, 
     ____XXXX, XXXXX___, 
@@ -23041,7 +23041,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0553[32] = {
     _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0554[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0554[32] = {
     ________, XX______, 
     ______XX, XXXX____, 
     _____XX_, ___XX___, 
@@ -23060,7 +23060,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0554[32] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0555[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0555[32] = {
     _______X, XX______, 
     _____XXX, XXXXX___, 
     ___XXX__, ___XXX__, 
@@ -23079,7 +23079,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0555[32] = {
     ____XXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0556[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0556[30] = {
     _____XXX, XX______, 
     ____XX__, X_______, 
     ___XX__X, X_______, 
@@ -23097,7 +23097,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0556[30] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0557[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0557[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -23114,7 +23114,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0557[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0558[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0558[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -23131,28 +23131,28 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0558[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0559[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0559[4] = {
     _X______, 
     X_______, 
     X_______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_055a[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_055a[4] = {
     _XX_____, 
     __X_____, 
     __X_____, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_055b[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_055b[4] = {
     __XX____, 
     _XX_____, 
     _X______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_055c[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_055c[5] = {
     ___XX___, 
     ___X____, 
     __XX____, 
@@ -23160,14 +23160,14 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_055c[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_055d[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_055d[4] = {
     XX______, 
     XX______, 
     _X______, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_055e[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_055e[5] = {
     ___XXX__, 
     __X___X_, 
     _X_X__X_, 
@@ -23175,14 +23175,14 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_055e[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_055f[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_055f[4] = {
     ___X____, 
     __XX____, 
     _X______, 
     XXXXXXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0560[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0560[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -23199,7 +23199,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0560[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0561[33] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0561[33] = {
     __X_____, XX_____X, X_______, 
     _XX_____, XX_____X, X_______, 
     _XX_____, XX_____X, X_______, 
@@ -23213,7 +23213,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0561[33] = {
     _XXXX___, XXXX_XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0562[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0562[32] = {
     ___XX_XX, XXX_____, 
     ___X_XX_, _XX_____, 
     __XXX___, _XX_____, 
@@ -23232,7 +23232,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0562[32] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0563[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0563[32] = {
     ___XXXXX, _XX_____, 
     __XXX__X, XXX_____, 
     _XX_____, XXX_____, 
@@ -23251,7 +23251,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0563[32] = {
     ______XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0564[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0564[32] = {
     __XX_XXX, XX______, 
     __X_XX__, XX______, 
     _XXX____, XX______, 
@@ -23270,7 +23270,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0564[32] = {
     ______XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0565[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0565[32] = {
     ___X____, ________, 
     __XX____, ________, 
     __XX____, ________, 
@@ -23289,7 +23289,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0565[32] = {
     _XXXX__X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0566[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0566[32] = {
     ___XXXXX, _XX_____, 
     __XXX__X, XXX_____, 
     _XX_____, XXX_____, 
@@ -23308,7 +23308,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0566[32] = {
     ______XX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0567[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0567[32] = {
     ___XX___, ________, 
     ___XX___, ________, 
     __XX____, ________, 
@@ -23327,7 +23327,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0567[32] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0568[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0568[32] = {
     ___XX_XX, XXX_____, 
     ___X_XX_, _XX_____, 
     __XXX___, _XX_____, 
@@ -23346,7 +23346,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0568[32] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0569[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0569[32] = {
     ___XX_XX, XXX_____, 
     ___X_XX_, __XX____, 
     __XXX___, __XX____, 
@@ -23365,7 +23365,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0569[32] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_056a[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_056a[32] = {
     ________, __XX____, 
     ________, __XX____, 
     ________, __XX____, 
@@ -23384,7 +23384,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_056a[32] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_056b[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_056b[42] = {
     ____XX__, ________, 
     ____X___, ________, 
     ____X___, ________, 
@@ -23408,7 +23408,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_056b[42] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_056c[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_056c[16] = {
     ___XX___, 
     ___X____, 
     __XX____, 
@@ -23427,7 +23427,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_056c[16] = {
     XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_056d[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_056d[63] = {
     ____XX__, ________, ________, 
     ____X___, ________, ________, 
     ___XX___, ________, ________, 
@@ -23451,7 +23451,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_056d[63] = {
     X_______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_056e[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_056e[32] = {
     _____XX_, ________, 
     ___XXX__, ________, 
     ____XX__, ________, 
@@ -23470,7 +23470,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_056e[32] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_056f[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_056f[42] = {
     ___X____, ________, 
     __XX____, ________, 
     __XX____, ________, 
@@ -23494,7 +23494,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_056f[42] = {
     ______X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0570[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0570[32] = {
     ___XX___, ________, 
     ___X____, ________, 
     __XX____, ________, 
@@ -23513,7 +23513,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0570[32] = {
     X______X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0571[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0571[32] = {
     _____X__, ________, 
     ____XXX_, ________, 
     ____XX__, ________, 
@@ -23532,7 +23532,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0571[32] = {
     _XXXX_XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0572[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0572[32] = {
     __XX_XXX, XX______, 
     __X_XX__, XX______, 
     _XXX____, XX______, 
@@ -23551,7 +23551,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0572[32] = {
     ______XX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0573[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0573[34] = {
     ________, __X_____, 
     ______XX, XXX_____, 
     _____XXX, ________, 
@@ -23571,7 +23571,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0573[34] = {
     _XXXX__X, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0574[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0574[32] = {
     ________, __XXXX__, 
     ________, __X_____, 
     ________, _XX_____, 
@@ -23590,7 +23590,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0574[32] = {
     _XXXX__X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0575[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0575[32] = {
     _______X, X_______, 
     _______X, X_______, 
     _______X, X_______, 
@@ -23609,7 +23609,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0575[32] = {
     XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0576[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0576[32] = {
     XXXX____, ________, 
     __XX____, ________, 
     __XX____, ________, 
@@ -23628,7 +23628,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0576[32] = {
     _XXXX__X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0577[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0577[32] = {
     ____XXXX, XX______, 
     ___XXX__, _XX_____, 
     ___X____, _XX_____, 
@@ -23647,7 +23647,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0577[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0578[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0578[22] = {
     __XX_XXX, XX______, 
     __X_XX__, XX______, 
     _XXX____, XX______, 
@@ -23661,7 +23661,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0578[22] = {
     X______X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0579[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0579[32] = {
     ______XX, ________, 
     ____XXX_, ________, 
     _____XX_, ________, 
@@ -23680,7 +23680,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0579[32] = {
     _XXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_057a[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_057a[48] = {
     __X_____, XX_____X, X_______, 
     _XX_____, XX_____X, X_______, 
     _XX_____, XX_____X, X_______, 
@@ -23699,7 +23699,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_057a[48] = {
     ________, ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_057b[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_057b[32] = {
     ____XXXX, XX______, 
     ___XXX__, XXX_____, 
     __XX____, _XX_____, 
@@ -23718,7 +23718,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_057b[32] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_057c[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_057c[22] = {
     __XX_XXX, X_______, 
     __X_XX__, XX______, 
     _XXX____, _X______, 
@@ -23732,7 +23732,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_057c[22] = {
     X____XXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_057d[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_057d[22] = {
     __X_____, _XX_____, 
     _XX_____, _X______, 
     _XX_____, XX______, 
@@ -23746,7 +23746,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_057d[22] = {
     _XXXX__X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_057e[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_057e[42] = {
     ________, __XX____, 
     ________, __X_____, 
     ________, _XX_____, 
@@ -23770,7 +23770,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_057e[42] = {
     ______XX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_057f[33] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_057f[33] = {
     __X_____, _X__XXXX, ________, 
     _XX_____, _X_XX__X, X_______, 
     _XX_____, XXX____X, X_______, 
@@ -23784,7 +23784,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_057f[33] = {
     _XXXX__X, X_____XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0580[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0580[32] = {
     ___XX_XX, XXX_____, 
     ___X_XX_, _XX_____, 
     __XXX___, _XX_____, 
@@ -23803,7 +23803,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0580[32] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0581[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0581[32] = {
     ____XXXX, X_XX____, 
     ___XXX__, XXXX____, 
     __XX____, _XXX____, 
@@ -23822,7 +23822,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0581[32] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0582[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0582[11] = {
     __XX____, 
     __X_____, 
     _XX_____, 
@@ -23836,7 +23836,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0582[11] = {
     XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0583[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0583[63] = {
     ________, __XX____, ________, 
     ________, __X_____, ________, 
     ________, _XX_____, ________, 
@@ -23860,7 +23860,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0583[63] = {
     ______X_, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0584[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0584[32] = {
     ____XX__, XXXX____, 
     ____XX_X, __XXX___, 
     ____XXX_, ___XX___, 
@@ -23879,7 +23879,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0584[32] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0585[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0585[22] = {
     ___XXXXX, ________, 
     __XX___X, X_______, 
     _XX_____, XX______, 
@@ -23893,7 +23893,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0585[22] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0586[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0586[42] = {
     ____XXXX, X_______, 
     ___XXX_X, X_______, 
     ___X___X, ________, 
@@ -23917,7 +23917,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0586[42] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0587[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0587[32] = {
     ___X____, ________, 
     __XX____, ________, 
     __XX____, ________, 
@@ -23936,7 +23936,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0587[32] = {
     _XXXX__X, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0588[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0588[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -23953,7 +23953,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0588[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0589[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0589[11] = {
     ____XX__, 
     ___XX___, 
     ________, 
@@ -23967,12 +23967,12 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0589[11] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_058a[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_058a[2] = {
     X_______, 
     XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_058b[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_058b[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -23989,7 +23989,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_058b[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_058c[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_058c[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -24006,7 +24006,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_058c[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_058d[51] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_058d[51] = {
     ______XX, XXX_____, ________, 
     ___XXX__, _XXXX___, ________, 
     __XXX___, X____XX_, ________, 
@@ -24026,7 +24026,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_058d[51] = {
     _______X, XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_058e[51] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_058e[51] = {
     ______XX, XXX_____, ________, 
     ___XXXXX, __XXX___, ________, 
     __XX___X, X__X_XX_, ________, 
@@ -24046,7 +24046,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_058e[51] = {
     _______X, XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_058f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_058f[32] = {
     ___XXX__, ________, 
     _XXXXXXX, ________, 
     _XX____X, X_______, 
@@ -24065,7 +24065,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_058f[32] = {
     _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0590[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0590[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -24082,239 +24082,239 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0590[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0591[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0591[3] = {
     __X_____, 
     XXXX____, 
     X_XX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0592[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0592[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0593[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0593[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0594[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0594[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0595[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0595[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0596[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0596[3] = {
     X_______, 
     X_______, 
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0597[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0597[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0598[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0598[2] = {
     X_______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0599[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0599[1] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_059a[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_059a[3] = {
     _XX_____, 
     XX______, 
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_059b[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_059b[3] = {
     _X_XX___, 
     ___X____, 
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_059c[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_059c[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_059d[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_059d[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_059e[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_059e[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_059f[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_059f[3] = {
     XX______, 
     X_______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05a0[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05a0[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05a1[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05a1[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05a2[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05a2[3] = {
     XX_XX___, 
     XXXX____, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05a3[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05a3[3] = {
     ___X____, 
     ___X____, 
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05a4[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05a4[3] = {
     _XX_____, 
     X_______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05a5[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05a5[3] = {
     ___XX___, 
     ___X____, 
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05a6[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05a6[3] = {
     __XX_X__, 
     __X__X__, 
     XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05a7[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05a7[3] = {
     _XXX____, 
     __X_____, 
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05a8[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05a8[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05a9[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05a9[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05aa[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05aa[3] = {
     XX_XX___, 
     XXXX____, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ab[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05ab[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ac[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05ac[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ad[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05ad[3] = {
     XX______, 
     X_______, 
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ae[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05ae[3] = {
     XXX_____, 
     X_______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05af[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05af[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05b0[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05b0[3] = {
     XX______, 
     ________, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05b1[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05b1[3] = {
     XX_X____, 
     ________, 
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05b2[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05b2[1] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05b3[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05b3[3] = {
     XXXX____, 
     _X______, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05b4[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05b4[1] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05b5[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05b5[1] = {
     XX_X____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05b6[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05b6[3] = {
     XX_X____, 
     ________, 
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05b7[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05b7[1] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05b8[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05b8[3] = {
     XXXX____, 
     __X_____, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05b9[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05b9[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ba[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05ba[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05bb[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05bb[2] = {
     XX______, 
     __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05bc[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05bc[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05bd[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05bd[3] = {
     _X______, 
     _X______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05be[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05be[3] = {
     XXXX____, 
     XXXX____, 
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05bf[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05bf[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05c0[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05c0[14] = {
     ____XX__, 
     ____XX__, 
     ___XX___, 
@@ -24331,7 +24331,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05c0[14] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05c1[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05c1[28] = {
     ________, ____X___, 
     ________, ________, 
     ________, ________, 
@@ -24348,7 +24348,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05c1[28] = {
     __XXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05c2[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05c2[30] = {
     ____XX__, ________, 
     ____X___, ________, 
     ________, ________, 
@@ -24366,7 +24366,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05c2[30] = {
     __XXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05c3[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05c3[14] = {
     _____XX_, 
     ____XX__, 
     ____XX__, 
@@ -24383,16 +24383,16 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05c3[14] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05c4[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05c4[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05c5[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05c5[2] = {
     XX______, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05c6[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05c6[28] = {
     _______X, X_______, 
     ____XXXX, X_______, 
     ____XXXX, X_______, 
@@ -24409,13 +24409,13 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05c6[28] = {
     XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05c7[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05c7[3] = {
     XXXX____, 
     _X______, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05c8[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05c8[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -24432,7 +24432,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05c8[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05c9[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05c9[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -24449,7 +24449,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05c9[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ca[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05ca[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -24466,7 +24466,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ca[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05cb[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05cb[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -24483,7 +24483,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05cb[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05cc[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05cc[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -24500,7 +24500,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05cc[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05cd[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05cd[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -24517,7 +24517,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05cd[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ce[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05ce[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -24534,7 +24534,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ce[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05cf[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05cf[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -24551,7 +24551,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05cf[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d0[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05d0[28] = {
     ____XXX_, ___XX___, 
     ____XXX_, ___XXX__, 
     _____XX_, __XXXX__, 
@@ -24568,7 +24568,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d0[28] = {
     XXX____X, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d1[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05d1[28] = {
     _____XXX, XXX_____, 
     ____XXXX, XXXXX___, 
     ____XXXX, XXXXX___, 
@@ -24585,7 +24585,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d1[28] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d2[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05d2[28] = {
     ________, XX______, 
     _______X, XXX_____, 
     _______X, XXX_____, 
@@ -24602,7 +24602,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d2[28] = {
     XXX___XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d3[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05d3[28] = {
     _XXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
@@ -24619,7 +24619,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d3[28] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d4[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05d4[28] = {
     ____XXXX, XXX_____, 
     ____XXXX, XXXXX___, 
     ____XXXX, XXXXX___, 
@@ -24636,7 +24636,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d4[28] = {
     XX______, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d5[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05d5[14] = {
     _XXX____, 
     _XXXX___, 
     _XXXX___, 
@@ -24653,7 +24653,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d5[14] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d6[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05d6[14] = {
     __XXXXXX, 
     _XXXXXXX, 
     _XXXXXXX, 
@@ -24670,7 +24670,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d6[14] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d7[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05d7[28] = {
     ____XXXX, XXX_____, 
     ____XXXX, XXXXX___, 
     ____XXXX, XXXXX___, 
@@ -24687,7 +24687,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d7[28] = {
     XX______, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d8[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05d8[28] = {
     __XX____, _XX_____, 
     __XXX__X, XXXX____, 
     __XX___X, XXXX____, 
@@ -24704,7 +24704,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d8[28] = {
     XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d9[8] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05d9[8] = {
     XXX_____, 
     XXXX____, 
     XXXX____, 
@@ -24715,7 +24715,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05d9[8] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05da[18] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05da[18] = {
     XXXXXX__, 
     XXXXXXXX, 
     XXXXXXXX, 
@@ -24736,7 +24736,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05da[18] = {
     __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05db[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05db[28] = {
     _____XXX, XXX_____, 
     ____XXXX, XXXX____, 
     ____XXXX, XXXX____, 
@@ -24753,7 +24753,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05db[28] = {
     XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05dc[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05dc[32] = {
     __XX____, ________, 
     __XX____, ________, 
     _XXXXXXX, X_______, 
@@ -24772,7 +24772,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05dc[32] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05dd[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05dd[28] = {
     ___XXXXX, XXXX____, 
     ___XXXXX, XXXXXX__, 
     ___XXXXX, XXXXX___, 
@@ -24789,7 +24789,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05dd[28] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05de[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05de[28] = {
     ___XX___, _XX_____, 
     ___XXX_X, XXXXX___, 
     ___XX_XX, XXXXX___, 
@@ -24806,7 +24806,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05de[28] = {
     XX___XXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05df[18] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05df[18] = {
     __XXX___, 
     __XXXXX_, 
     __XXXXX_, 
@@ -24827,7 +24827,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05df[18] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e0[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05e0[28] = {
     _____XX_, ________, 
     ____XXXX, X_______, 
     ____XXXX, X_______, 
@@ -24844,7 +24844,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e0[28] = {
     XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e1[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05e1[28] = {
     __XXXXXX, XXX_____, 
     __XXXXXX, XXXXX___, 
     __XXXXXX, XXXX____, 
@@ -24861,7 +24861,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e1[28] = {
     XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e2[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05e2[28] = {
     ______X_, ______XX, 
     ______XX, ______XX, 
     _____XXX, ______X_, 
@@ -24878,7 +24878,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e2[28] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e3[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05e3[36] = {
     __XXXXXX, X_______, 
     __XXXXXX, XXX_____, 
     _XXXXXXX, XXX_____, 
@@ -24899,7 +24899,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e3[36] = {
     _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e4[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05e4[28] = {
     _____XXX, XXX_____, 
     ____XXXX, XXXXX___, 
     ____XXXX, XXXXX___, 
@@ -24916,7 +24916,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e4[28] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e5[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05e5[36] = {
     ____XX__, ___XX___, 
     ____XXX_, ___XXX__, 
     ____XX__, __XXX___, 
@@ -24937,7 +24937,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e5[36] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e6[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05e6[28] = {
     ____XX__, ___XX___, 
     ____XXX_, ___XXX__, 
     ____XX__, __XXX___, 
@@ -24954,7 +24954,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e6[28] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e7[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05e7[36] = {
     ______XX, XXXXXX__, 
     ______XX, XXXXXXX_, 
     ______XX, XXXXXXX_, 
@@ -24975,7 +24975,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e7[36] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e8[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05e8[28] = {
     _XXXXXX_, ________, 
     _XXXXXXX, X_______, 
     XXXXXXXX, X_______, 
@@ -24992,7 +24992,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e8[28] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e9[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05e9[28] = {
     _____X__, XX__X___, 
     ___XXX__, X__XXX__, 
     ___XX__X, X__XXX__, 
@@ -25009,7 +25009,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05e9[28] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ea[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05ea[28] = {
     _____XXX, XXXX____, 
     ____XXXX, XXXXXX__, 
     ____XXXX, XXXXXX__, 
@@ -25026,7 +25026,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ea[28] = {
     XX______, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05eb[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05eb[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -25043,7 +25043,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05eb[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ec[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05ec[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -25060,7 +25060,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ec[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ed[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05ed[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -25077,7 +25077,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ed[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ee[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05ee[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -25094,7 +25094,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ee[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ef[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05ef[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -25111,7 +25111,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ef[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f0[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05f0[28] = {
     __XX____, _XX_____, 
     __XXXX__, XXXX____, 
     _XXXXX__, XXXX____, 
@@ -25128,7 +25128,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f0[28] = {
     XX_____X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f1[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05f1[28] = {
     _XX_____, XX______, 
     _XXXX__X, XXX_____, 
     XXXXX__X, XXX_____, 
@@ -25145,7 +25145,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f1[28] = {
     ______XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f2[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05f2[16] = {
     _XX_____, XX______, 
     _XXXX__X, XXX_____, 
     XXXXX__X, XXX_____, 
@@ -25156,14 +25156,14 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f2[16] = {
     _XX_____, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f3[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05f3[4] = {
     __X_____, 
     __X_____, 
     _X______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f4[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05f4[6] = {
     ___XX__X, 
     ___X___X, 
     __XX__XX, 
@@ -25172,7 +25172,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f4[6] = {
     XX__XX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f5[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05f5[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -25189,7 +25189,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f5[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f6[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05f6[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -25206,7 +25206,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f6[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f7[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05f7[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -25223,7 +25223,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f7[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f8[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05f8[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -25240,7 +25240,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f8[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f9[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05f9[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -25257,7 +25257,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05f9[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05fa[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05fa[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -25274,7 +25274,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05fa[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05fb[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05fb[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -25291,7 +25291,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05fb[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05fc[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05fc[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -25308,7 +25308,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05fc[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05fd[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05fd[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -25325,7 +25325,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05fd[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05fe[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05fe[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -25342,7 +25342,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05fe[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ff[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_05ff[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -25359,7 +25359,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_05ff[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0600[18] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0600[18] = {
     ________, ________, _XX_____, 
     ________, ________, _XX_____, 
     ________, ________, XX______, 
@@ -25368,7 +25368,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0600[18] = {
     _XXXXXXX, XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0601[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0601[20] = {
     _XX___XX, X___XX__, ________, ___XXX__, 
     _X__XXXX, X__XXX__, ______XX, XXXXXXX_, 
     XXXXXX_X, XXXXXXXX, XXXXXXXX, X___XX__, 
@@ -25376,7 +25376,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0601[20] = {
     ________, ________, ________, __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0602[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0602[16] = {
     ____XX__, ________, 
     __XXXXXX, ________, 
     _XXXXXXX, ________, 
@@ -25387,7 +25387,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0602[16] = {
     ___XXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0603[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0603[28] = {
     ________, ________, ________, _XXX____, 
     ________, ________, _______X, XXXXX___, 
     ________, ________, _XX___XX, ___XX___, 
@@ -25397,7 +25397,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0603[28] = {
     _XXXXXXX, XXXXXXX_, __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0604[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0604[40] = {
     ________, ________, ________, _____XX_, 
     ________, ________, ___XXXX_, __X__X__, 
     ________, ________, __XXXXX_, _XX__X__, 
@@ -25410,11 +25410,11 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0604[40] = {
     ________, ________, __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0605[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0605[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0606[15] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0606[15] = {
     X__XXXXX, 
     X__XX_X_, 
     X__XX___, 
@@ -25432,7 +25432,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0606[15] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0607[15] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0607[15] = {
     X____XX_, 
     X___X___, 
     X___XX__, 
@@ -25450,7 +25450,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0607[15] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0608[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0608[42] = {
     ________, ____XX__, _X______, 
     ________, __XXXX__, XX______, 
     ________, __X__X__, X_______, 
@@ -25467,7 +25467,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0608[42] = {
     ____XXX_, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0609[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0609[30] = {
     ________, ______XX, 
     ______X_, _____XX_, 
     ____XXXX, ____XX__, 
@@ -25485,7 +25485,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0609[30] = {
     XX____X_, __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_060a[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_060a[30] = {
     ________, ______XX, 
     ______X_, _____XX_, 
     ____XXXX, ____XX__, 
@@ -25503,7 +25503,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_060a[30] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_060b[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_060b[40] = {
     ________, ___XX___, 
     ________, ________, 
     ________, ________, 
@@ -25526,7 +25526,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_060b[40] = {
     ____X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_060c[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_060c[5] = {
     __XX____, 
     __X_____, 
     _X______, 
@@ -25534,7 +25534,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_060c[5] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_060d[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_060d[14] = {
     ______XX, X_______, 
     ____XXXX, ________, 
     ___XXX__, ________, 
@@ -25544,7 +25544,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_060d[14] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_060e[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_060e[21] = {
     __XXXXX_, ________, ________, 
     _XXXXXXX, ________, ________, 
     XXX__XXX, ________, ________, 
@@ -25554,7 +25554,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_060e[21] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_060f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_060f[32] = {
     ________, XXXXX___, 
     ______XX, XXXX____, 
     ______X_, ________, 
@@ -25573,32 +25573,32 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_060f[32] = {
     X___XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0610[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0610[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0611[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0611[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0612[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0612[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0613[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0613[2] = {
     _X______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0614[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0614[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0615[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0615[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0616[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0616[6] = {
     ___X_X__, 
     ___X_X__, 
     __X_X___, 
@@ -25607,7 +25607,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0616[6] = {
     XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0617[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0617[5] = {
     ___X____, 
     ________, 
     ___X____, 
@@ -25615,21 +25615,21 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0617[5] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0618[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0618[1] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0619[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0619[3] = {
     __XX____, 
     _X_X____, 
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_061a[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_061a[1] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_061b[9] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_061b[9] = {
     ____XX__, 
     ___X____, 
     __XX____, 
@@ -25641,7 +25641,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_061b[9] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_061c[64] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_061c[64] = {
     _____XXX, X__XXXX_, __XXX___, X_______, 
     _____X__, ________, _X______, ________, 
     _____X__, ________, ________, ________, 
@@ -25660,7 +25660,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_061c[64] = {
     XXXX__XX, XX__XXXX, ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_061d[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_061d[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -25677,14 +25677,14 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_061d[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_061e[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_061e[4] = {
     ___X____, 
     __XX____, 
     XX__X___, 
     XX_XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_061f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_061f[32] = {
     ____XXXX, X_______, 
     __XXXXXX, XX______, 
     _XX_____, XX______, 
@@ -25703,7 +25703,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_061f[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0620[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0620[32] = {
     ________, __XXXXX_, 
     ________, XXXXXXX_, 
     ________, X_____X_, 
@@ -25722,7 +25722,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0620[32] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0621[8] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0621[8] = {
     ___XXXXX, 
     __XXXXX_, 
     _XX_____, 
@@ -25733,7 +25733,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0621[8] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0622[19] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0622[19] = {
     _____X__, 
     ____X___, 
     _____X__, 
@@ -25755,7 +25755,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0622[19] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0623[18] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0623[18] = {
     _____X__, 
     _____X__, 
     _____X__, 
@@ -25776,7 +25776,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0623[18] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0624[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0624[36] = {
     ________, __XXX___, 
     ________, __X_X___, 
     ________, ___X____, 
@@ -25797,7 +25797,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0624[36] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0625[21] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0625[21] = {
     _______X, 
     _______X, 
     _______X, 
@@ -25821,7 +25821,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0625[21] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0626[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0626[24] = {
     ____XX__, __XXXXX_, 
     ___X____, XXXXXXX_, 
     ___XXX__, X_____X_, 
@@ -25836,7 +25836,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0626[24] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0627[17] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0627[17] = {
     _____X__, 
     _____X__, 
     _____X__, 
@@ -25856,7 +25856,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0627[17] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0628[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0628[22] = {
     __X_____, ______X_, 
     _XX_____, ______X_, 
     _X______, _____XX_, 
@@ -25870,7 +25870,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0628[22] = {
     _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0629[13] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0629[13] = {
     ___XX_XX, 
     ________, 
     ________, 
@@ -25886,7 +25886,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0629[13] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_062a[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_062a[20] = {
     _______X, X_XX____, 
     ________, ________, 
     __X_____, ______X_, 
@@ -25899,7 +25899,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_062a[20] = {
     __XXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_062b[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_062b[26] = {
     ________, __X_____, 
     ________, _XX_____, 
     ________, ________, 
@@ -25915,7 +25915,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_062b[26] = {
     __XXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_062c[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_062c[30] = {
     ____XXXX, X_______, 
     ___XXXXX, XXX_____, 
     ________, __XXX___, 
@@ -25933,7 +25933,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_062c[30] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_062d[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_062d[30] = {
     ____XXXX, X_______, 
     ___XXXXX, XXX_____, 
     ________, __XXX___, 
@@ -25951,7 +25951,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_062d[30] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_062e[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_062e[38] = {
     ________, __XX____, 
     ________, __XX____, 
     ________, ________, 
@@ -25973,7 +25973,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_062e[38] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_062f[10] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_062f[10] = {
     _____X__, 
     _____XX_, 
     _____XXX, 
@@ -25986,7 +25986,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_062f[10] = {
     XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0630[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0630[14] = {
     _____XX_, 
     _____X__, 
     ________, 
@@ -26003,7 +26003,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0630[14] = {
     XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0631[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0631[22] = {
     ________, _XX_____, 
     ________, __XX____, 
     ________, __XX____, 
@@ -26017,7 +26017,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0631[22] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0632[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0632[28] = {
     ________, __XX____, 
     ________, __XX____, 
     ________, ________, 
@@ -26034,7 +26034,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0632[28] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0633[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0633[36] = {
     ________, ________, __XX____, 
     ________, ________, __X_____, 
     ________, _X___XX_, _XX_____, 
@@ -26049,7 +26049,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0633[36] = {
     __X_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0634[51] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0634[51] = {
     ________, _______X, ________, 
     ________, ______XX, ________, 
     ________, ________, ________, 
@@ -26069,7 +26069,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0634[51] = {
     __X_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0635[56] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0635[56] = {
     ________, ________, _____XX_, ________, 
     ________, ________, ___XXXXX, ________, 
     ________, ________, _XXX___X, X_______, 
@@ -26086,7 +26086,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0635[56] = {
     __X_____, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0636[68] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0636[68] = {
     ________, ________, ______XX, ________, 
     ________, ________, ______X_, ________, 
     ________, ________, ________, ________, 
@@ -26106,7 +26106,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0636[68] = {
     __X_____, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0637[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0637[34] = {
     ________, XX______, 
     ________, XX______, 
     ________, X_______, 
@@ -26126,7 +26126,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0637[34] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0638[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0638[34] = {
     ________, XX______, 
     ________, XX______, 
     ________, X_______, 
@@ -26146,7 +26146,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0638[34] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0639[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0639[32] = {
     ______XX, XXX_____, 
     ____XXXX, XX______, 
     ____X___, ________, 
@@ -26165,7 +26165,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0639[32] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_063a[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_063a[40] = {
     ________, _X______, 
     ________, XX______, 
     ________, ________, 
@@ -26188,7 +26188,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_063a[40] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_063b[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_063b[34] = {
     ________, _XX_XX__, 
     ________, _XX_XX__, 
     ________, _____XX_, 
@@ -26208,7 +26208,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_063b[34] = {
     _XXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_063c[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_063c[40] = {
     ________, _____XX_, 
     ________, ___XXX__, 
     ________, _XXX____, 
@@ -26231,7 +26231,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_063c[40] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_063d[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_063d[30] = {
     ______X_, ________, 
     _____X_X, ________, 
     ____X__X, ________, 
@@ -26249,7 +26249,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_063d[30] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_063e[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_063e[28] = {
     ____XX_X, X_______, 
     ____X__X, ________, 
     ________, __XXXXX_, 
@@ -26266,7 +26266,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_063e[28] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_063f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_063f[32] = {
     ______XX, ________, 
     ______XX, ________, 
     ____XX_X, X_______, 
@@ -26285,12 +26285,12 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_063f[32] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0640[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0640[2] = {
     XXXXXX__, 
     XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0641[45] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0641[45] = {
     ________, ________, XX______, 
     ________, ________, ________, 
     ________, ________, ________, 
@@ -26308,7 +26308,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0641[45] = {
     __XXXXXX, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0642[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0642[36] = {
     ________, ___XX_XX, 
     ________, ________, 
     ________, ________, 
@@ -26329,7 +26329,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0642[36] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0643[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0643[26] = {
     ________, ______X_, 
     ________, ______X_, 
     ________, _____XX_, 
@@ -26345,7 +26345,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0643[26] = {
     _XXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0644[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0644[30] = {
     ________, ____X___, 
     ________, ____X___, 
     ________, ___XX___, 
@@ -26363,7 +26363,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0644[30] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0645[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0645[20] = {
     ____XXXX, ________, 
     ___XX_XX, ________, 
     _______X, X_______, 
@@ -26376,7 +26376,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0645[20] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0646[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0646[24] = {
     ______XX, ________, 
     ______XX, ________, 
     __X_____, ___X____, 
@@ -26391,7 +26391,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0646[24] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0647[10] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0647[10] = {
     __XX____, 
     __XXX___, 
     __XXXX__, 
@@ -26404,7 +26404,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0647[10] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0648[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0648[28] = {
     ________, __X_____, 
     ________, XXXX____, 
     ________, X_XX____, 
@@ -26421,7 +26421,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0648[28] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0649[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0649[24] = {
     ________, __XXXXX_, 
     ________, XXXXXXX_, 
     ________, X_____X_, 
@@ -26436,7 +26436,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0649[24] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_064a[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_064a[30] = {
     ________, __XXXXX_, 
     ________, XXXXXXX_, 
     ________, X_____X_, 
@@ -26454,71 +26454,71 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_064a[30] = {
     _X_XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_064b[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_064b[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_064c[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_064c[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_064d[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_064d[3] = {
     XXXX____, 
     _XXX____, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_064e[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_064e[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_064f[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_064f[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0650[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0650[2] = {
     ___X____, 
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0651[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0651[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0652[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0652[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0653[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0653[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0654[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0654[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0655[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0655[3] = {
     _XX_____, 
     X_______, 
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0656[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0656[4] = {
     _X______, 
     _X______, 
     X_______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0657[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0657[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0658[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0658[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0659[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0659[30] = {
     _____XXX, XX______, 
     ________, ________, 
     ________, ________, 
@@ -26536,7 +26536,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0659[30] = {
     __XXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_065a[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_065a[34] = {
     _______X, _XX_____, 
     _______X, _X______, 
     _______X, X_______, 
@@ -26556,7 +26556,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_065a[34] = {
     __XXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_065b[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_065b[34] = {
     ________, X_______, 
     _______X, X_______, 
     ______X_, XX______, 
@@ -26576,7 +26576,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_065b[34] = {
     __XXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_065c[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_065c[30] = {
     _______X, _X______, 
     _____X__, X_______, 
     ___X____, __X_____, 
@@ -26594,7 +26594,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_065c[30] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_065d[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_065d[36] = {
     ________, X_______, 
     _______X, _X______, 
     _______X, X_______, 
@@ -26615,7 +26615,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_065d[36] = {
     __XXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_065e[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_065e[32] = {
     _______X, XXX_____, 
     ______XX, _X______, 
     ________, ________, 
@@ -26634,7 +26634,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_065e[32] = {
     __XXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_065f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_065f[32] = {
     _______X, _X______, 
     _____X__, X_______, 
     ___X____, __X_____, 
@@ -26653,7 +26653,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_065f[32] = {
     XXXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0660[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0660[6] = {
     ___X____, 
     __XX____, 
     XXXXX___, 
@@ -26662,7 +26662,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0660[6] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0661[15] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0661[15] = {
     __XX____, 
     ___X____, 
     ___X____, 
@@ -26680,7 +26680,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0661[15] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0662[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0662[30] = {
     _XX_____, ________, 
     _XXXX___, XX______, 
     __XXXXXX, XX______, 
@@ -26698,7 +26698,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0662[30] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0663[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0663[30] = {
     _X____X_, ________, 
     _XX__XXX, _X______, 
     _XXXXXXX, XX______, 
@@ -26716,7 +26716,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0663[30] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0664[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0664[30] = {
     ________, __XX____, 
     ______XX, XXXX____, 
     _____XXX, ________, 
@@ -26734,7 +26734,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0664[30] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0665[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0665[24] = {
     ______XX, X_______, 
     _____XXX, XX______, 
     ____XX__, XXX_____, 
@@ -26749,7 +26749,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0665[24] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0666[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0666[30] = {
     X_______, _X______, 
     XXXX__XX, X_______, 
     XXXXXXXX, X_______, 
@@ -26767,7 +26767,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0666[30] = {
     _____X__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0667[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0667[30] = {
     XX______, ________, 
     XX______, _X______, 
     XX______, XX______, 
@@ -26785,7 +26785,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0667[30] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0668[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0668[30] = {
     ________, __XX____, 
     ________, _XXX____, 
     ________, _XXX____, 
@@ -26803,7 +26803,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0668[30] = {
     XX______, __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0669[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0669[30] = {
     _____XXX, ________, 
     ___XXXXX, X_______, 
     __XX___X, X_______, 
@@ -26821,7 +26821,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0669[30] = {
     ______X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_066a[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_066a[30] = {
     ______X_, ______X_, 
     _____XXX, _____XX_, 
     ____XXXX, ____XX__, 
@@ -26839,7 +26839,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_066a[30] = {
     XX______, _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_066b[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_066b[5] = {
     __XX____, 
     __X_____, 
     __X_____, 
@@ -26847,7 +26847,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_066b[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_066c[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_066c[5] = {
     _XXX____, 
     _XX_____, 
     __X_____, 
@@ -26855,7 +26855,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_066c[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_066d[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_066d[6] = {
     ____XX__, 
     _X__X__X, 
     XXXXXXXX, 
@@ -26864,7 +26864,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_066d[6] = {
     XX__XX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_066e[16] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_066e[16] = {
     __X_____, ______X_, 
     _XX_____, ______X_, 
     _X______, _____XX_, 
@@ -26875,7 +26875,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_066e[16] = {
     __XXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_066f[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_066f[30] = {
     ________, ____X___, 
     ________, __XXXX__, 
     ________, _XX_XX__, 
@@ -26893,11 +26893,11 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_066f[30] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0670[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0670[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0671[19] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0671[19] = {
     _____X__, 
     ____X___, 
     _____X__, 
@@ -26919,7 +26919,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0671[19] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0672[18] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0672[18] = {
     ____XX__, 
     _____X__, 
     _____X__, 
@@ -26940,7 +26940,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0672[18] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0673[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0673[42] = {
     ________, X_______, 
     ________, X_______, 
     ________, X_______, 
@@ -26964,11 +26964,11 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0673[42] = {
     XXXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0674[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0674[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0675[17] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0675[17] = {
     _____XX_, 
     _____XXX, 
     _____X_X, 
@@ -26988,7 +26988,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0675[17] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0676[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0676[36] = {
     ________, _____X__, 
     ________, ____X___, 
     ________, _____X__, 
@@ -27009,7 +27009,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0676[36] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0677[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0677[38] = {
     ________, _X______, 
     ________, X_X__X__, 
     ________, XXX_X___, 
@@ -27031,7 +27031,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0677[38] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0678[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0678[30] = {
     ________, _______X, 
     ________, ________, 
     ________, ________, 
@@ -27049,7 +27049,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0678[30] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0679[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0679[28] = {
     ________, _X______, 
     ________, _X______, 
     ________, X_X_____, 
@@ -27066,7 +27066,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0679[28] = {
     __XXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_067a[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_067a[26] = {
     ________, __X_____, 
     ________, _XX_____, 
     ________, __X_____, 
@@ -27082,7 +27082,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_067a[26] = {
     __XXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_067b[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_067b[26] = {
     __X_____, ______X_, 
     _XX_____, ______X_, 
     _X______, _____XX_, 
@@ -27098,7 +27098,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_067b[26] = {
     ____X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_067c[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_067c[24] = {
     _______X, X_XX____, 
     ________, ________, 
     __X_____, ______X_, 
@@ -27113,7 +27113,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_067c[24] = {
     ____XXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_067d[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_067d[26] = {
     ________, XX_XX___, 
     ________, X__X____, 
     ________, __X_____, 
@@ -27129,7 +27129,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_067d[26] = {
     __XXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_067e[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_067e[26] = {
     __X_____, ______X_, 
     _XX_____, ______X_, 
     _X______, _____XX_, 
@@ -27145,7 +27145,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_067e[26] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_067f[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_067f[26] = {
     ________, XX_XX___, 
     ________, X__X____, 
     ________, ________, 
@@ -27161,7 +27161,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_067f[26] = {
     __XXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0680[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0680[26] = {
     __X_____, ______X_, 
     _XX_____, ______X_, 
     _X______, _____XX_, 
@@ -27177,7 +27177,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0680[26] = {
     __XX_XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0681[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0681[40] = {
     ________, __XX____, 
     ________, _X______, 
     ________, XXX_____, 
@@ -27200,7 +27200,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0681[40] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0682[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0682[42] = {
     ________, ___XX___, 
     ________, ___X____, 
     ________, __XX____, 
@@ -27224,7 +27224,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0682[42] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0683[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0683[30] = {
     ____XXXX, X_______, 
     ___XXXXX, XXX_____, 
     ________, __XXX___, 
@@ -27242,7 +27242,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0683[30] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0684[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0684[30] = {
     ____XXXX, X_______, 
     ___XXXXX, XXX_____, 
     ________, __XXX___, 
@@ -27260,7 +27260,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0684[30] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0685[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0685[42] = {
     ________, ___XX___, 
     ________, ___X____, 
     ________, _X__X___, 
@@ -27284,7 +27284,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0685[42] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0686[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0686[30] = {
     ____XXXX, X_______, 
     ___XXXXX, XXX_____, 
     ________, __XXX___, 
@@ -27302,7 +27302,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0686[30] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0687[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0687[30] = {
     ____XXXX, X_______, 
     ___XXXXX, XXX_____, 
     ________, __XXX___, 
@@ -27320,7 +27320,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0687[30] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0688[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0688[34] = {
     _______X, ________, 
     _______X, ________, 
     _______X, XX______, 
@@ -27340,7 +27340,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0688[34] = {
     XXXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0689[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0689[12] = {
     _____X__, 
     _____XX_, 
     _____XXX, 
@@ -27355,7 +27355,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0689[12] = {
     _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_068a[13] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_068a[13] = {
     _____X__, 
     _____XX_, 
     _____XXX, 
@@ -27371,7 +27371,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_068a[13] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_068b[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_068b[40] = {
     _______X, ________, 
     _______X, ________, 
     _______X, XX______, 
@@ -27394,7 +27394,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_068b[40] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_068c[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_068c[28] = {
     _____X_X, X_______, 
     ____XX_X, X_______, 
     ________, ________, 
@@ -27411,7 +27411,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_068c[28] = {
     XXXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_068d[13] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_068d[13] = {
     _____X__, 
     _____XX_, 
     _____XXX, 
@@ -27427,7 +27427,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_068d[13] = {
     XX_XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_068e[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_068e[32] = {
     _______X, X_______, 
     ______XX, ________, 
     _____X__, X_______, 
@@ -27446,7 +27446,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_068e[32] = {
     XXXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_068f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_068f[32] = {
     _____XX_, XX______, 
     _____X__, XX______, 
     ______XX, ________, 
@@ -27465,7 +27465,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_068f[32] = {
     XXXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0690[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0690[32] = {
     _____XX_, XX______, 
     _____XX_, XX______, 
     _____X__, X_______, 
@@ -27484,7 +27484,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0690[32] = {
     XXXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0691[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0691[36] = {
     ________, __X_____, 
     ________, __X_____, 
     ________, _X_X____, 
@@ -27505,7 +27505,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0691[36] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0692[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0692[30] = {
     ________, _X_XX___, 
     ________, __XX____, 
     ________, __X_____, 
@@ -27523,7 +27523,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0692[30] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0693[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0693[22] = {
     ________, _XX_____, 
     ________, __XX____, 
     ________, __XX____, 
@@ -27537,7 +27537,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0693[22] = {
     XX_____X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0694[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0694[22] = {
     ________, _XX_____, 
     ________, __XX____, 
     ________, __XX____, 
@@ -27551,7 +27551,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0694[22] = {
     XX_____X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0695[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0695[22] = {
     ________, XXX_____, 
     ________, _XX_____, 
     ________, _XX_____, 
@@ -27565,7 +27565,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0695[22] = {
     ____X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0696[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0696[22] = {
     ________, _XX_____, 
     ________, __XX____, 
     ________, __XX____, 
@@ -27579,7 +27579,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0696[22] = {
     XX_____X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0697[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0697[28] = {
     ________, XX_XX___, 
     ________, X__X____, 
     ________, ________, 
@@ -27596,7 +27596,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0697[28] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0698[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0698[32] = {
     ________, ___XX___, 
     ________, ________, 
     ________, _X__XX__, 
@@ -27615,7 +27615,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0698[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0699[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0699[32] = {
     ________, _XX_XX__, 
     ________, ___X____, 
     ________, XX_XX___, 
@@ -27634,7 +27634,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0699[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_069a[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_069a[42] = {
     ________, ______XX, ________, 
     ________, ________, ________, 
     ________, ________, __XX____, 
@@ -27651,7 +27651,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_069a[42] = {
     __X_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_069b[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_069b[36] = {
     ________, ________, __XX____, 
     ________, ________, __X_____, 
     ________, _X___XX_, _XX_____, 
@@ -27666,7 +27666,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_069b[36] = {
     __X_____, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_069c[51] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_069c[51] = {
     ________, _______X, ________, 
     ________, ______XX, ________, 
     ________, ________, ________, 
@@ -27686,7 +27686,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_069c[51] = {
     __X_____, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_069d[56] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_069d[56] = {
     ________, ________, _____XX_, ________, 
     ________, ________, ___XXXXX, ________, 
     ________, ________, _XXX___X, X_______, 
@@ -27703,7 +27703,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_069d[56] = {
     __X_____, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_069e[76] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_069e[76] = {
     ________, ________, _______X, X_______, 
     ________, ________, ______X_, ________, 
     ________, ________, _____X__, X_______, 
@@ -27725,7 +27725,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_069e[76] = {
     __X_____, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_069f[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_069f[34] = {
     ________, XX______, 
     ________, XX______, 
     ________, X_______, 
@@ -27745,7 +27745,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_069f[34] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a0[44] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06a0[44] = {
     ________, _XX_____, 
     ________, _XX_____, 
     _______X, X_XX____, 
@@ -27770,7 +27770,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a0[44] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a1[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06a1[36] = {
     ________, _______X, X_______, 
     ________, _____XXX, X_______, 
     ________, _____X__, X_______, 
@@ -27785,7 +27785,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a1[36] = {
     __XXXXXX, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a2[45] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06a2[45] = {
     ________, _______X, X_______, 
     ________, _____XXX, X_______, 
     ________, _____X__, X_______, 
@@ -27803,7 +27803,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a2[45] = {
     ________, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a3[54] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06a3[54] = {
     ________, ________, XX______, 
     ________, ________, ________, 
     ________, ________, ________, 
@@ -27824,7 +27824,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a3[54] = {
     ________, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a4[54] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06a4[54] = {
     ________, ________, _X______, 
     ________, ________, XX______, 
     ________, ________, ________, 
@@ -27845,7 +27845,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a4[54] = {
     __XXXXXX, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a5[51] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06a5[51] = {
     ________, _______X, X_______, 
     ________, _____XXX, X_______, 
     ________, _____X__, X_______, 
@@ -27865,7 +27865,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a5[51] = {
     ________, _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a6[54] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06a6[54] = {
     ________, _______X, X_______, 
     ________, _______X, X_______, 
     ________, ________, ________, 
@@ -27886,7 +27886,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a6[54] = {
     __XXXXXX, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a7[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06a7[36] = {
     ________, ____XX__, 
     ________, ________, 
     ________, ________, 
@@ -27907,7 +27907,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a7[36] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a8[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06a8[40] = {
     ________, _____XX_, 
     ________, _____X__, 
     ________, ____X__X, 
@@ -27930,7 +27930,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a8[40] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a9[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06a9[30] = {
     ________, _____XX_, 
     ________, ___XXX__, 
     ________, _XXX____, 
@@ -27948,7 +27948,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06a9[30] = {
     _XXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06aa[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06aa[48] = {
     ________, ______X_, ________, ________, 
     ________, ____XXX_, ________, ________, 
     ________, __XXXX__, ________, ________, 
@@ -27963,7 +27963,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06aa[48] = {
     _XXXXXXX, XXXXXXXX, XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ab[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06ab[30] = {
     ________, _____XX_, 
     ________, ___XXX__, 
     ________, _XXX__X_, 
@@ -27981,7 +27981,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ab[30] = {
     _XXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ac[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06ac[34] = {
     ________, ___XX___, 
     ________, __XX____, 
     ________, ________, 
@@ -28001,7 +28001,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ac[34] = {
     _XXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ad[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06ad[34] = {
     ________, ___XX___, 
     ________, __XX____, 
     ________, ________, 
@@ -28021,7 +28021,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ad[34] = {
     _XXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ae[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06ae[36] = {
     ________, ______X_, 
     ________, ______X_, 
     ________, _____XX_, 
@@ -28042,7 +28042,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ae[36] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06af[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06af[34] = {
     ________, _____XX_, 
     ________, ___XX___, 
     ________, _XX__XX_, 
@@ -28062,7 +28062,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06af[34] = {
     _XXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b0[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06b0[34] = {
     ________, _____XX_, 
     ________, ___XX___, 
     ________, _XX__XX_, 
@@ -28082,7 +28082,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b0[34] = {
     _XXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b1[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06b1[40] = {
     ________, __XX_XX_, 
     ________, __X_XX__, 
     ________, _X______, 
@@ -28105,7 +28105,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b1[40] = {
     _XXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b2[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06b2[40] = {
     ________, _____XX_, 
     ________, ___XX___, 
     ________, _XX__XX_, 
@@ -28128,7 +28128,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b2[40] = {
     __XX_XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b3[44] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06b3[44] = {
     ________, _____XX_, 
     ________, ___XX___, 
     ________, _XX__XX_, 
@@ -28153,7 +28153,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b3[44] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b4[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06b4[40] = {
     ________, _XX_____, 
     ________, ________, 
     _______X, __XX____, 
@@ -28176,7 +28176,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b4[40] = {
     _XXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b5[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06b5[30] = {
     ________, ____X___, 
     ________, ____X___, 
     ________, ___XX___, 
@@ -28194,7 +28194,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b5[30] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b6[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06b6[30] = {
     ________, ____X___, 
     ________, ____X___, 
     ________, ___XX___, 
@@ -28212,7 +28212,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b6[30] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b7[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06b7[40] = {
     ________, ___XX___, 
     ________, ___XX___, 
     ________, ________, 
@@ -28235,7 +28235,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b7[40] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b8[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06b8[36] = {
     ________, ____X___, 
     ________, ____X___, 
     ________, ___XX___, 
@@ -28256,7 +28256,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b8[36] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b9[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06b9[30] = {
     ______XX, ________, 
     ______XX, ________, 
     __X_____, ___X____, 
@@ -28274,7 +28274,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06b9[30] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ba[18] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06ba[18] = {
     _XX_____, __XX____, 
     XX______, __X_____, 
     X_______, _XX_____, 
@@ -28286,7 +28286,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ba[18] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06bb[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06bb[32] = {
     _______X, ________, 
     _______X, ________, 
     ______X_, X_______, 
@@ -28305,7 +28305,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06bb[32] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06bc[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06bc[28] = {
     ______XX, ________, 
     ______XX, ________, 
     __X_____, ___X____, 
@@ -28322,7 +28322,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06bc[28] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06bd[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06bd[28] = {
     _______X, X_______, 
     ________, ________, 
     _____XX_, XX______, 
@@ -28339,7 +28339,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06bd[28] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06be[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06be[24] = {
     ______XX, ________, 
     ______XX, XX______, 
     ________, XXX_____, 
@@ -28354,7 +28354,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06be[24] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06bf[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06bf[38] = {
     ________, __XX____, 
     ________, __XX____, 
     ________, ________, 
@@ -28376,7 +28376,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06bf[38] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c0[15] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06c0[15] = {
     _____XX_, 
     ____X___, 
     ___XXX__, 
@@ -28394,7 +28394,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c0[15] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c1[10] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06c1[10] = {
     __XX____, 
     __XXX___, 
     __XXXX__, 
@@ -28407,7 +28407,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c1[10] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c2[15] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06c2[15] = {
     _____XX_, 
     ____X___, 
     ___XXX__, 
@@ -28425,7 +28425,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c2[15] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c3[13] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06c3[13] = {
     ___XX_XX, 
     ________, 
     ________, 
@@ -28441,7 +28441,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c3[13] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c4[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06c4[28] = {
     ________, __X_____, 
     ________, XXXX____, 
     ________, X_XX____, 
@@ -28458,7 +28458,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c4[28] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c5[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06c5[28] = {
     ________, __X_____, 
     ________, XXXX____, 
     ________, X_XX____, 
@@ -28475,7 +28475,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c5[28] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c6[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06c6[36] = {
     ________, __X_XX__, 
     ________, __XX____, 
     ________, ________, 
@@ -28496,7 +28496,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c6[36] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c7[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06c7[38] = {
     ________, ___XX___, 
     ________, __XXX___, 
     ________, ____X___, 
@@ -28518,7 +28518,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c7[38] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c8[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06c8[42] = {
     ________, ____X___, 
     ________, ____X___, 
     ________, ___X____, 
@@ -28542,7 +28542,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c8[42] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c9[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06c9[36] = {
     ________, ___XX___, 
     ________, __X_X___, 
     ________, _X______, 
@@ -28563,7 +28563,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06c9[36] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ca[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06ca[34] = {
     ________, _XX_XX__, 
     ________, ________, 
     ________, ________, 
@@ -28583,7 +28583,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ca[34] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06cb[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06cb[38] = {
     ________, ___XX___, 
     ________, ________, 
     ________, _XX_XX__, 
@@ -28605,7 +28605,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06cb[38] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06cc[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06cc[24] = {
     ________, __XXXXX_, 
     ________, XXXXXXX_, 
     ________, X_____X_, 
@@ -28620,7 +28620,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06cc[24] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06cd[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06cd[36] = {
     ________, ____XXXX, X_______, 
     ________, ___XXXXX, X_______, 
     ________, __X_____, X_______, 
@@ -28635,7 +28635,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06cd[36] = {
     ___XXXXX, XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ce[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06ce[24] = {
     ____X_X_, __XXXXX_, 
     ____XX__, XXXXXXX_, 
     ____X___, X_____X_, 
@@ -28650,7 +28650,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ce[24] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06cf[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06cf[34] = {
     ________, __XX____, 
     ________, ________, 
     ________, ________, 
@@ -28670,7 +28670,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06cf[34] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06d0[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06d0[34] = {
     ________, __XXXXX_, 
     ________, XXXXXXX_, 
     ________, X_____X_, 
@@ -28690,7 +28690,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06d0[34] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06d1[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06d1[34] = {
     ________, __XXXXX_, 
     ________, XXXXXXX_, 
     ________, X_____X_, 
@@ -28710,7 +28710,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06d1[34] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06d2[27] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06d2[27] = {
     ________, __XXX___, ________, 
     ________, _XXXX___, ________, 
     ________, XX__X___, ________, 
@@ -28722,7 +28722,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06d2[27] = {
     XXXXXXXX, XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06d3[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06d3[42] = {
     ________, ____XX__, ________, 
     ________, ___X____, ________, 
     ________, ___XXX__, ________, 
@@ -28739,12 +28739,12 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06d3[42] = {
     XXXXXXXX, XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06d4[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06d4[2] = {
     _XXXX___, 
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06d5[10] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06d5[10] = {
     __XX____, 
     __XXX___, 
     __XXXX__, 
@@ -28757,42 +28757,42 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06d5[10] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06d6[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06d6[4] = {
     __X_____, 
     __X_____, 
     _X______, 
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06d7[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06d7[2] = {
     XXX_____, 
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06d8[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06d8[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06d9[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06d9[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06da[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06da[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06db[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06db[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06dc[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06dc[4] = {
     _X______, 
     X_______, 
     X_______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06dd[92] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06dd[92] = {
     ________, ____XXXX, XXXXX_X_, ________, 
     ________, _XXX____, ____XX_X, ________, 
     ________, X_XXXXXX, XXXXXX_X, ________, 
@@ -28818,7 +28818,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06dd[92] = {
     _____XXX, XXXXX___, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06de[66] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06de[66] = {
     ________, ______XX, ________, 
     ________, _____X__, X_______, 
     ________, ____X___, X_______, 
@@ -28843,51 +28843,51 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06de[66] = {
     _______X, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06df[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06df[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06e0[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06e0[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06e1[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06e1[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06e2[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06e2[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06e3[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06e3[4] = {
     ______X_, 
     X_XXXX__, 
     __X_____, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06e4[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06e4[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06e5[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06e5[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06e6[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06e6[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06e7[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06e7[2] = {
     XX______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06e8[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06e8[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06e9[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06e9[36] = {
     ________, ___X____, 
     ________, _XX_X___, 
     ________, X_X_X___, 
@@ -28908,29 +28908,29 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06e9[36] = {
     XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ea[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06ea[4] = {
     __X_____, 
     XX_X____, 
     _XX_____, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06eb[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06eb[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ec[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06ec[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ed[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06ed[4] = {
     __X_____, 
     _XX_____, 
     X_______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ee[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06ee[30] = {
     _______X, ________, 
     ______XX, ________, 
     _____X__, X_______, 
@@ -28948,7 +28948,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ee[30] = {
     XXXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ef[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06ef[30] = {
     ________, __XX____, 
     ________, _X_X____, 
     ________, X__X____, 
@@ -28966,7 +28966,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ef[30] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f0[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06f0[6] = {
     ___X____, 
     __XX____, 
     XXXXX___, 
@@ -28975,7 +28975,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f0[6] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f1[15] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06f1[15] = {
     __XX____, 
     ___X____, 
     ___X____, 
@@ -28993,7 +28993,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f1[15] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f2[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06f2[30] = {
     _XX_____, ________, 
     _XXXX___, XX______, 
     __XXXXXX, XX______, 
@@ -29011,7 +29011,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f2[30] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f3[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06f3[30] = {
     _X____X_, ________, 
     _XX__XXX, _X______, 
     _XXXXXXX, XX______, 
@@ -29029,7 +29029,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f3[30] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f4[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06f4[32] = {
     _______X, XX______, 
     _X____X_, _X______, 
     _XX__X__, ________, 
@@ -29048,7 +29048,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f4[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f5[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06f5[30] = {
     ________, XX______, 
     ______XX, XXX_____, 
     _____XXX, _XX_____, 
@@ -29066,7 +29066,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f5[30] = {
     XXX__XXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f6[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06f6[30] = {
     ________, _XXXX___, 
     _______X, XXXX____, 
     ______XX, ________, 
@@ -29084,7 +29084,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f6[30] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f7[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06f7[30] = {
     XX______, ________, 
     XX______, _X______, 
     XX______, XX______, 
@@ -29102,7 +29102,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f7[30] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f8[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06f8[30] = {
     ________, __XX____, 
     ________, _XXX____, 
     ________, _XXX____, 
@@ -29120,7 +29120,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f8[30] = {
     XX______, __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f9[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06f9[30] = {
     _____XXX, ________, 
     ___XXXXX, X_______, 
     __XX___X, X_______, 
@@ -29138,7 +29138,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06f9[30] = {
     ______X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06fa[51] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06fa[51] = {
     ________, _______X, ________, 
     ________, ______XX, ________, 
     ________, ________, ________, 
@@ -29158,7 +29158,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06fa[51] = {
     __X_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06fb[68] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06fb[68] = {
     ________, ________, ______XX, ________, 
     ________, ________, ______X_, ________, 
     ________, ________, ________, ________, 
@@ -29178,7 +29178,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06fb[68] = {
     __X_____, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06fc[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06fc[40] = {
     ________, _X______, 
     ________, XX______, 
     ________, ________, 
@@ -29201,7 +29201,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06fc[40] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06fd[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06fd[12] = {
     ___XXXXX, 
     __XXXXX_, 
     _XX_____, 
@@ -29216,7 +29216,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06fd[12] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06fe[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06fe[20] = {
     ____XXXX, ________, 
     ___XX_XX, ________, 
     _______X, X_______, 
@@ -29229,7 +29229,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06fe[20] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ff[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_06ff[32] = {
     ________, __X_____, 
     ________, _X_X____, 
     ________, X__X____, 
@@ -29248,7 +29248,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_06ff[32] = {
     XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0700[8] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0700[8] = {
     ____XXX_, 
     ____XX__, 
     __X_X__X, 
@@ -29259,15 +29259,15 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0700[8] = {
     ___X____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0701[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0701[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0702[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0702[1] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0703[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0703[5] = {
     __X_____, 
     _X______, 
     ________, 
@@ -29275,33 +29275,33 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0703[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0704[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0704[4] = {
     _XX_____, 
     ________, 
     ________, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0705[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0705[2] = {
     ___X____, 
     X__X____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0706[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0706[4] = {
     X_______, 
     ________, 
     ________, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0707[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0707[4] = {
     ___X____, 
     ________, 
     ________, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0708[5] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0708[5] = {
     _X______, 
     X_______, 
     ________, 
@@ -29309,14 +29309,14 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0708[5] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0709[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0709[4] = {
     X_______, 
     ________, 
     ________, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_070a[10] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_070a[10] = {
     _XXXXX__, 
     ________, 
     ________, 
@@ -29329,13 +29329,13 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_070a[10] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_070b[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_070b[6] = {
     XXXXXXXX, XX______, 
     ________, ________, 
     ____X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_070c[8] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_070c[8] = {
     X_______, 
     X_______, 
     _X______, 
@@ -29346,7 +29346,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_070c[8] = {
     ___XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_070d[8] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_070d[8] = {
     ____X___, 
     ____X___, 
     __XX_X__, 
@@ -29357,7 +29357,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_070d[8] = {
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_070e[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_070e[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -29374,11 +29374,11 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_070e[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_070f[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_070f[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0710[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0710[20] = {
     ________, ______XX, 
     ________, ____XXXX, 
     ________, ___XXX__, 
@@ -29391,13 +29391,13 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0710[20] = {
     X_______, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0711[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0711[3] = {
     _XX_____, 
     X_______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0712[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0712[14] = {
     _____XXX, ________, 
     _____XXX, XXXXXX__, 
     ________, ____XX__, 
@@ -29407,7 +29407,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0712[14] = {
     XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0713[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0713[48] = {
     ________, X_______, ________, 
     _______X, XX______, ________, 
     ________, XXX_____, ________, 
@@ -29426,7 +29426,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0713[48] = {
     ________, ________, ___XXXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0714[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0714[48] = {
     ________, X_______, ________, 
     _______X, XX______, ________, 
     ________, XXX_____, ________, 
@@ -29445,7 +29445,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0714[48] = {
     ________, ________, ___XXXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0715[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0715[6] = {
     _XXXXXX_, 
     ____XX__, 
     ____XX__, 
@@ -29454,7 +29454,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0715[6] = {
     X__XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0716[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0716[6] = {
     XXXXXX__, 
     ___XX___, 
     ___XX___, 
@@ -29463,7 +29463,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0716[6] = {
     __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0717[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0717[12] = {
     __XXXXXX, XXXXXX__, 
     _XXX___X, X___XX__, 
     _X_____X, ____XX__, 
@@ -29472,7 +29472,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0717[12] = {
     _XX__X__, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0718[6] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0718[6] = {
     __XXXXXX, 
     _XX___XX, 
     XX____XX, 
@@ -29481,7 +29481,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0718[6] = {
     XXXXX_X_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0719[7] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0719[7] = {
     XX______, 
     XX______, 
     XX______, 
@@ -29491,7 +29491,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0719[7] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_071a[12] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_071a[12] = {
     ________, _X______, 
     ____XX__, XX______, 
     ____XX__, XX______, 
@@ -29500,7 +29500,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_071a[12] = {
     XXXX_XXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_071b[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_071b[42] = {
     ________, XX______, 
     _______X, XX______, 
     _______X, XX______, 
@@ -29524,7 +29524,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_071b[42] = {
     ________, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_071c[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_071c[42] = {
     ________, XX______, 
     _______X, XX______, 
     _______X, XX______, 
@@ -29548,7 +29548,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_071c[42] = {
     ________, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_071d[7] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_071d[7] = {
     __XX____, 
     __XXX___, 
     __XX____, 
@@ -29558,7 +29558,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_071d[7] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_071e[45] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_071e[45] = {
     ________, _XX_____, ________, 
     ________, _X______, ________, 
     _______X, ________, ________, 
@@ -29576,7 +29576,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_071e[45] = {
     _____X__, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_071f[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_071f[28] = {
     __X_____, ________, 
     _XXX____, XXXXX___, 
     _XXX___X, XX_XX___, 
@@ -29593,7 +29593,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_071f[28] = {
     ________, _____X__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0720[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0720[30] = {
     ________, _X______, 
     ________, XXX_____, 
     ________, XXX_____, 
@@ -29611,7 +29611,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0720[30] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0721[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0721[22] = {
     __XX____, ________, 
     _XXXXXX_, ________, 
     ____XXXX, XXXXX___, 
@@ -29625,7 +29625,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0721[22] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0722[18] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0722[18] = {
     _X______, ________, 
     XXXX____, ________, 
     XXXXXX__, ________, 
@@ -29637,7 +29637,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0722[18] = {
     ________, _______X, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0723[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0723[14] = {
     __XX____, ________, 
     _XXXX__X, XX______, 
     XX__XXXX, XXX_____, 
@@ -29647,7 +29647,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0723[14] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0724[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0724[20] = {
     __XX____, ________, 
     _XXXX__X, XX______, 
     XX__XXXX, XXX_____, 
@@ -29660,7 +29660,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0724[20] = {
     ___X____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0725[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0725[14] = {
     ______X_, ________, 
     _____XXX, ________, 
     _____XXX, ________, 
@@ -29670,7 +29670,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0725[14] = {
     XXXXXXXX, XXXXXXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0726[18] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0726[18] = {
     ________, _X______, 
     _______X, XXXX____, 
     ______XX, __XXX___, 
@@ -29682,7 +29682,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0726[18] = {
     XXXXXXXX, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0727[18] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0727[18] = {
     _______X, X_______, 
     _____XXX, XX______, 
     ____XX__, XX______, 
@@ -29694,7 +29694,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0727[18] = {
     XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0728[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0728[30] = {
     ________, ________, __XX____, 
     ________, ___XXXXX, XXXX____, 
     ________, __XXXXXX, XXX_____, 
@@ -29707,7 +29707,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0728[30] = {
     XXXXXXXX, XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0729[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0729[14] = {
     ____XXXX, XXX_____, 
     ____XX__, _XX_____, 
     ___XX___, _XX_____, 
@@ -29717,7 +29717,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0729[14] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_072a[10] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_072a[10] = {
     ____X___, 
     ___XX___, 
     ________, 
@@ -29730,7 +29730,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_072a[10] = {
     __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_072b[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_072b[14] = {
     ______XX, _XX_____, 
     _____XXX, XXXX____, 
     _____XXX, XXX_____, 
@@ -29740,7 +29740,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_072b[14] = {
     XXXXXXXX, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_072c[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_072c[30] = {
     _____XX_, ________, 
     _____XX_, ________, 
     _____XX_, ________, 
@@ -29758,7 +29758,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_072c[30] = {
     XXXXXX__, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_072d[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_072d[20] = {
     ________, ___X____, 
     ________, _XXX____, 
     ________, XXX_____, 
@@ -29771,7 +29771,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_072d[20] = {
     XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_072e[54] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_072e[54] = {
     ________, _____X__, ________, 
     ________, ____XXX_, ________, 
     ________, X____XX_, ________, 
@@ -29792,7 +29792,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_072e[54] = {
     ________, ________, ___XXXX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_072f[9] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_072f[9] = {
     _XXXXXX_, 
     ____XX__, 
     ____XX__, 
@@ -29804,157 +29804,157 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_072f[9] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0730[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0730[3] = {
     _XX_____, 
     _XX_____, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0731[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0731[2] = {
     __X_____, 
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0732[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0732[4] = {
     _X______, 
     XX______, 
     XX______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0733[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0733[4] = {
     _XX_____, 
     _XX_____, 
     _X______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0734[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0734[4] = {
     __X_____, 
     _X______, 
     XX______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0735[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0735[2] = {
     _X______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0736[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0736[3] = {
     XX______, 
     _X______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0737[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0737[4] = {
     X__X____, 
     X_X_____, 
     XX______, 
     _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0738[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0738[2] = {
     XX______, 
     X_X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0739[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0739[2] = {
     _X_X____, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_073a[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_073a[2] = {
     _XX_____, 
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_073b[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_073b[2] = {
     _XXX____, 
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_073c[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_073c[2] = {
     XX______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_073d[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_073d[3] = {
     _X______, 
     XX______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_073e[4] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_073e[4] = {
     __XX____, 
     _XXX____, 
     _XX_____, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_073f[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_073f[2] = {
     _X______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0740[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0740[1] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0741[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0741[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0742[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0742[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0743[3] = {
-    _X______, 
-    ________, 
-    X_______, 
-};
-
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0744[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0743[3] = {
     _X______, 
     ________, 
+    X_______, 
+};
+
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0744[3] = {
+    _X______, 
+    ________, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0745[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0745[3] = {
     __X_____, 
     ________, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0746[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0746[3] = {
     X_______, 
     ________, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0747[2] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0747[2] = {
     _XX_____, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0748[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0748[3] = {
     X_______, 
     X_______, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0749[3] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0749[3] = {
     XX______, 
     X_______, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_074a[1] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_074a[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_074b[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_074b[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -29971,7 +29971,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_074b[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_074c[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_074c[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -29988,7 +29988,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_074c[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_074d[11] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_074d[11] = {
     XX___XXX, 
     XX___XX_, 
     XX__XX__, 
@@ -30002,7 +30002,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_074d[11] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_074e[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_074e[22] = {
     ________, _____XX_, 
     ________, _____XX_, 
     ________, _____XX_, 
@@ -30016,7 +30016,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_074e[22] = {
     XXXXXXXX, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_074f[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_074f[36] = {
     ________, ___X____, ________, 
     ________, __XX____, ________, 
     ________, __XX__XX, ________, 
@@ -30031,7 +30031,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_074f[36] = {
     XXXXXXXX, XXXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0750[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0750[22] = {
     __X_____, ______X_, 
     _XX_____, ______X_, 
     _X______, _____XX_, 
@@ -30045,7 +30045,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0750[22] = {
     __XX_XX_, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0751[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0751[32] = {
     ________, __X_____, 
     ________, _XX_____, 
     ________, ________, 
@@ -30064,7 +30064,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0751[32] = {
     _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0752[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0752[26] = {
     __X_____, ______X_, 
     _XX_____, ______X_, 
     _X______, _____XX_, 
@@ -30080,7 +30080,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0752[26] = {
     ___X__X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0753[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0753[30] = {
     _______X, X_XX____, 
     ________, ________, 
     __X_____, ______X_, 
@@ -30098,7 +30098,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0753[30] = {
     ___X__X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0754[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0754[26] = {
     ________, _XX_____, 
     ________, X_______, 
     __X_____, ______X_, 
@@ -30114,7 +30114,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0754[26] = {
     ___XX_XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0755[24] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0755[24] = {
     __X_____, ______X_, 
     _XX_____, ______X_, 
     _X______, _____XX_, 
@@ -30129,7 +30129,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0755[24] = {
     ___X__X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0756[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0756[22] = {
     ________, X__X____, 
     ________, X_X_____, 
     ________, XX______, 
@@ -30143,7 +30143,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0756[22] = {
     __XXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0757[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0757[36] = {
     ________, X__X____, 
     _______X, X_XX____, 
     ________, ________, 
@@ -30164,7 +30164,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0757[36] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0758[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0758[30] = {
     ____XXXX, X_______, 
     ___XXXXX, XXX_____, 
     ________, __XXX___, 
@@ -30182,7 +30182,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0758[30] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0759[44] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0759[44] = {
     _______X, ________, 
     _______X, ________, 
     _______X, XX______, 
@@ -30207,7 +30207,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0759[44] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_075a[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_075a[14] = {
     _____X__, 
     _____XX_, 
     _____XXX, 
@@ -30224,7 +30224,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_075a[14] = {
     X__X____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_075b[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_075b[22] = {
     ________, _XX_____, 
     ________, __XX____, 
     ________, __XX____, 
@@ -30238,7 +30238,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_075b[22] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_075c[51] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_075c[51] = {
     ________, _____XX_, XX______, 
     ________, _____XX_, X_______, 
     ________, ________, ________, 
@@ -30258,7 +30258,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_075c[51] = {
     __X_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_075d[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_075d[40] = {
     _______X, X_XX____, 
     _______X, __X_____, 
     ________, ________, 
@@ -30281,7 +30281,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_075d[40] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_075e[44] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_075e[44] = {
     ________, X__XX___, 
     _______X, X_XX____, 
     ________, _X______, 
@@ -30306,7 +30306,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_075e[44] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_075f[44] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_075f[44] = {
     ________, _XX_____, 
     ________, _XX_____, 
     ________, _X______, 
@@ -30331,7 +30331,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_075f[44] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0760[45] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0760[45] = {
     ________, _______X, X_______, 
     ________, _____XXX, X_______, 
     ________, _____X__, X_______, 
@@ -30349,7 +30349,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0760[45] = {
     ________, _XX_X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0761[51] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0761[51] = {
     ________, _______X, X_______, 
     ________, _____XXX, X_______, 
     ________, _____X__, X_______, 
@@ -30369,7 +30369,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0761[51] = {
     ________, XX_XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0762[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0762[34] = {
     ________, __XX____, 
     ________, ________, 
     ________, _____XX_, 
@@ -30389,7 +30389,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0762[34] = {
     _XXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0763[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0763[40] = {
     ________, ___XX___, 
     ________, ___XX___, 
     ________, __X_____, 
@@ -30412,7 +30412,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0763[40] = {
     _XXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0764[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0764[40] = {
     ________, _____XX_, 
     ________, ___XXX__, 
     ________, _XXX____, 
@@ -30435,7 +30435,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0764[40] = {
     __X__X__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0765[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0765[28] = {
     _______X, ________, 
     ______XX, ________, 
     ________, ________, 
@@ -30452,7 +30452,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0765[28] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0766[20] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0766[20] = {
     ____XXXX, ________, 
     ___XX_XX, ________, 
     _______X, X_______, 
@@ -30465,7 +30465,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0766[20] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0767[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0767[30] = {
     ______XX, ________, 
     ______XX, ________, 
     __X_____, ___X____, 
@@ -30483,7 +30483,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0767[30] = {
     XX_XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0768[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0768[36] = {
     ________, X_______, 
     _______X, ________, 
     _______X, XX______, 
@@ -30504,7 +30504,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0768[36] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0769[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0769[34] = {
     _______X, __X_____, 
     _______X, _X______, 
     _______X, X_______, 
@@ -30524,7 +30524,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0769[34] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_076a[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_076a[30] = {
     ________, ____X___, 
     ________, _XXXX___, 
     ________, ___XX___, 
@@ -30542,7 +30542,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_076a[30] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_076b[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_076b[32] = {
     ________, ___XX___, 
     ________, ________, 
     ________, __XX____, 
@@ -30561,7 +30561,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_076b[32] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_076c[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_076c[30] = {
     ________, __XXX___, 
     ________, __X_X___, 
     ________, __XX____, 
@@ -30579,7 +30579,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_076c[30] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_076d[51] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_076d[51] = {
     ________, _______X, ________, 
     ________, ______XX, ________, 
     ________, _______X, ________, 
@@ -30599,7 +30599,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_076d[51] = {
     __X_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_076e[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_076e[30] = {
     ____XXXX, X_______, 
     ___XXXXX, XXX_____, 
     ________, __XXX___, 
@@ -30617,7 +30617,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_076e[30] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_076f[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_076f[30] = {
     ____XXXX, X_______, 
     ___XXXXX, XXX_____, 
     ________, __XXX___, 
@@ -30635,7 +30635,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_076f[30] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0770[57] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0770[57] = {
     ________, ________, X_______, 
     ________, _______X, _X______, 
     ________, _______X, X_X_____, 
@@ -30657,7 +30657,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0770[57] = {
     __X_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0771[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0771[38] = {
     ________, ___X____, 
     ________, ___X_X__, 
     ________, ___XXX__, 
@@ -30679,7 +30679,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0771[38] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0772[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0772[40] = {
     ________, X_______, 
     ________, XXX_____, 
     ________, X_X_____, 
@@ -30702,7 +30702,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0772[40] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0773[19] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0773[19] = {
     ___X_X__, 
     ____X___, 
     ___X_X__, 
@@ -30724,7 +30724,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0773[19] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0774[19] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0774[19] = {
     ___XXX__, 
     ___XXX__, 
     ___X_X__, 
@@ -30746,7 +30746,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0774[19] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0775[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0775[26] = {
     _____XX_, ________, 
     _____X__, __XXXXX_, 
     _____X__, XXXXXXX_, 
@@ -30762,7 +30762,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0775[26] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0776[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0776[26] = {
     _____XXX, ________, 
     _____X__, __XXXXX_, 
     _____X__, XXXXXXX_, 
@@ -30778,7 +30778,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0776[26] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0777[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0777[34] = {
     ________, __XXXXX_, 
     ________, XXXXXXX_, 
     ________, X_____X_, 
@@ -30798,7 +30798,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0777[34] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0778[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0778[34] = {
     _______X, X_______, 
     _______X, ________, 
     _______X, ________, 
@@ -30818,7 +30818,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0778[34] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0779[34] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0779[34] = {
     _______X, XX______, 
     _______X, X_______, 
     _______X, ________, 
@@ -30838,7 +30838,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0779[34] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_077a[33] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_077a[33] = {
     _______X, XX______, ________, 
     _______X, ________, ________, 
     _______X, __XXX___, ________, 
@@ -30852,7 +30852,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_077a[33] = {
     XXXXXXXX, XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_077b[33] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_077b[33] = {
     _______X, XX______, ________, 
     _______X, ________, ________, 
     _______X, __XXX___, ________, 
@@ -30866,7 +30866,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_077b[33] = {
     XXXXXXXX, XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_077c[30] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_077c[30] = {
     ____XXXX, X_______, 
     ___XXXXX, XXX_____, 
     ________, __XXX___, 
@@ -30884,7 +30884,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_077c[30] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_077d[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_077d[48] = {
     ________, _______X, X_______, 
     ________, _______X, X_______, 
     ________, ______X_, ________, 
@@ -30903,7 +30903,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_077d[48] = {
     __X_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_077e[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_077e[48] = {
     ________, _______X, ________, 
     ________, ______X_, X_______, 
     ________, _____XX_, X_______, 
@@ -30922,7 +30922,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_077e[48] = {
     __X_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_077f[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_077f[28] = {
     _______X, X_XX____, 
     _______X, X_XX__X_, 
     ________, ______X_, 
@@ -30939,7 +30939,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_077f[28] = {
     _XXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0780[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0780[22] = {
     ________, _______X, 
     ________, ______XX, 
     ________, _____XX_, 
@@ -30953,7 +30953,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0780[22] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0781[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0781[36] = {
     ________, ________, ____XX__, 
     ________, ______XX, __XXXX__, 
     ________, ______XX, XXXX____, 
@@ -30968,7 +30968,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0781[36] = {
     XXX_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0782[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0782[36] = {
     ________, ________, ______X_, 
     ________, ________, _XX__XX_, 
     ________, ____XXXX, XXX_XX__, 
@@ -30983,7 +30983,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0782[36] = {
     XXX_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0783[39] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0783[39] = {
     ________, ________, ____X___, 
     ________, ________, __XXX___, 
     ________, _____XX_, XXXX____, 
@@ -30999,7 +30999,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0783[39] = {
     XXX_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0784[18] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0784[18] = {
     ____XXX_, __XXXXX_, 
     __XXXXXX, _XX_XXX_, 
     _XXX__XX, XX___XX_, 
@@ -31011,7 +31011,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0784[18] = {
     _XXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0785[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0785[36] = {
     ________, _____XXX, ________, 
     ________, ____XXX_, __XX____, 
     ________, ____XX__, _XXX____, 
@@ -31026,7 +31026,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0785[36] = {
     XXXX____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0786[18] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0786[18] = {
     ___XX___, ___XX___, 
     ___XX___, __XXX___, 
     ___XX___, _XXX____, 
@@ -31038,7 +31038,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0786[18] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0787[18] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0787[18] = {
     ________, ___XX___, 
     ________, __XXXX__, 
     ________, _XX_XX__, 
@@ -31050,7 +31050,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0787[18] = {
     XXX_____, _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0788[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0788[22] = {
     ________, _XXXX___, 
     ________, XXXXX___, 
     _______X, X__XX___, 
@@ -31064,7 +31064,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0788[22] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0789[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0789[22] = {
     ________, __XXXXX_, 
     ________, XXXXXXX_, 
     ________, XX___XX_, 
@@ -31078,7 +31078,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0789[22] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_078a[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_078a[48] = {
     ________, ________, _X______, 
     ________, _______X, XX______, 
     ________, _____XXX, ________, 
@@ -31097,7 +31097,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_078a[48] = {
     XX______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_078b[45] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_078b[45] = {
     ________, ________, __XX____, 
     ________, ________, XXXX____, 
     ________, ______XX, XX______, 
@@ -31115,7 +31115,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_078b[45] = {
     XX______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_078c[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_078c[26] = {
     ________, ____XXXX, 
     ________, __XXXXXX, 
     ________, XXXX__XX, 
@@ -31131,7 +31131,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_078c[26] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_078d[45] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_078d[45] = {
     ________, ______XX, ________, 
     ________, _____XXX, ________, 
     ________, ___XXXXX, XX______, 
@@ -31149,7 +31149,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_078d[45] = {
     X_______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_078e[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_078e[22] = {
     ________, _____XXX, 
     ________, __XXXXXX, 
     ________, XXXX____, 
@@ -31163,7 +31163,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_078e[22] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_078f[39] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_078f[39] = {
     _______X, ___XX__X, X_______, 
     ______XX, X_XXX_XX, X_______, 
     ______XX, XXXXXXXX, ________, 
@@ -31179,7 +31179,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_078f[39] = {
     __XXXXX_, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0790[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0790[40] = {
     ________, ________, ________, X_______, 
     ________, ________, _______X, XX______, 
     _____XX_, ________, ______XX, X_______, 
@@ -31192,7 +31192,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0790[40] = {
     XXX_____, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0791[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0791[22] = {
     ________, XX______, 
     _____XXX, X_______, 
     ____XXX_, ________, 
@@ -31206,7 +31206,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0791[22] = {
     __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0792[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0792[28] = {
     ________, ___XXX__, 
     _____XX_, _XXXX___, 
     ____XXXX, XX______, 
@@ -31223,7 +31223,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0792[28] = {
     __XXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0793[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0793[28] = {
     _____XXX, ___XXXXX, 
     ___XXXXX, XXXXXXXX, 
     __XX___X, XXX___XX, 
@@ -31240,7 +31240,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0793[28] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0794[33] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0794[33] = {
     ________, ___XX___, _XX_____, 
     ________, __XXX_XX, XXX_____, 
     ________, __XXXXXX, _XX_____, 
@@ -31254,7 +31254,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0794[33] = {
     XXX_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0795[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0795[48] = {
     ________, ________, _X______, 
     ________, _______X, XX______, 
     ________, _____XXX, ________, 
@@ -31273,7 +31273,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0795[48] = {
     XX______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0796[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0796[48] = {
     ________, ________, XX______, 
     ________, _____XXX, X_______, 
     ________, ____XXX_, ________, 
@@ -31292,7 +31292,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0796[48] = {
     __XXXXX_, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0797[51] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0797[51] = {
     ________, ________, _X______, 
     ________, ________, XX______, 
     ________, _______X, X_______, 
@@ -31312,7 +31312,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0797[51] = {
     XXX_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0798[54] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0798[54] = {
     ________, _______X, X_______, 
     ________, _______X, ________, 
     ________, ____X___, ________, 
@@ -31333,7 +31333,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0798[54] = {
     XXX_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0799[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_0799[22] = {
     ________, _______X, 
     ________, ______XX, 
     ________, _____XX_, 
@@ -31347,7 +31347,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_0799[22] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_079a[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_079a[22] = {
     ________, _______X, 
     ________, ______XX, 
     ________, _XX__XX_, 
@@ -31361,7 +31361,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_079a[22] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_079b[51] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_079b[51] = {
     ________, ________, X_______, 
     ________, _______X, X_______, 
     ________, _______X, __XX____, 
@@ -31381,7 +31381,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_079b[51] = {
     XX______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_079c[42] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_079c[42] = {
     ________, ________, XX______, 
     ________, _______X, X___X___, 
     ________, ________, __XXX___, 
@@ -31398,7 +31398,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_079c[42] = {
     XXX_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_079d[44] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_079d[44] = {
     ________, _______X, X_______, ________, 
     ________, ______XX, ________, X_______, 
     ________, ________, _______X, XX______, 
@@ -31412,7 +31412,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_079d[44] = {
     XXX_____, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_079e[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_079e[40] = {
     ________, ________, ________, X_______, 
     ________, ________, _______X, XX______, 
     _____XX_, ________, ______XX, X_______, 
@@ -31425,7 +31425,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_079e[40] = {
     XXX_____, ___XX___, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_079f[40] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_079f[40] = {
     ________, ________, ________, X_______, 
     ________, ______X_, _______X, XX______, 
     _____XX_, _____XX_, ______XX, X_______, 
@@ -31438,7 +31438,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_079f[40] = {
     XXX_____, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a0[26] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07a0[26] = {
     ________, ____XXXX, 
     ________, __XXXXXX, 
     ________, XXXX__XX, 
@@ -31454,7 +31454,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a0[26] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a1[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07a1[32] = {
     ________, ______XX, 
     ________, ______XX, 
     ________, ________, 
@@ -31473,7 +31473,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a1[32] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a2[22] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07a2[22] = {
     ________, ___XX___, 
     ________, __XXXX__, 
     ________, _XX_XX__, 
@@ -31487,7 +31487,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a2[22] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a3[18] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07a3[18] = {
     _______X, X__XX___, 
     ______XX, __XXXX__, 
     ________, _XX_XX__, 
@@ -31499,7 +31499,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a3[18] = {
     XXX_____, _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a4[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07a4[28] = {
     ________, __XX__XX, 
     ________, __XX_XX_, 
     ________, ________, 
@@ -31516,7 +31516,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a4[28] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a5[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07a5[28] = {
     ________, ___XX___, 
     ________, ___XX___, 
     ________, ________, 
@@ -31533,7 +31533,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a5[28] = {
     XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a6[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07a6[38] = {
     ________, __XX____, 
     ________, _XX_____, 
     _______X, XX______, 
@@ -31555,7 +31555,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a6[38] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a7[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07a7[38] = {
     _______X, X___X___, 
     ______XX, __XXX___, 
     ____XXX_, _XX_____, 
@@ -31577,7 +31577,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a7[38] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a8[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07a8[36] = {
     _______X, ________, 
     ________, ________, 
     ________, __X_____, 
@@ -31598,7 +31598,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a8[36] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a9[36] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07a9[36] = {
     ________, _X______, 
     ________, ________, 
     ________, ____X___, 
@@ -31619,7 +31619,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07a9[36] = {
     XX__XXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07aa[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07aa[38] = {
     _______X, XXX_____, 
     ________, _XX_____, 
     ________, XX______, 
@@ -31641,7 +31641,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07aa[38] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07ab[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07ab[38] = {
     _____XXX, X_XXXX__, 
     _______X, X____X__, 
     ______XX, ___XX___, 
@@ -31663,7 +31663,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07ab[38] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07ac[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07ac[38] = {
     ________, XXX_____, 
     ______XX, X_______, 
     ______X_, ________, 
@@ -31685,7 +31685,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07ac[38] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07ad[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07ad[38] = {
     _____XXX, __XXX___, 
     ___XXX__, _XX_____, 
     ___X____, XX______, 
@@ -31707,7 +31707,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07ad[38] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07ae[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07ae[38] = {
     _____XXX, X_XXXX__, 
     _______X, XXX_____, 
     ______XX, XX______, 
@@ -31729,7 +31729,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07ae[38] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07af[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07af[38] = {
     ____X___, __XX____, 
     ___XX___, __X_____, 
     ___XX___, ________, 
@@ -31751,7 +31751,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07af[38] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b0[38] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07b0[38] = {
     ______XX, XXX_____, 
     _____XX_, _XX_____, 
     _____X__, XX______, 
@@ -31773,7 +31773,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b0[38] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b1[28] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07b1[28] = {
     ________, XXXX____, 
     _______X, XXXX____, 
     ______XX, __XX____, 
@@ -31790,7 +31790,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b1[28] = {
     _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b2[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07b2[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -31807,7 +31807,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b2[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b3[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07b3[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -31824,7 +31824,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b3[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b4[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07b4[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -31841,7 +31841,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b4[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b5[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07b5[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -31858,7 +31858,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b5[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b6[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07b6[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -31875,7 +31875,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b6[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b7[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07b7[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -31892,7 +31892,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b7[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b8[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07b8[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -31909,7 +31909,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b8[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b9[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07b9[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -31926,7 +31926,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07b9[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07ba[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07ba[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -31943,7 +31943,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07ba[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07bb[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07bb[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -31960,7 +31960,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07bb[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07bc[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07bc[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -31977,7 +31977,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07bc[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07bd[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07bd[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -31994,7 +31994,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07bd[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07be[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07be[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32011,7 +32011,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07be[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07bf[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07bf[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32028,7 +32028,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07bf[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c0[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07c0[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32045,7 +32045,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c0[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c1[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07c1[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32062,7 +32062,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c1[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c2[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07c2[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32079,7 +32079,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c2[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c3[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07c3[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32096,7 +32096,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c3[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c4[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07c4[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32113,7 +32113,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c4[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c5[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07c5[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32130,7 +32130,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c5[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c6[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07c6[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32147,7 +32147,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c6[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c7[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07c7[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32164,7 +32164,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c7[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c8[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07c8[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32181,7 +32181,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c8[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c9[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07c9[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32198,7 +32198,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07c9[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07ca[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07ca[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32215,7 +32215,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07ca[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07cb[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07cb[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32232,7 +32232,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07cb[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07cc[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07cc[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32249,7 +32249,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07cc[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07cd[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07cd[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32266,7 +32266,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07cd[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07ce[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07ce[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32283,7 +32283,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07ce[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07cf[14] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_07cf[14] = {
     _____XXX, 
     ____X___, 
     ____X___, 
@@ -32300,7 +32300,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_07cf[14] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_2c62[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_2c62[32] = {
     ______XX, ________, 
     ______XX, ________, 
     _____XX_, ________, 
@@ -32319,7 +32319,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_2c62[32] = {
     _XXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_2c64[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_2c64[63] = {
     ______XX, XXXXXXXX, ________, 
     ______XX, XXXXXXXX, X_______, 
     _____XX_, _______X, X_______, 
@@ -32343,7 +32343,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_2c64[63] = {
     _XXX____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_2c6d[48] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_2c6d[48] = {
     ________, XXXXX__X, X_______, 
     ______XX, XXXXXX_X, X_______, 
     ____XXX_, _____XXX, ________, 
@@ -32362,7 +32362,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_2c6d[48] = {
     __XXXXXX, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_2c6e[63] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_2c6e[63] = {
     _____XXX, ________, _XXX____, 
     _____XXX, ________, XXX_____, 
     ____XXXX, _______X, XXX_____, 
@@ -32386,7 +32386,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_2c6e[63] = {
     ________, _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_2c6f[32] = {
+gui_const uint8_t Font_Arial_Narrow_Italic_22_2c6f[32] = {
     XXX_____, ________, 
     XXX_____, ____X___, 
     XXX_____, ___XX___, 
@@ -32406,7 +32406,7 @@ GUI_Const GUI_Byte Font_Arial_Narrow_Italic_22_2c6f[32] = {
 };
 
 
-GUI_Const GUI_FONT_CharInfo_t Arial_Narrow_Italic_22_CharTable[] = {
+gui_const gui_font_char_t Arial_Narrow_Italic_22_CharTable[] = {
     {   7,    1,  0,    0,    1, Font_Arial_Narrow_Italic_22_0020},
     {   5,   16,  0,    3,    1, Font_Arial_Narrow_Italic_22_0021},
     {   6,    6,  0,    3,    1, Font_Arial_Narrow_Italic_22_0022},
@@ -34382,7 +34382,7 @@ GUI_Const GUI_FONT_CharInfo_t Arial_Narrow_Italic_22_CharTable[] = {
     {  13,   16,  0,    3,    1, Font_Arial_Narrow_Italic_22_2c6f},
 };
 
-GUI_Const gui_font_t GUI_Font_Arial_Narrow_Italic_22 = {
+gui_const gui_font_t GUI_Font_Arial_Narrow_Italic_22 = {
     _GT("Arial Narrow Italic"),
     22,
     0x0020,

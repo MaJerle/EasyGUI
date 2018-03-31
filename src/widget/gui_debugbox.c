@@ -64,11 +64,11 @@ gui_widget_t widget = {
 static uint16_t
 item_height(gui_handle_p h, uint16_t* offset) {
     uint16_t size = 0;
-    if (h->Font != NULL) {
-        size = (float)h->Font->Size * 1.3f;
+    if (h->font != NULL) {
+        size = (float)h->font->size * 1.3f;
     }
     if (offset) {                                   /* Calculate top offset */
-        *offset = (size - h->Font->Size) >> 1;
+        *offset = (size - h->font->size) >> 1;
     }
     return size;                                    /* Return height for element */
 }
@@ -77,7 +77,7 @@ item_height(gui_handle_p h, uint16_t* offset) {
 static int16_t
 nr_entries_pp(gui_handle_p h) {
     int16_t res = 0;
-    if (h->Font != NULL) {                          /* Font is responsible for this setup */
+    if (h->font != NULL) {                          /* Font is responsible for this setup */
         res = guii_widget_getheight(h) / item_height(h, NULL);
     }
     return res;
@@ -88,17 +88,17 @@ static void
 slide(gui_handle_p h, int16_t dir) {
     int16_t mPP = nr_entries_pp(h);
     if (dir < 0) {                                  /* Slide elements up */
-        if ((o->VisibleStartIndex + dir) < 0) {
-            o->VisibleStartIndex = 0;
+        if ((o->visiblestartindex + dir) < 0) {
+            o->visiblestartindex = 0;
         } else {
-            o->VisibleStartIndex += dir;
+            o->visiblestartindex += dir;
         }
         guii_widget_invalidate(h);
     } else if (dir > 0) {
-        if ((o->VisibleStartIndex + dir) > (o->Count - mPP - 1)) {  /* Slide elements down */
-            o->VisibleStartIndex = o->Count - mPP;
+        if ((o->visiblestartindex + dir) > (o->Count - mPP - 1)) {  /* Slide elements down */
+            o->visiblestartindex = o->Count - mPP;
         } else {
-            o->VisibleStartIndex += dir;
+            o->visiblestartindex += dir;
         }
         guii_widget_invalidate(h);
     }
@@ -109,15 +109,15 @@ static void
 check_values(gui_handle_p h) {
     int16_t mPP = nr_entries_pp(h);                 /* Get number of lines visible in widget at a time */
    
-    if (o->VisibleStartIndex < 0) {                 /* Check visible start index position */
-        o->VisibleStartIndex = 0;
-    } else if (o->VisibleStartIndex > 0) {
+    if (o->visiblestartindex < 0) {                 /* Check visible start index position */
+        o->visiblestartindex = 0;
+    } else if (o->visiblestartindex > 0) {
         if (o->Count > mPP) {
-            if (o->VisibleStartIndex + mPP >= o->Count) {
-                o->VisibleStartIndex = o->Count - mPP;
+            if (o->visiblestartindex + mPP >= o->Count) {
+                o->visiblestartindex = o->Count - mPP;
             }
         } else {
-            o->VisibleStartIndex = 0;
+            o->visiblestartindex = 0;
         }
     }
     
@@ -141,7 +141,7 @@ check_values(gui_handle_p h) {
 static uint8_t
 gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
 #if GUI_CFG_USE_TOUCH
-    static gui_idim_t tY;
+    static gui_dim_t tY;
 #endif /* GUI_CFG_USE_TOUCH */
     
     switch (ctrl) {                                 /* Handle control function if required */
@@ -175,7 +175,7 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 sb.Width = o->SliderWidth;
                 sb.Height = height - 2;
                 sb.Dir = GUI_DRAW_SB_DIR_VERTICAL;
-                sb.EntriesTop = o->VisibleStartIndex;
+                sb.EntriesTop = o->visiblestartindex;
                 sb.EntriesTotal = o->Count;
                 sb.EntriesVisible = nr_entries_pp(h);
                 
@@ -185,12 +185,12 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             }
             
             /* Draw text if possible */
-            if (h->Font != NULL && gui_linkedlist_hasentries(&__GL(h)->Root)) { /* Is first set? */
+            if (h->font != NULL && gui_linkedlist_hasentries(&__GL(h)->Root)) { /* Is first set? */
                 GUI_DRAW_FONT_t f;
                 GUI_DEBUGBOX_ITEM_t* item;
                 uint16_t itemHeight;                /* Get item height */
                 uint16_t index = 0;                 /* Start index */
-                gui_idim_t tmp;
+                gui_dim_t tmp;
                 
                 itemHeight = item_height(h, 0);     /* Get item height and Y offset */
                 
@@ -210,7 +210,7 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 
                 for (index = 0, item = (GUI_DEBUGBOX_ITEM_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); item && f.Y <= disp->Y2;
                         item = (GUI_DEBUGBOX_ITEM_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
-                    if (index < o->VisibleStartIndex) { /* Check for start drawing index */
+                    if (index < o->visiblestartindex) { /* Check for start drawing index */
                         continue;
                     }
                     f.Color1 = guii_widget_getcolor(h, GUI_DEBUGBOX_COLOR_TEXT);
@@ -231,17 +231,17 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
         }
 #if GUI_CFG_USE_TOUCH
         case GUI_WC_TouchStart: {
-            guii_touchdata_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
+            guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             tY = ts->RelY[0];
             
             GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
         }
         case GUI_WC_TouchMove: {
-            guii_touchdata_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            if (__GH(h)->Font) {
+            guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
+            if (h->font != NULL) {
                 gui_dim_t height = item_height(h, NULL);   /* Get element height */
-                gui_idim_t diff = tY - ts->RelY[0];
+                gui_dim_t diff = tY - ts->RelY[0];
                 
                 if (GUI_ABS(diff) > height) {
                     slide(h, diff > 0 ? 1 : -1);    /* Slide widget */
@@ -252,7 +252,7 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
         }
 #endif /* GUI_CFG_USE_TOUCH */
         case GUI_WC_Click: {
-            guii_touchdata_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
+            guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             gui_dim_t width = guii_widget_getwidth(h); /* Get widget widget */
             gui_dim_t height = guii_widget_getheight(h);   /* Get widget height */
             
@@ -282,12 +282,12 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
- * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p
-gui_debugbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+gui_debugbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
     return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
@@ -300,7 +300,7 @@ gui_debugbox_create(gui_id_t id, float x, float y, float width, float height, gu
  */
 uint8_t
 gui_debugbox_setcolor(gui_handle_p h, GUI_DEBUGBOX_COLOR_t index, gui_color_t color) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
 }
 
@@ -315,14 +315,14 @@ gui_debugbox_addstring(gui_handle_p h, const gui_char* text) {
     GUI_DEBUGBOX_ITEM_t* item;
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     
     item = GUI_MEMALLOC(sizeof(*item) + gui_string_lengthtotal(text) + 1);  /* Allocate memory for entry */
     if (item != NULL) {
         __GUI_ENTER();                              /* Enter GUI */
         item->Text = (void *)((char *)item + sizeof(*item));/* Add text to entry */
         gui_string_copy(item->Text, text);          /* Copy text */
-        gui_linkedlist_add_gen(&__GL(h)->Root, &item->List);/* Add to linked list */
+        gui_linkedlist_add_gen(&__GL(h)->Root, &item->list);/* Add to linked list */
         __GL(h)->Count++;                           /* Increase number of strings */
         
         /*
@@ -343,7 +343,7 @@ gui_debugbox_addstring(gui_handle_p h, const gui_char* text) {
             }
         }
         
-        __GL(h)->VisibleStartIndex = __GL(h)->Count;/* Invalidate visible start index */
+        __GL(h)->visiblestartindex = __GL(h)->Count;/* Invalidate visible start index */
         check_values(h);                            /* Check values */
         guii_widget_invalidate(h);                 /* Invalidate widget */
         __GUI_LEAVE();                              /* Leave GUI */
@@ -364,7 +364,7 @@ gui_debugbox_addstring(gui_handle_p h, const gui_char* text) {
  */
 uint8_t
 gui_debugbox_setsliderauto(gui_handle_p h, uint8_t autoMode) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (autoMode && !(__GL(h)->Flags & GUI_FLAG_DEBUGBOX_SLIDER_AUTO)) {
@@ -391,7 +391,7 @@ uint8_t
 gui_debugbox_setslidervisibility(gui_handle_p h, uint8_t visible) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (!(__GL(h)->Flags & GUI_FLAG_DEBUGBOX_SLIDER_AUTO)) {
@@ -420,15 +420,15 @@ uint8_t
 gui_debugbox_scroll(gui_handle_p h, int16_t step) {
     volatile int16_t start;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    start = __GL(h)->VisibleStartIndex;
-    __GL(h)->VisibleStartIndex += step;
+    start = __GL(h)->visiblestartindex;
+    __GL(h)->visiblestartindex += step;
         
     check_values(h);                                /* Check widget values */
     
-    start = start != __GL(h)->VisibleStartIndex;    /* Check if there was valid change */
+    start = start != __GL(h)->visiblestartindex;    /* Check if there was valid change */
     
     if (start) {
         guii_widget_invalidate(h);
@@ -448,7 +448,7 @@ uint8_t
 gui_debugbox_setmaxitems(gui_handle_p h, int16_t max_items) {
     volatile int16_t start;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget && max_items > 0);   /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && max_items > 0);   /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     __GL(h)->MaxCount = max_items;

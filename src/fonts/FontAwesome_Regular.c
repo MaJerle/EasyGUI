@@ -1,6 +1,6 @@
 #include "gui/gui.h"
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f000[112] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f000[112] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
@@ -31,7 +31,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f000[112] = {
     ____XXXX, XXXXXXXX, XXXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f001[112] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f001[112] = {
     ________, ________, ________, X_______, 
     ________, ________, ____XXXX, XX______, 
     ________, ________, _XXXXXXX, XX______, 
@@ -62,7 +62,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f001[112] = {
     __XXXXXX, X_______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f002[112] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f002[112] = {
     ________, ___XX___, ________, ________, 
     _______X, XXXXXXXX, X_______, ________, 
     _____XXX, XXXXXXXX, XX______, ________, 
@@ -93,7 +93,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f002[112] = {
     ________, ________, ________, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f003[92] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f003[92] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXXXX___, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
     XX______, ________, ________, ____XX__, 
@@ -119,7 +119,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f003[92] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f004[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f004[104] = {
     _______X, X_______, _____XX_, ________, 
     ___XXXXX, XXXX____, __XXXXXX, XXX_____, 
     __XXXXXX, XXXXX___, _XXXXXXX, XXXX____, 
@@ -148,7 +148,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f004[104] = {
     ________, ______XX, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f005[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f005[104] = {
     ________, _____XX_, ________, ________, 
     ________, _____XX_, ________, ________, 
     ________, ____XXXX, ________, ________, 
@@ -177,7 +177,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f005[104] = {
     _____XXX, ________, ____XXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f006[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f006[104] = {
     ________, _____XX_, ________, ________, 
     ________, _____XX_, ________, ________, 
     ________, ____XXXX, ________, ________, 
@@ -206,7 +206,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f006[104] = {
     _____XXX, ________, ____XXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f007[78] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f007[78] = {
     ________, ___XX___, ________, 
     ________, XXXXXXX_, ________, 
     _______X, XXXXXXXX, X_______, 
@@ -235,7 +235,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f007[78] = {
     __XXXXXX, XXXXXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f008[112] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f008[112] = {
     __XXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXXXX, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXXXX, 
@@ -266,7 +266,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f008[112] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXXX_, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f009[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f009[96] = {
     __XXXXXX, XXX_____, _XXXXXXX, XX______, 
     XXXXXXXX, XXXXX__X, XXXXXXXX, XXXX____, 
     XXXXXXXX, XXXXX__X, XXXXXXXX, XXXX____, 
@@ -293,7 +293,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f009[96] = {
     _XXXXXXX, XXXX____, XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f00a[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f00a[96] = {
     _XXXXXX_, ____XXXX, XX_____X, XXXXX___, 
     XXXXXXXX, ___XXXXX, XXX___XX, XXXXXX__, 
     XXXXXXXX, X__XXXXX, XXX__XXX, XXXXXX__, 
@@ -320,7 +320,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f00a[96] = {
     XXXXXXXX, ___XXXXX, XXX___XX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f00b[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f00b[96] = {
     _XXXXXX_, ____XXXX, XXXXXXXX, XXXXX___, 
     XXXXXXXX, ___XXXXX, XXXXXXXX, XXXXXX__, 
     XXXXXXXX, X__XXXXX, XXXXXXXX, XXXXXX__, 
@@ -347,7 +347,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f00b[96] = {
     XXXXXXXX, ___XXXXX, XXXXXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f00c[80] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f00c[80] = {
     ________, ________, _____XX_, ________, 
     ________, ________, ____XXXX, ________, 
     ________, ________, ___XXXXX, X_______, 
@@ -370,7 +370,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f00c[80] = {
     ________, _XX_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f00d[60] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f00d[60] = {
     ___X____, _______X, ________, 
     __XXX___, ______XX, XX______, 
     _XXXXX__, _____XXX, XXX_____, 
@@ -393,7 +393,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f00d[60] = {
     __XXX___, ______XX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f00e[112] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f00e[112] = {
     ________, ___XX___, ________, ________, 
     _______X, XXXXXXXX, X_______, ________, 
     _____XXX, XXXXXXXX, XX______, ________, 
@@ -424,7 +424,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f00e[112] = {
     ________, ________, ________, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f00f[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f00f[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -453,7 +453,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f00f[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f010[112] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f010[112] = {
     ________, ___XX___, ________, ________, 
     _______X, XXXXXXXX, X_______, ________, 
     _____XXX, XXXXXXXX, XX______, ________, 
@@ -484,7 +484,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f010[112] = {
     ________, ________, ________, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f011[112] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f011[112] = {
     ________, ____XX__, ________, ________, 
     ________, ___XXXX_, ________, ________, 
     ________, ___XXXX_, ________, ________, 
@@ -515,7 +515,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f011[112] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f012[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f012[104] = {
     ________, ________, ________, __XXXX__, 
     ________, ________, ________, __XXXX__, 
     ________, ________, ________, __XXXX__, 
@@ -544,7 +544,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f012[104] = {
     XXXX__XX, XXX__XXX, X__XXXXX, __XXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f013[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f013[104] = {
     ________, ___XXXX_, ________, ________, 
     ________, __XXXXX_, ________, ________, 
     ________, __XXXXXX, ________, ________, 
@@ -573,7 +573,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f013[104] = {
     ________, __XXXXX_, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f014[78] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f014[78] = {
     ________, _XXXXXX_, ________, 
     _______X, XXXXXXXX, ________, 
     _______X, XXXXXXXX, X_______, 
@@ -602,7 +602,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f014[78] = {
     ___XXXXX, XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f015[84] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f015[84] = {
     ________, ____XXXX, ___XXXXX, ________, 
     ________, ___XXXXX, X__XXXXX, ________, 
     ________, __XXXXXX, XX_XXXXX, ________, 
@@ -626,7 +626,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f015[84] = {
     ____XXXX, XXXX____, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f016[120] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f016[120] = {
     _XXXXXXX, XXXXXXXX, XX______, ________, 
     XXXXXXXX, XXXXXXXX, XXX_____, ________, 
     XX______, _______X, XXXX____, ________, 
@@ -659,7 +659,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f016[120] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f017[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f017[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -688,7 +688,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f017[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f018[84] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f018[84] = {
     _______X, XXXXXX__, XXXXXXX_, ________, 
     _______X, XXXXX___, _XXXXXX_, ________, 
     ______XX, XXXXX___, _XXXXXXX, ________, 
@@ -712,7 +712,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f018[84] = {
     XXXXXXXX, XXXX____, __XXXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f019[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f019[104] = {
     ________, ___XXXXX, X_______, ________, 
     ________, ___XXXXX, X_______, ________, 
     ________, ___XXXXX, X_______, ________, 
@@ -741,7 +741,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f019[104] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f01a[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f01a[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -770,7 +770,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f01a[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f01b[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f01b[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -799,7 +799,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f01b[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f01c[84] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f01c[84] = {
     ____XXXX, XXXXXXXX, XXXXX___, ________, 
     ____XXXX, XXXXXXXX, XXXXXX__, ________, 
     ____XXXX, XXXXXXXX, XXXXXX__, ________, 
@@ -823,7 +823,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f01c[84] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f01d[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f01d[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -852,7 +852,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f01d[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f01e[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f01e[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, X_______, 
     ______XX, XXXXXXXX, XXXX___X, XX______, 
@@ -881,7 +881,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f01e[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f01f[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f01f[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -910,7 +910,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f01f[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f020[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f020[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -939,7 +939,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f020[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f021[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f021[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, X_______, 
     ______XX, XXXXXXXX, XXXX___X, XX______, 
@@ -968,7 +968,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f021[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f022[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f022[96] = {
     __XXXXXX, XXXXXXXX, XXXXXXXX, XXXX____, 
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXXXX___, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
@@ -995,7 +995,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f022[96] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f023[72] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f023[72] = {
     ________, _XX_____, ________, 
     ______XX, XXXXXX__, ________, 
     _____XXX, XXXXXXX_, ________, 
@@ -1022,7 +1022,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f023[72] = {
     XXXXXXXX, XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f024[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f024[104] = {
     __X_____, ________, ________, ________, 
     XXXX____, ________, ________, ________, 
     XXXX____, ________, ________, ________, 
@@ -1051,7 +1051,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f024[104] = {
     _XX_____, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f025[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f025[96] = {
     ________, _____XX_, ________, ________, 
     ________, XXXXXXXX, XXX_____, ________, 
     ______XX, XXXXXXXX, XXXXX___, ________, 
@@ -1078,7 +1078,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f025[96] = {
     ________, _XX_____, _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f026[40] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f026[40] = {
     ________, ___XX___, 
     ________, __XXX___, 
     ________, _XXXX___, 
@@ -1101,7 +1101,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f026[40] = {
     ________, __XXX___, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f027[60] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f027[60] = {
     ________, ___XX___, ________, 
     ________, __XXX___, ________, 
     ________, _XXXX___, ________, 
@@ -1124,7 +1124,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f027[60] = {
     ________, __XXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f028[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f028[96] = {
     ________, ________, ___X____, ________, 
     ________, ________, ___XXX__, ________, 
     ________, ___XX___, ___XXXX_, ________, 
@@ -1151,7 +1151,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f028[96] = {
     ________, ________, ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f029[72] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f029[72] = {
     XXXXXXXX, XXX__XXX, XXXXXXXX, 
     XXXXXXXX, XXX__XXX, XXXXXXXX, 
     XXXXXXXX, XXX__XXX, XXXXXXXX, 
@@ -1178,7 +1178,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f029[72] = {
     XXXXXXXX, XXX__XX_, _XX__XXX, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f02a[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f02a[96] = {
     XX_X_X__, X_XXX__X, _X_XX_XX, __XX_X__, 
     XX_X_X__, X_XXX__X, _X_XX_XX, __XX_X__, 
     XX_X_X__, X_XXX__X, _X_XX_XX, __XX_X__, 
@@ -1205,7 +1205,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f02a[96] = {
     XX_X_X__, X_XXX__X, _X_XX_XX, __XX_X__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f02b[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f02b[104] = {
     __XXXXXX, XX______, ________, ________, 
     XXXXXXXX, XXXX____, ________, ________, 
     XXXXXXXX, XXXXX___, ________, ________, 
@@ -1234,7 +1234,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f02b[104] = {
     ________, ______XX, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f02c[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f02c[104] = {
     __XXXXXX, XX__XXXX, ________, ________, 
     XXXXXXXX, XXXX___X, XXX_____, ________, 
     XXXXXXXX, XXXXX___, XXXX____, ________, 
@@ -1263,7 +1263,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f02c[104] = {
     ________, ______XX, ____XXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f02d[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f02d[104] = {
     ________, X_XXXXXX, XXXXXXX_, ________, 
     _______X, XXXXXXXX, XXXXXXXX, X_______, 
     _______X, XXXXXXXX, XXXXXXXX, X_______, 
@@ -1292,7 +1292,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f02d[104] = {
     __XXXXXX, XXXXXXXX, XXXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f02e[78] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f02e[78] = {
     _XXXXXXX, XXXXXXXX, XXXX____, 
     XXXXXXXX, XXXXXXXX, XXXXX___, 
     XXXXXXXX, XXXXXXXX, XXXXX___, 
@@ -1321,7 +1321,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f02e[78] = {
     _XX_____, ________, ___X____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f02f[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f02f[104] = {
     _____XXX, XXXXXXXX, XX______, ________, 
     ____XXXX, XXXXXXXX, XXXX____, ________, 
     ____XXXX, XXXXXXXX, XXXXX___, ________, 
@@ -1350,7 +1350,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f02f[104] = {
     _____XXX, XXXXXXXX, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f030[112] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f030[112] = {
     ________, ___XXXXX, XXXXX___, ________, 
     ________, _XXXXXXX, XXXXXXX_, ________, 
     ________, _XXXXXXX, XXXXXXX_, ________, 
@@ -1381,7 +1381,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f030[112] = {
     __XXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f031[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f031[104] = {
     ________, _____XX_, ________, ________, 
     ________, ____XXX_, ________, ________, 
     ________, ____XXXX, ________, ________, 
@@ -1410,7 +1410,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f031[104] = {
     XXXXXXXX, XX_____X, XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f032[78] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f032[78] = {
     ________, XXXXXXX_, ________, 
     XXXXXXXX, XXXXXXXX, XXX_____, 
     ___XXXXX, X_____XX, XXXX____, 
@@ -1439,7 +1439,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f032[78] = {
     XXXXXXXX, XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f033[78] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f033[78] = {
     _____XX_, ________, X_______, 
     _____XXX, XXXXXXXX, X_______, 
     ________, XXXXXXX_, ________, 
@@ -1468,7 +1468,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f033[78] = {
     XXXXXXXX, XXXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f034[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f034[104] = {
     X_______, ________, ____X___, ________, 
     XXXXXXXX, XXXXXXXX, XXXXX___, __XX____, 
     XXXXXXXX, XXXXXXXX, XXXXX___, _XXXX___, 
@@ -1497,7 +1497,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f034[104] = {
     ____XXXX, XXXXXXXX, X_______, __XX____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f035[112] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f035[112] = {
     X_______, ________, ________, XX______, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
@@ -1528,7 +1528,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f035[112] = {
     ___X____, ________, _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f036[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f036[96] = {
     _XXXXXXX, XXXXXXXX, XXXXX___, ________, 
     XXXXXXXX, XXXXXXXX, XXXXX___, ________, 
     XXXXXXXX, XXXXXXXX, XXXXX___, ________, 
@@ -1555,7 +1555,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f036[96] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f037[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f037[96] = {
     ________, _XXXXXXX, XXXXX___, ________, 
     ________, _XXXXXXX, XXXXX___, ________, 
     ________, _XXXXXXX, XXXXX___, ________, 
@@ -1582,7 +1582,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f037[96] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f038[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f038[96] = {
     ________, _XXXXXXX, XXXXXXXX, XXXXX___, 
     ________, _XXXXXXX, XXXXXXXX, XXXXXX__, 
     ________, _XXXXXXX, XXXXXXXX, XXXXXX__, 
@@ -1609,7 +1609,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f038[96] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f039[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f039[96] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXXXX___, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
@@ -1636,7 +1636,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f039[96] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f03a[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f03a[96] = {
     XXXX___X, XXXXXXXX, XXXXXXXX, XXXXXX__, 
     XXXX__XX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
     XXXX__XX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
@@ -1663,7 +1663,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f03a[96] = {
     XXXX__XX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f03b[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f03b[96] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
@@ -1690,7 +1690,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f03b[96] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f03c[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f03c[96] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
@@ -1717,7 +1717,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f03c[96] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f03d[84] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f03d[84] = {
     __XXXXXX, XXXXXXXX, XXX_____, ____XX__, 
     _XXXXXXX, XXXXXXXX, XXXX____, ___XXX__, 
     XXXXXXXX, XXXXXXXX, XXXXX___, __XXXX__, 
@@ -1741,7 +1741,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f03d[84] = {
     ___XXXXX, XXXXXXXX, XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f03e[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f03e[104] = {
     __XXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXXXX, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXXXX, 
@@ -1770,7 +1770,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f03e[104] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXXX_, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f03f[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f03f[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -1799,7 +1799,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f03f[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f040[100] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f040[100] = {
     ________, ________, __XXX___, ________, 
     ________, ________, _XXXXX__, ________, 
     ________, ________, XXXXXXX_, ________, 
@@ -1827,7 +1827,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f040[100] = {
     XXXXXXXX, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f041[78] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f041[78] = {
     _______X, XX______, ________, 
     ____XXXX, XXXXX___, ________, 
     ___XXXXX, XXXXXX__, ________, 
@@ -1856,7 +1856,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f041[78] = {
     _______X, XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f042[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f042[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -1885,7 +1885,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f042[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f043[75] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f043[75] = {
     ________, X_______, ________, 
     _______X, XX______, ________, 
     _______X, XX______, ________, 
@@ -1913,7 +1913,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f043[75] = {
     ______XX, XXXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f044[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f044[96] = {
     ____XXXX, XXXXXXXX, XXXX____, ________, 
     __XXXXXX, XXXXXXXX, XXXXX___, XXX_____, 
     _XXXXXXX, XXXXXXXX, XXXX___X, XXXX____, 
@@ -1940,7 +1940,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f044[96] = {
     ___XXXXX, XXXXXXXX, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f045[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f045[104] = {
     ________, ________, ____X___, ________, 
     ________, ________, ___XXX__, ________, 
     ____XXXX, X_______, ___XXXX_, ________, 
@@ -1969,7 +1969,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f045[104] = {
     ___XXXXX, XXXXXXXX, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f046[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f046[96] = {
     ____XXXX, XXXXXXXX, XXXX____, ________, 
     __XXXXXX, XXXXXXXX, XXXXX___, ________, 
     _XXXXXXX, XXXXXXXX, XXXX___X, XX______, 
@@ -1996,7 +1996,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f046[96] = {
     ___XXXXX, XXXXXXXX, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f047[120] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f047[120] = {
     ________, ______XX, ________, ________, 
     ________, _____XXX, X_______, ________, 
     ________, ____XXXX, XX______, ________, 
@@ -2029,7 +2029,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f047[120] = {
     ________, ______XX, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f048[78] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f048[78] = {
     _XXX____, ________, X_______, 
     XXXX____, ________, X_______, 
     XXXX____, _______X, X_______, 
@@ -2058,7 +2058,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f048[78] = {
     XXXX____, ________, X_______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f049[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f049[104] = {
     _XXX____, ________, X_______, _____X__, 
     XXXX____, ________, X_______, ____XX__, 
     XXXX____, _______X, X_______, ___XXX__, 
@@ -2087,7 +2087,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f049[104] = {
     XXXX____, ________, X_______, _____X__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f04a[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f04a[104] = {
     ________, ____X___, ________, _X______, 
     ________, ___XX___, ________, XX______, 
     ________, __XXX___, _______X, XX______, 
@@ -2116,7 +2116,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f04a[104] = {
     ________, ____X___, ________, _X______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f04b[78] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f04b[78] = {
     X_______, ________, ________, 
     XXX_____, ________, ________, 
     XXXXX___, ________, ________, 
@@ -2145,7 +2145,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f04b[78] = {
     XX______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f04c[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f04c[104] = {
     _XXXXXXX, XX______, XXXXXXXX, X_______, 
     XXXXXXXX, XXX____X, XXXXXXXX, XX______, 
     XXXXXXXX, XXX____X, XXXXXXXX, XX______, 
@@ -2174,7 +2174,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f04c[104] = {
     XXXXXXXX, XXX____X, XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f04d[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f04d[104] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, X_______, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
@@ -2203,7 +2203,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f04d[104] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f04e[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f04e[104] = {
     X_______, ____X___, ________, ________, 
     XX______, _____X__, ________, ________, 
     XXX_____, _____XX_, ________, ________, 
@@ -2232,7 +2232,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f04e[104] = {
     X_______, _____X__, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f04f[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f04f[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -2261,7 +2261,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f04f[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f050[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f050[104] = {
     X_______, ____X___, ________, __XXX___, 
     XX______, _____X__, ________, __XXXX__, 
     XXX_____, _____XX_, ________, __XXXX__, 
@@ -2290,7 +2290,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f050[104] = {
     X_______, _____X__, ________, __XXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f051[78] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f051[78] = {
     X_______, ______XX, ________, 
     XX______, _____XXX, X_______, 
     XXX_____, _____XXX, X_______, 
@@ -2319,7 +2319,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f051[78] = {
     X_______, _____XXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f052[88] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f052[88] = {
     ________, ____X___, ________, ________, 
     ________, ___XXX__, ________, ________, 
     ________, __XXXXX_, ________, ________, 
@@ -2344,7 +2344,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f052[88] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f053[81] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f053[81] = {
     ________, ____XX__, ________, 
     ________, ___XXXX_, ________, 
     ________, __XXXXXX, ________, 
@@ -2374,7 +2374,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f053[81] = {
     ________, ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f054[81] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f054[81] = {
     ___XXX__, ________, ________, 
     __XXXXX_, ________, ________, 
     _XXXXXXX, ________, ________, 
@@ -2404,7 +2404,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f054[81] = {
     ____X___, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f055[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f055[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -2433,7 +2433,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f055[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f056[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f056[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -2462,7 +2462,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f056[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f057[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f057[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -2491,7 +2491,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f057[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f058[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f058[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -2520,7 +2520,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f058[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f059[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f059[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -2549,7 +2549,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f059[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f05a[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f05a[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -2578,7 +2578,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f05a[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f05b[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f05b[104] = {
     ________, ___XXX__, ________, ________, 
     ________, ___XXXX_, ________, ________, 
     ________, ___XXXX_, ________, ________, 
@@ -2607,7 +2607,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f05b[104] = {
     ________, ___XXXX_, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f05c[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f05c[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -2636,7 +2636,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f05c[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f05d[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f05d[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -2665,7 +2665,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f05d[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f05e[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f05e[104] = {
     ________, ___XXXX_, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -2694,7 +2694,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f05e[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f05f[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f05f[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -2723,7 +2723,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f05f[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f060[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f060[104] = {
     ________, ____XX__, ________, ________, 
     ________, ___XXXX_, ________, ________, 
     ________, __XXXXXX, ________, ________, 
@@ -2752,7 +2752,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f060[104] = {
     ________, ___XXXX_, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f061[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f061[104] = {
     ________, ___X____, ________, ________, 
     ________, __XXXX__, ________, ________, 
     ________, _XXXXXX_, ________, ________, 
@@ -2781,7 +2781,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f061[104] = {
     ________, __XXX___, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f062[100] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f062[100] = {
     ________, ____X___, ________, ________, 
     ________, ___XXXX_, ________, ________, 
     ________, __XXXXXX, ________, ________, 
@@ -2809,7 +2809,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f062[100] = {
     ________, __XXXXXX, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f063[100] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f063[100] = {
     ________, ___XXXX_, ________, ________, 
     ________, __XXXXXX, ________, ________, 
     ________, __XXXXXX, ________, ________, 
@@ -2837,7 +2837,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f063[100] = {
     ________, ___XXXX_, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f064[108] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f064[108] = {
     ________, ________, ____X___, ________, 
     ________, ________, ___XXX__, ________, 
     ________, ________, ___XXXX_, ________, 
@@ -2867,7 +2867,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f064[108] = {
     ___X____, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f065[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f065[104] = {
     ________, ________, _XXXXXXX, X_______, 
     ________, ________, XXXXXXXX, XX______, 
     ________, ________, _XXXXXXX, XX______, 
@@ -2896,7 +2896,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f065[104] = {
     XXXXXXXX, XX______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f066[100] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f066[100] = {
     ________, ________, ______XX, ________, 
     ________, ________, _____XXX, X_______, 
     ________, ________, ____XXXX, XX______, 
@@ -2924,7 +2924,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f066[100] = {
     __X_____, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f067[72] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f067[72] = {
     ________, __XXXX__, ________, 
     ________, _XXXXXX_, ________, 
     ________, _XXXXXX_, ________, 
@@ -2951,7 +2951,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f067[72] = {
     ________, _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f068[18] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f068[18] = {
     XXXXXXXX, XXXXXXXX, XXXXXXX_, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, 
@@ -2960,7 +2960,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f068[18] = {
     XXXXXXXX, XXXXXXXX, XXXXXXX_, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f069[78] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f069[78] = {
     ________, __XXXX__, ________, 
     ________, _XXXXXX_, ________, 
     ________, _XXXXXX_, ________, 
@@ -2989,7 +2989,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f069[78] = {
     ________, _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f06a[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f06a[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -3018,7 +3018,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f06a[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f06b[92] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f06b[92] = {
     _______X, ________, _X______, ________, 
     _____XXX, XX_____X, XXXX____, ________, 
     _____XXX, XXX___XX, XXXXX___, ________, 
@@ -3044,7 +3044,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f06b[92] = {
     ___XXXXX, XXXXXXXX, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f06c[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f06c[96] = {
     ________, ________, ________, ___X____, 
     ________, ________, ________, _XXXX___, 
     ________, ________, ________, XXXXX___, 
@@ -3071,7 +3071,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f06c[96] = {
     _XX_____, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f06d[90] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f06d[90] = {
     ________, __X_____, ________, 
     ________, ___XX___, ________, 
     ________, ____XXX_, ________, 
@@ -3104,7 +3104,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f06d[90] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f06e[76] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f06e[76] = {
     ________, __XXXXXX, XXXX____, ________, 
     ________, XXXXXXXX, XXXXXX__, ________, 
     ______XX, XXXXX___, XXXXXXXX, ________, 
@@ -3126,7 +3126,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f06e[76] = {
     ________, ___XXXXX, XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f06f[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f06f[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -3155,7 +3155,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f06f[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f070[92] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f070[92] = {
     ________, ________, ___X____, ________, 
     ________, ________, __XXXX__, ________, 
     ________, __XXXXXX, XXXXXX__, ________, 
@@ -3181,7 +3181,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f070[92] = {
     ________, _X______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f071[112] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f071[112] = {
     ________, ______XX, ________, ________, 
     ________, _____XXX, X_______, ________, 
     ________, _____XXX, X_______, ________, 
@@ -3212,7 +3212,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f071[112] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f072[69] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f072[69] = {
     ________, ________, ___XXXX_, 
     ________, ________, __XXXXX_, 
     ___XXXXX, ________, _XXXXXX_, 
@@ -3238,7 +3238,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f072[69] = {
     _______X, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f073[120] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f073[120] = {
     ______XX, X_______, ___XXX__, ________, 
     _____XXX, XX______, __XXXXX_, ________, 
     ____XXX_, XXX_____, _XXX_XXX, ________, 
@@ -3271,7 +3271,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f073[120] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f074[108] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f074[108] = {
     ________, ________, ________, X_______, 
     ________, ________, ________, XX______, 
     ________, ________, ________, XXX_____, 
@@ -3301,7 +3301,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f074[108] = {
     ________, ________, _______X, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f075[100] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f075[100] = {
     ________, _XXXXXXX, XXXXX___, ________, 
     ______XX, XXXXXXXX, XXXXXXXX, ________, 
     _____XXX, XXXXXXXX, XXXXXXXX, X_______, 
@@ -3329,7 +3329,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f075[100] = {
     __XXXX__, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f076[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f076[104] = {
     _XXXXXXX, ________, __XXXXXX, X_______, 
     XXXXXXXX, X_______, _XXXXXXX, XX______, 
     XXXXXXXX, X_______, _XXXXXXX, XX______, 
@@ -3358,7 +3358,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f076[104] = {
     ________, XXXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f077[72] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f077[72] = {
     ________, _____XX_, ________, ________, 
     ________, ____XXXX, ________, ________, 
     ________, ___XXXXX, X_______, ________, 
@@ -3379,7 +3379,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f077[72] = {
     ____X___, ________, _______X, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f078[72] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f078[72] = {
     ____X___, ________, _______X, ________, 
     ___XXX__, ________, ______XX, X_______, 
     __XXXXX_, ________, _____XXX, XX______, 
@@ -3400,7 +3400,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f078[72] = {
     ________, _____X__, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f079[76] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f079[76] = {
     _____XXX, ___XXXXX, XXXXXXXX, XXXX____, 
     ____XXXX, ____XXXX, XXXXXXXX, XXXX____, 
     ____XXXX, X___XXXX, XXXXXXXX, XXXX____, 
@@ -3422,7 +3422,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f079[76] = {
     ____XXXX, XXXXXXXX, XXXXX___, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f07a[92] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f07a[92] = {
     XXXXXX__, ________, ________, ________, 
     XXXXXXX_, ________, ________, ________, 
     _____XXX, XXXXXXXX, XXXXXXXX, XXXX____, 
@@ -3448,7 +3448,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f07a[92] = {
     _______X, XX______, ______XX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f07b[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f07b[96] = {
     ___XXXXX, XX______, ________, ________, 
     _XXXXXXX, XXXX____, ________, ________, 
     XXXXXXXX, XXXX____, ________, ________, 
@@ -3475,7 +3475,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f07b[96] = {
     __XXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f07c[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f07c[96] = {
     ___XXXXX, XX______, ________, ________, 
     _XXXXXXX, XXXX____, ________, ________, 
     XXXXXXXX, XXXX____, ________, ________, 
@@ -3502,7 +3502,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f07c[96] = {
     _XXXXXXX, XXXXXXXX, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f07d[60] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f07d[60] = {
     _____X__, ________, 
     ____XXX_, ________, 
     ___XXXXX, ________, 
@@ -3535,7 +3535,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f07d[60] = {
     ____XXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f07e[44] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f07e[44] = {
     ____XX__, ________, ________, XX______, 
     ___XXX__, ________, ________, XXX_____, 
     __XXXX__, ________, ________, XXXX____, 
@@ -3549,7 +3549,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f07e[44] = {
     _____X__, ________, ________, X_______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f07f[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f07f[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -3578,7 +3578,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f07f[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f080[130] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f080[130] = {
     XX______, ________, ________, ________, ________, 
     XX______, ________, ________, ________, ________, 
     XX______, ________, ________, ________, ________, 
@@ -3607,7 +3607,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f080[130] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f081[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f081[104] = {
     ____XXXX, XXXXXXXX, XXXXXX__, ________, 
     __XXXXXX, XXXXXXXX, XXXXXXXX, ________, 
     _XXXXXXX, XXXXXXXX, XXXXXXXX, X_______, 
@@ -3636,7 +3636,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f081[104] = {
     __XXXXXX, XXXXXXXX, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f082[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f082[104] = {
     ____XXXX, XXXXXXXX, XXXXXX__, ________, 
     __XXXXXX, XXXXXXXX, XXXXXXXX, ________, 
     _XXXXXXX, XXXXXXXX, XXXXXXXX, X_______, 
@@ -3665,7 +3665,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f082[104] = {
     __XXXXXX, XXXXXX__, __XXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f083[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f083[104] = {
     __XXXXXX, XXXXXXXX, XXXXXXXX, XXXX____, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
     XXXX____, ___XXXXX, XXXXXXXX, XXXXXX__, 
@@ -3694,7 +3694,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f083[104] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f084[108] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f084[108] = {
     ________, __XX____, ________, ________, 
     _______X, XXXXXXX_, ________, ________, 
     _____XXX, XXXXXXXX, ________, ________, 
@@ -3724,7 +3724,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f084[108] = {
     ________, ________, _______X, XX______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f085[116] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f085[116] = {
     ________, ________, ______XX, ___XXX__, 
     ________, ________, _____XXX, XXXXXX__, 
     ________, ________, ______XX, XXXXX___, 
@@ -3756,7 +3756,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f085[116] = {
     ________, ________, _______X, ___XX___, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f086[92] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f086[92] = {
     ______XX, XXXXXXXX, X_______, ________, 
     ____XXXX, XXXXXXXX, XXX_____, ________, 
     ___XXXXX, XXXXXXXX, XXXXX___, ________, 
@@ -3782,7 +3782,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f086[92] = {
     ________, ________, ________, _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f087[112] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f087[112] = {
     ________, ______XX, ________, ________, 
     ________, ____XXXX, XX______, ________, 
     ________, ____XX_X, XXX_____, ________, 
@@ -3813,7 +3813,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f087[112] = {
     ________, ____XXXX, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f088[112] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f088[112] = {
     ________, _______X, XXX_____, ________, 
     ________, ___XXXXX, XXXXXX__, ________, 
     _______X, XXXXXXXX, XXXXXXX_, ________, 
@@ -3844,7 +3844,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f088[112] = {
     ________, _____XXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f089[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f089[52] = {
     ________, _____X__, 
     ________, _____X__, 
     ________, ____XX__, 
@@ -3873,7 +3873,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f089[52] = {
     _____XXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f08a[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f08a[104] = {
     _______X, X_______, _____XX_, ________, 
     ___XXXXX, XXXX____, __XXXXXX, XXX_____, 
     __XXXXXX, XXXXX___, _XXXXXXX, XXXX____, 
@@ -3902,7 +3902,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f08a[104] = {
     ________, ______XX, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f08b[84] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f08b[84] = {
     __XXXXXX, XXX____X, X_______, ________, 
     _XXXXXXX, XXX____X, XX______, ________, 
     XXX_____, _______X, XXX_____, ________, 
@@ -3926,7 +3926,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f08b[84] = {
     ___XXXXX, XXX_____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f08c[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f08c[104] = {
     ____XXXX, XXXXXXXX, XXXXXX__, ________, 
     __XXXXXX, XXXXXXXX, XXXXXXXX, ________, 
     _XXXXXXX, XXXXXXXX, XXXXXXXX, X_______, 
@@ -3955,7 +3955,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f08c[104] = {
     __XXXXXX, XXXXXXXX, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f08d[84] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f08d[84] = {
     ____XXXX, XXXXXXXX, ________, 
     __XXXXXX, XXXXXXXX, X_______, 
     __XXXXXX, XXXXXXXX, X_______, 
@@ -3986,7 +3986,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f08d[84] = {
     ________, _X______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f08e[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f08e[104] = {
     ________, ________, ____XXXX, XXXXXX__, 
     ________, ________, ___XXXXX, XXXXXX__, 
     ____XXXX, XXXXXXXX, X___XXXX, XXXXXX__, 
@@ -4015,7 +4015,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f08e[104] = {
     ___XXXXX, XXXXXXXX, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f08f[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f08f[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -4044,7 +4044,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f08f[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f090[84] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f090[84] = {
     ________, _X_____X, XXXXXXXX, ________, 
     ________, _XX____X, XXXXXXXX, X_______, 
     ________, _XXX____, _______X, X_______, 
@@ -4068,7 +4068,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f090[84] = {
     ________, _______X, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f091[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f091[104] = {
     ________, _XXXXXXX, XXX_____, ________, 
     _______X, XXXXXXXX, XXXXX___, ________, 
     ______XX, XXXXXXXX, XXXXX___, ________, 
@@ -4097,7 +4097,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f091[104] = {
     ______XX, XXXXXXXX, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f092[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f092[104] = {
     ____XXXX, XXXXXXXX, XXXXXX__, ________, 
     __XXXXXX, XXXXXXXX, XXXXXXXX, ________, 
     _XXXXXXX, XXXXXXXX, XXXXXXXX, X_______, 
@@ -4126,7 +4126,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f092[104] = {
     __XXXXXX, XXXXXXXX, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f093[108] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f093[108] = {
     ________, _____X__, ________, ________, 
     ________, ____XXXX, ________, ________, 
     ________, ___XXXXX, X_______, ________, 
@@ -4156,7 +4156,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f093[108] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f094[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f094[104] = {
     ________, ______XX, ________, ________, 
     ________, __XXXXXX, XXXXXXXX, ________, 
     ________, XXXXXXXX, XXXXXXXX, X_______, 
@@ -4185,7 +4185,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f094[104] = {
     _XXXXXXX, XXXXXXXX, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f095[72] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f095[72] = {
     ____X___, ________, ________, 
     __XXXX__, ________, ________, 
     _XXXXXX_, ________, ________, 
@@ -4212,7 +4212,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f095[72] = {
     ________, _______X, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f096[72] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f096[72] = {
     ____XXXX, XXXXXXXX, XXXX____, 
     __XXXXXX, XXXXXXXX, XXXXXX__, 
     _XXXXXXX, XXXXXXXX, XXXXXXX_, 
@@ -4239,7 +4239,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f096[72] = {
     ___XXXXX, XXXXXXXX, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f097[78] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f097[78] = {
     _XXXXXXX, XXXXXXXX, XXXX____, 
     XXXXXXXX, XXXXXXXX, XXXXX___, 
     XXXXXXXX, XXXXXXXX, XXXXX___, 
@@ -4268,7 +4268,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f097[78] = {
     _XX_____, ________, ___X____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f098[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f098[104] = {
     ____XXXX, XXXXXXXX, XXXXXX__, ________, 
     __XXXXXX, XXXXXXXX, XXXXXXXX, ________, 
     _XXXXXXX, XXXXXXXX, XXXXXXXX, X_______, 
@@ -4297,7 +4297,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f098[104] = {
     __XXXXXX, XXXXXXXX, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f099[84] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f099[84] = {
     ________, _______X, XXXXX___, X_______, 
     _X______, ______XX, XXXXXXXX, X_______, 
     _XX_____, _____XXX, XXXXXXXX, _X______, 
@@ -4321,7 +4321,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f099[84] = {
     ____XXXX, XXXX____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f09a[56] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f09a[56] = {
     ________, XXXXXX__, 
     ______XX, XXXXXX__, 
     _____XXX, XXXXXX__, 
@@ -4352,7 +4352,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f09a[56] = {
     ____XXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f09b[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f09b[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -4381,7 +4381,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f09b[104] = {
     ________, X_______, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f09c[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f09c[96] = {
     ________, ________, ___XX___, ________, 
     ________, ________, XXXXXXXX, ________, 
     ________, _______X, XXXXXXXX, XX______, 
@@ -4408,7 +4408,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f09c[96] = {
     XXXXXXXX, XXXXXXXX, XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f09d[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f09d[104] = {
     __XXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXXXX, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXXXX, 
@@ -4437,7 +4437,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f09d[104] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXXX_, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f09e[72] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f09e[72] = {
     _X______, ________, ________, 
     XXXXXXX_, ________, ________, 
     XXXXXXXX, XX______, ________, 
@@ -4464,7 +4464,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f09e[72] = {
     _XXXX___, ___XXXX_, ___XXXX_, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f09f[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f09f[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -4493,7 +4493,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f09f[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a0[84] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0a0[84] = {
     ____XXXX, XXXXXXXX, XXXXXX__, ________, 
     ____XXXX, XXXXXXXX, XXXXXX__, ________, 
     ___XXX__, ________, ____XX__, ________, 
@@ -4517,7 +4517,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a0[84] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a1[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0a1[104] = {
     ________, ________, ________, _X______, 
     ________, ________, ________, XXXX____, 
     ________, ________, _______X, XXXX____, 
@@ -4546,7 +4546,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a1[104] = {
     ______XX, XXXX____, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a2[120] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0a2[120] = {
     ________, _____XX_, ________, ________, 
     ________, ____XXXX, ________, ________, 
     ________, _____XX_, ________, ________, 
@@ -4579,7 +4579,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a2[120] = {
     ________, ____XXXX, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a3[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0a3[104] = {
     ________, _X_____X, ________, ________, 
     ________, _XX___XX, X_______, ________, 
     ________, XXXX_XXX, X_______, ________, 
@@ -4608,7 +4608,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a3[104] = {
     ________, _XX____X, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a4[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0a4[104] = {
     ________, ______XX, ________, ________, 
     ________, _____XXX, XX______, ________, 
     ________, ____XXXX, XXX_____, ________, 
@@ -4637,7 +4637,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a4[104] = {
     ________, ____XXXX, XXX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a5[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0a5[104] = {
     ________, ______XX, ________, ________, 
     ________, ____XXXX, X_______, ________, 
     ________, ___XXXXX, XX______, ________, 
@@ -4666,7 +4666,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a5[104] = {
     ________, ___XXXXX, XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a6[120] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0a6[120] = {
     ________, _XXX____, ________, ________, 
     ________, XXXXXX__, ________, ________, 
     _______X, XX_XXX__, ________, ________, 
@@ -4699,7 +4699,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a6[120] = {
     ________, _XXXXXXX, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a7[120] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0a7[120] = {
     ________, __XXXXXX, XXXXXX__, ________, 
     ________, _XXXXXXX, XXXXXXX_, ________, 
     ________, _XXXXXXX, XXXX_XXX, ________, 
@@ -4732,7 +4732,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a7[120] = {
     ________, XXXXX___, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a8[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0a8[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -4761,7 +4761,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a8[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a9[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0a9[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -4790,7 +4790,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0a9[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0aa[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0aa[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -4819,7 +4819,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0aa[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ab[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0ab[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -4848,7 +4848,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ab[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ac[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0ac[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -4877,7 +4877,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ac[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ad[112] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0ad[112] = {
     ________, ________, ___XX___, ________, 
     ________, ________, XXXXXXXX, ________, 
     ________, _______X, XXXXXXXX, ________, 
@@ -4908,7 +4908,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ad[112] = {
     ___XXX__, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ae[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0ae[96] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXXXX___, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
@@ -4935,7 +4935,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ae[96] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0af[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0af[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -4964,7 +4964,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0af[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b0[69] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0b0[69] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, 
     XXXXXXXX, XXXXXXXX, XXXXXXX_, 
     _XXXXXXX, XXXXXXXX, XXXXXX__, 
@@ -4990,7 +4990,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b0[69] = {
     ________, _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b1[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0b1[104] = {
     ________, _XXXXXXX, XXXXX___, ________, 
     ________, _XXXXXXX, XXXXX___, ________, 
     ________, _XX_____, ___XX___, ________, 
@@ -5019,7 +5019,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b1[104] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b2[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0b2[104] = {
     _XXXXXXX, X_______, _XXXXXXX, X_______, 
     XXXXXXXX, XX______, XXXXXXXX, XX______, 
     XXXXXXXX, X_______, _XXXXXXX, XX______, 
@@ -5048,7 +5048,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b2[104] = {
     XXXXXXXX, XX______, XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b3[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0b3[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -5077,7 +5077,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b3[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b4[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0b4[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -5106,7 +5106,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b4[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b5[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0b5[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -5135,7 +5135,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b5[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b6[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0b6[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -5164,7 +5164,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b6[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b7[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0b7[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -5193,7 +5193,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b7[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b8[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0b8[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -5222,7 +5222,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b8[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b9[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0b9[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -5251,7 +5251,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0b9[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ba[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0ba[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -5280,7 +5280,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ba[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0bb[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0bb[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -5309,7 +5309,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0bb[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0bc[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0bc[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -5338,7 +5338,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0bc[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0bd[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0bd[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -5367,7 +5367,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0bd[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0be[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0be[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -5396,7 +5396,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0be[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0bf[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0bf[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -5425,7 +5425,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0bf[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c0[120] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0c0[120] = {
     _____XXX, ________, ________, XXX_____, 
     ___XXXXX, X_______, _______X, XXXXX___, 
     ___XXXXX, XX______, ______XX, XXXXX___, 
@@ -5458,7 +5458,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c0[120] = {
     ______XX, XXXXXXXX, XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c1[108] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0c1[108] = {
     _____XXX, XX______, ________, ________, 
     ____XXXX, XXX_____, ________, ________, 
     ___XXXXX, XXXX____, ________, ________, 
@@ -5488,7 +5488,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c1[108] = {
     ________, ________, __XXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c2[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0c2[96] = {
     ________, ____XX__, ________, ________, 
     ________, _XXXXXXX, X_______, ________, 
     _______X, XXXXXXXX, XX______, ________, 
@@ -5515,7 +5515,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c2[96] = {
     _____XXX, XXXXXXXX, XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c3[78] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0c3[78] = {
     _______X, XXXXXXXX, X_______, 
     _______X, XXXXXXXX, X_______, 
     _______X, XXXXXXXX, X_______, 
@@ -5544,7 +5544,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c3[78] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c4[92] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0c4[92] = {
     __XXXXXX, X_______, ________, ________, 
     _XXXXXXX, XX______, ________, ________, 
     XXXX___X, XXX_____, ________, _XXXX___, 
@@ -5570,7 +5570,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c4[92] = {
     __XXXXXX, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c5[120] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0c5[120] = {
     ________, __XXXXXX, XX______, ________, 
     ________, XXXXXXXX, XXX_____, ________, 
     _______X, XXX_____, _XX_____, ________, 
@@ -5603,7 +5603,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c5[120] = {
     ________, ___XXXXX, XXXXXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c6[78] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0c6[78] = {
     _____X__, ________, ________, 
     ___XXXXX, XX______, ________, 
     __XXXXXX, XXX_____, ________, 
@@ -5632,7 +5632,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c6[78] = {
     ________, ________, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c7[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0c7[104] = {
     _XXXXXXX, XXXXXXXX, XX______, ________, 
     XXXXXXXX, XXXXXXXX, XXXX____, ________, 
     XXXXXXXX, XXXXXXXX, XXXXX___, ________, 
@@ -5661,7 +5661,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c7[104] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c8[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0c8[104] = {
     ____XXXX, XXXXXXXX, XXXXXX__, ________, 
     __XXXXXX, XXXXXXXX, XXXXXXXX, ________, 
     _XXXXXXX, XXXXXXXX, XXXXXXXX, X_______, 
@@ -5690,7 +5690,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c8[104] = {
     __XXXXXX, XXXXXXXX, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c9[84] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0c9[84] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
@@ -5714,7 +5714,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0c9[84] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ca[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0ca[96] = {
     __X_____, ________, ________, ________, 
     _XXXXX__, ________, ________, ________, 
     XXXXXX__, _XXXXXXX, XXXXXXXX, XXXXXX__, 
@@ -5741,7 +5741,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ca[96] = {
     _XXXX___, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0cb[120] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0cb[120] = {
     ___XX___, ________, ________, ________, 
     __XXX___, ________, ________, ________, 
     _XXXX___, ________, ________, ________, 
@@ -5774,7 +5774,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0cb[120] = {
     XXXXX___, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0cc[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0cc[104] = {
     ________, ______XX, ________, ________, 
     ________, __XXXXXX, XXXXX___, ________, 
     ________, _XXXX___, XXXXX___, ________, 
@@ -5803,7 +5803,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0cc[104] = {
     ________, __XXXXXX, XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0cd[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0cd[104] = {
     XX______, ___X____, _XXX____, _X______, 
     XXXXXXXX, XXXX____, _XXXXXXX, XX______, 
     ___XXXXX, X_______, ____XXX_, ________, 
@@ -5832,7 +5832,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0cd[104] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ce[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0ce[96] = {
     __XXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXX_____, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXX____, 
@@ -5859,7 +5859,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ce[96] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0cf[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0cf[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -5888,7 +5888,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0cf[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d0[112] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0d0[112] = {
     ___X____, ______X_, ________, ________, 
     ____X___, _X____X_, ______XX, ________, 
     __XXXX__, _X___XXX, X____XXX, X_______, 
@@ -5919,7 +5919,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d0[112] = {
     ____X___, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d1[92] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0d1[92] = {
     ________, __XXXXXX, XXXXXXXX, XXXXX___, 
     ________, __XXXXXX, XXXXXXXX, XXXXX___, 
     ________, __XXXXXX, XXXXXXXX, XXXXX___, 
@@ -5945,7 +5945,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d1[92] = {
     _____XXX, XX______, ____XXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d2[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0d2[104] = {
     ________, ____XX__, ________, ________, 
     ________, XXXXXXXX, XX______, ________, 
     ______XX, XXXXXXXX, XXXX____, ________, 
@@ -5974,7 +5974,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d2[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d3[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0d3[104] = {
     ____XXXX, XXXXXXXX, XXXXXX__, ________, 
     __XXXXXX, XXXXXXXX, XXXXXXXX, ________, 
     _XXXXXXX, XXXXXXXX, XXXXXXXX, X_______, 
@@ -6003,7 +6003,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d3[104] = {
     __XXXXXX, _XXXXXXX, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d4[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0d4[104] = {
     ____XXXX, XXXXXXXX, XXXXXX__, ________, 
     __XXXXXX, XXXXXXXX, XXXXXXXX, ________, 
     _XXXXXXX, XXXXXXXX, XXXXXXXX, X_______, 
@@ -6032,7 +6032,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d4[104] = {
     __XXXXXX, XXXXXXXX, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d5[125] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0d5[125] = {
     ________, _XXXXXXX, ________, ________, ________, 
     ______XX, XXXXXXXX, XX______, ________, ________, 
     _____XXX, XXXXXXXX, XXXX____, ________, ________, 
@@ -6060,7 +6060,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d5[125] = {
     ________, ___XXX__, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d6[84] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0d6[84] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXXXX, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXXXX, 
     XXXXXX__, ________, ________, __XXXXXX, 
@@ -6084,7 +6084,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d6[84] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXXXX, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d7[30] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0d7[30] = {
     XXXXXXXX, XXXXXXXX, X_______, 
     XXXXXXXX, XXXXXXXX, X_______, 
     _XXXXXXX, XXXXXXXX, ________, 
@@ -6097,7 +6097,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d7[30] = {
     ________, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d8[30] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0d8[30] = {
     ________, X_______, ________, 
     _______X, XX______, ________, 
     ______XX, XXX_____, ________, 
@@ -6110,7 +6110,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d8[30] = {
     XXXXXXXX, XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d9[34] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0d9[34] = {
     _______X, XX______, 
     ______XX, XX______, 
     _____XXX, XX______, 
@@ -6130,7 +6130,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0d9[34] = {
     ________, X_______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0da[34] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0da[34] = {
     XX______, ________, 
     XXX_____, ________, 
     XXXX____, ________, 
@@ -6150,7 +6150,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0da[34] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0db[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0db[104] = {
     __XXXXXX, XXXXXXXX, XXXXXXXX, XX______, 
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXX_____, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXX____, 
@@ -6179,7 +6179,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0db[104] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0dc[72] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0dc[72] = {
     ________, X_______, ________, 
     _______X, XX______, ________, 
     ______XX, XXX_____, ________, 
@@ -6206,7 +6206,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0dc[72] = {
     ________, XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0dd[30] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0dd[30] = {
     _XXXXXXX, XXXXXXXX, ________, 
     XXXXXXXX, XXXXXXXX, X_______, 
     _XXXXXXX, XXXXXXXX, X_______, 
@@ -6219,7 +6219,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0dd[30] = {
     ________, XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0de[30] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0de[30] = {
     ________, X_______, ________, 
     _______X, XX______, ________, 
     ______XX, XXX_____, ________, 
@@ -6232,7 +6232,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0de[30] = {
     XXXXXXXX, XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0df[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0df[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -6261,7 +6261,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0df[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e0[92] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0e0[92] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXXXX___, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
@@ -6287,7 +6287,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e0[92] = {
     _XXXXXXX, XXXXXXXX, XXXXXXXX, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e1[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0e1[96] = {
     _XXXX___, ________, ________, ________, 
     XXXXXX__, ________, ________, ________, 
     XXXXXX__, ________, ________, ________, 
@@ -6314,7 +6314,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e1[96] = {
     XXXXXX__, _XXXXX__, ____XXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e2[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0e2[104] = {
     ________, ____XX__, ________, ________, 
     X_______, XXXXXXXX, XX______, ________, 
     XXX___XX, XXXXXXXX, XXXX____, ________, 
@@ -6343,7 +6343,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e2[104] = {
     ________, _XXXXXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e3[116] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0e3[116] = {
     ________, ___XXX__, ________, ________, 
     ________, __XXXXX_, ________, ________, 
     ________, __XXXXXX, ________, ________, 
@@ -6375,7 +6375,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e3[116] = {
     ________, ________, _______X, XX______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e4[92] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0e4[92] = {
     ________, __XXXXXX, XXXX____, ________, 
     ________, XXXXXXXX, XXXXXX__, ________, 
     ______XX, XXXXX___, _XXXXXXX, ________, 
@@ -6401,7 +6401,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e4[92] = {
     __XXXXXX, XXXXXXXX, XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e5[100] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0e5[100] = {
     ________, _XXXXXXX, XXXXX___, ________, 
     ______XX, XXXXXXXX, XXXXXXXX, ________, 
     _____XXX, XX______, ____XXXX, X_______, 
@@ -6429,7 +6429,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e5[100] = {
     __XXXX__, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e6[92] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0e6[92] = {
     ______XX, XXXXXXXX, X_______, ________, 
     ____XXXX, XXXXXXXX, XXX_____, ________, 
     ___XXXX_, ________, XXXXX___, ________, 
@@ -6455,7 +6455,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e6[92] = {
     ________, ________, ________, _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e7[56] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0e7[56] = {
     ____XXXX, XX______, 
     ___XXXXX, XX______, 
     ___XXXXX, XX______, 
@@ -6486,7 +6486,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e7[56] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e8[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0e8[104] = {
     ________, ____XXXX, XX______, ________, 
     ________, ___XXXXX, XXX_____, ________, 
     ________, ___XXXXX, XXX_____, ________, 
@@ -6515,7 +6515,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e8[104] = {
     XXXXXXXX, ___XXXXX, XXX___XX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e9[108] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0e9[108] = {
     ________, _____X__, ________, ________, 
     ________, _____XX_, ________, ________, 
     ________, _____XX_, ________, ________, 
@@ -6545,7 +6545,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0e9[108] = {
     ________, XXXXX___, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ea[120] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0ea[120] = {
     _XXXXXXX, XXXXXXXX, XXXXX___, ________, 
     XXXXXXXX, XXXXXXXX, XXXXX___, ________, 
     XXXXX___, ________, _XXXX___, ________, 
@@ -6578,7 +6578,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ea[120] = {
     ________, ___XXXXX, XXXXXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0eb[78] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0eb[78] = {
     _______X, XX______, ________, 
     ____XXXX, XXXXX___, ________, 
     ___XXXXX, XXXXXX__, ________, 
@@ -6607,7 +6607,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0eb[78] = {
     _______X, XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ec[92] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0ec[92] = {
     ________, ________, ________, X_______, 
     ________, ________, ________, XX______, 
     ________, ________, ________, XXX_____, 
@@ -6633,7 +6633,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ec[92] = {
     _____X__, ________, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ed[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0ed[96] = {
     ________, ____XX__, ________, ________, 
     ________, _XXXXXXX, X_______, ________, 
     _______X, XXXXXXXX, XX______, ________, 
@@ -6660,7 +6660,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ed[96] = {
     _____XXX, XXXXXXXX, XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ee[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0ee[96] = {
     ________, ____XX__, ________, ________, 
     ________, _XXXXXXX, X_______, ________, 
     _______X, XXXXXXXX, XX______, ________, 
@@ -6687,7 +6687,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ee[96] = {
     _____XXX, XXXXXXXX, XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ef[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0ef[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -6716,7 +6716,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ef[52] = {
     XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f0[78] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0f0[78] = {
     ________, ___XX___, ________, 
     ________, XXXXXXX_, ________, 
     _______X, XXXXXXXX, X_______, 
@@ -6745,7 +6745,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f0[78] = {
     __XXXXXX, XXXXXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f1[78] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0f1[78] = {
     ___X____, ___X____, ________, 
     _XXXX___, __XXXX__, ________, 
     XXXXX___, __XXXXX_, ________, 
@@ -6774,7 +6774,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f1[78] = {
     ________, ___XXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f2[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0f2[104] = {
     ________, __XXXXXX, XXXX____, ________, 
     ________, _XXXXXXX, XXXXX___, ________, 
     ________, _XXXXXXX, XXXXX___, ________, 
@@ -6803,7 +6803,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f2[104] = {
     __XXX_XX, XXXXXXXX, XXXXXXXX, _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f3[120] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0f3[120] = {
     ________, _____XX_, ________, ________, 
     ________, ____XXXX, ________, ________, 
     ________, _____XX_, ________, ________, 
@@ -6836,7 +6836,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f3[120] = {
     ________, ____XXXX, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f4[92] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0f4[92] = {
     ____XXXX, XXXXXXXX, XXXXXXXX, XXXX____, 
     ____XXXX, XXXXXXXX, XXXXXXXX, XXXXX___, 
     ____XXXX, XXXXXXXX, XXXXXXXX, XXXXXX__, 
@@ -6862,7 +6862,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f4[92] = {
     __XXXXXX, XXXXXXXX, XXXXXXXX, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f5[90] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0f5[90] = {
     XX___X__, _X______, _XXXXXX_, 
     XX__XX__, _XX____X, XXXXXXXX, 
     XX__XX__, _XX___XX, XXXXXXXX, 
@@ -6895,7 +6895,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f5[90] = {
     ___XXXXX, ________, __XXXXX_, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f6[120] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0f6[120] = {
     _XXXXXXX, XXXXXXXX, XX______, ________, 
     XXXXXXXX, XXXXXXXX, XXX_____, ________, 
     XX______, _______X, XXXX____, ________, 
@@ -6928,7 +6928,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f6[120] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f7[90] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0f7[90] = {
     XXXXXXXX, XXXXXXXX, XXXXXXX_, 
     XXXXXXXX, XXXXXXXX, XXXXXXXX, 
     XX______, ________, _____XXX, 
@@ -6961,7 +6961,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f7[90] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f8[90] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0f8[90] = {
     _______X, XXXXXXXX, ________, 
     ______XX, XXXXXXXX, X_______, 
     ______XX, X_XXX__X, X_______, 
@@ -6994,7 +6994,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f8[90] = {
     XXXXXXXX, XXXXXXXX, XXXXXXXX, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f9[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0f9[104] = {
     ________, __XXXXXX, XXXXXXXX, XXXXXX__, 
     ________, __XXXXXX, XXXXXXXX, XXXXXXX_, 
     ________, __XXXXXX, XXXXXXXX, XXXXXXX_, 
@@ -7023,7 +7023,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0f9[104] = {
     _____XXX, XX______, ____XXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0fa[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0fa[104] = {
     ________, __XXXXXX, XXXX____, ________, 
     ________, _XXXXXXX, XXXXX___, ________, 
     ________, _XXXXXXX, XXXXX___, ________, 
@@ -7052,7 +7052,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0fa[104] = {
     __XX__XX, XXXXXXXX, XXXXXXXX, __XX____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0fb[76] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0fb[76] = {
     _______X, XXXXXX__, ________, ________, 
     ________, _XXXX___, ________, ________, 
     ________, _XXXXX__, ________, ________, 
@@ -7074,7 +7074,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0fb[76] = {
     _______X, XXXXXX__, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0fc[96] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0fc[96] = {
     ________, _XXXXXXX, XXXXXXXX, X_______, 
     ________, _XXXXXXX, XXXXXXXX, X_______, 
     ________, _XXXXXXX, XXXXXXXX, XX______, 
@@ -7101,7 +7101,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0fc[96] = {
     ________, XXXXXXXX, XXXXXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0fd[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0fd[104] = {
     ____XXXX, XXXXXXXX, XXXXXX__, ________, 
     __XXXXXX, XXXXXXXX, XXXXXXXX, ________, 
     _XXXXXXX, XXXXXXXX, XXXXXXXX, X_______, 
@@ -7130,7 +7130,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0fd[104] = {
     __XXXXXX, XXXXXXXX, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0fe[104] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0fe[104] = {
     ____XXXX, XXXXXXXX, XXXXXX__, ________, 
     __XXXXXX, XXXXXXXX, XXXXXXXX, ________, 
     _XXXXXXX, XXXXXXXX, XXXXXXXX, X_______, 
@@ -7159,7 +7159,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0fe[104] = {
     __XXXXXX, XXXXXXXX, XXXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ff[52] = {
+gui_const uint8_t Font_FontAwesome_Regular_30_f0ff[52] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, _XX_____, 
@@ -7189,7 +7189,7 @@ GUI_Const GUI_Byte Font_FontAwesome_Regular_30_f0ff[52] = {
 };
 
 
-GUI_Const GUI_FONT_CharInfo_t FontAwesome_Regular_30_CharTable[] = {
+gui_const gui_font_char_t FontAwesome_Regular_30_CharTable[] = {
     {  26,   28,  0,    1,    1, Font_FontAwesome_Regular_30_f000},
     {  26,   28,  0,    1,    1, Font_FontAwesome_Regular_30_f001},
     {  28,   28,  0,    1,    1, Font_FontAwesome_Regular_30_f002},
@@ -7448,7 +7448,7 @@ GUI_Const GUI_FONT_CharInfo_t FontAwesome_Regular_30_CharTable[] = {
     {  11,   26,  0,   25,    1, Font_FontAwesome_Regular_30_f0ff},
 };
 
-GUI_Const gui_font_t GUI_Font_FontAwesome_Regular_30 = {
+gui_const gui_font_t GUI_Font_FontAwesome_Regular_30 = {
     _GT("FontAwesome Regular"),
     30,
     0xf000,

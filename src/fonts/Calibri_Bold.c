@@ -1,10 +1,10 @@
 #include "gui/gui.h"
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0020[1] = {
+gui_const uint8_t Font_Calibri_Bold_8_0020[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0021[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0021[5] = {
     X_______, 
     X_______, 
     X_______, 
@@ -12,12 +12,12 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0021[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0022[2] = {
+gui_const uint8_t Font_Calibri_Bold_8_0022[2] = {
     X_X_____, 
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0023[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0023[5] = {
     _X______, 
     XXXX____, 
     _XX_____, 
@@ -25,7 +25,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0023[5] = {
     X_X_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0024[7] = {
+gui_const uint8_t Font_Calibri_Bold_8_0024[7] = {
     __X_____, 
     _XX_____, 
     XX______, 
@@ -35,7 +35,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0024[7] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0025[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0025[5] = {
     XXX_X___, 
     X_XX____, 
     _XX_X___, 
@@ -43,7 +43,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0025[5] = {
     _X_XX___, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0026[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0026[5] = {
     _XXX____, 
     _X_X____, 
     _XX_X___, 
@@ -51,54 +51,54 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0026[5] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0027[1] = {
+gui_const uint8_t Font_Calibri_Bold_8_0027[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0028[7] = {
+gui_const uint8_t Font_Calibri_Bold_8_0028[7] = {
     _X______, 
     _X______, 
     _X______, 
     X_______, 
     X_______, 
-    _X______, 
-    _X______, 
-};
-
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0029[7] = {
-    X_______, 
-    _X______, 
-    _X______, 
-    _X______, 
-    _X______, 
     _X______, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_002a[2] = {
+gui_const uint8_t Font_Calibri_Bold_8_0029[7] = {
+    X_______, 
+    _X______, 
+    _X______, 
+    _X______, 
+    _X______, 
+    _X______, 
+    _X______, 
+};
+
+gui_const uint8_t Font_Calibri_Bold_8_002a[2] = {
     XX______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_002b[2] = {
+gui_const uint8_t Font_Calibri_Bold_8_002b[2] = {
     XXXX____, 
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_002c[2] = {
+gui_const uint8_t Font_Calibri_Bold_8_002c[2] = {
     _X______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_002d[1] = {
+gui_const uint8_t Font_Calibri_Bold_8_002d[1] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_002e[1] = {
+gui_const uint8_t Font_Calibri_Bold_8_002e[1] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_002f[7] = {
+gui_const uint8_t Font_Calibri_Bold_8_002f[7] = {
     __X_____, 
     __X_____, 
     __X_____, 
@@ -108,7 +108,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_002f[7] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0030[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0030[5] = {
     _XX_____, 
     X__X____, 
     X__X____, 
@@ -116,7 +116,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0030[5] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0031[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0031[5] = {
     XX______, 
     _X______, 
     _X______, 
@@ -124,7 +124,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0031[5] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0032[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0032[5] = {
     XXX_____, 
     __XX____, 
     __X_____, 
@@ -132,7 +132,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0032[5] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0033[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0033[5] = {
     XXX_____, 
     __X_____, 
     _XX_____, 
@@ -140,7 +140,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0033[5] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0034[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0034[5] = {
     __X_____, 
     _XX_____, 
     X_X_____, 
@@ -148,7 +148,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0034[5] = {
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0035[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0035[5] = {
     _XX_____, 
     X_______, 
     _XX_____, 
@@ -156,7 +156,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0035[5] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0036[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0036[5] = {
     _XXX____, 
     X_______, 
     XXXX____, 
@@ -164,7 +164,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0036[5] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0037[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0037[5] = {
     XXXX____, 
     __X_____, 
     __X_____, 
@@ -172,7 +172,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0037[5] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0038[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0038[5] = {
     _XXX____, 
     X__X____, 
     _XX_____, 
@@ -180,7 +180,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0038[5] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0039[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0039[5] = {
     _XX_____, 
     X__X____, 
     XXXX____, 
@@ -188,14 +188,14 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0039[5] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_003a[4] = {
+gui_const uint8_t Font_Calibri_Bold_8_003a[4] = {
     X_______, 
     ________, 
     ________, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_003b[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_003b[5] = {
     _X______, 
     ________, 
     ________, 
@@ -203,26 +203,26 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_003b[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_003c[4] = {
+gui_const uint8_t Font_Calibri_Bold_8_003c[4] = {
     __XX____, 
     XX______, 
     _XX_____, 
     ___X____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_003d[2] = {
+gui_const uint8_t Font_Calibri_Bold_8_003d[2] = {
     _XX_____, 
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_003e[4] = {
+gui_const uint8_t Font_Calibri_Bold_8_003e[4] = {
     XX______, 
     __XX____, 
     _XX_____, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_003f[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_003f[5] = {
     XXX_____, 
     __X_____, 
     _XX_____, 
@@ -230,7 +230,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_003f[5] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0040[6] = {
+gui_const uint8_t Font_Calibri_Bold_8_0040[6] = {
     __XXXX__, 
     _X_XX_X_, 
     _XX_X_X_, 
@@ -239,7 +239,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0040[6] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0041[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0041[5] = {
     __X_____, 
     _X_X____, 
     _X_X____, 
@@ -247,7 +247,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0041[5] = {
     X___X___, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0042[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0042[5] = {
     XXX_____, 
     X_X_____, 
     XXX_____, 
@@ -255,7 +255,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0042[5] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0043[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0043[5] = {
     _XXX____, 
     XX______, 
     X_______, 
@@ -263,7 +263,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0043[5] = {
     _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0044[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0044[5] = {
     XXX_____, 
     X__X____, 
     X__X____, 
@@ -271,7 +271,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0044[5] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0045[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0045[5] = {
     XXX_____, 
     X_______, 
     XX______, 
@@ -279,7 +279,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0045[5] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0046[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0046[5] = {
     XX______, 
     X_______, 
     XX______, 
@@ -287,7 +287,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0046[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0047[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0047[5] = {
     _XXXX___, 
     XX______, 
     X_XXX___, 
@@ -295,7 +295,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0047[5] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0048[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0048[5] = {
     X_XX____, 
     X_XX____, 
     XXXX____, 
@@ -303,7 +303,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0048[5] = {
     X_XX____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0049[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0049[5] = {
     X_______, 
     X_______, 
     X_______, 
@@ -311,7 +311,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0049[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_004a[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_004a[5] = {
     _X______, 
     _X______, 
     _X______, 
@@ -319,7 +319,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_004a[5] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_004b[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_004b[5] = {
     X_X_____, 
     XX______, 
     XX______, 
@@ -327,7 +327,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_004b[5] = {
     X_X_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_004c[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_004c[5] = {
     X_______, 
     X_______, 
     X_______, 
@@ -335,7 +335,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_004c[5] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_004d[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_004d[5] = {
     X___X___, 
     XX_XX___, 
     XX_XX___, 
@@ -343,7 +343,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_004d[5] = {
     X_X_X___, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_004e[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_004e[5] = {
     X__X____, 
     XX_X____, 
     XX_X____, 
@@ -351,7 +351,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_004e[5] = {
     __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_004f[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_004f[5] = {
     _XXXX___, 
     XX__X___, 
     X___X___, 
@@ -359,7 +359,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_004f[5] = {
     _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0050[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0050[5] = {
     XXX_____, 
     X_X_____, 
     XXX_____, 
@@ -367,7 +367,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0050[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0051[6] = {
+gui_const uint8_t Font_Calibri_Bold_8_0051[6] = {
     _XXXX___, 
     XX__X___, 
     X___X___, 
@@ -376,7 +376,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0051[6] = {
     ____XX__, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0052[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0052[5] = {
     XXX_____, 
     X_X_____, 
     XX______, 
@@ -384,7 +384,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0052[5] = {
     X_X_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0053[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0053[5] = {
     _XX_____, 
     X_______, 
     _XX_____, 
@@ -392,7 +392,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0053[5] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0054[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0054[5] = {
     XXXX____, 
     _XX_____, 
     _XX_____, 
@@ -400,7 +400,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0054[5] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0055[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0055[5] = {
     X__X____, 
     X__X____, 
     X__X____, 
@@ -408,7 +408,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0055[5] = {
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0056[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0056[5] = {
     X___X___, 
     _X_X____, 
     _X_X____, 
@@ -416,7 +416,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0056[5] = {
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0057[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0057[5] = {
     X__X__X_, 
     _X_XX_X_, 
     _XX_X_X_, 
@@ -424,7 +424,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0057[5] = {
     _XX_XX__, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0058[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0058[5] = {
     XX_X____, 
     _XX_____, 
     _XX_____, 
@@ -432,7 +432,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0058[5] = {
     X__X____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0059[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0059[5] = {
     X__X____, 
     _XX_____, 
     _XX_____, 
@@ -440,7 +440,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0059[5] = {
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_005a[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_005a[5] = {
     XXXX____, 
     __X_____, 
     _X______, 
@@ -448,7 +448,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_005a[5] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_005b[7] = {
+gui_const uint8_t Font_Calibri_Bold_8_005b[7] = {
     X_______, 
     X_______, 
     X_______, 
@@ -458,7 +458,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_005b[7] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_005c[7] = {
+gui_const uint8_t Font_Calibri_Bold_8_005c[7] = {
     X_______, 
     X_______, 
     _X______, 
@@ -468,7 +468,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_005c[7] = {
     __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_005d[7] = {
+gui_const uint8_t Font_Calibri_Bold_8_005d[7] = {
     XX______, 
     _X______, 
     _X______, 
@@ -478,28 +478,28 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_005d[7] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_005e[3] = {
+gui_const uint8_t Font_Calibri_Bold_8_005e[3] = {
     _XX_____, 
     _XX_____, 
     X__X____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_005f[1] = {
+gui_const uint8_t Font_Calibri_Bold_8_005f[1] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0060[1] = {
+gui_const uint8_t Font_Calibri_Bold_8_0060[1] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0061[4] = {
+gui_const uint8_t Font_Calibri_Bold_8_0061[4] = {
     _XX_____, 
     __X_____, 
     XXX_____, 
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0062[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0062[5] = {
     X_______, 
     X_X_____, 
     XX_X____, 
@@ -507,14 +507,14 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0062[5] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0063[4] = {
+gui_const uint8_t Font_Calibri_Bold_8_0063[4] = {
     _XX_____, 
     X_______, 
     X_______, 
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0064[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0064[5] = {
     ___X____, 
     _XXX____, 
     X__X____, 
@@ -522,14 +522,14 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0064[5] = {
     _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0065[4] = {
+gui_const uint8_t Font_Calibri_Bold_8_0065[4] = {
     _XX_____, 
     X__X____, 
     XXX_____, 
     _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0066[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0066[5] = {
     _X______, 
     XX______, 
     _X______, 
@@ -537,7 +537,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0066[5] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0067[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0067[5] = {
     _XXX____, 
     X_X_____, 
     XXX_____, 
@@ -545,7 +545,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0067[5] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0068[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0068[5] = {
     X_______, 
     X_X_____, 
     XX_X____, 
@@ -553,7 +553,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0068[5] = {
     X__X____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0069[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0069[5] = {
     XX______, 
     X_______, 
     X_______, 
@@ -561,7 +561,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0069[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_006a[6] = {
+gui_const uint8_t Font_Calibri_Bold_8_006a[6] = {
     _X______, 
     _X______, 
     _X______, 
@@ -570,7 +570,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_006a[6] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_006b[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_006b[5] = {
     X_______, 
     X_XX____, 
     XXX_____, 
@@ -578,7 +578,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_006b[5] = {
     X_XX____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_006c[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_006c[5] = {
     X_______, 
     X_______, 
     X_______, 
@@ -586,28 +586,28 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_006c[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_006d[4] = {
+gui_const uint8_t Font_Calibri_Bold_8_006d[4] = {
     X_X_XX__, 
     XX_X_X__, 
     X__X_X__, 
     X__X_X__, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_006e[4] = {
+gui_const uint8_t Font_Calibri_Bold_8_006e[4] = {
     X_X_____, 
     XX_X____, 
     X__X____, 
     X__X____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_006f[4] = {
+gui_const uint8_t Font_Calibri_Bold_8_006f[4] = {
     _XX_____, 
     X__X____, 
     X__X____, 
     _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0070[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0070[5] = {
     X_X_____, 
     XX_X____, 
     X__X____, 
@@ -615,7 +615,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0070[5] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0071[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0071[5] = {
     _XXX____, 
     X__X____, 
     X__X____, 
@@ -623,21 +623,21 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0071[5] = {
     ___X____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0072[4] = {
+gui_const uint8_t Font_Calibri_Bold_8_0072[4] = {
     X_X_____, 
     XX______, 
     X_______, 
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0073[4] = {
+gui_const uint8_t Font_Calibri_Bold_8_0073[4] = {
     _XX_____, 
     X_______, 
     _XX_____, 
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0074[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0074[5] = {
     _X______, 
     XXX_____, 
     _X______, 
@@ -645,35 +645,35 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0074[5] = {
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0075[4] = {
+gui_const uint8_t Font_Calibri_Bold_8_0075[4] = {
     X__X____, 
     X__X____, 
     X__X____, 
     _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0076[4] = {
+gui_const uint8_t Font_Calibri_Bold_8_0076[4] = {
     X__X____, 
     X_X_____, 
     _XX_____, 
     _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0077[4] = {
+gui_const uint8_t Font_Calibri_Bold_8_0077[4] = {
     X_XX_X__, 
     X_XX_X__, 
     _XXXX___, 
     _X_XX___, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0078[4] = {
+gui_const uint8_t Font_Calibri_Bold_8_0078[4] = {
     X_X_____, 
     _XX_____, 
     _XX_____, 
     X_X_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_0079[5] = {
+gui_const uint8_t Font_Calibri_Bold_8_0079[5] = {
     X__X____, 
     XXX_____, 
     _XX_____, 
@@ -681,14 +681,14 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_0079[5] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_007a[4] = {
+gui_const uint8_t Font_Calibri_Bold_8_007a[4] = {
     XXX_____, 
     _X______, 
     _X______, 
     XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_007b[7] = {
+gui_const uint8_t Font_Calibri_Bold_8_007b[7] = {
     _X______, 
     _X______, 
     _X______, 
@@ -698,7 +698,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_007b[7] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_007c[7] = {
+gui_const uint8_t Font_Calibri_Bold_8_007c[7] = {
     X_______, 
     X_______, 
     X_______, 
@@ -708,7 +708,7 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_007c[7] = {
     X_______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_007d[7] = {
+gui_const uint8_t Font_Calibri_Bold_8_007d[7] = {
     X_______, 
     _X______, 
     _X______, 
@@ -718,17 +718,17 @@ GUI_Const GUI_Byte Font_Calibri_Bold_8_007d[7] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_007e[2] = {
+gui_const uint8_t Font_Calibri_Bold_8_007e[2] = {
     _X______, 
     X_XX____, 
 };
 
-GUI_Const GUI_Byte Font_Calibri_Bold_8_007f[1] = {
+gui_const uint8_t Font_Calibri_Bold_8_007f[1] = {
     ________, 
 };
 
 
-GUI_Const GUI_FONT_CharInfo_t Calibri_Bold_8_CharTable[] = {
+gui_const gui_font_char_t Calibri_Bold_8_CharTable[] = {
     {   4,    1,  0,    0,    1, Font_Calibri_Bold_8_0020},
     {   1,    5,  0,    1,    1, Font_Calibri_Bold_8_0021},
     {   3,    2,  0,    1,    1, Font_Calibri_Bold_8_0022},
@@ -827,7 +827,7 @@ GUI_Const GUI_FONT_CharInfo_t Calibri_Bold_8_CharTable[] = {
     {   4,    1,  0,    0,    1, Font_Calibri_Bold_8_007f},
 };
 
-GUI_Const gui_font_t GUI_Font_Calibri_Bold_8 = {
+gui_const gui_font_t GUI_Font_Calibri_Bold_8 = {
     _GT("Calibri Bold"),
     8,
     0x20,

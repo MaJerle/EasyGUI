@@ -115,7 +115,7 @@ get_dialog(gui_handle_p h) {
  */
 static uint8_t
 gui_dialog_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         default:                                    /* Handle default option */
             GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
@@ -131,12 +131,12 @@ gui_dialog_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       func: Widget create function used as dialog base. In most cases \ref gui_container_create will be used to create empty container
- * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p
-gui_dialog_create(gui_id_t id, float x, float y, float width, float height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+gui_dialog_create(gui_id_t id, float x, float y, float width, float height, GUI_WIDGET_CreateFunc_t func, gui_widget_callback_t cb, uint16_t flags) {
     gui_handle_p ptr;
     if (func == NULL) {                             /* Check create function */
         return NULL;
@@ -165,12 +165,12 @@ gui_dialog_create(gui_id_t id, float x, float y, float width, float height, GUI_
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       func: Widget create function used as dialog base. In most cases \ref gui_container_create will be used to create empty container
- * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
  * \return          Value passed to \ref gui_dialog_dismiss when dialog is dismissed on success, -1 otherwise
  */
 int
-gui_dialog_createblocking(gui_id_t id, gui_idim_t x, gui_idim_t y, gui_dim_t width, gui_dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+gui_dialog_createblocking(gui_id_t id, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, GUI_WIDGET_CreateFunc_t func, gui_widget_callback_t cb, uint16_t flags) {
     gui_handle_p ptr;
     int resp = -1;                                  /* Dialog not created error */
     

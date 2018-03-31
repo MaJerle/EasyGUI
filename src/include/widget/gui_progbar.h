@@ -36,13 +36,10 @@
 extern "C" {
 #endif
 
-/**
- * \addtogroup      GUI_WIDGETS
- * \{
- */
 #include "gui_widget.h"
 
 /**
+ * \ingroup         GUI_WIDGETS
  * \defgroup        GUI_PROGBAR Progress bar
  * \brief           Progress bar for progress visualization
  * \{
@@ -72,7 +69,7 @@ typedef struct GUI_PROGBAR_t {
 } GUI_PROGBAR_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+gui_handle_p gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
 uint8_t gui_progbar_setcolor(gui_handle_p h, GUI_PROGBAR_COLOR_t index, gui_color_t color);
 uint8_t gui_progbar_setmin(gui_handle_p h, int32_t val);
 uint8_t gui_progbar_setmax(gui_handle_p h, int32_t val);
@@ -82,10 +79,6 @@ int32_t gui_progbar_getmin(gui_handle_p h);
 int32_t gui_progbar_getmax(gui_handle_p h);
 int32_t gui_progbar_getvalue(gui_handle_p h);
 uint8_t gui_progbar_setpercentmode(gui_handle_p h, uint8_t enable);
-
-/**
- * \}
- */
 
 /**
  * \}

@@ -35,22 +35,22 @@
 
 #if GUI_CFG_USE_TOUCH
 static GUI_BUFFER_t TSBuffer;
-static GUI_Byte_t TSBufferData[GUI_CFG_TOUCH_BUFFER_SIZE * sizeof(gui_touchdata_t) + 1];
+static uint8_t TSBufferData[GUI_CFG_TOUCH_BUFFER_SIZE * sizeof(gui_touch_data_t) + 1];
 #endif /* GUI_CFG_USE_TOUCH */
 #if GUI_CFG_USE_KEYBOARD
 static GUI_BUFFER_t KBBuffer;
-static GUI_Byte_t KBBufferData[GUI_CFG_KEYBOARD_BUFFER_SIZE * sizeof(gui_keyboarddata_t) + 1];
+static uint8_t KBBufferData[GUI_CFG_KEYBOARD_BUFFER_SIZE * sizeof(gui_keyboard_data_t) + 1];
 #endif /* GUI_CFG_USE_KEYBOARD */
 
 #if GUI_CFG_USE_TOUCH || __DOXYGEN__
 
 /**
  * \brief           Add new touch data to internal buffer for further processing
- * \param[in]       ts: Pointer to \ref gui_touchdata_t touch data with valid input
+ * \param[in]       ts: Pointer to \ref gui_touch_data_t touch data with valid input
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_input_touchadd(gui_touchdata_t* ts) {
+gui_input_touchadd(gui_touch_data_t* ts) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(ts);                         /* Check input parameters */
     ts->Time = gui_sys_now();                       /* Set event time */
@@ -68,11 +68,11 @@ gui_input_touchadd(gui_touchdata_t* ts) {
 
 /**
  * \brief           Reads new touch entry
- * \param[out]      ts: Pointer to \ref gui_touchdata_t structure to save touch into to
+ * \param[out]      ts: Pointer to \ref gui_touch_data_t structure to save touch into to
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_input_touchread(gui_touchdata_t* ts) {
+gui_input_touchread(gui_touch_data_t* ts) {
     if (gui_buffer_getfull(&TSBuffer) >= sizeof(*ts)) {
         return (uint8_t)gui_buffer_read(&TSBuffer, ts, sizeof(*ts)); /* Read data fro mbuffer */
     }
@@ -94,11 +94,11 @@ gui_input_touchavailable(void) {
 
 /**
  * \brief           Add new key data to internal buffer for further processing
- * \param[in]       kb: Pointer to \ref gui_keyboarddata_t key data
+ * \param[in]       kb: Pointer to \ref gui_keyboard_data_t key data
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_input_keyadd(gui_keyboarddata_t* kb) {
+gui_input_keyadd(gui_keyboard_data_t* kb) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(kb);                         /* Check input parameters */
     kb->Time = gui_sys_now();                       /* Set event time */
@@ -116,11 +116,11 @@ gui_input_keyadd(gui_keyboarddata_t* kb) {
 
 /**
  * \brief           Read keyboard entry from buffer
- * \param[out]      kb: Pointer to \ref gui_keyboarddata_t to save entry to
+ * \param[out]      kb: Pointer to \ref gui_keyboard_data_t to save entry to
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_input_keyread(gui_keyboarddata_t* kb) {
+gui_input_keyread(gui_keyboard_data_t* kb) {
     if (gui_buffer_getfull(&KBBuffer) >= sizeof(*kb)) {
         return (uint8_t)gui_buffer_read(&KBBuffer, kb, sizeof(*kb)); /* Read data fro mbuffer */
     }

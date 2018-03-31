@@ -44,7 +44,7 @@ gui_t GUI;
  */
 static void
 check_disp_clipping(gui_handle_p h) {
-    gui_idim_t x, y;
+    gui_dim_t x, y;
     gui_dim_t wi, hi;
     
     /* Set widget itself first */
@@ -57,10 +57,10 @@ check_disp_clipping(gui_handle_p h) {
      * Step 1: Set active clipping area only for current widget
      */
     memcpy(&GUI.DisplayTemp, &GUI.Display, sizeof(GUI.DisplayTemp));
-    if (GUI.DisplayTemp.X1 == (gui_idim_t)0x7FFF)   { GUI.DisplayTemp.X1 = x; }
-    if (GUI.DisplayTemp.Y1 == (gui_idim_t)0x7FFF)   { GUI.DisplayTemp.Y1 = y; }
-    if (GUI.DisplayTemp.X2 == (gui_idim_t)0x8000)   { GUI.DisplayTemp.X2 = (gui_idim_t)GUI.LCD.Width; }
-    if (GUI.DisplayTemp.Y2 == (gui_idim_t)0x8000)   { GUI.DisplayTemp.Y2 = (gui_idim_t)GUI.LCD.Height; }
+    if (GUI.DisplayTemp.X1 == (gui_dim_t)0x7FFF)   { GUI.DisplayTemp.X1 = x; }
+    if (GUI.DisplayTemp.Y1 == (gui_dim_t)0x7FFF)   { GUI.DisplayTemp.Y1 = y; }
+    if (GUI.DisplayTemp.X2 == (gui_dim_t)0x8000)   { GUI.DisplayTemp.X2 = (gui_dim_t)GUI.LCD.Width; }
+    if (GUI.DisplayTemp.Y2 == (gui_dim_t)0x8000)   { GUI.DisplayTemp.Y2 = (gui_dim_t)GUI.LCD.Height; }
     
     if (GUI.DisplayTemp.X1 < x)             { GUI.DisplayTemp.X1 = x; }
     if (GUI.DisplayTemp.X2 > x + wi)        { GUI.DisplayTemp.X2 = x + wi; }
@@ -73,7 +73,7 @@ check_disp_clipping(gui_handle_p h) {
      * Process all parent widgets and check what is the position of them
      * Make sure that on current widget we only draw actual visible area
      */
-    for (; h != NULL; h = __GH(h)->Parent) {
+    for (; h != NULL; h = guii_widget_getparent(h)) {
         x = guii_widget_getparentabsolutex(h);     /* Parent absolute X position for inner widgets */
         y = guii_widget_getparentabsolutey(h);     /* Parent absolute Y position for inner widgets */
         wi = guii_widget_getparentinnerwidth(h);   /* Get parent inner width */
@@ -98,7 +98,7 @@ redraw_widgets(gui_handle_p parent) {
     static uint32_t level = 0;
 
     /* Go through all elements of parent */
-    for (h = gui_linkedlist_widgetgetnext((gui_handle_ROOT_t *)parent, NULL); h != NULL; 
+    for (h = gui_linkedlist_widgetgetnext((gui_handle_root_t *)parent, NULL); h != NULL; 
             h = gui_linkedlist_widgetgetnext(NULL, h)) {
         if (!guii_widget_isvisible(h)) {           /* Check if visible */
             guii_widget_clrflag(h, GUI_FLAG_REDRAW);   /* Clear flag to be sure */
@@ -124,8 +124,8 @@ redraw_widgets(gui_handle_p parent) {
                  * Check transparency and check if blending function exists to merge layers later together
                  */
                 if (guii_widget_istransparent(h) && GUI.LL.CopyBlend) {
-                    gui_idim_t width = GUI.DisplayTemp.X2 - GUI.DisplayTemp.X1;
-                    gui_idim_t height = GUI.DisplayTemp.Y2 - GUI.DisplayTemp.Y1;
+                    gui_dim_t width = GUI.DisplayTemp.X2 - GUI.DisplayTemp.X1;
+                    gui_dim_t height = GUI.DisplayTemp.Y2 - GUI.DisplayTemp.Y1;
                     
                     /**
                      * Try to allocate memory for new virtual layer for temporary usage
@@ -156,7 +156,7 @@ redraw_widgets(gui_handle_p parent) {
                     gui_handle_p tmp;
                     
                     /* Set drawing flag to all widgets  first... */
-                    for (tmp = gui_linkedlist_widgetgetnext((gui_handle_ROOT_t *)h, NULL); tmp != NULL; 
+                    for (tmp = gui_linkedlist_widgetgetnext((gui_handle_root_t *)h, NULL); tmp != NULL; 
                             tmp = gui_linkedlist_widgetgetnext(NULL, tmp)) {
                         guii_widget_setflag(tmp, GUI_FLAG_REDRAW); /* Set redraw bit to all children elements */
                     }
@@ -244,10 +244,10 @@ redraw_widgets(gui_handle_p parent) {
  * \return          PT thread result
  */
 static
-PT_THREAD(__TouchEvents_Thread(guii_touchdata_t* ts, guii_touchdata_t* old, uint8_t v, GUI_WC_t* result)) {
+PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, uint8_t v, GUI_WC_t* result)) {
     static volatile uint32_t Time;
     static uint8_t i = 0;
-    static gui_idim_t x[2], y[2];
+    static gui_dim_t x[2], y[2];
     
     *result = (GUI_WC_t)0;                          /* Reset widget control variable */          
     
@@ -302,10 +302,10 @@ PT_THREAD(__TouchEvents_Thread(guii_touchdata_t* ts, guii_touchdata_t* old, uint
                     }
                 }
                 if (
-                    x[0] < 0 || x[0] > ts->WidgetWidth ||
-                    y[0] < 0 || y[0] > ts->WidgetHeight ||
-                    x[1] < 0 || x[1] > ts->WidgetWidth ||
-                    y[1] < 0 || y[1] > ts->WidgetHeight
+                    x[0] < 0 || x[0] > ts->widget_width ||
+                    y[0] < 0 || y[0] > ts->widget_height ||
+                    x[1] < 0 || x[1] > ts->widget_width ||
+                    y[1] < 0 || y[1] > ts->widget_height
                 ) {
                     PT_EXIT(&ts->pt);               /* Exit thread, invalid coordinate for touch click or double click */
                 }
@@ -350,7 +350,7 @@ PT_THREAD(__TouchEvents_Thread(guii_touchdata_t* ts, guii_touchdata_t* old, uint
  * \param[in]       height: Height of widget
  */
 static void
-set_relative_coordinate(guii_touchdata_t* ts, gui_idim_t x, gui_idim_t y, gui_idim_t width, gui_idim_t height) {
+set_relative_coordinate(guii_touch_data_t* ts, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height) {
     uint8_t i = 0;
     for (i = 0; i < ts->TS.Count; i++) {
         ts->RelOldX[i] = ts->RelX[i];               /* Save old on X value */
@@ -359,13 +359,13 @@ set_relative_coordinate(guii_touchdata_t* ts, gui_idim_t x, gui_idim_t y, gui_id
         ts->RelY[i] = ts->TS.Y[i] - y;              /* Get relative coordinate on widget */
     }
     
-    ts->WidgetWidth = width;                        /* Get widget width */
-    ts->WidgetHeight = height;                      /* Get widget height */
+    ts->widget_width = width;                       /* Set widget width */
+    ts->widget_height = height;                     /* Set widget height */
 
 #if GUI_CFG_TOUCH_MAX_PRESSES > 1
     if (ts->TS.Count == 2) {                        /* 2 points detected */
-        ts->DistanceOld = ts->Distance;             /* Save old distance */
-        gui_math_distancebetweenxy(ts->RelX[0], ts->RelY[0], ts->RelX[1], ts->RelY[1], &ts->Distance);  /* Calculate distance between 2 points */
+        ts->distance_old = ts->distance;            /* Save old distance */
+        gui_math_distancebetweenxy(ts->RelX[0], ts->RelY[0], ts->RelX[1], ts->RelY[1], &ts->distance);  /* Calculate distance between 2 points */
     }
 #endif /* GUI_CFG_TOUCH_MAX_PRESSES > 1 */
 }
@@ -381,7 +381,7 @@ set_relative_coordinate(guii_touchdata_t* ts, gui_idim_t x, gui_idim_t y, gui_id
  * \return          Member of \ref guii_touch_status_t enumeration about success
  */
 static guii_touch_status_t
-process_touch(guii_touchdata_t* touch, gui_handle_p parent) {
+process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
     gui_handle_p h;
     static uint8_t deep = 0;
     static uint8_t isKeyboard = 0;
@@ -395,7 +395,7 @@ process_touch(guii_touchdata_t* touch, gui_handle_p parent) {
      * This is due to the fact that widget with most deep level,
      * is displayed on top of screen = should be detected first
      */
-    for (h = gui_linkedlist_widgetgetprev((gui_handle_ROOT_t *)parent, NULL); h != NULL; 
+    for (h = gui_linkedlist_widgetgetprev((gui_handle_root_t *)parent, NULL); h != NULL; 
             h = gui_linkedlist_widgetgetprev(NULL, h)) {
         if (guii_widget_ishidden(h)) {             /* Ignore hidden widget */
             continue;
@@ -638,7 +638,7 @@ gui_process_touch(void) {
  */
 static void
 process_keyboard(void) {
-    __gui_keyboarddata_t key;
+    guii_keyboard_data_t key;
     
     gui_widget_param_t param = {0};
     gui_widget_result_t result = {0};
@@ -655,7 +655,7 @@ process_keyboard(void) {
                         h = NULL;
                     }
                     if (h == NULL) {                /* There is no next widget */
-                        for (h = gui_linkedlist_widgetgetnext((gui_handle_ROOT_t *)GUI.FocusedWidget->Parent, NULL); 
+                        for (h = gui_linkedlist_widgetgetnext((gui_handle_root_t *)guii_widget_getparent(GUI.FocusedWidget), NULL); 
                             h != NULL; h = gui_linkedlist_widgetgetnext(NULL, h)) {
                             if (guii_widget_isvisible(h)) {    /* Check if widget is visible */
                                 break;

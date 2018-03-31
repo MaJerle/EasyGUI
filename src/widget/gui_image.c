@@ -60,7 +60,7 @@ gui_widget_t widget = {
  */
 static uint8_t
 gui_image_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
             gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
@@ -87,12 +87,12 @@ gui_image_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
- * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p
-gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
     return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
@@ -106,7 +106,7 @@ uint8_t
 gui_image_setsource(gui_handle_p h, const GUI_IMAGE_DESC_t* img) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &widget && img != NULL); /* Check input parameters */
+    __GUI_ASSERTPARAMS(h && __GH(h)->widget == &widget && img != NULL); /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     __GI(h)->Image = img;                           /* Set image */

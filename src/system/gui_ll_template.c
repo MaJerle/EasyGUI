@@ -371,7 +371,7 @@ gui_ll_control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* result) 
             return 1;                           /* Command processed */
         }
         case GUI_LL_Command_SetActiveLayer: {   /* Set new active layer */
-            GUI_Byte layer = *(GUI_Byte *)param;/* Read layer as byte */
+            uint8_t layer = *(uint8_t *)param;/* Read layer as byte */
             LCD->Layers[layer].Pending = 1;     /* Set layer as pending and redraw on next reload */
 
             if (result) {

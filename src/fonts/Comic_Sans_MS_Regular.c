@@ -1,10 +1,10 @@
 #include "gui/gui.h"
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0020[1] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0020[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0021[18] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0021[18] = {
     _XX_____, 
     _XX_____, 
     _XX_____, 
@@ -25,7 +25,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0021[18] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0022[7] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0022[7] = {
     XX___X__, 
     XX__XX__, 
     XX__XX__, 
@@ -35,7 +35,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0022[7] = {
     XX__XX__, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0023[51] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0023[51] = {
     _______X, X_____XX, ________, 
     _______X, X_____XX, ________, 
     ______XX, ______XX, ________, 
@@ -55,7 +55,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0023[51] = {
     __XX____, __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0024[44] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0024[44] = {
     _____XX_, ________, 
     _____XX_, ________, 
     _____XXX, X_______, 
@@ -80,7 +80,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0024[44] = {
     _____XX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0025[36] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0025[36] = {
     __XX____, ________, 
     XXXXX___, __X_____, 
     XX__XX__, _XX_____, 
@@ -101,7 +101,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0025[36] = {
     __XX____, _XXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0026[36] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0026[36] = {
     ______XX, ________, 
     _____XXX, X_______, 
     ____XXX_, XX______, 
@@ -122,7 +122,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0026[36] = {
     ________, ___XX___, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0027[6] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0027[6] = {
     XX______, 
     XX______, 
     XX______, 
@@ -131,7 +131,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0027[6] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0028[22] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0028[22] = {
     ____XX__, 
     ___XXX__, 
     ___XX___, 
@@ -156,7 +156,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0028[22] = {
     _____X__, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0029[22] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0029[22] = {
     XX______, 
     _XX_____, 
     __XX____, 
@@ -181,7 +181,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0029[22] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_002a[18] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_002a[18] = {
     ___XX___, ________, 
     ___XX___, ________, 
     XX_XX_XX, X_______, 
@@ -193,7 +193,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_002a[18] = {
     _______X, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_002b[16] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_002b[16] = {
     ___XX___, ________, 
     ___XX___, ________, 
     ___XX___, ________, 
@@ -204,7 +204,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_002b[16] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_002c[6] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_002c[6] = {
     __X_____, 
     _XX_____, 
     _XX_____, 
@@ -213,18 +213,18 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_002c[6] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_002d[2] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_002d[2] = {
     _XXXXXX_, 
     XXXXXXX_, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_002e[3] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_002e[3] = {
     XX______, 
     XX______, 
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_002f[36] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_002f[36] = {
     ________, X_______, 
     _______X, X_______, 
     _______X, X_______, 
@@ -245,7 +245,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_002f[36] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0030[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0030[34] = {
     ____XXX_, ________, 
     __XXXXXX, X_______, 
     __XXX__X, XX______, 
@@ -265,7 +265,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0030[34] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0031[17] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0031[17] = {
     ___XX___, 
     __XXX___, 
     _XXXX___, 
@@ -285,7 +285,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0031[17] = {
     XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0032[32] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0032[32] = {
     __XXXXXX, ________, 
     _XXXXXXX, X_______, 
     XXX____X, XX______, 
@@ -304,7 +304,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0032[32] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0033[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0033[34] = {
     _XXXXXXX, ________, 
     XXXXXXXX, X_______, 
     XX_____X, X_______, 
@@ -324,7 +324,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0033[34] = {
     ____X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0034[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0034[34] = {
     _______X, X_______, 
     ______XX, X_______, 
     _____XXX, X_______, 
@@ -344,7 +344,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0034[34] = {
     _______X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0035[36] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0035[36] = {
     ________, _X______, 
     _XXXXXXX, XXX_____, 
     _XXXXXXX, XX______, 
@@ -365,7 +365,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0035[36] = {
     ___XXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0036[36] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0036[36] = {
     ______X_, ________, 
     _____XXX, ________, 
     ____XXX_, ________, 
@@ -386,7 +386,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0036[36] = {
     ____XXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0037[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0037[34] = {
     XXXXXXXX, XXXX____, 
     XXXXXXXX, XXXX____, 
     ________, XXX_____, 
@@ -406,7 +406,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0037[34] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0038[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0038[34] = {
     ___XXXXX, X_______, 
     __XXXXXX, XX______, 
     _XX_____, XX______, 
@@ -426,7 +426,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0038[34] = {
     ____XXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0039[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0039[34] = {
     __XXXXXX, X_______, 
     _XXXX__X, XX______, 
     _XX_____, XXX_____, 
@@ -446,7 +446,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0039[34] = {
     _XXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_003a[11] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_003a[11] = {
     XX______, 
     XX______, 
     XX______, 
@@ -460,7 +460,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_003a[11] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_003b[14] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_003b[14] = {
     _XX_____, 
     _XX_____, 
     _XX_____, 
@@ -477,7 +477,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_003b[14] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_003c[9] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_003c[9] = {
     ____XXX_, 
     ___XXX__, 
     ___XX___, 
@@ -489,7 +489,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_003c[9] = {
     _____X__, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_003d[8] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_003d[8] = {
     XXXXXXXX, 
     XXXXXXXX, 
     ________, 
@@ -500,7 +500,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_003d[8] = {
     XXXXXXXX, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_003e[10] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_003e[10] = {
     XX______, 
     XXX_____, 
     _XXX____, 
@@ -513,7 +513,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_003e[10] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_003f[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_003f[34] = {
     __XXXX__, ________, 
     XXXXXXX_, ________, 
     XXX__XXX, ________, 
@@ -533,7 +533,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_003f[34] = {
     __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0040[57] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0040[57] = {
     ________, X_______, ________, 
     _____XXX, XXXXX___, ________, 
     ___XXXXX, XXXXXXX_, ________, 
@@ -555,7 +555,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0040[57] = {
     _____XXX, XXXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0041[32] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0041[32] = {
     ________, _X______, 
     ________, XX______, 
     _______X, XXX_____, 
@@ -574,7 +574,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0041[32] = {
     XXX_____, ___XXX__, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0042[36] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0042[36] = {
     _XXXXX__, ________, 
     _XXXXXXX, ________, 
     _XX__XXX, X_______, 
@@ -595,7 +595,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0042[36] = {
     _X______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0043[32] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0043[32] = {
     ______XX, XXXX____, 
     _____XXX, XXXX____, 
     ____XXX_, _XXX____, 
@@ -614,7 +614,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0043[32] = {
     ___XXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0044[36] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0044[36] = {
     _X______, ________, 
     XXXX____, ________, 
     XXXXXXX_, ________, 
@@ -635,7 +635,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0044[36] = {
     __XXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0045[36] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0045[36] = {
     XXXXXXXX, XXX_____, 
     XXXXXXXX, XXX_____, 
     XX______, ________, 
@@ -656,7 +656,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0045[36] = {
     _XXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0046[36] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0046[36] = {
     _XXXXXXX, X_______, 
     XXXXXXXX, XXX_____, 
     XXXX____, XXX_____, 
@@ -677,7 +677,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0046[36] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0047[36] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0047[36] = {
     ______XX, X_______, 
     ____XXXX, XXX_____, 
     ___XXXX_, XXXX____, 
@@ -698,7 +698,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0047[36] = {
     ___XXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0048[36] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0048[36] = {
     _X______, ____X___, 
     XX______, ____XX__, 
     XX______, ___XXX__, 
@@ -719,7 +719,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0048[36] = {
     X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0049[32] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0049[32] = {
     XXXXXXXX, XX______, 
     XXXXXXXX, XX______, 
     ____XX__, XX______, 
@@ -738,7 +738,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0049[32] = {
     XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_004a[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_004a[34] = {
     ___XXXXX, XXXXX___, 
     ___XXXXX, XXXXX___, 
     _______X, X_______, 
@@ -758,7 +758,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_004a[34] = {
     ___XXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_004b[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_004b[34] = {
     _XX_____, _XX_____, 
     _XX_____, XX______, 
     _XX____X, XX______, 
@@ -778,7 +778,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_004b[34] = {
     _X______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_004c[36] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_004c[36] = {
     _X______, ________, 
     _XX_____, ________, 
     _XX_____, ________, 
@@ -799,7 +799,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_004c[36] = {
     _XXXXXX_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_004d[51] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_004d[51] = {
     ____XX__, ____XX__, ________, 
     ___XXX__, ____XXX_, ________, 
     ___XXX__, ___XXXX_, ________, 
@@ -819,7 +819,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_004d[51] = {
     _X______, ________, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_004e[36] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_004e[36] = {
     _X______, ________, 
     XXX_____, _____XX_, 
     XXXX____, _____XX_, 
@@ -840,7 +840,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_004e[36] = {
     _X______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_004f[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_004f[34] = {
     _____XXX, XXXXX___, 
     ____XXXX, XXXXXX__, 
     ___XXX__, ____XXX_, 
@@ -860,7 +860,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_004f[34] = {
     ______XX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0050[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0050[34] = {
     _XXXXX__, ________, 
     _XXXXXXX, ________, 
     _X____XX, X_______, 
@@ -880,7 +880,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0050[34] = {
     XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0051[63] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0051[63] = {
     _____XXX, XXXXX___, ________, 
     ____XXXX, XXXXXX__, ________, 
     ___XXX__, ____XXX_, ________, 
@@ -904,7 +904,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0051[63] = {
     ________, ________, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0052[32] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0052[32] = {
     _XXXXXX_, ________, 
     XXXXXXXX, X_______, 
     _XX___XX, XX______, 
@@ -923,7 +923,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0052[32] = {
     XXX_____, __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0053[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0053[34] = {
     ______XX, XX______, 
     ____XXXX, XXXX____, 
     ___XXXX_, __XX____, 
@@ -943,7 +943,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0053[34] = {
     _____XXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0054[32] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0054[32] = {
     XXXXXXXX, XXXXXX__, 
     XXXXXXXX, XXXXXXX_, 
     ______XX, ________, 
@@ -962,7 +962,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0054[32] = {
     ______XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0055[32] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0055[32] = {
     XX______, ___XX___, 
     XX______, ___XX___, 
     XX______, ___XX___, 
@@ -981,7 +981,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0055[32] = {
     ___XXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0056[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0056[34] = {
     XX______, __XX____, 
     XX______, _XXX____, 
     XX______, _XX_____, 
@@ -1001,7 +1001,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0056[34] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0057[51] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0057[51] = {
     XX______, _XX_____, __XXX___, 
     XX______, XXX_____, __XX____, 
     XX______, XXXX____, __XX____, 
@@ -1021,7 +1021,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0057[51] = {
     ____X___, ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0058[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0058[34] = {
     XXX_____, ____XX__, 
     _XXX____, ___XXX__, 
     __XX____, __XXX___, 
@@ -1041,7 +1041,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0058[34] = {
     X_______, ____XX__, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0059[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0059[34] = {
     XXX_____, ___XX___, 
     _XX_____, ___XX___, 
     _XXX____, __XX____, 
@@ -1061,7 +1061,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0059[34] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_005a[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_005a[34] = {
     XXXXXXXX, XXXXXX__, 
     XXXXXXXX, XXXXXX__, 
     ________, _XXXX___, 
@@ -1081,7 +1081,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_005a[34] = {
     _XXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_005b[20] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_005b[20] = {
     XXXXX___, 
     XXXXX___, 
     XX______, 
@@ -1104,7 +1104,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_005b[20] = {
     XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_005c[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_005c[34] = {
     XX______, ________, 
     XXX_____, ________, 
     _XX_____, ________, 
@@ -1124,7 +1124,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_005c[34] = {
     _______X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_005d[20] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_005d[20] = {
     XXXXX___, 
     _XXXX___, 
     ___XX___, 
@@ -1147,7 +1147,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_005d[20] = {
     XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_005e[12] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_005e[12] = {
     ____X___, ________, 
     ___XXX__, ________, 
     __XXXXX_, ________, 
@@ -1156,12 +1156,12 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_005e[12] = {
     XX_____X, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_005f[4] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_005f[4] = {
     XXXXXXXX, XXXXXX__, 
     XXXXXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0060[5] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0060[5] = {
     X_______, 
     XX______, 
     _XX_____, 
@@ -1169,7 +1169,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0060[5] = {
     __XX____, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0061[24] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0061[24] = {
     ___XXXXX, ________, 
     _XXXXXXX, X_______, 
     _XX____X, X_______, 
@@ -1184,7 +1184,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0061[24] = {
     ___XX___, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0062[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0062[34] = {
     XX______, ________, 
     XX______, ________, 
     XX______, ________, 
@@ -1204,7 +1204,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0062[34] = {
     XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0063[24] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0063[24] = {
     ___XXXXX, ________, 
     __XXXXXX, X_______, 
     _XXX____, X_______, 
@@ -1219,7 +1219,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0063[24] = {
     ____XX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0064[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0064[34] = {
     ________, _XX_____, 
     ________, _XX_____, 
     ________, _XX_____, 
@@ -1239,7 +1239,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0064[34] = {
     __XXXXXX, _XX_____, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0065[22] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0065[22] = {
     ___XXXXX, ________, 
     __XXXXXX, X_______, 
     _XX_____, XX______, 
@@ -1253,7 +1253,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0065[22] = {
     __XXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0066[38] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0066[38] = {
     _____XXX, X_______, 
     ____XXXX, X_______, 
     ___XXX__, ________, 
@@ -1275,7 +1275,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0066[38] = {
     ___X____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0067[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0067[34] = {
     ___XXXXX, ________, 
     __XXXXXX, XX______, 
     _XX_____, XX______, 
@@ -1295,7 +1295,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0067[34] = {
     XXXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0068[36] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0068[36] = {
     XX______, ________, 
     XX______, ________, 
     XX______, ________, 
@@ -1316,7 +1316,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0068[36] = {
     ________, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0069[16] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0069[16] = {
     XXX_____, 
     XXX_____, 
     ________, 
@@ -1335,7 +1335,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0069[16] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_006a[22] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_006a[22] = {
     ____XX__, 
     ____XX__, 
     ________, 
@@ -1360,7 +1360,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_006a[22] = {
     __XXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_006b[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_006b[34] = {
     XX______, ________, 
     XX______, ________, 
     XX______, ________, 
@@ -1380,7 +1380,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_006b[34] = {
     XX_____X, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_006c[17] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_006c[17] = {
     XX______, 
     XX______, 
     XX______, 
@@ -1400,7 +1400,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_006c[17] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_006d[26] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_006d[26] = {
     _X______, ________, 
     XXX_XXXX, _XXXX___, 
     XX_XXXXX, XXXXXX__, 
@@ -1416,7 +1416,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_006d[26] = {
     _X_____X, X____XX_, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_006e[26] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_006e[26] = {
     _X______, ________, 
     _XX_XXXX, X_______, 
     _XXXXXXX, X_______, 
@@ -1432,7 +1432,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_006e[26] = {
     _X______, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_006f[24] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_006f[24] = {
     ___XXXX_, ________, 
     __XXXXXX, ________, 
     _XXX__XX, X_______, 
@@ -1447,7 +1447,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_006f[24] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0070[36] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0070[36] = {
     _X______, ________, 
     XX__XXXX, ________, 
     XXXXXXXX, X_______, 
@@ -1468,7 +1468,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0070[36] = {
     _XX_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0071[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0071[34] = {
     ___XXXXX, X_______, 
     _XXXX__X, X_______, 
     _XX____X, X_______, 
@@ -1488,7 +1488,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0071[34] = {
     ______XX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0072[24] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0072[24] = {
     _X__XXXX, X_______, 
     _XXXXXXX, X_______, 
     _XXX___X, X_______, 
@@ -1503,7 +1503,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0072[24] = {
     _X______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0073[26] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0073[26] = {
     ______XX, X_______, 
     ___XXXXX, XX______, 
     __XXXX__, XX______, 
@@ -1519,7 +1519,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0073[26] = {
     ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0074[32] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0074[32] = {
     ___XX___, ________, 
     ___XX___, ________, 
     ___XX___, ________, 
@@ -1538,7 +1538,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0074[32] = {
     ____X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0075[24] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0075[24] = {
     XXX____X, X_______, 
     XXX____X, X_______, 
     XX_____X, X_______, 
@@ -1553,7 +1553,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0075[24] = {
     ____X___, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0076[22] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0076[22] = {
     XX_____X, X_______, 
     XX_____X, X_______, 
     XX_____X, X_______, 
@@ -1567,7 +1567,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0076[22] = {
     ___XX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0077[24] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0077[24] = {
     XX____XX, ___XX___, 
     XX___XXX, ___XX___, 
     XX___XXX, ___XX___, 
@@ -1582,7 +1582,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0077[24] = {
     __X_____, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0078[24] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0078[24] = {
     _X______, __X_____, 
     _XX_____, _XX_____, 
     __XX____, XXX_____, 
@@ -1597,7 +1597,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0078[24] = {
     XX______, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0079[34] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_0079[34] = {
     XX______, _XX_____, 
     XXX_____, XXX_____, 
     _XX_____, XX______, 
@@ -1617,7 +1617,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_0079[34] = {
     __XX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_007a[24] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_007a[24] = {
     _XXXXXXX, XX______, 
     _XXXXXXX, XX______, 
     _______X, X_______, 
@@ -1632,7 +1632,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_007a[24] = {
     XXXX____, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_007b[21] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_007b[21] = {
     ___XXXX_, 
     ___XXXX_, 
     __XX____, 
@@ -1656,7 +1656,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_007b[21] = {
     ____XXX_, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_007c[22] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_007c[22] = {
     XX______, 
     XX______, 
     XX______, 
@@ -1681,7 +1681,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_007c[22] = {
     XX______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_007d[21] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_007d[21] = {
     XXXX____, 
     _XXXX___, 
     ___XX___, 
@@ -1705,7 +1705,7 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_007d[21] = {
     XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_007e[10] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_007e[10] = {
     __XXX___, __X_____, 
     _XXXXX__, _XX_____, 
     XXX__XX_, _XX_____, 
@@ -1713,12 +1713,12 @@ GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_007e[10] = {
     _______X, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Comic_Sans_MS_Regular_size_12_007f[1] = {
+gui_const uint8_t Font_Comic_Sans_MS_Regular_size_12_007f[1] = {
     ________, 
 };
 
 
-GUI_Const GUI_FONT_CharInfo_t CharTable[] = {
+gui_const gui_font_char_t CharTable[] = {
     {   7,    1,  0,    0,    1, Font_Comic_Sans_MS_Regular_size_12_0020},
     {   3,   18,  0,    1,    1, Font_Comic_Sans_MS_Regular_size_12_0021},
     {   6,    7,  0,    1,    1, Font_Comic_Sans_MS_Regular_size_12_0022},
@@ -1817,7 +1817,7 @@ GUI_Const GUI_FONT_CharInfo_t CharTable[] = {
     {   7,    1,  0,    0,    1, Font_Comic_Sans_MS_Regular_size_12_007f},
 };
 
-GUI_Const gui_font_t GUI_Font_Comic_Sans_MS_Regular_22 = {
+gui_const gui_font_t GUI_Font_Comic_Sans_MS_Regular_22 = {
     _GT("Comic Sans MS Regular"),
     22,
     0x20,

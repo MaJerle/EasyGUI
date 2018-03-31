@@ -1,10 +1,10 @@
 #include "gui/gui.h"
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0020[1] = {
+gui_const uint8_t Font_Arial_Bold_18_0020[1] = {
     ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0021[13] = {
+gui_const uint8_t Font_Arial_Bold_18_0021[13] = {
     XXXXX___, 
     XXXXX___, 
     XXXXX___, 
@@ -20,7 +20,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0021[13] = {
     XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0022[10] = {
+gui_const uint8_t Font_Arial_Bold_18_0022[10] = {
     _XXXX_X_, _XXXX_X_, 
     _XXXX_X_, _XXXX_X_, 
     _XXXX_X_, _XXXX_X_, 
@@ -28,7 +28,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0022[10] = {
     _X_XX___, __XXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0023[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0023[39] = {
     _______X, _XX_X__X, _XX_X___, 
     _______X, _XX____X, XXX_____, 
     _______X, XXX____X, XXX_____, 
@@ -44,7 +44,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0023[39] = {
     ___XXX__, ___XXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0024[48] = {
+gui_const uint8_t Font_Arial_Bold_18_0024[48] = {
     ________, XX______, ________, 
     ____XX_X, XXXXX_X_, ________, 
     __XXXXXX, XXXXXXX_, X_______, 
@@ -63,7 +63,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0024[48] = {
     ________, XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0025[56] = {
+gui_const uint8_t Font_Arial_Bold_18_0025[56] = {
     __XXXXXX, X_X_____, ___XXX__, ________, 
     _XXX___X, XXX_____, __XXX___, ________, 
     _XXX___X, _XX_____, _XXX____, ________, 
@@ -80,7 +80,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0025[56] = {
     _______X, XX______, ___X_XXX, X_X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0026[52] = {
+gui_const uint8_t Font_Arial_Bold_18_0026[52] = {
     ______XX, XXXXXX__, ________, ________, 
     ____XXXX, XXXXXXXX, X_______, ________, 
     ___X_XXX, X____XXX, X_X_____, ________, 
@@ -96,7 +96,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0026[52] = {
     ____XX_X, XXXXXX__, ___X_X__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0027[5] = {
+gui_const uint8_t Font_Arial_Bold_18_0027[5] = {
     _XXXX___, 
     _XXXX___, 
     _XXXX___, 
@@ -104,7 +104,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0027[5] = {
     _X_XX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0028[34] = {
+gui_const uint8_t Font_Arial_Bold_18_0028[34] = {
     _____XXX, X_______, 
     ____XXXX, ________, 
     ___XXXX_, X_______, 
@@ -124,7 +124,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0028[34] = {
     _____XXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0029[34] = {
+gui_const uint8_t Font_Arial_Bold_18_0029[34] = {
     _XXXX___, ________, 
     _X_XX_X_, ________, 
     __XXXXX_, ________, 
@@ -144,7 +144,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0029[34] = {
     _XXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_002a[12] = {
+gui_const uint8_t Font_Arial_Bold_18_002a[12] = {
     ______XX, X_______, 
     __X_X_XX, X_XX____, 
     _X_XXXXX, XXXXX_X_, 
@@ -153,7 +153,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_002a[12] = {
     ___X__X_, _X__X___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_002b[27] = {
+gui_const uint8_t Font_Arial_Bold_18_002b[27] = {
     _______X, XXX_X___, ________, 
     _______X, XXX_X___, ________, 
     _______X, XXX_X___, ________, 
@@ -165,7 +165,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_002b[27] = {
     _______X, XXX_X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_002c[6] = {
+gui_const uint8_t Font_Arial_Bold_18_002c[6] = {
     _X_XXX__, 
     _X_XXX__, 
     _X_XXX__, 
@@ -174,19 +174,19 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_002c[6] = {
     _X__X___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_002d[6] = {
+gui_const uint8_t Font_Arial_Bold_18_002d[6] = {
     _XXXXXXX, XX______, 
     _XXXXXXX, XX______, 
     _XXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_002e[3] = {
+gui_const uint8_t Font_Arial_Bold_18_002e[3] = {
     _X_XXX__, 
     _X_XXX__, 
     _X_XXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_002f[26] = {
+gui_const uint8_t Font_Arial_Bold_18_002f[26] = {
     _______X, XX______, 
     _______X, X_X_____, 
     ______XX, X_X_____, 
@@ -202,7 +202,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_002f[26] = {
     _XXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0030[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0030[39] = {
     _____X_X, XXXX____, ________, 
     ___XXXXX, XXXXXXX_, ________, 
     _X_XXXX_, ___XXXXX, ________, 
@@ -218,7 +218,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0030[39] = {
     _____X_X, XXXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0031[26] = {
+gui_const uint8_t Font_Arial_Bold_18_0031[26] = {
     _______X, XXX_____, 
     _____X_X, XXX_____, 
     __XXXXXX, XXX_____, 
@@ -234,7 +234,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0031[26] = {
     ______XX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0032[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0032[39] = {
     ____XX_X, XXXX__X_, ________, 
     __XXXXXX, XXXXXXX_, X_______, 
     _XXXXX__, ___X_XXX, X_______, 
@@ -250,7 +250,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0032[39] = {
     XXXXXXXX, XXXXXXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0033[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0033[39] = {
     _____X_X, XXXX____, ________, 
     ___XXXXX, XXXXXXX_, ________, 
     _X_XXXX_, ___XXXX_, X_______, 
@@ -266,7 +266,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0033[39] = {
     ____XX_X, XXXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0034[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0034[39] = {
     ________, ____XXXX, X_______, 
     ________, ___XXXXX, X_______, 
     ________, _XXXXXXX, X_______, 
@@ -282,7 +282,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0034[39] = {
     ________, ____XXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0035[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0035[39] = {
     ___X_XXX, XXXXXXXX, ________, 
     ___XXXXX, XXXXXXXX, ________, 
     ___XXXX_, ________, ________, 
@@ -298,7 +298,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0035[39] = {
     ____XX_X, XXXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0036[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0036[39] = {
     _____X_X, XXXXX_X_, ________, 
     ___X_XXX, XXXXXXX_, X_______, 
     __XXXXX_, ___X_XXX, ________, 
@@ -314,7 +314,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0036[39] = {
     _____X_X, XXXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0037[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0037[39] = {
     _XXXXXXX, XXXXXXXX, X_______, 
     _XXXXXXX, XXXXXXXX, X_______, 
     ________, ___XXXXX, ________, 
@@ -330,7 +330,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0037[39] = {
     ____XXXX, X_______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0038[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0038[39] = {
     ____XX_X, XXXX__X_, ________, 
     __XXXXXX, XXXXXXX_, X_______, 
     _XXXXX__, ___XXXXX, ________, 
@@ -346,7 +346,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0038[39] = {
     ____XX_X, XXXX__X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0039[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0039[39] = {
     ____XX_X, XXXX____, ________, 
     __XXXXXX, XXXXXX__, ________, 
     _XXXXX__, __XXXXX_, X_______, 
@@ -362,7 +362,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0039[39] = {
     ____XXXX, XXX_X___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_003a[10] = {
+gui_const uint8_t Font_Arial_Bold_18_003a[10] = {
     _XXXX___, 
     _XXXX___, 
     _XXXX___, 
@@ -375,7 +375,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_003a[10] = {
     _XXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_003b[13] = {
+gui_const uint8_t Font_Arial_Bold_18_003b[13] = {
     _XXXX___, 
     _XXXX___, 
     _XXXX___, 
@@ -391,7 +391,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_003b[13] = {
     _X______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_003c[30] = {
+gui_const uint8_t Font_Arial_Bold_18_003c[30] = {
     ________, ________, X_X_____, 
     ________, ___X_XXX, X_X_____, 
     ______XX, _XXXXXXX, X_X_____, 
@@ -404,7 +404,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_003c[30] = {
     ________, ________, X_X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_003d[24] = {
+gui_const uint8_t Font_Arial_Bold_18_003d[24] = {
     _XXXXXXX, XXXXXXXX, XX______, 
     _XXXXXXX, XXXXXXXX, XX______, 
     _XXXXXXX, XXXXXXXX, XX______, 
@@ -415,7 +415,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_003d[24] = {
     _XXXXXXX, XXXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_003e[30] = {
+gui_const uint8_t Font_Arial_Bold_18_003e[30] = {
     _X______, ________, ________, 
     _XXXXX__, X_______, ________, 
     _XXXXXXX, XXX_X___, ________, 
@@ -428,7 +428,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_003e[30] = {
     _X______, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_003f[39] = {
+gui_const uint8_t Font_Arial_Bold_18_003f[39] = {
     _____X_X, XXXXXX__, ________, 
     ___XXXXX, XXXXXXXX, X_X_____, 
     _X_XXXX_, X____X_X, XXX_____, 
@@ -444,7 +444,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_003f[39] = {
     _______X, _XXX____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0040[85] = {
+gui_const uint8_t Font_Arial_Bold_18_0040[85] = {
     ________, ____XX_X, XXXXXX__, X_______, ________, 
     _______X, _XXXXXXX, XXXXXXXX, XXX_X___, ________, 
     _____X_X, XXX_X___, ________, XXXXX_X_, ________, 
@@ -464,7 +464,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0040[85] = {
     ________, __XX_X_X, XXXXXXXX, __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0041[52] = {
+gui_const uint8_t Font_Arial_Bold_18_0041[52] = {
     ________, __XXXXXX, ________, ________, 
     ________, _X_XXXXX, X_______, ________, 
     ________, _XXXXXXX, X_X_____, ________, 
@@ -480,7 +480,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0041[52] = {
     _X_XXXX_, ________, ____XXXX, X_X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0042[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0042[39] = {
     _X_XXXXX, XXXXXXXX, XX______, 
     _X_XXXXX, XXXXXXXX, XXXXX___, 
     _X_XXXXX, XXXXXXXX, XXXXX_X_, 
@@ -496,7 +496,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0042[39] = {
     _X_XXXXX, XXXXXXXX, XX__X___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0043[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0043[39] = {
     _______X, _XXXXXXX, __X_____, 
     ____XXXX, XXXXXXXX, XXXX____, 
     ___XXXXX, XXXXXXXX, XXXXX_X_, 
@@ -512,7 +512,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0043[39] = {
     _______X, _XXXXXXX, __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0044[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0044[39] = {
     _X_XXXXX, XXXXXXXX, __X_____, 
     _X_XXXXX, XXXXXXXX, XXXX____, 
     _X_XXXXX, XXXXXXXX, XXXXX___, 
@@ -528,7 +528,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0044[39] = {
     _X_XXXXX, XXXXXXXX, __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0045[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0045[39] = {
     _X_XXXXX, XXXXXXXX, XXXXX___, 
     _X_XXXXX, XXXXXXXX, XXXXX___, 
     _X_XXXXX, XXXXXXXX, XXXXX___, 
@@ -544,7 +544,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0045[39] = {
     _X_XXXXX, XXXXXXXX, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0046[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0046[39] = {
     _X_XXXXX, XXXXXXXX, XXX_____, 
     _X_XXXXX, XXXXXXXX, XXX_____, 
     _X_XXXXX, XXXXXXXX, XXX_____, 
@@ -560,7 +560,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0046[39] = {
     _X_XXX__, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0047[52] = {
+gui_const uint8_t Font_Arial_Bold_18_0047[52] = {
     ________, XX_XXXXX, XX______, ________, 
     _____XXX, XXXXXXXX, XXXXX_X_, ________, 
     ___XXXXX, XXXXXXXX, XXXXXXX_, ________, 
@@ -576,7 +576,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0047[52] = {
     ________, XX_XXXXX, XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0048[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0048[39] = {
     _X_XXX__, ________, _XXXXX__, 
     _X_XXX__, ________, _XXXXX__, 
     _X_XXX__, ________, _XXXXX__, 
@@ -592,7 +592,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0048[39] = {
     _X_XXX__, ________, _XXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0049[13] = {
+gui_const uint8_t Font_Arial_Bold_18_0049[13] = {
     _X_XXX__, 
     _X_XXX__, 
     _X_XXX__, 
@@ -608,7 +608,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0049[13] = {
     _X_XXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_004a[39] = {
+gui_const uint8_t Font_Arial_Bold_18_004a[39] = {
     ________, _____XXX, X_X_____, 
     ________, _____XXX, X_X_____, 
     ________, _____XXX, X_X_____, 
@@ -624,7 +624,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_004a[39] = {
     _____X_X, XXXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_004b[52] = {
+gui_const uint8_t Font_Arial_Bold_18_004b[52] = {
     _X_XXXX_, ________, _XXXXXX_, ________, 
     _X_XXXX_, _______X, XXXXX___, ________, 
     _X_XXXX_, _____XXX, XXX_X___, ________, 
@@ -640,7 +640,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_004b[52] = {
     _X_XXXX_, ________, _X_XXXX_, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_004c[39] = {
+gui_const uint8_t Font_Arial_Bold_18_004c[39] = {
     _X_XXXX_, ________, ________, 
     _X_XXXX_, ________, ________, 
     _X_XXXX_, ________, ________, 
@@ -656,7 +656,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_004c[39] = {
     _X_XXXXX, XXXXXXXX, XXX_X___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_004d[52] = {
+gui_const uint8_t Font_Arial_Bold_18_004d[52] = {
     _XXXXXXX, X_______, ___XXXXX, XXX_____, 
     _XXXXXXX, X_X_____, __XXXXXX, XXX_____, 
     _XXXXXXX, XX______, _X_XXXXX, XXX_____, 
@@ -672,7 +672,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_004d[52] = {
     _XXXXX__, ___X_XXX, ______XX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_004e[39] = {
+gui_const uint8_t Font_Arial_Bold_18_004e[39] = {
     _X_XXXX_, ________, _XXXX_X_, 
     _X_XXXXX, X_______, _XXXX_X_, 
     _X_XXXXX, X_X_____, _XXXX_X_, 
@@ -688,7 +688,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_004e[39] = {
     _X_XXXX_, ________, XXXXX_X_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_004f[52] = {
+gui_const uint8_t Font_Arial_Bold_18_004f[52] = {
     _______X, _XXXXXXX, X_X_____, ________, 
     ____XXXX, XXXXXXXX, XXXXX_X_, ________, 
     ___XXXXX, XXXXXXXX, XXXXXXX_, ________, 
@@ -704,7 +704,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_004f[52] = {
     _______X, _XXXXXXX, XX______, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0050[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0050[39] = {
     _X_XXXXX, XXXXXXXX, __X_____, 
     _X_XXXXX, XXXXXXXX, XXX_X___, 
     _X_XXXXX, XXXXXXXX, XXXXX___, 
@@ -720,7 +720,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0050[39] = {
     _X_XXX__, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0051[56] = {
+gui_const uint8_t Font_Arial_Bold_18_0051[56] = {
     _______X, _XXXXXXX, XX______, ________, 
     ____XXXX, XXXXXXXX, XXXXX_X_, ________, 
     ___XXXXX, XXXXXXXX, XXXXXXX_, ________, 
@@ -737,7 +737,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0051[56] = {
     ________, ________, ______XX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0052[52] = {
+gui_const uint8_t Font_Arial_Bold_18_0052[52] = {
     _X_XXXXX, XXXXXXXX, XX______, ________, 
     _X_XXXXX, XXXXXXXX, XXXXX___, ________, 
     _X_XXXXX, XXXXXXXX, XXXXXX__, ________, 
@@ -753,7 +753,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0052[52] = {
     _X_XXX__, ________, __XXXXX_, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0053[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0053[39] = {
     _____X_X, XXXXXX__, X_______, 
     ___XXXXX, XXXXXXXX, XX______, 
     _X_XXXXX, XXXXXXXX, XXX_X___, 
@@ -769,7 +769,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0053[39] = {
     _____X_X, XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0054[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0054[39] = {
     _X_XXXXX, XXXXXXXX, XXXXX_X_, 
     _X_XXXXX, XXXXXXXX, XXXXX_X_, 
     _X_XXXXX, XXXXXXXX, XXXXX_X_, 
@@ -785,7 +785,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0054[39] = {
     ________, _XXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0055[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0055[39] = {
     _X_XXX__, ________, _XXXX_X_, 
     _X_XXX__, ________, _XXXX_X_, 
     _X_XXX__, ________, _XXXX_X_, 
@@ -801,7 +801,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0055[39] = {
     ______XX, _XXXXXXX, __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0056[52] = {
+gui_const uint8_t Font_Arial_Bold_18_0056[52] = {
     _XXXXXX_, ________, ___XXXXX, ________, 
     __XXXXX_, X_______, __XXXXX_, X_______, 
     ___XXXXX, ________, _X_XXXX_, ________, 
@@ -817,7 +817,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0056[52] = {
     ________, _XXXXXXX, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0057[65] = {
+gui_const uint8_t Font_Arial_Bold_18_0057[65] = {
     _XXXXX__, _______X, XXXXX___, _____X_X, XXX_____, 
     _X_XXXX_, ______XX, XXXXX_X_, _____XXX, XX______, 
     __XXXXX_, _____X_X, XXXXXX__, _____XXX, X_X_____, 
@@ -833,7 +833,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0057[65] = {
     _______X, XXXXX___, _______X, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0058[52] = {
+gui_const uint8_t Font_Arial_Bold_18_0058[52] = {
     ___XXXXX, X_______, _XXXXXX_, ________, 
     ____XXXX, X_X_____, XXXXX_X_, ________, 
     _____XXX, XXX____X, XXXX____, ________, 
@@ -849,7 +849,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0058[52] = {
     _X_XXXX_, X_______, __XXXXX_, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0059[52] = {
+gui_const uint8_t Font_Arial_Bold_18_0059[52] = {
     _X_XXXX_, X_______, __XXXXX_, X_______, 
     ___XXXXX, X_______, _XXXXXX_, ________, 
     ____XXXX, X_X_____, XXXXX_X_, ________, 
@@ -865,7 +865,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0059[52] = {
     ________, ___XXXX_, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_005a[39] = {
+gui_const uint8_t Font_Arial_Bold_18_005a[39] = {
     ___XXXXX, XXXXXXXX, XXXXX_X_, 
     ___XXXXX, XXXXXXXX, XXXXX_X_, 
     ___XXXXX, XXXXXXXX, XXXXX___, 
@@ -881,7 +881,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_005a[39] = {
     _X_XXXXX, XXXXXXXX, XXXXXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_005b[34] = {
+gui_const uint8_t Font_Arial_Bold_18_005b[34] = {
     _X_XXXXX, XXX_____, 
     _X_XXXXX, XXX_____, 
     _X_XXXXX, XXX_____, 
@@ -901,7 +901,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_005b[34] = {
     _X_XXXXX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_005c[26] = {
+gui_const uint8_t Font_Arial_Bold_18_005c[26] = {
     _XXXX___, ________, 
     _X_XX___, ________, 
     __XXX_X_, ________, 
@@ -917,7 +917,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_005c[26] = {
     _______X, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_005d[34] = {
+gui_const uint8_t Font_Arial_Bold_18_005d[34] = {
     _XXXXXXX, XX______, 
     _XXXXXXX, XX______, 
     _XXXXXXX, XX______, 
@@ -937,7 +937,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_005d[34] = {
     _XXXXXXX, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_005e[21] = {
+gui_const uint8_t Font_Arial_Bold_18_005e[21] = {
     _______X, XXX_X___, ________, 
     ______XX, XXXXX___, ________, 
     _____XXX, XXXXX_X_, ________, 
@@ -947,18 +947,18 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_005e[21] = {
     _XXXXX__, _____XXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_005f[6] = {
+gui_const uint8_t Font_Arial_Bold_18_005f[6] = {
     _XXXXXXX, XXXXXXXX, XXXXX___, 
     _XXXXXXX, XXXXXXXX, XXXXX___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0060[3] = {
+gui_const uint8_t Font_Arial_Bold_18_0060[3] = {
     _XXXX_X_, 
     __XXXX__, 
     ___X_XX_, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0061[30] = {
+gui_const uint8_t Font_Arial_Bold_18_0061[30] = {
     ____XXXX, XXXXX_X_, ________, 
     __XXXXXX, XXXXXXX_, X_______, 
     _XXXX_X_, ___XXXXX, ________, 
@@ -971,7 +971,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0061[30] = {
     ___X_XXX, X_X__XXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0062[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0062[39] = {
     _XXXX_X_, ________, ________, 
     _XXXX_X_, ________, ________, 
     _XXXX_X_, ________, ________, 
@@ -987,7 +987,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0062[39] = {
     _XXXX_X_, XXXXXX__, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0063[30] = {
+gui_const uint8_t Font_Arial_Bold_18_0063[30] = {
     _____X_X, XXXXX_X_, ________, 
     ___XXXXX, XXXXXXX_, X_______, 
     _X_XXXX_, ___X_XXX, X_______, 
@@ -1000,7 +1000,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0063[30] = {
     _____X_X, XXXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0064[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0064[39] = {
     ________, ______XX, XXX_____, 
     ________, ______XX, XXX_____, 
     ________, ______XX, XXX_____, 
@@ -1016,7 +1016,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0064[39] = {
     _____X_X, XXX_X_XX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0065[30] = {
+gui_const uint8_t Font_Arial_Bold_18_0065[30] = {
     ____XX_X, XXXX____, ________, 
     __XXXXXX, XXXXXXX_, ________, 
     _XXXXX__, ___X_XXX, ________, 
@@ -1029,7 +1029,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0065[30] = {
     ____XX_X, XXXX__X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0066[26] = {
+gui_const uint8_t Font_Arial_Bold_18_0066[26] = {
     ______XX, XXXXX_X_, 
     _____XXX, XXXXX_X_, 
     ____XXXX, X_______, 
@@ -1045,7 +1045,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0066[26] = {
     ____XXXX, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0067[42] = {
+gui_const uint8_t Font_Arial_Bold_18_0067[42] = {
     ____XX_X, XXX_X_XX, XXX_____, 
     __XXXXXX, XXXXXX_X, XXX_____, 
     _XXXXXX_, ____XXXX, XXX_____, 
@@ -1062,7 +1062,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0067[42] = {
     ____XX_X, XXXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0068[39] = {
+gui_const uint8_t Font_Arial_Bold_18_0068[39] = {
     _X_XXX__, ________, ________, 
     _X_XXX__, ________, ________, 
     _X_XXX__, ________, ________, 
@@ -1078,7 +1078,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0068[39] = {
     _X_XXX__, ______XX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0069[13] = {
+gui_const uint8_t Font_Arial_Bold_18_0069[13] = {
     _X_XXX__, 
     _X_XXX__, 
     ________, 
@@ -1094,7 +1094,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0069[13] = {
     _X_XXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_006a[34] = {
+gui_const uint8_t Font_Arial_Bold_18_006a[34] = {
     _____X_X, XX______, 
     _____X_X, XX______, 
     ________, ________, 
@@ -1114,7 +1114,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_006a[34] = {
     _X_XXXX_, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_006b[39] = {
+gui_const uint8_t Font_Arial_Bold_18_006b[39] = {
     _XXXX_X_, ________, ________, 
     _XXXX_X_, ________, ________, 
     _XXXX_X_, ________, ________, 
@@ -1130,7 +1130,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_006b[39] = {
     _XXXX_X_, _____XXX, X_X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_006c[13] = {
+gui_const uint8_t Font_Arial_Bold_18_006c[13] = {
     _X_XXX__, 
     _X_XXX__, 
     _X_XXX__, 
@@ -1146,7 +1146,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_006c[13] = {
     _X_XXX__, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_006d[40] = {
+gui_const uint8_t Font_Arial_Bold_18_006d[40] = {
     _XXXX_X_, XXXXXX__, ___X_XXX, X_X_____, 
     _XXXXXXX, XXXXXXXX, _XXXXXXX, XXX_X___, 
     _XXXXXX_, ___X_XXX, XX_____X, XXXX____, 
@@ -1159,7 +1159,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_006d[40] = {
     _XXXX_X_, _____XXX, X______X, _XXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_006e[30] = {
+gui_const uint8_t Font_Arial_Bold_18_006e[30] = {
     _X_XXX__, _X_XXXXX, ________, 
     _X_XXXXX, XXXXXXXX, XX______, 
     _X_XXXXX, _____XXX, XXX_____, 
@@ -1172,7 +1172,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_006e[30] = {
     _X_XXX__, ______XX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_006f[30] = {
+gui_const uint8_t Font_Arial_Bold_18_006f[30] = {
     _____X_X, XXXXXX__, ________, 
     ___XXXXX, XXXXXXXX, X_______, 
     _X_XXXX_, _____XXX, XX______, 
@@ -1185,7 +1185,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_006f[30] = {
     _____X_X, XXXXXX__, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0070[42] = {
+gui_const uint8_t Font_Arial_Bold_18_0070[42] = {
     _XXXX_X_, XXXXXX__, X_______, 
     _XXXXXXX, XXXXXXXX, X_X_____, 
     _XXXXXX_, X____XXX, XXX_____, 
@@ -1202,7 +1202,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0070[42] = {
     _XXXX_X_, ________, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0071[42] = {
+gui_const uint8_t Font_Arial_Bold_18_0071[42] = {
     _____X_X, XXX_X_XX, XXX_____, 
     ___XXXXX, XXXXXXXX, XXX_____, 
     _X_XXXX_, X____XXX, XXX_____, 
@@ -1219,7 +1219,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0071[42] = {
     ________, ______XX, XXX_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0072[20] = {
+gui_const uint8_t Font_Arial_Bold_18_0072[20] = {
     _XXXX_XX, _XXXX___, 
     _XXXXXXX, XXXXX___, 
     _XXXXXX_, ________, 
@@ -1232,7 +1232,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0072[20] = {
     _XXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0073[30] = {
+gui_const uint8_t Font_Arial_Bold_18_0073[30] = {
     ___X_XXX, XXXX____, ________, 
     _X_XXXXX, XXXXXXX_, ________, 
     _XXXX_X_, ___XXXXX, ________, 
@@ -1245,7 +1245,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0073[30] = {
     ____XXXX, XXXX__X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0074[26] = {
+gui_const uint8_t Font_Arial_Bold_18_0074[26] = {
     ______XX, X_______, 
     ____XXXX, X_______, 
     ____XXXX, X_______, 
@@ -1261,7 +1261,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0074[26] = {
     _____X_X, XXXX____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0075[30] = {
+gui_const uint8_t Font_Arial_Bold_18_0075[30] = {
     _XXXX_X_, _____X_X, XX______, 
     _XXXX_X_, _____X_X, XX______, 
     _XXXX_X_, _____X_X, XX______, 
@@ -1274,7 +1274,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0075[30] = {
     ____XXXX, XX__XX_X, XX______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0076[30] = {
+gui_const uint8_t Font_Arial_Bold_18_0076[30] = {
     _X_XXX__, _______X, XXX_X___, 
     __XXXXX_, ______XX, XXX_____, 
     ___XXXX_, X____X_X, XX______, 
@@ -1287,7 +1287,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0076[30] = {
     ________, XXXXX___, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0077[40] = {
+gui_const uint8_t Font_Arial_Bold_18_0077[40] = {
     _X_XXX__, _____XXX, X_X_____, XXXXX___, 
     __XXXXX_, ____XXXX, XX_____X, _XXX____, 
     ___XXXX_, ___X_XXX, XXX____X, XXX_X___, 
@@ -1300,7 +1300,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0077[40] = {
     _______X, XXXX____, __XXXXX_, X_______, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0078[30] = {
+gui_const uint8_t Font_Arial_Bold_18_0078[30] = {
     _XXXXX__, ____XXXX, X_______, 
     __XXXXX_, ___XXXX_, X_______, 
     ___XXXXX, _XXXXXX_, ________, 
@@ -1313,7 +1313,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0078[30] = {
     XXXXX___, ____XXXX, X_X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_0079[42] = {
+gui_const uint8_t Font_Arial_Bold_18_0079[42] = {
     _XXXX_X_, _______X, XXX_X___, 
     __XXXXX_, ______XX, XXX_____, 
     ___XXXX_, _____X_X, XX______, 
@@ -1330,7 +1330,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_0079[42] = {
     ___XXXXX, __X_____, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_007a[30] = {
+gui_const uint8_t Font_Arial_Bold_18_007a[30] = {
     _XXXXXXX, XXXXXXX_, ________, 
     _XXXXXXX, XXXXXXX_, ________, 
     ________, XXXXXXX_, ________, 
@@ -1343,7 +1343,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_007a[30] = {
     XXXXXXXX, XXXXXXXX, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_007b[34] = {
+gui_const uint8_t Font_Arial_Bold_18_007b[34] = {
     ______XX, XXX_X___, 
     _____XXX, XXX_X___, 
     ____XXXX, X_______, 
@@ -1363,7 +1363,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_007b[34] = {
     ______XX, XXX_X___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_007c[17] = {
+gui_const uint8_t Font_Arial_Bold_18_007c[17] = {
     XXX_X___, 
     XXX_X___, 
     XXX_X___, 
@@ -1383,7 +1383,7 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_007c[17] = {
     XXX_X___, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_007d[34] = {
+gui_const uint8_t Font_Arial_Bold_18_007d[34] = {
     XXXXX_X_, ________, 
     XXXXXXX_, ________, 
     ___XXXX_, X_______, 
@@ -1403,19 +1403,19 @@ GUI_Const GUI_Byte Font_Arial_Bold_18_007d[34] = {
     XXXXX_X_, ________, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_007e[12] = {
+gui_const uint8_t Font_Arial_Bold_18_007e[12] = {
     _X_XXXXX, __X_____, _X______, 
     XXXXXXXX, XXXXXXXX, XXX_____, 
     XXXXXXXX, XXXXXXXX, XXX_____, 
     X_X_____, XX_XXXXX, __X_____, 
 };
 
-GUI_Const GUI_Byte Font_Arial_Bold_18_007f[1] = {
+gui_const uint8_t Font_Arial_Bold_18_007f[1] = {
     ________, 
 };
 
 
-GUI_Const GUI_FONT_CharInfo_t Arial_Bold_18_CharTable[] = {
+gui_const gui_font_char_t Arial_Bold_18_CharTable[] = {
 {   0,    1,  0,    0,    6, Font_Arial_Bold_18_0020},
 {   3,   13,  0,    1,    0, Font_Arial_Bold_18_0021},
 {   8,    5,  0,    1,    0, Font_Arial_Bold_18_0022},
@@ -1514,7 +1514,7 @@ GUI_Const GUI_FONT_CharInfo_t Arial_Bold_18_CharTable[] = {
 {   0,    1,  0,    0,    6, Font_Arial_Bold_18_007f},
 };
 
-GUI_Const gui_font_t GUI_Font_Arial_Bold_18 = {
+gui_const gui_font_t GUI_Font_Arial_Bold_18 = {
     _GT("Arial Bold"),
     18,
     0x20,

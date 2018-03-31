@@ -50,7 +50,7 @@ gui_color_t colors[] = {
 static const
 gui_widget_t widget = {
     .Name = _GT("CONTAINER"),                       /*!< Widget name */
-    .Size = sizeof(GUI_CONTAINER_t),                /*!< Size of widget for memory allocation */
+    .Size = sizeof(gui_container_t),                /*!< Size of widget for memory allocation */
     .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
     .Callback = gui_container_callback,             /*!< Control function */
     .Colors = colors,                               /*!< Pointer to colors array */
@@ -67,11 +67,11 @@ gui_widget_t widget = {
  */
 static uint8_t
 gui_container_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
             gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
-            gui_idim_t x, y, wi, hi;
+            gui_dim_t x, y, wi, hi;
             
             x = guii_widget_getabsolutex(h);
             y = guii_widget_getabsolutey(h);
@@ -96,24 +96,24 @@ gui_container_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param,
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
- * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p
-gui_container_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+gui_container_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
     return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
 /**
  * \brief           Set color to specific part of widget
  * \param[in,out]   h: Widget handle
- * \param[in]       index: Color index. This parameter can be a value of \ref GUI_CONTAINER_COLOR_t enumeration
+ * \param[in]       index: Color index. This parameter can be a value of \ref gui_container_color_t enumeration
  * \param[in]       color: Color value
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_container_setcolor(gui_handle_p h, GUI_CONTAINER_COLOR_t index, gui_color_t color) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+gui_container_setcolor(gui_handle_p h, gui_container_color_t index, gui_color_t color) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
 }

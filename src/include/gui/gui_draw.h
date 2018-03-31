@@ -148,14 +148,14 @@ extern "C" {
  * \sa              gui_draw_font_init
  */
 typedef struct GUI_DRAW_FONT_t {
-    gui_idim_t X;                           /*!< Top left X position for rectangle */
-    gui_idim_t Y;                           /*!< Top left Y position for rectangle */
-    gui_idim_t Width;                       /*!< Rectangle width for string draw */
-    gui_idim_t Height;                      /*!< Rectangle height for string draw */
-    GUI_Byte Align;                         /*!< Alignment parameters */
+    gui_dim_t X;                            /*!< Top left X position for rectangle */
+    gui_dim_t Y;                            /*!< Top left Y position for rectangle */
+    gui_dim_t Width;                        /*!< Rectangle width for string draw */
+    gui_dim_t Height;                       /*!< Rectangle height for string draw */
+    uint8_t Align;                         /*!< Alignment parameters */
     gui_dim_t LineHeight;                   /*!< Line height, only when multiline mode is enabled */
-    GUI_Byte Flags;                         /*!< Flags for future use */
-    gui_idim_t Color1Width;                 /*!< Width for color 1 */
+    uint8_t Flags;                         /*!< Flags for future use */
+    gui_dim_t Color1Width;                  /*!< Width for color 1 */
     gui_color_t Color1;                     /*!< Color 1 */
     gui_color_t Color2;                     /*!< Color 2 */
     uint32_t ScrollY;                       /*!< Scroll in vertical direction */
@@ -173,10 +173,10 @@ typedef enum GUI_DRAW_SB_DIR_t {
  * \brief           Scroll bar structure
  */
 typedef struct GUI_DRAW_SB_t {
-    gui_idim_t X;                           /*!< X position on screen */
-    gui_idim_t Y;                           /*!< Y position on screen */
-    gui_idim_t Width;                       /*!< Total width */
-    gui_idim_t Height;                      /*!< Total height */
+    gui_dim_t X;                           /*!< X position on screen */
+    gui_dim_t Y;                           /*!< Y position on screen */
+    gui_dim_t Width;                       /*!< Total width */
+    gui_dim_t Height;                      /*!< Total height */
     GUI_DRAW_SB_DIR_t Dir;                  /*!< Scroll bar direction (horizontal or vertical */
     uint32_t EntriesTotal;                  /*!< Total number of entries */
     uint32_t EntriesVisible;                /*!< Number of entries visible at a time */
@@ -197,30 +197,30 @@ typedef enum GUI_DRAW_3D_State_t {
  * \sa              gui_draw_poly
  */
 typedef struct GUI_DRAW_Poly_t {
-    gui_idim_t X;                           /*!< Poly point X location */
-    gui_idim_t Y;                           /*!< Poly point Y location */
+    gui_dim_t X;                           /*!< Poly point X location */
+    gui_dim_t Y;                           /*!< Poly point Y location */
 } GUI_DRAW_Poly_t;
 
 void gui_draw_font_init(GUI_DRAW_FONT_t* f);
 void gui_draw_fillscreen(const gui_display_t* disp, gui_color_t color);
-void gui_draw_setpixel(const gui_display_t* disp, gui_idim_t x, gui_idim_t y, gui_color_t color);
-gui_color_t gui_draw_getpixel(const gui_display_t* disp, gui_idim_t x, gui_idim_t y);
-void gui_draw_vline(const gui_display_t* disp, gui_idim_t x, gui_idim_t y, gui_idim_t length, gui_color_t color);
-void gui_draw_hline(const gui_display_t* disp, gui_idim_t x, gui_idim_t y, gui_idim_t length, gui_color_t color);
-void gui_draw_line(const gui_display_t* disp, gui_idim_t x1, gui_idim_t y1, gui_idim_t x2, gui_idim_t y2, gui_color_t color);
-void gui_draw_rectangle(const gui_display_t* disp, gui_idim_t x, gui_idim_t y, gui_idim_t width, gui_idim_t height, gui_color_t color);
-void gui_draw_filledrectangle(const gui_display_t* disp, gui_idim_t x, gui_idim_t y, gui_idim_t width, gui_idim_t height, gui_color_t color);
-void gui_draw_roundedrectangle(const gui_display_t* disp, gui_idim_t x, gui_idim_t y, gui_idim_t width, gui_idim_t height, gui_idim_t r, gui_color_t color);
-void gui_draw_filledroundedrectangle(const gui_display_t* disp, gui_idim_t x, gui_idim_t y, gui_idim_t width, gui_idim_t height, gui_idim_t r, gui_color_t color);
-void gui_draw_circle(const gui_display_t* disp, gui_idim_t x0, gui_idim_t y0, gui_idim_t r, gui_color_t color);
-void gui_draw_filledcircle(const gui_display_t* disp, gui_idim_t x0, gui_idim_t y0, gui_idim_t r, gui_color_t color);
-void gui_draw_circlecorner(const gui_display_t* disp, gui_idim_t x0, gui_idim_t y0, gui_idim_t r, GUI_Byte_t c, gui_color_t color);
-void gui_draw_filledcirclecorner(const gui_display_t* disp, gui_idim_t x0, gui_idim_t y0, gui_idim_t r, GUI_Byte_t c, uint32_t color);
-void gui_draw_triangle(const gui_display_t* disp, gui_idim_t x1, gui_idim_t y1,  gui_idim_t x2, gui_idim_t y2, gui_idim_t x3, gui_idim_t y3, gui_color_t color);
-void gui_draw_filledtriangle(const gui_display_t* disp, gui_idim_t x1, gui_idim_t y1, gui_idim_t x2, gui_idim_t y2, gui_idim_t x3, gui_idim_t y3, gui_color_t color);
-void gui_draw_image(gui_display_t* disp, gui_idim_t x, gui_idim_t y, const GUI_IMAGE_DESC_t* img);
+void gui_draw_setpixel(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_color_t color);
+gui_color_t gui_draw_getpixel(const gui_display_t* disp, gui_dim_t x, gui_dim_t y);
+void gui_draw_vline(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t length, gui_color_t color);
+void gui_draw_hline(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t length, gui_color_t color);
+void gui_draw_line(const gui_display_t* disp, gui_dim_t x1, gui_dim_t y1, gui_dim_t x2, gui_dim_t y2, gui_color_t color);
+void gui_draw_rectangle(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_color_t color);
+void gui_draw_filledrectangle(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_color_t color);
+void gui_draw_roundedrectangle(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_dim_t r, gui_color_t color);
+void gui_draw_filledroundedrectangle(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_dim_t r, gui_color_t color);
+void gui_draw_circle(const gui_display_t* disp, gui_dim_t x0, gui_dim_t y0, gui_dim_t r, gui_color_t color);
+void gui_draw_filledcircle(const gui_display_t* disp, gui_dim_t x0, gui_dim_t y0, gui_dim_t r, gui_color_t color);
+void gui_draw_circlecorner(const gui_display_t* disp, gui_dim_t x0, gui_dim_t y0, gui_dim_t r, uint8_t c, gui_color_t color);
+void gui_draw_filledcirclecorner(const gui_display_t* disp, gui_dim_t x0, gui_dim_t y0, gui_dim_t r, uint8_t c, uint32_t color);
+void gui_draw_triangle(const gui_display_t* disp, gui_dim_t x1, gui_dim_t y1,  gui_dim_t x2, gui_dim_t y2, gui_dim_t x3, gui_dim_t y3, gui_color_t color);
+void gui_draw_filledtriangle(const gui_display_t* disp, gui_dim_t x1, gui_dim_t y1, gui_dim_t x2, gui_dim_t y2, gui_dim_t x3, gui_dim_t y3, gui_color_t color);
+void gui_draw_image(gui_display_t* disp, gui_dim_t x, gui_dim_t y, const GUI_IMAGE_DESC_t* img);
 void gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_char* str, GUI_DRAW_FONT_t* draw);
-void gui_draw_rectangle3d(const gui_display_t* disp, gui_idim_t x, gui_idim_t y, gui_idim_t width, gui_idim_t height, GUI_DRAW_3D_State_t state);
+void gui_draw_rectangle3d(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, GUI_DRAW_3D_State_t state);
 void gui_draw_poly(const gui_display_t* disp, const GUI_DRAW_Poly_t* points, size_t len, gui_color_t color);
 void gui_draw_scrollbar_init(GUI_DRAW_SB_t* sb);
 void gui_draw_scrollbar(const gui_display_t* disp, GUI_DRAW_SB_t* sb);

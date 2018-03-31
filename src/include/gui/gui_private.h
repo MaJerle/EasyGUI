@@ -95,8 +95,8 @@ typedef struct {
     gui_widget_result_t WidgetResult;
     
 #if GUI_CFG_USE_TOUCH || __DOXYGEN__
-    guii_touchdata_t TouchOld;              /*!< Old touch data, used for event management */
-    guii_touchdata_t Touch;                 /*!< Current touch data and processing tool */
+    guii_touch_data_t TouchOld;              /*!< Old touch data, used for event management */
+    guii_touch_data_t Touch;                 /*!< Current touch data and processing tool */
     gui_handle_p ActiveWidget;              /*!< Pointer to widget currently active by touch */
     gui_handle_p ActiveWidgetPrev;          /*!< Previously active widget */
 #endif /* GUI_CFG_USE_TOUCH */
@@ -140,7 +140,7 @@ extern gui_t GUI;
  * \retval          Pointer to GUI root handle
  * \hideinitializer
  */ 
-#define __GHR(x)                    ((struct gui_handle_ROOT *)(x))
+#define __GHR(x)                    ((struct gui_handle_root *)(x))
 
 /**
  * \brief           Check input parameters and return value on failure

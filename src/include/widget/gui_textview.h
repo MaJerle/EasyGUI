@@ -36,13 +36,10 @@
 extern "C" {
 #endif
 
-/**
- * \addtogroup      GUI_WIDGETS
- * \{
- */
 #include "gui_widget.h"
 
 /**
+ * \ingroup         GUI_WIDGETS
  * \defgroup        GUI_TEXTVIEW Text view
  * \brief           Text view widget
  * \{
@@ -88,15 +85,11 @@ typedef struct GUI_TEXTVIEW_t {
 } GUI_TEXTVIEW_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p gui_textview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+gui_handle_p gui_textview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
 uint8_t gui_textview_setcolor(gui_handle_p h, GUI_TEXTVIEW_COLOR_t index, gui_color_t color);
 uint8_t gui_textview_setvalign(gui_handle_p h, GUI_TEXTVIEW_VALIGN_t align);
 uint8_t gui_textview_sethalign(gui_handle_p h, GUI_TEXTVIEW_HALIGN_t align);
     
-/**
- * \}
- */
-
 /**
  * \}
  */

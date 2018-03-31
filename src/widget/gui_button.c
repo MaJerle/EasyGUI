@@ -32,7 +32,7 @@
 #include "gui/gui_private.h"
 #include "widget/gui_button.h"
 
-#define __GB(x)             ((GUI_BUTTON_t *)(x))
+#define __GB(x)             ((gui_button_t *)(x))
 
 #define CFG_BORDER_RADIUS   0x01
 
@@ -54,14 +54,14 @@ gui_color_t colors[] = {
 static const
 gui_widget_t widget = {
     .Name = _GT("BUTTON"),                          /*!< Widget name */
-    .Size = sizeof(GUI_BUTTON_t),                   /*!< Size of widget for memory allocation */
+    .Size = sizeof(gui_button_t),                   /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
     .Callback = gui_button_callback,                /*!< Callback function */
     .Colors = colors,                               /*!< List of default colors */
     .ColorsCount = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 
-#define b                   ((GUI_BUTTON_t *)(h))
+#define b                   ((gui_button_t *)(h))
 
 /**
  * \brief           Default widget callback function
@@ -73,7 +73,7 @@ gui_widget_t widget = {
  */
 static uint8_t
 gui_button_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
             guii_widget_set3dstyle(h, 1);          /* By default set 3D */
@@ -81,8 +81,8 @@ gui_button_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
         }
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
             gui_widget_param* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
-            switch (p->Type) {
-                case CFG_BORDER_RADIUS: b->BorderRadius = *(gui_dim_t *)p->Data; break; /* Set max X value to widget */
+            switch (p->type) {
+                case CFG_BORDER_RADIUS: b->borderradius = *(gui_dim_t *)p->data; break;
                 default: break;
             }
             GUI_WIDGET_RESULTTYPE_U8(result) = 1;   /* Save result */
@@ -116,8 +116,8 @@ gui_button_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
                 gui_draw_filledrectangle(disp, x + 2, y + 2, width - 4, height - 4, c1);
                 gui_draw_rectangle3d(disp, x, y, width, height, guii_widget_getflag(h, GUI_FLAG_ACTIVE) ? GUI_DRAW_3D_State_Lowered : GUI_DRAW_3D_State_Raised);
             } else {
-                gui_draw_filledroundedrectangle(disp, x, y, width, height, b->BorderRadius, c1);
-                gui_draw_roundedrectangle(disp, x, y, width, height, b->BorderRadius, c2);
+                gui_draw_filledroundedrectangle(disp, x, y, width, height, b->borderradius, c1);
+                gui_draw_roundedrectangle(disp, x, y, width, height, b->borderradius, c2);
             }
             
             /* Draw text if possible */
@@ -138,7 +138,7 @@ gui_button_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
         }
 #if GUI_CFG_USE_KEYBOARD
         case GUI_WC_KeyPress: {
-            __gui_keyboarddata_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
+            guii_keyboard_data_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (kb->KB.Keys[0] == GUI_KEY_CR || kb->KB.Keys[0] == GUI_KEY_LF) {
                 guii_widget_callback(h, GUI_WC_Click, NULL, NULL); /* Process click */
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
@@ -166,12 +166,12 @@ gui_button_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
- * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p
-gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
     return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
@@ -184,7 +184,7 @@ gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_
  */
 uint8_t
 gui_button_setcolor(gui_handle_p h, gui_button_color_t index, gui_color_t color) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
 }
 
@@ -196,6 +196,6 @@ gui_button_setcolor(gui_handle_p h, gui_button_color_t index, gui_color_t color)
  */
 uint8_t
 gui_button_setborderradius(gui_handle_p h, gui_dim_t size) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setparam(h, CFG_BORDER_RADIUS, &size, 1, 1);    /* Set parameter */
 }

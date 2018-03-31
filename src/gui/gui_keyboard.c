@@ -354,7 +354,7 @@ keyboard_btn_callback(gui_handle_p h, GUI_WC_t cmd, gui_widget_param_t* param, g
             gui_handle_p tmp1, tmp2, tmp3;
             const key_btn_t* kbtn;
             uint32_t ch = 0;
-            gui_keyboarddata_t kbd = {0};
+            gui_keyboard_data_t kbd = {0};
             
             kbtn = guii_widget_getuserdata(h); /* Get data from widget */
             if (kbtn->s) {                      /* Has button special function? */
@@ -482,8 +482,8 @@ static uint8_t
 keyboard_base_callback(gui_handle_p h, GUI_WC_t cmd, gui_widget_param_t* param, gui_widget_result_t* result) {
     switch (cmd) {
         case GUI_WC_PreInit: {
-            __GH(h)->Timer = gui_timer_create__(60, keyboard_timer_callback, 0);    /* Create timer */
-            if (!__GH(h)->Timer) {
+            h->timer = gui_timer_create__(60, keyboard_timer_callback, 0);    /* Create timer */
+            if (h->timer == NULL) {
                 GUI_WIDGET_RESULTTYPE_U8(result) = 0;   /* Failed, stop and clear memory */
             }
             return 1;
@@ -503,7 +503,7 @@ keyboard_base_callback(gui_handle_p h, GUI_WC_t cmd, gui_widget_param_t* param, 
             guii_widget_setzindex(h, GUI_WIDGET_ZINDEX_MAX);   /* Set to maximal z-index */
             guii_widget_hide(h);               /* Hide keyboard by default */
             
-            keyboard.default_font = h->Font;    /* Save current font */
+            keyboard.default_font = h->font;    /* Save current font */
             
             /***************************/
             /* Create keyboard layouts */
@@ -558,7 +558,7 @@ uint8_t
 guii_keyboard_hide(void) {
     __GUI_ASSERTPARAMS(keyboard.handle != NULL);/* Check parameters */
     keyboard.action = ACTION_HIDE;              /* Set action to hide */
-    gui_timer_startperiodic__(keyboard.handle->Timer);  /* Start periodic timer */
+    gui_timer_startperiodic__(keyboard.handle->timer);  /* Start periodic timer */
     
     return 1;
 }
@@ -574,11 +574,11 @@ uint8_t
 guii_keyboard_show(gui_handle_p h) {
     __GUI_ASSERTPARAMS(keyboard.handle != NULL);/* Check parameters */
     keyboard.action = ACTION_SHOW;              /* Set action to show */
-    if (h && h->Font != NULL) {                 /* Check widget and font for it */
-        keyboard.font = h->Font;                /* Save font as display font */
-        guii_widget_invalidate(keyboard.handle);   /* Force invalidation */
+    if (h != NULL && h->font != NULL) {         /* Check widget and font for it */
+        keyboard.font = h->font;                /* Save font as display font */
+        guii_widget_invalidate(keyboard.handle);/* Force invalidation */
     }
-    gui_timer_startperiodic__(keyboard.handle->Timer);  /* Start periodic timer */
+    gui_timer_startperiodic__(keyboard.handle->timer);  /* Start periodic timer */
     
     return 1;
 }
@@ -610,7 +610,7 @@ gui_keyboard_hide(void) {
     uint8_t ret;
     __GUI_ENTER();                              /* Enter GUI */
     
-    ret = guii_keyboard_hide();                /* Hide keyboard */
+    ret = guii_keyboard_hide();                 /* Hide keyboard */
     
     __GUI_LEAVE();                              /* Leave GUI */
     return ret;
@@ -627,7 +627,7 @@ gui_keyboard_show(gui_handle_p h) {
     uint8_t ret;
     __GUI_ENTER();                              /* Enter GUI */
     
-    ret = guii_keyboard_show(h);               /* Show keyboard */
+    ret = guii_keyboard_show(h);                /* Show keyboard */
     
     __GUI_LEAVE();                              /* Leave GUI */
     return ret;

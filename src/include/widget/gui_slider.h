@@ -36,13 +36,10 @@
 extern "C" {
 #endif
 
-/**
- * \addtogroup      GUI_WIDGETS
- * \{
- */
 #include "gui_widget.h"
 
 /**
+ * \ingroup         GUI_WIDGETS
  * \defgroup        GUI_SLIDER Slider
  * \brief           Simple slider widget for user interaction
  * \{
@@ -88,7 +85,7 @@ typedef struct GUI_SLIDER_t {
 } GUI_SLIDER_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+gui_handle_p gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
 uint8_t gui_slider_setcolor(gui_handle_p h, GUI_SLIDER_COLOR_t index, gui_color_t color);
 uint8_t gui_slider_setmode(gui_handle_p h, GUI_SLIDER_MODE_t mode);
 uint8_t gui_slider_setmin(gui_handle_p h, int32_t val);
@@ -97,10 +94,6 @@ uint8_t gui_slider_setvalue(gui_handle_p h, int32_t val);
 int32_t gui_slider_getmin(gui_handle_p h);
 int32_t gui_slider_getmax(gui_handle_p h);
 int32_t gui_slider_getvalue(gui_handle_p h);
-
-/**
- * \}
- */
 
 /**
  * \}

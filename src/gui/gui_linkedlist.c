@@ -37,19 +37,25 @@
  * \param[in]       root: Root linked list element
  */
 static void
-print_list(gui_handle_ROOT_t* root) {
+print_list(gui_handle_root_t* root) {
     static uint8_t depth = 0;
-    gui_handle_ROOT_t* h;
+    gui_handle_root_t* h;
     gui_linkedlistroot_t* list;
     
     depth++;
-    if (root) {
-        list = &root->RootList;
+    if (root != NULL) {
+        list = &root->root_list;
     } else {
         list = &GUI.root;
     }
-    for (h = (gui_handle_ROOT_t *)list->First; h != NULL; h = h->Handle.List.Next) {
-        GUI_DEBUG("%*d: W: %s; A: 0x%08X; R: %lu; D: %lu\r\n", depth, depth, (const char *)h->Handle.Widget->Name, (unsigned int)h, (unsigned long)!!(h->Handle.Flags & GUI_FLAG_REDRAW), (unsigned long)!!(h->Handle.Flags & GUI_FLAG_REMOVE));
+    for (h = (gui_handle_root_t *)list->first; h != NULL; h = h->handle.list.next) {
+        GUI_DEBUG("%*d: W: %s; A: 0x%p, R: %lu; D: %lu\r\n",
+            depth, depth,
+            (const char *)h->handle.widget->Name,
+            h,
+            (unsigned long)!!(h->handle.flags & GUI_FLAG_REDRAW),
+            (unsigned long)!!(h->handle.flags & GUI_FLAG_REMOVE)
+        );
         if (guii_widget_allowchildren(h)) {
             print_list(h);
         }
@@ -68,16 +74,16 @@ print_list(gui_handle_ROOT_t* root) {
  */
 void
 gui_linkedlist_add_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
-    if (!root->First || !root->Last) {              /* First widget is about to be created */
-        element->Prev = NULL;                       /* There is no previous element */
-        element->Next = NULL;                       /* There is no next element */
-        root->First = element;                      /* Set as first widget */
-        root->Last = element;                       /* Set as last widget */
+    if (root->first == NULL || root->last == NULL) {/* First widget is about to be created */
+        element->prev = NULL;                       /* There is no previous element */
+        element->next = NULL;                       /* There is no next element */
+        root->first = element;                      /* Set as first widget */
+        root->last = element;                       /* Set as last widget */
     } else {
-        element->Next = NULL;                       /* Next element of last is not known */
-        element->Prev = root->Last;                 /* Previous element of new entry is currently last element */
-        ((gui_linkedlist_t *)root->Last)->Next = element;   /* Previous's element next element is current element */
-        root->Last = element;                       /* Add new element as last */
+        element->next = NULL;                       /* Next element of last is not known */
+        element->prev = root->last;                 /* Previous element of new entry is currently last element */
+        ((gui_linkedlist_t *)root->last)->next = element;   /* Previous's element next element is current element */
+        root->last = element;                       /* Add new element as last */
     }
 }
     
@@ -89,7 +95,7 @@ gui_linkedlist_add_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
  * \return          Removed element handle
  * \sa              gui_linkedlist_add_gen, gui_linkedlist_multi_add_gen, gui_linkedlist_multi_remove_gen
  */
-gui_linkedlist_t*
+gui_linkedlist_t *
 gui_linkedlist_remove_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
     gui_linkedlist_t* prev;
     gui_linkedlist_t* next;
@@ -98,24 +104,24 @@ gui_linkedlist_remove_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element)
         return 0;
     }
 
-    prev = element->Prev;                           /* Get previous element of current */
-    next = element->Next;                           /* Get next element of current */
+    prev = element->prev;                           /* Get previous element of current */
+    next = element->next;                           /* Get next element of current */
     
-    if (prev) {                                     /* If current element has previous elemnet */
-        prev->Next = next;                          /* Set new next element to previous element */
+    if (prev != NULL) {                             /* If current element has previous elemnet */
+        prev->next = next;                          /* Set new next element to previous element */
     }
-    if (next) {                                     /* If current element has next element */
-        next->Prev = prev;                          /* Set new previous element to next element */
+    if (next != NULL) {                             /* If current element has next element */
+        next->prev = prev;                          /* Set new previous element to next element */
     }
-    if (root->First == element) {                   /* If current is the same as first */
-        root->First = next;                         /* Set next element as first */
+    if (root->first == element) {                   /* If current is the same as first */
+        root->first = next;                         /* Set next element as first */
     }
-    if (root->Last == element) {                    /* If current is the same as last */
-        root->Last = prev;                          /* Set previous as last element */
+    if (root->last == element) {                    /* If current is the same as last */
+        root->last = prev;                          /* Set previous as last element */
     }
     
-    element->Prev = NULL;                           /*!< Clear element pointer */
-    element->Next = NULL;                           /*!< Clear element pointer */
+    element->prev = NULL;                           /*!< Clear element pointer */
+    element->next = NULL;                           /*!< Clear element pointer */
     return element;
 }
 
@@ -136,16 +142,16 @@ gui_linkedlist_remove_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element)
  * \return          Next element handle on success, NULL otherwise
  * \sa              gui_linkedlist_getprev_gen, gui_linkedlist_multi_getnext_gen, gui_linkedlist_multi_getprev_gen
  */
-gui_linkedlist_t*
+gui_linkedlist_t *
 gui_linkedlist_getnext_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
-    if (!element) { 
-        if (root) {
-            return (void *)root->First;
+    if (element == NULL) { 
+        if (root != NULL) {
+            return (void *)root->first;
         } else {
-            return 0;
+            return NULL;
         }
     }
-    return element->Next;                           /* Get next widget of current in linked list */
+    return element->next;                           /* Get next widget of current in linked list */
 }
 
 /**
@@ -165,16 +171,16 @@ gui_linkedlist_getnext_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element
  * \return          Previous element handle on success, NULL otherwise
  * \sa              gui_linkedlist_getnext_gen, gui_linkedlist_multi_getnext_gen, gui_linkedlist_multi_getprev_gen
  */
-gui_linkedlist_t*
+gui_linkedlist_t *
 gui_linkedlist_getprev_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
-    if (!element) { 
-        if (root) {
-            return (void *)root->Last;
+    if (element == NULL) { 
+        if (root != NULL) {
+            return (void *)root->last;
         } else {
-            return 0;
+            return NULL;
         }
     }
-    return element->Prev;                           /* Get next widget of current in linked list */
+    return element->prev;                           /* Get next widget of current in linked list */
 }
 
 /**
@@ -191,36 +197,36 @@ gui_linkedlist_movedown_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* elemen
     gui_linkedlist_t* Next = 0;
     gui_linkedlist_t* NextNext = 0;
     
-    if (!element || element == root->Last) {        /* Check if move is available */
+    if (element == NULL || element == root->last) { /* Check if move is available */
         return 0;                                   /* Could not move */
     }
     
-    Prev = element->Prev;                           /* Get previous element */
-    Next = element->Next;                           /* Get next element */
+    Prev = element->prev;                           /* Get previous element */
+    Next = element->next;                           /* Get next element */
     if (Next) {                                     /* Check if next is available */
-        NextNext = Next->Next;                      /* Get next element of next element */
+        NextNext = Next->next;                      /* Get next element of next element */
     }
     
-    if (NextNext) {                                 /* If there is available memory */
-        NextNext->Prev = element;                   /* Previous element of next next element is current element */
+    if (NextNext != NULL) {                         /* If there is available memory */
+        NextNext->prev = element;                   /* Previous element of next next element is current element */
     } else {
-        root->Last = element;                       /* There is no next next element so we will be last element after move */
+        root->last = element;                       /* There is no next next element so we will be last element after move */
     }
     
-    if (Next) {                                     /* If there is next element */
-        Next->Next = element;                       /* Next element will become previous and set next element as current */
-        Next->Prev = Prev;                          /* Set previous element to next element as current previous */
+    if (Next != NULL) {                             /* If there is next element */
+        Next->next = element;                       /* Next element will become previous and set next element as current */
+        Next->prev = Prev;                          /* Set previous element to next element as current previous */
     }
     
-    element->Next = NextNext;                       /* Set next next element to current next element */
-    element->Prev = Next;                           /* Set next element as previous (swap current and next elements) */
+    element->next = NextNext;                       /* Set next next element to current next element */
+    element->prev = Next;                           /* Set next element as previous (swap current and next elements) */
     
-    if (Prev) {                                     /* Check if next exists */
-        Prev->Next = Next;                          /* Set previous element to next */
+    if (Prev != NULL) {                             /* Check if next exists */
+        Prev->next = Next;                          /* Set previous element to next */
     }
     
-    if (root->First == element) {                   /* Check for current element */
-        root->First = Next;                         /* Set new element as first in linked list */
+    if (root->first == element) {                   /* Check for current element */
+        root->first = Next;                         /* Set new element as first in linked list */
     }
     
     return 1;                                       /* Move was successful */
@@ -240,36 +246,36 @@ gui_linkedlist_moveup_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element)
     gui_linkedlist_t* Prev = 0;
     gui_linkedlist_t* Next = 0;
     
-    if (!element || element == root->First) {       /* Check if move is available */
+    if (element == NULL || element == root->first) {/* Check if move is available */
         return 0;                                   /* Could not move */
     }
     
-    Prev = element->Prev;                           /* Get previous element */
-    Next = element->Next;                           /* Get next element */
-    if (Prev) {                                     /* Check if previous is available */
-        PrevPrev = Prev->Prev;                      /* Get previous element of previous element */
+    Prev = element->prev;                           /* Get previous element */
+    Next = element->next;                           /* Get next element */
+    if (Prev != NULL) {                             /* Check if previous is available */
+        PrevPrev = Prev->prev;                      /* Get previous element of previous element */
     }
     
-    if (PrevPrev) {                                 /* If there is available memory */
-        PrevPrev->Next = element;                   /* Next element of previous previous element is current element */
+    if (PrevPrev != NULL) {                         /* If there is available memory */
+        PrevPrev->next = element;                   /* Next element of previous previous element is current element */
     } else {
-        root->First = element;                      /* There is no previous previous element so we will be first element after move */
+        root->first = element;                      /* There is no previous previous element so we will be first element after move */
     }
     
-    if (Prev) {                                     /* If there is previous element */
-        Prev->Prev = element;                       /* Previous element will become next and set previous element as current */
-        Prev->Next = Next;                          /* Set next element to previous element as current previous */
+    if (Prev != NULL) {                             /* If there is previous element */
+        Prev->prev = element;                       /* Previous element will become next and set previous element as current */
+        Prev->next = Next;                          /* Set next element to previous element as current previous */
     }
     
-    element->Prev = PrevPrev;                       /* Set previous previous element to current previous element */
-    element->Next = Prev;                           /* Set previous element as next (swap current and previous elements) */
+    element->prev = PrevPrev;                       /* Set previous previous element to current previous element */
+    element->next = Prev;                           /* Set previous element as next (swap current and previous elements) */
     
-    if (Next) {                                     /* Check if previous exists */
-        Next->Prev = Prev;                          /* Set next element to previous */
+    if (Next != NULL) {                             /* Check if previous exists */
+        Next->prev = Prev;                          /* Set next element to previous */
     }
     
-    if (root->Last == element) {                    /* Check for current element */
-        root->Last = Prev;                          /* Set new last as first in linked list */
+    if (root->last == element) {                    /* Check for current element */
+        root->last = Prev;                          /* Set new last as first in linked list */
     }
     
     return 1;                                       /* Move was successful */
@@ -282,10 +288,10 @@ gui_linkedlist_moveup_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element)
  * \param[in]       index: Number in list to get item
  * \return          Item handle on success, NULL otherwise
  */
-gui_linkedlist_t*
+gui_linkedlist_t *
 gui_linkedlist_getnext_byindex_gen(gui_linkedlistroot_t* root, uint16_t index) {
-    gui_linkedlist_t* item = gui_linkedlist_getnext_gen(root, 0); /* Get first element */
-    while (index-- && item) {                       /* Scroll to next elements */
+    gui_linkedlist_t* item = gui_linkedlist_getnext_gen(root, NULL);    /* Get first element */
+    while (index-- && item != NULL) {               /* Scroll to next elements */
         item = gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item);
     }
     return item;                                    /* Get that item */
@@ -293,7 +299,7 @@ gui_linkedlist_getnext_byindex_gen(gui_linkedlistroot_t* root, uint16_t index) {
 
 /**
  * \brief           Add element to multi linked list
- * \note            Element can be any type since \ref GUI_LinkedListMulti_t structure is dynamicall allocated
+ * \note            Element can be any type since \ref gui_linkedlistmulti_t structure is dynamicall allocated
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
@@ -301,13 +307,13 @@ gui_linkedlist_getnext_byindex_gen(gui_linkedlistroot_t* root, uint16_t index) {
  * \return          Multi linked list handle on success, NULL otherwise
  * \sa              gui_linkedlist_add_gen, gui_linkedlist_remove_gen, gui_linkedlist_multi_remove_gen
  */
-GUI_LinkedListMulti_t*
+gui_linkedlistmulti_t *
 gui_linkedlist_multi_add_gen(gui_linkedlistroot_t* root, void* element) {
-    GUI_LinkedListMulti_t* ptr;
-    ptr = GUI_MEMALLOC(sizeof(GUI_LinkedListMulti_t));  /* Create memory for linked list */
+    gui_linkedlistmulti_t* ptr;
+    ptr = GUI_MEMALLOC(sizeof(gui_linkedlistmulti_t));  /* Create memory for linked list */
     if (ptr != NULL) {
-        ptr->Element = element;                     /* Save pointer to our element */
-        gui_linkedlist_add_gen(root, &ptr->List);   /* Add element to linked list */
+        ptr->element = element;                     /* Save pointer to our element */
+        gui_linkedlist_add_gen(root, &ptr->list);   /* Add element to linked list */
     }
     
     return ptr;
@@ -322,8 +328,8 @@ gui_linkedlist_multi_add_gen(gui_linkedlistroot_t* root, void* element) {
  * \sa              gui_linkedlist_add_gen, gui_linkedlist_remove_gen, gui_linkedlist_multi_add_gen
  */
 uint8_t
-gui_linkedlist_multi_remove_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti_t* element) {
-    if (!element) {                                 /* Check valid element */
+gui_linkedlist_multi_remove_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_t* element) {
+    if (element == NULL) {                          /* Check valid element */
         return 0;
     }
     gui_linkedlist_remove_gen(root, (gui_linkedlist_t *)element); /* Remove element from linked list */
@@ -344,20 +350,20 @@ gui_linkedlist_multi_remove_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti_
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
- * \param[in]       element: Pointer to \ref GUI_LinkedListMulti_t element to get next element of
+ * \param[in]       element: Pointer to \ref gui_linkedlistmulti_t element to get next element of
  * \return          Next element on success, NULL otherwise
  * \sa              gui_linkedlist_getnext_gen, gui_linkedlist_getprev_gen, gui_linkedlist_multi_getprev_gen
  */
-GUI_LinkedListMulti_t*
-gui_linkedlist_multi_getnext_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti_t* element) {
-    if (!element) { 
-        if (root) {
-            return (GUI_LinkedListMulti_t *)root->First;
+gui_linkedlistmulti_t *
+gui_linkedlist_multi_getnext_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_t* element) {
+    if (element == NULL) { 
+        if (root != NULL) {
+            return (gui_linkedlistmulti_t *)root->first;
         } else {
-            return 0;
+            return NULL;
         }
     }
-    return (GUI_LinkedListMulti_t *)element->List.Next; /* Get next widget of current in linked list */
+    return (gui_linkedlistmulti_t *)element->list.next; /* Get next widget of current in linked list */
 }
 
 /**
@@ -373,46 +379,46 @@ gui_linkedlist_multi_getnext_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
- * \param[in]       element: Pointer to \ref GUI_LinkedListMulti_t element to get next element of
+ * \param[in]       element: Pointer to \ref gui_linkedlistmulti_t element to get next element of
  * \return          Previous element on success, NULL otherwise
  * \sa              gui_linkedlist_getnext_gen, gui_linkedlist_getprev_gen, gui_linkedlist_multi_getnext_gen
  */
-GUI_LinkedListMulti_t*
-gui_linkedlist_multi_getprev_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti_t* element) {
-    if (!element) { 
-        if (root) {
-            return (GUI_LinkedListMulti_t *)root->Last;
+gui_linkedlistmulti_t *
+gui_linkedlist_multi_getprev_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_t* element) {
+    if (element == NULL) { 
+        if (root != NULL) {
+            return (gui_linkedlistmulti_t *)root->last;
         } else {
-            return 0;
+            return NULL;
         }
     }
-    return (GUI_LinkedListMulti_t *)element->List.Prev; /* Get next widget of current in linked list */
+    return (gui_linkedlistmulti_t *)element->list.prev; /* Get next widget of current in linked list */
 }
 
 /**
  * \brief           Move widget down for one on multi linked list
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
- * \param[in]       element: Pointer to \ref GUI_LinkedListMulti_t element to move down on base linked list
+ * \param[in]       element: Pointer to \ref gui_linkedlistmulti_t element to move down on base linked list
  * \return          `1` on success, `0` otherwise
  * \sa              gui_linkedlist_moveup_gen, gui_linkedlist_movedown_gen, gui_linkedlist_multi_moveup_gen
  */
 uint8_t
-gui_linkedlist_multi_movedown_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti_t* element) {
-    return gui_linkedlist_movedown_gen(root, &element->List); /* Move down elemenet */
+gui_linkedlist_multi_movedown_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_t* element) {
+    return gui_linkedlist_movedown_gen(root, &element->list); /* Move down elemenet */
 }
 
 /**
  * \brief           Move widget up for one on multi linked list
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
- * \param[in]       element: Pointer to \ref GUI_LinkedListMulti_t element to move up on base linked list
+ * \param[in]       element: Pointer to \ref gui_linkedlistmulti_t element to move up on base linked list
  * \return          `1` on success, `0` otherwise
  * \sa              gui_linkedlist_moveup_gen, gui_linkedlist_movedown_gen, gui_linkedlist_multi_movedown_gen
  */
 uint8_t
-gui_linkedlist_multi_moveup_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti_t* element) {
-    return gui_linkedlist_moveup_gen(root, &element->List);   /* Move down elemenet */
+gui_linkedlist_multi_moveup_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_t* element) {
+    return gui_linkedlist_moveup_gen(root, &element->list);   /* Move down elemenet */
 }
     
 /**
@@ -427,12 +433,13 @@ gui_linkedlist_multi_moveup_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti_
  */
 uint8_t
 gui_linkedlist_multi_find_remove(gui_linkedlistroot_t* root, void* element) {
-    GUI_LinkedListMulti_t* link;
+    gui_linkedlistmulti_t* link;
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(root);                       /* Check input parameters */
     
-    for (link = gui_linkedlist_multi_getnext_gen(root, NULL); link; link = gui_linkedlist_multi_getnext_gen(NULL, link)) {
+    for (link = gui_linkedlist_multi_getnext_gen(root, NULL); link != NULL;
+        link = gui_linkedlist_multi_getnext_gen(NULL, link)) {
         if ((void *)gui_linkedlist_multi_getdata(link) == element) {/* Check match */
             gui_linkedlist_multi_remove_gen(root, link);  /* Remove element from linked list */
             ret = 1;
@@ -449,9 +456,9 @@ gui_linkedlist_multi_find_remove(gui_linkedlistroot_t* root, void* element) {
  * \sa              gui_linkedlist_widgetremove
  */
 void
-gui_linkedlist_widgetadd(gui_handle_ROOT_t* root, gui_handle_p h) {    
+gui_linkedlist_widgetadd(gui_handle_root_t* root, gui_handle_p h) {    
     if (root != NULL) {
-        gui_linkedlist_add_gen(&root->RootList, (gui_linkedlist_t *)h);
+        gui_linkedlist_add_gen(&root->root_list, (gui_linkedlist_t *)h);
     } else {
         gui_linkedlist_add_gen(&GUI.root, (gui_linkedlist_t *)h);
     }
@@ -467,8 +474,8 @@ gui_linkedlist_widgetadd(gui_handle_ROOT_t* root, gui_handle_p h) {
  */
 void
 gui_linkedlist_widgetremove(gui_handle_p h) {    
-    if (__GH(h)->Parent != NULL) {
-        gui_linkedlist_remove_gen(&((gui_handle_ROOT_t *)__GH(h)->Parent)->RootList, (gui_linkedlist_t *)h);
+    if (guii_widget_hasparent(h)) {
+        gui_linkedlist_remove_gen(&((gui_handle_root_t *)guii_widget_getparent(h))->root_list, (gui_linkedlist_t *)h);
     } else {
         gui_linkedlist_remove_gen(&GUI.root, (gui_linkedlist_t *)h);
     }
@@ -483,8 +490,8 @@ gui_linkedlist_widgetremove(gui_handle_p h) {
  */
 uint8_t
 gui_linkedlist_widgetmoveup(gui_handle_p h) {
-    if (__GH(h)->Parent != NULL) {
-        return gui_linkedlist_moveup_gen(&__GHR(__GH(h)->Parent)->RootList, (gui_linkedlist_t *)h);
+    if (guii_widget_hasparent(h)) {
+        return gui_linkedlist_moveup_gen(&__GHR(guii_widget_getparent(h))->root_list, (gui_linkedlist_t *)h);
     }
     return gui_linkedlist_moveup_gen(&GUI.root, (gui_linkedlist_t *)h);
 }
@@ -498,8 +505,8 @@ gui_linkedlist_widgetmoveup(gui_handle_p h) {
  */
 uint8_t
 gui_linkedlist_widgetmovedown(gui_handle_p h) {
-    if (__GH(h)->Parent != NULL) {
-        return gui_linkedlist_movedown_gen(&__GHR(__GH(h)->Parent)->RootList, (gui_linkedlist_t *)h);
+    if (guii_widget_hasparent(h)) {
+        return gui_linkedlist_movedown_gen(&__GHR(guii_widget_getparent(h))->root_list, (gui_linkedlist_t *)h);
     }
     return gui_linkedlist_movedown_gen(&GUI.root, (gui_linkedlist_t *)h);
 }
@@ -525,15 +532,15 @@ gui_linkedlist_widgetmovedown(gui_handle_p h) {
  * \sa              gui_linkedlist_widgetgetprev
  */
 gui_handle_p
-gui_linkedlist_widgetgetnext(gui_handle_ROOT_t* parent, gui_handle_p h) {
+gui_linkedlist_widgetgetnext(gui_handle_root_t* parent, gui_handle_p h) {
     if (h == NULL) {                                /* Get first widget on list */
         if (parent != NULL) {                       /* If parent exists... */
-            return (gui_handle_p)parent->RootList.First;    /* ...get first widget on parent */
+            return (gui_handle_p)parent->root_list.first;   /* ...get first widget on parent */
         } else {
-            return (gui_handle_p)GUI.root.First;    /* Get first widget in GUI */
+            return (gui_handle_p)GUI.root.first;    /* Get first widget in GUI */
         }
     }
-    return (gui_handle_p)__GH(h)->List.Next;        /* Get next widget of current in linked list */
+    return (gui_handle_p)h->list.next;              /* Get next widget of current in linked list */
 }
 
 /**
@@ -557,47 +564,51 @@ gui_linkedlist_widgetgetnext(gui_handle_ROOT_t* parent, gui_handle_p h) {
  * \sa              gui_linkedlist_widgetgetnext
  */
 gui_handle_p
-gui_linkedlist_widgetgetprev(gui_handle_ROOT_t* parent, gui_handle_p h) {
+gui_linkedlist_widgetgetprev(gui_handle_root_t* parent, gui_handle_p h) {
     if (h == NULL) {                                /* Get last widget on list */
         if (parent != NULL) {                       /* If parent exists... */
-            return (gui_handle_p)parent->RootList.Last; /* ...get last widget on parent */
+            return (gui_handle_p)parent->root_list.last;/* ...get last widget on parent */
         } else {
-            return (gui_handle_p)GUI.root.Last;     /* Get last widget in GUI */
+            return (gui_handle_p)GUI.root.last;     /* Get last widget in GUI */
         }
     }
-    return (gui_handle_p)__GH(h)->List.Prev;        /* Get next widget of current in linked list */
+    return (gui_handle_p)h->list.prev;      /* Get next widget of current in linked list */
 }
 
-/***
+/*
  * Widget linked list order:
  *
  * 1. Normal widgets, with automatic or fixed z-index
  * 2. Widgets with children support
  * 3. Widgets as dialog base elements
  */
+
 /**
  * \brief           Move widget to bottom in linked list of parent widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget to move to bottom
- * \return          `1` on success, `0` otherwise
+ * \return          Number of moves on linked list, `0` if move not available
  * \sa              gui_linkedlist_widgetmovetotop
  */
 uint8_t
 gui_linkedlist_widgetmovetobottom(gui_handle_p h) {
-    if (h->List.Next == NULL) {
+    uint32_t cnt = 0;
+    if (h->list.next == NULL) {
         return 0;
     }
-    while (h->List.Next != NULL) {                  /* While device has next element */
-        if (guii_widget_isdialogbase(h)) {         /* Widget is dialog base element */
+    while (h->list.next != NULL) {                  /* While device has next element */
+        if (guii_widget_isdialogbase(h)) {          /* Widget is dialog base element */
             if (!gui_linkedlist_widgetmovedown(h)) {/* Move down */
-                return 0;
+                break;
             }
+            cnt++;
         } else if (guii_widget_allowchildren(h)) { /* Widget supports children widgets, go to the end of the list if necessary */
-            if (!guii_widget_isdialogbase(h->List.Next)) { /* Go down till dialog base is reached */
-                if (h->ZIndex >= __GH(h->List.Next)->ZIndex) {  /* Check if z-index allows move */
+            if (!guii_widget_isdialogbase(h->list.next)) { /* Go down till dialog base is reached */
+                if (h->zindex >= __GH(h->list.next)->zindex) {  /* Check if z-index allows move */
                     if (!gui_linkedlist_widgetmovedown(h)) {/* Move down */
-                        return 0;
+                        break;
                     }
+                    cnt++;
                 } else {
                     break;
                 }
@@ -605,11 +616,12 @@ gui_linkedlist_widgetmovetobottom(gui_handle_p h) {
                 break;
             }
         } else {                                    /* Our widget does not allow sub widgets */
-            if (!guii_widget_allowchildren(__GH(h)->List.Next)) {  /* Allow moving down only if next widget does not allow sub widgets */
-                if (h->ZIndex >= __GH(h->List.Next)->ZIndex) {  /* Check if z-index allows move */
+            if (!guii_widget_allowchildren(h->list.next)) {  /* Allow moving down only if next widget does not allow sub widgets */
+                if (h->zindex >= __GH(h->list.next)->zindex) {  /* Check if z-index allows move */
                     if (!gui_linkedlist_widgetmovedown(h)) {/* Move down */
-                        return 0;
+                        break;
                     }
+                    cnt++;
                 } else {
                     break;
                 }
@@ -618,36 +630,39 @@ gui_linkedlist_widgetmovetobottom(gui_handle_p h) {
             }
         }
     }
-    return 1;
+    return cnt;
 }
 
 /**
  * \brief           Move widget to top in linked list of parent widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget to move to top
- * \return          `1` on success, `0` otherwise
+ * \return          Number of moves on linked list, `0` if move not available
  * \sa              gui_linkedlist_widgetmovetobottom
  */
 uint8_t
 gui_linkedlist_widgetmovetotop(gui_handle_p h) {
-    if (__GH(h)->List.Prev == NULL) {
+    uint32_t cnt;
+    if (h->list.prev == NULL) {
         return 0;
     }
-    while (__GH(h)->List.Prev != NULL) {            /* While device has previous element */
-        if (guii_widget_isdialogbase(h)) {         /* Widget is dialog base element */
-            if (guii_widget_isdialogbase(__GH(__GH(h)->List.Prev))) {  /* If previous widget is dialog base too */
+    while (h->list.prev != NULL) {                  /* While device has previous element */
+        if (guii_widget_isdialogbase(h)) {          /* Widget is dialog base element */
+            if (guii_widget_isdialogbase(h->list.prev)) {   /* If previous widget is dialog base too */
                 if (!gui_linkedlist_widgetmoveup(h)) {  /* Move up widget */
-                    return 0;
+                    break;
                 }
+                cnt++;
             } else {
                 break;                              /* Stop execution */
             }
-        } else if (guii_widget_allowchildren(h)) { /* If moving widget allows children elements */
-            if (guii_widget_allowchildren(__GH(__GH(h)->List.Prev))) { /* If previous widget allows children too */
-                if (__GH(h)->ZIndex <= __GH(__GH(h)->List.Prev)->ZIndex) {  /* Check if z-index allows move */
+        } else if (guii_widget_allowchildren(h)) {  /* If moving widget allows children elements */
+            if (guii_widget_allowchildren(h->list.prev)) {  /* If previous widget allows children too */
+                if (h->zindex <= __GH(h->list.prev)->zindex) {  /* Check if z-index allows move */
                     if (!gui_linkedlist_widgetmoveup(h)) {  /* Move up */
-                        return 0;
+                        break;
                     }
+                    cnt++;
                 } else {
                     break;
                 }
@@ -655,16 +670,17 @@ gui_linkedlist_widgetmovetotop(gui_handle_p h) {
                 break;                              /* Stop execution */
             }
         } else {                                    /* Normal widget */
-            if (__GH(h)->ZIndex <= __GH(__GH(h)->List.Prev)->ZIndex) {  /* Check if z-index allows move */
+            if (h->zindex <= __GH(h->list.prev)->zindex) {  /* Check if z-index allows move */
                 if (!gui_linkedlist_widgetmoveup(h)) {  /* Move up */
-                    return 0;
+                    break;
                 }
+                cnt++;
             } else {
                 break;
             }
         }
     }
-    return 1;
+    return cnt;
 }
 
 /**

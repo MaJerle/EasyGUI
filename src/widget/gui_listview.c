@@ -32,7 +32,7 @@
 #include "gui/gui_private.h"
 #include "widget/gui_listview.h"
 
-#define __GL(x)             ((GUI_LISTVIEW_t *)(x))
+#define __GL(x)             ((gui_listview_t *)(x))
 
 static uint8_t gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
@@ -56,49 +56,49 @@ gui_color_t colors[] = {
 static const
 gui_widget_t widget = {
     .Name = _GT("LISTVIEW"),                        /*!< Widget name */
-    .Size = sizeof(GUI_LISTVIEW_t),                 /*!< Size of widget for memory allocation */
+    .Size = sizeof(gui_listview_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
     .Callback = gui_listview_callback,              /*!< Callback function */
     .Colors = colors,                               /*!< List of default colors */
     .ColorsCount = GUI_COUNT_OF(colors),            /*!< Define number of colors */
 };
-#define o                   ((GUI_LISTVIEW_t *)(h))
+#define o                   ((gui_listview_t *)(h))
 
 /* Get item from LISTVIEW entry */
-static GUI_LISTVIEW_ROW_t*
+static gui_listview_row_t*
 get_row(gui_handle_p h, uint16_t r) {
-    GUI_LISTVIEW_ROW_t* row = 0;
+    gui_listview_row_t* row = 0;
     
-    if (r >= o->Count) {                            /* Check if valid index */
+    if (r >= o->count) {                            /* Check if valid index */
         return 0;
     }
     
     if (r == 0) {                                   /* Check for first element */
-        row = (GUI_LISTVIEW_ROW_t *)gui_linkedlist_getnext_gen(&o->Root, 0);/* Get first element */
-    } else if (r == o->Count - 1) {
-        row = (GUI_LISTVIEW_ROW_t *)gui_linkedlist_getprev_gen(&o->Root, 0);/* Get last element */
+        row = (gui_listview_row_t *)gui_linkedlist_getnext_gen(&o->root, 0);/* Get first element */
+    } else if (r == o->count - 1) {
+        row = (gui_listview_row_t *)gui_linkedlist_getprev_gen(&o->root, 0);/* Get last element */
     } else {
-        row = (GUI_LISTVIEW_ROW_t *)gui_linkedlist_getnext_byindex_gen(&o->Root, r);/* Get row by index */
+        row = (gui_listview_row_t *)gui_linkedlist_getnext_byindex_gen(&o->root, r);/* Get row by index */
     }
     return row;
 }
 
 /* Get item pointer from row pointer and column index */
-static GUI_LISTVIEW_ITEM_t*
-get_item_for_row(gui_handle_p h, GUI_LISTVIEW_ROW_t* row, uint8_t c) {
-    if (!row) {                                     /* Check input value if exists */
+static gui_listview_item_t *
+get_item_for_row(gui_handle_p h, gui_listview_row_t* row, uint8_t c) {
+    if (row == NULL) {                              /* Check input value if exists */
         return NULL;
     }
     
-    return (GUI_LISTVIEW_ITEM_t *)gui_linkedlist_getnext_byindex_gen(&row->Root, c);/* Get item by index value = column number */
+    return (gui_listview_item_t *)gui_linkedlist_getnext_byindex_gen(&row->Root, c);/* Get item by index value = column number */
 }
 
 /* Get item height in LISTVIEW */
 static gui_dim_t
 item_height(gui_handle_p h, gui_dim_t* offset) {
-    gui_dim_t size = (float)__GH(h)->Font->Size * 1.3f;
-    if (offset) {                                   /* Calculate top offset */
-        *offset = (size - __GH(h)->Font->Size) >> 1;
+    gui_dim_t size = (float)h->font->size * 1.3f;
+    if (offset != NULL) {                           /* Calculate top offset */
+        *offset = (size - h->font->size) >> 1;
     }
     return size;                                    /* Return height for element */
 }
@@ -107,7 +107,7 @@ item_height(gui_handle_p h, gui_dim_t* offset) {
 static int16_t
 nr_entries_pp(gui_handle_p h) {
     int16_t res = 0;
-    if (__GH(h)->Font) {                            /* Font is responsible for this setup */
+    if (h->font != NULL) {                          /* Font is responsible for this setup */
         gui_dim_t height = item_height(h, 0);       /* Get item height */
         res = (guii_widget_getheight(h) - height) / height;
     }
@@ -119,17 +119,17 @@ static void
 slide(gui_handle_p h, int16_t dir) {
     int16_t mPP = nr_entries_pp(h);
     if (dir < 0) {                                  /* Slide elements up */
-        if ((o->VisibleStartIndex + dir) < 0) {
-            o->VisibleStartIndex = 0;
+        if ((o->visiblestartindex + dir) < 0) {
+            o->visiblestartindex = 0;
         } else {
-            o->VisibleStartIndex += dir;
+            o->visiblestartindex += dir;
         }
         guii_widget_invalidate(h);
     } else if (dir > 0) {
-        if ((o->VisibleStartIndex + dir) > (o->Count - mPP - 1)) {  /* Slide elements down */
-            o->VisibleStartIndex = o->Count - mPP;
+        if ((o->visiblestartindex + dir) > (o->count - mPP - 1)) {  /* Slide elements down */
+            o->visiblestartindex = o->count - mPP;
         } else {
-            o->VisibleStartIndex += dir;
+            o->visiblestartindex += dir;
         }
         guii_widget_invalidate(h);
     }
@@ -138,8 +138,8 @@ slide(gui_handle_p h, int16_t dir) {
 /* Set selection for widget */
 static void
 set_selection(gui_handle_p h, int16_t selected) {
-    if (o->Selected != selected) {                  /* Set selected value */
-        o->Selected = selected;
+    if (o->selected != selected) {                  /* Set selected value */
+        o->selected = selected;
         guii_widget_callback(h, GUI_WC_SelectionChanged, NULL, NULL);  /* Notify about selection changed */
     }                         
 }
@@ -148,17 +148,17 @@ set_selection(gui_handle_p h, int16_t selected) {
 static void
 inc_selection(gui_handle_p h, int16_t dir) {
     if (dir < 0) {                                  /* Slide elements up */
-        if ((o->Selected + dir) < 0) {
+        if ((o->selected + dir) < 0) {
             set_selection(h, 0);
         } else {
-            set_selection(h, o->Selected + dir);
+            set_selection(h, o->selected + dir);
         }
         guii_widget_invalidate(h);
     } else if (dir > 0) {
-        if ((o->Selected + dir) > (o->Count - 1)) { /* Slide elements down */
-            set_selection(h, o->Count - 1);
+        if ((o->selected + dir) > (o->count - 1)) { /* Slide elements down */
+            set_selection(h, o->count - 1);
         } else {
-            set_selection(h, o->Selected + dir);
+            set_selection(h, o->selected + dir);
         }
         guii_widget_invalidate(h);
     }
@@ -169,26 +169,26 @@ static void
 check_values(gui_handle_p h) {
     int16_t mPP = nr_entries_pp(h);                 /* Get number of lines visible in widget at a time */
    
-    if (o->Selected >= 0) {                         /* Check for selected value range */
-        if (o->Selected >= o->Count) {
-            set_selection(h, o->Count - 1);
+    if (o->selected >= 0) {                         /* Check for selected value range */
+        if (o->selected >= o->count) {
+            set_selection(h, o->count - 1);
         }
     }
-    if (o->VisibleStartIndex < 0) {                 /* Check visible start index position */
-        o->VisibleStartIndex = 0;
-    } else if (o->VisibleStartIndex > 0) {
-        if (o->Count > mPP) {
-            if (o->VisibleStartIndex + mPP >= o->Count) {
-                o->VisibleStartIndex = o->Count - mPP;
+    if (o->visiblestartindex < 0) {                 /* Check visible start index position */
+        o->visiblestartindex = 0;
+    } else if (o->visiblestartindex > 0) {
+        if (o->count > mPP) {
+            if (o->visiblestartindex + mPP >= o->count) {
+                o->visiblestartindex = o->count - mPP;
             }
         }
     }
     
-    if (o->Flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO) {  /* Check slider mode */
-        if (o->Count > mPP) {
-            o->Flags |= GUI_FLAG_LISTVIEW_SLIDER_ON;
+    if (o->flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO) {  /* Check slider mode */
+        if (o->count > mPP) {
+            o->flags |= GUI_FLAG_LISTVIEW_SLIDER_ON;
         } else {
-            o->Flags &= ~GUI_FLAG_LISTVIEW_SLIDER_ON;
+            o->flags &= ~GUI_FLAG_LISTVIEW_SLIDER_ON;
         }
     }
 }
@@ -199,10 +199,10 @@ check_values(gui_handle_p h) {
  * \param[in]       row: Row to remove items
  */
 static void
-remove_row_items(GUI_LISTVIEW_ROW_t* row) {
-    GUI_LISTVIEW_ITEM_t* item;
+remove_row_items(gui_listview_row_t* row) {
+    gui_listview_item_t* item;
     
-    while ((item = (GUI_LISTVIEW_ITEM_t *)gui_linkedlist_remove_gen(&row->Root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&row->Root, NULL))) != NULL) {
+    while ((item = (gui_listview_item_t *)gui_linkedlist_remove_gen(&row->Root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&row->Root, NULL))) != NULL) {
         GUI_MEMFREE(item);
     }
 }
@@ -213,14 +213,14 @@ remove_row_items(GUI_LISTVIEW_ROW_t* row) {
  */
 static void
 remove_rows(gui_handle_p h) {
-    GUI_LISTVIEW_ROW_t* row;
+    gui_listview_row_t* row;
     
     /* Remove first row until any available */
-    while ((row = (GUI_LISTVIEW_ROW_t *)gui_linkedlist_remove_gen(&o->Root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&o->Root, NULL))) != NULL) {
+    while ((row = (gui_listview_row_t *)gui_linkedlist_remove_gen(&o->root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&o->root, NULL))) != NULL) {
         remove_row_items(row);              /* Remove row items */
         GUI_MEMFREE(row);                   /* Remove actual row entry */
     }
-    __GL(h)->Count = 0;
+    __GL(h)->count = 0;
 }
 
 /**
@@ -234,14 +234,14 @@ remove_rows(gui_handle_p h) {
 static uint8_t
 gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
 #if GUI_CFG_USE_TOUCH
-    static gui_idim_t tX, tY;
+    static gui_dim_t tX, tY;
 #endif /* GUI_CFG_USE_TOUCH */
     
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
-            __GL(h)->Selected = -1;                 /* Invalidate selection */
-            __GL(h)->SliderWidth = 30;              /* Set slider width */
-            __GL(h)->Flags |= GUI_FLAG_LISTVIEW_SLIDER_AUTO;    /* Enable auto mode for slider */
+            __GL(h)->selected = -1;                 /* Invalidate selection */
+            __GL(h)->sliderwidth = 30;              /* Set slider width */
+            __GL(h)->flags |= GUI_FLAG_LISTVIEW_SLIDER_AUTO;    /* Enable auto mode for slider */
             return 1;
         }
         case GUI_WC_Draw: {
@@ -249,10 +249,9 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             gui_dim_t x, y, width, height;
             uint16_t i;
             gui_dim_t itemHeight;
+            gui_listview_row_t* row;
+            gui_listview_item_t* item;
             uint8_t is3D = guii_widget_is3d(h);    /* Is 3D mode enabled */
-            
-            GUI_LISTVIEW_ROW_t* row;
-            GUI_LISTVIEW_ITEM_t* item;
 
             x = guii_widget_getabsolutex(h);       /* Get absolute X coordinate */
             y = guii_widget_getabsolutey(h);       /* Get absolute Y coordinate */
@@ -270,19 +269,19 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             }
 
             /* Draw side scrollbar */
-            if (o->Flags & GUI_FLAG_LISTVIEW_SLIDER_ON) {
+            if (o->flags & GUI_FLAG_LISTVIEW_SLIDER_ON) {
                 GUI_DRAW_SB_t sb;
                 gui_draw_scrollbar_init(&sb);
                 
-                width -= o->SliderWidth;            /* Decrease available width */
+                width -= o->sliderwidth;            /* Decrease available width */
                 
                 sb.X = x + width - 1;
                 sb.Y = y + 1;
-                sb.Width = o->SliderWidth;
+                sb.Width = o->sliderwidth;
                 sb.Height = height - 2;
                 sb.Dir = GUI_DRAW_SB_DIR_VERTICAL;
-                sb.EntriesTop = o->VisibleStartIndex;
-                sb.EntriesTotal = o->Count;
+                sb.EntriesTop = o->visiblestartindex;
+                sb.EntriesTotal = o->count;
                 sb.EntriesVisible = nr_entries_pp(h);
                 
                 gui_draw_scrollbar(disp, &sb);      /* Draw scroll bar */
@@ -292,10 +291,9 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             
             itemHeight = item_height(h, 0);         /* Calculate item height */
             gui_draw_filledrectangle(disp, x + 2, y + 2, width - 3, itemHeight, GUI_COLOR_WIN_LIGHTGRAY);
-            if (o->Cols && o->Cols[0]) {            /* Draw all columns to screen */
-                gui_dim_t xTmp = x + 2;                
+            if (o->cols != NULL && o->cols[0] != NULL) {    /* Draw all columns to screen */
+                gui_dim_t tmpX2, xTmp = x + 2;                
                 GUI_DRAW_FONT_t f;
-                gui_idim_t tmpX2;
                 
                 gui_draw_font_init(&f);             /* Init structure */
                 
@@ -310,25 +308,25 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 
                 /* Draw header row with columns */
                 f.Y = y + 2;
-                for (i = 0; i < o->ColsCount; i++) {
+                for (i = 0; i < o->col_count; i++) {
                     if (is3D) {
-                        gui_draw_rectangle3d(disp, xTmp, f.Y, o->Cols[i]->Width, itemHeight, GUI_DRAW_3D_State_Raised);
-                        f.Width = o->Cols[i]->Width - 4;    /* Set width */
+                        gui_draw_rectangle3d(disp, xTmp, f.Y, o->cols[i]->width, itemHeight, GUI_DRAW_3D_State_Raised);
+                        f.Width = o->cols[i]->width - 4;    /* Set width */
                         f.X = xTmp + 2;             /* Set offset */
                     } else {
-                        gui_draw_rectangle(disp, xTmp, f.Y, o->Cols[i]->Width, itemHeight, GUI_COLOR_WIN_DARKGRAY);
-                        f.Width = o->Cols[i]->Width - 6;    /* Set width */
+                        gui_draw_rectangle(disp, xTmp, f.Y, o->cols[i]->width, itemHeight, GUI_COLOR_WIN_DARKGRAY);
+                        f.Width = o->cols[i]->width - 6;    /* Set width */
                         f.X = xTmp + 3;             /* Set offset */
                     }
-                    gui_draw_writetext(disp, guii_widget_getfont(h), o->Cols[i]->Text, &f);
-                    xTmp += o->Cols[i]->Width;      /* Increase X value */
+                    gui_draw_writetext(disp, guii_widget_getfont(h), o->cols[i]->text, &f);
+                    xTmp += o->cols[i]->width;      /* Increase X value */
                 }
                 f.Y += itemHeight;                  /* Go to next line */
                 
                 /* Draw all rows and entry elements */           
-                if (__GH(h)->Font && gui_linkedlist_hasentries(&__GL(h)->Root)) {   /* Is first set? */
+                if (h->font != NULL && gui_linkedlist_hasentries(&__GL(h)->root)) { /* Is first set? */
                     uint16_t index = 0;             /* Start index */
-                    gui_idim_t tmp;
+                    gui_dim_t tmp;
                     
                     tmp = disp->Y2;                 /* Scale out drawing area */
                     if (disp->Y2 > (y + height - 2)) {
@@ -336,27 +334,27 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                     }
                     
                     /* Try to process all strings */
-                    for (index = 0, row = (GUI_LISTVIEW_ROW_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); row && f.Y <= disp->Y2;
-                            row = (GUI_LISTVIEW_ROW_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)row), index++) {
-                        if (index < o->VisibleStartIndex) { /* Check for start visible */
+                    for (index = 0, row = (gui_listview_row_t *)gui_linkedlist_getnext_gen(&o->root, NULL); row && f.Y <= disp->Y2;
+                            row = (gui_listview_row_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)row), index++) {
+                        if (index < o->visiblestartindex) { /* Check for start visible */
                             continue;
                         }               
-                        if (index == __GL(h)->Selected) {
+                        if (index == __GL(h)->selected) {
                             gui_draw_filledrectangle(disp, x + 2, f.Y, width - 2, GUI_MIN(f.Height, itemHeight), guii_widget_isfocused(h) ? guii_widget_getcolor(h, GUI_LISTVIEW_COLOR_SEL_FOC_BG) : guii_widget_getcolor(h, GUI_LISTVIEW_COLOR_SEL_NOFOC_BG));
                             f.Color1 = guii_widget_isfocused(h) ? guii_widget_getcolor(h, GUI_LISTVIEW_COLOR_SEL_FOC) : guii_widget_getcolor(h, GUI_LISTVIEW_COLOR_SEL_NOFOC);
                         } else {
                             f.Color1 = guii_widget_getcolor(h, GUI_LISTVIEW_COLOR_TEXT);
                         }
                         xTmp = x + 2;
-                        for (i = 0, item = (GUI_LISTVIEW_ITEM_t *)gui_linkedlist_getnext_gen(&row->Root, NULL); item && i < o->ColsCount;
-                                item = (GUI_LISTVIEW_ITEM_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), i++) {
-                            if (item->Text) {       /* Draw if text set */
-                                f.Width = o->Cols[i]->Width - 6;    /* Set width */
+                        for (i = 0, item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(&row->Root, NULL); item && i < o->col_count;
+                                item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), i++) {
+                            if (item->text != NULL) {   /* Draw if text set */
+                                f.Width = o->cols[i]->width - 6;    /* Set width */
                                 f.Color1Width = GUI.LCD.Width;  /* Use the same color for entire width */
                                 f.X = xTmp + 3;     /* Set offset */
-                                gui_draw_writetext(disp, guii_widget_getfont(h), item->Text, &f);
+                                gui_draw_writetext(disp, guii_widget_getfont(h), item->text, &f);
                             }
-                            xTmp += o->Cols[i]->Width;  /* Increase X value */
+                            xTmp += o->cols[i]->width;  /* Increase X value */
                         }
                         f.Y += itemHeight;
                     }
@@ -375,17 +373,17 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             /*
              * Remove all columns
              */
-            if (o->Cols != NULL) {
-                for (i = 0; i < o->ColsCount; i++) {
-                    GUI_MEMFREE(o->Cols[i]);        /* Remove column object */
+            if (o->cols != NULL) {
+                for (i = 0; i < o->col_count; i++) {
+                    GUI_MEMFREE(o->cols[i]);        /* Remove column object */
                 }
-                GUI_MEMFREE(o->Cols);               /* Remove block of pointers to columns */
+                GUI_MEMFREE(o->cols);               /* Remove block of pointers to columns */
             }
             return 1;
         }
 #if GUI_CFG_USE_TOUCH
         case GUI_WC_TouchStart: {
-            guii_touchdata_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
+            guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             tX = ts->RelX[0];                       /* Save X position */
             tY = ts->RelY[0];                       /* Save Y position */
             
@@ -393,10 +391,10 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             return 1;
         }
         case GUI_WC_TouchMove: {
-            guii_touchdata_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            if (__GH(h)->Font) {
+            guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
+            if (h->font != NULL) {
                 gui_dim_t height = item_height(h, NULL);   /* Get element height */
-                gui_idim_t diff;
+                gui_dim_t diff;
                 
                 diff = tY - ts->RelY[0];            /* Check Y difference */
                 if (GUI_ABS(diff) > height) {       /* Difference must be greater than 1 height entry */
@@ -409,15 +407,15 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                     gui_dim_t sum = 0;
                     
                     diff = tX - ts->RelX[0];        /* Check X difference too */
-                    for (i = 0; i < o->ColsCount; i++) {    /* Check X position for column first */
-                        sum += o->Cols[i]->Width;   /* Check width */
+                    for (i = 0; i < o->col_count; i++) {    /* Check X position for column first */
+                        sum += o->cols[i]->width;   /* Check width */
                         if (GUI_ABS(tX - sum) < 10) {
                             break;
                         }
                     }
-                    if (i != o->ColsCount) {
-                        if (o->Cols[i]->Width - diff >= 4) {
-                            o->Cols[i]->Width -= diff;  /* Set new width for difference */
+                    if (i != o->col_count) {
+                        if (o->cols[i]->width - diff >= 4) {
+                            o->cols[i]->width -= diff;  /* Set new width for difference */
                         }
                         tX = ts->RelX[0];           /* Set new start X position for relative calculation */
                         guii_widget_invalidate(h); /* Invalidate widget */
@@ -428,18 +426,18 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
         }
 #endif /* GUI_CFG_USE_TOUCH */
         case GUI_WC_Click: {
-            guii_touchdata_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
+            guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             uint8_t handled = 0;
             uint16_t itemHeight = item_height(h, NULL); /* Get element height */
             
             gui_dim_t width = guii_widget_getwidth(h); /* Get widget widget */
             gui_dim_t height = guii_widget_getheight(h);   /* Get widget height */
             
-            if (o->Flags & GUI_FLAG_LISTVIEW_SLIDER_ON) {
-                if (ts->RelX[0] > (width - o->SliderWidth)) {   /* Touch is inside slider */
-                    if (ts->RelY[0] < o->SliderWidth) {
+            if (o->flags & GUI_FLAG_LISTVIEW_SLIDER_ON) {
+                if (ts->RelX[0] > (width - o->sliderwidth)) {   /* Touch is inside slider */
+                    if (ts->RelY[0] < o->sliderwidth) {
                         slide(h, -1);               /* Slide one value up */
-                    } else if (ts->RelY[0] > (height - o->SliderWidth)) {
+                    } else if (ts->RelY[0] > (height - o->sliderwidth)) {
                         slide(h, 1);                /* Slide one value down */
                     }
                     handled = 1;
@@ -450,8 +448,8 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 
                 if (ts->RelY[0] > itemHeight) {     /* Check item height */
                     tmpSelected = (ts->RelY[0] - itemHeight) / itemHeight;  /* Get temporary selected index */
-                    if ((o->VisibleStartIndex + tmpSelected) < o->Count) {
-                        set_selection(h, o->VisibleStartIndex + tmpSelected);
+                    if ((o->visiblestartindex + tmpSelected) < o->count) {
+                        set_selection(h, o->visiblestartindex + tmpSelected);
                         guii_widget_invalidate(h); /* Choose new selection */
                     }
                     handled = 1;
@@ -461,14 +459,14 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             if (!handled && ts->RelY[0] < itemHeight) { /* We are in top region */
                 uint16_t i;
                 gui_dim_t sum = 0;
-                for (i = 0; i < o->ColsCount; i++) {/* Process all columns */
-                    if (ts->RelX[0] > sum && ts->RelX[0] < (sum + o->Cols[i]->Width)) {
+                for (i = 0; i < o->col_count; i++) {/* Process all columns */
+                    if (ts->RelX[0] > sum && ts->RelX[0] < (sum + o->cols[i]->width)) {
                         break;
                     }
                         
-                    sum += o->Cols[i]->Width;       /* Increase sum value */
+                    sum += o->cols[i]->width;       /* Increase sum value */
                 }
-                if (i != o->ColsCount) {            /* We have value */
+                if (i != o->col_count) {            /* We have value */
                     //TODO: Sort rows on press
                 }
                 handled = 1;
@@ -477,7 +475,7 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
         }
 #if GUI_CFG_USE_KEYBOARD
         case GUI_WC_KeyPress: {
-            __gui_keyboarddata_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
+            guii_keyboard_data_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (kb->KB.Keys[0] == GUI_KEY_DOWN) {   /* On pressed down */
                 inc_selection(h, 1);                /* Increase selection */
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
@@ -508,12 +506,12 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
- * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p
-gui_listview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+gui_listview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
     return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
@@ -526,7 +524,7 @@ gui_listview_create(gui_id_t id, float x, float y, float width, float height, gu
  */
 uint8_t
 gui_listview_setcolor(gui_handle_p h, GUI_LISTVIEW_COLOR_t index, gui_color_t color) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
 }
 
@@ -540,22 +538,22 @@ gui_listview_setcolor(gui_handle_p h, GUI_LISTVIEW_COLOR_t index, gui_color_t co
 uint8_t
 gui_listview_addcolumn(gui_handle_p h, const gui_char* text, gui_dim_t width) {
     uint8_t ret = 0;
-    GUI_LISTVIEW_COL_t* col;
-    GUI_LISTVIEW_COL_t** cols;
+    gui_listview_col_t* col;
+    gui_listview_col_t** cols;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    cols = GUI_MEMREALLOC(__GL(h)->Cols, sizeof(*__GL(h)->Cols) * (__GL(h)->ColsCount + 2));/* Allocate new memory block for new pointers of columns */
-    if (cols) {
-        __GL(h)->Cols = cols;                       /* Save new pointer of memory */
+    cols = GUI_MEMREALLOC(__GL(h)->cols, sizeof(*__GL(h)->cols) * (__GL(h)->col_count + 2));/* Allocate new memory block for new pointers of columns */
+    if (cols != NULL) {
+        __GL(h)->cols = cols;                       /* Save new pointer of memory */
         col = GUI_MEMALLOC(sizeof(*col));           /* Allocate memory for new column structure */
         if (col != NULL) {
-            __GL(h)->Cols[__GL(h)->ColsCount++] = col;  /* Add column to array list */
-            __GL(h)->Cols[__GL(h)->ColsCount] = 0;  /* Add zero to the end of array */
+            __GL(h)->cols[__GL(h)->col_count++] = col;  /* Add column to array list */
+            __GL(h)->cols[__GL(h)->col_count] = 0;  /* Add zero to the end of array */
             
-            col->Text = (gui_char *)text;
-            col->Width = width > 0 ? width : 100;
+            col->text = (gui_char *)text;
+            col->width = width > 0 ? width : 100;
             ret = 1;
         }
     }
@@ -575,11 +573,11 @@ uint8_t
 gui_listview_setcolumnwidth(gui_handle_p h, uint16_t index, gui_dim_t width) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (index < __GL(h)->ColsCount) {
-        __GL(h)->Cols[index]->Width = width > 4 ? width : 4;    /* Set new width */
+    if (index < __GL(h)->col_count) {
+        __GL(h)->cols[index]->width = width > 4 ? width : 4;    /* Set new width */
         guii_widget_invalidate(h);                 /* Invalidate widget */
         ret = 1;
     }
@@ -593,22 +591,22 @@ gui_listview_setcolumnwidth(gui_handle_p h, uint16_t index, gui_dim_t width) {
  * \param[in]       h: Widget handle
  * \return          Row object handle on success, NULL otherwise
  */
-GUI_LISTVIEW_ROW_p
+gui_listview_row_p
 gui_listview_addrow(gui_handle_p h) {
-    GUI_LISTVIEW_ROW_t* row;
+    gui_listview_row_t* row;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);   /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);   /* Check input parameters */
 
     row = GUI_MEMALLOC(sizeof(*row));               /* Allocate memory for new row(s) */
     if (row != NULL) {
         __GUI_ENTER();                              /* Enter GUI */
-        gui_linkedlist_add_gen(&__GL(h)->Root, (gui_linkedlist_t *)row);/* Add new row to linked list */
-        __GL(h)->Count++;                           /* Increase number of rows */
+        gui_linkedlist_add_gen(&__GL(h)->root, (gui_linkedlist_t *)row);/* Add new row to linked list */
+        __GL(h)->count++;                           /* Increase number of rows */
         check_values(h);                            /* Check values situation */
         __GUI_LEAVE();                              /* Leave GUI */
     }
     
-    return (GUI_LISTVIEW_ROW_p)row;
+    return (gui_listview_row_p)row;
 }
 
 /**
@@ -618,15 +616,15 @@ gui_listview_addrow(gui_handle_p h) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_listview_removerow(gui_handle_p h, GUI_LISTVIEW_ROW_p row) {
-    __GUI_ASSERTPARAMS(h != NULL && row != NULL && h->Widget == &widget);   /* Check input parameters */
+gui_listview_removerow(gui_handle_p h, gui_listview_row_p row) {
+    __GUI_ASSERTPARAMS(h != NULL && row != NULL && h->widget == &widget);   /* Check input parameters */
     
     __GUI_ENTER();                                  /* Enter GUI */
     
-    gui_linkedlist_remove_gen(&__GL(h)->Root, (gui_linkedlist_t *)row);
+    gui_linkedlist_remove_gen(&__GL(h)->root, (gui_linkedlist_t *)row);
     remove_row_items(row);                          /* Remove row items */
     GUI_MEMFREE(row);
-    __GL(h)->Count--;                               /* Decrease number of elements */
+    __GL(h)->count--;                               /* Decrease number of elements */
     check_values(h);
     
     __GUI_LEAVE();                                  /* Leave GUI */
@@ -640,7 +638,7 @@ gui_listview_removerow(gui_handle_p h, GUI_LISTVIEW_ROW_p row) {
  */
 uint8_t
 gui_listview_removerows(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget); /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget); /* Check input parameters */
     
     __GUI_ENTER();                                  /* Enter GUI */
     
@@ -660,14 +658,14 @@ gui_listview_removerows(gui_handle_p h) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_listview_setitemstring(gui_handle_p h, GUI_LISTVIEW_ROW_p row, uint16_t col, const gui_char* text) {
+gui_listview_setitemstring(gui_handle_p h, gui_listview_row_p row, uint16_t col, const gui_char* text) {
     uint8_t ret = 0;
-    GUI_LISTVIEW_ITEM_t* item = 0;
+    gui_listview_item_t* item = 0;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget && row != NULL);   /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && row != NULL);   /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
-    item = (GUI_LISTVIEW_ITEM_t *)gui_linkedlist_getnext_gen(&__GLR(row)->Root, NULL);  /* Get first in linked list */
+    item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(&__GLR(row)->Root, NULL);  /* Get first in linked list */
     col++;
     while (col--) {                                 /* Find proper column */
         if (item == NULL) {
@@ -678,11 +676,11 @@ gui_listview_setitemstring(gui_handle_p h, GUI_LISTVIEW_ROW_p row, uint16_t col,
             gui_linkedlist_add_gen(&__GLR(row)->Root, (gui_linkedlist_t *)item);/* Add element to linked list */
         }
         if (col) {
-            item = (GUI_LISTVIEW_ITEM_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item);   /* Get next in linked list */
+            item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item);   /* Get next in linked list */
         }
     }
     if (item != NULL) {
-        item->Text = (gui_char *)text;              /* Set text to item */
+        item->text = (gui_char *)text;              /* Set text to item */
         ret = 1;
     }
 
@@ -700,14 +698,14 @@ gui_listview_setitemstring(gui_handle_p h, GUI_LISTVIEW_ROW_p row, uint16_t col,
  */
 uint8_t
 gui_listview_setsliderauto(gui_handle_p h, uint8_t autoMode) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (autoMode && !(__GL(h)->Flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO)) {
-        __GL(h)->Flags |= GUI_FLAG_LISTVIEW_SLIDER_AUTO;
+    if (autoMode && !(__GL(h)->flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO)) {
+        __GL(h)->flags |= GUI_FLAG_LISTVIEW_SLIDER_AUTO;
         guii_widget_invalidate(h);                 /* Invalidate widget */
-    } else if (!autoMode && (__GL(h)->Flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO)) {
-        __GL(h)->Flags &= ~GUI_FLAG_LISTVIEW_SLIDER_AUTO;
+    } else if (!autoMode && (__GL(h)->flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO)) {
+        __GL(h)->flags &= ~GUI_FLAG_LISTVIEW_SLIDER_AUTO;
         guii_widget_invalidate(h);                 /* Invalidate widget */
     }
     
@@ -727,16 +725,16 @@ uint8_t
 gui_listview_setslidervisibility(gui_handle_p h, uint8_t visible) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (!(__GL(h)->Flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO)) {
-        if (visible && !(__GL(h)->Flags & GUI_FLAG_LISTVIEW_SLIDER_ON)) {
-            __GL(h)->Flags |= GUI_FLAG_LISTVIEW_SLIDER_ON;
+    if (!(__GL(h)->flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO)) {
+        if (visible && !(__GL(h)->flags & GUI_FLAG_LISTVIEW_SLIDER_ON)) {
+            __GL(h)->flags |= GUI_FLAG_LISTVIEW_SLIDER_ON;
             guii_widget_invalidate(h);             /* Invalidate widget */
             ret = 1;
-        } else if (!visible && (__GL(h)->Flags & GUI_FLAG_LISTVIEW_SLIDER_ON)) {
-            __GL(h)->Flags &= ~GUI_FLAG_LISTVIEW_SLIDER_ON;
+        } else if (!visible && (__GL(h)->flags & GUI_FLAG_LISTVIEW_SLIDER_ON)) {
+            __GL(h)->flags &= ~GUI_FLAG_LISTVIEW_SLIDER_ON;
             guii_widget_invalidate(h);             /* Invalidate widget */
             ret = 1;
         }
@@ -756,16 +754,15 @@ uint8_t
 gui_listview_scroll(gui_handle_p h, int16_t step) {
     volatile int16_t start;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    start = __GL(h)->VisibleStartIndex;
-    __GL(h)->VisibleStartIndex += step;
+    start = __GL(h)->visiblestartindex;
+    __GL(h)->visiblestartindex += step;
         
     check_values(h);                                /* Check widget values */
     
-    start = start != __GL(h)->VisibleStartIndex;    /* Check if there was valid change */
-    
+    start = start != __GL(h)->visiblestartindex;    /* Check if there was valid change */
     if (start) {
         guii_widget_invalidate(h);
     }
@@ -782,7 +779,7 @@ gui_listview_scroll(gui_handle_p h, int16_t step) {
  */
 uint8_t
 gui_listview_setselection(gui_handle_p h, int16_t selection) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     set_selection(h, selection);                    /* Set selection */
@@ -802,10 +799,10 @@ int16_t
 gui_listview_getselection(gui_handle_p h) {
     int16_t selection;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    selection = __GL(h)->Selected;                  /* Read selection */
+    selection = __GL(h)->selected;                  /* Read selection */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return selection;
@@ -823,17 +820,17 @@ gui_listview_getselection(gui_handle_p h) {
 uint8_t
 gui_listview_getitemvalue(gui_handle_p h, uint16_t rindex, uint16_t cindex, gui_char* dst, size_t length) {
     int16_t ret = 0;
-    GUI_LISTVIEW_ROW_t* row;
+    gui_listview_row_t* row;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget && dst && length > 1); /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && dst && length > 1); /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     *dst = 0;
-    row = (GUI_LISTVIEW_ROW_t *)get_row(h, rindex); /* Get row pointer */
+    row = (gui_listview_row_t *)get_row(h, rindex); /* Get row pointer */
     if (row != NULL) {
-        GUI_LISTVIEW_ITEM_t* item = get_item_for_row(h, row, cindex);   /* Get item from column */
+        gui_listview_item_t* item = get_item_for_row(h, row, cindex);   /* Get item from column */
         if (item != NULL) {                         /* In case of valid index */
-            gui_string_copyn(dst, item->Text, length - 1);  /* Copy text to destination */
+            gui_string_copyn(dst, item->text, length - 1);  /* Copy text to destination */
             ret = 1;
         }
     }

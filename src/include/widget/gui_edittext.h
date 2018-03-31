@@ -36,14 +36,10 @@
 extern "C" {
 #endif
 
-/**
- * \addtogroup      GUI_WIDGETS
- * \{
- */
-
 #include "gui/gui.h"
 
 /**
+ * \ingroup         GUI_WIDGETS
  * \defgroup        GUI_EDITTEXT Edit text
  * \brief           Single-line edit text widget
  * \{
@@ -92,15 +88,11 @@ typedef struct GUI_EDITTEXT_t {
 } GUI_EDITTEXT_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+gui_handle_p gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
 uint8_t gui_edittext_setcolor(gui_handle_p h, GUI_EDITTEXT_COLOR_t index, gui_color_t color);
 uint8_t gui_edittext_setmultiline(gui_handle_p h, uint8_t multiline);
 uint8_t gui_edittext_setvalign(gui_handle_p h, GUI_EDITTEXT_VALIGN_t align);
 uint8_t gui_edittext_sethalign(gui_handle_p h, GUI_EDITTEXT_HALIGN_t align);
-
-/**
- * \}
- */
 
 /**
  * \}

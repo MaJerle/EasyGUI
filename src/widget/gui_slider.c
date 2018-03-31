@@ -93,13 +93,13 @@ set_value(gui_handle_p h, int32_t value) {
 
 /* Process touch event */
 static uint8_t
-touch_handle(gui_handle_p h, guii_touchdata_t* ts) {
+touch_handle(gui_handle_p h, guii_touch_data_t* ts) {
     gui_dim_t pos, delta, deltaH, width, height;
     int32_t value;
             
-    width = ts->WidgetWidth;
-    height = ts->WidgetHeight;
-    delta = get_delta(h, ts->WidgetWidth, ts->WidgetHeight);   /* Get delta value */
+    width = ts->widget_width;
+    height = ts->widget_height;
+    delta = get_delta(h, ts->widget_width, ts->widget_height);  /* Get delta value */
     deltaH = delta >> 1;
     if (is_horizontal(h)) {                         /* Horizontal widget */
         if (o->Mode == GUI_SLIDER_MODE_LEFT_RIGHT) {/* Inverted version to normal */
@@ -168,7 +168,7 @@ timer_callback(gui_timer_t* timer) {
  */
 static uint8_t
 gui_slider_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) { 
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
             o->Min = 0;                             /* Set default minimal value */
@@ -177,8 +177,8 @@ gui_slider_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
             
             o->MaxSize = 4;
             o->CurrentSize = 0;
-            o->C.Timer = gui_timer_create__(30, timer_callback, o);    /* Create timer for widget, when widget is deleted, timer will be automatically deleted too */
-            if (!o->C.Timer) {                      /* Check if timer created */
+            o->C.timer = gui_timer_create__(30, timer_callback, o);    /* Create timer for widget, when widget is deleted, timer will be automatically deleted too */
+            if (o->C.timer == NULL) {               /* Check if timer created */
                 GUI_WIDGET_RESULTTYPE_U8(result) = 0;   /* Failed, widget will be deleted */
             }
             return 1;
@@ -186,15 +186,15 @@ gui_slider_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
             gui_widget_param* v = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
             int32_t tmp;
-            switch (v->Type) {
+            switch (v->type) {
                 case CFG_MODE:                      /* Set current progress value */
-                    o->Mode = *(GUI_SLIDER_MODE_t *)v->Data;
+                    o->Mode = *(GUI_SLIDER_MODE_t *)v->data;
                     break;
                 case CFG_VALUE:                     /* Set current progress value */
-                    set_value(h, *(int32_t *)v->Data);
+                    set_value(h, *(int32_t *)v->data);
                     break;
                 case CFG_MAX:                       /* Set maximal value */
-                    tmp = *(int32_t *)v->Data;
+                    tmp = *(int32_t *)v->data;
                     if (tmp > o->Min) {
                         o->Max = tmp;
                         if (o->Value > o->Max) {
@@ -203,7 +203,7 @@ gui_slider_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
                     }
                     break;
                 case CFG_MIN:                       /* Set minimal value */
-                    tmp = *(int32_t *)v->Data;
+                    tmp = *(int32_t *)v->data;
                     if (tmp < o->Max) {
                         o->Min = tmp;
                         if (o->Value < o->Min) {
@@ -293,7 +293,7 @@ gui_slider_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
             return 1;
 #endif /* GUI_CFG_USE_TOUCH */
         case GUI_WC_ActiveIn: {
-            gui_timer_startperiodic__(o->C.Timer);  /* Start animation timer */
+            gui_timer_startperiodic__(o->C.timer);  /* Start animation timer */
             return 1;
         }
         case GUI_WC_ActiveOut: {
@@ -315,12 +315,12 @@ gui_slider_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
- * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for create procedure
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p
-gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
     return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
@@ -333,7 +333,7 @@ gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_
  */
 uint8_t
 gui_slider_setcolor(gui_handle_p h, GUI_SLIDER_COLOR_t index, gui_color_t color) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
 }
 
@@ -345,7 +345,7 @@ gui_slider_setcolor(gui_handle_p h, GUI_SLIDER_COLOR_t index, gui_color_t color)
  */
 uint8_t
 gui_slider_setmode(gui_handle_p h, GUI_SLIDER_MODE_t mode) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setparam(h, CFG_MODE, &mode, 1, 0); /* Set parameter */
 }
 
@@ -358,7 +358,7 @@ gui_slider_setmode(gui_handle_p h, GUI_SLIDER_MODE_t mode) {
  */
 uint8_t
 gui_slider_setvalue(gui_handle_p h, int32_t val) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setparam(h, CFG_VALUE, &val, 1, 0); /* Set parameter */
 }
 
@@ -371,7 +371,7 @@ gui_slider_setvalue(gui_handle_p h, int32_t val) {
  */
 uint8_t
 gui_slider_setmin(gui_handle_p h, int32_t val) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setparam(h, CFG_MIN, &val, 1, 0);   /* Set parameter */
 }
 
@@ -384,7 +384,7 @@ gui_slider_setmin(gui_handle_p h, int32_t val) {
  */
 uint8_t
 gui_slider_setmax(gui_handle_p h, int32_t val) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setparam(h, CFG_MAX, &val, 1, 0);   /* Set parameter */
 }
 
@@ -397,7 +397,7 @@ gui_slider_setmax(gui_handle_p h, int32_t val) {
 int32_t
 gui_slider_getmin(gui_handle_p h) {
     int32_t val;
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
     val = __GS(h)->Min;                             /* Get minimal value */
@@ -415,7 +415,7 @@ gui_slider_getmin(gui_handle_p h) {
 int32_t
 gui_slider_getmax(gui_handle_p h) {
     int32_t val;
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
     val = __GS(h)->Max;                             /* Get maximal value */
@@ -433,7 +433,7 @@ gui_slider_getmax(gui_handle_p h) {
 int32_t
 gui_slider_getvalue(gui_handle_p h) {
     int32_t val;
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
     val = __GS(h)->Value;                           /* Get current value */

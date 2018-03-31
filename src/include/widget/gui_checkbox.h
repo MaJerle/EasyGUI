@@ -48,13 +48,13 @@ extern "C" {
 /**
  * \brief           List of checkbox colors
  */
-typedef enum GUI_CHECKBOX_COLOR_t {
+typedef enum {
     GUI_CHECKBOX_COLOR_BG = 0x00,           /*!< Background color index */
     GUI_CHECKBOX_COLOR_FG,                  /*!< Foreground color index */
     GUI_CHECKBOX_COLOR_BORDER,              /*!< Border color index */
     GUI_CHECKBOX_COLOR_DISABLED_BG,         /*!< Background color index when disabled */
     GUI_CHECKBOX_COLOR_TEXT,                /*!< Text color index */
-} GUI_CHECKBOX_COLOR_t;
+} gui_checkbox_color_t;
 
 #if defined(GUI_INTERNAL) || __DOXYGEN__
 
@@ -64,19 +64,19 @@ typedef enum GUI_CHECKBOX_COLOR_t {
 /**
  * \brief           Checkbox object structure
  */
-typedef struct GUI_CHECKBOX_t {
+typedef struct {
     gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
-    uint8_t Flags;                          /*!< Widget flags */
-} GUI_CHECKBOX_t;
+    uint8_t flags;                          /*!< Widget flags */
+} gui_checkbox_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p gui_checkbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
-uint8_t gui_checkbox_setcolor(gui_handle_p h, GUI_CHECKBOX_COLOR_t index, gui_color_t color);
-uint8_t gui_checkbox_setchecked(gui_handle_p h, uint8_t checked);
-uint8_t gui_checkbox_ischecked(gui_handle_p h);
-uint8_t gui_checkbox_setdisabled(gui_handle_p h, uint8_t disabled);
-uint8_t gui_checkbox_isdisabled(gui_handle_p h);
+gui_handle_p    gui_checkbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+uint8_t         gui_checkbox_setcolor(gui_handle_p h, gui_checkbox_color_t index, gui_color_t color);
+uint8_t         gui_checkbox_setchecked(gui_handle_p h, uint8_t checked);
+uint8_t         gui_checkbox_ischecked(gui_handle_p h);
+uint8_t         gui_checkbox_setdisabled(gui_handle_p h, uint8_t disabled);
+uint8_t         gui_checkbox_isdisabled(gui_handle_p h);
 
 /**
  * \}

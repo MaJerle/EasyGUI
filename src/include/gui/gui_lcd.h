@@ -45,8 +45,8 @@ extern "C" {
  * \{
  */
 
-gui_idim_t  gui_lcd_getwidth(void);
-gui_idim_t  gui_lcd_getheight(void);
+gui_dim_t  gui_lcd_getwidth(void);
+gui_dim_t  gui_lcd_getheight(void);
 void        gui_lcd_confirmactivelayer(uint8_t layer_num);
 
 /**

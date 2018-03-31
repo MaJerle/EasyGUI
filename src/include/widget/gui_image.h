@@ -36,13 +36,10 @@
 extern "C" {
 #endif
 
-/**
- * \addtogroup      GUI_WIDGETS
- * \{
- */
 #include "gui_widget.h"
 
 /**
+ * \ingroup         GUI_WIDGETS
  * \defgroup        GUI_IMAGE Image
  * \brief           Image display widget
  * \{
@@ -59,12 +56,8 @@ typedef struct GUI_IMAGE_t {
 } GUI_IMAGE_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
     
-gui_handle_p gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+gui_handle_p gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
 uint8_t gui_image_setsource(gui_handle_p h, const GUI_IMAGE_DESC_t* img);
-
-/**
- * \}
- */
 
 /**
  * \}

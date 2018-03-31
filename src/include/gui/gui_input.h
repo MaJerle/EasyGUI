@@ -43,14 +43,14 @@ extern "C" {
  */
 #include "gui/gui.h"
     
-uint8_t gui_input_touchadd(gui_touchdata_t* ts);
-uint8_t gui_input_keyadd(gui_keyboarddata_t* kb);
+uint8_t gui_input_touchadd(gui_touch_data_t* ts);
+uint8_t gui_input_keyadd(gui_keyboard_data_t* kb);
 
 #if !__DOXYGEN__ && defined(GUI_INTERNAL)
 void gui_input_init(void);
 uint8_t gui_input_touchavailable(void);
-uint8_t gui_input_touchread(gui_touchdata_t* ts);
-uint8_t gui_input_keyread(gui_keyboarddata_t* kb);
+uint8_t gui_input_touchread(gui_touch_data_t* ts);
+uint8_t gui_input_keyread(gui_keyboard_data_t* kb);
 #endif /* !__DOXYGEN__ && defined(GUI_INTERNAL) */
 
 /**

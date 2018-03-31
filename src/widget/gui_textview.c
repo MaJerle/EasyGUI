@@ -75,12 +75,12 @@ gui_textview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
             gui_widget_param* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
-            switch (p->Type) {
+            switch (p->type) {
                 case CFG_HALIGN: 
-                    o->HAlign = *(GUI_TEXTVIEW_HALIGN_t *)p->Data;
+                    o->HAlign = *(GUI_TEXTVIEW_HALIGN_t *)p->data;
                     break;
                 case CFG_VALIGN: 
-                    o->VAlign = *(GUI_TEXTVIEW_VALIGN_t *)p->Data;
+                    o->VAlign = *(GUI_TEXTVIEW_VALIGN_t *)p->data;
                     break;
                 default: break;
             }
@@ -122,7 +122,7 @@ gui_textview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
         }
 #if GUI_CFG_USE_KEYBOARD
         case GUI_WC_KeyPress: {
-            __gui_keyboarddata_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
+            guii_keyboard_data_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (guii_widget_processtextkey(h, kb)) {
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }
@@ -147,12 +147,12 @@ gui_textview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
- * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p
-gui_textview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+gui_textview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
     return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
@@ -166,7 +166,7 @@ gui_textview_create(gui_id_t id, float x, float y, float width, float height, gu
 uint8_t
 gui_textview_setcolor(gui_handle_p h, GUI_TEXTVIEW_COLOR_t index, gui_color_t color) {
     uint8_t ret;
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     ret = guii_widget_setcolor(h, (uint8_t)index, color);  /* Set color */
     
     if (ret) {                                      /* Check success */
@@ -187,7 +187,7 @@ gui_textview_setcolor(gui_handle_p h, GUI_TEXTVIEW_COLOR_t index, gui_color_t co
  */
 uint8_t
 gui_textview_setvalign(gui_handle_p h, GUI_TEXTVIEW_VALIGN_t align) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setparam(h, CFG_VALIGN, &align, 1, 1);  /* Set parameter */
 }
 
@@ -199,6 +199,6 @@ gui_textview_setvalign(gui_handle_p h, GUI_TEXTVIEW_VALIGN_t align) {
  */
 uint8_t
 gui_textview_sethalign(gui_handle_p h, GUI_TEXTVIEW_HALIGN_t align) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setparam(h, CFG_HALIGN, &align, 1, 1);  /* Set parameter */
 }

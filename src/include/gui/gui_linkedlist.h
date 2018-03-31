@@ -36,14 +36,10 @@
 extern "C" {
 #endif
 
-/**
- * \addtogroup      GUI_UTILS
- * \brief       
- * \{
- */
-#include "gui_utils.h"
+#include "gui/gui_utils.h"
 
 /**
+ * \ingroup         GUI_UTILS
  * \defgroup        GUI_LINKEDLIST Linked list
  * \brief           Linked list generic functions
  * \{
@@ -54,34 +50,34 @@ extern "C" {
 /**
  * \brief           Get data from multi linked list object
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       element: Linked list element of \ref GUI_LinkedListMulti_t structure
+ * \param[in]       element: Linked list element of \ref gui_linkedlistmulti_t structure
  * \retval          Element in linked list
  * \hideinitializer
  */
-#define gui_linkedlist_multi_getdata(element)     ((element) ? (element)->Element : 0)
-void gui_linkedlist_add_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
-gui_linkedlist_t* gui_linkedlist_remove_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
-gui_linkedlist_t* gui_linkedlist_getnext_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
-gui_linkedlist_t* gui_linkedlist_getprev_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
-gui_linkedlist_t* gui_linkedlist_getnext_byindex_gen(gui_linkedlistroot_t* root, uint16_t index);
-uint8_t gui_linkedlist_movedown_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
-uint8_t gui_linkedlist_moveup_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
-GUI_LinkedListMulti_t* gui_linkedlist_multi_add_gen(gui_linkedlistroot_t* root, void* element);
-uint8_t gui_linkedlist_multi_remove_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti_t* element);
-GUI_LinkedListMulti_t* gui_linkedlist_multi_getnext_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti_t* element);
-GUI_LinkedListMulti_t* gui_linkedlist_multi_getprev_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti_t* element);
-uint8_t gui_linkedlist_multi_movedown_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti_t* element);
-uint8_t gui_linkedlist_multi_moveup_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti_t* element);
-uint8_t gui_linkedlist_multi_find_remove(gui_linkedlistroot_t* root, void* element);
+#define gui_linkedlist_multi_getdata(e)     (((e) != NULL) ? (e)->element : NULL)
+
+void                    gui_linkedlist_add_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
+gui_linkedlist_t*       gui_linkedlist_remove_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
+gui_linkedlist_t*       gui_linkedlist_getnext_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
+gui_linkedlist_t*       gui_linkedlist_getprev_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
+gui_linkedlist_t*       gui_linkedlist_getnext_byindex_gen(gui_linkedlistroot_t* root, uint16_t index);
+uint8_t                 gui_linkedlist_movedown_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
+uint8_t                 gui_linkedlist_moveup_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
+gui_linkedlistmulti_t*  gui_linkedlist_multi_add_gen(gui_linkedlistroot_t* root, void* element);
+uint8_t                 gui_linkedlist_multi_remove_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_t* element);
+gui_linkedlistmulti_t*  gui_linkedlist_multi_getnext_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_t* element);
+gui_linkedlistmulti_t*  gui_linkedlist_multi_getprev_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_t* element);
+uint8_t                 gui_linkedlist_multi_movedown_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_t* element);
+uint8_t                 gui_linkedlist_multi_moveup_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_t* element);
+uint8_t                 gui_linkedlist_multi_find_remove(gui_linkedlistroot_t* root, void* element);
     
 /**
  * \brief           Checks if linked list has any entries
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
- * \return          `1` on success, `0` otherwise No entries
- * \retval          > 0: Has entries
+ * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
-#define gui_linkedlist_hasentries(root)       (!!((root)->First))
+#define gui_linkedlist_hasentries(root)       ((root)->first != NULL)
 
 /**
  * \defgroup        GUI_LINKEDLIST_WIDGET Widget linked list
@@ -97,44 +93,37 @@ uint8_t gui_linkedlist_multi_find_remove(gui_linkedlistroot_t* root, void* eleme
  * \brief           Check if widget is first child element in linked list
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle
- * \return          `1` on success, `0` otherwise Widget is first child
- * \return          `1` on success, `0` otherwise Widget is not first child
- * \sa              gui_linkedlist_iswidgetlast
+ * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
-#define gui_linkedlist_iswidgetfirst(h)       (!(h) || !(__GH(h))->List.Prev)
+#define gui_linkedlist_iswidgetfirst(h)       ((h) == NULL || (__GH(h))->list.prev == NULL)
 
 /**
  * \brief           Check if widget is last child element in linked list
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle
- * \return          `1` on success, `0` otherwise Widget is last child
- * \return          `1` on success, `0` otherwise Widget is not last child
- * \sa              gui_linkedlist_iswidgetfirst
+ * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
-#define gui_linkedlist_iswidgetlast(h)        (!(h) || !(__GH(h))->List.Next)
-void gui_linkedlist_widgetadd(gui_handle_ROOT_t* parent, gui_handle_p h);
-void gui_linkedlist_widgetremove(gui_handle_p h);
-uint8_t gui_linkedlist_widgetmoveup(gui_handle_p h);
-uint8_t gui_linkedlist_widgetmovedown(gui_handle_p h);
-gui_handle_p gui_linkedlist_widgetgetnext(gui_handle_ROOT_t* parent, gui_handle_p h);
-gui_handle_p gui_linkedlist_widgetgetprev(gui_handle_ROOT_t* parent, gui_handle_p h);
-uint8_t gui_linkedlist_widgetmovetobottom(gui_handle_p h);
-uint8_t gui_linkedlist_widgetmovetotop(gui_handle_p h);
- 
-#endif /* GUI_INTERNAL || __DOXYGEN__ */
+#define gui_linkedlist_iswidgetlast(h)        ((h) == NULL || (__GH(h))->list.next == NULL)
+
+void            gui_linkedlist_widgetadd(gui_handle_root_t* parent, gui_handle_p h);
+void            gui_linkedlist_widgetremove(gui_handle_p h);
+uint8_t         gui_linkedlist_widgetmoveup(gui_handle_p h);
+uint8_t         gui_linkedlist_widgetmovedown(gui_handle_p h);
+gui_handle_p    gui_linkedlist_widgetgetnext(gui_handle_root_t* parent, gui_handle_p h);
+gui_handle_p    gui_linkedlist_widgetgetprev(gui_handle_root_t* parent, gui_handle_p h);
+uint8_t         gui_linkedlist_widgetmovetobottom(gui_handle_p h);
+uint8_t         gui_linkedlist_widgetmovetotop(gui_handle_p h);
 
 /**
  * \}
  */
 
 void gui_linkedlist_printlist(void);
-
-/**
- * \}
- */
  
+#endif /* GUI_INTERNAL || __DOXYGEN__ */
+
 /**
  * \}
  */

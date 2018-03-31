@@ -36,13 +36,10 @@
 extern "C" {
 #endif
 
-/**
- * \addtogroup      GUI_WIDGETS
- * \{
- */
 #include "gui_widget.h"
 
 /**
+ * \ingroup         GUI_WIDGETS
  * \defgroup        GUI_LED Led
  * \brief           Simple LED
  * \{
@@ -77,21 +74,17 @@ typedef struct GUI_LED_t {
     gui_handle C;                           /*!< Global widget object */
     
     GUI_LED_TYPE_t Type;                    /*!< Led shape type */
-    GUI_Byte Flags;                         /*!< Flags management for LED */
+    uint8_t Flags;                         /*!< Flags management for LED */
 } GUI_LED_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p gui_led_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+gui_handle_p gui_led_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
 uint8_t gui_led_setcolor(gui_handle_p h, GUI_LED_COLOR_t index, gui_color_t color);
 uint8_t gui_led_settype(gui_handle_p h, GUI_LED_TYPE_t type);
 uint8_t gui_led_toggle(gui_handle_p h);
 uint8_t gui_led_set(gui_handle_p h, uint8_t state);
 uint8_t gui_led_ison(gui_handle_p h);
 
-/**
- * \}
- */
- 
 /**
  * \}
  */

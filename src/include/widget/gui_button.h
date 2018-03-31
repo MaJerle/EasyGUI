@@ -36,14 +36,10 @@
 extern "C" {
 #endif
     
-/**
- * \addtogroup      GUI_WIDGETS
- * \{
- */
-    
 #include "gui_widget.h"
 
 /**
+ * \ingroup         GUI_WIDGETS
  * \defgroup        GUI_BUTTON Button
  * \brief           Button which can be pressed
  * \{
@@ -56,7 +52,7 @@ extern "C" {
 /**
  * \brief           Button color list enumeration
  */
-typedef enum gui_button_color_t {
+typedef enum {
     GUI_BUTTON_COLOR_BG = 0x00,             /*!< Background color index */
     GUI_BUTTON_COLOR_FG,                    /*!< Foreground color index */
     GUI_BUTTON_COLOR_BORDER,                /*!< Border color index in array */
@@ -66,22 +62,18 @@ typedef enum gui_button_color_t {
 /**
  * \brief           GUI button structure
  */
-typedef struct GUI_BUTTON_t {
+typedef struct {
     gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
-    gui_dim_t BorderWidth;                  /*!< Border width */
-    gui_dim_t BorderRadius;                 /*!< Border radius */
-} GUI_BUTTON_t;
+    gui_dim_t borderwidth;                  /*!< Border width */
+    gui_dim_t borderradius;                 /*!< Border radius */
+} gui_button_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p    gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+gui_handle_p    gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
 uint8_t         gui_button_setcolor(gui_handle_p h, gui_button_color_t index, gui_color_t color);
 uint8_t         gui_button_setborderradius(gui_handle_p h, gui_dim_t size);
     
-/**
- * \}
- */
- 
 /**
  * \}
  */

@@ -36,13 +36,10 @@
 extern "C" {
 #endif
 
-/**
- * \addtogroup      GUI_WIDGETS
- * \{
- */
 #include "gui_widget.h"
 
 /**
+ * \ingroup         GUI_WIDGETS
  * \defgroup        GUI_RADIO Radio box
  * \brief           Radio box widget
  * \{
@@ -77,7 +74,7 @@ typedef struct {
 } gui_radio_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p gui_radio_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+gui_handle_p gui_radio_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
 uint8_t gui_radio_setcolor(gui_handle_p h, GUI_RADIO_COLOR_t index, gui_color_t color);
 uint8_t gui_radio_setgroup(gui_handle_p h, uint8_t groupId);
 uint8_t gui_radio_getgroup(gui_handle_p h);
@@ -88,10 +85,6 @@ uint8_t gui_radio_setdisabled(gui_handle_p h, uint8_t disabled);
 uint8_t gui_radio_isdisabled(gui_handle_p h);
 uint8_t gui_radio_setselected(gui_handle_p h);
     
-/**
- * \}
- */
-
 /**
  * \}
  */

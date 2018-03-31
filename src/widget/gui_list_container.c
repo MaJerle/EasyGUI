@@ -72,7 +72,7 @@ calculate_limits(gui_handle_p h) {
     /*
      * Scan all children widgets and check for maximal possible scroll
      */
-    for (w = gui_linkedlist_widgetgetnext((gui_handle_ROOT_t *)h, NULL); w;
+    for (w = gui_linkedlist_widgetgetnext((gui_handle_root_t *)h, NULL); w;
             w = gui_linkedlist_widgetgetnext(NULL, w)) {
 
         x = guii_widget_getrelativex(w);           /* Get absolute position on screen */
@@ -118,7 +118,7 @@ calculate_limits(gui_handle_p h) {
  */
 static uint8_t
 gui_listcontainer_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
-    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
             guii_widget_setpadding(h, 3);          /* Set padding */
@@ -147,7 +147,7 @@ gui_listcontainer_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* pa
             return 1;
         }
         case GUI_WC_TouchMove: {
-            guii_touchdata_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
+            guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
             gui_widget_incscrolly(h, ts->RelOldY[0] - ts->RelY[0]);
             if (gui_widget_getscrolly(h) < 0) {
@@ -171,11 +171,11 @@ gui_listcontainer_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* pa
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
- * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
+ * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p
-gui_listcontainer_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+gui_listcontainer_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
     return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }

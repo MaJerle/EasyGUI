@@ -65,7 +65,7 @@ gui_timer_create__(uint16_t period, void (*callback)(gui_timer_t *), void* param
         ptr->Params = params;                       /* Timer custom parameters */
         ptr->Flags = 0;                             /* Timer flags management */
         
-        gui_linkedlist_add_gen(&GUI.timers.List, (gui_linkedlist_t *)ptr);  /* Add timer to linked list */
+        gui_linkedlist_add_gen(&GUI.timers.list, (gui_linkedlist_t *)ptr);  /* Add timer to linked list */
 #if GUI_CFG_OS
         gui_sys_mbox_putnow(&GUI.OS.mbox, &timer_msg);  /* Add new message to queue */
 #endif /* GUI_CFG_OS */
@@ -83,7 +83,7 @@ gui_timer_create__(uint16_t period, void (*callback)(gui_timer_t *), void* param
 uint8_t
 gui_timer_remove__(gui_timer_t** t) {  
     __GUI_ASSERTPARAMS(t && *t);                    /* Check input parameters */  
-    gui_linkedlist_remove_gen(&GUI.timers.List, (gui_linkedlist_t *)(*t));  /* Remove timer from linked list */
+    gui_linkedlist_remove_gen(&GUI.timers.list, (gui_linkedlist_t *)(*t));  /* Remove timer from linked list */
     GUI_MEMFREE(*t);                                /* Free memory for timer */
     *t = 0;                                         /* Clear pointer */
     
@@ -170,7 +170,8 @@ gui_timer_process(void) {
     }
     
     /* Process all software timers */
-    for (t = (gui_timer_t *)GUI.timers.List.First; t; t = (gui_timer_t *)t->List.Next) {
+    for (t = (gui_timer_t *)GUI.timers.list.first; t != NULL;
+        t = (gui_timer_t *)t->list.next) {
         if (t->Flags & GUI_FLAG_TIMER_CALL) {       /* Counter is set to 0, process callback */
             t->Flags &= ~GUI_FLAG_TIMER_CALL;       /* Clear timer flag */
             if (!gui_timer_isperiodic__(t)) {       /* If timer is not periodic */
@@ -207,7 +208,8 @@ uint32_t
 gui_timer_getactivecount(void) {
     uint32_t cnt = 0;
     gui_timer_t* t;
-    for (t = (gui_timer_t *)GUI.timers.List.First; t; t = (gui_timer_t *)t->List.Next) {
+    for (t = (gui_timer_t *)gui_linkedlist_getnext_gen(&GUI.timers.list, NULL); t != NULL;
+        t = (gui_timer_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)t)) {
         if ((t->Flags & GUI_FLAG_TIMER_ACTIVE)) {
             cnt++;
         }

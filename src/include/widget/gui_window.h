@@ -36,13 +36,10 @@
 extern "C" {
 #endif
 
-/**
- * \addtogroup      GUI_WIDGETS
- * \{
- */
 #include "gui_widget.h"
 
 /**
+ * \ingroup         GUI_WIDGETS
  * \defgroup        GUI_WINDOW Window
  * \brief           Basic widget and core parent to all other widgets
  * \{
@@ -63,7 +60,7 @@ typedef enum GUI_WINDOW_COLOR_t {
  * \brief           Window object structure
  */
 typedef struct GUI_WINDOW_t {
-    gui_handle_ROOT_t C;                    /*!< GUI handle object, must always be first on list */
+    gui_handle_root_t C;                    /*!< GUI handle object, must always be first on list */
     
     uint32_t Number;                        /*!< Window number */
     
@@ -74,16 +71,12 @@ typedef struct GUI_WINDOW_t {
   
 gui_handle_p gui_window_getdesktop(void);
 uint8_t gui_window_setactive(gui_handle_p h);
-gui_handle_p gui_window_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+gui_handle_p gui_window_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
 uint8_t gui_window_setcolor(gui_handle_p h, GUI_WINDOW_COLOR_t index, gui_color_t color);
 
 #if defined(GUI_INTERNAL)
-gui_handle_p gui_window_createdesktop(gui_id_t id, GUI_WIDGET_CALLBACK_t cb);
+gui_handle_p gui_window_createdesktop(gui_id_t id, gui_widget_callback_t cb);
 #endif /* defined(GUI_INTERNAL) */
- 
-/**
- * \}
- */
  
 /**
  * \}

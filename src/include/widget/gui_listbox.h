@@ -69,7 +69,7 @@ typedef enum GUI_LISTBOX_COLOR_t {
  * \brief           LISTBOX string item object
  */
 typedef struct GUI_LISTBOX_ITEM_t {
-    gui_linkedlist_t List;                  /*!< Linked list entry, must be first on list */
+    gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
     gui_char* Text;                         /*!< Text entry */
 } GUI_LISTBOX_ITEM_t;
     
@@ -81,7 +81,7 @@ typedef struct GUI_LISTBOX_t {
     
     int16_t Count;                          /*!< Current number of strings attached to this widget */
     int16_t Selected;                       /*!< Selected text index */
-    int16_t VisibleStartIndex;              /*!< Index in array of string on top of visible area of widget */
+    int16_t visiblestartindex;              /*!< Index in array of string on top of visible area of widget */
     
     gui_linkedlistroot_t Root;              /*!< Root of linked list entries */
     
@@ -90,7 +90,7 @@ typedef struct GUI_LISTBOX_t {
 } GUI_LISTBOX_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p gui_listbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+gui_handle_p gui_listbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
 uint8_t gui_listbox_setcolor(gui_handle_p h, GUI_LISTBOX_COLOR_t index, gui_color_t color);
 uint8_t gui_listbox_addstring(gui_handle_p h, const gui_char* text);
 uint8_t gui_listbox_deletefirststring(gui_handle_p h);
