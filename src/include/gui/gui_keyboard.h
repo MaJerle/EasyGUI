@@ -36,15 +36,11 @@
 extern "C" {
 #endif
 
-/**
- * \addtogroup      GUI_INPUT
- * \{
- */
-
 #include "gui/gui_input.h"
 #include "widget/gui_widget.h"
 
 /**
+ * \ingroup         GUI_INPUT
  * \defgroup        GUI_KEYBOARD Virtual keyboard
  * \brief           Virtual keyboard on screen
  * \{
@@ -52,25 +48,23 @@ extern "C" {
     
 /**
  * \defgroup        GUI_KEYBOARD_Private Private functions
- * \brief           Private keyboard functions *
+ * \brief           Private keyboard functions
  * \{
+ *
+ * \note            This function may be called only when GUI core is protected
  */
  
-uint8_t gui_keyboard_hide__(void);
-uint8_t gui_keyboard_show__(GUI_HANDLE_p h);
+uint8_t     guii_keyboard_hide(void);
+uint8_t     guii_keyboard_show(gui_handle_p h);
     
 /**
  * \}
  */
     
-GUI_HANDLE_p gui_keyboard_create(void);
-uint8_t gui_keyboard_hide(void);
-uint8_t gui_keyboard_show(GUI_HANDLE_p h);
+gui_handle_p    gui_keyboard_create(void);
+uint8_t         gui_keyboard_hide(void);
+uint8_t         gui_keyboard_show(gui_handle_p h);
     
-/**
- * \}
- */
-
 /**
  * \}
  */

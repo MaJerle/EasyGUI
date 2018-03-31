@@ -56,27 +56,27 @@ extern "C" {
 /**
  * \brief           Button color list enumeration
  */
-typedef enum GUI_BUTTON_COLOR_t {
+typedef enum gui_button_color_t {
     GUI_BUTTON_COLOR_BG = 0x00,             /*!< Background color index */
     GUI_BUTTON_COLOR_FG,                    /*!< Foreground color index */
     GUI_BUTTON_COLOR_BORDER,                /*!< Border color index in array */
-} GUI_BUTTON_COLOR_t;
+} gui_button_color_t;
 
 #if defined(GUI_INTERNAL) || __DOXYGEN__
 /**
  * \brief           GUI button structure
  */
 typedef struct GUI_BUTTON_t {
-    GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
-    GUI_Dim_t BorderWidth;                  /*!< Border width */
-    GUI_Dim_t BorderRadius;                 /*!< Border radius */
+    gui_dim_t BorderWidth;                  /*!< Border width */
+    gui_dim_t BorderRadius;                 /*!< Border radius */
 } GUI_BUTTON_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-GUI_HANDLE_p gui_button_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
-uint8_t gui_button_setcolor(GUI_HANDLE_p h, GUI_BUTTON_COLOR_t index, GUI_Color_t color);
-uint8_t gui_button_setborderradius(GUI_HANDLE_p h, GUI_Dim_t size);
+gui_handle_p    gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+uint8_t         gui_button_setcolor(gui_handle_p h, gui_button_color_t index, gui_color_t color);
+uint8_t         gui_button_setborderradius(gui_handle_p h, gui_dim_t size);
     
 /**
  * \}

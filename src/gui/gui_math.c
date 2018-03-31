@@ -38,7 +38,7 @@
  *
  * \param[in]       x: Number to calculate square from
  * \param[out]      result: Pointer to float variable to store result to
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_math_sqrt(float x, float* result) {
@@ -56,7 +56,7 @@ gui_math_sqrt(float x, float* result) {
  *
  * \param[in]       x: Number to calculate reverse square from
  * \param[out]      result: Pointer to float variable to store result to
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_math_rsqrt(float x, float* result) {
@@ -87,7 +87,7 @@ gui_math_rsqrt(float x, float* result) {
  * \param[in]       x2: X position of point 2
  * \param[in]       y2: Y position of point 2
  * \param[out]      result: Pointer to float variable to store result to
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_math_distancebetweenxy(float x1, float y1, float x2, float y2, float* result) {
@@ -107,7 +107,7 @@ gui_math_distancebetweenxy(float x1, float y1, float x2, float y2, float* result
  * \param[in]       y2: Y position of point 2
  * \param[out]      resultX: Pointer to float variable to store result about X position to
  * \param[out]      resultY: Pointer to float variable to store result about Y position to
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_math_centerofxy(float x1, float y1, float x2, float y2, float* resultX, float* resultY) {

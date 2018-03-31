@@ -827,7 +827,7 @@ GUI_Const GUI_FONT_CharInfo_t Calibri_Bold_8_CharTable[] = {
     {   4,    1,  0,    0,    1, Font_Calibri_Bold_8_007f},
 };
 
-GUI_Const GUI_FONT_t GUI_Font_Calibri_Bold_8 = {
+GUI_Const gui_font_t GUI_Font_Calibri_Bold_8 = {
     _GT("Calibri Bold"),
     8,
     0x20,

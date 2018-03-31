@@ -84,7 +84,7 @@ typedef enum GUI_EDITTEXT_HALIGN_t {
  * \brief           GUI EDIT TEXT widget structure
  */
 typedef struct GUI_EDITTEXT_t {
-    GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
     uint8_t Flags;                          /*!< List of widget flags */
     GUI_EDITTEXT_VALIGN_t VAlign;           /*!< Vertical align setup */
@@ -92,11 +92,11 @@ typedef struct GUI_EDITTEXT_t {
 } GUI_EDITTEXT_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-GUI_HANDLE_p gui_edittext_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
-uint8_t gui_edittext_setcolor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color);
-uint8_t gui_edittext_setmultiline(GUI_HANDLE_p h, uint8_t multiline);
-uint8_t gui_edittext_setvalign(GUI_HANDLE_p h, GUI_EDITTEXT_VALIGN_t align);
-uint8_t gui_edittext_sethalign(GUI_HANDLE_p h, GUI_EDITTEXT_HALIGN_t align);
+gui_handle_p gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+uint8_t gui_edittext_setcolor(gui_handle_p h, GUI_EDITTEXT_COLOR_t index, gui_color_t color);
+uint8_t gui_edittext_setmultiline(gui_handle_p h, uint8_t multiline);
+uint8_t gui_edittext_setvalign(gui_handle_p h, GUI_EDITTEXT_VALIGN_t align);
+uint8_t gui_edittext_sethalign(gui_handle_p h, GUI_EDITTEXT_HALIGN_t align);
 
 /**
  * \}

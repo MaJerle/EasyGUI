@@ -83,43 +83,43 @@ typedef enum GUI_DROPDOWN_OPENDIR_t {
  * \brief           Dropdown string item object
  */
 typedef struct GUI_DROPDOWN_ITEM_t {
-    GUI_LinkedList_t List;                  /*!< Linked list entry, must be first on list */
-    GUI_Char* Text;                         /*!< Text entry */
+    gui_linkedlist_t List;                  /*!< Linked list entry, must be first on list */
+    gui_char* Text;                         /*!< Text entry */
 } GUI_DROPDOWN_ITEM_t;
     
 /**
  * \brief           Dropdown object structure
  */
 typedef struct GUI_DROPDOWN_t {
-    GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
-    GUI_iDim_t OldY;                        /*!< Y coordinate register before widget opened */
-    GUI_iDim_t OldHeight;                   /*!< Height value register before widget opened */
+    gui_idim_t OldY;                        /*!< Y coordinate register before widget opened */
+    gui_idim_t OldHeight;                   /*!< Height value register before widget opened */
     
     int16_t Count;                          /*!< Current number of strings attached to this widget */
     int16_t Selected;                       /*!< Selected text index */
     int16_t VisibleStartIndex;              /*!< Index in array of string on top of visible area of widget */
     
-    GUI_LinkedListRoot_t Root;              /*!< Root of linked list entries */
+    gui_linkedlistroot_t Root;              /*!< Root of linked list entries */
     
-    GUI_Dim_t SliderWidth;                  /*!< Slider width in units of pixels */
+    gui_dim_t SliderWidth;                  /*!< Slider width in units of pixels */
     uint8_t Flags;                          /*!< Widget flags */
 } GUI_DROPDOWN_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-GUI_HANDLE_p gui_dropdown_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
-uint8_t gui_dropdown_setcolor(GUI_HANDLE_p h, GUI_DROPDOWN_COLOR_t index, GUI_Color_t color);
-uint8_t gui_dropdown_addstring(GUI_HANDLE_p h, const GUI_Char* text);
-uint8_t gui_dropdown_deletefirststring(GUI_HANDLE_p h);
-uint8_t gui_dropdown_deletelaststring(GUI_HANDLE_p h);
-uint8_t gui_dropdown_deletestring(GUI_HANDLE_p h, uint16_t index);
-uint8_t gui_dropdown_setstring(GUI_HANDLE_p h, uint16_t index, const GUI_Char* text);
-uint8_t gui_dropdown_setselection(GUI_HANDLE_p h, int16_t selection);
-int16_t gui_dropdown_getselection(GUI_HANDLE_p h);
-uint8_t gui_dropdown_setsliderauto(GUI_HANDLE_p h, uint8_t autoMode);
-uint8_t gui_dropdown_setslidervisibility(GUI_HANDLE_p h, uint8_t visible);
-uint8_t gui_dropdown_scroll(GUI_HANDLE_p h, int16_t step);
-uint8_t gui_dropdown_setopendirection(GUI_HANDLE_p h, GUI_DROPDOWN_OPENDIR_t dir);
+gui_handle_p gui_dropdown_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+uint8_t gui_dropdown_setcolor(gui_handle_p h, GUI_DROPDOWN_COLOR_t index, gui_color_t color);
+uint8_t gui_dropdown_addstring(gui_handle_p h, const gui_char* text);
+uint8_t gui_dropdown_deletefirststring(gui_handle_p h);
+uint8_t gui_dropdown_deletelaststring(gui_handle_p h);
+uint8_t gui_dropdown_deletestring(gui_handle_p h, uint16_t index);
+uint8_t gui_dropdown_setstring(gui_handle_p h, uint16_t index, const gui_char* text);
+uint8_t gui_dropdown_setselection(gui_handle_p h, int16_t selection);
+int16_t gui_dropdown_getselection(gui_handle_p h);
+uint8_t gui_dropdown_setsliderauto(gui_handle_p h, uint8_t autoMode);
+uint8_t gui_dropdown_setslidervisibility(gui_handle_p h, uint8_t visible);
+uint8_t gui_dropdown_scroll(gui_handle_p h, int16_t step);
+uint8_t gui_dropdown_setopendirection(gui_handle_p h, GUI_DROPDOWN_OPENDIR_t dir);
     
 /**
  * \}

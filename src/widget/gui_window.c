@@ -35,13 +35,13 @@
 
 #define __GW(x)             ((GUI_WINDOW_t *)(x))
 
-static uint8_t gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
+static uint8_t gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
  */
 static const
-GUI_Color_t Colors[] = {
+gui_color_t colors[] = {
     GUI_COLOR_WIN_LIGHTGRAY,                        /*!< Default background color */
     GUI_COLOR_WIN_TEXT_TITLE,                       /*!< Default text color */
     GUI_COLOR_WIN_BLUE,                             /*!< Default top background color when widget in focus */
@@ -52,13 +52,13 @@ GUI_Color_t Colors[] = {
  * \brief           Widget initialization structure
  */
 static const
-GUI_WIDGET_t Widget = {
+gui_widget_t widget = {
     .Name = _GT("WINDOW"),                          /*!< Widget name */
     .Size = sizeof(GUI_WINDOW_t),                   /*!< Size of widget for memory allocation */
     .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
     .Callback = gui_window_callback,                /*!< Control function */
-    .Colors = Colors,                               /*!< Pointer to colors array */
-    .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
+    .Colors = colors,                               /*!< Pointer to colors array */
+    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 
 #define w          ((GUI_WINDOW_t *)h)
@@ -72,12 +72,12 @@ GUI_WIDGET_t Widget = {
  * \return          1 if command processed, 0 otherwise
  */
 static uint8_t
-gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
+gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
 #if GUI_CFG_USE_TOUCH
-    static GUI_iDim_t tX, tY, Mode = 0;
+    static gui_idim_t tX, tY, Mode = 0;
 #endif /* GUI_CFG_USE_TOUCH */
     
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {                      /* Called immediatelly after widget is created */
             gui_window_setactive(h);                /* Set active window */
@@ -85,19 +85,19 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
         }
         case GUI_WC_Draw: {
             uint8_t inFocus;
-            GUI_Display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
-            GUI_iDim_t x, y, wi, hi, pt, topH;
+            gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
+            gui_idim_t x, y, wi, hi, pt, topH;
             
-            pt = gui_widget_getpaddingtop__(h);
+            pt = guii_widget_getpaddingtop(h);
             
-            x = gui_widget_getabsolutex__(h);
-            y = gui_widget_getabsolutey__(h);
-            wi = gui_widget_getwidth__(h);
-            hi = gui_widget_getheight__(h);
+            x = guii_widget_getabsolutex(h);
+            y = guii_widget_getabsolutey(h);
+            wi = guii_widget_getwidth(h);
+            hi = guii_widget_getheight(h);
             
-            gui_draw_filledrectangle(disp, x, y, wi, hi, gui_widget_getcolor__(h, GUI_WINDOW_COLOR_BG));
-            if (gui_widget_getflag__(h, GUI_FLAG_CHILD)) {
-                GUI_iDim_t tX, tY, tW;
+            gui_draw_filledrectangle(disp, x, y, wi, hi, guii_widget_getcolor(h, GUI_WINDOW_COLOR_BG));
+            if (guii_widget_getflag(h, GUI_FLAG_CHILD)) {
+                gui_idim_t tX, tY, tW;
                 
                 gui_draw_rectangle3d(disp, x, y, wi, hi, GUI_DRAW_3D_State_Lowered);
                 
@@ -107,9 +107,9 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
                 hi -= 4;
                 topH = pt - 4;
                 
-                inFocus = gui_widget_isfocused__(h);    /* Check if window is in focus or any children widget */
+                inFocus = guii_widget_isfocused(h);    /* Check if window is in focus or any children widget */
                 
-                gui_draw_filledrectangle(disp, x + 1, y + 1, wi - 2, topH, inFocus ? gui_widget_getcolor__(h, GUI_WINDOW_COLOR_TOP_BG_FOC) : gui_widget_getcolor__(h, GUI_WINDOW_COLOR_TOP_BG_NOFOC));
+                gui_draw_filledrectangle(disp, x + 1, y + 1, wi - 2, topH, inFocus ? guii_widget_getcolor(h, GUI_WINDOW_COLOR_TOP_BG_FOC) : guii_widget_getcolor(h, GUI_WINDOW_COLOR_TOP_BG_NOFOC));
                 
                 /* Draw "hide" button */
                 gui_draw_rectangle3d(disp, x + wi - 3 * topH, y + 2, topH - 2, topH - 2, GUI_DRAW_3D_State_Raised);
@@ -119,8 +119,8 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
                 /* Draw maximize button */
                 gui_draw_rectangle3d(disp, x + wi - 2 * topH, y + 2, topH - 2, topH - 2, GUI_DRAW_3D_State_Raised);
                 gui_draw_filledrectangle(disp, x + wi - 2 * topH + 2, y + 4, topH - 6, topH - 6, GUI_COLOR_GRAY);
-                if (gui_widget_isexpanded__(h)) {
-                    GUI_iDim_t tmpX, tmpY;
+                if (guii_widget_isexpanded(h)) {
+                    gui_idim_t tmpX, tmpY;
                     tmpX = x + wi - 2 * topH + 4;
                     tmpY = y + 7;
                     gui_draw_rectangle(disp, tmpX, tmpY + 4, topH - 14, topH - 14, GUI_COLOR_BLACK);
@@ -151,7 +151,7 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
                 gui_draw_line(disp, tX + 1, tY + tW,     tX + tW,     tY + 1, GUI_COLOR_WHITE);
                 gui_draw_line(disp, tX,     tY + tW - 1, tX + tW - 1, tY,     GUI_COLOR_WHITE);
                 
-                if (gui_widget_isfontandtextset__(h)) {
+                if (guii_widget_isfontandtextset(h)) {
                     GUI_DRAW_FONT_t f;
                     gui_draw_font_init(&f);         /* Init structure */
                     
@@ -161,25 +161,25 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
                     f.Height = topH - 3;
                     f.Align = GUI_HALIGN_CENTER | GUI_VALIGN_CENTER;
                     f.Color1Width = f.Width;
-                    f.Color1 = gui_widget_getcolor__(h, GUI_WINDOW_COLOR_TEXT);
-                    gui_draw_writetext(disp, gui_widget_getfont__(h), gui_widget_gettext__(h), &f);
+                    f.Color1 = guii_widget_getcolor(h, GUI_WINDOW_COLOR_TEXT);
+                    gui_draw_writetext(disp, guii_widget_getfont(h), guii_widget_gettext(h), &f);
                 }
             }
             
-            //gui_widget_setcolor__(h, GUI_WINDOW_COLOR_BG, (gui_widget_getcolor__(h, GUI_WINDOW_COLOR_BG) + 5) * (gui_widget_getcolor__(h, GUI_WINDOW_COLOR_BG) + 10));
+            //guii_widget_setcolor(h, GUI_WINDOW_COLOR_BG, (guii_widget_getcolor(h, GUI_WINDOW_COLOR_BG) + 5) * (guii_widget_getcolor(h, GUI_WINDOW_COLOR_BG) + 10));
             
             return 1;
         }
 #if GUI_CFG_USE_TOUCH
         case GUI_WC_TouchStart: {
-            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            if (!gui_widget_getparent__(h)) {       /* Ignore on base window */
+            guii_touchdata_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
+            if (!guii_widget_getparent(h)) {       /* Ignore on base window */
                 return 1;
             }
-            if (ts->TS.Count == 1 && gui_widget_getflag__(h, GUI_FLAG_CHILD)) { /* For children widgets only on single touch */
-                GUI_iDim_t pt, wi;
-                pt = gui_widget_getpaddingtop__(h); /* Get top padding */
-                wi = gui_widget_getwidth__(h);      /* Get widget width */
+            if (ts->TS.Count == 1 && guii_widget_getflag(h, GUI_FLAG_CHILD)) { /* For children widgets only on single touch */
+                gui_idim_t pt, wi;
+                pt = guii_widget_getpaddingtop(h); /* Get top padding */
+                wi = guii_widget_getwidth(h);      /* Get widget width */
                 
                 if (ts->RelY[0] < pt && ts->RelX[0] < (wi - pt)) {
                     Mode = 1;
@@ -194,16 +194,16 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
             return 1;
         }
         case GUI_WC_TouchMove: {
-            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
+            guii_touchdata_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             
-            if (Mode == 1 && gui_widget_getflag__(h, GUI_FLAG_CHILD)) {
-                GUI_iDim_t pX, pY;
-                pX = gui_widget_getparentabsolutex__(__GH(h));
-                pY = gui_widget_getparentabsolutey__(__GH(h));
-                gui_widget_setposition__(h, ts->TS.X[0] - pX - tX, ts->TS.Y[0] - pY - tY);
+            if (Mode == 1 && guii_widget_getflag(h, GUI_FLAG_CHILD)) {
+                gui_idim_t pX, pY;
+                pX = guii_widget_getparentabsolutex(__GH(h));
+                pY = guii_widget_getparentabsolutey(__GH(h));
+                guii_widget_setposition(h, ts->TS.X[0] - pX - tX, ts->TS.Y[0] - pY - tY);
                 
-                if (gui_widget_isexpanded__(h)) {   /* If it is expanded */
-                    gui_widget_setexpanded__(h, 0); /* Clear expanded mode */
+                if (guii_widget_isexpanded(h)) {   /* If it is expanded */
+                    guii_widget_setexpanded(h, 0); /* Clear expanded mode */
                 }
             }
             
@@ -215,49 +215,49 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
         }
 #endif /* GUI_CFG_USE_TOUCH */
         case GUI_WC_Click: {
-            GUI_iDim_t pt, wi;
-            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
+            gui_idim_t pt, wi;
+            guii_touchdata_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             
-            pt = gui_widget_getpaddingtop__(h);     /* Get top padding */
-            wi = gui_widget_getwidth__(h);          /* Get widget width */
+            pt = guii_widget_getpaddingtop(h);     /* Get top padding */
+            wi = guii_widget_getwidth(h);          /* Get widget width */
             
             if (ts->RelY[0] <= pt) {                /* Top widget part detected */
                 pt = pt - 4;
                 if (ts->RelX[0] > (wi - 3 * pt) && ts->RelX[0] < (wi - 2 * pt)) {
-                    gui_widget_hide__(h);           /* Hide widget */
+                    guii_widget_hide(h);           /* Hide widget */
                 } else if (ts->RelX[0] > (wi - 2 * pt) && ts->RelX[0] < (wi - pt)) {
-                    gui_widget_toggleexpanded__(h); /* Hide widget */
+                    guii_widget_toggleexpanded(h); /* Hide widget */
                 } else if (ts->RelX[0] >= (wi - pt)) {
-                    gui_widget_remove__(h);         /* Remove widget */
+                    guii_widget_remove(h);         /* Remove widget */
                 }
             }
             return 1;
         }
         case GUI_WC_DblClick: {
-            GUI_iDim_t pt;
-            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
+            gui_idim_t pt;
+            guii_touchdata_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             
-            pt = gui_widget_getpaddingtop__(h);     /* Get top padding */
+            pt = guii_widget_getpaddingtop(h);     /* Get top padding */
             
             if (ts->RelY[0] <= pt) {                /* Top widget part detected */
-                gui_widget_toggleexpanded__(h);     /* Toggle expanded mode */
+                guii_widget_toggleexpanded(h);     /* Toggle expanded mode */
             }
             return 1;
         }
 #if GUI_CFG_USE_KEYBOARD
         case GUI_WC_KeyPress: {
-            __GUI_KeyboardData_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
+            __gui_keyboarddata_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (kb->KB.Keys[0] == GUI_KEY_DOWN) {
-                gui_widget_setposition__(h, __GH(h)->X, __GH(h)->Y + 1);
+                guii_widget_setposition(h, __GH(h)->X, __GH(h)->Y + 1);
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             } else if (kb->KB.Keys[0] == GUI_KEY_UP) {
-                gui_widget_setposition__(h, __GH(h)->X, __GH(h)->Y - 1);
+                guii_widget_setposition(h, __GH(h)->X, __GH(h)->Y - 1);
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             } else if (kb->KB.Keys[0] == GUI_KEY_LEFT) {
-                gui_widget_setposition__(h, __GH(h)->X - 1, __GH(h)->Y);
+                guii_widget_setposition(h, __GH(h)->X - 1, __GH(h)->Y);
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             } else if (kb->KB.Keys[0] == GUI_KEY_RIGHT) {
-                gui_widget_setposition__(h, __GH(h)->X + 1, __GH(h)->Y);
+                guii_widget_setposition(h, __GH(h)->X + 1, __GH(h)->Y);
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }
             return 1;
@@ -274,12 +274,12 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
  * \brief           Create new base widget window with desktop window as a parent
  * \param           id: Widget unique ID to use for identity for callback processing
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
- * \return          \ref GUI_HANDLE_p object of created widget on success, NULL otherwise
- * \return          \ref GUI_HANDLE_p object of created widget on success, NULL otherwise
+ * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
+ * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
-GUI_HANDLE_p
-gui_window_createdesktop(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb) {
-    return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, 0, 0, GUI.LCD.Width, GUI.LCD.Height, 0, cb, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);   /* Allocate memory for basic widget */
+gui_handle_p
+gui_window_createdesktop(gui_id_t id, GUI_WIDGET_CALLBACK_t cb) {
+    return (gui_handle_p)guii_widget_create(&widget, id, 0, 0, GUI.LCD.Width, GUI.LCD.Height, 0, cb, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);   /* Allocate memory for basic widget */
 }
 
 /**
@@ -292,25 +292,25 @@ gui_window_createdesktop(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb) {
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
- * \return          \ref GUI_HANDLE_p object of created widget on success, NULL otherwise
+ * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
-GUI_HANDLE_p
-gui_window_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+gui_handle_p
+gui_window_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
     GUI_WINDOW_t* ptr;
 
-    ptr = gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
+    ptr = guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
     if (ptr) {
         __GUI_ENTER();                              /* Enter GUI */
         
-        gui_widget_setflag__(__GH(ptr), GUI_FLAG_CHILD);    /* This window is child window */
-        gui_widget_setpaddingtop__(__GH(ptr), 30);
-        gui_widget_setpaddingright__(__GH(ptr), 2);
-        gui_widget_setpaddingbottom__(__GH(ptr), 2);
-        gui_widget_setpaddingleft__(__GH(ptr), 2);
+        guii_widget_setflag(__GH(ptr), GUI_FLAG_CHILD);    /* This window is child window */
+        guii_widget_setpaddingtop(__GH(ptr), 30);
+        guii_widget_setpaddingright(__GH(ptr), 2);
+        guii_widget_setpaddingbottom(__GH(ptr), 2);
+        guii_widget_setpaddingleft(__GH(ptr), 2);
         
         __GUI_LEAVE();                              /* Leave GUI */
     }
-    return (GUI_HANDLE_p)ptr;
+    return (gui_handle_p)ptr;
 }
 
 /**
@@ -318,22 +318,22 @@ gui_window_create(GUI_ID_t id, float x, float y, float width, float height, GUI_
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index. This parameter can be a value of \ref GUI_WINDOW_COLOR_t enumeration
  * \param[in]       color: Color value
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_window_setcolor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
+gui_window_setcolor(gui_handle_p h, GUI_WINDOW_COLOR_t index, gui_color_t color) {
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
 }
  
 /**
  * \brief           Set active window for future widgets and for current top window
  * \param[in]       h: Widget handle to set as active window
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_window_setactive(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+gui_window_setactive(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     GUI.WindowActive = h;                           /* Set new active window */
@@ -350,7 +350,7 @@ gui_window_setactive(GUI_HANDLE_p h) {
  * \brief           Get desktop window
  * \return          Widget handle of desktop window
  */
-GUI_HANDLE_p
+gui_handle_p
 gui_window_getdesktop(void) {
-    return (GUI_HANDLE_p)gui_linkedlist_getnext_gen(&GUI.Root, NULL);   /* Return desktop window */
+    return (gui_handle_p)gui_linkedlist_getnext_gen(&GUI.root, NULL);   /* Return desktop window */
 }

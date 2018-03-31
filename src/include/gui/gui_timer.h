@@ -48,8 +48,6 @@ extern "C" {
  * \brief           Generic software timers
  * \{
  */
-
-#if defined(GUI_INTERNAL) || __DOXYGEN__
     
 /**
  * \brief           Get parameters from timer
@@ -58,19 +56,17 @@ extern "C" {
  * \retval          Timer parameters
  * \hideinitializer
  */
-#define gui_timer_getparams__(t)        (t)->Params
+#define gui_timer_getparams__(t)        ((t)->Params)
 
-GUI_TIMER_t* gui_timer_create__(uint16_t period, void (*callback)(GUI_TIMER_t *), void* param);
-uint8_t gui_timer_remove__(GUI_TIMER_t** t);
-uint8_t gui_timer_start__(GUI_TIMER_t* t);
-uint8_t gui_timer_startperiodic__(GUI_TIMER_t* t);
-uint8_t gui_timer_stop__(GUI_TIMER_t* t);
-uint8_t gui_timer_reset__(GUI_TIMER_t* t);
+gui_timer_t* gui_timer_create__(uint16_t period, void (*callback)(gui_timer_t *), void* param);
+uint8_t gui_timer_remove__(gui_timer_t** t);
+uint8_t gui_timer_start__(gui_timer_t* t);
+uint8_t gui_timer_startperiodic__(gui_timer_t* t);
+uint8_t gui_timer_stop__(gui_timer_t* t);
+uint8_t gui_timer_reset__(gui_timer_t* t);
 
 uint32_t gui_timer_getactivecount(void);
 void gui_timer_process(void);
-
-#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 /**
  * \}

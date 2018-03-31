@@ -9,7 +9,7 @@
  * \brief           Window event function
  */
 uint8_t
-gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
+gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
     uint8_t res;
     
     res = gui_widget_processdefaultcallback(h, ctrl, param, result);
@@ -21,10 +21,10 @@ gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
  * \brief           Container event function
  */
 uint8_t
-gui_container_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
-    GUI_ID_t id;
+gui_container_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+    gui_id_t id;
     uint8_t res;
-    GUI_Dim_t width;
+    gui_dim_t width;
     
     id = gui_widget_getid(h);                   /* Get widget ID */
     width = gui_widget_getwidth(h);             /* Get widget callback */
@@ -36,8 +36,8 @@ gui_container_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param,
                 gui_container_setcolor(h, GUI_CONTAINER_COLOR_BG, GUI_COLOR_LIGHTGRAY);
             }
             if (GUI_ID_CONTAINER_STATUS == id) {
-                gui_textview_create(GUI_ID_TEXTVIEW_CPU_USAGE, 10, 0, 150, 40, h, gui_textview_callback, NULL);
-                gui_textview_create(GUI_ID_TEXTVIEW_TIME, width - 50, 0, 46, 40, h, gui_textview_callback, NULL);
+                gui_textview_create(gui_id_tEXTVIEW_CPU_USAGE, 10, 0, 150, 40, h, gui_textview_callback, NULL);
+                gui_textview_create(gui_id_tEXTVIEW_TIME, width - 50, 0, 46, 40, h, gui_textview_callback, NULL);
                 gui_image_create(GUI_ID_IMAGE_WIFI_STATUS, width - 100 + 4, 4, 32, 32, h, gui_image_callback, 0);
                 gui_image_create(GUI_ID_IMAGE_CONSOLE, width - 140 + 4, 4, 32, 32, h, gui_image_callback, 0);
                 gui_image_create(GUI_ID_IMAGE_LOG, width - 180 + 4, 4, 32, 32, h, gui_image_callback, 0);
@@ -46,7 +46,7 @@ gui_container_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param,
                 gui_button_create(GUI_ID_BUTTON_WIFI_RELOAD, 2, 2, 2, 2, h, gui_button_callback, 0);
                 gui_button_create(GUI_ID_BUTTON_WIFI_CONNECT, 2, 2, 2, 2, h, gui_button_callback, 0);
                 gui_edittext_create(GUI_ID_EDITTEXT_WIFI_PASSWORD, 2, 2, 2, 2, h, gui_edittext_callback, 0);
-                gui_textview_create(GUI_ID_TEXTVIEW_IP_ADDR, 2, 2, 2, 2, h, gui_textview_callback, NULL);
+                gui_textview_create(gui_id_tEXTVIEW_IP_ADDR, 2, 2, 2, 2, h, gui_textview_callback, NULL);
             } else if (GUI_ID_CONTAINER_LOG == id) {
                 gui_debugbox_create(GUI_ID_DEBUGBOX_LOG, 2, 2, 2, 2, h, gui_debugbox_callback, 0);
             }
@@ -64,8 +64,8 @@ gui_container_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param,
  * \brief           Image event function
  */
 uint8_t
-gui_image_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
-    GUI_ID_t id;
+gui_image_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+    gui_id_t id;
     uint8_t res;
     
     res = gui_widget_processdefaultcallback(h, ctrl, param, result);
@@ -101,25 +101,25 @@ gui_image_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI
  * \brief           Text view event function
  */
 uint8_t
-gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
-    GUI_ID_t id;
+gui_textview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+    gui_id_t id;
     uint8_t res;
     
     res = gui_widget_processdefaultcallback(h, ctrl, param, result);
     id = gui_widget_getid(h);                   /* Get widget ID */
     switch (ctrl) {
         case GUI_WC_Init: {                     /* Init widget callback */
-            if (id == GUI_ID_TEXTVIEW_TIME) {
+            if (id == gui_id_tEXTVIEW_TIME) {
                 gui_textview_setvalign(h, GUI_TEXTVIEW_VALIGN_CENTER);
                 gui_textview_sethalign(h, GUI_TEXTVIEW_HALIGN_RIGHT);
                 gui_textview_setcolor(h, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_TRANS);
                 gui_widget_settext(h, _GT("15:55"));
-            } else if (id == GUI_ID_TEXTVIEW_CPU_USAGE) {
+            } else if (id == gui_id_tEXTVIEW_CPU_USAGE) {
                 gui_textview_setvalign(h, GUI_TEXTVIEW_VALIGN_CENTER);
                 gui_textview_sethalign(h, GUI_TEXTVIEW_HALIGN_LEFT);
                 gui_textview_setcolor(h, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_TRANS);
                 gui_widget_settext(h, _GT("EasyGUI by TM"));
-            } else if (id == GUI_ID_TEXTVIEW_IP_ADDR) {
+            } else if (id == gui_id_tEXTVIEW_IP_ADDR) {
                 gui_textview_setcolor(h, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_TRANS);
                 gui_widget_setpositionpercent(h, 50.5f, 45.5f);
                 gui_widget_setsizepercent(h, 49.0f, 10.0f);
@@ -137,10 +137,10 @@ gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
  * \brief           Listview event function
  */
 uint8_t
-gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
-    GUI_ID_t id;
+gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+    gui_id_t id;
     uint8_t res;
-    GUI_HANDLE_p tmp;
+    gui_handle_p tmp;
     
     res = gui_widget_processdefaultcallback(h, ctrl, param, result);
     id = gui_widget_getid(h);                   /* Get widget ID */
@@ -182,8 +182,8 @@ gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
  * \brief           Debugbox event function
  */
 uint8_t
-gui_debugbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
-    GUI_ID_t id;
+gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+    gui_id_t id;
     uint8_t res;
     
     id = gui_widget_getid(h);                   /* Get widget ID */
@@ -194,7 +194,7 @@ gui_debugbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
             if (id == GUI_ID_DEBUGBOX_LOG) {
                 gui_widget_setpositionpercent(h, 0.0f, 0.0f);
                 gui_widget_setsizepercent(h, 100.0f, 100.0f);
-                gui_widget_setfont(h, &GUI_Font_Arial_Bold_18);
+                guii_widget_setfont(h, &GUI_Font_Arial_Bold_18);
                 
                 gui_debugbox_setmaxitems(h, 50);
                 gui_debugbox_addstring(h, _GT("Logging widget"));
@@ -211,10 +211,10 @@ gui_debugbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
  * \brief           Button event function
  */
 uint8_t
-gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
-    GUI_ID_t id;
+gui_button_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+    gui_id_t id;
     uint8_t res;
-    GUI_HANDLE_p tmp;
+    gui_handle_p tmp;
     
     id = gui_widget_getid(h);                   /* Get widget ID */
     
@@ -241,7 +241,7 @@ gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
                 list_access_points();           /* List access points */
                 console_write("Listing access points...\r\n");
             } else if (id == GUI_ID_BUTTON_WIFI_CONNECT) {
-                static GUI_Char password[24] = {0}, ssid[24] = {0};
+                static gui_char password[24] = {0}, ssid[24] = {0};
                 int16_t selection = -1;
                 
                 if (!esp_sta_is_joined()) {     /* If there is no AP, try to join */
@@ -281,8 +281,8 @@ gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
  * \brief           Edit text event function
  */
 uint8_t
-gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
-    GUI_ID_t id;
+gui_edittext_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+    gui_id_t id;
     uint8_t res;
     
     id = gui_widget_getid(h);                   /* Get widget ID */

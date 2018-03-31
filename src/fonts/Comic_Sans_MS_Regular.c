@@ -1817,7 +1817,7 @@ GUI_Const GUI_FONT_CharInfo_t CharTable[] = {
     {   7,    1,  0,    0,    1, Font_Comic_Sans_MS_Regular_size_12_007f},
 };
 
-GUI_Const GUI_FONT_t GUI_Font_Comic_Sans_MS_Regular_22 = {
+GUI_Const gui_font_t GUI_Font_Comic_Sans_MS_Regular_22 = {
     _GT("Comic Sans MS Regular"),
     22,
     0x20,

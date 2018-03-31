@@ -43,13 +43,13 @@
 #define CFG_VALIGN          0x02
 #define CFG_HALIGN          0x03
     
-static uint8_t gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
+static uint8_t gui_edittext_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
  */
 static const
-GUI_Color_t Colors[] = {
+gui_color_t colors[] = {
     GUI_COLOR_WHITE,                                /*!< Default background color index */
     GUI_COLOR_BLACK,                                /*!< Default foreground color index */
     GUI_COLOR_BLACK,                                /*!< Default border color index */
@@ -59,13 +59,13 @@ GUI_Color_t Colors[] = {
  * \brief           Widget initialization structure
  */
 static const
-GUI_WIDGET_t Widget = {
+gui_widget_t widget = {
     .Name = _GT("EDITTEXT"),                        /*!< Widget name */
     .Size = sizeof(GUI_EDITTEXT_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
     .Callback = gui_edittext_callback,              /*!< Control function */
-    .Colors = Colors,                               /*!< List of default colors */
-    .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
+    .Colors = colors,                               /*!< List of default colors */
+    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 
 #define e          ((GUI_EDITTEXT_t *)h)
@@ -82,8 +82,8 @@ GUI_WIDGET_t Widget = {
  * \return          1 if command processed, 0 otherwise
  */
 static uint8_t
-gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+gui_edittext_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
             __GE(h)->VAlign = GUI_EDITTEXT_VALIGN_CENTER;
@@ -91,7 +91,7 @@ gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
             return 1;
         }
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
-            GUI_WIDGET_Param_t* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
+            gui_widget_param* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
             switch (p->Type) {
                 case CFG_MULTILINE:                 /* Enable/Disable multiline */
                     if (*(uint8_t *)p->Data && !is_multiline(h)) {
@@ -112,22 +112,22 @@ gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
             return 1;
         }
         case GUI_WC_Draw: {
-            GUI_Dim_t x, y, width, height;
-            GUI_Display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
+            gui_dim_t x, y, width, height;
+            gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
     
-            x = gui_widget_getabsolutex__(h);       /* Get absolute X coordinate */
-            y = gui_widget_getabsolutey__(h);       /* Get absolute Y coordinate */
-            width = gui_widget_getwidth__(h);       /* Get widget width */
-            height = gui_widget_getheight__(h);     /* Get widget height */
+            x = guii_widget_getabsolutex(h);       /* Get absolute X coordinate */
+            y = guii_widget_getabsolutey(h);       /* Get absolute Y coordinate */
+            width = guii_widget_getwidth(h);       /* Get widget width */
+            height = guii_widget_getheight(h);     /* Get widget height */
             
             gui_draw_rectangle3d(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
-            gui_draw_filledrectangle(disp, x + 2, y + 2, width - 4, height - 4, gui_widget_getcolor__(h, GUI_EDITTEXT_COLOR_BG));
+            gui_draw_filledrectangle(disp, x + 2, y + 2, width - 4, height - 4, guii_widget_getcolor(h, GUI_EDITTEXT_COLOR_BG));
             
-            if (gui_widget_isfocused__(h)) {        /* Check if widget is in focus */
-                gui_draw_rectangle(disp, x + 3, y + 3, width - 6, height - 6, gui_widget_getcolor__(h, GUI_EDITTEXT_COLOR_BORDER));
+            if (guii_widget_isfocused(h)) {        /* Check if widget is in focus */
+                gui_draw_rectangle(disp, x + 3, y + 3, width - 6, height - 6, guii_widget_getcolor(h, GUI_EDITTEXT_COLOR_BORDER));
             }
             
-            if (gui_widget_isfontandtextset__(h)) { /* Ready to write string */
+            if (guii_widget_isfontandtextset(h)) { /* Ready to write string */
                 GUI_DRAW_FONT_t f;
                 gui_draw_font_init(&f);             /* Init font drawing */
                 
@@ -137,25 +137,25 @@ gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
                 f.Height = height - 10;
                 f.Align = (uint8_t)__GE(h)->HAlign | (uint8_t)__GE(h)->VAlign;
                 f.Color1Width = f.Width;
-                f.Color1 = gui_widget_getcolor__(h, GUI_EDITTEXT_COLOR_FG);
+                f.Color1 = guii_widget_getcolor(h, GUI_EDITTEXT_COLOR_FG);
                 f.Flags |= GUI_FLAG_FONT_RIGHTALIGN | GUI_FLAG_FONT_EDITMODE;
                 
                 if (is_multiline(h)) {
                     f.Flags |= GUI_FLAG_FONT_MULTILINE; /* Set multiline flag for widget */
                 }
                 
-                gui_draw_writetext(disp, gui_widget_getfont__(h), gui_widget_gettext__(h), &f);
+                gui_draw_writetext(disp, guii_widget_getfont(h), guii_widget_gettext(h), &f);
             }
             return 1;
         }
         case GUI_WC_FocusIn:
 #if GUI_CFG_USE_KEYBOARD
-            gui_keyboard_show__(h);                 /* Show keyboard */
+            guii_keyboard_show(h);                 /* Show keyboard */
 #endif /* GUI_CFG_USE_KEYBOARD */
             return 1;
         case GUI_WC_FocusOut:
 #if GUI_CFG_USE_KEYBOARD
-            gui_keyboard_hide__();                  /* Hide keyboard */
+            guii_keyboard_hide();                  /* Hide keyboard */
 #endif /* GUI_CFG_USE_KEYBOARD */
             return 1;
 #if GUI_CFG_USE_TOUCH
@@ -166,8 +166,8 @@ gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
 #endif /* GUI_CFG_USE_TOUCH */
 #if GUI_CFG_USE_KEYBOARD
         case GUI_WC_KeyPress: {
-            __GUI_KeyboardData_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
-            if (gui_widget_processtextkey__(h, kb)) {
+            __gui_keyboarddata_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
+            if (guii_widget_processtextkey(h, kb)) {
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }
             return 1;
@@ -191,11 +191,11 @@ gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
- * \return          \ref GUI_HANDLE_p object of created widget on success, NULL otherwise
+ * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
-GUI_HANDLE_p
-gui_edittext_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
-    return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+gui_handle_p
+gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
 /**
@@ -203,12 +203,12 @@ gui_edittext_create(GUI_ID_t id, float x, float y, float width, float height, GU
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index. This parameter can be a value of \ref GUI_EDITTEXT_COLOR_t enumeration
  * \param[in]       color: Color value
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_edittext_setcolor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t color) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return gui_widget_setcolor__(h, (uint8_t)index, color);  /* Set color */
+gui_edittext_setcolor(gui_handle_p h, GUI_EDITTEXT_COLOR_t index, gui_color_t color) {
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    return guii_widget_setcolor(h, (uint8_t)index, color);  /* Set color */
 }
 
 /**
@@ -216,34 +216,34 @@ gui_edittext_setcolor(GUI_HANDLE_p h, GUI_EDITTEXT_COLOR_t index, GUI_Color_t co
  * \note            When multiline is enabled, vertical text alignment is always top positioned
  * \param[in,out]   h: Widget handle
  * \param[in]       multiline: Set to 1 to enable multiline or 0 to disable
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_edittext_setmultiline(GUI_HANDLE_p h, uint8_t multiline) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return gui_widget_setparam__(h, CFG_MULTILINE, &multiline, 1, 0);   /* Set parameter */
+gui_edittext_setmultiline(gui_handle_p h, uint8_t multiline) {
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    return guii_widget_setparam(h, CFG_MULTILINE, &multiline, 1, 0);   /* Set parameter */
 }
 
 /**
  * \brief           Set vertical align for text inside text box
  * \param[in,out]   h: Widget handle
  * \param[in]       align: Vertical align. This parameter can be a value of \ref GUI_EDITTEXT_VALIGN_t enumeration
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_edittext_setvalign(GUI_HANDLE_p h, GUI_EDITTEXT_VALIGN_t align) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return gui_widget_setparam__(h, CFG_VALIGN, &align, 1, 1);  /* Set parameter */
+gui_edittext_setvalign(gui_handle_p h, GUI_EDITTEXT_VALIGN_t align) {
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    return guii_widget_setparam(h, CFG_VALIGN, &align, 1, 1);  /* Set parameter */
 }
 
 /**
  * \brief           Set horizontal align for text inside text box
  * \param[in,out]   h: Widget handle
  * \param[in]       align: Vertical align. This parameter can be a value of \ref GUI_EDITTEXT_HALIGN_t enumeration
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_edittext_sethalign(GUI_HANDLE_p h, GUI_EDITTEXT_HALIGN_t align) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return gui_widget_setparam__(h, CFG_HALIGN, &align, 1, 1);  /* Set parameter */
+gui_edittext_sethalign(gui_handle_p h, GUI_EDITTEXT_HALIGN_t align) {
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    return guii_widget_setparam(h, CFG_HALIGN, &align, 1, 1);  /* Set parameter */
 }

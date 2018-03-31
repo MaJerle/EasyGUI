@@ -7448,7 +7448,7 @@ GUI_Const GUI_FONT_CharInfo_t FontAwesome_Regular_30_CharTable[] = {
     {  11,   26,  0,   25,    1, Font_FontAwesome_Regular_30_f0ff},
 };
 
-GUI_Const GUI_FONT_t GUI_Font_FontAwesome_Regular_30 = {
+GUI_Const gui_font_t GUI_Font_FontAwesome_Regular_30 = {
     _GT("FontAwesome Regular"),
     30,
     0xf000,

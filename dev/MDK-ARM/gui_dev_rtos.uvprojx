@@ -1206,6 +1206,11 @@
               <FileType>1</FileType>
               <FilePath>..\esp\src\esp\esp_unicode.c</FilePath>
             </File>
+            <File>
+              <FileName>esp_evt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\esp\src\esp\esp_evt.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2482,6 +2487,11 @@
               <FileName>esp_unicode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\esp\src\esp\esp_unicode.c</FilePath>
+            </File>
+            <File>
+              <FileName>esp_evt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\esp\src\esp\esp_evt.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -27,7 +27,7 @@ esp_ip_t esp_ip;
  */
 void
 list_access_points(void) {
-    GUI_HANDLE_p h;
+    gui_handle_p h;
     
     h = gui_widget_getbyid(GUI_ID_LISTVIEW_WIFI_APS);
     if (h != NULL) {   
@@ -166,7 +166,7 @@ esp_cb_func(esp_cb_t* cb) {
          */
         case ESP_CB_STA_LIST_AP: {
             size_t i;
-            GUI_HANDLE_p h;
+            gui_handle_p h;
             GUI_LISTVIEW_ROW_p row;
             
             h = gui_widget_getbyid(GUI_ID_LISTVIEW_WIFI_APS);   /* Get list view to hold access points */
@@ -221,6 +221,7 @@ esp_cb_func(esp_cb_t* cb) {
             gui_image_setsource(gui_widget_getbyid(GUI_ID_IMAGE_WIFI_STATUS), &image_wifi_off);
             gui_widget_settext(gui_widget_getbyid(GUI_ID_BUTTON_WIFI_CONNECT), _GT("Connect"));
             console_write("WiFi disconnected\r\n");
+            lcd_update_ip(NULL);
             break;
         }
         
@@ -229,7 +230,7 @@ esp_cb_func(esp_cb_t* cb) {
             gui_image_setsource(gui_widget_getbyid(GUI_ID_IMAGE_WIFI_STATUS), &image_wifi_on);
             gui_widget_settext(gui_widget_getbyid(GUI_ID_BUTTON_WIFI_CONNECT), _GT("Disconnect"));
             sprintf(sp, "WiFi got IP address: %d.%d.%d.%d\r\n", esp_ip.ip[0], esp_ip.ip[1], esp_ip.ip[2], esp_ip.ip[3]);
-            lcd_update_up(&esp_ip);
+            lcd_update_ip(&esp_ip);
             console_write(sp);
             console_write("MQTT TCP connecting...\r\n");
             start_mqtt();
@@ -239,8 +240,8 @@ esp_cb_func(esp_cb_t* cb) {
         /*
          * Event relative to manual connection to access point
          */
-        case ESP_CB_JOIN_AP: {
-            espr_t status = cb->cb.sta_join.status;
+        case ESP_CB_STA_JOIN_AP: {
+            espr_t status = esp_evt_sta_join_ap_get_status(cb);
             
             switch (status) {
                 case espOK: console_write("ESP_JOIN: Joined OK!\r\n"); break;

@@ -36,28 +36,19 @@
 extern "C" {
 #endif
 
-/**
- * \addtogroup      GUI_UTILS
- * \brief       
- * \{
- */
-
 #include "gui_utils.h"
 
 /**
+ * \ingroup         GUI_UTILS
  * \defgroup        GUI_TRANSLATE Translation engine
  * \brief           String translation engine for widgets
  * \{
  */
  
-const GUI_Char* gui_translate_get(const GUI_Char* src);
-uint8_t gui_translate_setactivelanguage(const GUI_TRANSLATE_Language_t* lang);
-uint8_t gui_translate_setsourcelanguage(const GUI_TRANSLATE_Language_t* lang); 
+const gui_char* gui_translate_get(const gui_char* src);
+uint8_t gui_translate_setactivelanguage(const gui_translate_language_t* lang);
+uint8_t gui_translate_setsourcelanguage(const gui_translate_language_t* lang); 
     
-/**
- * \}
- */
-
 /**
  * \}
  */

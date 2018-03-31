@@ -8,19 +8,19 @@
 /* Touch data structure */
 TM_TOUCH_t TS;
 
-GUI_Dim_t lcd_width, lcd_height;
+gui_dim_t lcd_width, lcd_height;
 
 /**
  * \brief           Creates desktop with GUI
  */
 void
 create_desktop(void) {
-    GUI_HANDLE_p winbase;
+    gui_handle_p winbase;
     
     lcd_width = gui_lcd_getwidth();
     lcd_height = gui_lcd_getheight();
     
-    gui_widget_setfontdefault(&GUI_Font_Arial_Narrow_Italic_22);
+    guii_widget_setfontdefault(&GUI_Font_Arial_Narrow_Italic_22);
     
     winbase = gui_window_getdesktop();          /* Get desktop window */
     if (winbase != NULL) {
@@ -39,8 +39,8 @@ create_desktop(void) {
  * \param[in]       id: Container ID to open
  */
 void
-open_container(GUI_ID_t cont_id) {
-    GUI_HANDLE_p h;
+open_container(gui_id_t cont_id) {
+    gui_handle_p h;
     
     gui_widget_hidechildren(gui_window_getdesktop());   /* Hide all widgets on desktop first */
     gui_widget_show(gui_widget_getbyid(GUI_ID_CONTAINER_STATUS));
@@ -58,7 +58,7 @@ open_container(GUI_ID_t cont_id) {
  */
 void
 read_touch(void) {
-    static GUI_TouchData_t p = {0}, t = {0};
+    static gui_touchdata_t p = {0}, t = {0};
     uint8_t i, update = 0, diffx, diffy;
     TM_TOUCH_Read(&TS);                         /* Read touch data */
     

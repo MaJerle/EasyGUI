@@ -49,7 +49,7 @@ gui_string_unicode_init(GUI_STRING_UNICODE_t* s) {
  * \sa              gui_string_unicode_init, gui_string_unicode_encode
  */
 GUI_STRING_UNICODE_Result_t
-gui_string_unicode_decode(GUI_STRING_UNICODE_t* s, const GUI_Char c) {    
+gui_string_unicode_decode(GUI_STRING_UNICODE_t* s, const gui_char c) {    
     if (!s->r) {                            /* First byte received */
         s->t = 0;
         if (c < 0x80) {                     /* One byte only in UTF-8 representation */
@@ -99,7 +99,7 @@ gui_string_unicode_decode(GUI_STRING_UNICODE_t* s, const GUI_Char c) {
  * \sa              gui_string_unicode_init, gui_string_unicode_decode
  */
 uint8_t
-gui_string_unicode_encode(const uint32_t c, GUI_Char* out) {
+gui_string_unicode_encode(const uint32_t c, gui_char* out) {
     if (c < 0x0080) {                       /* Normal ASCII character */
         *out++ = (uint8_t)c;                /* 1-byte sequence */
         return 1;
@@ -132,10 +132,10 @@ gui_string_unicode_encode(const uint32_t c, GUI_Char* out) {
  * \sa              gui_string_lengthtotal
  */
 size_t
-gui_string_length(const GUI_Char* src) {
+gui_string_length(const gui_char* src) {
 #if GUI_CFG_USE_UNICODE
     size_t out = 0;
-    const GUI_Char* tmp = src;
+    const gui_char* tmp = src;
     GUI_STRING_UNICODE_t s;
     
     gui_string_unicode_init(&s);            /* Init unicode */
@@ -160,7 +160,7 @@ gui_string_length(const GUI_Char* src) {
  * \sa              gui_string_length
  */
 size_t
-gui_string_lengthtotal(const GUI_Char* src) {
+gui_string_lengthtotal(const gui_char* src) {
     return strlen((const char *)src);       /* Get string length */
 }
 
@@ -171,9 +171,9 @@ gui_string_lengthtotal(const GUI_Char* src) {
  * \return          Pointer to destination memory
  * \sa              gui_string_copyn
  */
-GUI_Char*
-gui_string_copy(GUI_Char* dst, const GUI_Char* src) {
-    return (GUI_Char *)strcpy((char *)dst, (const char *)src);  /* Copy source string to destination */
+gui_char*
+gui_string_copy(gui_char* dst, const gui_char* src) {
+    return (gui_char *)strcpy((char *)dst, (const char *)src);  /* Copy source string to destination */
 }
 
 /**
@@ -184,9 +184,9 @@ gui_string_copy(GUI_Char* dst, const GUI_Char* src) {
  * \return          Pointer to destination memory
  * \sa              gui_string_copy
  */
-GUI_Char*
-gui_string_copyn(GUI_Char* dst, const GUI_Char* src, size_t len) {
-    return (GUI_Char *)strncpy((char *)dst, (const char *)src, len);    /* Copy source string to destination */
+gui_char*
+gui_string_copyn(gui_char* dst, const gui_char* src, size_t len) {
+    return (gui_char *)strncpy((char *)dst, (const char *)src, len);    /* Copy source string to destination */
 }
 
 /**
@@ -196,18 +196,18 @@ gui_string_copyn(GUI_Char* dst, const GUI_Char* src, size_t len) {
  * \return          0 if equal, non-zero otherwise
  */
 int
-gui_string_compare(const GUI_Char* s1, const GUI_Char* s2) {
+gui_string_compare(const gui_char* s1, const gui_char* s2) {
     return strcmp((const char *)s1, (const char *)s2);
 }
 
 /**
  * \brief           Prepare string before it can be used with \ref gui_string_getch or \ref gui_string_getchreverse functions
  * \param[in,out]   *s: Pointer to \ref GUI_STRING_t as base string object
- * \param[in]       str: Pointer to \ref GUI_Char with string used for manupulation
- * \return          1 on success, 0 otherwise
+ * \param[in]       str: Pointer to \ref gui_char with string used for manupulation
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_string_prepare(GUI_STRING_t* s, const GUI_Char* str) {
+gui_string_prepare(GUI_STRING_t* s, const gui_char* str) {
     s->Str = str;                           /* Save string pointer */
 #if GUI_CFG_USE_UNICODE
     gui_string_unicode_init(&s->S);         /* Prepare unicode structure */
@@ -225,7 +225,7 @@ gui_string_prepare(GUI_STRING_t* s, const GUI_Char* str) {
                         Function will internally change pointer of actual string where it points to to next character
  * \param[out]      out: Pointer to output memory where output character will be saved
  * \param[out]      len: Pointer to output memory where number of bytes for string will be saved
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_string_getchreverse
  */
 uint8_t
@@ -274,13 +274,13 @@ gui_string_getch(GUI_STRING_t* s, uint32_t* out, uint8_t* len) {
                         Function will internally change pointer of actual string where it points to to next character
  * \param[out]      out: Pointer to output memory where output character will be saved
  * \param[out]      len: Pointer to output memory where number of bytes for string will be saved
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_string_getch, gui_string_gotoend
  */
 uint8_t
 gui_string_getchreverse(GUI_STRING_t* str, uint32_t* out, uint8_t* len) {
 #if GUI_CFG_USE_UNICODE
-    const GUI_Char* ch = (str->Str) - 3;    /* Save character pointer, start 3 bytes before current active character */
+    const gui_char* ch = (str->Str) - 3;    /* Save character pointer, start 3 bytes before current active character */
     if (ch[3] < 0x80) {                     /* Normal ASCII character */
         *out = (uint32_t)ch[3];
         str->Str -= 1;
@@ -313,7 +313,7 @@ gui_string_getchreverse(GUI_STRING_t* str, uint32_t* out, uint8_t* len) {
     }
     return 1;                               /* Return valid character sign */
 #else
-    const GUI_Char ch = *str->Str;          /* Save character pointer */
+    const gui_char ch = *str->Str;          /* Save character pointer */
     str->Str--;                             /* Decrease input pointer where it points to */
     *out = (uint32_t)ch;                    /* Save character for output */
     if (!*out) {                            /* Check if valid character */
@@ -330,7 +330,7 @@ gui_string_getchreverse(GUI_STRING_t* str, uint32_t* out, uint8_t* len) {
  *
  * \brief           Set character pointer to the last character in sequence
  * \param[in,out]   *str: Pointer to \ref GUI_STRING_t structure with string informations
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_string_getchreverse
  */
 uint8_t
@@ -345,7 +345,7 @@ gui_string_gotoend(GUI_STRING_t* str) {
 /**
  * \brief           Check if character is printable
  * \param[in]       ch: First memory address
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_string_isprintable(uint32_t ch) {

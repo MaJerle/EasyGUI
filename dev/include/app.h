@@ -83,17 +83,17 @@ espr_t  esp_cb_func(esp_cb_t* cb);
 
 /* GUI APP based functions */
 void    create_desktop(void);
-void    open_container(GUI_ID_t cont_id);
+void    open_container(gui_id_t cont_id);
 
 /* Widget event functions */
-uint8_t gui_window_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
-uint8_t gui_container_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result); 
-uint8_t gui_image_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
-uint8_t gui_button_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
-uint8_t gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
-uint8_t gui_listview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
-uint8_t gui_debugbox_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
-uint8_t gui_edittext_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
+uint8_t gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+uint8_t gui_container_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result); 
+uint8_t gui_image_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+uint8_t gui_button_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+uint8_t gui_textview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+uint8_t gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+uint8_t gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+uint8_t gui_edittext_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
 /* Access points visible to ESP device */
 extern esp_ap_t access_points[10];
@@ -104,7 +104,7 @@ void    list_access_points(void);
 void    enable_wifi_access_point(void);
 espr_t  mqtt_send_data(const void* data, size_t len);
 espr_t  start_server(void);
-void    lcd_update_up(esp_ip_t* ip);
+void    lcd_update_ip(esp_ip_t* ip);
 
 /* MQTT client */
 extern mqtt_client_t* mqtt_client;
@@ -119,9 +119,9 @@ extern mqtt_client_t* mqtt_client;
 #define GUI_ID_IMAGE_CONSOLE                (GUI_ID_USER + 0x0102)
 #define GUI_ID_IMAGE_LOG                    (GUI_ID_USER + 0x0103)
 
-#define GUI_ID_TEXTVIEW_TIME                (GUI_ID_USER + 0x0201)
-#define GUI_ID_TEXTVIEW_CPU_USAGE           (GUI_ID_USER + 0x0202)
-#define GUI_ID_TEXTVIEW_IP_ADDR             (GUI_ID_USER + 0x0203)
+#define gui_id_tEXTVIEW_TIME                (GUI_ID_USER + 0x0201)
+#define gui_id_tEXTVIEW_CPU_USAGE           (GUI_ID_USER + 0x0202)
+#define gui_id_tEXTVIEW_IP_ADDR             (GUI_ID_USER + 0x0203)
 
 #define GUI_ID_LISTVIEW_WIFI_APS            (GUI_ID_USER + 0x0301)
 
@@ -139,9 +139,9 @@ extern const GUI_IMAGE_DESC_t image_console;
 extern const GUI_IMAGE_DESC_t image_log;
 
 /* List of fonts */
-extern GUI_Const GUI_FONT_t GUI_Font_Arial_Bold_18;
-extern GUI_Const GUI_FONT_t GUI_Font_Comic_Sans_MS_Regular_22;
-extern GUI_Const GUI_FONT_t GUI_Font_Arial_Narrow_Italic_22;
-extern GUI_Const GUI_FONT_t GUI_Font_Calibri_Bold_8;
+extern GUI_Const gui_font_t GUI_Font_Arial_Bold_18;
+extern GUI_Const gui_font_t GUI_Font_Comic_Sans_MS_Regular_22;
+extern GUI_Const gui_font_t GUI_Font_Arial_Narrow_Italic_22;
+extern GUI_Const gui_font_t GUI_Font_Calibri_Bold_8;
 
 #endif /* __APP_H */

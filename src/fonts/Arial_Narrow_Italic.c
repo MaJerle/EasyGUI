@@ -34382,7 +34382,7 @@ GUI_Const GUI_FONT_CharInfo_t Arial_Narrow_Italic_22_CharTable[] = {
     {  13,   16,  0,    3,    1, Font_Arial_Narrow_Italic_22_2c6f},
 };
 
-GUI_Const GUI_FONT_t GUI_Font_Arial_Narrow_Italic_22 = {
+GUI_Const gui_font_t GUI_Font_Arial_Narrow_Italic_22 = {
     _GT("Arial Narrow Italic"),
     22,
     0x0020,

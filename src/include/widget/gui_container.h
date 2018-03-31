@@ -64,13 +64,13 @@ typedef enum {
  * \brief           Container object structure
  */
 typedef struct GUI_CONTAINER_t {
-    GUI_HANDLE_ROOT_t C;                    /*!< GUI handle object, must always be first on list */
+    gui_handle_ROOT_t C;                    /*!< GUI handle object, must always be first on list */
 } GUI_CONTAINER_t;
 
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-GUI_HANDLE_p gui_container_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
-uint8_t gui_container_setcolor(GUI_HANDLE_p h, GUI_CONTAINER_COLOR_t index, GUI_Color_t color);
+gui_handle_p gui_container_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+uint8_t gui_container_setcolor(gui_handle_p h, GUI_CONTAINER_COLOR_t index, gui_color_t color);
 
 /**
  * \}

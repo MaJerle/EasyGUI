@@ -63,22 +63,22 @@ typedef enum GUI_WINDOW_COLOR_t {
  * \brief           Window object structure
  */
 typedef struct GUI_WINDOW_t {
-    GUI_HANDLE_ROOT_t C;                    /*!< GUI handle object, must always be first on list */
+    gui_handle_ROOT_t C;                    /*!< GUI handle object, must always be first on list */
     
     uint32_t Number;                        /*!< Window number */
     
-    GUI_Dim_t BorderRadius;                 /*!< Radius in units of pixels for children windows */
-    GUI_Dim_t BorderWidth;                  /*!< Border width */
+    gui_dim_t BorderRadius;                 /*!< Radius in units of pixels for children windows */
+    gui_dim_t BorderWidth;                  /*!< Border width */
 } GUI_WINDOW_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
   
-GUI_HANDLE_p gui_window_getdesktop(void);
-uint8_t gui_window_setactive(GUI_HANDLE_p h);
-GUI_HANDLE_p gui_window_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
-uint8_t gui_window_setcolor(GUI_HANDLE_p h, GUI_WINDOW_COLOR_t index, GUI_Color_t color);
+gui_handle_p gui_window_getdesktop(void);
+uint8_t gui_window_setactive(gui_handle_p h);
+gui_handle_p gui_window_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+uint8_t gui_window_setcolor(gui_handle_p h, GUI_WINDOW_COLOR_t index, gui_color_t color);
 
 #if defined(GUI_INTERNAL)
-GUI_HANDLE_p gui_window_createdesktop(GUI_ID_t id, GUI_WIDGET_CALLBACK_t cb);
+gui_handle_p gui_window_createdesktop(gui_id_t id, GUI_WIDGET_CALLBACK_t cb);
 #endif /* defined(GUI_INTERNAL) */
  
 /**

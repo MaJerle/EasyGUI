@@ -39,12 +39,12 @@
 #define CFG_SET             0x02
 #define CFG_TYPE            0x03
 
-static uint8_t gui_listcontainer_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
+static uint8_t gui_listcontainer_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 /**
  * \brief           List of default color in the same order of widget color enumeration
  */
 static const
-GUI_Color_t Colors[] = {
+gui_color_t colors[] = {
     GUI_COLOR_LIGHTBLUE,                            /*!< Default color when led is on */
 };
 
@@ -52,33 +52,33 @@ GUI_Color_t Colors[] = {
  * \brief           Widget initialization structure
  */
 static const
-GUI_WIDGET_t Widget = {
+gui_widget_t widget = {
     .Name = _GT("LED"),                             /*!< Widget name */ 
     .Size = sizeof(GUI_LIST_CONTAINER_t),           /*!< Size of widget for memory allocation */
     .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
     .Callback = gui_listcontainer_callback,         /*!< Control function */
-    .Colors = Colors,                               /*!< List of default colors */
-    .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Number of colors */
+    .Colors = colors,                               /*!< List of default colors */
+    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 #define l           ((GUI_LIST_CONTAINER_t *)(h))
 
 /* Calculate scroll limits according to children widgets */
 static void
-calculate_limits(GUI_HANDLE_p h) {
-    GUI_HANDLE_p w;
-    GUI_Dim_t x, y, width, height;
-    GUI_Dim_t cmx = 0, cmy = 0;
+calculate_limits(gui_handle_p h) {
+    gui_handle_p w;
+    gui_dim_t x, y, width, height;
+    gui_dim_t cmx = 0, cmy = 0;
     
     /*
      * Scan all children widgets and check for maximal possible scroll
      */
-    for (w = gui_linkedlist_widgetgetnext((GUI_HANDLE_ROOT_t *)h, NULL); w;
+    for (w = gui_linkedlist_widgetgetnext((gui_handle_ROOT_t *)h, NULL); w;
             w = gui_linkedlist_widgetgetnext(NULL, w)) {
 
-        x = gui_widget_getrelativex__(w);           /* Get absolute position on screen */
-        y = gui_widget_getrelativey__(w);           /* Get absolute position on screen */
-        width = gui_widget_getwidth__(w);           /* Get widget width */
-        height = gui_widget_getheight__(w);         /* Get widget height */
+        x = guii_widget_getrelativex(w);           /* Get absolute position on screen */
+        y = guii_widget_getrelativey(w);           /* Get absolute position on screen */
+        width = guii_widget_getwidth(w);           /* Get widget width */
+        height = guii_widget_getheight(w);         /* Get widget height */
         
         if (x + width > cmx) {
             cmx = x + width;
@@ -88,8 +88,8 @@ calculate_limits(GUI_HANDLE_p h) {
         }
     }
 
-    width = gui_widget_getinnerwidth__(h);          /* Get widget width */
-    height = gui_widget_getinnerheight__(h);        /* Get widget height */
+    width = guii_widget_getinnerwidth(h);          /* Get widget width */
+    height = guii_widget_getinnerheight(h);        /* Get widget height */
     
     l->MaxScrollX = 0;
     l->MaxScrollY = 0;
@@ -117,28 +117,28 @@ calculate_limits(GUI_HANDLE_p h) {
  * \return          1 if command processed, 0 otherwise
  */
 static uint8_t
-gui_listcontainer_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+gui_listcontainer_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
-            gui_widget_setpadding__(h, 3);          /* Set padding */
+            guii_widget_setpadding(h, 3);          /* Set padding */
             return 1;
         }
         case GUI_WC_ChildWidgetCreated: {           /* Child widget has been created */
             return 1;
         }
         case GUI_WC_Draw: {
-            GUI_Display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
-            GUI_Dim_t x, y, width, height;
+            gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
+            gui_dim_t x, y, width, height;
             
             calculate_limits(h);                    /* Calculate new limits for scrolling */
             
-            x = gui_widget_getabsolutex__(h);       /* Get absolute position on screen */
-            y = gui_widget_getabsolutey__(h);       /* Get absolute position on screen */
-            width = gui_widget_getwidth__(h);       /* Get widget width */
-            height = gui_widget_getheight__(h);     /* Get widget height */
+            x = guii_widget_getabsolutex(h);       /* Get absolute position on screen */
+            y = guii_widget_getabsolutey(h);       /* Get absolute position on screen */
+            width = guii_widget_getwidth(h);       /* Get widget width */
+            height = guii_widget_getheight(h);     /* Get widget height */
             
-            gui_draw_filledrectangle(disp, x, y, width, height, gui_widget_getcolor__(h, GUI_LIST_CONTAINER_COLOR_BG));
+            gui_draw_filledrectangle(disp, x, y, width, height, guii_widget_getcolor(h, GUI_LIST_CONTAINER_COLOR_BG));
             return 1;                               /* */
         }
 #if GUI_CFG_USE_TOUCH
@@ -147,7 +147,7 @@ gui_listcontainer_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* pa
             return 1;
         }
         case GUI_WC_TouchMove: {
-            __GUI_TouchData_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
+            guii_touchdata_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
             gui_widget_incscrolly(h, ts->RelOldY[0] - ts->RelY[0]);
             if (gui_widget_getscrolly(h) < 0) {
@@ -173,9 +173,9 @@ gui_listcontainer_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* pa
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
- * \return          \ref GUI_HANDLE_p object of created widget on success, NULL otherwise
+ * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
-GUI_HANDLE_p
-gui_listcontainer_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
-    return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+gui_handle_p
+gui_listcontainer_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }

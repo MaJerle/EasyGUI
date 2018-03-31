@@ -51,13 +51,13 @@ static gui_mbox_msg_t timer_msg = {GUI_SYS_MBOX_TYPE_TIMER};
  * \param[in]       params: Pointer to user parameters used in callback
  * \return          Timer handle on success, NULL otherwise
  */
-GUI_TIMER_t*
-gui_timer_create__(uint16_t period, void (*callback)(GUI_TIMER_t *), void* params) {
-    GUI_TIMER_t* ptr;
+gui_timer_t*
+gui_timer_create__(uint16_t period, void (*callback)(gui_timer_t *), void* params) {
+    gui_timer_t* ptr;
     
     ptr = GUI_MEMALLOC(sizeof(*ptr));               /* Allocate memory for timer */
     if (ptr != NULL) {
-        memset(ptr, 0x00, sizeof(GUI_TIMER_t));     /* Reset memory */
+        memset(ptr, 0x00, sizeof(gui_timer_t));     /* Reset memory */
         
         ptr->Period = period;                       /* Set period value */
         ptr->Counter = period;                      /* Set current counter value */
@@ -65,7 +65,7 @@ gui_timer_create__(uint16_t period, void (*callback)(GUI_TIMER_t *), void* param
         ptr->Params = params;                       /* Timer custom parameters */
         ptr->Flags = 0;                             /* Timer flags management */
         
-        gui_linkedlist_add_gen(&GUI.Timers.List, (GUI_LinkedList_t *)ptr);  /* Add timer to linked list */
+        gui_linkedlist_add_gen(&GUI.timers.List, (gui_linkedlist_t *)ptr);  /* Add timer to linked list */
 #if GUI_CFG_OS
         gui_sys_mbox_putnow(&GUI.OS.mbox, &timer_msg);  /* Add new message to queue */
 #endif /* GUI_CFG_OS */
@@ -76,14 +76,14 @@ gui_timer_create__(uint16_t period, void (*callback)(GUI_TIMER_t *), void* param
 /**
  * \brief           Remove timer
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       *t: Pointer to pointer to \ref GUI_TIMER_t structure.
+ * \param[in]       *t: Pointer to pointer to \ref gui_timer_t structure.
  *                      After timer remove, pointer value where it points to will be changed
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_timer_remove__(GUI_TIMER_t** t) {  
+gui_timer_remove__(gui_timer_t** t) {  
     __GUI_ASSERTPARAMS(t && *t);                    /* Check input parameters */  
-    gui_linkedlist_remove_gen(&GUI.Timers.List, (GUI_LinkedList_t *)(*t));  /* Remove timer from linked list */
+    gui_linkedlist_remove_gen(&GUI.timers.List, (gui_linkedlist_t *)(*t));  /* Remove timer from linked list */
     GUI_MEMFREE(*t);                                /* Free memory for timer */
     *t = 0;                                         /* Clear pointer */
     
@@ -93,11 +93,11 @@ gui_timer_remove__(GUI_TIMER_t** t) {
 /**
  * \brief           Start timer
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       t: Pointer to \ref GUI_TIMER_t structure
- * \return          1 on success, 0 otherwise
+ * \param[in]       t: Pointer to \ref gui_timer_t structure
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_timer_start__(GUI_TIMER_t* t) {
+gui_timer_start__(gui_timer_t* t) {
     __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
     t->Counter = t->Period;                         /* Reset counter to top value */
     t->Flags &= ~GUI_FLAG_TIMER_PERIODIC;           /* Clear periodic flag */
@@ -112,11 +112,11 @@ gui_timer_start__(GUI_TIMER_t* t) {
 /**
  * \brief           Start timer periodically. It will start again when callback is called
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       t: Pointer to \ref GUI_TIMER_t structure
- * \return          1 on success, 0 otherwise
+ * \param[in]       t: Pointer to \ref gui_timer_t structure
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_timer_startperiodic__(GUI_TIMER_t* t) {
+gui_timer_startperiodic__(gui_timer_t* t) {
     __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
     t->Counter = t->Period;                         /* Reset counter to top value */
     t->Flags |= GUI_FLAG_TIMER_ACTIVE | GUI_FLAG_TIMER_PERIODIC;    /* Set active flag */
@@ -127,11 +127,11 @@ gui_timer_startperiodic__(GUI_TIMER_t* t) {
 /**
  * \brief           Stop timer
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       t: Pointer to \ref GUI_TIMER_t structure
- * \return          1 on success, 0 otherwise
+ * \param[in]       t: Pointer to \ref gui_timer_t structure
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_timer_stop__(GUI_TIMER_t* t) {
+gui_timer_stop__(gui_timer_t* t) {
     __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
     t->Counter = t->Period;                         /* Reset counter to top value */
     t->Flags &= ~GUI_FLAG_TIMER_ACTIVE;             /* Clear active flag */
@@ -142,11 +142,11 @@ gui_timer_stop__(GUI_TIMER_t* t) {
 /**
  * \brief           Reset timer to zero
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       t: Pointer to \ref GUI_TIMER_t structure
- * \return          1 on success, 0 otherwise
+ * \param[in]       t: Pointer to \ref gui_timer_t structure
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_timer_reset__(GUI_TIMER_t* t) {
+gui_timer_reset__(gui_timer_t* t) {
     __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
     t->Counter = t->Period;                         /* Clear and reset timer */
     
@@ -160,9 +160,9 @@ gui_timer_reset__(GUI_TIMER_t* t) {
  */
 void
 gui_timer_process(void) {
-    GUI_TIMER_t* t;
+    gui_timer_t* t;
     volatile uint32_t time = gui_sys_now();         /* Get current time */
-    volatile uint32_t lastTime = GUI.Timers.Time;
+    volatile uint32_t lastTime = GUI.timers.Time;
     uint32_t diff = time - lastTime;                /* Get difference in time */
     
     if (diff == 0) {                                /* No difference in time */
@@ -170,7 +170,7 @@ gui_timer_process(void) {
     }
     
     /* Process all software timers */
-    for (t = (GUI_TIMER_t *)GUI.Timers.List.First; t; t = (GUI_TIMER_t *)t->List.Next) {
+    for (t = (gui_timer_t *)GUI.timers.List.First; t; t = (gui_timer_t *)t->List.Next) {
         if (t->Flags & GUI_FLAG_TIMER_CALL) {       /* Counter is set to 0, process callback */
             t->Flags &= ~GUI_FLAG_TIMER_CALL;       /* Clear timer flag */
             if (!gui_timer_isperiodic__(t)) {       /* If timer is not periodic */
@@ -196,7 +196,7 @@ gui_timer_process(void) {
         }
     }
     
-    GUI.Timers.Time = time;                         /* Reset time */
+    GUI.timers.Time = time;                         /* Reset time */
 }
 
 /**
@@ -206,8 +206,8 @@ gui_timer_process(void) {
 uint32_t
 gui_timer_getactivecount(void) {
     uint32_t cnt = 0;
-    GUI_TIMER_t* t;
-    for (t = (GUI_TIMER_t *)GUI.Timers.List.First; t; t = (GUI_TIMER_t *)t->List.Next) {
+    gui_timer_t* t;
+    for (t = (gui_timer_t *)GUI.timers.List.First; t; t = (gui_timer_t *)t->List.Next) {
         if ((t->Flags & GUI_FLAG_TIMER_ACTIVE)) {
             cnt++;
         }

@@ -74,19 +74,19 @@ typedef enum GUI_LED_TYPE_t {
  * \brief           LED object structure
  */
 typedef struct GUI_LED_t {
-    GUI_HANDLE C;                           /*!< Global widget object */
+    gui_handle C;                           /*!< Global widget object */
     
     GUI_LED_TYPE_t Type;                    /*!< Led shape type */
     GUI_Byte Flags;                         /*!< Flags management for LED */
 } GUI_LED_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-GUI_HANDLE_p gui_led_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
-uint8_t gui_led_setcolor(GUI_HANDLE_p h, GUI_LED_COLOR_t index, GUI_Color_t color);
-uint8_t gui_led_settype(GUI_HANDLE_p h, GUI_LED_TYPE_t type);
-uint8_t gui_led_toggle(GUI_HANDLE_p h);
-uint8_t gui_led_set(GUI_HANDLE_p h, uint8_t state);
-uint8_t gui_led_ison(GUI_HANDLE_p h);
+gui_handle_p gui_led_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+uint8_t gui_led_setcolor(gui_handle_p h, GUI_LED_COLOR_t index, gui_color_t color);
+uint8_t gui_led_settype(gui_handle_p h, GUI_LED_TYPE_t type);
+uint8_t gui_led_toggle(gui_handle_p h);
+uint8_t gui_led_set(gui_handle_p h, uint8_t state);
+uint8_t gui_led_ison(gui_handle_p h);
 
 /**
  * \}

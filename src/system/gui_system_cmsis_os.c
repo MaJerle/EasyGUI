@@ -43,7 +43,7 @@ static osMutexId sys_mutex;                     /* Mutex ID for main protection 
 /**
  * \brief           Init system dependant parameters
  * \note            Called from high-level application layer when required
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_init(void) {
@@ -65,7 +65,7 @@ gui_sys_now(void) {
  * \note            This function is required with OS
  *
  * \note            This function may be called multiple times, recursive protection is required
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_protect(void) {
@@ -76,7 +76,7 @@ gui_sys_protect(void) {
 /**
  * \brief           Protect stack core
  * \note            This function is required with OS
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_unprotect(void) {
@@ -89,7 +89,7 @@ gui_sys_unprotect(void) {
  * \note            This function is required with OS
  * \note            Recursive mutex must be created as it may be locked multiple times before unlocked
  * \param[out]      p: Pointer to mutex structure to save result to
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_mutex_create(gui_sys_mutex_t* p) {
@@ -102,7 +102,7 @@ gui_sys_mutex_create(gui_sys_mutex_t* p) {
  * \brief           Delete mutex from OS
  * \note            This function is required with OS
  * \param[in]       p: Pointer to mutex structure
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_mutex_delete(gui_sys_mutex_t* p) {
@@ -113,7 +113,7 @@ gui_sys_mutex_delete(gui_sys_mutex_t* p) {
  * \brief           Wait forever to lock the mutex
  * \note            This function is required with OS
  * \param[in]       p: Pointer to mutex structure
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_mutex_lock(gui_sys_mutex_t* p) {
@@ -124,7 +124,7 @@ gui_sys_mutex_lock(gui_sys_mutex_t* p) {
  * \brief           Unlock mutex
  * \note            This function is required with OS
  * \param[in]       p: Pointer to mutex structure
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_mutex_unlock(gui_sys_mutex_t* p) {
@@ -135,7 +135,7 @@ gui_sys_mutex_unlock(gui_sys_mutex_t* p) {
  * \brief           Check if mutex structure is valid OS entry
  * \note            This function is required with OS
  * \param[in]       p: Pointer to mutex structure
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_mutex_isvalid(gui_sys_mutex_t* p) {
@@ -146,7 +146,7 @@ gui_sys_mutex_isvalid(gui_sys_mutex_t* p) {
  * \brief           Set mutex structure as invalid
  * \note            This function is required with OS
  * \param[in]       p: Pointer to mutex structure
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_mutex_invalid(gui_sys_mutex_t* p) {
@@ -162,7 +162,7 @@ gui_sys_mutex_invalid(gui_sys_mutex_t* p) {
  * \param[in]       cnt: Count indicating default semaphore state:
  *                     0: Lock it immediteally
  *                     1: Leave it unlocked
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_sem_create(gui_sys_sem_t* p, uint8_t cnt) {
@@ -179,7 +179,7 @@ gui_sys_sem_create(gui_sys_sem_t* p, uint8_t cnt) {
  * \brief           Delete binary semaphore
  * \note            This function is required with OS
  * \param[in]       p: Pointer to semaphore structure
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_sem_delete(gui_sys_sem_t* p) {
@@ -203,7 +203,7 @@ gui_sys_sem_wait(gui_sys_sem_t* p, uint32_t timeout) {
  * \brief           Release semaphore
  * \note            This function is required with OS
  * \param[in]       p: Pointer to semaphore structure
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_sem_release(gui_sys_sem_t* p) {
@@ -214,7 +214,7 @@ gui_sys_sem_release(gui_sys_sem_t* p) {
  * \brief           Check if semaphore is valid
  * \note            This function is required with OS
  * \param[in]       p: Pointer to semaphore structure
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_sem_isvalid(gui_sys_sem_t* p) {
@@ -225,7 +225,7 @@ gui_sys_sem_isvalid(gui_sys_sem_t* p) {
  * \brief           Invalid semaphore
  * \note            This function is required with OS
  * \param[in]       p: Pointer to semaphore structure
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_sem_invalid(gui_sys_sem_t* p) {
@@ -238,7 +238,7 @@ gui_sys_sem_invalid(gui_sys_sem_t* p) {
  * \note            This function is required with OS
  * \param[out]      b: Pointer to message queue structure
  * \param[in]       size: Number of entries for message queue to hold
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_mbox_create(gui_sys_mbox_t* b, size_t size) {
@@ -251,7 +251,7 @@ gui_sys_mbox_create(gui_sys_mbox_t* b, size_t size) {
  * \brief           Delete message queue
  * \note            This function is required with OS
  * \param[in]       b: Pointer to message queue structure
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_mbox_delete(gui_sys_mbox_t* b) {
@@ -300,7 +300,7 @@ gui_sys_mbox_get(gui_sys_mbox_t* b, void** m, uint32_t timeout) {
  * \note            This function is required with OS
  * \param[in]       b: Pointer to message queue structure
  * \param[in]       m: Pointer to message to save to queue
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_mbox_putnow(gui_sys_mbox_t* b, void* m) {
@@ -312,7 +312,7 @@ gui_sys_mbox_putnow(gui_sys_mbox_t* b, void* m) {
  * \note            This function is required with OS
  * \param[in]       b: Pointer to message queue structure
  * \param[in]       m: Pointer to pointer to result to save value from message queue to
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_mbox_getnow(gui_sys_mbox_t* b, void** m) {
@@ -330,7 +330,7 @@ gui_sys_mbox_getnow(gui_sys_mbox_t* b, void** m) {
  * \brief           Check if message queue is valid
  * \note            This function is required with OS
  * \param[in]       b: Pointer to message queue structure
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_mbox_isvalid(gui_sys_mbox_t* b) {
@@ -341,7 +341,7 @@ gui_sys_mbox_isvalid(gui_sys_mbox_t* b) {
  * \brief           Invalid message queue
  * \note            This function is required with OS
  * \param[in]       b: Pointer to message queue structure
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_mbox_invalid(gui_sys_mbox_t* b) {
@@ -358,7 +358,7 @@ gui_sys_mbox_invalid(gui_sys_mbox_t* b) {
  * \param[in]       arg: Thread function argument
  * \param[in]       stack_size: Size of thread stack in uints of bytes
  * \param[in]       prio: Thread priority 
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_sys_thread_create(gui_sys_thread_t* t, const char* name, void (*thread_func)(void *), void* const arg, size_t stack_size, gui_sys_thread_prio_t prio) {

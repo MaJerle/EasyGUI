@@ -66,27 +66,27 @@ typedef enum GUI_RADIO_COLOR_t {
 /**
  * \brief           Radio object structure
  */
-typedef struct GUI_RADIO_t {
-    GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
-    uint8_t GroupId;                        /*!< Group ID for radio box */
-    uint32_t Value;                         /*!< Single radio value when selected */
-    uint32_t SelectedValue;                 /*!< Currently selected value in radio group. 
+    uint8_t group_id;                       /*!< Group ID for radio box */
+    uint32_t value;                         /*!< Single radio value when selected */
+    uint32_t selected_value;                /*!< Currently selected value in radio group. 
                                                     All Widgets in the same group share the same value in this field all the time */
-    uint8_t Flags;                          /*!< Flags for checkbox */
-} GUI_RADIO_t;
+    uint8_t flags;                          /*!< Flags for checkbox */
+} gui_radio_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-GUI_HANDLE_p gui_radio_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
-uint8_t gui_radio_setcolor(GUI_HANDLE_p h, GUI_RADIO_COLOR_t index, GUI_Color_t color);
-uint8_t gui_radio_setgroup(GUI_HANDLE_p h, uint8_t groupId);
-uint8_t gui_radio_getgroup(GUI_HANDLE_p h);
-uint8_t gui_radio_setvalue(GUI_HANDLE_p h, uint32_t value);
-uint32_t gui_radio_getvalue(GUI_HANDLE_p h);
-uint32_t gui_radio_getselectedvalue(GUI_HANDLE_p h);
-uint8_t gui_radio_setdisabled(GUI_HANDLE_p h, uint8_t disabled);
-uint8_t gui_radio_isdisabled(GUI_HANDLE_p h);
-uint8_t gui_radio_setselected(GUI_HANDLE_p h);
+gui_handle_p gui_radio_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+uint8_t gui_radio_setcolor(gui_handle_p h, GUI_RADIO_COLOR_t index, gui_color_t color);
+uint8_t gui_radio_setgroup(gui_handle_p h, uint8_t groupId);
+uint8_t gui_radio_getgroup(gui_handle_p h);
+uint8_t gui_radio_setvalue(gui_handle_p h, uint32_t value);
+uint32_t gui_radio_getvalue(gui_handle_p h);
+uint32_t gui_radio_getselectedvalue(gui_handle_p h);
+uint8_t gui_radio_setdisabled(gui_handle_p h, uint8_t disabled);
+uint8_t gui_radio_isdisabled(gui_handle_p h);
+uint8_t gui_radio_setselected(gui_handle_p h);
     
 /**
  * \}

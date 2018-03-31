@@ -371,7 +371,7 @@ mem_getminfree(void) {
  * \brief           Allocate memory of specific size
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       size: Number of bytes to allocate
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  * \return          >0: Pointer to allocated memory
  */
 void*
@@ -478,7 +478,7 @@ gui_mem_getminfree(void) {
  * \note            You can allocate multiple regions by assigning start address and region size in units of bytes
  * \param[in]       regions: Pointer to list of regions to use for allocations
  * \param[in]       len: Number of regions to use
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_mem_assignmemory(const GUI_MEM_Region_t* regions, size_t len) {

@@ -35,36 +35,36 @@
 #include "widget/gui_button.h"
 
 typedef struct {
-    uint32_t C;                                     /*!< Character to print */
-    uint32_t CS;                                    /*!< Character on shift */
-    float X;                                        /*!< Start X position */
-    float W;                                        /*!< Character width */
-    uint8_t S;                                      /*!< Special function */
-} KeyboardBtn_t;
+    uint32_t c;                                     /*!< Character to print */
+    uint32_t cs;                                    /*!< Character on shift */
+    float x;                                        /*!< Start X position */
+    float w;                                        /*!< Character width */
+    uint8_t s;                                      /*!< Special function */
+} key_btn_t;
 
 typedef struct {
-    GUI_Dim_t xOffset;                              /*!< Starting X offset */
-    const KeyboardBtn_t* Btns;                      /*!< Pointer to buttons structure */
-    size_t BtnsCount;                               /*!< Number of buttons in array */
-} KeyboardRow_t;
+    gui_dim_t x_offset;                             /*!< Starting X offset */
+    const key_btn_t* btns;                          /*!< Pointer to buttons structure */
+    size_t btns_count;                              /*!< Number of buttons in array */
+} key_row_t;
 
 typedef struct {
-    const KeyboardRow_t* Rows;                      /*!< Pointer to rows objects */
-    size_t RowsCount;                               /*!< Number of rows */
-    GUI_ID_t ID;                                    /*!< Layout ID */
-} KeyboardLayout_t;
+    const key_row_t* rows;                          /*!< Pointer to rows objects */
+    size_t rows_count;                              /*!< Number of rows */
+    gui_id_t id;                                    /*!< Layout ID */
+} key_layout_t;
 
 typedef struct {
-    uint8_t IsShift;                                /*!< Status indicating shift mode is enabled */
-    GUI_HANDLE_p Handle;                            /*!< Pointer to keyboard handle */
-    GUI_HANDLE_p MainLayoutHandle;                  /*!< Pointer to main keyboard layout */
+    uint8_t is_shift;                               /*!< Status indicating shift mode is enabled */
+    gui_handle_p handle;                            /*!< Pointer to keyboard handle */
+    gui_handle_p main_layout_handle;                /*!< Pointer to main keyboard layout */
     
-    const GUI_FONT_t* Font;                         /*!< Pointer to used font */
-    const GUI_FONT_t* DefaultFont;                  /*!< Pointer to default font */
+    const gui_font_t* font;                         /*!< Pointer to used font */
+    const gui_font_t* default_font;                 /*!< Pointer to default font */
     
-    uint8_t Action;                                 /*!< Kbd show/hide action */
-    uint8_t ActionValue;                            /*!< Action custom value */
-} KeyboardInfo_t;
+    uint8_t action;                                 /*!< Kbd show/hide action */
+    uint8_t action_value;                           /*!< Action custom value */
+} key_info_t;
 
 #define SPECIAL_123                     ((uint32_t)0x01)
 #define SPECIAL_ABC                     ((uint32_t)0x02)
@@ -85,220 +85,231 @@ typedef struct {
 #define ACTION_HIDE                     0x01
 #define ACTION_SHOW                     0x02
 
+#define KEY_ROW(c_v, cs_v, x_v, w_v, s_v)         { .c = ((uint32_t)(c_v)), .cs = ((uint32_t)(cs_v)), .x = x_v, .w = w_v, .s = (s_v) }
+
 /***************************/
 /*   Layout 1 descriptors  */
 /***************************/
-static const
-KeyboardBtn_t ButtonsL1R1[] = {
-    {.C = ((uint32_t)'q'), .X = 0.5, .W = 9, .CS = ((uint32_t)'Q')},
-    {.C = ((uint32_t)'w'), .X = 10.5, .W = 9, .CS = ((uint32_t)'W')},
-    {.C = ((uint32_t)'e'), .X = 20.5, .W = 9, .CS = ((uint32_t)'E')},
-    {.C = ((uint32_t)'r'), .X = 30.5, .W = 9, .CS = ((uint32_t)'R')},
-    {.C = ((uint32_t)'t'), .X = 40.5, .W = 9, .CS = ((uint32_t)'T')},
-    {.C = ((uint32_t)'z'), .X = 50.5, .W = 9, .CS = ((uint32_t)'Z')},
-    {.C = ((uint32_t)'u'), .X = 60.5, .W = 9, .CS = ((uint32_t)'U')},
-    {.C = ((uint32_t)'i'), .X = 70.5, .W = 9, .CS = ((uint32_t)'I')},
-    {.C = ((uint32_t)'o'), .X = 80.5, .W = 9, .CS = ((uint32_t)'O')},
-    {.C = ((uint32_t)'p'), .X = 90.5, .W = 9, .CS = ((uint32_t)'P')}
+static const key_btn_t
+buttons_l1_r1[] = {
+    KEY_ROW('q', 'Q', 0.5f,  9.0f, 0),
+    KEY_ROW('w', 'W', 10.5f, 9.0f, 0),
+    KEY_ROW('e', 'E', 20.5f, 9.0f, 0),
+    KEY_ROW('r', 'R', 30.5f, 9.0f, 0),
+    KEY_ROW('t', 'T', 40.5f, 9.0f, 0),
+    KEY_ROW('z', 'Z', 50.5f, 9.0f, 0),
+    KEY_ROW('u', 'U', 60.5f, 9.0f, 0),
+    KEY_ROW('i', 'I', 70.5f, 9.0f, 0),
+    KEY_ROW('o', 'O', 80.5f, 9.0f, 0),
+    KEY_ROW('p', 'P', 90.5f, 9.0f, 0),
 };
 
-static const
-KeyboardBtn_t ButtonsL1R2[] = {
-    {.C = ((uint32_t)'a'), .X = 5.5, .W = 9, .CS = ((uint32_t)'A')},
-    {.C = ((uint32_t)'s'), .X = 15.5, .W = 9, .CS = ((uint32_t)'S')},
-    {.C = ((uint32_t)'d'), .X = 25.5, .W = 9, .CS = ((uint32_t)'D')},
-    {.C = ((uint32_t)'f'), .X = 35.5, .W = 9, .CS = ((uint32_t)'F')},
-    {.C = ((uint32_t)'g'), .X = 45.5, .W = 9, .CS = ((uint32_t)'G')},
-    {.C = ((uint32_t)'h'), .X = 55.5, .W = 9, .CS = ((uint32_t)'H')},
-    {.C = ((uint32_t)'j'), .X = 65.5, .W = 9, .CS = ((uint32_t)'J')},
-    {.C = ((uint32_t)'k'), .X = 75.5, .W = 9, .CS = ((uint32_t)'K')},
-    {.C = ((uint32_t)'l'), .X = 85.5, .W = 9, .CS = ((uint32_t)'L')}
+static const key_btn_t
+buttons_l1_r2[] = {
+    KEY_ROW('a', 'A', 5.5f, 9.0f, 0),
+    KEY_ROW('s', 'S', 15.5f, 9.0f, 0),
+    KEY_ROW('d', 'D', 25.5f, 9.0f, 0),
+    KEY_ROW('f', 'F', 35.5f, 9.0f, 0),
+    KEY_ROW('g', 'G', 45.5f, 9.0f, 0),
+    KEY_ROW('h', 'H', 55.5f, 9.0f, 0),
+    KEY_ROW('j', 'J', 65.5f, 9.0f, 0),
+    KEY_ROW('k', 'K', 75.5f, 9.0f, 0),
+    KEY_ROW('l', 'L', 85.5f, 9.0f, 0),
 };
 
-static const
-KeyboardBtn_t ButtonsL1R3[] = {
-    {.C = 0, .X = 0.5, .W = 14, .S = SPECIAL_SHIFT},
-    {.C = ((uint32_t)'y'), .X = 15.5, .W = 9, .CS = ((uint32_t)'Y')},
-    {.C = ((uint32_t)'x'), .X = 25.5, .W = 9, .CS = ((uint32_t)'X')},
-    {.C = ((uint32_t)'c'), .X = 35.5, .W = 9, .CS = ((uint32_t)'C')},
-    {.C = ((uint32_t)'v'), .X = 45.5, .W = 9, .CS = ((uint32_t)'V')},
-    {.C = ((uint32_t)'b'), .X = 55.5, .W = 9, .CS = ((uint32_t)'B')},
-    {.C = ((uint32_t)'n'), .X = 65.5, .W = 9, .CS = ((uint32_t)'N')},
-    {.C = ((uint32_t)'m'), .X = 75.5, .W = 9, .CS = ((uint32_t)'M')},
-    {.C = 0, .X = 85.5, .W = 14, .S = SPECIAL_BACKSPACE},
+static const key_btn_t
+buttons_l1_r3[] = {
+    KEY_ROW(0, 0, 0.5f, 14.0f, SPECIAL_SHIFT),
+    KEY_ROW('y', 'Y', 15.5f, 9.0f, 0),
+    KEY_ROW('x', 'X', 25.5f, 9.0f, 0),
+    KEY_ROW('c', 'C', 35.5f, 9.0f, 0),
+    KEY_ROW('g', 'V', 45.5f, 9.0f, 0),
+    KEY_ROW('b', 'B', 55.5f, 9.0f, 0),
+    KEY_ROW('n', 'N', 65.5f, 9.0f, 0),
+    KEY_ROW('m', 'M', 75.5f, 9.0f, 0),
+    KEY_ROW(0, 0, 85.5f, 14.0f, SPECIAL_BACKSPACE),
 };
 
-static const
-KeyboardBtn_t ButtonsL1R4[] = {
-    {.C = 0, .X = 0.5, .W = 9, .S = ((uint32_t)SPECIAL_123)},
-    {.C = ((uint32_t)' '), .X = 10.5, .W = 59},
-    {.C = ((uint32_t)'.'), .X = 70.5, .W = 9},
-    {.C = 0, .X = 80.5, .W = 9, .S = ((uint32_t)SPECIAL_ENTER)},
-    {.C = 0, .X = 90.5, .W = 9, .S = ((uint32_t)SPECIAL_HIDE)},
+static const key_btn_t
+buttons_l1_r4[] = {
+    {.c = 0, .x = 0.5, .w = 9, .s = ((uint32_t)SPECIAL_123)},
+    {.c = ((uint32_t)' '), .x = 10.5, .w = 59},
+    {.c = ((uint32_t)'.'), .x = 70.5, .w = 9},
+    {.c = 0, .x = 80.5, .w = 9, .s = ((uint32_t)SPECIAL_ENTER)},
+    {.c = 0, .x = 90.5, .w = 9, .s = ((uint32_t)SPECIAL_HIDE)},
 };
 
-static const
-KeyboardRow_t KeyboardL1Rows[] = {
-    {.xOffset = 1, .Btns = ButtonsL1R1, .BtnsCount = GUI_COUNT_OF(ButtonsL1R1)},
-    {.xOffset = 1, .Btns = ButtonsL1R2, .BtnsCount = GUI_COUNT_OF(ButtonsL1R2)},
-    {.xOffset = 1, .Btns = ButtonsL1R3, .BtnsCount = GUI_COUNT_OF(ButtonsL1R3)},
-    {.xOffset = 1, .Btns = ButtonsL1R4, .BtnsCount = GUI_COUNT_OF(ButtonsL1R4)},
+static const key_row_t
+keyboard_rows_l1[] = {
+    {.x_offset = 1, .btns = buttons_l1_r1, .btns_count = GUI_COUNT_OF(buttons_l1_r1)},
+    {.x_offset = 1, .btns = buttons_l1_r2, .btns_count = GUI_COUNT_OF(buttons_l1_r2)},
+    {.x_offset = 1, .btns = buttons_l1_r3, .btns_count = GUI_COUNT_OF(buttons_l1_r3)},
+    {.x_offset = 1, .btns = buttons_l1_r4, .btns_count = GUI_COUNT_OF(buttons_l1_r4)},
 };
                 
 /***************************/
 /*   Layout 2 descriptors  */
 /***************************/
-static const
-KeyboardBtn_t ButtonsL2R1[] = {
-    {.C = ((uint32_t)'1'), .X = 0.5, .W = 9},
-    {.C = ((uint32_t)'2'), .X = 10.5, .W = 9},
-    {.C = ((uint32_t)'3'), .X = 20.5, .W = 9},
-    {.C = ((uint32_t)'4'), .X = 30.5, .W = 9},
-    {.C = ((uint32_t)'5'), .X = 40.5, .W = 9},
-    {.C = ((uint32_t)'6'), .X = 50.5, .W = 9},
-    {.C = ((uint32_t)'7'), .X = 60.5, .W = 9},
-    {.C = ((uint32_t)'8'), .X = 70.5, .W = 9},
-    {.C = ((uint32_t)'9'), .X = 80.5, .W = 9},
-    {.C = ((uint32_t)'0'), .X = 90.5, .W = 9}
+static const key_btn_t
+buttons_l2_r1[] = {
+    {.c = ((uint32_t)'1'), .x = 0.5, .w = 9},
+    {.c = ((uint32_t)'2'), .x = 10.5, .w = 9},
+    {.c = ((uint32_t)'3'), .x = 20.5, .w = 9},
+    {.c = ((uint32_t)'4'), .x = 30.5, .w = 9},
+    {.c = ((uint32_t)'5'), .x = 40.5, .w = 9},
+    {.c = ((uint32_t)'6'), .x = 50.5, .w = 9},
+    {.c = ((uint32_t)'7'), .x = 60.5, .w = 9},
+    {.c = ((uint32_t)'8'), .x = 70.5, .w = 9},
+    {.c = ((uint32_t)'9'), .x = 80.5, .w = 9},
+    {.c = ((uint32_t)'0'), .x = 90.5, .w = 9}
 };
 
-static const
-KeyboardBtn_t ButtonsL2R2[] = {
-    {.C = ((uint32_t)'-'), .X = 0.5, .W = 9},
-    {.C = ((uint32_t)'/'), .X = 10.5, .W = 9},
-    {.C = ((uint32_t)':'), .X = 20.5, .W = 9},
-    {.C = ((uint32_t)';'), .X = 30.5, .W = 9},
-    {.C = ((uint32_t)'('), .X = 40.5, .W = 9},
-    {.C = ((uint32_t)')'), .X = 50.5, .W = 9},
-    {.C = ((uint32_t)'$'), .X = 60.5, .W = 9},
-    {.C = ((uint32_t)'&'), .X = 70.5, .W = 9},
-    {.C = ((uint32_t)'@'), .X = 80.5, .W = 9},
-    {.C = ((uint32_t)'"'), .X = 90.5, .W = 9}
+static const key_btn_t
+buttons_l2_r2[] = {
+    {.c = ((uint32_t)'-'), .x = 0.5, .w = 9},
+    {.c = ((uint32_t)'/'), .x = 10.5, .w = 9},
+    {.c = ((uint32_t)':'), .x = 20.5, .w = 9},
+    {.c = ((uint32_t)';'), .x = 30.5, .w = 9},
+    {.c = ((uint32_t)'('), .x = 40.5, .w = 9},
+    {.c = ((uint32_t)')'), .x = 50.5, .w = 9},
+    {.c = ((uint32_t)'$'), .x = 60.5, .w = 9},
+    {.c = ((uint32_t)'&'), .x = 70.5, .w = 9},
+    {.c = ((uint32_t)'@'), .x = 80.5, .w = 9},
+    {.c = ((uint32_t)'"'), .x = 90.5, .w = 9}
 };
 
-static const
-KeyboardBtn_t ButtonsL2R3[] = {
-    {.C = 0, .X = 0.5, .W = 14, .S = SPECIAL_CALC},
-    {.C = ((uint32_t)'.'), .X = 15.5, .W = 13},
-    {.C = ((uint32_t)','), .X = 29.5, .W = 13},
-    {.C = ((uint32_t)'?'), .X = 43.5, .W = 13},
-    {.C = ((uint32_t)'!'), .X = 57.5, .W = 13},
-    {.C = ((uint32_t)'\''), .X = 71.5, .W = 13},
-    {.C = 0, .X = 85.5, .W = 14, .S = SPECIAL_BACKSPACE},
+static const key_btn_t
+buttons_l2_r3[] = {
+    {.c = 0, .x = 0.5, .w = 14, .s = SPECIAL_CALC},
+    {.c = ((uint32_t)'.'), .x = 15.5, .w = 13},
+    {.c = ((uint32_t)','), .x = 29.5, .w = 13},
+    {.c = ((uint32_t)'?'), .x = 43.5, .w = 13},
+    {.c = ((uint32_t)'!'), .x = 57.5, .w = 13},
+    {.c = ((uint32_t)'\''), .x = 71.5, .w = 13},
+    {.c = 0, .x = 85.5, .w = 14, .s = SPECIAL_BACKSPACE},
 };
 
-static const
-KeyboardBtn_t ButtonsL2R4[] = {
-    {.C = 0, .X = 0.5, .W = 9, .S = ((uint32_t)SPECIAL_ABC)},
-    {.C = ((uint32_t)' '), .X = 10.5, .W = 59},
-    {.C = ((uint32_t)'.'), .X = 70.5, .W = 9},
-    {.C = 0, .X = 80.5, .W = 9, .S = ((uint32_t)SPECIAL_ENTER)},
-    {.C = 0, .X = 90.5, .W = 9, .S = ((uint32_t)SPECIAL_HIDE)},
+static const key_btn_t
+buttons_l2_r4[] = {
+    {.c = 0, .x = 0.5, .w = 9, .s = ((uint32_t)SPECIAL_ABC)},
+    {.c = ((uint32_t)' '), .x = 10.5, .w = 59},
+    {.c = ((uint32_t)'.'), .x = 70.5, .w = 9},
+    {.c = 0, .x = 80.5, .w = 9, .s = ((uint32_t)SPECIAL_ENTER)},
+    {.c = 0, .x = 90.5, .w = 9, .s = ((uint32_t)SPECIAL_HIDE)},
 };
 
-static const
-KeyboardRow_t KeyboardL2Rows[] = {
-    {.xOffset = 1, .Btns = ButtonsL2R1, .BtnsCount = GUI_COUNT_OF(ButtonsL2R1)},
-    {.xOffset = 1, .Btns = ButtonsL2R2, .BtnsCount = GUI_COUNT_OF(ButtonsL2R2)},
-    {.xOffset = 1, .Btns = ButtonsL2R3, .BtnsCount = GUI_COUNT_OF(ButtonsL2R3)},
-    {.xOffset = 1, .Btns = ButtonsL2R4, .BtnsCount = GUI_COUNT_OF(ButtonsL2R4)},
+static const key_row_t
+keyboard_rows_l2[] = {
+    {.x_offset = 1, .btns = buttons_l2_r1, .btns_count = GUI_COUNT_OF(buttons_l2_r1)},
+    {.x_offset = 1, .btns = buttons_l2_r2, .btns_count = GUI_COUNT_OF(buttons_l2_r2)},
+    {.x_offset = 1, .btns = buttons_l2_r3, .btns_count = GUI_COUNT_OF(buttons_l2_r3)},
+    {.x_offset = 1, .btns = buttons_l2_r4, .btns_count = GUI_COUNT_OF(buttons_l2_r4)},
 };
 
 /***************************/
 /*   Layout 2 descriptors  */
 /***************************/
-static const
-KeyboardBtn_t ButtonsL3R1[] = {
-    {.C = ((uint32_t)'['), .X = 0.5, .W = 9},
-    {.C = ((uint32_t)']'), .X = 10.5, .W = 9},
-    {.C = ((uint32_t)'{'), .X = 20.5, .W = 9},
-    {.C = ((uint32_t)'}'), .X = 30.5, .W = 9},
-    {.C = ((uint32_t)'#'), .X = 40.5, .W = 9},
-    {.C = ((uint32_t)'%'), .X = 50.5, .W = 9},
-    {.C = ((uint32_t)'^'), .X = 60.5, .W = 9},
-    {.C = ((uint32_t)'*'), .X = 70.5, .W = 9},
-    {.C = ((uint32_t)'+'), .X = 80.5, .W = 9},
-    {.C = ((uint32_t)'='), .X = 90.5, .W = 9}
+static const key_btn_t
+buttons_l3_r1[] = {
+    {.c = ((uint32_t)'['), .x = 0.5, .w = 9},
+    {.c = ((uint32_t)']'), .x = 10.5, .w = 9},
+    {.c = ((uint32_t)'{'), .x = 20.5, .w = 9},
+    {.c = ((uint32_t)'}'), .x = 30.5, .w = 9},
+    {.c = ((uint32_t)'#'), .x = 40.5, .w = 9},
+    {.c = ((uint32_t)'%'), .x = 50.5, .w = 9},
+    {.c = ((uint32_t)'^'), .x = 60.5, .w = 9},
+    {.c = ((uint32_t)'*'), .x = 70.5, .w = 9},
+    {.c = ((uint32_t)'+'), .x = 80.5, .w = 9},
+    {.c = ((uint32_t)'='), .x = 90.5, .w = 9}
 };
 
-static const
-KeyboardBtn_t ButtonsL3R2[] = {
-    {.C = ((uint32_t)'_'), .X = 0.5, .W = 9},
-    {.C = ((uint32_t)'\\'), .X = 10.5, .W = 9},
-    {.C = ((uint32_t)'|'), .X = 20.5, .W = 9},
-    {.C = ((uint32_t)'~'), .X = 30.5, .W = 9},
-    {.C = ((uint32_t)'<'), .X = 40.5, .W = 9},
-    {.C = ((uint32_t)'>'), .X = 50.5, .W = 9},
-    {.C = ((uint32_t)'$'), .X = 60.5, .W = 9},
-    {.C = ((uint32_t)':'), .X = 70.5, .W = 9},
-    {.C = ((uint32_t)';'), .X = 80.5, .W = 9},
-    {.C = ((uint32_t)'-'), .X = 90.5, .W = 9}
+static const key_btn_t
+buttons_l3_r2[] = {
+    {.c = ((uint32_t)'_'), .x = 0.5, .w = 9},
+    {.c = ((uint32_t)'\\'), .x = 10.5, .w = 9},
+    {.c = ((uint32_t)'|'), .x = 20.5, .w = 9},
+    {.c = ((uint32_t)'~'), .x = 30.5, .w = 9},
+    {.c = ((uint32_t)'<'), .x = 40.5, .w = 9},
+    {.c = ((uint32_t)'>'), .x = 50.5, .w = 9},
+    {.c = ((uint32_t)'$'), .x = 60.5, .w = 9},
+    {.c = ((uint32_t)':'), .x = 70.5, .w = 9},
+    {.c = ((uint32_t)';'), .x = 80.5, .w = 9},
+    {.c = ((uint32_t)'-'), .x = 90.5, .w = 9}
 };
 
-static const
-KeyboardBtn_t ButtonsL3R3[] = {
-    {.C = 0, .X = 0.5, .W = 14, .S = SPECIAL_123},
-    {.C = ((uint32_t)'.'), .X = 15.5, .W = 13},
-    {.C = ((uint32_t)','), .X = 29.5, .W = 13},
-    {.C = ((uint32_t)'?'), .X = 43.5, .W = 13},
-    {.C = ((uint32_t)'!'), .X = 57.5, .W = 13},
-    {.C = ((uint32_t)'\''), .X = 71.5, .W = 13},
-    {.C = 0, .X = 85.5, .W = 14, .S = SPECIAL_BACKSPACE},
+static const key_btn_t
+buttons_l3_r3[] = {
+    {.c = 0, .x = 0.5, .w = 14, .s = SPECIAL_123},
+    {.c = ((uint32_t)'.'), .x = 15.5, .w = 13},
+    {.c = ((uint32_t)','), .x = 29.5, .w = 13},
+    {.c = ((uint32_t)'?'), .x = 43.5, .w = 13},
+    {.c = ((uint32_t)'!'), .x = 57.5, .w = 13},
+    {.c = ((uint32_t)'\''), .x = 71.5, .w = 13},
+    {.c = 0, .x = 85.5, .w = 14, .s = SPECIAL_BACKSPACE},
 };
 
-static const
-KeyboardBtn_t ButtonsL3R4[] = {
-    {.C = 0, .X = 0.5, .W = 9, .S = ((uint32_t)SPECIAL_ABC)},
-    {.C = ((uint32_t)' '), .X = 10.5, .W = 59},
-    {.C = ((uint32_t)'.'), .X = 70.5, .W = 9},
-    {.C = 0, .X = 80.5, .W = 9, .S = ((uint32_t)SPECIAL_ENTER)},
-    {.C = 0, .X = 90.5, .W = 9, .S = ((uint32_t)SPECIAL_HIDE)},
+static const key_btn_t
+buttons_l3_r4[] = {
+    {.c = 0, .x = 0.5, .w = 9, .s = ((uint32_t)SPECIAL_ABC)},
+    {.c = ((uint32_t)' '), .x = 10.5, .w = 59},
+    {.c = ((uint32_t)'.'), .x = 70.5, .w = 9},
+    {.c = 0, .x = 80.5, .w = 9, .s = ((uint32_t)SPECIAL_ENTER)},
+    {.c = 0, .x = 90.5, .w = 9, .s = ((uint32_t)SPECIAL_HIDE)},
 };
 
-static const
-KeyboardRow_t KeyboardL3Rows[] = {
-    {.xOffset = 1, .Btns = ButtonsL3R1, .BtnsCount = GUI_COUNT_OF(ButtonsL3R1)},
-    {.xOffset = 1, .Btns = ButtonsL3R2, .BtnsCount = GUI_COUNT_OF(ButtonsL3R2)},
-    {.xOffset = 1, .Btns = ButtonsL3R3, .BtnsCount = GUI_COUNT_OF(ButtonsL3R3)},
-    {.xOffset = 1, .Btns = ButtonsL3R4, .BtnsCount = GUI_COUNT_OF(ButtonsL3R4)},
+static const key_row_t
+keyboard_rows_l3[] = {
+    {.x_offset = 1, .btns = buttons_l3_r1, .btns_count = GUI_COUNT_OF(buttons_l3_r1)},
+    {.x_offset = 1, .btns = buttons_l3_r2, .btns_count = GUI_COUNT_OF(buttons_l3_r2)},
+    {.x_offset = 1, .btns = buttons_l3_r3, .btns_count = GUI_COUNT_OF(buttons_l3_r3)},
+    {.x_offset = 1, .btns = buttons_l3_r4, .btns_count = GUI_COUNT_OF(buttons_l3_r4)},
 };
 
 /************************/
 /*  Layouts descriptor  */
 /************************/
-static const
-KeyboardLayout_t KeyboardLayouts[] = {
-    {.ID = GUI_ID_KEYBOARD_LAYOUT_ABC, .Rows = KeyboardL1Rows, .RowsCount = GUI_COUNT_OF(KeyboardL1Rows)},
-    {.ID = GUI_ID_KEYBOARD_LAYOUT_123, .Rows = KeyboardL2Rows, .RowsCount = GUI_COUNT_OF(KeyboardL2Rows)},
-    {.ID = GUI_ID_KEYBOARD_LAYOUT_CALC, .Rows = KeyboardL3Rows, .RowsCount = GUI_COUNT_OF(KeyboardL3Rows)},
+static const key_layout_t
+layouts[] = {
+    {.id = GUI_ID_KEYBOARD_LAYOUT_ABC, .rows = keyboard_rows_l1, .rows_count = GUI_COUNT_OF(keyboard_rows_l1)},
+    {.id = GUI_ID_KEYBOARD_LAYOUT_123, .rows = keyboard_rows_l2, .rows_count = GUI_COUNT_OF(keyboard_rows_l2)},
+    {.id = GUI_ID_KEYBOARD_LAYOUT_CALC, .rows = keyboard_rows_l3, .rows_count = GUI_COUNT_OF(keyboard_rows_l3)},
 };
 
-static
-KeyboardInfo_t Kbd = {.ActionValue = 10};   /* Set action value to max */
+static key_info_t
+keyboard = {
+    .action_value = 10              /* Set action value to max */
+};   
 
-#define SHIFT_DISABLE()     if (Kbd.IsShift) { Kbd.IsShift = 0; gui_widget_invalidate__(Kbd.MainLayoutHandle); }
-#define SHIFT_ENABLE(mode)  do {                        \
-    if (!Kbd.IsShift && (mode)) {                       \
-        gui_widget_invalidate__(Kbd.MainLayoutHandle);  \
-    }                                                   \
-    Kbd.IsShift = (mode);                               \
+#define SHIFT_DISABLE()     if (keyboard.is_shift) {        \
+    keyboard.is_shift = 0;                                  \
+    guii_widget_invalidate(keyboard.main_layout_handle);   \
+}
+
+#define SHIFT_ENABLE(mode)  do {                            \
+    if (!keyboard.is_shift && (mode)) {                     \
+        guii_widget_invalidate(keyboard.main_layout_handle);  \
+    }                                                       \
+    keyboard.is_shift = (mode);                             \
 } while (0)
 
-#define SHIFT_TOGGLE()      do {        \
-    Kbd.IsShift = !Kbd.IsShift;         \
-    gui_widget_invalidate__(Kbd.MainLayoutHandle);  \
+#define SHIFT_TOGGLE()      do {                            \
+    keyboard.is_shift = !keyboard.is_shift;                 \
+    guii_widget_invalidate(keyboard.main_layout_handle);   \
 } while (0)
-/* Callback for keyboard button */
+
+/**
+ * \brief           Keyboard button callback function
+ */
 static uint8_t
-keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
+keyboard_btn_callback(gui_handle_p h, GUI_WC_t cmd, gui_widget_param_t* param, gui_widget_result_t* result) {
     switch (cmd) {                                  /* Process commands */
-        case GUI_WC_Draw: {
-            GUI_Char str[10] = {0};
-            const KeyboardBtn_t* kbtn;
+        case GUI_WC_Draw: {                         /* Draw button */
+            gui_char str[10] = {0};
+            const key_btn_t* kbtn;
             
-            kbtn = (const KeyboardBtn_t *)gui_widget_getuserdata__(h);  /* Get user data */
+            kbtn = (const key_btn_t *)guii_widget_getuserdata(h);  /* Get user data */
             
-            switch (kbtn->S) {
+            switch (kbtn->s) {                      /* Check if there is specal key */
                 case SPECIAL_123: 
                     strcpy((char *)str, (char *)_GT("123"));
                     break;
@@ -321,109 +332,103 @@ keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param, G
                     strcpy((char *)str, (char *)_GT("Hide"));
                     break;
                 default:
-                    if (Kbd.IsShift && kbtn->CS) {  /* Character when shift is ON */
-                        gui_string_unicode_encode(kbtn->CS, str);   /* Encode character to unicode */
+                    if (keyboard.is_shift && kbtn->cs) {    /* Character when shift is ON */
+                        gui_string_unicode_encode(kbtn->cs, str);   /* Encode character to unicode */
                     } else {                        /* Character when shift is OFF */
-                        gui_string_unicode_encode(kbtn->C, str);    /* Encode character to unicode */
+                        gui_string_unicode_encode(kbtn->c, str);    /* Encode character to unicode */
                     }
+                    break;
             }
-            
-            if (Kbd.Font) {                         /* Check if widget font is set */
-                gui_widget_setfont__(h, Kbd.Font);  /* Set drawing font */
+                                                
+            if (keyboard.font != NULL) {            /* Check if widget font is set */
+                guii_widget_setfont(h, keyboard.font);  /* Set drawing font */
             } else {
-                gui_widget_setfont__(h, Kbd.DefaultFont);   /* Set drawing font */
+                guii_widget_setfont(h, keyboard.default_font); /* Set drawing font */
             }
             
-            gui_widget_settext__(h, str);           /* Temporary set text */
+            guii_widget_settext(h, str);       /* Temporary set text */
             gui_widget_processdefaultcallback(h, cmd, param, result);   /* Process default callback with drawing */
             return 1;
         }
-        case GUI_WC_Click: {                        /* Handle pressed button */
-            GUI_HANDLE_p tmp1, tmp2, tmp3;
-            const KeyboardBtn_t* kbtn;
+        case GUI_WC_Click: {                    /* Handle pressed button */
+            gui_handle_p tmp1, tmp2, tmp3;
+            const key_btn_t* kbtn;
             uint32_t ch = 0;
-            GUI_KeyboardData_t kbd = {0};
+            gui_keyboarddata_t kbd = {0};
             
-            kbtn = gui_widget_getuserdata__(h);     /* Get data from widget */
-            if (kbtn->S) {                          /* Is button special function? */
-                switch (kbtn->S) {                  /* Check special function */
+            kbtn = guii_widget_getuserdata(h); /* Get data from widget */
+            if (kbtn->s) {                      /* Has button special function? */
+                switch (kbtn->s) {              /* Check special function */
                     case SPECIAL_123:
                     case SPECIAL_ABC: 
                     case SPECIAL_CALC: {            /* Special functions 123 or ABC */
-                        tmp1 = gui_widget_getbyid__(GUI_ID_KEYBOARD_LAYOUT_123);
-                        tmp2 = gui_widget_getbyid__(GUI_ID_KEYBOARD_LAYOUT_ABC);
-                        tmp3 = gui_widget_getbyid__(GUI_ID_KEYBOARD_LAYOUT_CALC);
+                        tmp1 = guii_widget_getbyid(GUI_ID_KEYBOARD_LAYOUT_123);
+                        tmp2 = guii_widget_getbyid(GUI_ID_KEYBOARD_LAYOUT_ABC);
+                        tmp3 = guii_widget_getbyid(GUI_ID_KEYBOARD_LAYOUT_CALC);
                         
-                        /* Hide layouts */
-                        if (kbtn->S == SPECIAL_ABC) {
-                            gui_widget_hide__(tmp1);
-                            gui_widget_hide__(tmp3);
-                        } else if (kbtn->S == SPECIAL_123) {
-                            gui_widget_hide__(tmp2);
-                            gui_widget_hide__(tmp3);
-                        } else if (kbtn->S == SPECIAL_CALC) {
-                            gui_widget_hide__(tmp1);
-                            gui_widget_hide__(tmp2);
+                        if (kbtn->s == SPECIAL_ABC) {
+                            guii_widget_hide(tmp1);
+                            guii_widget_show(tmp2);
+                            guii_widget_hide(tmp3);
+                        } else if (kbtn->s == SPECIAL_123) {
+                            guii_widget_show(tmp1);
+                            guii_widget_hide(tmp2);
+                            guii_widget_hide(tmp3);
+                        } else if (kbtn->s == SPECIAL_CALC) {
+                            guii_widget_hide(tmp1);
+                            guii_widget_hide(tmp2);
+                            guii_widget_show(tmp3);
                         }
-                        
-                        /* Show layout */
-                        if (kbtn->S == SPECIAL_ABC) {
-                            gui_widget_show__(tmp2);
-                        } else if (kbtn->S == SPECIAL_123) {
-                            gui_widget_show__(tmp1);
-                        } else if (kbtn->S == SPECIAL_CALC) {
-                            gui_widget_show__(tmp3);
-                        }
-                        SHIFT_DISABLE();            /* Clear shift mode */
+                        SHIFT_DISABLE();        /* Clear shift mode */
                         break;
                     }
                     case SPECIAL_SHIFT: {
-                        SHIFT_TOGGLE();             /* Toggle shift mode */
+                        SHIFT_TOGGLE();         /* Toggle shift mode */
                         break;
                     }
                     case SPECIAL_BACKSPACE: {
-                        ch = GUI_KEY_BACKSPACE;     /* Fake backspace key */
+                        ch = GUI_KEY_BACKSPACE; /* Fake backspace key */
                         break;
                     }
-                    case SPECIAL_HIDE: {            /* Hide button pressed */
-                        gui_keyboard_hide__();      /* Hide keyboard */
+                    case SPECIAL_HIDE: {        /* Hide button pressed */
+                        guii_keyboard_hide();  /* Hide keyboard */
                         break;
                     }
                 }
             }
             
-            /**
+            /*
              * Check if we have to add key to input buffer
              */
-            if (ch || !kbtn->S) {                   /* If character from special is set or normal key pressed */
-                if (!ch) {                          /* Only if char not yet set */
-                    if (Kbd.IsShift && kbtn->CS) {  /* If shift mode enabled and character has shift mode character */
-                        ch = kbtn->CS;              /* Use shift mode character */
+            if (ch || !kbtn->s) {               /* If character from special is set or normal key pressed */
+                if (!ch) {                      /* Only if char not yet set */
+                    if (keyboard.is_shift && kbtn->cs) {/* If shift mode enabled and character has shift mode character */
+                        ch = kbtn->cs;          /* Use shift mode character */
                     } else {
-                        ch = kbtn->C;               /* Use normal character */
+                        ch = kbtn->c;           /* Use normal character */
                     }
                 }
                 
                 /* Clear shift mode if necessary */
-                if (Kbd.IsShift != SHIFT_UPPERCASE) {   /* When not in uppercase shift mode */
-                    SHIFT_DISABLE();                /* Clear shift mode */
+                if (keyboard.is_shift != SHIFT_UPPERCASE) {   /* When not in uppercase shift mode */
+                    SHIFT_DISABLE();            /* Clear shift mode */
                 }
                 
                 /************************************/
                 /* Send character to focused widget */
                 /************************************/
-                gui_string_unicode_encode(ch, kbd.Keys);    /* Decode key */
-                gui_input_keyadd(&kbd);             /* Add actual key */
-                kbd.Keys[0] = 0;                    /* Set key to 0 */
-                gui_input_keyadd(&kbd);             /* Add end key */
+                gui_string_unicode_encode(ch, kbd.Keys);/* Decode key */
+                gui_input_keyadd(&kbd);         /* Add actual key */
+                kbd.Keys[0] = 0;                /* Set key to 0 */
+                gui_input_keyadd(&kbd);         /* Add end key */
             }
             return 1;
         }
         case GUI_WC_DblClick: {
-            const KeyboardBtn_t* kbtn;
+            const key_btn_t* kbtn;
             
-            kbtn = gui_widget_getuserdata__(h);     /* Get data from widget */
-            switch (kbtn->S) {
+            kbtn = guii_widget_getuserdata(h); /* Get data from widget */
+            switch (kbtn->s) {
                 case SPECIAL_SHIFT: {
                     SHIFT_ENABLE(SHIFT_UPPERCASE);  /* Enable shift upper case mode */
                     return 1;
@@ -432,49 +437,49 @@ keyboard_btn_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param, G
             return 0;
         }
         default:
-            GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
+            GUI_UNUSED3(h, param, result);      /* Unused elements to prevent compiler warnings */
             return gui_widget_processdefaultcallback(h, cmd, param, result);    /* Process default callback */
     }
 }
 
 /* Callback for keyboard base widget */
 static uint8_t
-keyboard_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
+keyboard_callback(gui_handle_p h, GUI_WC_t cmd, gui_widget_param_t* param, gui_widget_result_t* result) {
     switch (cmd) {
         case GUI_WC_Init: {
             return 1;
         }
-        default:                                    /* Handle default option */
-            GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
+        default:                                /* Handle default option */
+            GUI_UNUSED3(h, param, result);      /* Unused elements to prevent compiler warnings */
             return gui_widget_processdefaultcallback(h, cmd, param, result);    /* Process default callback */
     }
 }
 
 /* Timer callback for keyboard */
 static void
-keyboard_timer_callback(GUI_TIMER_t* timer) {
-    if (Kbd.Action == ACTION_HIDE) {                /* We should hide the keyboard */
-        if (Kbd.ActionValue < 10) {
-            Kbd.ActionValue++;
-            gui_widget_setpositionpercent__(Kbd.Handle, 0, 50 + Kbd.ActionValue * 5);
+keyboard_timer_callback(gui_timer_t* timer) {
+    if (keyboard.action == ACTION_HIDE) {       /* We should hide the keyboard */
+        if (keyboard.action_value < 10) {
+            keyboard.action_value++;
+            guii_widget_setpositionpercent(keyboard.handle, 0, 50 + keyboard.action_value * 5);
         } else {
-            gui_widget_hide__(Kbd.Handle);          /* Hide keyboard */
-            gui_timer_stop__(timer);                /* Stop timer */
+            guii_widget_hide(keyboard.handle); /* Hide keyboard */
+            gui_timer_stop__(timer);            /* Stop timer */
         }
-    } else if (Kbd.Action == ACTION_SHOW) {         /* We should show the keyboard */
-        if (Kbd.ActionValue) {
-            if (Kbd.ActionValue == 10) {            /* At the bottom? */
-                gui_widget_show__(Kbd.Handle);      /* First set keyboard as visible */
+    } else if (keyboard.action == ACTION_SHOW) {/* We should show the keyboard */
+        if (keyboard.action_value) {
+            if (keyboard.action_value == 10) {  /* At the bottom? */
+                guii_widget_show(keyboard.handle);  /* First set keyboard as visible */
             }
-            Kbd.ActionValue--;                      /* Decrease value */
-            gui_widget_setpositionpercent__(Kbd.Handle, 0, 50 + Kbd.ActionValue * 5);
+            keyboard.action_value--;            /* Decrease value */
+            guii_widget_setpositionpercent(keyboard.handle, 0, 50 + keyboard.action_value * 5);
         }
     }
 }
 
 /* Callback function for base element of keyboard */
 static uint8_t
-keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
+keyboard_base_callback(gui_handle_p h, GUI_WC_t cmd, gui_widget_param_t* param, gui_widget_result_t* result) {
     switch (cmd) {
         case GUI_WC_PreInit: {
             __GH(h)->Timer = gui_timer_create__(60, keyboard_timer_callback, 0);    /* Create timer */
@@ -483,62 +488,62 @@ keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param, 
             }
             return 1;
         }
-        case GUI_WC_Init: {                         /* When base element is initialized */
-            GUI_HANDLE_p handle, handleLayout;
+        case GUI_WC_Init: {                     /* When base element is initialized */
+            gui_handle_p handle, handleLayout;
             size_t i, k, z;
-            const KeyboardLayout_t* Layout;
-            const KeyboardRow_t* Row;
-            const KeyboardBtn_t* Btn;
+            const key_layout_t* layout;
+            const key_row_t* row;
+            const key_btn_t* btn;
             
             /***************************/
             /*   Configure keyboard    */
             /***************************/
-            gui_widget_setsizepercent__(h, 100, 50);/* Set keyboard size */
-            gui_widget_setpositionpercent__(h, 0, 100); /* Set position of keyboard outside visible area */
-            gui_widget_setzindex__(h, GUI_WIDGET_ZINDEX_MAX);   /* Set to maximal z-index */
-            gui_widget_hide__(h);                   /* Hide keyboard by default */
+            guii_widget_setsizepercent(h, 100, 50);/* Set keyboard size */
+            guii_widget_setpositionpercent(h, 0, 100); /* Set position of keyboard outside visible area */
+            guii_widget_setzindex(h, GUI_WIDGET_ZINDEX_MAX);   /* Set to maximal z-index */
+            guii_widget_hide(h);               /* Hide keyboard by default */
             
-            Kbd.DefaultFont = __GH(h)->Font;        /* Save current font */
+            keyboard.default_font = h->Font;    /* Save current font */
             
             /***************************/
             /* Create keyboard layouts */
             /***************************/
-            for (i = 0; i < GUI_COUNT_OF(KeyboardLayouts); i++) {
-                Layout = &KeyboardLayouts[i];       /* Get layout data */
+            for (i = 0; i < GUI_COUNT_OF(layouts); i++) {
+                layout = &layouts[i];           /* Get layout data */
                 
                 /***************************/
                 /* Create keyboard layout  */
                 /***************************/
-                handleLayout = gui_container_create(Layout->ID, 0, 0, 100, 100, h, keyboard_callback, 0);
-                gui_widget_setsizepercent__(handleLayout, 100, 100);
-                gui_widget_setpositionpercent__(handleLayout, 0, 0);
-                gui_widget_setuserdata__(handleLayout, (void *)Layout);
-                if (i) {                            /* Show only first layout */
-                    gui_widget_hide__(handleLayout);
-                } else {                            /* Save main layout handle */
-                    Kbd.MainLayoutHandle = handleLayout;
+                handleLayout = gui_container_create(layout->id, 0, 0, 100, 100, h, keyboard_callback, 0);
+                guii_widget_setsizepercent(handleLayout, 100, 100);
+                guii_widget_setpositionpercent(handleLayout, 0, 0);
+                guii_widget_setuserdata(handleLayout, (void *)layout);
+                if (i) {                        /* Show only first layout */
+                    guii_widget_hide(handleLayout);
+                } else {                        /* Save main layout handle */
+                    keyboard.main_layout_handle = handleLayout;
                 }
                 
                 /***************************/
                 /* Draw buttons on layout  */
                 /***************************/
-                for (k = 0; k < Layout->RowsCount; k++) {
-                    Row = &Layout->Rows[k];         /* Get row pointer */
-                    for (z = 0; z < Row->BtnsCount; z++) {
-                        Btn = &Row->Btns[z];        /* Get button pointer */
+                for (k = 0; k < layout->rows_count; k++) {
+                    row = &layout->rows[k];     /* Get row pointer */
+                    for (z = 0; z < row->btns_count; z++) {
+                        btn = &row->btns[z];    /* Get button pointer */
                         
                         handle = gui_button_create(0, 0, 0, 1, 1, handleLayout, keyboard_btn_callback, 0);    /* Create button object */
-                        gui_widget_setuserdata__(handle, (void *)Btn);  /* Set pointer to button */
-                        gui_widget_setsizepercent__(handle, Btn->W, 23);    /* Set button percent */
-                        gui_widget_setpositionpercent__(handle, Btn->X, 1 + 25 * k);
-                        gui_widget_set3dstyle__(handle, 0); /* Make buttons flat */
+                        guii_widget_setuserdata(handle, (void *)btn);  /* Set pointer to button */
+                        guii_widget_setsizepercent(handle, btn->w, 23);    /* Set button percent */
+                        guii_widget_setpositionpercent(handle, btn->x, 1 + 25 * k);
+                        guii_widget_set3dstyle(handle, 0); /* Make buttons flat */
                     }
                 }
             }
             return 1;
         }
-        default:                                    /* Handle default option */
-            GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
+        default:                                /* Handle default option */
+            GUI_UNUSED3(h, param, result);      /* Unused elements to prevent compiler warnings */
             return gui_widget_processdefaultcallback(h, cmd, param, result);    /* Process default callback */
     }
 }
@@ -546,14 +551,14 @@ keyboard_base_callback(GUI_HANDLE_p h, GUI_WC_t cmd, GUI_WIDGET_PARAM_t* param, 
 /**
  * \brief           Hide opened virtual keyboard
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \return          1 on success, 0 otherwise
- * \sa              gui_keyboard_show__
+ * \return          `1` on success, `0` otherwise
+ * \sa              guii_keyboard_show
  */
 uint8_t
-gui_keyboard_hide__(void) {
-    __GUI_ASSERTPARAMS(Kbd.Handle);                 /* Check parameters */
-    Kbd.Action = ACTION_HIDE;                       /* Set action to hide */
-    gui_timer_startperiodic__(__GH(Kbd.Handle)->Timer); /* Start periodic timer */
+guii_keyboard_hide(void) {
+    __GUI_ASSERTPARAMS(keyboard.handle != NULL);/* Check parameters */
+    keyboard.action = ACTION_HIDE;              /* Set action to hide */
+    gui_timer_startperiodic__(keyboard.handle->Timer);  /* Start periodic timer */
     
     return 1;
 }
@@ -562,18 +567,18 @@ gui_keyboard_hide__(void) {
  * \brief           Show hidden virtual keyboard
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle for which keyboard will be opened
- * \return          1 on success, 0 otherwise
- * \sa              gui_keyboard_hide__
+ * \return          `1` on success, `0` otherwise
+ * \sa              guii_keyboard_hide
  */
 uint8_t
-gui_keyboard_show__(GUI_HANDLE_p h) {
-    __GUI_ASSERTPARAMS(Kbd.Handle);                 /* Check parameters */
-    Kbd.Action = ACTION_SHOW;                       /* Set action to show */
-    if (h && __GH(h)->Font) {                       /* Check widget and font for it */
-        Kbd.Font = __GH(h)->Font;                   /* Save font as display font */
-        gui_widget_invalidate__(Kbd.Handle);        /* Force invalidation */
+guii_keyboard_show(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(keyboard.handle != NULL);/* Check parameters */
+    keyboard.action = ACTION_SHOW;              /* Set action to show */
+    if (h && h->Font != NULL) {                 /* Check widget and font for it */
+        keyboard.font = h->Font;                /* Save font as display font */
+        guii_widget_invalidate(keyboard.handle);   /* Force invalidation */
     }
-    gui_timer_startperiodic__(__GH(Kbd.Handle)->Timer); /* Start periodic timer */
+    gui_timer_startperiodic__(keyboard.handle->Timer);  /* Start periodic timer */
     
     return 1;
 }
@@ -583,47 +588,47 @@ gui_keyboard_show__(GUI_HANDLE_p h) {
  * \note            This function must be called by user after \ref gui_init is called to use virtual keyboard
  * \return          Keyboard handle on success, NULL otherwise
  */
-GUI_HANDLE_p
+gui_handle_p
 gui_keyboard_create(void) {    
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_ENTER();                              /* Enter GUI */
     
-    if (Kbd.Handle == NULL) {
-        Kbd.Handle = gui_container_create(GUI_ID_KEYBOARD_BASE, 0, 0, 1, 1, 0, keyboard_base_callback, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);  /* Create keyboard base element with desktop as parent */
+    if (keyboard.handle == NULL) {
+        keyboard.handle = gui_container_create(GUI_ID_KEYBOARD_BASE, 0, 0, 1, 1, 0, keyboard_base_callback, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);  /* Create keyboard base element with desktop as parent */
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
-    return Kbd.Handle;
+    __GUI_LEAVE();                              /* Leave GUI */
+    return keyboard.handle;
 }
 
 /**
  * \brief           Hide opened virtual keyboard
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_keyboard_show
  */
 uint8_t
 gui_keyboard_hide(void) {
     uint8_t ret;
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_ENTER();                              /* Enter GUI */
     
-    ret = gui_keyboard_hide__();                    /* Hide keyboard */
+    ret = guii_keyboard_hide();                /* Hide keyboard */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE();                              /* Leave GUI */
     return ret;
 }
 
 /**
  * \brief           Show hidden virtual keyboard
  * \param[in]       h: Widget handle for which keyboard will be opened
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_keyboard_hide
  */
 uint8_t
-gui_keyboard_show(GUI_HANDLE_p h) {
+gui_keyboard_show(gui_handle_p h) {
     uint8_t ret;
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_ENTER();                              /* Enter GUI */
     
-    ret = gui_keyboard_show__(h);                   /* Show keyboard */
+    ret = guii_keyboard_show(h);               /* Show keyboard */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE();                              /* Leave GUI */
     return ret;
 }

@@ -28,8 +28,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef GUI_H
-#define GUI_H 010
+#ifndef __GUI_H
+#define __GUI_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -195,9 +195,9 @@ extern "C" {
 #include "widget/gui_widget.h"
 #include "gui/gui_input.h"
 
-guir_t gui_init(void);
+guir_t  gui_init(void);
 int32_t gui_process(void);
-uint8_t gui_seteventcallback(GUI_EventCallback_t cb);
+uint8_t gui_seteventcallback(gui_eventcallback_t cb);
  
 /**
  * \}

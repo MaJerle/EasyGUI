@@ -36,24 +36,25 @@
 
 /**
  * \brief           Get translated entry from input string
- * \param[in]       src: Pointer to \ref GUI_Char string to translate
+ * \param[in]       src: Pointer to \ref gui_char string to translate
  * \return          Pointer to translated string or source string if translate not found
  */
-const GUI_Char*
-gui_translate_get(const GUI_Char* src) {
+const gui_char*
+gui_translate_get(const gui_char* src) {
     size_t i;
+    
     /* Try to find source string in translate table */
-    if (!GUI.Translate.Source || !GUI.Translate.Active) {   /* Check if languages set correctly */
+    if (GUI.translate.source == NULL || GUI.translate.active == NULL) { /* Check if languages set correctly */
         return src;                                 /* Just return original string */
     }
     
-    /**
+    /*
      * Scan all entries and return appropriate string
      */
-    for (i = 0; i < GUI.Translate.Source->Count; i++) {
-        if (gui_string_compare(src, GUI.Translate.Source->Entries[i]) == 0) {
-            if (i < GUI.Translate.Active->Count) {  /* Check if in valid range */
-                return GUI.Translate.Active->Entries[i];    /* Return translated string */
+    for (i = 0; i < GUI.translate.source->count; i++) {
+        if (gui_string_compare(src, GUI.translate.source->entries[i]) == 0) {
+            if (i < GUI.translate.active->count) {  /* Check if in valid range */
+                return GUI.translate.active->entries[i];    /* Return translated string */
             }
             break;                                  /* Stop execution at this point */
         }
@@ -65,11 +66,11 @@ gui_translate_get(const GUI_Char* src) {
  * \brief           Set currently active language for translated entries
  * \note            These entries are returned when index matches the source string from source language
  * \param[in]       lang: Pointer to \ref GUI_TRANSLATE_Language_t structure with translation entries
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_translate_setactivelanguage(const GUI_TRANSLATE_Language_t* lang) {
-    GUI.Translate.Active = lang;                    /* Set currently active language */
+gui_translate_setactivelanguage(const gui_translate_language_t* lang) {
+    GUI.translate.active = lang;                    /* Set currently active language */
     return 1;
 }
 
@@ -77,11 +78,11 @@ gui_translate_setactivelanguage(const GUI_TRANSLATE_Language_t* lang) {
  * \brief           Set source language for translated entries
  * \note            These entries are compared with input string to get index for translated value
  * \param[in]       lang: Pointer to \ref GUI_TRANSLATE_Language_t structure with translation entries
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_translate_setsourcelanguage(const GUI_TRANSLATE_Language_t* lang) {
-    GUI.Translate.Source = lang;                    /* Set source language */
+gui_translate_setsourcelanguage(const gui_translate_language_t* lang) {
+    GUI.translate.source = lang;                    /* Set source language */
     return 1;
 }
 

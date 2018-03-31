@@ -39,13 +39,13 @@
 #define CFG_MIN             0x03
 #define CFG_MAX             0x04
 
-static uint8_t gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
+static uint8_t gui_slider_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
  */
 static const
-GUI_Color_t Colors[] = {
+gui_color_t colors[] = {
     GUI_COLOR_WIN_BG,                               /*!< Default background color on non-active part */
     GUI_COLOR_WIN_BLUE,                             /*!< Default background color on active part */
     GUI_COLOR_WIN_RED,                              /*!< Default circle (...) color */
@@ -56,13 +56,13 @@ GUI_Color_t Colors[] = {
  * \brief           Widget initialization structure
  */
 static const
-GUI_WIDGET_t Widget = {
+gui_widget_t widget = {
     .Name = _GT("SLIDER"),                          /*!< Widget name */
     .Size = sizeof(GUI_SLIDER_t),                   /*!< Size of widget for memory allocation */
     .Flags = GUI_FLAG_WIDGET_INVALIDATE_PARENT,     /*!< List of widget flags */
     .Callback = gui_slider_callback,                /*!< Callback function */
-    .Colors = Colors,                               /*!< List of default colors */
-    .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Define number of colors */
+    .Colors = colors,                               /*!< List of default colors */
+    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Define number of colors */
 };
 #define o       ((GUI_SLIDER_t *)(h))
 
@@ -70,14 +70,14 @@ GUI_WIDGET_t Widget = {
 #define is_horizontal(h)   (o->Mode == GUI_SLIDER_MODE_LEFT_RIGHT || o->Mode == GUI_SLIDER_MODE_RIGHT_LEFT)
 
 /* Get delta value from widget */
-static GUI_Dim_t
-get_delta(GUI_HANDLE_p h, GUI_Dim_t wi, GUI_Dim_t he) {
+static gui_dim_t
+get_delta(gui_handle_p h, gui_dim_t wi, gui_dim_t he) {
     return wi > he ? he : wi;
 }
 
 /* Set slider value */
 static uint8_t 
-set_value(GUI_HANDLE_p h, int32_t value) {
+set_value(gui_handle_p h, int32_t value) {
     if (value > o->Max) {
         value = o->Max;
     } else if (value < o->Min) {
@@ -85,7 +85,7 @@ set_value(GUI_HANDLE_p h, int32_t value) {
     }
     if (value != o->Value) {                        /* Check difference in values */
         o->Value = value;                           /* Set new value */
-        gui_widget_callback__(h, GUI_WC_ValueChanged, NULL, NULL);  /* Callback process */
+        guii_widget_callback(h, GUI_WC_ValueChanged, NULL, NULL);  /* Callback process */
         return 1;
     }
     return 0;
@@ -93,8 +93,8 @@ set_value(GUI_HANDLE_p h, int32_t value) {
 
 /* Process touch event */
 static uint8_t
-touch_handle(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
-    GUI_Dim_t pos, delta, deltaH, width, height;
+touch_handle(gui_handle_p h, guii_touchdata_t* ts) {
+    gui_dim_t pos, delta, deltaH, width, height;
     int32_t value;
             
     width = ts->WidgetWidth;
@@ -135,23 +135,23 @@ touch_handle(GUI_HANDLE_p h, __GUI_TouchData_t* ts) {
         value = (int32_t)(((float)(o->Max - o->Min)) * (float)pos / (float)height) + o->Min;
     }
     
-    gui_widget_invalidate__(h);                     /* Redraw widget */
+    guii_widget_invalidate(h);                     /* Redraw widget */
     return set_value(h, value);                     /* Set new value */
 }
 
 /* Timer callback function for slider widget */
 static void
-timer_callback(GUI_TIMER_t* timer) {
-    GUI_HANDLE_p h = (GUI_HANDLE_p)gui_timer_getparams__(timer);    /* Get user parameters */
-    if (gui_widget_isactive__(h)) {                 /* Timer is in focus */
+timer_callback(gui_timer_t* timer) {
+    gui_handle_p h = (gui_handle_p)gui_timer_getparams__(timer);    /* Get user parameters */
+    if (guii_widget_isactive(h)) {                 /* Timer is in focus */
         if (__GS(h)->CurrentSize < __GS(h)->MaxSize) {
             __GS(h)->CurrentSize++;                 /* Increase size */
-            gui_widget_invalidate__(h);             /* Invalidate widget */
+            guii_widget_invalidate(h);             /* Invalidate widget */
         }
     } else {
         if (__GS(h)->CurrentSize > 0) {
             __GS(h)->CurrentSize--;
-            gui_widget_invalidate__(h);             /* Invalidate widget */
+            guii_widget_invalidate(h);             /* Invalidate widget */
         } else {
             gui_timer_stop__(timer);                /* Stop timer execution */
         }
@@ -167,8 +167,8 @@ timer_callback(GUI_TIMER_t* timer) {
  * \return          1 if command processed, 0 otherwise
  */
 static uint8_t
-gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) { 
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+gui_slider_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) { 
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
             o->Min = 0;                             /* Set default minimal value */
@@ -184,7 +184,7 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
             return 1;
         }
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
-            GUI_WIDGET_Param_t* v = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
+            gui_widget_param* v = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
             int32_t tmp;
             switch (v->Type) {
                 case CFG_MODE:                      /* Set current progress value */
@@ -217,15 +217,15 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
             return 1;
         }
         case GUI_WC_Draw: {
-            GUI_Display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
-            GUI_Dim_t x, y, width, height, delta, deltaH, recParam, offset;
-            GUI_Color_t c1, c2;
-            GUI_Dim_t circleSize;
+            gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
+            gui_dim_t x, y, width, height, delta, deltaH, recParam, offset;
+            gui_color_t c1, c2;
+            gui_dim_t circleSize;
 
-            x = gui_widget_getabsolutex__(h);       /* Get absolute X coordinate */
-            y = gui_widget_getabsolutey__(h);       /* Get absolute Y coordinate */
-            width = gui_widget_getwidth__(h);       /* Get widget width */
-            height = gui_widget_getheight__(h);     /* Get widget height */
+            x = guii_widget_getabsolutex(h);       /* Get absolute X coordinate */
+            y = guii_widget_getabsolutey(h);       /* Get absolute Y coordinate */
+            width = guii_widget_getwidth(h);       /* Get widget width */
+            height = guii_widget_getheight(h);     /* Get widget height */
             
             delta = get_delta(h, width, height);    /* Get delta value */
             deltaH = delta >> 1;                    /* Half of delta */
@@ -236,11 +236,11 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
             
             /* Set color for inverted sliders */
             if (o->Mode == GUI_SLIDER_MODE_BOTTOM_TOP || o->Mode == GUI_SLIDER_MODE_RIGHT_LEFT) {
-                c1 = gui_widget_getcolor__(h, GUI_SLIDER_COLOR_BG_NONACTIVE);
-                c2 = gui_widget_getcolor__(h, GUI_SLIDER_COLOR_BG_ACTIVE);
+                c1 = guii_widget_getcolor(h, GUI_SLIDER_COLOR_BG_NONACTIVE);
+                c2 = guii_widget_getcolor(h, GUI_SLIDER_COLOR_BG_ACTIVE);
             } else {
-                c1 = gui_widget_getcolor__(h, GUI_SLIDER_COLOR_BG_ACTIVE);
-                c2 = gui_widget_getcolor__(h, GUI_SLIDER_COLOR_BG_NONACTIVE);
+                c1 = guii_widget_getcolor(h, GUI_SLIDER_COLOR_BG_ACTIVE);
+                c2 = guii_widget_getcolor(h, GUI_SLIDER_COLOR_BG_NONACTIVE);
             }
             
             circleSize = (deltaH >> 2) + o->CurrentSize * (deltaH - (deltaH >> 2)) / o->MaxSize;    /* Get circle size */
@@ -250,30 +250,30 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
                 offset = 0;                         /* Make start offset */
                 width -= delta;
                 if (o->Mode == GUI_SLIDER_MODE_RIGHT_LEFT) {/* Right left version */
-                    offset = width - (GUI_Dim_t)(((float)(width) * (float)(o->Value - o->Min)) / (float)(o->Max - o->Min));
+                    offset = width - (gui_dim_t)(((float)(width) * (float)(o->Value - o->Min)) / (float)(o->Max - o->Min));
                 } else {                            /* Left right version */
-                    offset = (GUI_Dim_t)(((float)(width) * (float)(o->Value - o->Min)) / (float)(o->Max - o->Min));
+                    offset = (gui_dim_t)(((float)(width) * (float)(o->Value - o->Min)) / (float)(o->Max - o->Min));
                 }
                 x += deltaH;
                 gui_draw_filledroundedrectangle(disp, x, y + ((delta - recParam) >> 1), offset, recParam, (recParam >> 1), c1);   
                 gui_draw_filledroundedrectangle(disp, x + offset, y + ((delta - recParam) >> 1), width - offset, recParam, (recParam >> 1), c2);
-                gui_draw_roundedrectangle(disp, x, y + ((delta - recParam) >> 1), width, recParam, (recParam >> 1), gui_widget_getcolor__(h, GUI_SLIDER_COLOR_BORDER));
-                gui_draw_filledcircle(disp, x + offset, y + deltaH, circleSize, gui_widget_getcolor__(h, GUI_SLIDER_COLOR_FG));
-                gui_draw_circle(disp, x + offset, y + deltaH, circleSize, gui_widget_getcolor__(h, GUI_SLIDER_COLOR_BORDER));
+                gui_draw_roundedrectangle(disp, x, y + ((delta - recParam) >> 1), width, recParam, (recParam >> 1), guii_widget_getcolor(h, GUI_SLIDER_COLOR_BORDER));
+                gui_draw_filledcircle(disp, x + offset, y + deltaH, circleSize, guii_widget_getcolor(h, GUI_SLIDER_COLOR_FG));
+                gui_draw_circle(disp, x + offset, y + deltaH, circleSize, guii_widget_getcolor(h, GUI_SLIDER_COLOR_BORDER));
             } else {                                /* Vertical slider */
                 offset = 0;                         /* Make start offset */
                 height -= delta;
                 if (o->Mode == GUI_SLIDER_MODE_BOTTOM_TOP) {    /* Bottom top version */
-                    offset = height - (GUI_Dim_t)(((float)(height) * (float)o->Value) / (float)(o->Max - o->Min));
+                    offset = height - (gui_dim_t)(((float)(height) * (float)o->Value) / (float)(o->Max - o->Min));
                 } else {                            /* Top bottom version */
-                    offset = (GUI_Dim_t)(((float)(height) * (float)o->Value) / (float)(o->Max - o->Min));
+                    offset = (gui_dim_t)(((float)(height) * (float)o->Value) / (float)(o->Max - o->Min));
                 }
                 y += deltaH;
                 gui_draw_filledroundedrectangle(disp, x + ((delta - recParam) >> 1), y, recParam, offset, (recParam >> 1), c1);   
                 gui_draw_filledroundedrectangle(disp, x + ((delta - recParam) >> 1), y + offset, recParam, height - offset, (recParam >> 1), c2);
-                gui_draw_roundedrectangle(disp, x + ((delta - recParam) >> 1), y, recParam, height, (recParam >> 1), gui_widget_getcolor__(h, GUI_SLIDER_COLOR_BORDER)); 
-                gui_draw_filledcircle(disp, x + deltaH, y + offset, circleSize, gui_widget_getcolor__(h, GUI_SLIDER_COLOR_FG));
-                gui_draw_circle(disp, x + deltaH, y + offset, circleSize, gui_widget_getcolor__(h, GUI_SLIDER_COLOR_BORDER));
+                gui_draw_roundedrectangle(disp, x + ((delta - recParam) >> 1), y, recParam, height, (recParam >> 1), guii_widget_getcolor(h, GUI_SLIDER_COLOR_BORDER)); 
+                gui_draw_filledcircle(disp, x + deltaH, y + offset, circleSize, guii_widget_getcolor(h, GUI_SLIDER_COLOR_FG));
+                gui_draw_circle(disp, x + deltaH, y + offset, circleSize, guii_widget_getcolor(h, GUI_SLIDER_COLOR_BORDER));
             }
             
             return 1;
@@ -297,7 +297,7 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
             return 1;
         }
         case GUI_WC_ActiveOut: {
-            gui_widget_invalidate__(h);             /* Invalidate widget */
+            guii_widget_invalidate(h);             /* Invalidate widget */
             return 1;
         }
         default:                                    /* Handle default option */
@@ -317,11 +317,11 @@ gui_slider_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GU
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for create procedure
- * \return          \ref GUI_HANDLE_p object of created widget on success, NULL otherwise
+ * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
-GUI_HANDLE_p
-gui_slider_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
-    return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+gui_handle_p
+gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
 /**
@@ -329,63 +329,63 @@ gui_slider_create(GUI_ID_t id, float x, float y, float width, float height, GUI_
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index. This parameter can be a value of \ref GUI_SLIDER_COLOR_t enumeration
  * \param[in]       color: Color value
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_slider_setcolor(GUI_HANDLE_p h, GUI_SLIDER_COLOR_t index, GUI_Color_t color) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return gui_widget_setcolor__(h, (uint8_t)index, color); /* Set color */
+gui_slider_setcolor(gui_handle_p h, GUI_SLIDER_COLOR_t index, gui_color_t color) {
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
 }
 
 /**
  * \brief           Set slider mode (orientation)
  * \param[in]       h: Widget handle
  * \param[in]       mode: Slider mode. This parameter can be a value of \ref GUI_SLIDER_MODE_t enumeration
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_slider_setmode(GUI_HANDLE_p h, GUI_SLIDER_MODE_t mode) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return gui_widget_setparam__(h, CFG_MODE, &mode, 1, 0); /* Set parameter */
+gui_slider_setmode(gui_handle_p h, GUI_SLIDER_MODE_t mode) {
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    return guii_widget_setparam(h, CFG_MODE, &mode, 1, 0); /* Set parameter */
 }
 
 /**
  * \brief           Set slider current value
  * \param[in,out]   h: Widget handle
  * \param[in]       val: New current value
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_slider_setmin, gui_slider_setmax, gui_slider_getvalue, gui_slider_getmin, gui_slider_getmax  
  */
 uint8_t
-gui_slider_setvalue(GUI_HANDLE_p h, int32_t val) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return gui_widget_setparam__(h, CFG_VALUE, &val, 1, 0); /* Set parameter */
+gui_slider_setvalue(gui_handle_p h, int32_t val) {
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    return guii_widget_setparam(h, CFG_VALUE, &val, 1, 0); /* Set parameter */
 }
 
 /**
  * \brief           Set slider minimal value
  * \param[in,out]   h: Widget handle
  * \param[in]       val: New minimal value
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_slider_setvalue, gui_slider_setmax, gui_slider_getvalue, gui_slider_getmin, gui_slider_getmax         
  */
 uint8_t
-gui_slider_setmin(GUI_HANDLE_p h, int32_t val) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return gui_widget_setparam__(h, CFG_MIN, &val, 1, 0);   /* Set parameter */
+gui_slider_setmin(gui_handle_p h, int32_t val) {
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    return guii_widget_setparam(h, CFG_MIN, &val, 1, 0);   /* Set parameter */
 }
 
 /**
  * \brief           Set slider maximal value
  * \param[in,out]   h: Widget handle
  * \param[in]       val: New maximal value
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_slider_setmin, gui_slider_setvalue, gui_slider_getvalue, gui_slider_getmin, gui_slider_getmax  
  */
 uint8_t
-gui_slider_setmax(GUI_HANDLE_p h, int32_t val) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return gui_widget_setparam__(h, CFG_MAX, &val, 1, 0);   /* Set parameter */
+gui_slider_setmax(gui_handle_p h, int32_t val) {
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    return guii_widget_setparam(h, CFG_MAX, &val, 1, 0);   /* Set parameter */
 }
 
 /**
@@ -395,9 +395,9 @@ gui_slider_setmax(GUI_HANDLE_p h, int32_t val) {
  * \sa              gui_slider_setmin, gui_slider_setvalue, gui_slider_setmax, gui_slider_getvalue, gui_slider_getmax  
  */
 int32_t
-gui_slider_getmin(GUI_HANDLE_p h) {
+gui_slider_getmin(gui_handle_p h) {
     int32_t val;
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
     val = __GS(h)->Min;                             /* Get minimal value */
@@ -413,9 +413,9 @@ gui_slider_getmin(GUI_HANDLE_p h) {
  * \sa              gui_slider_setmin, gui_slider_setvalue, gui_slider_setmax, gui_slider_getvalue, gui_slider_getmin  
  */
 int32_t
-gui_slider_getmax(GUI_HANDLE_p h) {
+gui_slider_getmax(gui_handle_p h) {
     int32_t val;
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
     val = __GS(h)->Max;                             /* Get maximal value */
@@ -431,9 +431,9 @@ gui_slider_getmax(GUI_HANDLE_p h) {
  * \sa              gui_slider_setmin, gui_slider_setvalue, gui_slider_setmax, gui_slider_getmin, gui_slider_getmax  
  */
 int32_t
-gui_slider_getvalue(GUI_HANDLE_p h) {
+gui_slider_getvalue(gui_handle_p h) {
     int32_t val;
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
     val = __GS(h)->Value;                           /* Get current value */

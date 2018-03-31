@@ -37,13 +37,13 @@
 #define CFG_VALIGN          0x01
 #define CFG_HALIGN          0x02
 
-static uint8_t gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result);
+static uint8_t gui_textview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
  */
 static const
-GUI_Color_t Colors[] = {
+gui_color_t colors[] = {
     GUI_COLOR_WIN_LIGHTGRAY,                        /*!< Default background color */
     GUI_COLOR_WIN_TEXT,                             /*!< Default text color */
 };
@@ -52,13 +52,13 @@ GUI_Color_t Colors[] = {
  * \brief           Widget initialization structure
  */
 static const
-GUI_WIDGET_t Widget = {
+gui_widget_t widget = {
     .Name = _GT("TEXTVIEW"),                        /*!< Widget name */
     .Size = sizeof(GUI_TEXTVIEW_t),                 /*!< Size of widget for memory allocation */
     .Flags = 0,                                     /*!< List of widget flags */
     .Callback = gui_textview_callback,              /*!< Callback function */
-    .Colors = Colors,
-    .ColorsCount = GUI_COUNT_OF(Colors),            /*!< Define number of colors */
+    .Colors = colors,                               /*!< List of default colors */
+    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Define number of colors */
 };
 #define o                   ((GUI_TEXTVIEW_t *)(h))
 
@@ -71,10 +71,10 @@ GUI_WIDGET_t Widget = {
  * \return          1 if command processed, 0 otherwise
  */
 static uint8_t
-gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, GUI_WIDGET_RESULT_t* result) {
+gui_textview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
-            GUI_WIDGET_Param_t* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
+            gui_widget_param* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
             switch (p->Type) {
                 case CFG_HALIGN: 
                     o->HAlign = *(GUI_TEXTVIEW_HALIGN_t *)p->Data;
@@ -88,20 +88,20 @@ gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
             return 1;
         }
         case GUI_WC_Draw: {
-            GUI_Display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
-            GUI_Dim_t x, y, wi, hi;
-            GUI_Color_t bg;
+            gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
+            gui_dim_t x, y, wi, hi;
+            gui_color_t bg;
             
-            if (gui_widget_isfontandtextset__(h)) { /* Check if font is prepared for drawing */
+            if (guii_widget_isfontandtextset(h)) { /* Check if font is prepared for drawing */
                 GUI_DRAW_FONT_t f;
                 
-                x = gui_widget_getabsolutex__(h);   /* Get absolute X coordinate */
-                y = gui_widget_getabsolutey__(h);   /* Get absolute Y coordinate */
-                wi = gui_widget_getwidth__(h);      /* Get widget width */
-                hi = gui_widget_getheight__(h);     /* Get widget height */
+                x = guii_widget_getabsolutex(h);   /* Get absolute X coordinate */
+                y = guii_widget_getabsolutey(h);   /* Get absolute Y coordinate */
+                wi = guii_widget_getwidth(h);      /* Get widget width */
+                hi = guii_widget_getheight(h);     /* Get widget height */
                 
                 /* Draw background if necessary */
-                bg = gui_widget_getcolor__(h, GUI_TEXTVIEW_COLOR_BG);
+                bg = guii_widget_getcolor(h, GUI_TEXTVIEW_COLOR_BG);
                 if (bg != GUI_COLOR_TRANS) {
                     gui_draw_filledrectangle(disp, x, y, wi, hi, bg);
                 }
@@ -115,15 +115,15 @@ gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
                 f.Align = (uint8_t)o->HAlign | (uint8_t)o->VAlign;
                 f.Flags |= GUI_FLAG_FONT_MULTILINE; /* Enable multiline */
                 f.Color1Width = f.Width;
-                f.Color1 = gui_widget_getcolor__(h, GUI_TEXTVIEW_COLOR_TEXT);
-                gui_draw_writetext(disp, gui_widget_getfont__(h), gui_widget_gettext__(h), &f);
+                f.Color1 = guii_widget_getcolor(h, GUI_TEXTVIEW_COLOR_TEXT);
+                gui_draw_writetext(disp, guii_widget_getfont(h), guii_widget_gettext(h), &f);
             }
             return 1;
         }
 #if GUI_CFG_USE_KEYBOARD
         case GUI_WC_KeyPress: {
-            __GUI_KeyboardData_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
-            if (gui_widget_processtextkey__(h, kb)) {
+            __gui_keyboarddata_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
+            if (guii_widget_processtextkey(h, kb)) {
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }
             return 1;
@@ -149,11 +149,11 @@ gui_textview_callback(GUI_HANDLE_p h, GUI_WC_t ctrl, GUI_WIDGET_PARAM_t* param, 
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref GUI_WIDGET_CALLBACK_t callback function. Set to NULL to use default widget callback
  * \param[in]       flags: Flags for widget creation
- * \return          \ref GUI_HANDLE_p object of created widget on success, NULL otherwise
+ * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
-GUI_HANDLE_p
-gui_textview_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
-    return (GUI_HANDLE_p)gui_widget_create__(&Widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+gui_handle_p
+gui_textview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags) {
+    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
 }
 
 /**
@@ -161,18 +161,18 @@ gui_textview_create(GUI_ID_t id, float x, float y, float width, float height, GU
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index. This parameter can be a value of \ref GUI_TEXTVIEW_COLOR_t enumeration
  * \param[in]       color: Color value
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_textview_setcolor(GUI_HANDLE_p h, GUI_TEXTVIEW_COLOR_t index, GUI_Color_t color) {
+gui_textview_setcolor(gui_handle_p h, GUI_TEXTVIEW_COLOR_t index, gui_color_t color) {
     uint8_t ret;
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    ret = gui_widget_setcolor__(h, (uint8_t)index, color);  /* Set color */
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    ret = guii_widget_setcolor(h, (uint8_t)index, color);  /* Set color */
     
     if (ret) {                                      /* Check success */
         if (index == GUI_TEXTVIEW_COLOR_BG) {       /* If background is transparent */
             __GUI_ENTER();
-            gui_widget_setinvalidatewithparent__(h, color == GUI_COLOR_TRANS);  /* When widget is invalidated, invalidate parent too */
+            guii_widget_setinvalidatewithparent(h, color == GUI_COLOR_TRANS);  /* When widget is invalidated, invalidate parent too */
             __GUI_LEAVE();
         }
     }
@@ -183,22 +183,22 @@ gui_textview_setcolor(GUI_HANDLE_p h, GUI_TEXTVIEW_COLOR_t index, GUI_Color_t co
  * \brief           Set vertical align for text inside text box
  * \param[in,out]   h: Widget handle
  * \param[in]       align: Vertical align. This parameter can be a value of \ref GUI_TEXTVIEW_VALIGN_t enumeration
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_textview_setvalign(GUI_HANDLE_p h, GUI_TEXTVIEW_VALIGN_t align) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return gui_widget_setparam__(h, CFG_VALIGN, &align, 1, 1);  /* Set parameter */
+gui_textview_setvalign(gui_handle_p h, GUI_TEXTVIEW_VALIGN_t align) {
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    return guii_widget_setparam(h, CFG_VALIGN, &align, 1, 1);  /* Set parameter */
 }
 
 /**
  * \brief           Set horizontal align for text inside text box
  * \param[in,out]   h: Widget handle
  * \param[in]       align: Vertical align. This parameter can be a value of \ref GUI_TEXTVIEW_HALIGN_t enumeration
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_textview_sethalign(GUI_HANDLE_p h, GUI_TEXTVIEW_HALIGN_t align) {
-    __GUI_ASSERTPARAMS(h && __GH(h)->Widget == &Widget);    /* Check input parameters */
-    return gui_widget_setparam__(h, CFG_HALIGN, &align, 1, 1);  /* Set parameter */
+gui_textview_sethalign(gui_handle_p h, GUI_TEXTVIEW_HALIGN_t align) {
+    __GUI_ASSERTPARAMS(h != NULL && h->Widget == &widget);  /* Check input parameters */
+    return guii_widget_setparam(h, CFG_HALIGN, &align, 1, 1);  /* Set parameter */
 }

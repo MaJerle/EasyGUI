@@ -36,28 +36,19 @@
 extern "C" {
 #endif
 
-/**
- * \addtogroup      GUI_UTILS
- * \brief       
- * \{
- */
-
 #include "gui/gui.h"
 
 /**
+ * \ingroup         GUI_UTILS
  * \defgroup        GUI_LCD LCD
  * \brief           LCD info specific functions
  * \{
  */
 
-GUI_iDim_t gui_lcd_getwidth(void);
-GUI_iDim_t gui_lcd_getheight(void);
-void gui_lcd_confirmactivelayer(uint8_t layer_num);
+gui_idim_t  gui_lcd_getwidth(void);
+gui_idim_t  gui_lcd_getheight(void);
+void        gui_lcd_confirmactivelayer(uint8_t layer_num);
 
-/**
- * \}
- */
- 
 /**
  * \}
  */

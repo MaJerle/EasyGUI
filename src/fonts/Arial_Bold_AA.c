@@ -1514,7 +1514,7 @@ GUI_Const GUI_FONT_CharInfo_t Arial_Bold_18_CharTable[] = {
 {   0,    1,  0,    0,    6, Font_Arial_Bold_18_007f},
 };
 
-GUI_Const GUI_FONT_t GUI_Font_Arial_Bold_18 = {
+GUI_Const gui_font_t GUI_Font_Arial_Bold_18 = {
     _GT("Arial Bold"),
     18,
     0x20,

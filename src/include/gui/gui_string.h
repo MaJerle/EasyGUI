@@ -74,8 +74,8 @@ typedef enum GUI_STRING_UNICODE_Result_t {
 } GUI_STRING_UNICODE_Result_t;
 
 void gui_string_unicode_init(GUI_STRING_UNICODE_t* s);
-GUI_STRING_UNICODE_Result_t gui_string_unicode_decode(GUI_STRING_UNICODE_t* s, const GUI_Char c);
-uint8_t gui_string_unicode_encode(const uint32_t c, GUI_Char* out);
+GUI_STRING_UNICODE_Result_t gui_string_unicode_decode(GUI_STRING_UNICODE_t* s, const gui_char c);
+uint8_t gui_string_unicode_encode(const uint32_t c, gui_char* out);
 
 /**
  * \}
@@ -85,19 +85,19 @@ uint8_t gui_string_unicode_encode(const uint32_t c, GUI_Char* out);
  * \brief           String structure for parsing characters
  */
 typedef struct GUI_STRING_t {
-    const GUI_Char* Str;                /*!< Pointer to source string */
+    const gui_char* Str;                /*!< Pointer to source string */
 #if GUI_CFG_USE_UNICODE || __DOXYGEN__
     GUI_STRING_UNICODE_t S;             /*!< Unicode processing structure */
 #endif /* GUI_CFG_USE_UNICODE || __DOXYGEN__ */
 } GUI_STRING_t;
 
-size_t gui_string_length(const GUI_Char* src);
-size_t gui_string_lengthtotal(const GUI_Char* src);
-GUI_Char* gui_string_copy(GUI_Char* dst, const GUI_Char* src);
-GUI_Char* gui_string_copyn(GUI_Char* dst, const GUI_Char* src, size_t len);
-int gui_string_compare(const GUI_Char* s1, const GUI_Char* s2);
+size_t gui_string_length(const gui_char* src);
+size_t gui_string_lengthtotal(const gui_char* src);
+gui_char* gui_string_copy(gui_char* dst, const gui_char* src);
+gui_char* gui_string_copyn(gui_char* dst, const gui_char* src, size_t len);
+int gui_string_compare(const gui_char* s1, const gui_char* s2);
 uint8_t gui_string_isprintable(uint32_t ch);
-uint8_t gui_string_prepare(GUI_STRING_t* s, const GUI_Char* str);
+uint8_t gui_string_prepare(GUI_STRING_t* s, const gui_char* str);
 uint8_t gui_string_getch(GUI_STRING_t* str, uint32_t* out, uint8_t* len);
 uint8_t gui_string_getchreverse(GUI_STRING_t* str, uint32_t* out, uint8_t* len);
 uint8_t gui_string_gotoend(GUI_STRING_t* str);

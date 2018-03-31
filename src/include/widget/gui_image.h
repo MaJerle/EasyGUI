@@ -53,14 +53,14 @@ extern "C" {
  * \brief           Image widget structure
  */
 typedef struct GUI_IMAGE_t {
-    GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
     const GUI_IMAGE_DESC_t* Image;          /*!< Pointer to image object to draw */
 } GUI_IMAGE_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
     
-GUI_HANDLE_p gui_image_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
-uint8_t gui_image_setsource(GUI_HANDLE_p h, const GUI_IMAGE_DESC_t* img);
+gui_handle_p gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+uint8_t gui_image_setsource(gui_handle_p h, const GUI_IMAGE_DESC_t* img);
 
 /**
  * \}

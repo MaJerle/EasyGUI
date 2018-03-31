@@ -37,20 +37,20 @@
  * \param[in]       root: Root linked list element
  */
 static void
-print_list(GUI_HANDLE_ROOT_t* root) {
+print_list(gui_handle_ROOT_t* root) {
     static uint8_t depth = 0;
-    GUI_HANDLE_ROOT_t* h;
-    GUI_LinkedListRoot_t* list;
+    gui_handle_ROOT_t* h;
+    gui_linkedlistroot_t* list;
     
     depth++;
     if (root) {
         list = &root->RootList;
     } else {
-        list = &GUI.Root;
+        list = &GUI.root;
     }
-    for (h = (GUI_HANDLE_ROOT_t *)list->First; h != NULL; h = h->Handle.List.Next) {
+    for (h = (gui_handle_ROOT_t *)list->First; h != NULL; h = h->Handle.List.Next) {
         GUI_DEBUG("%*d: W: %s; A: 0x%08X; R: %lu; D: %lu\r\n", depth, depth, (const char *)h->Handle.Widget->Name, (unsigned int)h, (unsigned long)!!(h->Handle.Flags & GUI_FLAG_REDRAW), (unsigned long)!!(h->Handle.Flags & GUI_FLAG_REMOVE));
-        if (gui_widget_allowchildren__(h)) {
+        if (guii_widget_allowchildren(h)) {
             print_list(h);
         }
     }
@@ -59,15 +59,15 @@ print_list(GUI_HANDLE_ROOT_t* root) {
 
 /**
  * \brief           Add element to doubly linked list
- * \note            Element added to linkedlist must have \ref GUI_LinkedList_t as top structure
+ * \note            Element added to linkedlist must have \ref gui_linkedlist_t as top structure
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to add to base linked list 
+ * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
+ * \param[in]       element: Pointer to \ref gui_linkedlist_t element to add to base linked list 
  * \sa              gui_linkedlist_remove_gen, gui_linkedlist_multi_add_gen, gui_linkedlist_multi_remove_gen
  */
 void
-gui_linkedlist_add_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
+gui_linkedlist_add_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
     if (!root->First || !root->Last) {              /* First widget is about to be created */
         element->Prev = NULL;                       /* There is no previous element */
         element->Next = NULL;                       /* There is no next element */
@@ -76,7 +76,7 @@ gui_linkedlist_add_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
     } else {
         element->Next = NULL;                       /* Next element of last is not known */
         element->Prev = root->Last;                 /* Previous element of new entry is currently last element */
-        ((GUI_LinkedList_t *)root->Last)->Next = element;   /* Previous's element next element is current element */
+        ((gui_linkedlist_t *)root->Last)->Next = element;   /* Previous's element next element is current element */
         root->Last = element;                       /* Add new element as last */
     }
 }
@@ -84,15 +84,15 @@ gui_linkedlist_add_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
 /**
  * \brief           Remove element from doubly linked list
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to remove from base linked list
+ * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
+ * \param[in]       element: Pointer to \ref gui_linkedlist_t element to remove from base linked list
  * \return          Removed element handle
  * \sa              gui_linkedlist_add_gen, gui_linkedlist_multi_add_gen, gui_linkedlist_multi_remove_gen
  */
-GUI_LinkedList_t*
-gui_linkedlist_remove_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
-    GUI_LinkedList_t* prev;
-    GUI_LinkedList_t* next;
+gui_linkedlist_t*
+gui_linkedlist_remove_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
+    gui_linkedlist_t* prev;
+    gui_linkedlist_t* next;
     
     if (!element) {                                 /* Maybe element is not even valid? */
         return 0;
@@ -131,13 +131,13 @@ gui_linkedlist_remove_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element)
  *                  </table>
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to get next element of
+ * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
+ * \param[in]       element: Pointer to \ref gui_linkedlist_t element to get next element of
  * \return          Next element handle on success, NULL otherwise
  * \sa              gui_linkedlist_getprev_gen, gui_linkedlist_multi_getnext_gen, gui_linkedlist_multi_getprev_gen
  */
-GUI_LinkedList_t*
-gui_linkedlist_getnext_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
+gui_linkedlist_t*
+gui_linkedlist_getnext_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
     if (!element) { 
         if (root) {
             return (void *)root->First;
@@ -160,13 +160,13 @@ gui_linkedlist_getnext_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element
  *                  </table>
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to get next element of
+ * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
+ * \param[in]       element: Pointer to \ref gui_linkedlist_t element to get next element of
  * \return          Previous element handle on success, NULL otherwise
  * \sa              gui_linkedlist_getnext_gen, gui_linkedlist_multi_getnext_gen, gui_linkedlist_multi_getprev_gen
  */
-GUI_LinkedList_t*
-gui_linkedlist_getprev_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
+gui_linkedlist_t*
+gui_linkedlist_getprev_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
     if (!element) { 
         if (root) {
             return (void *)root->Last;
@@ -180,16 +180,16 @@ gui_linkedlist_getprev_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element
 /**
  * \brief           Move widget down for one on doubly linked list
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to move down on base linked list
- * \return          1 on success, 0 otherwise
+ * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
+ * \param[in]       element: Pointer to \ref gui_linkedlist_t element to move down on base linked list
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_linkedlist_moveup_gen, gui_linkedlist_multi_moveup_gen, gui_linkedlist_multi_movedown_gen
  */
 uint8_t
-gui_linkedlist_movedown_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
-    GUI_LinkedList_t* Prev = 0;
-    GUI_LinkedList_t* Next = 0;
-    GUI_LinkedList_t* NextNext = 0;
+gui_linkedlist_movedown_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
+    gui_linkedlist_t* Prev = 0;
+    gui_linkedlist_t* Next = 0;
+    gui_linkedlist_t* NextNext = 0;
     
     if (!element || element == root->Last) {        /* Check if move is available */
         return 0;                                   /* Could not move */
@@ -229,16 +229,16 @@ gui_linkedlist_movedown_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* elemen
 /**
  * \brief           Move widget up for one on doubly linked list
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to move up on base linked list
- * \return          1 on success, 0 otherwise
+ * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
+ * \param[in]       element: Pointer to \ref gui_linkedlist_t element to move up on base linked list
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_linkedlist_movedown_gen, gui_linkedlist_multi_moveup_gen, gui_linkedlist_multi_movedown_gen
  */
 uint8_t
-gui_linkedlist_moveup_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element) {
-    GUI_LinkedList_t* PrevPrev = 0;
-    GUI_LinkedList_t* Prev = 0;
-    GUI_LinkedList_t* Next = 0;
+gui_linkedlist_moveup_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
+    gui_linkedlist_t* PrevPrev = 0;
+    gui_linkedlist_t* Prev = 0;
+    gui_linkedlist_t* Next = 0;
     
     if (!element || element == root->First) {       /* Check if move is available */
         return 0;                                   /* Could not move */
@@ -278,15 +278,15 @@ gui_linkedlist_moveup_gen(GUI_LinkedListRoot_t* root, GUI_LinkedList_t* element)
 /**
  * \brief           Get item from linked list by index
  * \note            Index value is the number of item in list order
- * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       index: Number in list to get item
  * \return          Item handle on success, NULL otherwise
  */
-GUI_LinkedList_t*
-gui_linkedlist_getnext_byindex_gen(GUI_LinkedListRoot_t* root, uint16_t index) {
-    GUI_LinkedList_t* item = gui_linkedlist_getnext_gen(root, 0); /* Get first element */
+gui_linkedlist_t*
+gui_linkedlist_getnext_byindex_gen(gui_linkedlistroot_t* root, uint16_t index) {
+    gui_linkedlist_t* item = gui_linkedlist_getnext_gen(root, 0); /* Get first element */
     while (index-- && item) {                       /* Scroll to next elements */
-        item = gui_linkedlist_getnext_gen(NULL, (GUI_LinkedList_t *)item);
+        item = gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item);
     }
     return item;                                    /* Get that item */
 }
@@ -296,13 +296,13 @@ gui_linkedlist_getnext_byindex_gen(GUI_LinkedListRoot_t* root, uint16_t index) {
  * \note            Element can be any type since \ref GUI_LinkedListMulti_t structure is dynamicall allocated
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to add to base linked list
+ * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
+ * \param[in]       element: Pointer to \ref gui_linkedlist_t element to add to base linked list
  * \return          Multi linked list handle on success, NULL otherwise
  * \sa              gui_linkedlist_add_gen, gui_linkedlist_remove_gen, gui_linkedlist_multi_remove_gen
  */
 GUI_LinkedListMulti_t*
-gui_linkedlist_multi_add_gen(GUI_LinkedListRoot_t* root, void* element) {
+gui_linkedlist_multi_add_gen(gui_linkedlistroot_t* root, void* element) {
     GUI_LinkedListMulti_t* ptr;
     ptr = GUI_MEMALLOC(sizeof(GUI_LinkedListMulti_t));  /* Create memory for linked list */
     if (ptr != NULL) {
@@ -316,17 +316,17 @@ gui_linkedlist_multi_add_gen(GUI_LinkedListRoot_t* root, void* element) {
 /**
  * \brief           Remove element from linked list in multi linked list
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
- * \param[in]       element: Pointer to \ref GUI_LinkedList_t element to remove from base linked list
- * \return          1 on success, 0 otherwise
+ * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
+ * \param[in]       element: Pointer to \ref gui_linkedlist_t element to remove from base linked list
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_linkedlist_add_gen, gui_linkedlist_remove_gen, gui_linkedlist_multi_add_gen
  */
 uint8_t
-gui_linkedlist_multi_remove_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
+gui_linkedlist_multi_remove_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti_t* element) {
     if (!element) {                                 /* Check valid element */
         return 0;
     }
-    gui_linkedlist_remove_gen(root, (GUI_LinkedList_t *)element); /* Remove element from linked list */
+    gui_linkedlist_remove_gen(root, (gui_linkedlist_t *)element); /* Remove element from linked list */
     GUI_MEMFREE(element);                           /* Free memory */
     return 1;
 }
@@ -343,13 +343,13 @@ gui_linkedlist_multi_remove_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_
  *                  </table>
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Pointer to \ref GUI_LinkedListMulti_t element to get next element of
  * \return          Next element on success, NULL otherwise
  * \sa              gui_linkedlist_getnext_gen, gui_linkedlist_getprev_gen, gui_linkedlist_multi_getprev_gen
  */
 GUI_LinkedListMulti_t*
-gui_linkedlist_multi_getnext_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
+gui_linkedlist_multi_getnext_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti_t* element) {
     if (!element) { 
         if (root) {
             return (GUI_LinkedListMulti_t *)root->First;
@@ -372,13 +372,13 @@ gui_linkedlist_multi_getnext_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti
  *                  </table>
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Pointer to \ref GUI_LinkedListMulti_t element to get next element of
  * \return          Previous element on success, NULL otherwise
  * \sa              gui_linkedlist_getnext_gen, gui_linkedlist_getprev_gen, gui_linkedlist_multi_getnext_gen
  */
 GUI_LinkedListMulti_t*
-gui_linkedlist_multi_getprev_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
+gui_linkedlist_multi_getprev_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti_t* element) {
     if (!element) { 
         if (root) {
             return (GUI_LinkedListMulti_t *)root->Last;
@@ -392,26 +392,26 @@ gui_linkedlist_multi_getprev_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti
 /**
  * \brief           Move widget down for one on multi linked list
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Pointer to \ref GUI_LinkedListMulti_t element to move down on base linked list
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_linkedlist_moveup_gen, gui_linkedlist_movedown_gen, gui_linkedlist_multi_moveup_gen
  */
 uint8_t
-gui_linkedlist_multi_movedown_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
+gui_linkedlist_multi_movedown_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti_t* element) {
     return gui_linkedlist_movedown_gen(root, &element->List); /* Move down elemenet */
 }
 
 /**
  * \brief           Move widget up for one on multi linked list
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Pointer to \ref GUI_LinkedListMulti_t element to move up on base linked list
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_linkedlist_moveup_gen, gui_linkedlist_movedown_gen, gui_linkedlist_multi_movedown_gen
  */
 uint8_t
-gui_linkedlist_multi_moveup_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_t* element) {
+gui_linkedlist_multi_moveup_gen(gui_linkedlistroot_t* root, GUI_LinkedListMulti_t* element) {
     return gui_linkedlist_moveup_gen(root, &element->List);   /* Move down elemenet */
 }
     
@@ -420,13 +420,13 @@ gui_linkedlist_multi_moveup_gen(GUI_LinkedListRoot_t* root, GUI_LinkedListMulti_
  * \note            Delete by element pointer, not by list item. It searches in all entries for element pointers and deletes all links with that element pointer
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       root: Pointer to \ref GUI_LinkedListRoot_t structure as base element
+ * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Memory address in data part of linked list entry
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_linkedlist_remove_gen, gui_linkedlist_multi_remove_gen
  */
 uint8_t
-gui_linkedlist_multi_find_remove(GUI_LinkedListRoot_t* root, void* element) {
+gui_linkedlist_multi_find_remove(gui_linkedlistroot_t* root, void* element) {
     GUI_LinkedListMulti_t* link;
     uint8_t ret = 0;
     
@@ -449,11 +449,11 @@ gui_linkedlist_multi_find_remove(GUI_LinkedListRoot_t* root, void* element) {
  * \sa              gui_linkedlist_widgetremove
  */
 void
-gui_linkedlist_widgetadd(GUI_HANDLE_ROOT_t* root, GUI_HANDLE_p h) {    
+gui_linkedlist_widgetadd(gui_handle_ROOT_t* root, gui_handle_p h) {    
     if (root != NULL) {
-        gui_linkedlist_add_gen(&root->RootList, (GUI_LinkedList_t *)h);
+        gui_linkedlist_add_gen(&root->RootList, (gui_linkedlist_t *)h);
     } else {
-        gui_linkedlist_add_gen(&GUI.Root, (GUI_LinkedList_t *)h);
+        gui_linkedlist_add_gen(&GUI.root, (gui_linkedlist_t *)h);
     }
     gui_linkedlist_widgetmovetotop(h);              /* Reset by moving to top */
     gui_linkedlist_widgetmovetobottom(h);           /* Reset by moving to bottom with reorder */
@@ -466,11 +466,11 @@ gui_linkedlist_widgetadd(GUI_HANDLE_ROOT_t* root, GUI_HANDLE_p h) {
  * \sa              gui_linkedlist_widgetadd
  */
 void
-gui_linkedlist_widgetremove(GUI_HANDLE_p h) {    
+gui_linkedlist_widgetremove(gui_handle_p h) {    
     if (__GH(h)->Parent != NULL) {
-        gui_linkedlist_remove_gen(&((GUI_HANDLE_ROOT_t *)__GH(h)->Parent)->RootList, (GUI_LinkedList_t *)h);
+        gui_linkedlist_remove_gen(&((gui_handle_ROOT_t *)__GH(h)->Parent)->RootList, (gui_linkedlist_t *)h);
     } else {
-        gui_linkedlist_remove_gen(&GUI.Root, (GUI_LinkedList_t *)h);
+        gui_linkedlist_remove_gen(&GUI.root, (gui_linkedlist_t *)h);
     }
 }
 
@@ -478,30 +478,30 @@ gui_linkedlist_widgetremove(GUI_HANDLE_p h) {
  * \brief           Move widget up for one in linked list
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle to move up
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_linkedlist_widgetmovedown
  */
 uint8_t
-gui_linkedlist_widgetmoveup(GUI_HANDLE_p h) {
+gui_linkedlist_widgetmoveup(gui_handle_p h) {
     if (__GH(h)->Parent != NULL) {
-        return gui_linkedlist_moveup_gen(&__GHR(__GH(h)->Parent)->RootList, (GUI_LinkedList_t *)h);
+        return gui_linkedlist_moveup_gen(&__GHR(__GH(h)->Parent)->RootList, (gui_linkedlist_t *)h);
     }
-    return gui_linkedlist_moveup_gen(&GUI.Root, (GUI_LinkedList_t *)h);
+    return gui_linkedlist_moveup_gen(&GUI.root, (gui_linkedlist_t *)h);
 }
 
 /**
  * \brief           Move widget down for one in linked list
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle to move down
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_linkedlist_widgetmoveup
  */
 uint8_t
-gui_linkedlist_widgetmovedown(GUI_HANDLE_p h) {
+gui_linkedlist_widgetmovedown(gui_handle_p h) {
     if (__GH(h)->Parent != NULL) {
-        return gui_linkedlist_movedown_gen(&__GHR(__GH(h)->Parent)->RootList, (GUI_LinkedList_t *)h);
+        return gui_linkedlist_movedown_gen(&__GHR(__GH(h)->Parent)->RootList, (gui_linkedlist_t *)h);
     }
-    return gui_linkedlist_movedown_gen(&GUI.Root, (GUI_LinkedList_t *)h);
+    return gui_linkedlist_movedown_gen(&GUI.root, (gui_linkedlist_t *)h);
 }
 
 /**
@@ -524,16 +524,16 @@ gui_linkedlist_widgetmovedown(GUI_HANDLE_p h) {
  * \return          Previous widget on linked list on success, NULL otherwise
  * \sa              gui_linkedlist_widgetgetprev
  */
-GUI_HANDLE_p
-gui_linkedlist_widgetgetnext(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h) {
+gui_handle_p
+gui_linkedlist_widgetgetnext(gui_handle_ROOT_t* parent, gui_handle_p h) {
     if (h == NULL) {                                /* Get first widget on list */
         if (parent != NULL) {                       /* If parent exists... */
-            return (GUI_HANDLE_p)parent->RootList.First;    /* ...get first widget on parent */
+            return (gui_handle_p)parent->RootList.First;    /* ...get first widget on parent */
         } else {
-            return (GUI_HANDLE_p)GUI.Root.First;    /* Get first widget in GUI */
+            return (gui_handle_p)GUI.root.First;    /* Get first widget in GUI */
         }
     }
-    return (GUI_HANDLE_p)__GH(h)->List.Next;        /* Get next widget of current in linked list */
+    return (gui_handle_p)__GH(h)->List.Next;        /* Get next widget of current in linked list */
 }
 
 /**
@@ -556,16 +556,16 @@ gui_linkedlist_widgetgetnext(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h) {
  * \return          Next widget on linked list on success, NULL otherwise
  * \sa              gui_linkedlist_widgetgetnext
  */
-GUI_HANDLE_p
-gui_linkedlist_widgetgetprev(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h) {
+gui_handle_p
+gui_linkedlist_widgetgetprev(gui_handle_ROOT_t* parent, gui_handle_p h) {
     if (h == NULL) {                                /* Get last widget on list */
         if (parent != NULL) {                       /* If parent exists... */
-            return (GUI_HANDLE_p)parent->RootList.Last; /* ...get last widget on parent */
+            return (gui_handle_p)parent->RootList.Last; /* ...get last widget on parent */
         } else {
-            return (GUI_HANDLE_p)GUI.Root.Last;     /* Get last widget in GUI */
+            return (gui_handle_p)GUI.root.Last;     /* Get last widget in GUI */
         }
     }
-    return (GUI_HANDLE_p)__GH(h)->List.Prev;        /* Get next widget of current in linked list */
+    return (gui_handle_p)__GH(h)->List.Prev;        /* Get next widget of current in linked list */
 }
 
 /***
@@ -579,23 +579,23 @@ gui_linkedlist_widgetgetprev(GUI_HANDLE_ROOT_t* parent, GUI_HANDLE_p h) {
  * \brief           Move widget to bottom in linked list of parent widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget to move to bottom
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_linkedlist_widgetmovetotop
  */
 uint8_t
-gui_linkedlist_widgetmovetobottom(GUI_HANDLE_p h) {
-    if (__GH(h)->List.Next == NULL) {
+gui_linkedlist_widgetmovetobottom(gui_handle_p h) {
+    if (h->List.Next == NULL) {
         return 0;
     }
-    while (__GH(h)->List.Next != NULL) {            /* While device has next element */
-        if (gui_widget_isdialogbase__(h)) {         /* Widget is dialog base element */
-            if (!gui_linkedlist_widgetmovedown(h)) {    /* Move down */
+    while (h->List.Next != NULL) {                  /* While device has next element */
+        if (guii_widget_isdialogbase(h)) {         /* Widget is dialog base element */
+            if (!gui_linkedlist_widgetmovedown(h)) {/* Move down */
                 return 0;
             }
-        } else if (gui_widget_allowchildren__(h)) { /* Widget supports children widgets, go to the end of the list if necessary */
-            if (!gui_widget_isdialogbase__(__GH(__GH(h)->List.Next))) { /* Go down till dialog base is reached */
-                if (__GH(h)->ZIndex >= __GH(__GH(h)->List.Next)->ZIndex) {  /* Check if z-index allows move */
-                    if (!gui_linkedlist_widgetmovedown(h)) {    /* Move down */
+        } else if (guii_widget_allowchildren(h)) { /* Widget supports children widgets, go to the end of the list if necessary */
+            if (!guii_widget_isdialogbase(h->List.Next)) { /* Go down till dialog base is reached */
+                if (h->ZIndex >= __GH(h->List.Next)->ZIndex) {  /* Check if z-index allows move */
+                    if (!gui_linkedlist_widgetmovedown(h)) {/* Move down */
                         return 0;
                     }
                 } else {
@@ -605,9 +605,9 @@ gui_linkedlist_widgetmovetobottom(GUI_HANDLE_p h) {
                 break;
             }
         } else {                                    /* Our widget does not allow sub widgets */
-            if (!gui_widget_allowchildren__(__GH(__GH(h)->List.Next))) {    /* Allow moving down only if next widget does not allow sub widgets */
-                if (__GH(h)->ZIndex >= __GH(__GH(h)->List.Next)->ZIndex) {  /* Check if z-index allows move */
-                    if (!gui_linkedlist_widgetmovedown(h)) {    /* Move down */
+            if (!guii_widget_allowchildren(__GH(h)->List.Next)) {  /* Allow moving down only if next widget does not allow sub widgets */
+                if (h->ZIndex >= __GH(h->List.Next)->ZIndex) {  /* Check if z-index allows move */
+                    if (!gui_linkedlist_widgetmovedown(h)) {/* Move down */
                         return 0;
                     }
                 } else {
@@ -625,25 +625,25 @@ gui_linkedlist_widgetmovetobottom(GUI_HANDLE_p h) {
  * \brief           Move widget to top in linked list of parent widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget to move to top
- * \return          1 on success, 0 otherwise
+ * \return          `1` on success, `0` otherwise
  * \sa              gui_linkedlist_widgetmovetobottom
  */
 uint8_t
-gui_linkedlist_widgetmovetotop(GUI_HANDLE_p h) {
+gui_linkedlist_widgetmovetotop(gui_handle_p h) {
     if (__GH(h)->List.Prev == NULL) {
         return 0;
     }
     while (__GH(h)->List.Prev != NULL) {            /* While device has previous element */
-        if (gui_widget_isdialogbase__(h)) {         /* Widget is dialog base element */
-            if (gui_widget_isdialogbase__(__GH(__GH(h)->List.Prev))) {  /* If previous widget is dialog base too */
+        if (guii_widget_isdialogbase(h)) {         /* Widget is dialog base element */
+            if (guii_widget_isdialogbase(__GH(__GH(h)->List.Prev))) {  /* If previous widget is dialog base too */
                 if (!gui_linkedlist_widgetmoveup(h)) {  /* Move up widget */
                     return 0;
                 }
             } else {
                 break;                              /* Stop execution */
             }
-        } else if (gui_widget_allowchildren__(h)) { /* If moving widget allows children elements */
-            if (gui_widget_allowchildren__(__GH(__GH(h)->List.Prev))) { /* If previous widget allows children too */
+        } else if (guii_widget_allowchildren(h)) { /* If moving widget allows children elements */
+            if (guii_widget_allowchildren(__GH(__GH(h)->List.Prev))) { /* If previous widget allows children too */
                 if (__GH(h)->ZIndex <= __GH(__GH(h)->List.Prev)->ZIndex) {  /* Check if z-index allows move */
                     if (!gui_linkedlist_widgetmoveup(h)) {  /* Move up */
                         return 0;

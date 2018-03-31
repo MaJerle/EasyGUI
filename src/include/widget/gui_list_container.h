@@ -66,14 +66,14 @@ typedef enum GUI_LIST_CONTAINER_COLOR_t {
  * \brief           LIST CONTAINER object structure
  */
 typedef struct GUI_LIST_CONTAINER_t {
-    GUI_HANDLE_ROOT_t C;                    /*!< Global widget object */
+    gui_handle_ROOT_t C;                    /*!< Global widget object */
     
-    GUI_iDim_t MaxScrollX;                  /*!< Maximal scroll on X axis */
-    GUI_iDim_t MaxScrollY;                  /*!< Maximal scroll on Y axis */
+    gui_idim_t MaxScrollX;                  /*!< Maximal scroll on X axis */
+    gui_idim_t MaxScrollY;                  /*!< Maximal scroll on Y axis */
 } GUI_LIST_CONTAINER_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-GUI_HANDLE_p gui_listcontainer_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+gui_handle_p gui_listcontainer_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
 
 /**
  * \}

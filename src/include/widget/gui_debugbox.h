@@ -65,36 +65,36 @@ typedef enum GUI_DEBUGBOX_COLOR_t {
  * \brief           DEBUGBOX string item object
  */
 typedef struct GUI_DEBUGBOX_ITEM_t {
-    GUI_LinkedList_t List;                  /*!< Linked list entry, must be first on list */
-    GUI_Char* Text;                         /*!< Text entry */
+    gui_linkedlist_t List;                  /*!< Linked list entry, must be first on list */
+    gui_char* Text;                         /*!< Text entry */
 } GUI_DEBUGBOX_ITEM_t;
     
 /**
  * \brief           DEBUGBOX object structure
  */
 typedef struct GUI_DEBUGBOX_t {
-    GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
     int16_t Count;                          /*!< Current number of strings attached to this widget */
     int16_t MaxCount;                       /*!< Maximal number of lines in debug window */
     int16_t VisibleStartIndex;              /*!< Index in array of string on top of visible area of widget */
     
-    GUI_LinkedListRoot_t Root;              /*!< Root of linked list entries */
+    gui_linkedlistroot_t Root;              /*!< Root of linked list entries */
     
-    GUI_Dim_t SliderWidth;                  /*!< Slider width in units of pixels */
+    gui_dim_t SliderWidth;                  /*!< Slider width in units of pixels */
     uint8_t Flags;                          /*!< Widget flags */
 } GUI_DEBUGBOX_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-GUI_HANDLE_p gui_debugbox_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
-uint8_t gui_debugbox_setcolor(GUI_HANDLE_p h, GUI_DEBUGBOX_COLOR_t index, GUI_Color_t color);
-uint8_t gui_debugbox_addstring(GUI_HANDLE_p h, const GUI_Char* text);
+gui_handle_p gui_debugbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+uint8_t gui_debugbox_setcolor(gui_handle_p h, GUI_DEBUGBOX_COLOR_t index, gui_color_t color);
+uint8_t gui_debugbox_addstring(gui_handle_p h, const gui_char* text);
 
-uint8_t gui_debugbox_setsliderauto(GUI_HANDLE_p h, uint8_t autoMode);
-uint8_t gui_debugbox_setslidervisibility(GUI_HANDLE_p h, uint8_t visible);
-uint8_t gui_debugbox_scroll(GUI_HANDLE_p h, int16_t step);
+uint8_t gui_debugbox_setsliderauto(gui_handle_p h, uint8_t autoMode);
+uint8_t gui_debugbox_setslidervisibility(gui_handle_p h, uint8_t visible);
+uint8_t gui_debugbox_scroll(gui_handle_p h, int16_t step);
 
-uint8_t gui_debugbox_setmaxitems(GUI_HANDLE_p h, int16_t max_items);
+uint8_t gui_debugbox_setmaxitems(gui_handle_p h, int16_t max_items);
 
 /**
  * \}

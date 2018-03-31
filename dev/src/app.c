@@ -12,7 +12,7 @@
 /* Thread definitions */
 osThreadDef(user_thread, user_thread, osPriorityNormal, 0, 512);
 
-GUI_HANDLE_p winbase;
+gui_handle_p winbase;
 
 static char str_buff[100];
 
@@ -26,7 +26,7 @@ init_thread(void const * arg) {
     TM_TOUCH_Init(NULL, &TS);
     
     gui_init();                                 /* Init GUI library */
-    esp_init(esp_cb_func);                      /* Init ESP library */
+    esp_init(esp_cb_func, 1);                   /* Init ESP library */
     esp_restore(1);                             /* Restore device to default settings */
     
     osThreadCreate(osThread(user_thread), NULL);/* Create user thread */
@@ -53,9 +53,9 @@ user_thread(void const * arg) {
     gui_keyboard_create();                      /* Create virtual keyboard */
     create_desktop();                           /* Create desktop on screen */
     
+    list_access_points();                       /* List all access points */
     enable_wifi_access_point();                 /* Enable WiFi access point */
     esp_sta_autojoin(1, 1);                     /* Enable station auto join */
-    list_access_points();
     start_server();                             /* Start server */
     
     /*
@@ -115,7 +115,7 @@ user_thread(void const * arg) {
  */
 void
 console_write(const char* str) {
-    GUI_HANDLE_p h;
+    gui_handle_p h;
     static char str_b[100];
     uint32_t time;
     
@@ -132,13 +132,17 @@ console_write(const char* str) {
  * \brief           Update IP address on LCD screen
  */
 void
-lcd_update_up(esp_ip_t* ip) {
-    GUI_HANDLE_p h;
+lcd_update_ip(esp_ip_t* ip) {
+    gui_handle_p h;
     
-    h = gui_widget_getbyid(GUI_ID_TEXTVIEW_IP_ADDR);
+    h = gui_widget_getbyid(gui_id_tEXTVIEW_IP_ADDR);
     if (h != NULL) {
-        char str[20];
-        sprintf(str, "IP: %d.%d.%d.%d", ip->ip[0], ip->ip[1], ip->ip[2], ip->ip[3]);
-        gui_widget_settext(h, _GT(str));
+        if (ip != NULL) {
+            char str[20];
+            sprintf(str, "IP: %d.%d.%d.%d", ip->ip[0], ip->ip[1], ip->ip[2], ip->ip[3]);
+            gui_widget_settext(h, _GT(str));
+        } else {
+            gui_widget_settext(h, _GT("IP: not connected"));
+        }
     }
 }

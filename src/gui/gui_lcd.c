@@ -36,7 +36,7 @@
  * \brief           Get LCD width in units of pixels
  * \return          LCD width in units of pixels
  */
-GUI_Dim_t
+gui_dim_t
 gui_lcd_getwidth(void) {
     return GUI.LCD.Width;
 }
@@ -45,7 +45,7 @@ gui_lcd_getwidth(void) {
  * \brief           Get LCD height in units of pixels
  * \return          LCD height in units of pixels
  */
-GUI_Dim_t
+gui_dim_t
 gui_lcd_getheight(void) {
     return GUI.LCD.Height;
 }

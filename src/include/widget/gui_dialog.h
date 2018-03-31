@@ -53,13 +53,13 @@ extern "C" {
  * \brief           Dialog object structure
  */
 typedef struct GUI_DIALOG_t {
-    GUI_HANDLE_ROOT_t C;                    /*!< GUI handle object, must always be first on list */
+    gui_handle_ROOT_t C;                    /*!< GUI handle object, must always be first on list */
 } GUI_DIALOG_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-GUI_HANDLE_p gui_dialog_create(GUI_ID_t id, float x, float y, float width, float height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
-int gui_dialog_createblocking(GUI_ID_t id, GUI_iDim_t x, GUI_iDim_t y, GUI_Dim_t width, GUI_Dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
-uint8_t gui_dialog_dismiss(GUI_HANDLE_p h, int status);
+gui_handle_p gui_dialog_create(gui_id_t id, float x, float y, float width, float height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+int gui_dialog_createblocking(gui_id_t id, gui_idim_t x, gui_idim_t y, gui_dim_t width, gui_dim_t height, GUI_WIDGET_CreateFunc_t func, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+uint8_t gui_dialog_dismiss(gui_handle_p h, int status);
 
 /**
  * \}

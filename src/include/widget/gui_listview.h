@@ -70,8 +70,8 @@ typedef enum GUI_LISTVIEW_COLOR_t {
  * \brief           Listview main row item
  */
 typedef struct GUI_LISTVIEW_ROW_t {
-    GUI_LinkedList_t List;                  /*!< Linked list entry, must be first on list */
-    GUI_LinkedListRoot_t Root;              /*!< Linked list root entry for \ref GUI_LISTVIEW_ITEM_t column data entries */
+    gui_linkedlist_t List;                  /*!< Linked list entry, must be first on list */
+    gui_linkedlistroot_t Root;              /*!< Linked list root entry for \ref GUI_LISTVIEW_ITEM_t column data entries */
 } GUI_LISTVIEW_ROW_t;
 
 /**
@@ -84,24 +84,24 @@ typedef struct GUI_LISTVIEW_ROW_t {
  * \brief           Listview column item
  */
 typedef struct GUI_LISTVIEW_COL_t {
-    GUI_LinkedList_t List;                  /*!< Linked list entry, must be first on list */
-    GUI_iDim_t Width;                       /*!< Column width in units of pixels */
-    GUI_Char* Text;                         /*!< Header column text size */
+    gui_linkedlist_t List;                  /*!< Linked list entry, must be first on list */
+    gui_idim_t Width;                       /*!< Column width in units of pixels */
+    gui_char* Text;                         /*!< Header column text size */
 } GUI_LISTVIEW_COL_t;
 
 /**
  * \brief           Listview string item object
  */
 typedef struct GUI_LISTVIEW_ITEM_t {
-    GUI_LinkedList_t List;                  /*!< Linked list entry, must be first on list */
-    GUI_Char* Text;                         /*!< Text entry */
+    gui_linkedlist_t List;                  /*!< Linked list entry, must be first on list */
+    gui_char* Text;                         /*!< Text entry */
 } GUI_LISTVIEW_ITEM_t;
     
 /**
  * \brief           Listview object structure
  */
 typedef struct GUI_LISTVIEW_t {
-    GUI_HANDLE C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
     /**
      * Use colums as pointer to array for faster data access
@@ -112,13 +112,13 @@ typedef struct GUI_LISTVIEW_t {
     /**
      * Use linked list for rows
      */
-    GUI_LinkedListRoot_t Root;              /*!< Linked list root entry for \ref GUI_LISTVIEW_ROW_t for rows */
+    gui_linkedlistroot_t Root;              /*!< Linked list root entry for \ref GUI_LISTVIEW_ROW_t for rows */
     
     int16_t Count;                          /*!< Current number of strings attached to this widget */
     int16_t Selected;                       /*!< Selected text index */
     int16_t VisibleStartIndex;              /*!< Index in array of string on top of visible area of widget */
     
-    GUI_Dim_t SliderWidth;                  /*!< Slider width in units of pixels */
+    gui_dim_t SliderWidth;                  /*!< Slider width in units of pixels */
     uint8_t Flags;                          /*!< Widget flags */
 } GUI_LISTVIEW_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
@@ -128,23 +128,23 @@ typedef struct GUI_LISTVIEW_t {
  */
 typedef void* GUI_LISTVIEW_ROW_p;
    
-GUI_HANDLE_p gui_listview_create(GUI_ID_t id, float x, float y, float width, float height, GUI_HANDLE_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
-uint8_t gui_listview_setcolor(GUI_HANDLE_p h, GUI_LISTVIEW_COLOR_t index, GUI_Color_t color);
+gui_handle_p gui_listview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, GUI_WIDGET_CALLBACK_t cb, uint16_t flags);
+uint8_t gui_listview_setcolor(gui_handle_p h, GUI_LISTVIEW_COLOR_t index, gui_color_t color);
 
-uint8_t gui_listview_addcolumn(GUI_HANDLE_p h, const GUI_Char* text, GUI_Dim_t width);
-uint8_t gui_listview_setcolumnwidth(GUI_HANDLE_p h, uint16_t index, GUI_Dim_t width);
+uint8_t gui_listview_addcolumn(gui_handle_p h, const gui_char* text, gui_dim_t width);
+uint8_t gui_listview_setcolumnwidth(gui_handle_p h, uint16_t index, gui_dim_t width);
 
-GUI_LISTVIEW_ROW_p gui_listview_addrow(GUI_HANDLE_p h);
-uint8_t gui_listview_removerow(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row);
-uint8_t gui_listview_removerows(GUI_HANDLE_p h);
+GUI_LISTVIEW_ROW_p gui_listview_addrow(gui_handle_p h);
+uint8_t gui_listview_removerow(gui_handle_p h, GUI_LISTVIEW_ROW_p row);
+uint8_t gui_listview_removerows(gui_handle_p h);
 
-uint8_t gui_listview_setitemstring(GUI_HANDLE_p h, GUI_LISTVIEW_ROW_p row, uint16_t col, const GUI_Char* text);
-uint8_t gui_listview_setselection(GUI_HANDLE_p h, int16_t selection);
-int16_t gui_listview_getselection(GUI_HANDLE_p h);
-uint8_t gui_listview_setsliderauto(GUI_HANDLE_p h, uint8_t autoMode);
-uint8_t gui_listview_setslidervisibility(GUI_HANDLE_p h, uint8_t visible);
-uint8_t gui_listview_scroll(GUI_HANDLE_p h, int16_t step);
-uint8_t gui_listview_getitemvalue(GUI_HANDLE_p h, uint16_t rindex, uint16_t cindex, GUI_Char* dst, size_t length);
+uint8_t gui_listview_setitemstring(gui_handle_p h, GUI_LISTVIEW_ROW_p row, uint16_t col, const gui_char* text);
+uint8_t gui_listview_setselection(gui_handle_p h, int16_t selection);
+int16_t gui_listview_getselection(gui_handle_p h);
+uint8_t gui_listview_setsliderauto(gui_handle_p h, uint8_t autoMode);
+uint8_t gui_listview_setslidervisibility(gui_handle_p h, uint8_t visible);
+uint8_t gui_listview_scroll(gui_handle_p h, int16_t step);
+uint8_t gui_listview_getitemvalue(gui_handle_p h, uint16_t rindex, uint16_t cindex, gui_char* dst, size_t length);
 
 /**
  * \}
