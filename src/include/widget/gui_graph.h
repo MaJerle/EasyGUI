@@ -69,65 +69,69 @@ typedef enum GUI_GRAPH_BORDER_t {
 /**
  * \brief           Graph type enumeration
  */
-typedef enum GUI_GRAPH_TYPE_t {
+typedef enum {
     GUI_GRAPH_TYPE_YT = 0x00,               /*!< Data type is Y versus time */
     GUI_GRAPH_TYPE_XY = 0x01,               /*!< Data type is Y versus X [Y(x)] */
-} GUI_GRAPH_TYPE_t;
+} gui_graph_type_t;
 
 /**
  * \brief           Graph data widget structure
  */
-typedef struct GUI_GRAPH_DATA_p {
+typedef struct {
 #if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE || __DOXYGEN__
-    gui_linkedlistroot_t Root;              /*!< Root linked list object of graph widgets */
+    gui_linkedlistroot_t root;              /*!< Root linked list object of graph widgets */
 #endif /* GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     
-    int16_t* Data;                          /*!< Pointer to actual data object */
-    size_t Length;                          /*!< Size of data array */
-    size_t Ptr;                             /*!< Read/Write start pointer */
+    gui_id_t id;                            /*!< Data ID */
     
-    gui_color_t Color;                      /*!< Curve color */
-    GUI_GRAPH_TYPE_t Type;                  /*!< Plot data type */
-} GUI_GRAPH_DATA_t;
+    int16_t* data;                          /*!< Pointer to actual data object */
+    size_t length;                          /*!< Size of data array */
+    size_t ptr;                             /*!< Read/Write start pointer */
+    
+    gui_color_t color;                      /*!< Curve color */
+    gui_graph_type_t type;                  /*!< Plot data type */
+} gui_graph_data_t;
 
-typedef GUI_GRAPH_DATA_t *  GUI_GRAPH_DATA_p;   /*!< GUI Graph data pointer */
+typedef gui_graph_data_t * gui_graph_data_p;/*!< GUI Graph data pointer */
 
 #if defined(GUI_INTERNAL) || __DOXYGEN__
 /**
  * \brief           Graph widget structure
  */
-typedef struct GUI_GRAPH_t {
+typedef struct {
     gui_handle C;                           /*!< GUI handle object, must always be first on list */
-    gui_linkedlistroot_t Root;              /*!< Linked list root object for data objects. It stores where first in last data exists for this graph */
+    gui_linkedlistroot_t root;              /*!< Linked list root object for data objects. It stores where first in last data exists for this graph */
     
-    gui_dim_t Border[4];                    /*!< Borders for widgets */
-    uint8_t Rows;                           /*!< Number of rows in plot represented with lines */
-    uint8_t Columns;                        /*!< Number of columns in plot represented with lines */
-    float MinX;                             /*!< Minimal X value for plot */
-    float MaxX;                             /*!< Maximal X value for plot */
-    float MinY;                             /*!< Minimal Y value for plot */
-    float MaxY;                             /*!< Maximal Y value for plot */
-    float VisibleMinX;                      /*!< Visible minimal X value for plot */
-    float VisibleMaxX;                      /*!< Visible maximal X value for plot */
-    float VisibleMinY;                      /*!< Visible minimal Y value for plot */
-    float VisibleMaxY;                      /*!< Visible maximal Y value for plot */
-} GUI_GRAPH_t;
+    gui_dim_t border[4];                    /*!< Borders for widgets */
+    uint8_t rows;                           /*!< Number of rows in plot represented with lines */
+    uint8_t columns;                        /*!< Number of columns in plot represented with lines */
+    float min_x;                            /*!< Minimal X value for plot */
+    float max_x;                            /*!< Maximal X value for plot */
+    float min_y;                            /*!< Minimal Y value for plot */
+    float max_y;                            /*!< Maximal Y value for plot */
+    float visible_min_x;                    /*!< Visible minimal X value for plot */
+    float visible_max_x;                    /*!< Visible maximal X value for plot */
+    float visible_min_y;                    /*!< Visible minimal Y value for plot */
+    float visible_max_y;                    /*!< Visible maximal Y value for plot */
+} gui_graph_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p gui_graph_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
-uint8_t gui_graph_setcolor(gui_handle_p h, GUI_GRAPH_COLOR_t index, gui_color_t color);
-uint8_t gui_graph_setminx(gui_handle_p h, float v);
-uint8_t gui_graph_setmaxx(gui_handle_p h, float v);
-uint8_t gui_graph_setminy(gui_handle_p h, float v);
-uint8_t gui_graph_setmaxy(gui_handle_p h, float v);
-uint8_t gui_graph_zoomreset(gui_handle_p h);
-uint8_t gui_graph_zoom(gui_handle_p h, float zoom, float x, float y);
-uint8_t gui_graph_attachdata(gui_handle_p h, GUI_GRAPH_DATA_p data);
-uint8_t gui_graph_detachdata(gui_handle_p h, GUI_GRAPH_DATA_p data);
+gui_handle_p    gui_graph_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+uint8_t         gui_graph_setcolor(gui_handle_p h, GUI_GRAPH_COLOR_t index, gui_color_t color);
+uint8_t         gui_graph_setminx(gui_handle_p h, float v);
+uint8_t         gui_graph_setmaxx(gui_handle_p h, float v);
+uint8_t         gui_graph_setminy(gui_handle_p h, float v);
+uint8_t         gui_graph_setmaxy(gui_handle_p h, float v);
+uint8_t         gui_graph_zoomreset(gui_handle_p h);
+uint8_t         gui_graph_zoom(gui_handle_p h, float zoom, float x, float y);
+uint8_t         gui_graph_attachdata(gui_handle_p h, gui_graph_data_p data);
+uint8_t         gui_graph_detachdata(gui_handle_p h, gui_graph_data_p data);
 
-GUI_GRAPH_DATA_p gui_graph_data_create(GUI_GRAPH_TYPE_t type, size_t length);
-uint8_t gui_graph_data_addvalue(GUI_GRAPH_DATA_p data, int16_t x, int16_t y);
-uint8_t gui_graph_data_setcolor(GUI_GRAPH_DATA_p data, gui_color_t color);
+gui_graph_data_p    gui_graph_data_create(gui_id_t id, gui_graph_type_t type, size_t length);
+uint8_t             gui_graph_data_addvalue(gui_graph_data_p data, int16_t x, int16_t y);
+uint8_t             gui_graph_data_setcolor(gui_graph_data_p data, gui_color_t color);
+gui_graph_data_p    gui_graph_data_get_by_id(gui_handle_p graph_h, gui_id_t id);
+
  
 /**
  * \}

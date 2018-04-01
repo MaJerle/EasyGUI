@@ -75,7 +75,7 @@ gui_color_t LCD_GetPixel(gui_lcd_t* LCD, gui_layer_t* layer, gui_dim_t x, gui_di
     gui_color_t color;
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait till end */
     
-    DMA2D->FGMAR = (uint32_t)(layer->StartAddress + GUI.lcd.PixelSize * (layer->Width * y + x));
+    DMA2D->FGMAR = (uint32_t)(layer->start_address + GUI.lcd.pixel_size * (layer->width * y + x));
     DMA2D->OMAR = (uint32_t)&color;                 /* Set output address */
     DMA2D->FGOR = 0;                                /* Set foreground offline */    
     DMA2D->OOR = 0;                                 /* Set output offline */
