@@ -135,25 +135,25 @@ touch_handle(gui_handle_p h, guii_touch_data_t* ts) {
         value = (int32_t)(((float)(o->Max - o->Min)) * (float)pos / (float)height) + o->Min;
     }
     
-    guii_widget_invalidate(h);                     /* Redraw widget */
+    guii_widget_invalidate(h);                      /* Redraw widget */
     return set_value(h, value);                     /* Set new value */
 }
 
 /* Timer callback function for slider widget */
 static void
 timer_callback(gui_timer_t* timer) {
-    gui_handle_p h = (gui_handle_p)gui_timer_getparams__(timer);    /* Get user parameters */
-    if (guii_widget_isactive(h)) {                 /* Timer is in focus */
+    gui_handle_p h = (gui_handle_p)guii_timer_getparams(timer); /* Get user parameters */
+    if (guii_widget_isactive(h)) {                  /* Timer is in focus */
         if (__GS(h)->CurrentSize < __GS(h)->MaxSize) {
             __GS(h)->CurrentSize++;                 /* Increase size */
-            guii_widget_invalidate(h);             /* Invalidate widget */
+            guii_widget_invalidate(h);              /* Invalidate widget */
         }
     } else {
         if (__GS(h)->CurrentSize > 0) {
             __GS(h)->CurrentSize--;
-            guii_widget_invalidate(h);             /* Invalidate widget */
+            guii_widget_invalidate(h);              /* Invalidate widget */
         } else {
-            gui_timer_stop__(timer);                /* Stop timer execution */
+            guii_timer_stop(timer);                 /* Stop timer execution */
         }
     }
 }
@@ -177,8 +177,8 @@ gui_slider_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
             
             o->MaxSize = 4;
             o->CurrentSize = 0;
-            o->C.timer = gui_timer_create__(30, timer_callback, o);    /* Create timer for widget, when widget is deleted, timer will be automatically deleted too */
-            if (o->C.timer == NULL) {               /* Check if timer created */
+            h->timer = guii_timer_create(30, timer_callback, o);    /* Create timer for widget, when widget is deleted, timer will be automatically deleted too */
+            if (h->timer == NULL) {                 /* Check if timer created */
                 GUI_WIDGET_RESULTTYPE_U8(result) = 0;   /* Failed, widget will be deleted */
             }
             return 1;
@@ -293,11 +293,11 @@ gui_slider_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
             return 1;
 #endif /* GUI_CFG_USE_TOUCH */
         case GUI_WC_ActiveIn: {
-            gui_timer_startperiodic__(o->C.timer);  /* Start animation timer */
+            guii_timer_startperiodic(h->timer);     /* Start animation timer */
             return 1;
         }
         case GUI_WC_ActiveOut: {
-            guii_widget_invalidate(h);             /* Invalidate widget */
+            guii_widget_invalidate(h);              /* Invalidate widget */
             return 1;
         }
         default:                                    /* Handle default option */

@@ -59,5 +59,8 @@ gui_lcd_confirmactivelayer(uint8_t layer_num) {
     if ((GUI.lcd.flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM)) {/* If we have anything pending */
         GUI.lcd.layers[layer_num].pending = 0;
         GUI.lcd.flags &= ~GUI_FLAG_LCD_WAIT_LAYER_CONFIRM;  /* Clear flag */
+#if GUI_CFG_OS
+        gui_sys_mbox_putnow(&GUI.OS.mbox, 0x00);
+#endif
     }
 }

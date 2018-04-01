@@ -49,7 +49,7 @@ extern "C" {
 #include "gui/gui_defs.h"
     
 /* Proto threads */
-#include "pt/pt.h"
+#include "gui/pt/pt.h"
     
 /* Include utilities */
 #include "gui/gui_buffer.h"
@@ -76,7 +76,7 @@ extern "C" {
 #define __GUI_SYS_PROTECT()     gui_sys_protect()
 #define __GUI_SYS_UNPROTECT()   gui_sys_unprotect()
 #define __GUI_ENTER()           __GUI_SYS_PROTECT()
-#define __GUI_LEAVE()           __GUI_SYS_UNPROTECT()
+#define __GUI_LEAVE()           do { __GUI_SYS_UNPROTECT(); gui_sys_mbox_putnow(&GUI.OS.mbox, 0x00); } while (0)
 
 #else
 
@@ -101,13 +101,13 @@ extern "C" {
  * \note            This function must take care of reseting memory to zero
  * \hideinitializer
  */
-#define GUI_MEMALLOC(size)        gui_mem_calloc(size, 1)
+#define GUI_MEMALLOC(size)          gui_mem_calloc(size, 1)
 
 /**
  * \brief           Reallocate memory with specific size in bytes
  * \hideinitializer
  */
-#define GUI_MEMREALLOC(ptr, size) gui_mem_realloc(ptr, size)
+#define GUI_MEMREALLOC(ptr, size)   gui_mem_realloc(ptr, size)
 
 /**
  * \brief           Free memory from specific address previously allocated with \ref GUI_MEMALLOC or \ref GUI_MEMREALLOC

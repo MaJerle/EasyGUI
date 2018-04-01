@@ -337,10 +337,10 @@ gui_window_setactive(gui_handle_p h) {
     __GUI_ENTER();                                  /* Enter GUI */
     
     GUI.WindowActive = h;                           /* Set new active window */
-    gui_widget_movedowntree(h);                     /* Move widget down on tree */
+    guii_widget_movedowntree(h);                     /* Move widget down on tree */
     
-    gui_widget_focus_clear();                       /* Clear focus on widget */
-    gui_widget_active_clear();                      /* Clear active on widget */
+    guii_widget_focus_clear();                       /* Clear focus on widget */
+    guii_widget_active_clear();                      /* Clear active on widget */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;

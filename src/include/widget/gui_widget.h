@@ -718,21 +718,21 @@ uint8_t gui_widget_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* p
 #if defined(GUI_INTERNAL) && !__DOXYGEN__
 //Strictly private functions by GUI
 //Widget initialization purpose
-void gui_widget_init(void);
+void guii_widget_init(void);
 
 //Clipping regions
-uint8_t gui_widget_isinsideclippingregion(gui_handle_p h);
+uint8_t guii_widget_isinsideclippingregion(gui_handle_p h);
 
 //Move widget down and all its parents with it
-void gui_widget_movedowntree(gui_handle_p h);
+void guii_widget_movedowntree(gui_handle_p h);
 
-void gui_widget_focus_clear(void);
-void gui_widget_focus_set(gui_handle_p h);
-void gui_widget_active_clear(void);
-void gui_widget_active_set(gui_handle_p h);
+void guii_widget_focus_clear(void);
+void guii_widget_focus_set(gui_handle_p h);
+void guii_widget_active_clear(void);
+void guii_widget_active_set(gui_handle_p h);
 
 //Execute actual widget remove process
-uint8_t gui_widget_executeremove(void);
+uint8_t guii_widget_executeremove(void);
 #endif /* !__DOXYGEN__ */
 
 /**

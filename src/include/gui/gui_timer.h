@@ -36,14 +36,10 @@
 extern "C" {
 #endif
 
-/**
- * \addtogroup      GUI_UTILS
- * \brief       
- * \{
- */
 #include "gui_utils.h"
 
 /**
+ * \ingroup         GUI_UTILS
  * \defgroup        GUI_TIMER Software timers
  * \brief           Generic software timers
  * \{
@@ -56,21 +52,17 @@ extern "C" {
  * \retval          Timer parameters
  * \hideinitializer
  */
-#define gui_timer_getparams__(t)        ((t)->Params)
+#define guii_timer_getparams(t)        ((t)->params)
 
-gui_timer_t* gui_timer_create__(uint16_t period, void (*callback)(gui_timer_t *), void* param);
-uint8_t gui_timer_remove__(gui_timer_t** t);
-uint8_t gui_timer_start__(gui_timer_t* t);
-uint8_t gui_timer_startperiodic__(gui_timer_t* t);
-uint8_t gui_timer_stop__(gui_timer_t* t);
-uint8_t gui_timer_reset__(gui_timer_t* t);
+gui_timer_t* guii_timer_create(uint16_t period, void (*callback)(gui_timer_t *), void* param);
+uint8_t guii_timer_remove(gui_timer_t** t);
+uint8_t guii_timer_start(gui_timer_t* t);
+uint8_t guii_timer_startperiodic(gui_timer_t* t);
+uint8_t guii_timer_stop(gui_timer_t* t);
+uint8_t guii_timer_reset(gui_timer_t* t);
 
-uint32_t gui_timer_getactivecount(void);
-void gui_timer_process(void);
-
-/**
- * \}
- */
+uint32_t guii_timer_getactivecount(void);
+void guii_timer_process(void);
 
 /**
  * \}

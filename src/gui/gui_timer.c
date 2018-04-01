@@ -37,7 +37,7 @@
 #define GUI_FLAG_TIMER_PERIODIC         ((uint16_t)(1 << 1UL))  /*!< Timer will start from beginning after reach end */ 
 #define GUI_FLAG_TIMER_CALL             ((uint16_t)(1 << 2UL))  /*!< Call callback function on timer */
 
-#define gui_timer_isperiodic__(t)       ((t)->Flags & GUI_FLAG_TIMER_PERIODIC)
+#define guii_timer_isperiodic(t)        ((t)->flags & GUI_FLAG_TIMER_PERIODIC)
 
 #if GUI_CFG_OS
 static gui_mbox_msg_t timer_msg = {GUI_SYS_MBOX_TYPE_TIMER};
@@ -51,19 +51,19 @@ static gui_mbox_msg_t timer_msg = {GUI_SYS_MBOX_TYPE_TIMER};
  * \param[in]       params: Pointer to user parameters used in callback
  * \return          Timer handle on success, NULL otherwise
  */
-gui_timer_t*
-gui_timer_create__(uint16_t period, void (*callback)(gui_timer_t *), void* params) {
+gui_timer_t *
+guii_timer_create(uint16_t period, void (*callback)(gui_timer_t *), void* params) {
     gui_timer_t* ptr;
     
     ptr = GUI_MEMALLOC(sizeof(*ptr));               /* Allocate memory for timer */
     if (ptr != NULL) {
         memset(ptr, 0x00, sizeof(gui_timer_t));     /* Reset memory */
         
-        ptr->Period = period;                       /* Set period value */
-        ptr->Counter = period;                      /* Set current counter value */
-        ptr->Callback = callback;                   /* Set callback */
-        ptr->Params = params;                       /* Timer custom parameters */
-        ptr->Flags = 0;                             /* Timer flags management */
+        ptr->period = period;                       /* Set period value */
+        ptr->counter = period;                      /* Set current counter value */
+        ptr->callback = callback;                   /* Set callback */
+        ptr->params = params;                       /* Timer custom parameters */
+        ptr->flags = 0;                             /* Timer flags management */
         
         gui_linkedlist_add_gen(&GUI.timers.list, (gui_linkedlist_t *)ptr);  /* Add timer to linked list */
 #if GUI_CFG_OS
@@ -81,7 +81,7 @@ gui_timer_create__(uint16_t period, void (*callback)(gui_timer_t *), void* param
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_timer_remove__(gui_timer_t** t) {  
+guii_timer_remove(gui_timer_t** t) {  
     __GUI_ASSERTPARAMS(t && *t);                    /* Check input parameters */  
     gui_linkedlist_remove_gen(&GUI.timers.list, (gui_linkedlist_t *)(*t));  /* Remove timer from linked list */
     GUI_MEMFREE(*t);                                /* Free memory for timer */
@@ -97,11 +97,11 @@ gui_timer_remove__(gui_timer_t** t) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_timer_start__(gui_timer_t* t) {
+guii_timer_start(gui_timer_t* t) {
     __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
-    t->Counter = t->Period;                         /* Reset counter to top value */
-    t->Flags &= ~GUI_FLAG_TIMER_PERIODIC;           /* Clear periodic flag */
-    t->Flags |= GUI_FLAG_TIMER_ACTIVE;              /* Set active flag */
+    t->counter = t->period;                         /* Reset counter to top value */
+    t->flags &= ~GUI_FLAG_TIMER_PERIODIC;           /* Clear periodic flag */
+    t->flags |= GUI_FLAG_TIMER_ACTIVE;              /* Set active flag */
 #if GUI_CFG_OS
     gui_sys_mbox_putnow(&GUI.OS.mbox, &timer_msg);  /* Add new message to queue */
 #endif /* GUI_CFG_OS */
@@ -116,10 +116,10 @@ gui_timer_start__(gui_timer_t* t) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_timer_startperiodic__(gui_timer_t* t) {
+guii_timer_startperiodic(gui_timer_t* t) {
     __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
-    t->Counter = t->Period;                         /* Reset counter to top value */
-    t->Flags |= GUI_FLAG_TIMER_ACTIVE | GUI_FLAG_TIMER_PERIODIC;    /* Set active flag */
+    t->counter = t->period;                         /* Reset counter to top value */
+    t->flags |= GUI_FLAG_TIMER_ACTIVE | GUI_FLAG_TIMER_PERIODIC;    /* Set active flag */
     
     return 1;
 }
@@ -131,10 +131,10 @@ gui_timer_startperiodic__(gui_timer_t* t) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_timer_stop__(gui_timer_t* t) {
+guii_timer_stop(gui_timer_t* t) {
     __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
-    t->Counter = t->Period;                         /* Reset counter to top value */
-    t->Flags &= ~GUI_FLAG_TIMER_ACTIVE;             /* Clear active flag */
+    t->counter = t->period;                         /* Reset counter to top value */
+    t->flags &= ~GUI_FLAG_TIMER_ACTIVE;             /* Clear active flag */
     
     return 1;
 }
@@ -146,9 +146,9 @@ gui_timer_stop__(gui_timer_t* t) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_timer_reset__(gui_timer_t* t) {
+guii_timer_reset(gui_timer_t* t) {
     __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
-    t->Counter = t->Period;                         /* Clear and reset timer */
+    t->counter = t->period;                         /* Clear and reset timer */
     
     return 1;
 }
@@ -159,7 +159,7 @@ gui_timer_reset__(gui_timer_t* t) {
  * \note            Processes all timers in loop and calls callback function if needed 
  */
 void
-gui_timer_process(void) {
+guii_timer_process(void) {
     gui_timer_t* t;
     volatile uint32_t time = gui_sys_now();         /* Get current time */
     volatile uint32_t lastTime = GUI.timers.Time;
@@ -172,28 +172,28 @@ gui_timer_process(void) {
     /* Process all software timers */
     for (t = (gui_timer_t *)GUI.timers.list.first; t != NULL;
         t = (gui_timer_t *)t->list.next) {
-        if (t->Flags & GUI_FLAG_TIMER_CALL) {       /* Counter is set to 0, process callback */
-            t->Flags &= ~GUI_FLAG_TIMER_CALL;       /* Clear timer flag */
-            if (!gui_timer_isperiodic__(t)) {       /* If timer is not periodic */
-                gui_timer_stop__(t);                /* Stop timer */
+        if (t->flags & GUI_FLAG_TIMER_CALL) {       /* Counter is set to 0, process callback */
+            t->flags &= ~GUI_FLAG_TIMER_CALL;       /* Clear timer flag */
+            if (!guii_timer_isperiodic(t)) {        /* If timer is not periodic */
+                guii_timer_stop(t);                 /* Stop timer */
             }
-            if (t->Callback) {                      /* Process callback */
-                t->Callback(t);                     /* Call user function */
+            if (t->callback != NULL) {              /* Process callback */
+                t->callback(t);                     /* Call user function */
             }
         }
         
-        if (!(t->Flags & GUI_FLAG_TIMER_ACTIVE)) {  /* Timer is not active */
+        if (!(t->flags & GUI_FLAG_TIMER_ACTIVE)) {  /* Timer is not active */
             continue;
         }
-        if (t->Counter >= diff) {                   /* Decrease counter value by zero */
-            t->Counter -= diff;                     /* Try to decrease to 0 */
-            if (!t->Counter) {
-                t->Counter = t->Period;             /* Set new period value */
-                t->Flags |= GUI_FLAG_TIMER_CALL;    /* Set flag for timer callback next time */
+        if (t->counter >= diff) {                   /* Decrease counter value by zero */
+            t->counter -= diff;                     /* Try to decrease to 0 */
+            if (!t->counter) {
+                t->counter = t->period;             /* Set new period value */
+                t->flags |= GUI_FLAG_TIMER_CALL;    /* Set flag for timer callback next time */
             }
         } else {                                    /* Overflow mode */
-            t->Counter = 0;                         /* Set new counter value */
-            t->Flags |= GUI_FLAG_TIMER_CALL;        /* Set callback flag in next check */
+            t->counter = 0;                         /* Set new counter value */
+            t->flags |= GUI_FLAG_TIMER_CALL;        /* Set callback flag in next check */
         }
     }
     
@@ -205,12 +205,12 @@ gui_timer_process(void) {
  * \return          Number of active timers
  */
 uint32_t
-gui_timer_getactivecount(void) {
+guii_timer_getactivecount(void) {
     uint32_t cnt = 0;
     gui_timer_t* t;
     for (t = (gui_timer_t *)gui_linkedlist_getnext_gen(&GUI.timers.list, NULL); t != NULL;
         t = (gui_timer_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)t)) {
-        if ((t->Flags & GUI_FLAG_TIMER_ACTIVE)) {
+        if ((t->flags & GUI_FLAG_TIMER_ACTIVE)) {
             cnt++;
         }
     }

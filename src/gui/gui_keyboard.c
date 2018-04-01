@@ -463,8 +463,8 @@ keyboard_timer_callback(gui_timer_t* timer) {
             keyboard.action_value++;
             guii_widget_setpositionpercent(keyboard.handle, 0, 50 + keyboard.action_value * 5);
         } else {
-            guii_widget_hide(keyboard.handle); /* Hide keyboard */
-            gui_timer_stop__(timer);            /* Stop timer */
+            guii_widget_hide(keyboard.handle);  /* Hide keyboard */
+            guii_timer_stop(timer);             /* Stop timer */
         }
     } else if (keyboard.action == ACTION_SHOW) {/* We should show the keyboard */
         if (keyboard.action_value) {
@@ -474,6 +474,9 @@ keyboard_timer_callback(gui_timer_t* timer) {
             keyboard.action_value--;            /* Decrease value */
             guii_widget_setpositionpercent(keyboard.handle, 0, 50 + keyboard.action_value * 5);
         }
+        if (keyboard.action_value == 0) {
+            guii_timer_stop(timer);             /* Stop timer */
+        }
     }
 }
 
@@ -482,7 +485,7 @@ static uint8_t
 keyboard_base_callback(gui_handle_p h, GUI_WC_t cmd, gui_widget_param_t* param, gui_widget_result_t* result) {
     switch (cmd) {
         case GUI_WC_PreInit: {
-            h->timer = gui_timer_create__(60, keyboard_timer_callback, 0);    /* Create timer */
+            h->timer = guii_timer_create(60, keyboard_timer_callback, 0);   /* Create timer */
             if (h->timer == NULL) {
                 GUI_WIDGET_RESULTTYPE_U8(result) = 0;   /* Failed, stop and clear memory */
             }
@@ -498,10 +501,10 @@ keyboard_base_callback(gui_handle_p h, GUI_WC_t cmd, gui_widget_param_t* param, 
             /***************************/
             /*   Configure keyboard    */
             /***************************/
-            guii_widget_setsizepercent(h, 100, 50);/* Set keyboard size */
-            guii_widget_setpositionpercent(h, 0, 100); /* Set position of keyboard outside visible area */
+            guii_widget_setsizepercent(h, 100, 50); /* Set keyboard size */
+            guii_widget_setpositionpercent(h, 0, 50);   /* Set position of keyboard outside visible area */
             guii_widget_setzindex(h, GUI_WIDGET_ZINDEX_MAX);   /* Set to maximal z-index */
-            guii_widget_hide(h);               /* Hide keyboard by default */
+            guii_widget_hide(h);                /* Hide keyboard by default */
             
             keyboard.default_font = h->font;    /* Save current font */
             
@@ -557,8 +560,9 @@ keyboard_base_callback(gui_handle_p h, GUI_WC_t cmd, gui_widget_param_t* param, 
 uint8_t
 guii_keyboard_hide(void) {
     __GUI_ASSERTPARAMS(keyboard.handle != NULL);/* Check parameters */
-    keyboard.action = ACTION_HIDE;              /* Set action to hide */
-    gui_timer_startperiodic__(keyboard.handle->timer);  /* Start periodic timer */
+    guii_widget_hide(keyboard.handle);          /* Show keyboard widget */
+    //keyboard.action = ACTION_HIDE;              /* Set action to hide */
+    //guii_timer_startperiodic(keyboard.handle->timer);   /* Start periodic timer */
     
     return 1;
 }
@@ -573,12 +577,18 @@ guii_keyboard_hide(void) {
 uint8_t
 guii_keyboard_show(gui_handle_p h) {
     __GUI_ASSERTPARAMS(keyboard.handle != NULL);/* Check parameters */
-    keyboard.action = ACTION_SHOW;              /* Set action to show */
     if (h != NULL && h->font != NULL) {         /* Check widget and font for it */
         keyboard.font = h->font;                /* Save font as display font */
         guii_widget_invalidate(keyboard.handle);/* Force invalidation */
     }
-    gui_timer_startperiodic__(keyboard.handle->timer);  /* Start periodic timer */
+    guii_widget_show(keyboard.handle);          /* Show keyboard widget */
+    
+//    keyboard.action = ACTION_SHOW;              /* Set action to show */
+//    if (h != NULL && h->font != NULL) {         /* Check widget and font for it */
+//        keyboard.font = h->font;                /* Save font as display font */
+//        guii_widget_invalidate(keyboard.handle);/* Force invalidation */
+//    }
+//    guii_timer_startperiodic(keyboard.handle->timer);   /* Start periodic timer */
     
     return 1;
 }

@@ -29,6 +29,7 @@
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
+#include "gui/gui.h"
 #include "gui/gui_mem.h"
 
 typedef struct MemBlock {
@@ -483,8 +484,8 @@ gui_mem_getminfree(void) {
 uint8_t
 gui_mem_assignmemory(const GUI_MEM_Region_t* regions, size_t len) {
     uint8_t ret;
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_SYS_PROTECT();                            /* Enter GUI */
     ret = mem_assignmem(regions, len);              /* Assign memory */
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_SYS_UNPROTECT();                          /* Leave GUI */
     return ret;                                     
 }

@@ -699,11 +699,11 @@ typedef struct GUI_FONT_CharEntry_t {
  */
 typedef struct gui_timer_t {
     gui_linkedlist_t list;                  /*!< Linked list entry, must be first on the list */
-    uint16_t Period;                        /*!< Timer period value */
-    uint16_t Counter;                       /*!< Timer current counter */
-    uint8_t Flags;                          /*!< Timer flags */
-    void* Params;                           /*!< Custom parameters passed to callback function */
-    void (*Callback)    (struct gui_timer_t *); /*!< Timer callback function */
+    uint16_t period;                        /*!< Timer period value */
+    uint16_t counter;                       /*!< Timer current counter */
+    uint8_t flags;                          /*!< Timer flags */
+    void* params;                           /*!< Custom parameters passed to callback function */
+    void (*callback)(struct gui_timer_t *); /*!< Timer callback function */
 } gui_timer_t;
 
 /**

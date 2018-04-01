@@ -68,7 +68,7 @@ remove_widget(gui_handle_p h) {
         if (guii_widget_hasparent(h)) {             /* Should always happen as top parent (window) can't be removed */
             GUI.FocusedWidget = guii_widget_getparent(h);   /* Set parent widget as focused */
         } else {
-            gui_widget_focus_clear();               /* Clear all widgets from focused */
+            guii_widget_focus_clear();               /* Clear all widgets from focused */
             GUI.FocusedWidget = NULL;
         }
     }
@@ -99,7 +99,7 @@ remove_widget(gui_handle_p h) {
     guii_widget_invalidatewithparent(h);            /* Invalidate object and its parent */
     guii_widget_freetextmemory(h);                  /* Free text memory */
     if (h->timer != NULL) {                         /* Check timer memory */
-        gui_timer_remove__(&h->timer);              /* Free timer memory */
+        guii_timer_remove(&h->timer);               /* Free timer memory */
     }
     if (h->colors != NULL) {                        /* Check colors memory */
         GUI_MEMFREE(h->colors);                     /* Free colors memory */
@@ -499,7 +499,7 @@ can_remove_widget(gui_handle_p h) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_isinsideclippingregion(gui_handle_p h) {
+guii_widget_isinsideclippingregion(gui_handle_p h) {
     gui_dim_t x1, y1, x2, y2;
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
@@ -515,7 +515,7 @@ gui_widget_isinsideclippingregion(gui_handle_p h) {
  * \brief           Init widget part of library
  */
 void
-gui_widget_init(void) {
+guii_widget_init(void) {
     gui_window_createdesktop(GUI_ID_WINDOW_BASE, NULL); /* Create base window object */
 }
 
@@ -524,7 +524,7 @@ gui_widget_init(void) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_executeremove(void) {
+guii_widget_executeremove(void) {
     if (GUI.Flags & GUI_FLAG_REMOVE) {              /* Anything to remove? */
         remove_widgets(NULL);                       /* Remove widgets */
         GUI.Flags &= ~GUI_FLAG_REMOVE;
@@ -538,7 +538,7 @@ gui_widget_executeremove(void) {
  * \param[in]       h: Widget handle
  */
 void
-gui_widget_movedowntree(gui_handle_p h) {              
+guii_widget_movedowntree(gui_handle_p h) {              
     /*
      * Move widget to the end of parent linked list
      * This will allow widget to be first checked next time for touch detection
@@ -569,7 +569,7 @@ gui_widget_movedowntree(gui_handle_p h) {
  * \param[in]       h: Widget handle
  */
 void
-gui_widget_focus_clear(void) {
+guii_widget_focus_clear(void) {
     if (GUI.FocusedWidget != NULL && GUI.FocusedWidget != GUI.root.first) { /* First widget is always in focus */
         GUI.FocusedWidgetPrev = GUI.FocusedWidget;  /* Clear everything */
         do {
@@ -587,7 +587,7 @@ gui_widget_focus_clear(void) {
  * \param[in]       h: Widget handle
  */
 void
-gui_widget_focus_set(gui_handle_p h) {
+guii_widget_focus_set(gui_handle_p h) {
     gui_handle_p common = NULL;
     
     if (GUI.FocusedWidget == h) {                   /* Check current focused widget */
@@ -638,7 +638,7 @@ gui_widget_focus_set(gui_handle_p h) {
  * \brief           Clear active status on widget
  */
 void
-gui_widget_active_clear(void) {
+guii_widget_active_clear(void) {
     if (GUI.ActiveWidget != NULL) {
         guii_widget_callback(GUI.ActiveWidget, GUI_WC_ActiveOut, NULL, NULL);  /* Notify user about change */
         guii_widget_clrflag(GUI.ActiveWidget, GUI_FLAG_ACTIVE | GUI_FLAG_TOUCH_MOVE);  /* Clear all widget based flags */
@@ -652,8 +652,8 @@ gui_widget_active_clear(void) {
  * \param[in]       h: Widget handle. When set to NULL, current active widget is cleared
  */
 void
-gui_widget_active_set(gui_handle_p h) {
-    gui_widget_active_clear();                      /* Clear active widget flag */
+guii_widget_active_set(gui_handle_p h) {
+    guii_widget_active_clear();                      /* Clear active widget flag */
     GUI.ActiveWidget = h;                           /* Set new active widget */
     if (h != NULL) {
         guii_widget_setflag(GUI.ActiveWidget, GUI_FLAG_ACTIVE);    /* Set active widget flag */
@@ -1050,7 +1050,7 @@ guii_widget_remove(gui_handle_p h) {
         guii_widget_setflag(h, GUI_FLAG_REMOVE);    /* Set flag for widget delete */
         GUI.Flags |= GUI_FLAG_REMOVE;               /* Set flag for to remove at least one widget from tree */
         if (guii_widget_isfocused(h)) {             /* In case current widget is in focus */
-            gui_widget_focus_set(guii_widget_getparent(h)); /* Set parent as focused */
+            guii_widget_focus_set(guii_widget_getparent(h)); /* Set parent as focused */
         }
 #if GUI_CFG_OS
     gui_sys_mbox_putnow(&GUI.OS.mbox, &msg_widget_remove);  /* Put message to queue */
@@ -1587,10 +1587,10 @@ guii_widget_hide(gui_handle_p h) {
      */
     
     if (GUI.FocusedWidget != NULL && (GUI.FocusedWidget == h || guii_widget_ischildof(GUI.FocusedWidget, h))) {    /* Clear focus */
-        gui_widget_focus_set(guii_widget_getparent(GUI.FocusedWidget)); /* Set parent widget as focused now */
+        guii_widget_focus_set(guii_widget_getparent(GUI.FocusedWidget)); /* Set parent widget as focused now */
     }
     if (GUI.ActiveWidget && (GUI.ActiveWidget == h || guii_widget_ischildof(GUI.ActiveWidget, h))) {   /* Clear active */
-        gui_widget_active_clear();
+        guii_widget_active_clear();
     }
     return 1;
 }
@@ -2350,8 +2350,8 @@ gui_widget_putonfront(gui_handle_p h) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    gui_widget_movedowntree(h);                     /* Put widget on front */
-    gui_widget_focus_set(h);                        /* Set widget to focused state */
+    guii_widget_movedowntree(h);                     /* Put widget on front */
+    guii_widget_focus_set(h);                        /* Set widget to focused state */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;
@@ -2690,7 +2690,7 @@ gui_widget_setfocus(gui_handle_p h) {
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
-    gui_widget_focus_set(h);                        /* Put widget in focus */
+    guii_widget_focus_set(h);                        /* Put widget in focus */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;

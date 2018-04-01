@@ -104,7 +104,7 @@ redraw_widgets(gui_handle_p parent) {
             guii_widget_clrflag(h, GUI_FLAG_REDRAW);   /* Clear flag to be sure */
             continue;                               /* Ignore hidden elements */
         }
-        if (gui_widget_isinsideclippingregion(h)) { /* If widget is inside clipping region */
+        if (guii_widget_isinsideclippingregion(h)) { /* If widget is inside clipping region */
             /* Draw main widget if required */
             if (guii_widget_getflag(h, GUI_FLAG_REDRAW)) {  /* Check if redraw required */
 #if GUI_CFG_USE_TRANSPARENCY
@@ -127,7 +127,7 @@ redraw_widgets(gui_handle_p parent) {
                     gui_dim_t width = GUI.DisplayTemp.x2 - GUI.DisplayTemp.x1;
                     gui_dim_t height = GUI.DisplayTemp.y2 - GUI.DisplayTemp.y1;
                     
-                    /**
+                    /*
                      * Try to allocate memory for new virtual layer for temporary usage
                      */
                     GUI.lcd.drawing_layer = GUI_MEMALLOC(sizeof(*GUI.lcd.drawing_layer) + (size_t)width * (size_t)height * (size_t)GUI.lcd.pixel_size);
@@ -458,7 +458,7 @@ process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
                  * Move widget down on parent linked list and do the same with all of its parents,
                  * no matter of touch focus or not
                  */
-                gui_widget_movedowntree(h);
+                guii_widget_movedowntree(h);
                 
                 if (tStat == touchHANDLED) {        /* Touch handled for widget completely */
                     /*
@@ -468,9 +468,9 @@ process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
                      * This allows us to click keyboard items but not to lose focus on main widget
                      */
                     if (!isKeyboard) {
-                        gui_widget_focus_set(h);
+                        guii_widget_focus_set(h);
                     }
-                    gui_widget_active_set(h);
+                    guii_widget_active_set(h);
                     
                     /*
                      * Invalidate actual handle object
@@ -483,9 +483,9 @@ process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
                      * process only clearing currently focused and active widgets and clear them
                      */
                     if (!isKeyboard) {
-                        gui_widget_focus_clear();
+                        guii_widget_focus_clear();
                     }
-                    gui_widget_active_clear();
+                    guii_widget_active_clear();
                 }
             }
         }
@@ -576,7 +576,7 @@ gui_process_touch(void) {
                          * set this new widget to active from now on
                          */
                         if (aw && aw != GUI.ActiveWidget) {
-                            gui_widget_active_set(aw);  /* Set new active widget */
+                            guii_widget_active_set(aw);  /* Set new active widget */
                         }
                     } else {
                         GUI_WIDGET_PARAMTYPE_TOUCH(&param) = &GUI.Touch;
@@ -616,7 +616,7 @@ gui_process_touch(void) {
                     GUI_WIDGET_PARAMTYPE_TOUCH(&param) = &GUI.Touch;
                     GUI_WIDGET_RESULTTYPE_TOUCH(&result) = touchCONTINUE;
                     guii_widget_callback(GUI.ActiveWidget, GUI_WC_TouchEnd, &param, &result);  /* Process callback function */
-                    gui_widget_active_clear();      /* Clear active widget */
+                    guii_widget_active_clear();     /* Clear active widget */
                 }
             }
             
@@ -664,7 +664,7 @@ process_keyboard(void) {
                     }
                     if (h != NULL) {                /* We have next widget */
                         gui_linkedlist_widgetmovetobottom(h); /* Set widget to the down of list */
-                        gui_widget_focus_set(h);    /* Set focus to new widget */
+                        guii_widget_focus_set(h);   /* Set focus to new widget */
                     }
                 }
             }
@@ -758,7 +758,7 @@ gui_init(void) {
 #if GUI_CFG_OS
     /* Init system */
     gui_sys_init();                                 /* Init low-level system */
-    gui_sys_mbox_create(&GUI.OS.mbox, 10);          /* Message box for 10 elements */
+    gui_sys_mbox_create(&GUI.OS.mbox, 32);          /* Message box for 10 elements */
 #endif /* GUI_CFG_OS */
     
     /* Call LCD low-level function */
@@ -788,7 +788,7 @@ gui_init(void) {
     
     gui_input_init();                               /* Init input devices */
     GUI.Initialized = 1;                            /* GUI is initialized */
-    gui_widget_init();                              /* Init widgets */
+    guii_widget_init();                              /* Init widgets */
     
 #if GUI_CFG_OS
     /* Create graphical thread */
@@ -810,31 +810,30 @@ gui_process(void) {
 #if GUI_CFG_OS
     gui_mbox_msg_t* msg;
     uint32_t time;
-    uint32_t tmr_cnt = gui_timer_getactivecount();  /* Get number of active timers in system */
+    uint32_t tmr_cnt = guii_timer_getactivecount(); /* Get number of active timers in system */
     
-    time = gui_sys_mbox_get(&GUI.OS.mbox, (void **)&msg, tmr_cnt ? 10 : 0); /* Get value from message queue */
+    time = gui_sys_mbox_get(&GUI.OS.mbox, (void **)&msg, tmr_cnt ? 1 : 0); /* Get value from message queue */
+    
     GUI_UNUSED(time);                               /* Unused variable */
-    
-    __GUI_SYS_PROTECT();                            /* Protect from multiple access */
+    GUI_UNUSED(msg);                                /* Unused variable */
 #endif /* GUI_CFG_OS */
    
+    __GUI_SYS_PROTECT();                            /* Protect from multiple access */
+    
     /*
      * Periodically process everything
      */
-    gui_timer_process();                            /* Process all timers */
+    guii_timer_process();                           /* Process all timers */
+    guii_widget_executeremove();                    /* Delete widgets */
 #if GUI_CFG_USE_TOUCH
     gui_process_touch();                            /* Process touch inputs */
 #endif /* GUI_CFG_USE_TOUCH */
 #if GUI_CFG_USE_KEYBOARD
     process_keyboard();                             /* Process keyboard inputs */
 #endif /* GUI_CFG_USE_KEYBOARD */
-    gui_widget_executeremove();                     /* Delete widgets */
     process_redraw();                               /* Redraw widgets */
     
-#if GUI_CFG_OS
     __GUI_SYS_UNPROTECT();                          /* Release protection */
-#endif /* GUI_CFG_OS */
-    
     return 0;                                       /* Return number of elements updated on GUI */
 }
 
