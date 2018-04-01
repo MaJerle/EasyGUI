@@ -53,7 +53,7 @@ uint8_t
 gui_input_touchadd(gui_touch_data_t* ts) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(ts);                         /* Check input parameters */
-    ts->Time = gui_sys_now();                       /* Set event time */
+    ts->time = gui_sys_now();                       /* Set event time */
     ret = gui_buffer_write(&TSBuffer, ts, sizeof(*ts)) ? 1 : 0; /* Write data to buffer */
     
 #if GUI_CFG_OS
@@ -101,7 +101,7 @@ uint8_t
 gui_input_keyadd(gui_keyboard_data_t* kb) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(kb);                         /* Check input parameters */
-    kb->Time = gui_sys_now();                       /* Set event time */
+    kb->time = gui_sys_now();                       /* Set event time */
     ret = gui_buffer_write(&KBBuffer, kb, sizeof(*kb)) ? 1 : 0; /* Write data to buffer */
     
 #if GUI_CFG_OS

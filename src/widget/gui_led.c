@@ -56,12 +56,12 @@ gui_color_t colors[] = {
  */
 static const
 gui_widget_t widget = {
-    .Name = _GT("LED"),                             /*!< Widget name */ 
-    .Size = sizeof(GUI_LED_t),                      /*!< Size of widget for memory allocation */
-    .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = gui_led_callback,                   /*!< Control function */
-    .Colors = colors,                               /*!< List of default colors */
-    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Number of colors */
+    .name = _GT("LED"),                             /*!< Widget name */ 
+    .size = sizeof(GUI_LED_t),                      /*!< Size of widget for memory allocation */
+    .flags = 0,                                     /*!< List of widget flags */
+    .callback = gui_led_callback,                   /*!< Control function */
+    .colors = colors,                               /*!< List of default colors */
+    .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 
 #define l           ((GUI_LED_t *)(h))

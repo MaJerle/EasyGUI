@@ -54,12 +54,12 @@ gui_color_t colors[] = {
  */
 static const
 gui_widget_t widget = {
-    .Name = _GT("LISTBOX"),                         /*!< Widget name */
-    .Size = sizeof(GUI_LISTBOX_t),                  /*!< Size of widget for memory allocation */
-    .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = gui_listbox_callback,               /*!< Callback function */
-    .Colors = colors,                               /*!< List of default colors */
-    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Define number of colors */
+    .name = _GT("LISTBOX"),                         /*!< Widget name */
+    .size = sizeof(GUI_LISTBOX_t),                  /*!< Size of widget for memory allocation */
+    .flags = 0,                                     /*!< List of widget flags */
+    .callback = gui_listbox_callback,               /*!< Callback function */
+    .colors = colors,                               /*!< List of default colors */
+    .color_count = GUI_COUNT_OF(colors),            /*!< Define number of colors */
 };
 
 #define o                   ((GUI_LISTBOX_t *)(h))
@@ -280,12 +280,12 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
                 f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.Color1Width = f.Width;
                 
-                tmp = disp->Y2;                     /* Scale out drawing area */
-                if (disp->Y2 > (y + height - 2)) {
-                    disp->Y2 = y + height - 2;
+                tmp = disp->y2;                     /* Scale out drawing area */
+                if (disp->y2 > (y + height - 2)) {
+                    disp->y2 = y + height - 2;
                 }
                 
-                for (index = 0, item = (GUI_LISTBOX_ITEM_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); item && f.Y <= disp->Y2;
+                for (index = 0, item = (GUI_LISTBOX_ITEM_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); item && f.Y <= disp->y2;
                         item = (GUI_LISTBOX_ITEM_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
                     if (index < o->visiblestartindex) { /* Check for start drawing index */
                         continue;
@@ -299,7 +299,7 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
                     gui_draw_writetext(disp, guii_widget_getfont(h), item->Text, &f);
                     f.Y += itemHeight;
                 }
-                disp->Y2 = tmp;
+                disp->y2 = tmp;
             }
             
             return 1;
@@ -314,7 +314,7 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
 #if GUI_CFG_USE_TOUCH
         case GUI_WC_TouchStart: {
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            tY = ts->RelY[0];
+            tY = ts->y_rel[0];
             
             GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
@@ -323,11 +323,11 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             if (h->font != NULL) {
                 gui_dim_t height = item_height(h, NULL);   /* Get element height */
-                gui_dim_t diff = tY - ts->RelY[0];
+                gui_dim_t diff = tY - ts->y_rel[0];
                 
                 if (GUI_ABS(diff) > height) {
                     slide(h, diff > 0 ? 1 : -1);    /* Slide widget */
-                    tY = ts->RelY[0];               /* Save pointer */
+                    tY = ts->y_rel[0];               /* Save pointer */
                 }
             }
             return 1;
@@ -340,10 +340,10 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
             gui_dim_t height = guii_widget_getheight(h);   /* Get widget height */
             
             if (o->Flags & GUI_FLAG_LISTBOX_SLIDER_ON) {
-                if (ts->RelX[0] > (width - o->SliderWidth)) {   /* Touch is inside slider */
-                    if (ts->RelY[0] < o->SliderWidth) {
+                if (ts->x_rel[0] > (width - o->SliderWidth)) {   /* Touch is inside slider */
+                    if (ts->y_rel[0] < o->SliderWidth) {
                         slide(h, -1);               /* Slide one value up */
-                    } else if (ts->RelY[0] > (height - o->SliderWidth)) {
+                    } else if (ts->y_rel[0] > (height - o->SliderWidth)) {
                         slide(h, 1);                /* Slide one value down */
                     }
                     handled = 1;
@@ -353,7 +353,7 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
                 uint16_t height = item_height(h, NULL);    /* Get element height */
                 uint16_t tmpSelected;
                 
-                tmpSelected = ts->RelY[0] / height; /* Get temporary selected index */
+                tmpSelected = ts->y_rel[0] / height; /* Get temporary selected index */
                 if ((o->visiblestartindex + tmpSelected) <= o->Count) {
                     set_selection(h, o->visiblestartindex + tmpSelected);
                     guii_widget_invalidate(h);     /* Choose new selection */
@@ -364,9 +364,9 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
 #if GUI_CFG_USE_KEYBOARD
         case GUI_WC_KeyPress: {
             guii_keyboard_data_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
-            if (kb->KB.Keys[0] == GUI_KEY_DOWN) {   /* On pressed down */
+            if (kb->kb.keys[0] == GUI_KEY_DOWN) {   /* On pressed down */
                 inc_selection(h, 1);                /* Increase selection */
-            } else if (kb->KB.Keys[0] == GUI_KEY_UP) {
+            } else if (kb->kb.keys[0] == GUI_KEY_UP) {
                 inc_selection(h, -1);               /* Decrease selection */
             }
             return 1;

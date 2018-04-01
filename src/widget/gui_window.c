@@ -53,12 +53,12 @@ gui_color_t colors[] = {
  */
 static const
 gui_widget_t widget = {
-    .Name = _GT("WINDOW"),                          /*!< Widget name */
-    .Size = sizeof(GUI_WINDOW_t),                   /*!< Size of widget for memory allocation */
-    .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
-    .Callback = gui_window_callback,                /*!< Control function */
-    .Colors = colors,                               /*!< Pointer to colors array */
-    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Number of colors */
+    .name = _GT("WINDOW"),                          /*!< Widget name */
+    .size = sizeof(GUI_WINDOW_t),                   /*!< Size of widget for memory allocation */
+    .flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
+    .callback = gui_window_callback,                /*!< Control function */
+    .colors = colors,                               /*!< Pointer to colors array */
+    .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 
 #define w          ((GUI_WINDOW_t *)h)
@@ -176,15 +176,15 @@ gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
             if (!guii_widget_getparent(h)) {       /* Ignore on base window */
                 return 1;
             }
-            if (ts->TS.Count == 1 && guii_widget_getflag(h, GUI_FLAG_CHILD)) { /* For children widgets only on single touch */
+            if (ts->ts.count == 1 && guii_widget_getflag(h, GUI_FLAG_CHILD)) { /* For children widgets only on single touch */
                 gui_dim_t pt, wi;
                 pt = guii_widget_getpaddingtop(h); /* Get top padding */
                 wi = guii_widget_getwidth(h);      /* Get widget width */
                 
-                if (ts->RelY[0] < pt && ts->RelX[0] < (wi - pt)) {
+                if (ts->y_rel[0] < pt && ts->x_rel[0] < (wi - pt)) {
                     Mode = 1;
-                    tX = ts->RelX[0];
-                    tY = ts->RelY[0];
+                    tX = ts->x_rel[0];
+                    tY = ts->y_rel[0];
                 }
                 GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;  /* Set handled status */
             } else {
@@ -200,7 +200,7 @@ gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
                 gui_dim_t pX, pY;
                 pX = guii_widget_getparentabsolutex(__GH(h));
                 pY = guii_widget_getparentabsolutey(__GH(h));
-                guii_widget_setposition(h, ts->TS.X[0] - pX - tX, ts->TS.Y[0] - pY - tY);
+                guii_widget_setposition(h, ts->ts.x[0] - pX - tX, ts->ts.y[0] - pY - tY);
                 
                 if (guii_widget_isexpanded(h)) {   /* If it is expanded */
                     guii_widget_setexpanded(h, 0); /* Clear expanded mode */
@@ -221,13 +221,13 @@ gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
             pt = guii_widget_getpaddingtop(h);     /* Get top padding */
             wi = guii_widget_getwidth(h);          /* Get widget width */
             
-            if (ts->RelY[0] <= pt) {                /* Top widget part detected */
+            if (ts->y_rel[0] <= pt) {                /* Top widget part detected */
                 pt = pt - 4;
-                if (ts->RelX[0] > (wi - 3 * pt) && ts->RelX[0] < (wi - 2 * pt)) {
+                if (ts->x_rel[0] > (wi - 3 * pt) && ts->x_rel[0] < (wi - 2 * pt)) {
                     guii_widget_hide(h);           /* Hide widget */
-                } else if (ts->RelX[0] > (wi - 2 * pt) && ts->RelX[0] < (wi - pt)) {
+                } else if (ts->x_rel[0] > (wi - 2 * pt) && ts->x_rel[0] < (wi - pt)) {
                     guii_widget_toggleexpanded(h); /* Hide widget */
-                } else if (ts->RelX[0] >= (wi - pt)) {
+                } else if (ts->x_rel[0] >= (wi - pt)) {
                     guii_widget_remove(h);         /* Remove widget */
                 }
             }
@@ -239,7 +239,7 @@ gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
             
             pt = guii_widget_getpaddingtop(h);     /* Get top padding */
             
-            if (ts->RelY[0] <= pt) {                /* Top widget part detected */
+            if (ts->y_rel[0] <= pt) {                /* Top widget part detected */
                 guii_widget_toggleexpanded(h);     /* Toggle expanded mode */
             }
             return 1;
@@ -247,16 +247,16 @@ gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
 #if GUI_CFG_USE_KEYBOARD
         case GUI_WC_KeyPress: {
             guii_keyboard_data_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
-            if (kb->KB.Keys[0] == GUI_KEY_DOWN) {
+            if (kb->kb.keys[0] == GUI_KEY_DOWN) {
                 guii_widget_setposition(h, h->x, h->y + 1);
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
-            } else if (kb->KB.Keys[0] == GUI_KEY_UP) {
+            } else if (kb->kb.keys[0] == GUI_KEY_UP) {
                 guii_widget_setposition(h, h->x, h->y - 1);
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
-            } else if (kb->KB.Keys[0] == GUI_KEY_LEFT) {
+            } else if (kb->kb.keys[0] == GUI_KEY_LEFT) {
                 guii_widget_setposition(h, h->x - 1, h->y);
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
-            } else if (kb->KB.Keys[0] == GUI_KEY_RIGHT) {
+            } else if (kb->kb.keys[0] == GUI_KEY_RIGHT) {
                 guii_widget_setposition(h, h->x + 1, h->y);
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }
@@ -279,7 +279,7 @@ gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
  */
 gui_handle_p
 gui_window_createdesktop(gui_id_t id, gui_widget_callback_t cb) {
-    return (gui_handle_p)guii_widget_create(&widget, id, 0, 0, GUI.LCD.Width, GUI.LCD.Height, 0, cb, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);   /* Allocate memory for basic widget */
+    return (gui_handle_p)guii_widget_create(&widget, id, 0, 0, GUI.lcd.width, GUI.lcd.height, 0, cb, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);/* Allocate memory for basic widget */
 }
 
 /**

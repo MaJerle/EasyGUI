@@ -432,18 +432,18 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const GUI_DRAW_FONT
     uint8_t i, b, k, columns;
     gui_dim_t x1;
     
-    while (!GUI.LL.IsReady(&GUI.LCD));              /* Wait till ready */
+    while (!GUI.ll.IsReady(&GUI.lcd));              /* Wait till ready */
     
     y += c->y_pos;                                  /* Set Y position */
     
     if (!__GUI_RECT_MATCH(
-        disp->X1, disp->Y1, disp->X2, disp->Y2,
+        disp->x1, disp->y1, disp->x2, disp->y2,
         x, y, x + c->x_size, y + c->y_size
     )) {
         return;
     }
     
-    if (GUI.LL.CopyChar != NULL) {                  /* If copying character function exists in low-level part */
+    if (GUI.ll.CopyChar != NULL) {                  /* If copying character function exists in low-level part */
         GUI_FONT_CharEntry_t* entry = NULL;
         
         entry = get_char_entry_from_font(font, c);  /* Get char entry from font and character for fast alpha drawing operations */
@@ -458,31 +458,31 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const GUI_DRAW_FONT
             tmpX = x;                               /* Start X */
             
             ptr += sizeof(*entry);                  /* Go to start of data array */
-            dst = (uint8_t *)(GUI.LCD.DrawingLayer->StartAddress + ((y - GUI.LCD.DrawingLayer->OffsetY) * GUI.LCD.DrawingLayer->Width + (x - GUI.LCD.DrawingLayer->OffsetX)) * GUI.LCD.PixelSize);
+            dst = (uint8_t *)(GUI.lcd.drawing_layer->start_address + ((y - GUI.lcd.drawing_layer->y_offset) * GUI.lcd.drawing_layer->width + (x - GUI.lcd.drawing_layer->x_offset)) * GUI.lcd.pixel_size);
             
             width = c->x_size;                      /* Get X size */
             height = c->y_size;                     /* Get Y size */
             
-            if (y < disp->Y1) {                     /* Start Y position if outside visible area */
-                ptr += (disp->Y1 - y) * c->x_size;  /* Set offset for number of lines */
-                dst += (disp->Y1 - y) * GUI.LCD.DrawingLayer->Width * GUI.LCD.PixelSize;  /* Set offset for number of LCD lines */
-                height -= disp->Y1 - y;             /* Decrease effective height */
+            if (y < disp->y1) {                     /* Start Y position if outside visible area */
+                ptr += (disp->y1 - y) * c->x_size;  /* Set offset for number of lines */
+                dst += (disp->y1 - y) * GUI.lcd.drawing_layer->width * GUI.lcd.pixel_size;  /* Set offset for number of LCD lines */
+                height -= disp->y1 - y;             /* Decrease effective height */
             }
-            if ((y + c->y_size) > disp->Y2) {
-                height -= y + c->y_size - disp->Y2; /* Decrease effective height */
+            if ((y + c->y_size) > disp->y2) {
+                height -= y + c->y_size - disp->y2; /* Decrease effective height */
             }
-            if (x < disp->X1) {                     /* Set offset start address if required */
-                ptr += (disp->X1 - x);              /* Set offset of start address in X direction */
-                dst += (disp->X1 - x) * GUI.LCD.PixelSize;  /* Set offset of start address in X direction */
-                width -= disp->X1 - x;              /* Increase source offline */
-                tmpX += disp->X1 - x;               /* Increase effective start X position */
+            if (x < disp->x1) {                     /* Set offset start address if required */
+                ptr += (disp->x1 - x);              /* Set offset of start address in X direction */
+                dst += (disp->x1 - x) * GUI.lcd.pixel_size; /* Set offset of start address in X direction */
+                width -= disp->x1 - x;              /* Increase source offline */
+                tmpX += disp->x1 - x;               /* Increase effective start X position */
             }
-            if ((x + c->x_size) > disp->X2) {
-                width -= x + c->x_size - disp->X2;  /* Decrease effective width */
+            if ((x + c->x_size) > disp->x2) {
+                width -= x + c->x_size - disp->x2;  /* Decrease effective width */
             }
             
             offlineSrc = c->x_size - width;         /* Set offline source */
-            offlineDst = GUI.LCD.DrawingLayer->Width - width;   /* Set offline destination */
+            offlineDst = GUI.lcd.drawing_layer->width - width;   /* Set offline destination */
             
             /**
              * Check if character must be drawn with 2 colors, on the middle of color switch
@@ -491,17 +491,17 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const GUI_DRAW_FONT
                 gui_dim_t firstWidth = (draw->X + draw->Color1Width) - tmpX;
                 
                 /* First part draw */
-                GUI.LL.CopyChar(&GUI.LCD, GUI.LCD.DrawingLayer, ptr, dst, 
+                GUI.ll.CopyChar(&GUI.lcd, GUI.lcd.drawing_layer, ptr, dst, 
                     firstWidth, height,
                     offlineSrc + width - firstWidth, offlineDst + width - firstWidth, draw->Color1);
                 
                 /* Second part draw */
-                GUI.LL.CopyChar(&GUI.LCD, GUI.LCD.DrawingLayer, ptr + firstWidth, dst + firstWidth * GUI.LCD.PixelSize, 
+                GUI.ll.CopyChar(&GUI.lcd, GUI.lcd.drawing_layer, ptr + firstWidth, dst + firstWidth * GUI.lcd.pixel_size, 
                     width - firstWidth, height,
                     offlineSrc + firstWidth, offlineDst + firstWidth, draw->Color2);
             } else {
                 /* Draw entire character with single color */
-                GUI.LL.CopyChar(&GUI.LCD, GUI.LCD.DrawingLayer, ptr, dst, 
+                GUI.ll.CopyChar(&GUI.lcd, GUI.lcd.drawing_layer, ptr, dst, 
                     width, height,
                     offlineSrc, offlineDst, (draw->X + draw->Color1Width) > x ? draw->Color1 : draw->Color2);
             }
@@ -519,12 +519,12 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const GUI_DRAW_FONT
         }
         
         for (i = 0; i < columns * c->y_size; i++) { /* Go through all data bytes */
-            if (y >= disp->Y1 && y <= disp->Y2 && y < (draw->Y + draw->Height)) {   /* Do not draw when we are outside clipping are */            
+            if (y >= disp->y1 && y <= disp->y2 && y < (draw->Y + draw->Height)) {   /* Do not draw when we are outside clipping are */            
                 b = c->data[i];                     /* Get character byte */
                 for (k = 0; k < 4; k++) {           /* Scan each bit in byte */
                     gui_color_t baseColor;
                     x1 = x + (i % columns) * 4 + k; /* Get new X value for pixel draw */
-                    if (x1 < disp->X1 || x1 > disp->X2) {
+                    if (x1 < disp->x1 || x1 > disp->x2) {
                         continue;
                     }
                     if (x1 < (draw->X + draw->Color1Width)) {
@@ -559,12 +559,12 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const GUI_DRAW_FONT
             columns++;
         }
         for (i = 0; i < columns * c->y_size; i++) { /* Go through all data bytes */
-            if (y >= disp->Y1 && y <= disp->Y2 && y < (draw->Y + draw->Height)) {   /* Do not draw when we are outside clipping are */
+            if (y >= disp->y1 && y <= disp->y2 && y < (draw->Y + draw->Height)) {   /* Do not draw when we are outside clipping are */
                 b = c->data[i];                     /* Get character byte */
                 for (k = 0; k < 8; k++) {           /* Scan each bit in byte */
                     if (b & (1 << (7 - k))) {       /* If bit is set, draw pixel */
                         x1 = x + (i % columns) * 8 + k; /* Get new X value for pixel draw */
-                        if (x1 < disp->X1 || x1 > disp->X2) {
+                        if (x1 < disp->x1 || x1 > disp->x2) {
                             continue;
                         }
                         if (x1 <= (draw->X + draw->Color1Width)) {
@@ -612,7 +612,7 @@ static void
 gui_draw_fill(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_color_t color) {
     if (                                            /* Check if redraw is inside area */
         !__GUI_RECT_MATCH(  x, y, x + width, y + height,
-                            disp->X1, disp->Y1, disp->X2, disp->Y2)) {
+                            disp->x1, disp->y1, disp->x2, disp->y2)) {
         return;
     }
         
@@ -621,24 +621,24 @@ gui_draw_fill(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t wid
     }
     
     /* We are in region */
-    if (x < disp->X1) {
-        width -= (disp->X1 - x);
-        x = disp->X1;
+    if (x < disp->x1) {
+        width -= (disp->x1 - x);
+        x = disp->x1;
     }
-    if (y < disp->Y1) {
-        height -= (disp->Y1 - y);
-        y = disp->Y1;
+    if (y < disp->y1) {
+        height -= (disp->y1 - y);
+        y = disp->y1;
     }
     
     /* Check out of regions */
-    if ((x + width) > disp->X2) {
-        width = disp->X2 - x;
+    if ((x + width) > disp->x2) {
+        width = disp->x2 - x;
     }
-    if ((y + height) > disp->Y2) {
-        height = disp->Y2 - y;
+    if ((y + height) > disp->y2) {
+        height = disp->y2 - y;
     }
     if (width > 0 && height > 0) {
-        GUI.LL.FillRect(&GUI.LCD, GUI.LCD.DrawingLayer, x - GUI.LCD.DrawingLayer->OffsetX, y - GUI.LCD.DrawingLayer->OffsetY, width, height, color);
+        GUI.ll.FillRect(&GUI.lcd, GUI.lcd.drawing_layer, x - GUI.lcd.drawing_layer->x_offset, y - GUI.lcd.drawing_layer->y_offset, width, height, color);
     }
 }
 
@@ -658,7 +658,7 @@ gui_draw_font_init(GUI_DRAW_FONT_t* f) {
  */
 void
 gui_draw_fillscreen(const gui_display_t* disp, gui_color_t color) {
-    GUI.LL.Fill(&GUI.LCD, GUI.LCD.DrawingLayer, 0, GUI.LCD.DrawingLayer->Width, GUI.LCD.DrawingLayer->Height, 0, color);
+    GUI.ll.Fill(&GUI.lcd, GUI.lcd.drawing_layer, 0, GUI.lcd.drawing_layer->width, GUI.lcd.drawing_layer->height, 0, color);
 }
 
 /**
@@ -671,10 +671,10 @@ gui_draw_fillscreen(const gui_display_t* disp, gui_color_t color) {
  */
 void
 gui_draw_setpixel(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_color_t color) {
-    if (y < disp->Y1 || y >= disp->Y2 || x < disp->X1 || x >= disp->X2) {
+    if (y < disp->y1 || y >= disp->y2 || x < disp->x1 || x >= disp->x2) {
         return;
     }
-    GUI.LL.SetPixel(&GUI.LCD, GUI.LCD.DrawingLayer, x - GUI.LCD.DrawingLayer->OffsetX, y - GUI.LCD.DrawingLayer->OffsetY, color);
+    GUI.ll.SetPixel(&GUI.lcd, GUI.lcd.drawing_layer, x - GUI.lcd.drawing_layer->x_offset, y - GUI.lcd.drawing_layer->y_offset, color);
 }
 
 /**
@@ -687,7 +687,7 @@ gui_draw_setpixel(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_color
  */
 gui_color_t
 gui_draw_getpixel(const gui_display_t* disp, gui_dim_t x, gui_dim_t y) {
-    return GUI.LL.GetPixel(&GUI.LCD, GUI.LCD.DrawingLayer, x - GUI.LCD.DrawingLayer->OffsetX, y - GUI.LCD.DrawingLayer->OffsetY);
+    return GUI.ll.GetPixel(&GUI.lcd, GUI.lcd.drawing_layer, x - GUI.lcd.drawing_layer->x_offset, y - GUI.lcd.drawing_layer->y_offset);
 }
 
 /**
@@ -701,17 +701,17 @@ gui_draw_getpixel(const gui_display_t* disp, gui_dim_t x, gui_dim_t y) {
  */
 void
 gui_draw_vline(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t length, gui_color_t color) {
-    if (x >= disp->X2 || x < disp->X1 || y > disp->Y2 || (y + length) < disp->Y1) {
+    if (x >= disp->x2 || x < disp->x1 || y > disp->y2 || (y + length) < disp->y1) {
         return;
     }
-    if (y < disp->Y1) {
-        length -= disp->Y1 - y;
-        y = disp->Y1;
+    if (y < disp->y1) {
+        length -= disp->y1 - y;
+        y = disp->y1;
     }
-    if ((y + length) > disp->Y2) {
-        length = disp->Y2 - y;
+    if ((y + length) > disp->y2) {
+        length = disp->y2 - y;
     }
-    GUI.LL.DrawVLine(&GUI.LCD, GUI.LCD.DrawingLayer, x - GUI.LCD.DrawingLayer->OffsetX, y - GUI.LCD.DrawingLayer->OffsetY, length, color);
+    GUI.ll.DrawVLine(&GUI.lcd, GUI.lcd.drawing_layer, x - GUI.lcd.drawing_layer->x_offset, y - GUI.lcd.drawing_layer->y_offset, length, color);
 }
 
 /**
@@ -725,17 +725,17 @@ gui_draw_vline(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t le
  */
 void
 gui_draw_hline(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t length, gui_color_t color) {
-    if (y >= disp->Y2 || y < disp->Y1 || x > disp->X2 || (x + length) < disp->X1) {
+    if (y >= disp->y2 || y < disp->y1 || x > disp->x2 || (x + length) < disp->x1) {
         return;
     }
-    if (x < disp->X1) {
-        length -= disp->X1 - x;
-        x = disp->X1;
+    if (x < disp->x1) {
+        length -= disp->x1 - x;
+        x = disp->x1;
     }
-    if ((x + length) > disp->X2) {
-        length = disp->X2 - x;
+    if ((x + length) > disp->x2) {
+        length = disp->x2 - x;
     }
-    GUI.LL.DrawHLine(&GUI.LCD, GUI.LCD.DrawingLayer, x - GUI.LCD.DrawingLayer->OffsetX, y - GUI.LCD.DrawingLayer->OffsetY, length, color);
+    GUI.ll.DrawHLine(&GUI.lcd, GUI.lcd.drawing_layer, x - GUI.lcd.drawing_layer->x_offset, y - GUI.lcd.drawing_layer->y_offset, length, color);
 }
 
 /******************************************************************************/
@@ -1112,7 +1112,7 @@ gui_draw_circlecorner(const gui_display_t* disp, gui_dim_t x0, gui_dim_t y0, gui
     
     if (!__GUI_RECT_MATCH(
         x0 - r, y0 - r, x0 + r, y0 + r,
-        disp->X1, disp->Y1, disp->X2, disp->Y2
+        disp->x1, disp->y1, disp->x2, disp->y2
     )) {
         return;
     }
@@ -1172,7 +1172,7 @@ gui_draw_filledcirclecorner(const gui_display_t* disp, gui_dim_t x0, gui_dim_t y
     gui_dim_t y = r;
     
     if (!__GUI_RECT_MATCH(
-        disp->X1, disp->Y1, disp->X2, disp->Y2,
+        disp->x1, disp->y1, disp->x2, disp->y2,
         x0 - r, y0 - r, x0 + r, y0 + r
     )) {
         return;
@@ -1212,68 +1212,68 @@ gui_draw_filledcirclecorner(const gui_display_t* disp, gui_dim_t x0, gui_dim_t y
  * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x: Top left X position
  * \param[in]       y: Top left Y position
- * \param[in]       img: Pointer to \ref GUI_IMAGE_DESC_t structure with image description 
+ * \param[in]       img: Pointer to \ref gui_image_desc_t structure with image description 
  */
 void
-gui_draw_image(gui_display_t* disp, gui_dim_t x, gui_dim_t y, const GUI_IMAGE_DESC_t* img) {
-    uint8_t bytes = img->BPP >> 3;                  /* Get number of bytes per pixel on image */
+gui_draw_image(gui_display_t* disp, gui_dim_t x, gui_dim_t y, const gui_image_desc_t* img) {
+    uint8_t bytes = img->bpp >> 3;                  /* Get number of bytes per pixel on image */
     
-    GUI_Layer_t* layer;
+    gui_layer_t* layer;
     const uint8_t* src;
     const uint8_t* dst;
     gui_dim_t width, height;
     gui_dim_t offlineSrc, offlineDst;
     
     if (!img || !__GUI_RECT_MATCH(
-        disp->X1, disp->Y1, disp->X2, disp->Y2,
-        x, y, x + img->xSize, y + img->ySize
+        disp->x1, disp->y1, disp->x2, disp->y2,
+        x, y, x + img->x_size, y + img->y_size
     )) {
         return;
     }
     
-    layer = GUI.LCD.DrawingLayer;                   /* Set layer pointer */
+    layer = GUI.lcd.drawing_layer;                  /* Set layer pointer */
     
-    width = img->xSize;                             /* Set default width */
-    height = img->ySize;                            /* Set default height */
+    width = img->x_size;                            /* Set default width */
+    height = img->y_size;                           /* Set default height */
     
-    src = (uint8_t *)(img->Image);                  /* Set source address */
-    dst = (uint8_t *)(layer->StartAddress + GUI.LCD.PixelSize * ((y - layer->OffsetY) * layer->Width + (x - layer->OffsetX)));
+    src = (uint8_t *)(img->image);                  /* Set source address */
+    dst = (uint8_t *)(layer->start_address + GUI.lcd.pixel_size * ((y - layer->y_offset) * layer->width + (x - layer->x_offset)));
     
     //TODO: Check proper coordinates for memory!
-    if (y < disp->Y1) {
-        src += (disp->Y1 - y) * img->xSize * bytes; /* Set offset for number of image lines */
-        dst += (disp->Y1 - y) * GUI.LCD.Width * GUI.LCD.PixelSize;  /* Set offset for number of LCD lines */
-        height -= disp->Y1 - y;                     /* Decrease effective height */
+    if (y < disp->y1) {
+        src += (disp->y1 - y) * img->x_size * bytes;/* Set offset for number of image lines */
+        dst += (disp->y1 - y) * GUI.lcd.width * GUI.lcd.pixel_size;  /* Set offset for number of LCD lines */
+        height -= disp->y1 - y;                     /* Decrease effective height */
     }
-    if ((y + img->ySize) > disp->Y2) {
-        height -= y + img->ySize - disp->Y2;        /* Decrease effective height */
+    if ((y + img->y_size) > disp->y2) {
+        height -= y + img->y_size - disp->y2;       /* Decrease effective height */
     }
-    if (x < disp->X1) {                             /* Set offset start address if required */
-        src += (disp->X1 - x) * bytes;              /* Set offset of start address in X direction */
-        dst += (disp->X1 - x) * GUI.LCD.PixelSize;  /* Set offset of start address in X direction */
-        width -= disp->X1 - x;                      /* Decrease effective width */
+    if (x < disp->x1) {                             /* Set offset start address if required */
+        src += (disp->x1 - x) * bytes;              /* Set offset of start address in X direction */
+        dst += (disp->x1 - x) * GUI.lcd.pixel_size; /* Set offset of start address in X direction */
+        width -= disp->x1 - x;                      /* Decrease effective width */
     }
-    if ((x + img->xSize) > disp->X2) {
-        width -= x + img->xSize - disp->X2;         /* Decrease effective width */
+    if ((x + img->x_size) > disp->x2) {
+        width -= x + img->x_size - disp->x2;        /* Decrease effective width */
     }
     
-    offlineSrc = img->xSize - width;                /* Set offline source */
-    offlineDst = layer->Width - width;              /* Set offline destination */
+    offlineSrc = img->x_size - width;               /* Set offline source */
+    offlineDst = layer->width - width;              /* Set offline destination */
     
     /*******************/
     /*    Draw image   */
     /*******************/
     if (bytes == 4) {                               /* Draw 32BPP image */
-        if (GUI.LL.DrawImage32) {                   /* Draw image 32BPP if possible */
-            GUI.LL.DrawImage32(&GUI.LCD, GUI.LCD.DrawingLayer, img, (uint8_t *)src, (uint8_t *)dst, width, height, offlineSrc, offlineDst);
+        if (GUI.ll.DrawImage32) {                   /* Draw image 32BPP if possible */
+            GUI.ll.DrawImage32(&GUI.lcd, GUI.lcd.drawing_layer, img, (uint8_t *)src, (uint8_t *)dst, width, height, offlineSrc, offlineDst);
         }
     } else if (bytes == 3) {                        /* Draw 24BPP image */
-        if (GUI.LL.DrawImage24) {                   /* Draw image 24BPP if possible */
-            GUI.LL.DrawImage24(&GUI.LCD, GUI.LCD.DrawingLayer, img, (uint8_t *)src, (uint8_t *)dst, width, height, offlineSrc, offlineDst);
+        if (GUI.ll.DrawImage24) {                   /* Draw image 24BPP if possible */
+            GUI.ll.DrawImage24(&GUI.lcd, GUI.lcd.drawing_layer, img, (uint8_t *)src, (uint8_t *)dst, width, height, offlineSrc, offlineDst);
         }
     } else if (bytes == 2) {                        /* Draw 16BPP image */
-        if (GUI.LL.DrawImage16) {                   /* Draw image 16BPP if possible */
-            GUI.LL.DrawImage16(&GUI.LCD, GUI.LCD.DrawingLayer, img, (uint8_t *)src, (uint8_t *)dst, width, height, offlineSrc, offlineDst);
+        if (GUI.ll.DrawImage16) {                   /* Draw image 16BPP if possible */
+            GUI.ll.DrawImage16(&GUI.lcd, GUI.lcd.drawing_layer, img, (uint8_t *)src, (uint8_t *)dst, width, height, offlineSrc, offlineDst);
         }
     }
 }
@@ -1376,7 +1376,7 @@ gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_
             }
             rect.ReadDraw--;                        /* Decrease number of drawn elements */
             
-            if (x > disp->X2) {                     /* Check if X over line */
+            if (x > disp->x2) {                     /* Check if X over line */
                 continue;
             }
             
@@ -1389,7 +1389,7 @@ gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_
             x += c->x_size + c->x_margin;           /* Increase X position */
         }
         y += draw->LineHeight;                      /* Go to next line */
-        if (!(draw->Flags & GUI_FLAG_FONT_MULTILINE) || y > disp->Y2) { /* Not multiline or over visible Y area */
+        if (!(draw->Flags & GUI_FLAG_FONT_MULTILINE) || y > disp->y2) { /* Not multiline or over visible Y area */
             break;
         }
     }

@@ -41,12 +41,12 @@ static uint8_t gui_image_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_para
  */
 static const
 gui_widget_t widget = {
-    .Name = _GT("IMAGE"),                           /*!< Widget name */
-    .Size = sizeof(GUI_IMAGE_t),                    /*!< Size of widget for memory allocation */
-    .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = gui_image_callback,                 /*!< Callback function */
-    .Colors = 0,                                    /*!< List of default colors */
-    .ColorsCount = 0,                               /*!< Define number of colors */
+    .name = _GT("IMAGE"),                           /*!< Widget name */
+    .size = sizeof(GUI_IMAGE_t),                    /*!< Size of widget for memory allocation */
+    .flags = 0,                                     /*!< List of widget flags */
+    .callback = gui_image_callback,                 /*!< Callback function */
+    .colors = 0,                                    /*!< List of default colors */
+    .color_count = 0,                               /*!< Define number of colors */
 };
 #define o       ((GUI_IMAGE_t *)(h))
 
@@ -99,18 +99,18 @@ gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_h
 /**
  * \brief           Set image source to draw
  * \param[in]       h: Widget handle
- * \param[in]       img: Pointer to \ref GUI_IMAGE_DESC_t image object. Use NULL to clear image
+ * \param[in]       img: Pointer to \ref gui_image_desc_t image object. Use NULL to clear image
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_image_setsource(gui_handle_p h, const GUI_IMAGE_DESC_t* img) {
+gui_image_setsource(gui_handle_p h, const gui_image_desc_t* img) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h && __GH(h)->widget == &widget && img != NULL); /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
     __GI(h)->Image = img;                           /* Set image */
-    guii_widget_setinvalidatewithparent(h, img && img->BPP == 32); /* Set how invalidation functon hebaves */
+    guii_widget_setinvalidatewithparent(h, img && img->bpp == 32);  /* Set how invalidation functon hebaves */
     guii_widget_invalidatewithparent(h);           /* Invalidate widget */
 
     __GUI_LEAVE();                                  /* Leave GUI */

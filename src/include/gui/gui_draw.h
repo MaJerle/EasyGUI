@@ -218,7 +218,7 @@ void gui_draw_circlecorner(const gui_display_t* disp, gui_dim_t x0, gui_dim_t y0
 void gui_draw_filledcirclecorner(const gui_display_t* disp, gui_dim_t x0, gui_dim_t y0, gui_dim_t r, uint8_t c, uint32_t color);
 void gui_draw_triangle(const gui_display_t* disp, gui_dim_t x1, gui_dim_t y1,  gui_dim_t x2, gui_dim_t y2, gui_dim_t x3, gui_dim_t y3, gui_color_t color);
 void gui_draw_filledtriangle(const gui_display_t* disp, gui_dim_t x1, gui_dim_t y1, gui_dim_t x2, gui_dim_t y2, gui_dim_t x3, gui_dim_t y3, gui_color_t color);
-void gui_draw_image(gui_display_t* disp, gui_dim_t x, gui_dim_t y, const GUI_IMAGE_DESC_t* img);
+void gui_draw_image(gui_display_t* disp, gui_dim_t x, gui_dim_t y, const gui_image_desc_t* img);
 void gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_char* str, GUI_DRAW_FONT_t* draw);
 void gui_draw_rectangle3d(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, GUI_DRAW_3D_State_t state);
 void gui_draw_poly(const gui_display_t* disp, const GUI_DRAW_Poly_t* points, size_t len, gui_color_t color);

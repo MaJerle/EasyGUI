@@ -57,15 +57,15 @@ check_disp_clipping(gui_handle_p h) {
      * Step 1: Set active clipping area only for current widget
      */
     memcpy(&GUI.DisplayTemp, &GUI.Display, sizeof(GUI.DisplayTemp));
-    if (GUI.DisplayTemp.X1 == (gui_dim_t)0x7FFF)   { GUI.DisplayTemp.X1 = x; }
-    if (GUI.DisplayTemp.Y1 == (gui_dim_t)0x7FFF)   { GUI.DisplayTemp.Y1 = y; }
-    if (GUI.DisplayTemp.X2 == (gui_dim_t)0x8000)   { GUI.DisplayTemp.X2 = (gui_dim_t)GUI.LCD.Width; }
-    if (GUI.DisplayTemp.Y2 == (gui_dim_t)0x8000)   { GUI.DisplayTemp.Y2 = (gui_dim_t)GUI.LCD.Height; }
+    if (GUI.DisplayTemp.x1 == (gui_dim_t)0x7FFF)   { GUI.DisplayTemp.x1 = x; }
+    if (GUI.DisplayTemp.y1 == (gui_dim_t)0x7FFF)   { GUI.DisplayTemp.y1 = y; }
+    if (GUI.DisplayTemp.x2 == (gui_dim_t)0x8000)   { GUI.DisplayTemp.x2 = GUI.lcd.width; }
+    if (GUI.DisplayTemp.y2 == (gui_dim_t)0x8000)   { GUI.DisplayTemp.y2 = GUI.lcd.height; }
     
-    if (GUI.DisplayTemp.X1 < x)             { GUI.DisplayTemp.X1 = x; }
-    if (GUI.DisplayTemp.X2 > x + wi)        { GUI.DisplayTemp.X2 = x + wi; }
-    if (GUI.DisplayTemp.Y1 < y)             { GUI.DisplayTemp.Y1 = y; }
-    if (GUI.DisplayTemp.Y2 > y + hi)        { GUI.DisplayTemp.Y2 = y + hi; }
+    if (GUI.DisplayTemp.x1 < x)             { GUI.DisplayTemp.x1 = x; }
+    if (GUI.DisplayTemp.x2 > x + wi)        { GUI.DisplayTemp.x2 = x + wi; }
+    if (GUI.DisplayTemp.y1 < y)             { GUI.DisplayTemp.y1 = y; }
+    if (GUI.DisplayTemp.y2 > y + hi)        { GUI.DisplayTemp.y2 = y + hi; }
     
     /*
      * Step 2: Set active clipping area, combining all parent together
@@ -79,10 +79,10 @@ check_disp_clipping(gui_handle_p h) {
         wi = guii_widget_getparentinnerwidth(h);   /* Get parent inner width */
         hi = guii_widget_getparentinnerheight(h);  /* Get parent inner height */
         
-        if (GUI.DisplayTemp.X1 < x)         { GUI.DisplayTemp.X1 = x; }
-        if (GUI.DisplayTemp.X2 > x + wi)    { GUI.DisplayTemp.X2 = x + wi; }
-        if (GUI.DisplayTemp.Y1 < y)         { GUI.DisplayTemp.Y1 = y; }
-        if (GUI.DisplayTemp.Y2 > y + hi)    { GUI.DisplayTemp.Y2 = y + hi; }
+        if (GUI.DisplayTemp.x1 < x)         { GUI.DisplayTemp.x1 = x; }
+        if (GUI.DisplayTemp.x2 > x + wi)    { GUI.DisplayTemp.x2 = x + wi; }
+        if (GUI.DisplayTemp.y1 < y)         { GUI.DisplayTemp.y1 = y; }
+        if (GUI.DisplayTemp.y2 > y + hi)    { GUI.DisplayTemp.y2 = y + hi; }
     }
 }
 
@@ -100,19 +100,19 @@ redraw_widgets(gui_handle_p parent) {
     /* Go through all elements of parent */
     for (h = gui_linkedlist_widgetgetnext((gui_handle_root_t *)parent, NULL); h != NULL; 
             h = gui_linkedlist_widgetgetnext(NULL, h)) {
-        if (!guii_widget_isvisible(h)) {           /* Check if visible */
+        if (!guii_widget_isvisible(h)) {            /* Check if visible */
             guii_widget_clrflag(h, GUI_FLAG_REDRAW);   /* Clear flag to be sure */
             continue;                               /* Ignore hidden elements */
         }
         if (gui_widget_isinsideclippingregion(h)) { /* If widget is inside clipping region */
             /* Draw main widget if required */
-            if (guii_widget_getflag(h, GUI_FLAG_REDRAW)) { /* Check if redraw required */
+            if (guii_widget_getflag(h, GUI_FLAG_REDRAW)) {  /* Check if redraw required */
 #if GUI_CFG_USE_TRANSPARENCY
-                GUI_Layer_t* layerPrev = GUI.LCD.DrawingLayer;  /* Save drawing layer */
+                gui_layer_t* layerPrev = GUI.lcd.drawing_layer; /* Save drawing layer */
                 uint8_t transparent = 0;
 #endif /* GUI_CFG_USE_TRANSPARENCY */
                 
-                guii_widget_clrflag(h, GUI_FLAG_REDRAW);   /* Clear flag for drawing on widget */
+                guii_widget_clrflag(h, GUI_FLAG_REDRAW);    /* Clear flag for drawing on widget */
                 
                 /*
                  * Prepare clipping region for this widget drawing
@@ -123,24 +123,24 @@ redraw_widgets(gui_handle_p parent) {
                 /*
                  * Check transparency and check if blending function exists to merge layers later together
                  */
-                if (guii_widget_istransparent(h) && GUI.LL.CopyBlend) {
-                    gui_dim_t width = GUI.DisplayTemp.X2 - GUI.DisplayTemp.X1;
-                    gui_dim_t height = GUI.DisplayTemp.Y2 - GUI.DisplayTemp.Y1;
+                if (guii_widget_istransparent(h) && GUI.ll.CopyBlend) {
+                    gui_dim_t width = GUI.DisplayTemp.x2 - GUI.DisplayTemp.x1;
+                    gui_dim_t height = GUI.DisplayTemp.y2 - GUI.DisplayTemp.y1;
                     
                     /**
                      * Try to allocate memory for new virtual layer for temporary usage
                      */
-                    GUI.LCD.DrawingLayer = GUI_MEMALLOC(sizeof(*GUI.LCD.DrawingLayer) + (size_t)width * (size_t)height * (size_t)GUI.LCD.PixelSize);
+                    GUI.lcd.drawing_layer = GUI_MEMALLOC(sizeof(*GUI.lcd.drawing_layer) + (size_t)width * (size_t)height * (size_t)GUI.lcd.pixel_size);
                     
-                    if (GUI.LCD.DrawingLayer != NULL) { /* Check if allocation was successful */
-                        GUI.LCD.DrawingLayer->Width = width;
-                        GUI.LCD.DrawingLayer->Height = height;
-                        GUI.LCD.DrawingLayer->OffsetX = GUI.DisplayTemp.X1;
-                        GUI.LCD.DrawingLayer->OffsetY = GUI.DisplayTemp.Y1;
-                        GUI.LCD.DrawingLayer->StartAddress = (uint32_t)((char *)GUI.LCD.DrawingLayer) + sizeof(*GUI.LCD.DrawingLayer);
+                    if (GUI.lcd.drawing_layer != NULL) {/* Check if allocation was successful */
+                        GUI.lcd.drawing_layer->width = width;
+                        GUI.lcd.drawing_layer->height = height;
+                        GUI.lcd.drawing_layer->x_offset = GUI.DisplayTemp.x1;
+                        GUI.lcd.drawing_layer->y_offset = GUI.DisplayTemp.y1;
+                        GUI.lcd.drawing_layer->start_address = (uint32_t)((char *)GUI.lcd.drawing_layer) + sizeof(*GUI.lcd.drawing_layer);
                         transparent = 1;            /* We are going to transparent drawing mode */
                     } else {
-                        GUI.LCD.DrawingLayer = layerPrev;   /* Reset layer back */
+                        GUI.lcd.drawing_layer = layerPrev;  /* Reset layer back */
                     }
                 }
 #endif /* GUI_CFG_USE_TRANSPARENCY */
@@ -172,17 +172,17 @@ redraw_widgets(gui_handle_p parent) {
                  */
                 if (transparent) {                  /* If we were in transparent mode */
                     /* Copy layers with blending */
-                    GUI.LL.CopyBlend(&GUI.LCD, GUI.LCD.DrawingLayer,
-                        (void *)GUI.LCD.DrawingLayer->StartAddress, 
-                        (void *)(layerPrev->StartAddress + 
-                            GUI.LCD.PixelSize * (layerPrev->Width * (GUI.LCD.DrawingLayer->OffsetY - layerPrev->OffsetY) + (GUI.LCD.DrawingLayer->OffsetX - layerPrev->OffsetX))),
+                    GUI.ll.CopyBlend(&GUI.lcd, GUI.lcd.drawing_layer,
+                        (void *)GUI.lcd.drawing_layer->start_address, 
+                        (void *)(layerPrev->start_address + 
+                            GUI.lcd.pixel_size * (layerPrev->width * (GUI.lcd.drawing_layer->y_offset - layerPrev->y_offset) + (GUI.lcd.drawing_layer->x_offset - layerPrev->x_offset))),
                         guii_widget_gettransparency(h), 0xFF,
-                        GUI.LCD.DrawingLayer->Width, GUI.LCD.DrawingLayer->Height,
-                        0, layerPrev->Width - GUI.LCD.DrawingLayer->Width
+                        GUI.lcd.drawing_layer->width, GUI.lcd.drawing_layer->height,
+                        0, layerPrev->width - GUI.lcd.drawing_layer->width
                     );
                     
-                    GUI_MEMFREE(GUI.LCD.DrawingLayer);  /* Free memory for virtual layer */
-                    GUI.LCD.DrawingLayer = layerPrev;   /* Reset layer pointer */
+                    GUI_MEMFREE(GUI.lcd.drawing_layer); /* Free memory for virtual layer */
+                    GUI.lcd.drawing_layer = layerPrev;  /* Reset layer pointer */
                 }
 #endif /* GUI_CFG_USE_TRANSPARENCY */
                 
@@ -245,7 +245,7 @@ redraw_widgets(gui_handle_p parent) {
  */
 static
 PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, uint8_t v, GUI_WC_t* result)) {
-    static volatile uint32_t Time;
+    static volatile uint32_t time;
     static uint8_t i = 0;
     static gui_dim_t x[2], y[2];
     
@@ -259,18 +259,18 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
         /*
          * Wait for valid input with pressed state
          */
-        PT_WAIT_UNTIL(&ts->pt, v && ts->TS.Status && !old->TS.Status && ts->TS.Count == 1);
+        PT_WAIT_UNTIL(&ts->pt, v && ts->ts.status && !old->ts.status && ts->ts.count == 1);
         
-        Time = ts->TS.Time;                         /* Get start time of this touch */
-        x[i] = ts->RelX[0];                         /* Save X value */
-        y[i] = ts->RelY[0];                         /* Save Y value */
+        time = ts->ts.time;                         /* Get start time of this touch */
+        x[i] = ts->x_rel[0];                        /* Save X value */
+        y[i] = ts->y_rel[0];                        /* Save Y value */
         
         /*
          * Either wait for released status or timeout
          */
         do {
             PT_YIELD(&ts->pt);                      /* Stop thread for now and wait next call */
-            PT_WAIT_UNTIL(&ts->pt, v || (gui_sys_now() - Time) > 2000); /* Wait touch with released state or timeout */
+            PT_WAIT_UNTIL(&ts->pt, v || (gui_sys_now() - time) > 2000); /* Wait touch with released state or timeout */
             
             if (v) {                                /* New valid touch entry received, either released or pressed again */
                 /*
@@ -278,10 +278,10 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
                  * then we can use click events also after touch move (for example, button is that widget) where in
                  * some cases, click event should not be processed after touch move (slider, dropdown, etc)
                  */
-                if (ts->TS.Status && GUI.ActiveWidget && !guii_widget_getflag(GUI.ActiveWidget, GUI_FLAG_TOUCH_MOVE)) {
-                    Time = ts->TS.Time;             /* Get start time of this touch */
-                    x[i] = ts->RelX[0];             /* Update X value */
-                    y[i] = ts->RelY[0];             /* Update Y value */
+                if (ts->ts.status && GUI.ActiveWidget != NULL && !guii_widget_getflag(GUI.ActiveWidget, GUI_FLAG_TOUCH_MOVE)) {
+                    time = ts->ts.time;             /* Get start time of this touch */
+                    x[i] = ts->x_rel[0];            /* Update X value */
+                    y[i] = ts->y_rel[0];            /* Update Y value */
                     continue;                       /* Continue and wait for next (released) event */
                 } else {                            /* Released status received */
                     break;                          /* Stop execution, continue later */
@@ -295,7 +295,7 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
          * Check what was the reason for thread to continue
          */
         if (v) {                                    /* New touch event occurred */
-            if (!ts->TS.Status) {                   /* We received released state */
+            if (!ts->ts.status) {                   /* We received released state */
                 if (i) {                            /* Try to get second click, check difference for double click */
                     if (GUI_ABS(x[0] - x[1]) > 30 || GUI_ABS(y[0] - y[1]) > 30) {
                         i = 0;                      /* Difference was too big, reset and act like normal click */
@@ -312,14 +312,14 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
                 if (!i) {                           /* On first call, this is click event */
                     *result = GUI_WC_Click;         /* Click event occurred */
                     
-                    Time = ts->TS.Time;             /* Save last time */
+                    time = ts->ts.time;             /* Save last time */
                     PT_YIELD(&ts->pt);              /* Stop thread for now and wait next call with new touch event */
                     
                     /*
                      * Wait for valid input with pressed state
                      */
-                    PT_WAIT_UNTIL(&ts->pt, (v && ts->TS.Status) || (gui_sys_now() - Time) > 300);
-                    if ((gui_sys_now() - Time) > 300) { /* Check timeout for new pressed state */
+                    PT_WAIT_UNTIL(&ts->pt, (v && ts->ts.status) || (gui_sys_now() - time) > 300);
+                    if ((gui_sys_now() - time) > 300) { /* Check timeout for new pressed state */
                         PT_EXIT(&ts->pt);           /* Exit protothread */
                     }
                 } else {
@@ -352,20 +352,20 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
 static void
 set_relative_coordinate(guii_touch_data_t* ts, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height) {
     uint8_t i = 0;
-    for (i = 0; i < ts->TS.Count; i++) {
-        ts->RelOldX[i] = ts->RelX[i];               /* Save old on X value */
-        ts->RelOldY[i] = ts->RelY[i];               /* Save old on Y value */
-        ts->RelX[i] = ts->TS.X[i] - x;              /* Get relative coordinate on widget */
-        ts->RelY[i] = ts->TS.Y[i] - y;              /* Get relative coordinate on widget */
+    for (i = 0; i < ts->ts.count; i++) {
+        ts->x_rel_old[i] = ts->x_rel[i];            /* Save old on X value */
+        ts->y_rel_old[i] = ts->y_rel[i];            /* Save old on Y value */
+        ts->x_rel[i] = ts->ts.x[i] - x;             /* Get relative coordinate on widget */
+        ts->y_rel[i] = ts->ts.y[i] - y;             /* Get relative coordinate on widget */
     }
     
     ts->widget_width = width;                       /* Set widget width */
     ts->widget_height = height;                     /* Set widget height */
 
 #if GUI_CFG_TOUCH_MAX_PRESSES > 1
-    if (ts->TS.Count == 2) {                        /* 2 points detected */
+    if (ts->ts.count == 2) {                        /* 2 points detected */
         ts->distance_old = ts->distance;            /* Save old distance */
-        gui_math_distancebetweenxy(ts->RelX[0], ts->RelY[0], ts->RelX[1], ts->RelY[1], &ts->distance);  /* Calculate distance between 2 points */
+        gui_math_distancebetweenxy(ts->x_rel[0], ts->y_rel[0], ts->x_rel[1], ts->y_rel[1], &ts->distance);  /* Calculate distance between 2 points */
     }
 #endif /* GUI_CFG_TOUCH_MAX_PRESSES > 1 */
 }
@@ -439,8 +439,8 @@ process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
             check_disp_clipping(h);                 /* Check display region where widget is placed */
         
             /* Check if widget is in touch area */
-            if (touch->TS.X[0] >= GUI.DisplayTemp.X1 && touch->TS.X[0] <= GUI.DisplayTemp.X2 && 
-                touch->TS.Y[0] >= GUI.DisplayTemp.Y1 && touch->TS.Y[0] <= GUI.DisplayTemp.Y2) {
+            if (touch->ts.x[0] >= GUI.DisplayTemp.x1 && touch->ts.x[0] <= GUI.DisplayTemp.x2 && 
+                touch->ts.y[0] >= GUI.DisplayTemp.y1 && touch->ts.y[0] <= GUI.DisplayTemp.y2) {
                 set_relative_coordinate(touch,      /* Set relative coordinate */
                     guii_widget_getabsolutex(h), guii_widget_getabsolutey(h), 
                     guii_widget_getwidth(h), guii_widget_getheight(h)
@@ -526,8 +526,8 @@ gui_process_touch(void) {
     GUI_WC_t rresult;
     
     if (gui_input_touchavailable()) {               /* Check if any touch available */
-        while (gui_input_touchread(&GUI.Touch.TS)) {/* Process all touch events possible */
-            if (GUI.ActiveWidget && GUI.Touch.TS.Status) {  /* Check active widget for touch and pressed status */
+        while (gui_input_touchread(&GUI.Touch.ts)) {/* Process all touch events possible */
+            if (GUI.ActiveWidget && GUI.Touch.ts.status) {  /* Check active widget for touch and pressed status */
                 set_relative_coordinate(&GUI.Touch, /* Set relative touch (for widget) from current touch */
                     guii_widget_getabsolutex(GUI.ActiveWidget), guii_widget_getabsolutey(GUI.ActiveWidget), 
                     guii_widget_getwidth(GUI.ActiveWidget), guii_widget_getheight(GUI.ActiveWidget)
@@ -539,9 +539,9 @@ gui_process_touch(void) {
              * New status: pressed
              * Action: Touch move on active element
              */
-            if (GUI.Touch.TS.Status && GUI.TouchOld.TS.Status) {
+            if (GUI.Touch.ts.status && GUI.TouchOld.ts.status) {
                 if (GUI.ActiveWidget) {             /* If active widget exists */
-                    if (GUI.Touch.TS.Count == GUI.TouchOld.TS.Count) {
+                    if (GUI.Touch.ts.count == GUI.TouchOld.ts.count) {
                         gui_handle_p aw = GUI.ActiveWidget; /* Temporary set active widget */
                         do {
                             uint8_t r;
@@ -561,14 +561,14 @@ gui_process_touch(void) {
                              * With this approach, you can achieve slider on parent widget
                              */
                             aw = guii_widget_getparent(aw);    /* Get parent widget */
-                            if (aw) {
+                            if (aw != NULL) {
                                 set_relative_coordinate(&GUI.Touch, /* Set relative touch (for widget) from current touch */
                                     guii_widget_getabsolutex(aw), guii_widget_getabsolutey(aw), 
                                     guii_widget_getwidth(aw), guii_widget_getheight(aw)
                                 );
                                 /* Reset relative coordinates here! */
-                                memcpy(GUI.Touch.RelOldX, GUI.Touch.RelX, sizeof(GUI.Touch.RelOldX));
-                                memcpy(GUI.Touch.RelOldY, GUI.Touch.RelY, sizeof(GUI.Touch.RelOldY));
+                                memcpy(GUI.Touch.x_rel_old, GUI.Touch.x_rel, sizeof(GUI.Touch.x_rel_old));
+                                memcpy(GUI.Touch.y_rel_old, GUI.Touch.y_rel, sizeof(GUI.Touch.y_rel_old));
                             }
                         } while (aw);
                         /**
@@ -591,7 +591,7 @@ gui_process_touch(void) {
              * New status: pressed
              * Action: Touch down on element, find element
              */
-            if (GUI.Touch.TS.Status && !GUI.TouchOld.TS.Status) {
+            if (GUI.Touch.ts.status && !GUI.TouchOld.ts.status) {
                 process_touch(&GUI.Touch, NULL);
                 if (GUI.ActiveWidget != GUI.ActiveWidgetPrev) { /* If new active widget is not the same as previous */
                     PT_INIT(&GUI.Touch.pt)          /* Reset thread, otherwise process with double click event */
@@ -611,7 +611,7 @@ gui_process_touch(void) {
              * New status: released
              * Action: Touch up on active element
              */
-            if (!GUI.Touch.TS.Status && GUI.TouchOld.TS.Status) {
+            if (!GUI.Touch.ts.status && GUI.TouchOld.ts.status) {
                 if (GUI.ActiveWidget) {             /* Check if active widget */
                     GUI_WIDGET_PARAMTYPE_TOUCH(&param) = &GUI.Touch;
                     GUI_WIDGET_RESULTTYPE_TOUCH(&result) = touchCONTINUE;
@@ -643,13 +643,13 @@ process_keyboard(void) {
     gui_widget_param_t param = {0};
     gui_widget_result_t result = {0};
     
-    while (gui_input_keyread(&key.KB)) {            /* Read all keyboard entires */
+    while (gui_input_keyread(&key.kb)) {            /* Read all keyboard entires */
         if (GUI.FocusedWidget != NULL) {            /* Check if any widget is in focus already */
             GUI_WIDGET_PARAMTYPE_KEYBOARD(&param) = &key;
             GUI_WIDGET_RESULTTYPE_KEYBOARD(&result) = keyCONTINUE;
             guii_widget_callback(GUI.FocusedWidget, GUI_WC_KeyPress, &param, &result);
             if (GUI_WIDGET_RESULTTYPE_KEYBOARD(&result) != keyHANDLED) {
-                if (key.KB.Keys[0] == GUI_KEY_TAB) {/* Tab key pressed, set next widget as focused */
+                if (key.kb.keys[0] == GUI_KEY_TAB) {/* Tab key pressed, set next widget as focused */
                     gui_handle_p h = gui_linkedlist_widgetgetnext(NULL, GUI.ActiveWidget);  /* Get next widget if possible */
                     if (h != NULL && guii_widget_ishidden(h)) {/* Ignore hidden widget */
                         h = NULL;
@@ -678,46 +678,46 @@ process_keyboard(void) {
  */
 static void
 process_redraw(void) {
-    GUI_Layer_t* active = GUI.LCD.ActiveLayer;
-    GUI_Layer_t* drawing = GUI.LCD.DrawingLayer;
+    gui_layer_t* active = GUI.lcd.active_layer;
+    gui_layer_t* drawing = GUI.lcd.drawing_layer;
     uint8_t result = 1;
-    gui_display_t* dispA = &active->Display;
+    gui_display_t* dispA = &active->display;
     
-    if ((GUI.LCD.Flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM) || !(GUI.Flags & GUI_FLAG_REDRAW)) {  /* Check if anything to draw first */
+    if ((GUI.lcd.flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM) || !(GUI.Flags & GUI_FLAG_REDRAW)) {  /* Check if anything to draw first */
         return;
     }
     
     GUI.Flags &= ~GUI_FLAG_REDRAW;                  /* Clear redraw flag */
     
     /* Copy from currently active layer to drawing layer only changes on layer */
-    GUI.LL.Copy(&GUI.LCD, drawing, 
-        (void *)(active->StartAddress + GUI.LCD.PixelSize * (dispA->Y1 * active->Width + dispA->X1)),    /* Source address */
-        (void *)(drawing->StartAddress + GUI.LCD.PixelSize * (dispA->Y1 * drawing->Width + dispA->X1)),   /* Destination address */
-        dispA->X2 - dispA->X1,                      /* Area width */
-        dispA->Y2 - dispA->Y1,                      /* Area height */
-        active->Width - (dispA->X2 - dispA->X1),    /* Offline source */
-        drawing->Width - (dispA->X2 - dispA->X1)    /* Offline destination */
+    GUI.ll.Copy(&GUI.lcd, drawing, 
+        (void *)(active->start_address + GUI.lcd.pixel_size * (dispA->y1 * active->width + dispA->x1)), /* Source address */
+        (void *)(drawing->start_address + GUI.lcd.pixel_size * (dispA->y1 * drawing->width + dispA->x1)),   /* Destination address */
+        dispA->x2 - dispA->x1,                      /* Area width */
+        dispA->y2 - dispA->y1,                      /* Area height */
+        active->width - (dispA->x2 - dispA->x1),    /* Offline source */
+        drawing->width - (dispA->x2 - dispA->x1)    /* Offline destination */
     );
     
     redraw_widgets(NULL);                           /* Redraw all widgets now on drawing layer */
-    drawing->Pending = 1;                           /* Set drawing layer as pending */
+    drawing->pending = 1;                           /* Set drawing layer as pending */
     
     /* Notify low-level about layer change */
-    GUI.LCD.Flags |= GUI_FLAG_LCD_WAIT_LAYER_CONFIRM;
-    gui_ll_control(&GUI.LCD, GUI_LL_Command_SetActiveLayer, &drawing, &result); /* Set new active layer to low-level driver */
+    GUI.lcd.flags |= GUI_FLAG_LCD_WAIT_LAYER_CONFIRM;
+    gui_ll_control(&GUI.lcd, GUI_LL_Command_SetActiveLayer, &drawing, &result); /* Set new active layer to low-level driver */
     
     /* Swap active and drawing layers */
     /* New drawings won't be affected until confirmation from low-level is not received */
-    GUI.LCD.ActiveLayer = drawing;
-    GUI.LCD.DrawingLayer = active;
+    GUI.lcd.active_layer = drawing;
+    GUI.lcd.drawing_layer = active;
     
-    memcpy(&GUI.LCD.ActiveLayer->Display, &GUI.Display, sizeof(GUI.Display));   /* Copy clipping data to region */
+    memcpy(&GUI.lcd.active_layer->display, &GUI.Display, sizeof(GUI.Display));  /* Copy clipping data to region */
     
     /* Invalid clipping region(s) for next drawing process */
-    GUI.Display.X1 = 0x7FFF;
-    GUI.Display.Y1 = 0x7FFF;
-    GUI.Display.X2 = 0x8000;
-    GUI.Display.Y2 = 0x8000;
+    GUI.Display.x1 = 0x7FFF;
+    GUI.Display.y1 = 0x7FFF;
+    GUI.Display.x2 = 0x8000;
+    GUI.Display.y2 = 0x8000;
 }
 
 /**
@@ -763,24 +763,24 @@ gui_init(void) {
     
     /* Call LCD low-level function */
     result = 1;
-    gui_ll_control(&GUI.LCD, GUI_LL_Command_Init, &GUI.LL, &result);    /* Call low-level initialization */
-    GUI.LL.Init(&GUI.LCD);                          /* Call user LCD driver function */
+    gui_ll_control(&GUI.lcd, GUI_LL_Command_Init, &GUI.ll, &result);/* Call low-level initialization */
+    GUI.ll.Init(&GUI.lcd);                          /* Call user LCD driver function */
     
     /* Check situation with layers */
-    if (GUI.LCD.LayersCount >= 1) {
+    if (GUI.lcd.layer_count >= 1) {
         size_t i;
         /* Set default values for all layers */
-        for (i = 0; i < GUI.LCD.LayersCount; i++) {
-            GUI.LCD.Layers[i].OffsetX = 0;
-            GUI.LCD.Layers[i].OffsetY = 0;
-            GUI.LCD.Layers[i].Width = GUI.LCD.Width;
-            GUI.LCD.Layers[i].Height = GUI.LCD.Height;
+        for (i = 0; i < GUI.lcd.layer_count; i++) {
+            GUI.lcd.layers[i].x_offset = 0;
+            GUI.lcd.layers[i].y_offset = 0;
+            GUI.lcd.layers[i].width = GUI.lcd.width;
+            GUI.lcd.layers[i].height = GUI.lcd.height;
         }
-        GUI.LCD.ActiveLayer = &GUI.LCD.Layers[0];
-        GUI.LCD.DrawingLayer = &GUI.LCD.Layers[0];
-        GUI.LL.Fill(&GUI.LCD, GUI.LCD.DrawingLayer, (void *)GUI.LCD.DrawingLayer->StartAddress, GUI.LCD.Width, GUI.LCD.Height, 0, GUI_COLOR_LIGHTGRAY);
-        if (GUI.LCD.LayersCount > 1) {
-            GUI.LCD.DrawingLayer = &GUI.LCD.Layers[1];
+        GUI.lcd.active_layer = &GUI.lcd.layers[0];
+        GUI.lcd.drawing_layer = &GUI.lcd.layers[0];
+        GUI.ll.Fill(&GUI.lcd, GUI.lcd.drawing_layer, (void *)GUI.lcd.drawing_layer->start_address, GUI.lcd.width, GUI.lcd.height, 0, GUI_COLOR_LIGHTGRAY);
+        if (GUI.lcd.layer_count > 1) {
+            GUI.lcd.drawing_layer = &GUI.lcd.layers[1];
         }
     } else {
         return guiERROR;

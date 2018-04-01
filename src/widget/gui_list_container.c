@@ -53,12 +53,12 @@ gui_color_t colors[] = {
  */
 static const
 gui_widget_t widget = {
-    .Name = _GT("LED"),                             /*!< Widget name */ 
-    .Size = sizeof(GUI_LIST_CONTAINER_t),           /*!< Size of widget for memory allocation */
-    .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
-    .Callback = gui_listcontainer_callback,         /*!< Control function */
-    .Colors = colors,                               /*!< List of default colors */
-    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Number of colors */
+    .name = _GT("LED"),                             /*!< Widget name */ 
+    .size = sizeof(GUI_LIST_CONTAINER_t),           /*!< Size of widget for memory allocation */
+    .flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
+    .callback = gui_listcontainer_callback,         /*!< Control function */
+    .colors = colors,                               /*!< List of default colors */
+    .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 #define l           ((GUI_LIST_CONTAINER_t *)(h))
 
@@ -149,7 +149,7 @@ gui_listcontainer_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* pa
         case GUI_WC_TouchMove: {
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
-            gui_widget_incscrolly(h, ts->RelOldY[0] - ts->RelY[0]);
+            gui_widget_incscrolly(h, ts->y_rel_old[0] - ts->y_rel[0]);
             if (gui_widget_getscrolly(h) < 0) {
                 gui_widget_setscrolly(h, 0);
             }

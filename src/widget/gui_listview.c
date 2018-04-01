@@ -55,12 +55,12 @@ gui_color_t colors[] = {
  */
 static const
 gui_widget_t widget = {
-    .Name = _GT("LISTVIEW"),                        /*!< Widget name */
-    .Size = sizeof(gui_listview_t),                 /*!< Size of widget for memory allocation */
-    .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = gui_listview_callback,              /*!< Callback function */
-    .Colors = colors,                               /*!< List of default colors */
-    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Define number of colors */
+    .name = _GT("LISTVIEW"),                        /*!< Widget name */
+    .size = sizeof(gui_listview_t),                 /*!< Size of widget for memory allocation */
+    .flags = 0,                                     /*!< List of widget flags */
+    .callback = gui_listview_callback,              /*!< Callback function */
+    .colors = colors,                               /*!< List of default colors */
+    .color_count = GUI_COUNT_OF(colors),            /*!< Define number of colors */
 };
 #define o                   ((gui_listview_t *)(h))
 
@@ -301,9 +301,9 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.Color1Width = f.Width;
                 
-                tmpX2 = disp->X2;                   /* Save current value */
-                if (disp->X2 > (x + width - 1)) {   /* Set clipping region */
-                    disp->X2 = x + width - 1;
+                tmpX2 = disp->x2;                   /* Save current value */
+                if (disp->x2 > (x + width - 1)) {   /* Set clipping region */
+                    disp->x2 = x + width - 1;
                 }
                 
                 /* Draw header row with columns */
@@ -328,13 +328,13 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                     uint16_t index = 0;             /* Start index */
                     gui_dim_t tmp;
                     
-                    tmp = disp->Y2;                 /* Scale out drawing area */
-                    if (disp->Y2 > (y + height - 2)) {
-                        disp->Y2 = y + height - 2;
+                    tmp = disp->y2;                 /* Scale out drawing area */
+                    if (disp->y2 > (y + height - 2)) {
+                        disp->y2 = y + height - 2;
                     }
                     
                     /* Try to process all strings */
-                    for (index = 0, row = (gui_listview_row_t *)gui_linkedlist_getnext_gen(&o->root, NULL); row && f.Y <= disp->Y2;
+                    for (index = 0, row = (gui_listview_row_t *)gui_linkedlist_getnext_gen(&o->root, NULL); row != NULL && f.Y <= disp->y2;
                             row = (gui_listview_row_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)row), index++) {
                         if (index < o->visiblestartindex) { /* Check for start visible */
                             continue;
@@ -350,7 +350,7 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                                 item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), i++) {
                             if (item->text != NULL) {   /* Draw if text set */
                                 f.Width = o->cols[i]->width - 6;    /* Set width */
-                                f.Color1Width = GUI.LCD.Width;  /* Use the same color for entire width */
+                                f.Color1Width = GUI.lcd.width;  /* Use the same color for entire width */
                                 f.X = xTmp + 3;     /* Set offset */
                                 gui_draw_writetext(disp, guii_widget_getfont(h), item->text, &f);
                             }
@@ -358,9 +358,9 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                         }
                         f.Y += itemHeight;
                     }
-                    disp->Y2 = tmp;                 /* Set clipping region back */
+                    disp->y2 = tmp;                 /* Set clipping region back */
                 }
-                disp->X2 = tmpX2;                   /* Reset to first value */
+                disp->x2 = tmpX2;                   /* Reset to first value */
             }
             
             return 1;
@@ -384,8 +384,8 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
 #if GUI_CFG_USE_TOUCH
         case GUI_WC_TouchStart: {
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            tX = ts->RelX[0];                       /* Save X position */
-            tY = ts->RelY[0];                       /* Save Y position */
+            tX = ts->x_rel[0];                       /* Save X position */
+            tY = ts->y_rel[0];                       /* Save Y position */
             
             GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
@@ -396,17 +396,17 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 gui_dim_t height = item_height(h, NULL);   /* Get element height */
                 gui_dim_t diff;
                 
-                diff = tY - ts->RelY[0];            /* Check Y difference */
+                diff = tY - ts->y_rel[0];            /* Check Y difference */
                 if (GUI_ABS(diff) > height) {       /* Difference must be greater than 1 height entry */
                     slide(h, diff > 0 ? 1 : -1);    /* Slide widget */
-                    tY = ts->RelY[0];               /* Save pointer */
+                    tY = ts->y_rel[0];               /* Save pointer */
                 }
                 
                 if (tY < height) {                  /* Check if we are in top region part */
                     uint16_t i;
                     gui_dim_t sum = 0;
                     
-                    diff = tX - ts->RelX[0];        /* Check X difference too */
+                    diff = tX - ts->x_rel[0];        /* Check X difference too */
                     for (i = 0; i < o->col_count; i++) {    /* Check X position for column first */
                         sum += o->cols[i]->width;   /* Check width */
                         if (GUI_ABS(tX - sum) < 10) {
@@ -417,7 +417,7 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                         if (o->cols[i]->width - diff >= 4) {
                             o->cols[i]->width -= diff;  /* Set new width for difference */
                         }
-                        tX = ts->RelX[0];           /* Set new start X position for relative calculation */
+                        tX = ts->x_rel[0];           /* Set new start X position for relative calculation */
                         guii_widget_invalidate(h); /* Invalidate widget */
                     }
                 }
@@ -434,10 +434,10 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             gui_dim_t height = guii_widget_getheight(h);   /* Get widget height */
             
             if (o->flags & GUI_FLAG_LISTVIEW_SLIDER_ON) {
-                if (ts->RelX[0] > (width - o->sliderwidth)) {   /* Touch is inside slider */
-                    if (ts->RelY[0] < o->sliderwidth) {
+                if (ts->x_rel[0] > (width - o->sliderwidth)) {   /* Touch is inside slider */
+                    if (ts->y_rel[0] < o->sliderwidth) {
                         slide(h, -1);               /* Slide one value up */
-                    } else if (ts->RelY[0] > (height - o->sliderwidth)) {
+                    } else if (ts->y_rel[0] > (height - o->sliderwidth)) {
                         slide(h, 1);                /* Slide one value down */
                     }
                     handled = 1;
@@ -446,8 +446,8 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             if (!handled) {
                 uint16_t tmpSelected;
                 
-                if (ts->RelY[0] > itemHeight) {     /* Check item height */
-                    tmpSelected = (ts->RelY[0] - itemHeight) / itemHeight;  /* Get temporary selected index */
+                if (ts->y_rel[0] > itemHeight) {     /* Check item height */
+                    tmpSelected = (ts->y_rel[0] - itemHeight) / itemHeight;  /* Get temporary selected index */
                     if ((o->visiblestartindex + tmpSelected) < o->count) {
                         set_selection(h, o->visiblestartindex + tmpSelected);
                         guii_widget_invalidate(h); /* Choose new selection */
@@ -456,11 +456,11 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 }
             }
             
-            if (!handled && ts->RelY[0] < itemHeight) { /* We are in top region */
+            if (!handled && ts->y_rel[0] < itemHeight) { /* We are in top region */
                 uint16_t i;
                 gui_dim_t sum = 0;
                 for (i = 0; i < o->col_count; i++) {/* Process all columns */
-                    if (ts->RelX[0] > sum && ts->RelX[0] < (sum + o->cols[i]->width)) {
+                    if (ts->x_rel[0] > sum && ts->x_rel[0] < (sum + o->cols[i]->width)) {
                         break;
                     }
                         
@@ -476,10 +476,10 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
 #if GUI_CFG_USE_KEYBOARD
         case GUI_WC_KeyPress: {
             guii_keyboard_data_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
-            if (kb->KB.Keys[0] == GUI_KEY_DOWN) {   /* On pressed down */
+            if (kb->kb.keys[0] == GUI_KEY_DOWN) {   /* On pressed down */
                 inc_selection(h, 1);                /* Increase selection */
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
-            } else if (kb->KB.Keys[0] == GUI_KEY_UP) {
+            } else if (kb->kb.keys[0] == GUI_KEY_UP) {
                 inc_selection(h, -1);               /* Decrease selection */
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }

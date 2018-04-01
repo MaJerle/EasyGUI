@@ -49,12 +49,12 @@ gui_color_t colors[] = {
  */
 static const
 gui_widget_t widget = {
-    .Name = _GT("CONTAINER"),                       /*!< Widget name */
-    .Size = sizeof(gui_container_t),                /*!< Size of widget for memory allocation */
-    .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
-    .Callback = gui_container_callback,             /*!< Control function */
-    .Colors = colors,                               /*!< Pointer to colors array */
-    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Number of colors */
+    .name = _GT("CONTAINER"),                       /*!< Widget name */
+    .size = sizeof(gui_container_t),                /*!< Size of widget for memory allocation */
+    .flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
+    .callback = gui_container_callback,             /*!< Control function */
+    .colors = colors,                               /*!< Pointer to colors array */
+    .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 
 /**

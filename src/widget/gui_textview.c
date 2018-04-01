@@ -53,12 +53,12 @@ gui_color_t colors[] = {
  */
 static const
 gui_widget_t widget = {
-    .Name = _GT("TEXTVIEW"),                        /*!< Widget name */
-    .Size = sizeof(GUI_TEXTVIEW_t),                 /*!< Size of widget for memory allocation */
-    .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = gui_textview_callback,              /*!< Callback function */
-    .Colors = colors,                               /*!< List of default colors */
-    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Define number of colors */
+    .name = _GT("TEXTVIEW"),                        /*!< Widget name */
+    .size = sizeof(GUI_TEXTVIEW_t),                 /*!< Size of widget for memory allocation */
+    .flags = 0,                                     /*!< List of widget flags */
+    .callback = gui_textview_callback,              /*!< Callback function */
+    .colors = colors,                               /*!< List of default colors */
+    .color_count = GUI_COUNT_OF(colors),            /*!< Define number of colors */
 };
 #define o                   ((GUI_TEXTVIEW_t *)(h))
 

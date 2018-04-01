@@ -245,10 +245,10 @@ set_clipping_region(gui_handle_p h) {
     /* TODO Get actual visible widget part according to other widgets above current one */
     
     /* Set invalid clipping region */
-    if (GUI.Display.X1 > x1)    { GUI.Display.X1 = x1; }
-    if (GUI.Display.X2 < x2)    { GUI.Display.X2 = x2; }
-    if (GUI.Display.Y1 > y1)    { GUI.Display.Y1 = y1; }
-    if (GUI.Display.Y2 < y2)    { GUI.Display.Y2 = y2; }
+    if (GUI.Display.x1 > x1)    { GUI.Display.x1 = x1; }
+    if (GUI.Display.x2 < x2)    { GUI.Display.x2 = x2; }
+    if (GUI.Display.y1 > y1)    { GUI.Display.y1 = y1; }
+    if (GUI.Display.y2 < y2)    { GUI.Display.y2 = y2; }
     
     return 1;
 }
@@ -507,7 +507,7 @@ gui_widget_isinsideclippingregion(gui_handle_p h) {
     get_lcd_abs_position_and_visible_width_height(h, &x1, &y1, &x2, &y2);
     return __GUI_RECT_MATCH(
         x1, y1, x2, y2,
-        GUI.Display.X1, GUI.Display.Y1, GUI.Display.X2, GUI.Display.Y2
+        GUI.Display.x1, GUI.Display.y1, GUI.Display.x2, GUI.Display.y2
     );
 }
 
@@ -944,7 +944,7 @@ void *
 guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
     gui_handle_p h;
     
-    __GUI_ASSERTPARAMS(widget && widget->Callback); /* Check input parameters */
+    __GUI_ASSERTPARAMS(widget != NULL && widget->callback != NULL); /* Check input parameters */
     
     /*
      * Allocation size check:
@@ -952,17 +952,17 @@ guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, fl
      * - Size must be at least for widget size
      * - If widget supports children widgets, size must be for at least parent handle structure
      */
-    if (widget->Size < sizeof(gui_handle) ||
-        ((widget->Flags & GUI_FLAG_WIDGET_ALLOW_CHILDREN) && widget->Size < sizeof(gui_handle_root_t))) { 
+    if (widget->size < sizeof(gui_handle) ||
+        ((widget->flags & GUI_FLAG_WIDGET_ALLOW_CHILDREN) && widget->size < sizeof(gui_handle_root_t))) { 
         return 0;
     }
     
-    h = GUI_MEMALLOC(widget->Size);                 /* Allocate memory for widget */
+    h = GUI_MEMALLOC(widget->size);                 /* Allocate memory for widget */
     if (h != NULL) {
         gui_widget_param_t param = {0};
         gui_widget_result_t result = {0};
     
-        memset(h, 0x00, widget->Size);              /* Set memory to 0 */
+        memset(h, 0x00, widget->size);              /* Set memory to 0 */
         
         __GUI_ENTER();                              /* Enter GUI */
         
@@ -1206,7 +1206,7 @@ guii_widget_processtextkey(gui_handle_p h, guii_keyboard_data_t* kb) {
         return 0;
     }
     
-    gui_string_prepare(&currStr, kb->KB.Keys);      /* Set string to process */
+    gui_string_prepare(&currStr, kb->kb.keys);      /* Set string to process */
     if (!gui_string_getch(&currStr, &ch, &l)) {     /* Get key from input data */
         return 0;                                   /* Invalid input key */
     }
@@ -1220,7 +1220,7 @@ guii_widget_processtextkey(gui_handle_p h, guii_keyboard_data_t* kb) {
                 h->text[pos] = h->text[pos - l];
             }
             for (pos = 0; pos < l; pos++) {         /* Fill new characters to empty memory */
-                h->text[h->textcursor++] = kb->KB.Keys[pos];
+                h->text[h->textcursor++] = kb->kb.keys[pos];
             }
             h->text[tlen + l] = 0;                  /* Add 0 to the end */
             
@@ -1704,10 +1704,10 @@ guii_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI context */
     if (h->colors == NULL) {                        /* Do we need to allocate color memory? */
-        if (h->widget->ColorsCount) {               /* Check if at least some colors should be used */
-            h->colors = GUI_MEMALLOC(sizeof(*h->colors) * h->widget->ColorsCount);
+        if (h->widget->color_count) {               /* Check if at least some colors should be used */
+            h->colors = GUI_MEMALLOC(sizeof(*h->colors) * h->widget->color_count);
             if (h->colors != NULL) {          /* Copy all colors to new memory first */
-                memcpy(h->colors, h->widget->Colors, sizeof(*h->colors) * h->widget->ColorsCount);
+                memcpy(h->colors, h->widget->colors, sizeof(*h->colors) * h->widget->color_count);
             } else {
                 ret = 0;
             }
@@ -1716,7 +1716,7 @@ guii_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color) {
         }
     }
     if (ret) {
-        if (index < h->widget->ColorsCount) {       /* Index in valid range */
+        if (index < h->widget->color_count) {       /* Index in valid range */
            h->colors[index] = color;                /* Set new color */
         } else {
             ret = 0;
@@ -2491,7 +2491,7 @@ gui_widget_processdefaultcallback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_para
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = __GH(h)->widget->Callback(h, ctrl, param, result);    /* Call callback function */
+    ret = h->widget->callback(h, ctrl, param, result);  /* Call callback function */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -2509,7 +2509,7 @@ gui_widget_setcallback(gui_handle_p h, gui_widget_callback_t callback) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    __GH(h)->callback = callback;                   /* Set callback function */
+    h->callback = callback;                         /* Set callback function */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;
@@ -2746,7 +2746,7 @@ gui_widget_setzindex(gui_handle_p h, int32_t zindex) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = guii_widget_setzindex(h, zindex);        /* Set z-index value */
+    ret = guii_widget_setzindex(h, zindex);         /* Set z-index value */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -2765,7 +2765,7 @@ gui_widget_getzindex(gui_handle_p h) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = guii_widget_getzindex(h);                /* Set z-index value */
+    ret = guii_widget_getzindex(h);                 /* Set z-index value */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -2786,7 +2786,7 @@ gui_widget_settransparency(gui_handle_p h, uint8_t trans) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = guii_widget_settransparency(h, trans);   /* Set widget transparency */
+    ret = guii_widget_settransparency(h, trans);    /* Set widget transparency */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -2809,7 +2809,7 @@ gui_widget_gettransparency(gui_handle_p h) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    trans = guii_widget_gettransparency(h);        /* Get widget transparency */
+    trans = guii_widget_gettransparency(h);         /* Get widget transparency */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return trans;
@@ -2829,7 +2829,7 @@ gui_widget_set3dstyle(gui_handle_p h, uint8_t enable) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = guii_widget_set3dstyle(h, enable);       /* Set 3D mode */
+    ret = guii_widget_set3dstyle(h, enable);        /* Set 3D mode */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -2914,7 +2914,7 @@ gui_widget_setpaddingtopbottom(gui_handle_p h, gui_dim_t x) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    guii_widget_setpaddingtopbottom(h, x);         /* Set padding */
+    guii_widget_setpaddingtopbottom(h, x);          /* Set padding */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;
@@ -2931,7 +2931,7 @@ gui_widget_setpaddingleftright(gui_handle_p h, gui_dim_t x) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    guii_widget_setpaddingleftright(h, x);         /* Set padding */
+    guii_widget_setpaddingleftright(h, x);          /* Set padding */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;

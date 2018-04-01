@@ -60,12 +60,12 @@ gui_color_t colors[] = {
  */
 static const
 gui_widget_t widget = {
-    .Name = _GT("EDITTEXT"),                        /*!< Widget name */
-    .Size = sizeof(GUI_EDITTEXT_t),                 /*!< Size of widget for memory allocation */
-    .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = gui_edittext_callback,              /*!< Control function */
-    .Colors = colors,                               /*!< List of default colors */
-    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Number of colors */
+    .name = _GT("EDITTEXT"),                        /*!< Widget name */
+    .size = sizeof(GUI_EDITTEXT_t),                 /*!< Size of widget for memory allocation */
+    .flags = 0,                                     /*!< List of widget flags */
+    .callback = gui_edittext_callback,              /*!< Control function */
+    .colors = colors,                               /*!< List of default colors */
+    .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 
 #define e          ((GUI_EDITTEXT_t *)h)

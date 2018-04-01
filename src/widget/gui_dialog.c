@@ -58,12 +58,12 @@ gui_linkedlistroot_t ddlist;
  */
 static const
 gui_widget_t widget = {
-    .Name = _GT("DIALOG"),                          /*!< Widget name */
-    .Size = sizeof(GUI_DIALOG_t),                   /*!< Size of widget for memory allocation */
-    .Flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN | GUI_FLAG_WIDGET_DIALOG_BASE,  /*!< List of widget flags */
-    .Callback = gui_dialog_callback,                /*!< Control function */
-    .Colors = NULL,                                 /*!< Pointer to colors array */
-    .ColorsCount = 0,                               /*!< Number of colors */
+    .name = _GT("DIALOG"),                          /*!< Widget name */
+    .size = sizeof(GUI_DIALOG_t),                   /*!< Size of widget for memory allocation */
+    .flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN | GUI_FLAG_WIDGET_DIALOG_BASE,  /*!< List of widget flags */
+    .callback = gui_dialog_callback,                /*!< Control function */
+    .colors = NULL,                                 /*!< Pointer to colors array */
+    .color_count = 0,                               /*!< Number of colors */
 };
 
 

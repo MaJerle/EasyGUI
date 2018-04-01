@@ -57,21 +57,21 @@ extern "C" {
  *                  - Set up number of layers for drawing
  *                  - Set up drawing functions
  *
- * \param[in,out]   LCD: Pointer to \ref GUI_LCD_t structure for LCD properties
- * \param[in,out]   LL: Pointer to \ref GUI_LL_t structure with drawing functions
+ * \param[in,out]   LCD: Pointer to \ref gui_lcd_t structure for LCD properties
+ * \param[in,out]   LL: Pointer to \ref gui_ll_t structure with drawing functions
  * \return          0 on success, non-zero otherwise
  */
-uint8_t gui_ll_init(GUI_LCD_t* LCD, GUI_LL_t* LL);
+uint8_t gui_ll_init(gui_lcd_t* LCD, gui_ll_t* LL);
 
 /**
  * \brief           Send command to for LCD from GUI
- * \param[in,out]   LCD: Pointer to \ref GUI_LCD_t structure with LCD properties
+ * \param[in,out]   LCD: Pointer to \ref gui_lcd_t structure with LCD properties
  * \param[in]       cmd: Command to be executed. This parameter can be a value of \ref GUI_LL_Command_t enumeration
  * \param[in]       param: Optional data included in command. Check \ref GUI_LL_Command_t enumeration what is used for each command
  * \param[out]      result: Result from command
  * \return          0 on success, non-zero otherwise
  */
-uint8_t gui_ll_control(GUI_LCD_t* LCD, GUI_LL_Command_t cmd, void* param, void* result);
+uint8_t gui_ll_control(gui_lcd_t* LCD, GUI_LL_Command_t cmd, void* param, void* result);
  
 /**
  * \}

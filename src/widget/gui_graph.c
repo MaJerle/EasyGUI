@@ -59,12 +59,12 @@ gui_color_t colors[] = {
  */
 static const
 gui_widget_t widget = {
-    .Name = _GT("GRAPH"),                           /*!< Widget name */
-    .Size = sizeof(GUI_GRAPH_t),                    /*!< Size of widget for memory allocation */
-    .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = gui_graph_callback,                 /*!< Callback function for various events */
-    .Colors = colors,                               /*<! List of default colors */
-    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Number of colors */
+    .name = _GT("GRAPH"),                           /*!< Widget name */
+    .size = sizeof(GUI_GRAPH_t),                    /*!< Size of widget for memory allocation */
+    .flags = 0,                                     /*!< List of widget flags */
+    .callback = gui_graph_callback,                 /*!< Callback function for various events */
+    .colors = colors,                               /*<! List of default colors */
+    .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 
 #define g       ((GUI_GRAPH_t *)(h))
@@ -190,17 +190,17 @@ gui_graph_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui
                 memcpy(&display, disp, sizeof(gui_display_t));  /* Save GUI display data */
                 
                 /* Set clipping region */
-                if ((x + bl) > disp->X1) {
-                    disp->X1 = x + bl;
+                if ((x + bl) > disp->x1) {
+                    disp->x1 = x + bl;
                 }
-                if ((x + width - br) < disp->X2) {
-                    disp->X2 = x + width - br;
+                if ((x + width - br) < disp->x2) {
+                    disp->x2 = x + width - br;
                 }
-                if ((y + bt) > disp->Y1) {
-                    disp->Y1 = y + bt;
+                if ((y + bt) > disp->y1) {
+                    disp->y1 = y + bt;
                 }
-                if ((y + height - bb) < disp->Y2) {
-                    disp->Y2 = y + height - bb;
+                if ((y + height - bb) < disp->y2) {
+                    disp->y2 = y + height - bb;
                 }
                 
                 /* Draw all plot attached to graph */
@@ -220,14 +220,14 @@ gui_graph_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui
                         }
                         
                         /* Outside of right || outside on left */
-                        if (x1 > disp->X2 || (x1 + (data->Length * xStep)) < disp->X1) {/* Plot start is on the right of active area */
+                        if (x1 > disp->x2 || (x1 + (data->Length * xStep)) < disp->x1) {/* Plot start is on the right of active area */
                             continue;
                         }
                         
-                        while (read != write && x1 <= disp->X2) {   /* Calculate next points */
+                        while (read != write && x1 <= disp->x2) {   /* Calculate next points */
                             x2 = x1 + xStep;                /* Calculate next X */
                             y2 = yBottom - ((float)data->Data[read] - g->VisibleMinY) * yStep;  /* Calculate next Y */
-                            if ((x1 >= disp->X1 || x2 >= disp->X1) && (x1 < disp->X2 || x2 < disp->X2)) {
+                            if ((x1 >= disp->x1 || x2 >= disp->x1) && (x1 < disp->x2 || x2 < disp->x2)) {
                                 gui_draw_line(disp, x1, y1, x2, y2, data->Color);   /* Draw actual line */
                             }
                             x1 = x2, y1 = y2;       /* Copy values as old */
@@ -264,9 +264,9 @@ gui_graph_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui
         case GUI_WC_TouchStart: {                   /* Touch down event */
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             uint8_t i = 0;
-            for (i = 0; i < ts->TS.Count; i++) {
-                tX[i] = ts->RelX[i];                /* Relative X position on widget */
-                tY[i] = ts->RelY[i];                /* Relative Y position on widget */
+            for (i = 0; i < ts->ts.count; i++) {
+                tX[i] = ts->x_rel[i];                /* Relative X position on widget */
+                tY[i] = ts->y_rel[i];                /* Relative Y position on widget */
             }
             GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;  /* Set touch status */
             return 1;
@@ -277,9 +277,9 @@ gui_graph_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui
             gui_dim_t x, y;
             float diff, step;
             
-            if (ts->TS.Count == 1) {                /* Move graph on single widget */
-                x = ts->RelX[0];
-                y = ts->RelY[0];
+            if (ts->ts.count == 1) {                /* Move graph on single widget */
+                x = ts->x_rel[0];
+                y = ts->y_rel[0];
                 
                 step = (float)(guii_widget_getwidth(h) - g->Border[GUI_GRAPH_BORDER_LEFT] - g->Border[GUI_GRAPH_BORDER_RIGHT]) / (float)(g->VisibleMaxX - g->VisibleMinX);
                 diff = (float)(x - tX[0]) / step;
@@ -291,19 +291,19 @@ gui_graph_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui
                 g->VisibleMinY += diff;
                 g->VisibleMaxY += diff;
 #if GUI_CFG_TOUCH_MAX_PRESSES > 1
-            } else if (ts->TS.Count == 2) {         /* Scale widget on multiple widgets */
+            } else if (ts->ts.count == 2) {         /* Scale widget on multiple widgets */
                 float centerX, centerY, zoom;
                 
-                gui_math_centerofxy(ts->RelX[0], ts->RelY[0], ts->RelX[1], ts->RelY[1], &centerX, &centerY);    /* Calculate center position between points */
+                gui_math_centerofxy(ts->x_rel[0], ts->y_rel[0], ts->x_rel[1], ts->y_rel[1], &centerX, &centerY);    /* Calculate center position between points */
                 zoom = ts->distance / ts->distance_old; /* Calculate zoom value */
                 
                 graph_zoom(h, zoom, (float)centerX / (float)guii_widget_getwidth(h), (float)centerY / (float)guii_widget_getheight(h));
 #endif /* GUI_CFG_TOUCH_MAX_PRESSES > 1 */
             }
             
-            for (i = 0; i < ts->TS.Count; i++) {
-                tX[i] = ts->RelX[i];                /* Relative X position on widget */
-                tY[i] = ts->RelY[i];                /* Relative Y position on widget */
+            for (i = 0; i < ts->ts.count; i++) {
+                tX[i] = ts->x_rel[i];                /* Relative X position on widget */
+                tY[i] = ts->y_rel[i];                /* Relative Y position on widget */
             }
             
             guii_widget_invalidate(h);

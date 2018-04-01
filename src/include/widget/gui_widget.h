@@ -288,7 +288,7 @@ extern "C" {
  * \return          0 on failure, non-zero otherwise (flags)
  * \hideinitializer
  */
-#define guii_widget_getcoreflag(h, flag)            (__GH(h)->widget->Flags & (flag))
+#define guii_widget_getcoreflag(h, flag)            (__GH(h)->widget->flags & (flag))
 
 /**
  * \brief           Set widget flag(s)
@@ -354,7 +354,7 @@ extern "C" {
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
-#define guii_widget_callback(h, cmd, param, result) ((h)->callback != NULL ? (h)->callback(h, cmd, param, result) : (h)->widget->Callback(h, cmd, param, result))
+#define guii_widget_callback(h, cmd, param, result) ((h)->callback != NULL ? (h)->callback(h, cmd, param, result) : (h)->widget->callback(h, cmd, param, result))
 
 /**
  * \brief           Get widget colors from list of colors
@@ -365,7 +365,7 @@ extern "C" {
  * \retval          Color index
  * \hideinitializer
  */
-#define guii_widget_getcolor(h, index)              ((h)->colors != NULL ? (h)->colors[(uint8_t)(index)] : ((h)->widget->Colors != NULL ? (h)->widget->Colors[(uint8_t)(index)] : GUI_COLOR_BLACK))
+#define guii_widget_getcolor(h, index)              ((h)->colors != NULL ? (h)->colors[(uint8_t)(index)] : ((h)->widget->colors != NULL ? (h)->widget->colors[(uint8_t)(index)] : GUI_COLOR_BLACK))
 
 /**
  * \brief           Get inner width (total width - padding left - padding right)
@@ -392,7 +392,7 @@ extern "C" {
  * \retval          Parent width in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getparentwidth(h)               (guii_widget_hasparent(h) ? guii_widget_getwidth(guii_widget_getparent(h)) : GUI.LCD.Width)
+#define guii_widget_getparentwidth(h)               (guii_widget_hasparent(h) ? guii_widget_getwidth(guii_widget_getparent(h)) : GUI.lcd.Width)
 
 /**
  * \brief           Returns height of parent element. If parent does not exists, it returns LCD height
@@ -401,7 +401,7 @@ extern "C" {
  * \retval          Parent height in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getparentheight(h)              (guii_widget_hasparent(h) ? guii_widget_getheight(guii_widget_getparent(h)) : GUI.LCD.Height)
+#define guii_widget_getparentheight(h)              (guii_widget_hasparent(h) ? guii_widget_getheight(guii_widget_getparent(h)) : GUI.lcd.Height)
 
 /**
  * \brief           Returns inner width of parent element. If parent does not exists, it returns LCD width
@@ -412,7 +412,7 @@ extern "C" {
  * \retval          Parent width in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getparentinnerwidth(h)          (guii_widget_hasparent(h) ? guii_widget_getinnerwidth(guii_widget_getparent(h)) : GUI.LCD.Width)
+#define guii_widget_getparentinnerwidth(h)          (guii_widget_hasparent(h) ? guii_widget_getinnerwidth(guii_widget_getparent(h)) : GUI.lcd.width)
 
 /**
  * \brief           Returns inner height of parent element. If parent does not exists, it returns LCD height
@@ -423,7 +423,7 @@ extern "C" {
  * \retval          Parent height in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getparentinnerheight(h)         (guii_widget_hasparent(h) ? guii_widget_getinnerheight(guii_widget_getparent(h)) : GUI.LCD.Height)
+#define guii_widget_getparentinnerheight(h)         (guii_widget_hasparent(h) ? guii_widget_getinnerheight(guii_widget_getparent(h)) : GUI.lcd.height)
 
 /**
  * \brief           Check if widget is visible in any way, either with transparency or hidden flag

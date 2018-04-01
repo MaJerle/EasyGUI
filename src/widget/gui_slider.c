@@ -57,12 +57,12 @@ gui_color_t colors[] = {
  */
 static const
 gui_widget_t widget = {
-    .Name = _GT("SLIDER"),                          /*!< Widget name */
-    .Size = sizeof(GUI_SLIDER_t),                   /*!< Size of widget for memory allocation */
-    .Flags = GUI_FLAG_WIDGET_INVALIDATE_PARENT,     /*!< List of widget flags */
-    .Callback = gui_slider_callback,                /*!< Callback function */
-    .Colors = colors,                               /*!< List of default colors */
-    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Define number of colors */
+    .name = _GT("SLIDER"),                          /*!< Widget name */
+    .size = sizeof(GUI_SLIDER_t),                   /*!< Size of widget for memory allocation */
+    .flags = GUI_FLAG_WIDGET_INVALIDATE_PARENT,     /*!< List of widget flags */
+    .callback = gui_slider_callback,                /*!< Callback function */
+    .colors = colors,                               /*!< List of default colors */
+    .color_count = GUI_COUNT_OF(colors),            /*!< Define number of colors */
 };
 #define o       ((GUI_SLIDER_t *)(h))
 
@@ -103,9 +103,9 @@ touch_handle(gui_handle_p h, guii_touch_data_t* ts) {
     deltaH = delta >> 1;
     if (is_horizontal(h)) {                         /* Horizontal widget */
         if (o->Mode == GUI_SLIDER_MODE_LEFT_RIGHT) {/* Inverted version to normal */
-            pos = ts->RelX[0];                      /* Invert position */
+            pos = ts->x_rel[0];                      /* Invert position */
         } else {
-            pos = width - ts->RelX[0];
+            pos = width - ts->x_rel[0];
         }
         if (pos >= deltaH) {
             pos -= deltaH;
@@ -119,9 +119,9 @@ touch_handle(gui_handle_p h, guii_touch_data_t* ts) {
         value = (int32_t)(((float)(o->Max - o->Min)) * (float)pos / (float)width) + o->Min;
     } else {                                        /* Vertical widget */
         if (o->Mode == GUI_SLIDER_MODE_TOP_BOTTOM) {/* Inverted version to normal */
-            pos = ts->RelY[0];                      /* Invert position */
+            pos = ts->y_rel[0];                      /* Invert position */
         } else {
-            pos = height - ts->RelY[0];
+            pos = height - ts->y_rel[0];
         }
         if (pos >= deltaH) {
             pos -= deltaH;

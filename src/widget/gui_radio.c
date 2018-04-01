@@ -52,12 +52,12 @@ gui_color_t colors[] = {
  */
 static const
 gui_widget_t widget = {
-    .Name = _GT("RADIOBOX"),                        /*!< Widget name */
-    .Size = sizeof(gui_radio_t),                    /*!< Size of widget for memory allocation */
-    .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = gui_radio_callback,                 /*!< Callback function */
-    .Colors = colors,                               /*!< List of default colors */
-    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Number of colors */
+    .name = _GT("RADIOBOX"),                        /*!< Widget name */
+    .size = sizeof(gui_radio_t),                    /*!< Size of widget for memory allocation */
+    .flags = 0,                                     /*!< List of widget flags */
+    .callback = gui_radio_callback,                 /*!< Callback function */
+    .colors = colors,                               /*!< List of default colors */
+    .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 
 static uint8_t

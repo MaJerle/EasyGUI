@@ -51,7 +51,7 @@ print_list(gui_handle_root_t* root) {
     for (h = (gui_handle_root_t *)list->first; h != NULL; h = h->handle.list.next) {
         GUI_DEBUG("%*d: W: %s; A: 0x%p, R: %lu; D: %lu\r\n",
             depth, depth,
-            (const char *)h->handle.widget->Name,
+            (const char *)h->handle.widget->name,
             h,
             (unsigned long)!!(h->handle.flags & GUI_FLAG_REDRAW),
             (unsigned long)!!(h->handle.flags & GUI_FLAG_REMOVE)

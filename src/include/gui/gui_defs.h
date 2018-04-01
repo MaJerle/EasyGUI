@@ -201,18 +201,18 @@ typedef void (*gui_eventcallback_t)(void);
 /**
  * \brief           Color gradient definition
  */
-typedef struct GUI_Gradient_t {
-    gui_color_t Start;                      /*!< Gradient start color */
-    gui_color_t Stop;                       /*!< Gradient end color */
-} GUI_Gradient_t;
+typedef struct {
+    gui_color_t start;                      /*!< Gradient start color */
+    gui_color_t stop;                       /*!< Gradient end color */
+} gui_gradient_t;
 
 /**
  * \brief           Touch state on widget
  */
-typedef enum gui_touchstate_t {
-    GUI_TouchState_RELEASED = 0x00,         /*!< Touch released */
-    GUI_TouchState_PRESSED = 0x01,          /*!< Touch detected */
-} gui_touchstate_t;
+typedef enum {
+    GUI_TOUCH_STATE_RELEASED = 0x00,        /*!< Touch released */
+    GUI_TOUCH_STATE_PRESSED = 0x01,         /*!< Touch detected */
+} gui_touch_state_t;
 
 /**
  * \brief           Touch internal processing enumeration
@@ -227,22 +227,22 @@ typedef enum guii_touch_status_t {
  * \brief           Single touch data structure
  */
 typedef struct gui_touch_data_t {
-    uint8_t Count;                          /*!< Number of touches detected */
-    gui_dim_t X[GUI_CFG_TOUCH_MAX_PRESSES];/*!< Touch X coordinate */
-    gui_dim_t Y[GUI_CFG_TOUCH_MAX_PRESSES];/*!< Touch Y coordinate */
-    gui_touchstate_t Status;                /*!< Touch status, pressed or released */
-    uint32_t Time;                          /*!< Time when touch was recorded */
+    uint8_t count;                          /*!< Number of touches detected */
+    gui_dim_t x[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Touch X coordinate */
+    gui_dim_t y[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Touch Y coordinate */
+    gui_touch_state_t status;               /*!< Touch status, pressed or released */
+    uint32_t time;                          /*!< Time when touch was recorded */
 } gui_touch_data_t;
 
 /**
  * \brief           Internal touch structure used for widget callbacks
  */
 typedef struct {
-    gui_touch_data_t TS;                    /*!< Touch structure from outside */
-    gui_dim_t RelX[GUI_CFG_TOUCH_MAX_PRESSES];  /*!< Relative X position to current widget */
-    gui_dim_t RelY[GUI_CFG_TOUCH_MAX_PRESSES];  /*!< Relative Y position to current widget */
-    gui_dim_t RelOldX[GUI_CFG_TOUCH_MAX_PRESSES];   /*!< Relative X position to current widget */
-    gui_dim_t RelOldY[GUI_CFG_TOUCH_MAX_PRESSES];   /*!< Relative Y position to current widget */
+    gui_touch_data_t ts;                    /*!< Touch structure from outside */
+    gui_dim_t x_rel[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Relative X position to current widget */
+    gui_dim_t y_rel[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Relative Y position to current widget */
+    gui_dim_t x_rel_old[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Relative X position to current widget */
+    gui_dim_t y_rel_old[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Relative Y position to current widget */
     gui_dim_t widget_width;                 /*!< Save widget width value */
     gui_dim_t widget_height;                /*!< Save widget height value */
 #if GUI_CFG_TOUCH_MAX_PRESSES > 1 || __DOXYGEN__
@@ -257,20 +257,20 @@ typedef struct {
  */
 typedef struct {
 #if GUI_CFG_USE_UNICODE || __DOXYGEN__
-    gui_char Keys[4];                       /*!< Key pressed, plain unicode bytes, up to 4 bytes */
+    gui_char keys[4];                       /*!< Key pressed, plain unicode bytes, up to 4 bytes */
 #else
     gui_char Keys[1];                       /*!< Key pressed, no unicode support */
 #endif
-    uint8_t Flags;                          /*!< Flags for special keys */
-    uint32_t Time;                          /*!< Event time */
+    uint8_t flags;                          /*!< Flags for special keys */
+    uint32_t time;                          /*!< Event time */
 } gui_keyboard_data_t;
 
 /**
  * \brief           Internal single key data structure
  * \note            Used for private purpose between input and widget
  */
-typedef struct guii_keyboard_data_t {
-    gui_keyboard_data_t KB;                  /*!< Keyboard structure */
+typedef struct {
+    gui_keyboard_data_t kb;                 /*!< Keyboard structure */
 } guii_keyboard_data_t;
 
 /**
@@ -284,41 +284,41 @@ typedef enum {
 /**
  * \brief           GUI clipping management
  */
-typedef struct gui_display_t {
-    gui_dim_t X1;                          /*!< Clipping area start X */
-    gui_dim_t Y1;                          /*!< Clipping area start Y */
-    gui_dim_t X2;                          /*!< Clipping area end X */
-    gui_dim_t Y2;                          /*!< Clipping area end Y */
+typedef struct {
+    gui_dim_t x1;                           /*!< Clipping area start X */
+    gui_dim_t y1;                           /*!< Clipping area start Y */
+    gui_dim_t x2;                           /*!< Clipping area end X */
+    gui_dim_t y2;                           /*!< Clipping area end Y */
 } gui_display_t;
 
 /**
  * \brief           LCD layer structure
  */
-typedef struct GUI_Layer_t {
-    uint8_t Num;                            /*!< Layer number */
-    uint32_t StartAddress;                  /*!< Start address in memory if it exists */
-    volatile uint8_t Pending;               /*!< Layer pending for redrawing operation */
-    gui_display_t Display;                  /*!< Display setup for clipping regions for main layers (no virtual) */
+typedef struct {
+    uint8_t num;                            /*!< Layer number */
+    uint32_t start_address;                 /*!< Start address in memory if it exists */
+    volatile uint8_t pending;               /*!< Layer pending for redrawing operation */
+    gui_display_t display;                  /*!< Display setup for clipping regions for main layers (no virtual) */
     
-    gui_dim_t Width;                       /*!< Layer width, used for virtual layers mainly */
-    gui_dim_t Height;                      /*!< Layer height, used for virtual layers mainly */
-    gui_dim_t OffsetX;                     /*!< Offset value for pixel position calculation in X direction, used for virtual layers */
-    gui_dim_t OffsetY;                     /*!< Offset value for pixel position calculation in Y direction, used for virtual layers */
-} GUI_Layer_t;
+    gui_dim_t width;                        /*!< Layer width, used for virtual layers mainly */
+    gui_dim_t height;                       /*!< Layer height, used for virtual layers mainly */
+    gui_dim_t x_offset;                     /*!< Offset value for pixel position calculation in X direction, used for virtual layers */
+    gui_dim_t y_offset;                     /*!< Offset value for pixel position calculation in Y direction, used for virtual layers */
+} gui_layer_t;
 
 /**
  * \brief           GUI LCD structure
  */
-typedef struct GUI_LCD_t {
-    gui_dim_t Width;                        /*!< LCD width in units of pixels */
-    gui_dim_t Height;                       /*!< LCD height in units of pixels */
-    uint8_t PixelSize;                      /*!< Number of bytes per pixel */
-    GUI_Layer_t* ActiveLayer;               /*!< Active layer number currently shown to LCD */
-    GUI_Layer_t* DrawingLayer;              /*!< Currently active drawing layer */
-    size_t LayersCount;                     /*!< Number of layers used for LCD and drawings */
-    GUI_Layer_t* Layers;                    /*!< Pointer to layers */
-    uint32_t Flags;                         /*!< List of flags */
-} GUI_LCD_t;
+typedef struct {
+    gui_dim_t width;                        /*!< LCD width in units of pixels */
+    gui_dim_t height;                       /*!< LCD height in units of pixels */
+    uint8_t pixel_size;                     /*!< Number of bytes per pixel */
+    gui_layer_t* active_layer;              /*!< Active layer number currently shown to LCD */
+    gui_layer_t* drawing_layer;             /*!< Currently active drawing layer */
+    size_t layer_count;                     /*!< Number of layers used for LCD and drawings */
+    gui_layer_t* layers;                    /*!< Pointer to layers */
+    uint32_t flags;                         /*!< List of flags */
+} gui_lcd_t;
 
 /**
  * \addtogroup      GUI_IMAGE
@@ -328,12 +328,12 @@ typedef struct GUI_LCD_t {
 /**
  * \brief           Image descriptor structure
  */
-typedef struct GUI_IMAGE_DESC_t {
-    gui_dim_t xSize;                        /*!< X size */
-    gui_dim_t ySize;                        /*!< Y size */
-    uint8_t BPP;                            /*!< Bits per pixel */
-    const uint8_t* Image;                   /*!< Pointer to image byte array */
-} GUI_IMAGE_DESC_t;
+typedef struct {
+    gui_dim_t x_size;                       /*!< Image X size */
+    gui_dim_t y_size;                       /*!< Image Y size */
+    uint8_t bpp;                            /*!< Bits per pixel */
+    const uint8_t* image;                   /*!< Pointer to image byte array */
+} gui_image_desc_t;
 
 /**
  * \}
@@ -342,11 +342,11 @@ typedef struct GUI_IMAGE_DESC_t {
 /**
  * \brief           Low-level LCD command enumeration
  */
-typedef enum GUI_LL_Command_t {
+typedef enum {
     /**
      * \brief       Initialize low-level part of GUI
      *
-     * \param[in]   *param: Pointer to \ref GUI_LL_t structure to fill data to
+     * \param[in]   *param: Pointer to \ref gui_ll_t structure to fill data to
      * \param[out]  *result: Pointer to \ref uint8_t variable to save result: 0 = OK otherwise ERROR
      */
     GUI_LL_Command_Init = 0x00,             /*!< Set new layer as active layer */
@@ -354,7 +354,7 @@ typedef enum GUI_LL_Command_t {
     /**
      * \brief       Initialize low-level part of GUI
      *
-     * \param[in]   *param: Pointer to \ref GUI_LL_t structure to fill data to
+     * \param[in]   *param: Pointer to \ref gui_ll_t structure to fill data to
      * \param[out]  *result: Pointer to \ref uint8_t variable to save result: 0 = OK otherwise ERROR
      */
     GUI_LL_Command_SetActiveLayer,          /*!< Set new layer as active layer */
@@ -363,22 +363,22 @@ typedef enum GUI_LL_Command_t {
 /**
  * \brief           GUI Low-Level structure for drawing operations
  */
-typedef struct GUI_LL_t {
-    void            (*Init)         (GUI_LCD_t *);                                                                      /*!< Pointer to LCD initialization function */
-    uint8_t         (*IsReady)      (GUI_LCD_t *);                                                                      /*!< Pointer to LCD is ready function */
-    void            (*SetPixel)     (GUI_LCD_t *, GUI_Layer_t *, gui_dim_t, gui_dim_t, gui_color_t);                    /*!< Pointer to LCD set pixel function */
-    gui_color_t     (*GetPixel)     (GUI_LCD_t *, GUI_Layer_t *, gui_dim_t, gui_dim_t);                                 /*!< Pointer to read pixel from LCD */
-    void            (*Fill)         (GUI_LCD_t *, GUI_Layer_t *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_color_t); /*!< Pointer to LCD fill screen or rectangle function */
-    void            (*Copy)         (GUI_LCD_t *, GUI_Layer_t *, const void *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to LCD copy data from source to destination */
-    void            (*CopyBlend)    (GUI_LCD_t *, GUI_Layer_t *, const void *, void *, uint8_t, uint8_t, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to function to copy layers together (blending) with support to set overall layer transparency */
-    void            (*DrawHLine)    (GUI_LCD_t *, GUI_Layer_t *, gui_dim_t, gui_dim_t, gui_dim_t, gui_color_t);         /*!< Pointer to horizontal line drawing. Set to 0 if you do not have optimized version */
-    void            (*DrawVLine)    (GUI_LCD_t *, GUI_Layer_t *, gui_dim_t, gui_dim_t, gui_dim_t, gui_color_t);         /*!< Pointer to vertical line drawing. Set to 0 if you do not have optimized version */
-    void            (*FillRect)     (GUI_LCD_t *, GUI_Layer_t *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t, gui_color_t);  /*!< Pointer to function for filling rectangle on LCD */
-    void            (*DrawImage16)  (GUI_LCD_t *, GUI_Layer_t *, const GUI_IMAGE_DESC_t *, const void *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to function for drawing 16BPP (RGB565) images */
-    void            (*DrawImage24)  (GUI_LCD_t *, GUI_Layer_t *, const GUI_IMAGE_DESC_t *, const void *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to function for drawing 24BPP (RGB888) images */
-    void            (*DrawImage32)  (GUI_LCD_t *, GUI_Layer_t *, const GUI_IMAGE_DESC_t *, const void *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to function for drawing 32BPP (ARGB8888) images */
-    void            (*CopyChar)     (GUI_LCD_t *, GUI_Layer_t *, const void *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t, gui_color_t);                /*!< Pointer to copy char function with alpha only as source */
-} GUI_LL_t;
+typedef struct gui_ll_t {
+    void            (*Init)         (gui_lcd_t *);                                                                      /*!< Pointer to LCD initialization function */
+    uint8_t         (*IsReady)      (gui_lcd_t *);                                                                      /*!< Pointer to LCD is ready function */
+    void            (*SetPixel)     (gui_lcd_t *, gui_layer_t *, gui_dim_t, gui_dim_t, gui_color_t);                    /*!< Pointer to LCD set pixel function */
+    gui_color_t     (*GetPixel)     (gui_lcd_t *, gui_layer_t *, gui_dim_t, gui_dim_t);                                 /*!< Pointer to read pixel from LCD */
+    void            (*Fill)         (gui_lcd_t *, gui_layer_t *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_color_t); /*!< Pointer to LCD fill screen or rectangle function */
+    void            (*Copy)         (gui_lcd_t *, gui_layer_t *, const void *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to LCD copy data from source to destination */
+    void            (*CopyBlend)    (gui_lcd_t *, gui_layer_t *, const void *, void *, uint8_t, uint8_t, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to function to copy layers together (blending) with support to set overall layer transparency */
+    void            (*DrawHLine)    (gui_lcd_t *, gui_layer_t *, gui_dim_t, gui_dim_t, gui_dim_t, gui_color_t);         /*!< Pointer to horizontal line drawing. Set to 0 if you do not have optimized version */
+    void            (*DrawVLine)    (gui_lcd_t *, gui_layer_t *, gui_dim_t, gui_dim_t, gui_dim_t, gui_color_t);         /*!< Pointer to vertical line drawing. Set to 0 if you do not have optimized version */
+    void            (*FillRect)     (gui_lcd_t *, gui_layer_t *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t, gui_color_t);  /*!< Pointer to function for filling rectangle on LCD */
+    void            (*DrawImage16)  (gui_lcd_t *, gui_layer_t *, const gui_image_desc_t *, const void *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to function for drawing 16BPP (RGB565) images */
+    void            (*DrawImage24)  (gui_lcd_t *, gui_layer_t *, const gui_image_desc_t *, const void *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to function for drawing 24BPP (RGB888) images */
+    void            (*DrawImage32)  (gui_lcd_t *, gui_layer_t *, const gui_image_desc_t *, const void *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to function for drawing 32BPP (ARGB8888) images */
+    void            (*CopyChar)     (gui_lcd_t *, gui_layer_t *, const void *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t, gui_color_t);                /*!< Pointer to copy char function with alpha only as source */
+} gui_ll_t;
 
 /**
  * \defgroup        GUI_FONT Fonts
@@ -710,7 +710,7 @@ typedef struct gui_timer_t {
  * \ingroup         GUI_TIMER
  * \brief           Pointer to \ref gui_timer_t
  */
-typedef gui_timer_t* GUI_TIMER_p;
+typedef gui_timer_t* gui_timer_p;
 
 /**
  * \addtogroup      GUI_WIDGETS_CORE
@@ -1039,12 +1039,12 @@ typedef uint8_t (*gui_widget_callback_t) (gui_handle_p h, GUI_WC_t cmd, gui_widg
  * \brief           Structure for each widget type
  */
 typedef struct gui_widget_t {
-    const gui_char* Name;                   /*!< Widget name for display purpose */
-    uint16_t Size;                          /*!< Bytes required for widget memory allocation */
-    uint32_t Flags;                         /*!< List of flags for widget setup. This field can use \ref GUI_WIDGETS_CORE_FLAGS flags */
-    gui_widget_callback_t Callback;         /*!< Pointer to control function, returns 1 if command handled or 0 if not */
-    const gui_color_t* Colors;              /*!< Pointer to list of colors as default values for widget */
-    uint8_t ColorsCount;                    /*!< Number of colors used in widget */
+    const gui_char* name;                   /*!< Widget name for display purpose */
+    uint16_t size;                          /*!< Bytes required for widget memory allocation */
+    uint32_t flags;                         /*!< List of flags for widget setup. This field can use \ref GUI_WIDGETS_CORE_FLAGS flags */
+    gui_widget_callback_t callback;         /*!< Pointer to control function, returns 1 if command handled or 0 if not */
+    const gui_color_t* colors;              /*!< Pointer to list of colors as default values for widget */
+    uint8_t color_count;                    /*!< Number of colors used in widget */
 } gui_widget_t;
 
 #if defined(GUI_INTERNAL) || __DOXYGEN__

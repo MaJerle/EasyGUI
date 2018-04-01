@@ -417,9 +417,9 @@ keyboard_btn_callback(gui_handle_p h, GUI_WC_t cmd, gui_widget_param_t* param, g
                 /************************************/
                 /* Send character to focused widget */
                 /************************************/
-                gui_string_unicode_encode(ch, kbd.Keys);/* Decode key */
+                gui_string_unicode_encode(ch, kbd.keys);/* Decode key */
                 gui_input_keyadd(&kbd);         /* Add actual key */
-                kbd.Keys[0] = 0;                /* Set key to 0 */
+                kbd.keys[0] = 0;                /* Set key to 0 */
                 gui_input_keyadd(&kbd);         /* Add end key */
             }
             return 1;

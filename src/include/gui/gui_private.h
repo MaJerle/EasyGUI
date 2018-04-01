@@ -67,15 +67,15 @@ typedef struct {
 typedef struct {
     gui_sys_thread_t thread_id;             /*!< GUI thread ID */
     gui_sys_mbox_t mbox;                    /*!< Operating system message box */
-} GUI_CFG_OS_t;
+} GUI_OS_t;
 #endif /* GUI_CFG_OS */
 
 /**
  * \brief           GUI main object structure
  */
 typedef struct {
-    GUI_LCD_t LCD;                          /*!< LCD low-level settings */
-    GUI_LL_t LL;                            /*!< Low-level drawing routines for LCD */
+    gui_lcd_t lcd;                          /*!< LCD low-level settings */
+    gui_ll_t ll;                            /*!< Low-level drawing routines for LCD */
     
     uint32_t Flags;                         /*!< Core GUI flags management */
     
@@ -95,8 +95,8 @@ typedef struct {
     gui_widget_result_t WidgetResult;
     
 #if GUI_CFG_USE_TOUCH || __DOXYGEN__
-    guii_touch_data_t TouchOld;              /*!< Old touch data, used for event management */
-    guii_touch_data_t Touch;                 /*!< Current touch data and processing tool */
+    guii_touch_data_t TouchOld;             /*!< Old touch data, used for event management */
+    guii_touch_data_t Touch;                /*!< Current touch data and processing tool */
     gui_handle_p ActiveWidget;              /*!< Pointer to widget currently active by touch */
     gui_handle_p ActiveWidgetPrev;          /*!< Previously active widget */
 #endif /* GUI_CFG_USE_TOUCH */
@@ -106,10 +106,10 @@ typedef struct {
 #endif /* GUI_CFG_USE_TRANSLATE */
     
 #if GUI_CFG_OS
-    GUI_CFG_OS_t OS;                        /*!< Operating system dependant structure */
+    GUI_OS_t OS;                            /*!< Operating system dependant structure */
 #endif /* GUI_CFG_OS */
 
-    gui_eventcallback_t evt_cb;            /*!< Pointer to global GUI event callback function */
+    gui_eventcallback_t evt_cb;             /*!< Pointer to global GUI event callback function */
     
     uint8_t Initialized;                    /*!< Status indicating GUI is initialized */
 } gui_t;

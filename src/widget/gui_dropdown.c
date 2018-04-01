@@ -54,12 +54,12 @@ gui_color_t colors[] = {
  */
 static const
 gui_widget_t widget = {
-    .Name = _GT("DROPDOWN"),                        /*!< Widget name */
-    .Size = sizeof(gui_dropdown_t),                 /*!< Size of widget for memory allocation */
-    .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = gui_dropdown_callback,              /*!< Callback function */
-    .Colors = colors,
-    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Define number of colors */
+    .name = _GT("DROPDOWN"),                        /*!< Widget name */
+    .size = sizeof(gui_dropdown_t),                 /*!< Size of widget for memory allocation */
+    .flags = 0,                                     /*!< List of widget flags */
+    .callback = gui_dropdown_callback,              /*!< Callback function */
+    .colors = colors,
+    .color_count = GUI_COUNT_OF(colors),            /*!< Define number of colors */
 };
 
 #define o                   ((gui_dropdown_t *)(h))
@@ -291,15 +291,15 @@ process_click(gui_handle_p h, guii_touch_data_t* ts) {
     get_opened_positions(h, &y, &height, &y1, &height1);    /* Calculate values */
     
     /* Check if press was on normal area when widget is closed */
-    if (ts->RelY[0] >= y1 && ts->RelY[0] <= (y1 + height1)) {   /* Check first part */
+    if (ts->y_rel[0] >= y1 && ts->y_rel[0] <= (y1 + height1)) {   /* Check first part */
         
     } else {
         uint16_t tmpSelected;
         
         if (is_dir_up(h)) {
-            tmpSelected = ts->RelY[0] / item_height(h, NULL);  /* Get temporary selected index */
+            tmpSelected = ts->y_rel[0] / item_height(h, NULL);  /* Get temporary selected index */
         } else {
-            tmpSelected = (ts->RelY[0] - height1) / item_height(h, NULL);  /* Get temporary selected index */
+            tmpSelected = (ts->y_rel[0] - height1) / item_height(h, NULL);  /* Get temporary selected index */
         }
         if ((o->visiblestartindex + tmpSelected) < o->Count) {
             set_selection(h, o->visiblestartindex + tmpSelected);
@@ -418,13 +418,13 @@ gui_dropdown_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.Color1Width = f.Width;
                 
-                tmp = disp->Y2;
-                if (disp->Y2 > (y + height)) {      /* Set cut-off Y position for drawing operations */
-                    disp->Y2 = y + height;
+                tmp = disp->y2;
+                if (disp->y2 > (y + height)) {      /* Set cut-off Y position for drawing operations */
+                    disp->y2 = y + height;
                 }
                 
                 /* Try to process all strings */
-                for (index = 0, item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); item != NULL && f.Y <= disp->Y2;
+                for (index = 0, item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); item != NULL && f.Y <= disp->y2;
                         item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
                     if (index < o->visiblestartindex) { /* Check for start visible */
                         continue;
@@ -438,7 +438,7 @@ gui_dropdown_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                     gui_draw_writetext(disp, guii_widget_getfont(h), item->Text, &f);
                     f.Y += itemHeight;
                 }
-                disp->Y2 = tmp;                     /* Set temporary value back */
+                disp->y2 = tmp;                     /* Set temporary value back */
             }
             return 1;
         }
@@ -452,7 +452,7 @@ gui_dropdown_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
 #if GUI_CFG_USE_TOUCH
         case GUI_WC_TouchStart: {
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            tY = ts->RelY[0];                       /* Save relative Y position */
+            tY = ts->y_rel[0];                       /* Save relative Y position */
             
             GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
@@ -461,11 +461,11 @@ gui_dropdown_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             if (h->font != NULL) {
                 gui_dim_t height = item_height(h, NULL);   /* Get element height */
-                gui_dim_t diff = tY - ts->RelY[0];
+                gui_dim_t diff = tY - ts->y_rel[0];
                 
                 if (GUI_ABS(diff) > height) {
                     slide(h, diff > 0 ? 1 : -1);    /* Slide widget */
-                    tY = ts->RelY[0];               /* Save pointer */
+                    tY = ts->y_rel[0];               /* Save pointer */
                 }
             }
             return 1;
@@ -487,10 +487,10 @@ gui_dropdown_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
 #if GUI_CFG_USE_KEYBOARD
         case GUI_WC_KeyPress: {
             guii_keyboard_data_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
-            if (kb->KB.Keys[0] == GUI_KEY_DOWN) {   /* On pressed down */
+            if (kb->kb.keys[0] == GUI_KEY_DOWN) {   /* On pressed down */
                 inc_selection(h, 1);                /* Increase selection */
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
-            } else if (kb->KB.Keys[0] == GUI_KEY_UP) {
+            } else if (kb->kb.keys[0] == GUI_KEY_UP) {
                 inc_selection(h, -1);               /* Decrease selection */
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }

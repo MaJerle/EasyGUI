@@ -53,12 +53,12 @@ gui_color_t colors[] = {
  */
 static const
 gui_widget_t widget = {
-    .Name = _GT("BUTTON"),                          /*!< Widget name */
-    .Size = sizeof(gui_button_t),                   /*!< Size of widget for memory allocation */
-    .Flags = 0,                                     /*!< List of widget flags */
-    .Callback = gui_button_callback,                /*!< Callback function */
-    .Colors = colors,                               /*!< List of default colors */
-    .ColorsCount = GUI_COUNT_OF(colors),            /*!< Number of colors */
+    .name = _GT("BUTTON"),                          /*!< Widget name */
+    .size = sizeof(gui_button_t),                   /*!< Size of widget for memory allocation */
+    .flags = 0,                                     /*!< List of widget flags */
+    .callback = gui_button_callback,                /*!< Callback function */
+    .colors = colors,                               /*!< List of default colors */
+    .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 
 #define b                   ((gui_button_t *)(h))
@@ -139,7 +139,7 @@ gui_button_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
 #if GUI_CFG_USE_KEYBOARD
         case GUI_WC_KeyPress: {
             guii_keyboard_data_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
-            if (kb->KB.Keys[0] == GUI_KEY_CR || kb->KB.Keys[0] == GUI_KEY_LF) {
+            if (kb->kb.keys[0] == GUI_KEY_CR || kb->kb.keys[0] == GUI_KEY_LF) {
                 guii_widget_callback(h, GUI_WC_Click, NULL, NULL); /* Process click */
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }

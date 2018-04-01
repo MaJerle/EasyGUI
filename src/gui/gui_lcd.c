@@ -38,7 +38,7 @@
  */
 gui_dim_t
 gui_lcd_getwidth(void) {
-    return GUI.LCD.Width;
+    return GUI.lcd.width;
 }
 
 /**
@@ -47,7 +47,7 @@ gui_lcd_getwidth(void) {
  */
 gui_dim_t
 gui_lcd_getheight(void) {
-    return GUI.LCD.Height;
+    return GUI.lcd.height;
 }
 
 /**
@@ -56,8 +56,8 @@ gui_lcd_getheight(void) {
  */
 void
 gui_lcd_confirmactivelayer(uint8_t layer_num) {
-    if ((GUI.LCD.Flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM)) {/* If we have anything pending */
-        GUI.LCD.Layers[layer_num].Pending = 0;
-        GUI.LCD.Flags &= ~GUI_FLAG_LCD_WAIT_LAYER_CONFIRM;  /* Clear flag */
+    if ((GUI.lcd.flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM)) {/* If we have anything pending */
+        GUI.lcd.layers[layer_num].pending = 0;
+        GUI.lcd.flags &= ~GUI_FLAG_LCD_WAIT_LAYER_CONFIRM;  /* Clear flag */
     }
 }
