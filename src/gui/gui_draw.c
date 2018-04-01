@@ -34,8 +34,8 @@
 
 typedef struct GUI_StringRect_t {
     size_t Lines;                                   /*!< Number of lines processed */
-    gui_dim_t Width;                               /*!< Rectangle width */
-    gui_dim_t Height;                              /*!< Rectangle height */
+    gui_dim_t Width;                                /*!< Rectangle width */
+    gui_dim_t Height;                               /*!< Rectangle height */
 
     size_t IsEditMode;                              /*!< Status whether text is in edit mode */
     size_t ReadTotal;                               /*!< Total number of characters to read */
@@ -48,16 +48,16 @@ typedef struct GUI_StringRect_t {
 typedef struct GUI_StringRectVars_t {
     GUI_STRING_t s;                                 /*!< Pointer to input string */
     uint32_t ch, lastCh;                            /*!< Current and previous characters */
-    gui_dim_t cW;                                  /*!< Current line width */
+    gui_dim_t cW;                                   /*!< Current line width */
     size_t cnt;                                     /*!< Current count in line */
 
     size_t SpaceIndex;                              /*!< Index number of last space sequence start */
     size_t SpaceCount;                              /*!< Number of spaces in last sequence */
-    gui_dim_t SpaceWidth;                          /*!< Width of last space sequence */
+    gui_dim_t SpaceWidth;                           /*!< Width of last space sequence */
     const gui_char* SpacePtr;                       /*!< Pointer to space start sequence */
     size_t CharsIndex;                              /*!< Index number of non-space sequence start */
     size_t CharsCount;                              /*!< Number of non-space characters in sequence */
-    gui_dim_t CharsWidth;                          /*!< Width of characters after last space detected */
+    gui_dim_t CharsWidth;                           /*!< Width of characters after last space detected */
     const gui_char* CharsPtr;                       /*!< Pointer to chars start sequence */
     uint8_t IsLineFeed;                             /*!< Status indicating character is line feed */
     uint8_t Final;                                  /*!< Status indicating we should do line check and finish */
@@ -434,7 +434,7 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const GUI_DRAW_FONT
     
     while (!GUI.LL.IsReady(&GUI.LCD));              /* Wait till ready */
     
-    y += c->y_pos;                                   /* Set Y position */
+    y += c->y_pos;                                  /* Set Y position */
     
     if (!__GUI_RECT_MATCH(
         disp->X1, disp->Y1, disp->X2, disp->Y2,

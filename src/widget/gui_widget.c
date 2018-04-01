@@ -1022,11 +1022,11 @@ guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, fl
             guii_widget_callback(h->parent, GUI_WC_ChildWidgetCreated, &param, NULL);    /* Notify user about init successful */
         }
         
+        __GUI_LEAVE();                              /* Leave GUI */
 #if GUI_CFG_OS
         static gui_mbox_msg_t msg = {GUI_SYS_MBOX_TYPE_WIDGET_CREATED};
         gui_sys_mbox_putnow(&GUI.OS.mbox, &msg);    /* Post message queue */
 #endif /* GUI_CFG_OS */
-        __GUI_LEAVE();                              /* Leave GUI */
     }
     
     return (void *)h;
