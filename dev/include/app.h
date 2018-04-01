@@ -133,15 +133,15 @@ extern mqtt_client_t* mqtt_client;
 #define GUI_ID_DEBUGBOX_LOG                 (GUI_ID_USER + 0x0601)
 
 /* Image descriptors */
-extern const GUI_IMAGE_DESC_t image_wifi_on;
-extern const GUI_IMAGE_DESC_t image_wifi_off;
-extern const GUI_IMAGE_DESC_t image_console;
-extern const GUI_IMAGE_DESC_t image_log;
+extern const gui_image_desc_t image_wifi_on;
+extern const gui_image_desc_t image_wifi_off;
+extern const gui_image_desc_t image_console;
+extern const gui_image_desc_t image_log;
 
 /* List of fonts */
-extern GUI_Const gui_font_t GUI_Font_Arial_Bold_18;
-extern GUI_Const gui_font_t GUI_Font_Comic_Sans_MS_Regular_22;
-extern GUI_Const gui_font_t GUI_Font_Arial_Narrow_Italic_22;
-extern GUI_Const gui_font_t GUI_Font_Calibri_Bold_8;
+extern gui_const gui_font_t GUI_Font_Arial_Bold_18;
+extern gui_const gui_font_t GUI_Font_Comic_Sans_MS_Regular_22;
+extern gui_const gui_font_t GUI_Font_Arial_Narrow_Italic_22;
+extern gui_const gui_font_t GUI_Font_Calibri_Bold_8;
 
 #endif /* __APP_H */

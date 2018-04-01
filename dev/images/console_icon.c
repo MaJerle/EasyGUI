@@ -2,7 +2,8 @@
 
 #include "app.h"
 
-static const uint32_t _icon[] = {
+static const
+uint32_t _icon[] = {
   0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 
         0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000,
   0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 
@@ -69,12 +70,12 @@ static const uint32_t _icon[] = {
         0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000
 };
 
-const GUI_IMAGE_DESC_t 
-image_console = {
-    .xSize = 32,
-    .ySize = 32,
-    .BPP = 32,
-    .Image = (const uint8_t *)_icon
+const
+gui_image_desc_t image_console = {
+    .x_size = 32,
+    .y_size = 32,
+    .bpp = 32,
+    .image = (const uint8_t *)_icon
 };
 
 /*************************** End of file ****************************/

@@ -1,6 +1,6 @@
 #include "lcd_discovery.h"
 
-extern GUI_Layer_t Layers[];
+extern gui_layer_t Layers[];
 
 /* Define physical screen sizes */
 #define XSIZE_PHYS 800
@@ -38,7 +38,7 @@ uint8_t pSyncLeft[]   = {0x02, 0x15};             /* Scan @ 533 */
 static int32_t active_area = INVALID_AREA;
 int8_t pending_buffer = -1;
 
-GUI_Layer_t* currentLayer;
+gui_layer_t* currentLayer;
 
 #if 0
 /* ZONES of the screen */
@@ -319,7 +319,7 @@ _LCD_Init(void) {
     /*******************************/
     /*******************************/
     /*******************************/
-    LCD_LayertInit(0, Layers[0].StartAddress);
+    LCD_LayertInit(0, Layers[0].start_address);
   
     /*******************************/
     /*******************************/
@@ -365,7 +365,7 @@ void HAL_DSI_EndOfRefreshCallback(DSI_HandleTypeDef *hdsi) {
             HAL_DSI_ShortWrite(hdsi, 0, DSI_DCS_SHORT_PKT_WRITE_P1, OTM8009A_CMD_TEOFF, 0x00);
 
             __HAL_DSI_WRAPPER_DISABLE(hdsi);
-            LTDC_LAYER(&LTDCHandle, 0)->CFBAR = currentLayer->StartAddress + 400 * 4;
+            LTDC_LAYER(&LTDCHandle, 0)->CFBAR = currentLayer->start_address + 400 * 4;
             __HAL_LTDC_RELOAD_CONFIG(&LTDCHandle);
             __HAL_DSI_WRAPPER_ENABLE(hdsi);
 
@@ -376,16 +376,16 @@ void HAL_DSI_EndOfRefreshCallback(DSI_HandleTypeDef *hdsi) {
             /* Find next pending layer */
             uint8_t i = 0;
             for (i = 0; i < GUI_LAYERS; i++) {
-                if (Layers[i].Pending) {
+                if (Layers[i].pending) {
                     currentLayer = &Layers[i];
-                    Layers[i].Pending = 0;
+                    Layers[i].pending = 0;
                     gui_lcd_confirmactivelayer(i);
                     break;
                 }
             }
 
             __HAL_DSI_WRAPPER_DISABLE(hdsi);
-            LTDC_LAYER(&LTDCHandle, 0)->CFBAR = currentLayer != NULL ? currentLayer->StartAddress : Layers[0].StartAddress;
+            LTDC_LAYER(&LTDCHandle, 0)->CFBAR = currentLayer != NULL ? currentLayer->start_address : Layers[0].start_address;
             __HAL_LTDC_RELOAD_CONFIG(&LTDCHandle);
             __HAL_DSI_WRAPPER_ENABLE(hdsi);
             HAL_DSI_LongWrite(hdsi, 0, DSI_DCS_LONG_PKT_WRITE, 4, OTM8009A_CMD_CASET, pColLeft);

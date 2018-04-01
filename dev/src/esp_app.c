@@ -167,7 +167,7 @@ esp_cb_func(esp_cb_t* cb) {
         case ESP_CB_STA_LIST_AP: {
             size_t i;
             gui_handle_p h;
-            GUI_LISTVIEW_ROW_p row;
+            gui_listview_row_p row;
             
             h = gui_widget_getbyid(GUI_ID_LISTVIEW_WIFI_APS);   /* Get list view to hold access points */
             if (h != NULL) {

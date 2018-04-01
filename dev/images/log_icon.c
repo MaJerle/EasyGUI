@@ -69,12 +69,12 @@ static const uint32_t _icon[] = {
         0x00460F87, 0x00460F87, 0x00460F87, 0x00460F87, 0x00460F87, 0x00460F87, 0x00460F87, 0x00460F87, 0x00460F87, 0x18460F87, 0xB7440E83
 };
 
-const GUI_IMAGE_DESC_t 
+const gui_image_desc_t 
 image_log = {
-    .xSize = 32,
-    .ySize = 32,
-    .BPP = 32,
-    .Image = (const uint8_t *)_icon
+    .x_size = 32,
+    .y_size = 32,
+    .bpp = 32,
+    .image = (const uint8_t *)_icon
 };
 
 /*************************** End of file ****************************/

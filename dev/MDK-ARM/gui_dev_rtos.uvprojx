@@ -691,14 +691,14 @@
           <GroupName>LCD_STM32F7_DISCOVERY</GroupName>
           <Files>
             <File>
-              <FileName>tm_stm32_touch_ft5336.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-STM32_LIBRARIES\tm_stm32_touch_ft5336.c</FilePath>
-            </File>
-            <File>
               <FileName>lcd_stm32f7_discovery.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\User\lcd_stm32f7_discovery.c</FilePath>
+              <FilePath>..\src\lcd_stm32f7_discovery.c</FilePath>
+            </File>
+            <File>
+              <FileName>tm_stm32_touch_ft5336.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\libs\tm_stm32_touch_ft5336.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2009,14 +2009,14 @@
           </GroupOption>
           <Files>
             <File>
-              <FileName>tm_stm32_touch_ft5336.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\00-STM32_LIBRARIES\tm_stm32_touch_ft5336.c</FilePath>
-            </File>
-            <File>
               <FileName>lcd_stm32f7_discovery.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\User\lcd_stm32f7_discovery.c</FilePath>
+              <FilePath>..\src\lcd_stm32f7_discovery.c</FilePath>
+            </File>
+            <File>
+              <FileName>tm_stm32_touch_ft5336.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\libs\tm_stm32_touch_ft5336.c</FilePath>
             </File>
           </Files>
         </Group>

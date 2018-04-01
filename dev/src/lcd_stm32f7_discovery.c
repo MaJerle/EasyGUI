@@ -8,8 +8,8 @@
 #define LCD_VFP                     2
 
 /* Variables */
-extern LTDC_HandleTypeDef LTDCHandle;
-extern GUI_Layer_t Layers[];
+LTDC_HandleTypeDef LTDCHandle;
+extern gui_layer_t Layers[];
 
 void _LCD_Init(void) {
     static RCC_PeriphCLKInitTypeDef PeriphClkInitStruct;
@@ -83,6 +83,7 @@ void _LCD_Init(void) {
     LTDCHandle.Init.PCPolarity = LTDC_PCPOLARITY_IPC;
 
     /* Init LTDC */
+    LTDCHandle.Instance = LTDC;
     HAL_LTDC_Init(&LTDCHandle);
     
     /**********************************/
