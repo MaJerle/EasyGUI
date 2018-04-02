@@ -83,8 +83,8 @@ typedef struct {
     gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
     uint8_t flags;                          /*!< List of widget flags */
-    gui_edittext_valign_t VAlign;           /*!< Vertical align setup */
-    gui_edittext_halign_t HAlign;           /*!< Horizontal align setup */
+    gui_edittext_valign_t valign;           /*!< Vertical align setup */
+    gui_edittext_halign_t halign;           /*!< Horizontal align setup */
 } GUI_EDITTEXT_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 

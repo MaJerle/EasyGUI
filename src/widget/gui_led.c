@@ -143,7 +143,7 @@ gui_led_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_w
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
- * \param[in]       flags: Flags for widget creation
+ * \param[in]       flags: flags for widget creation
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p

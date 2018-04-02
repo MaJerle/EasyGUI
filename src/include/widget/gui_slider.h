@@ -81,7 +81,7 @@ typedef struct {
     uint8_t MaxSize;                        /*!< Max size for animation */
     uint8_t CurrentSize;                    /*!< Current size for animation */
     
-    uint8_t Flags;                          /*!< Widget flags */
+    uint8_t flags;                          /*!< Widget flags */
 } gui_slider_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 

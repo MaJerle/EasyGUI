@@ -65,7 +65,7 @@ typedef struct {
     int32_t Max;                            /*!< High value for progress bar */
     int32_t CurrentValue;                   /*!< Current value for progress bar */
     int32_t DesiredValue;                   /*!< Desired value, set by used */
-    uint8_t Flags;                          /*!< Flags variable */
+    uint8_t flags;                          /*!< flags variable */
 } gui_progbar_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 

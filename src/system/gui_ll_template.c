@@ -68,12 +68,12 @@ LCD_Ready(gui_lcd_t* LCD) {
 static gui_color_t
 LCD_GetPixel(gui_lcd_t* LCD, gui_layer_t* layer, gui_dim_t x, gui_dim_t y) {
 #if defined(LCD_COLOR_FORMAT_ARGB8888)
-    return *(gui_color_t *)(layer->StartAddress + GUI.lcd.PixelSize * (layer->Width * y + x));
+    return *(gui_color_t *)(layer->StartAddress + GUI.lcd.PixelSize * (layer->width * y + x));
 #else
     gui_color_t color;
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait till end */
     
-    DMA2D->FGMAR = (uint32_t)(layer->StartAddress + GUI.lcd.PixelSize * (layer->Width * y + x));
+    DMA2D->FGMAR = (uint32_t)(layer->StartAddress + GUI.lcd.PixelSize * (layer->width * y + x));
     DMA2D->OMAR = (uint32_t)&color;                 /* Set output address */
     DMA2D->FGOR = 0;                                /* Set foreground offline */    
     DMA2D->OOR = 0;                                 /* Set output offline */
@@ -255,23 +255,23 @@ LCD_CopyChar(gui_lcd_t* LCD, gui_layer_t* layer, const void* src, void* dst, gui
 
 static void
 LCD_DrawHLine(gui_lcd_t* LCD, gui_layer_t* layer, gui_dim_t x, gui_dim_t y, gui_dim_t length, gui_color_t color) {
-    uint32_t addr = layer->StartAddress + (LCD->PixelSize * (layer->Width * y + x));
+    uint32_t addr = layer->StartAddress + (LCD->PixelSize * (layer->width * y + x));
     
-    LCD_Fill(LCD, layer, (void *)addr, length, 1, layer->Width - length, color);
+    LCD_Fill(LCD, layer, (void *)addr, length, 1, layer->width - length, color);
 }
 
 static void
 LCD_DrawVLine(gui_lcd_t* LCD, gui_layer_t* layer, gui_dim_t x, gui_dim_t y, gui_dim_t length, gui_color_t color) {
-    uint32_t addr = layer->StartAddress + (LCD->PixelSize * (layer->Width * y + x));
+    uint32_t addr = layer->StartAddress + (LCD->PixelSize * (layer->width * y + x));
     
-    LCD_Fill(LCD, layer, (void *)addr, 1, length, layer->Width - 1, color);
+    LCD_Fill(LCD, layer, (void *)addr, 1, length, layer->width - 1, color);
 }
 
 static void
 LCD_FillRect(gui_lcd_t* LCD, gui_layer_t* layer, gui_dim_t x, gui_dim_t y, gui_dim_t xSize, gui_dim_t ySize, gui_color_t color) {
-    uint32_t addr = layer->StartAddress + (LCD->PixelSize * (layer->Width * y + x));
+    uint32_t addr = layer->StartAddress + (LCD->PixelSize * (layer->width * y + x));
     
-    LCD_Fill(LCD, layer, (void *)addr, xSize, ySize, layer->Width - xSize, color);
+    LCD_Fill(LCD, layer, (void *)addr, xSize, ySize, layer->width - xSize, color);
 }
 
 static void
@@ -326,8 +326,8 @@ gui_ll_control(gui_lcd_t* LCD, GUI_LL_Command_t cmd, void* param, void* result) 
             /*******************************/
             /* Set up LCD data             */
             /*******************************/
-            LCD->Width = LCD_WIDTH;
-            LCD->Height = LCD_HEIGHT;
+            LCD->width = LCD_WIDTH;
+            LCD->height = LCD_HEIGHT;
             LCD->PixelSize = LCD_PIXEL_SIZE;
             
             /*******************************/
@@ -359,14 +359,12 @@ gui_ll_control(gui_lcd_t* LCD, GUI_LL_Command_t cmd, void* param, void* result) 
             LL->DrawImage32 = LCD_DrawImage32;  /* Set draw function for 32bit image (ARGB8888/ABGR8888) format */
             LL->CopyChar = LCD_CopyChar;        /* Set draw function for char copy with alpha information */
             
-            if (result) {
+            if (result != NULL) {
                 *(uint8_t *)result = 0;         /* Successful initialization */
             }
             
             HAL_NVIC_SetPriority(DMA2D_IRQn, 4, 0); /* Set priority level for DMA2D */
             HAL_NVIC_EnableIRQ(DMA2D_IRQn);     /* Enable IRQ */
-            
-            DMA2DHandle.XferErrorCallback = TransferErrorCallback;
             
             return 1;                           /* Command processed */
         }

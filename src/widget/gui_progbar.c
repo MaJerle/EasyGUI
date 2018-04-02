@@ -69,7 +69,7 @@ gui_widget_t widget = {
 };
 
 #define p           ((gui_progbar_t *)h)
-#define is_anim(h)  (!!(__GP(h)->Flags & GUI_PROGBAR_FLAG_ANIMATE))
+#define is_anim(h)  (!!(__GP(h)->flags & GUI_PROGBAR_FLAG_ANIMATE))
 
 /* Set value for widget */
 static uint8_t
@@ -155,9 +155,9 @@ gui_progbar_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
                     break;
                 case CFG_PERCENT:                   /* Set percentage mode */
                     if (*(uint8_t *)v->data) {
-                        p->Flags |= GUI_PROGBAR_FLAG_PERCENT;
+                        p->flags |= GUI_PROGBAR_FLAG_PERCENT;
                     } else {
-                        p->Flags &= ~GUI_PROGBAR_FLAG_PERCENT;
+                        p->flags &= ~GUI_PROGBAR_FLAG_PERCENT;
                     }
                     break;
                 case CFG_ANIM:
@@ -166,10 +166,10 @@ gui_progbar_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
                             h->timer = guii_timer_create(10, timer_callback, h);    /* Create animation timer */
                         }
                         if (h->timer != NULL) { /* Check timer response */
-                            __GP(h)->Flags |= GUI_PROGBAR_FLAG_ANIMATE; /* Enable animations */
+                            __GP(h)->flags |= GUI_PROGBAR_FLAG_ANIMATE; /* Enable animations */
                         }
                     } else {
-                        __GP(h)->Flags &= ~GUI_PROGBAR_FLAG_ANIMATE;    /* Disable animation */
+                        __GP(h)->flags &= ~GUI_PROGBAR_FLAG_ANIMATE;    /* Disable animation */
                         if (h->timer != NULL) {
                             guii_timer_remove(&h->timer);   /* Remove timer */
                         }
@@ -201,7 +201,7 @@ gui_progbar_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
                 const gui_char* text = NULL;
                 gui_char buff[5];
                 
-                if (p->Flags & GUI_PROGBAR_FLAG_PERCENT) {
+                if (p->flags & GUI_PROGBAR_FLAG_PERCENT) {
                     sprintf((char *)buff, "%lu%%", (unsigned long)(((p->CurrentValue - p->Min) * 100) / (p->Max - p->Min)));
                     text = buff;
                 } else if (guii_widget_isfontandtextset(h)) {
@@ -212,13 +212,13 @@ gui_progbar_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
                     gui_draw_font_t f;
                     gui_draw_font_init(&f);         /* Init structure */
                     
-                    f.X = x + 2;
-                    f.Y = y + 2;
-                    f.Width = width - 4;
-                    f.Height = height - 4;
-                    f.Align = GUI_HALIGN_CENTER | GUI_VALIGN_CENTER;
-                    f.Color1Width = w ? w - 1 : 0;
-                    f.Color1 = guii_widget_getcolor(h, GUI_PROGBAR_COLOR_BG);
+                    f.x = x + 2;
+                    f.y = y + 2;
+                    f.width = width - 4;
+                    f.height = height - 4;
+                    f.align = GUI_HALIGN_CENTER | GUI_VALIGN_CENTER;
+                    f.color1width = w ? w - 1 : 0;
+                    f.color1 = guii_widget_getcolor(h, GUI_PROGBAR_COLOR_BG);
                     f.Color2 = guii_widget_getcolor(h, GUI_PROGBAR_COLOR_FG);
                     gui_draw_writetext(disp, guii_widget_getfont(h), text, &f);
                 }
@@ -239,7 +239,7 @@ gui_progbar_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
- * \param[in]       flags: Flags for create procedure
+ * \param[in]       flags: flags for create procedure
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p

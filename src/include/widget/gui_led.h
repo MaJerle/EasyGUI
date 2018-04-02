@@ -74,7 +74,7 @@ typedef struct {
     gui_handle C;                           /*!< Global widget object */
     
     gui_led_type_t type;                    /*!< Led shape type */
-    uint8_t flags;                         /*!< Flags management for LED */
+    uint8_t flags;                         /*!< flags management for LED */
 } GUI_LED_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 

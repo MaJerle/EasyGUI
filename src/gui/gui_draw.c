@@ -34,8 +34,8 @@
 
 typedef struct {
     size_t Lines;                                   /*!< Number of lines processed */
-    gui_dim_t Width;                                /*!< Rectangle width */
-    gui_dim_t Height;                               /*!< Rectangle height */
+    gui_dim_t width;                                /*!< Rectangle width */
+    gui_dim_t height;                               /*!< Rectangle height */
 
     size_t IsEditMode;                              /*!< Status whether text is in edit mode */
     size_t ReadTotal;                               /*!< Total number of characters to read */
@@ -51,14 +51,14 @@ typedef struct {
     gui_dim_t cW;                                   /*!< Current line width */
     size_t cnt;                                     /*!< Current count in line */
 
-    size_t SpaceIndex;                              /*!< Index number of last space sequence start */
-    size_t SpaceCount;                              /*!< Number of spaces in last sequence */
-    gui_dim_t SpaceWidth;                           /*!< Width of last space sequence */
-    const gui_char* SpacePtr;                       /*!< Pointer to space start sequence */
-    size_t CharsIndex;                              /*!< Index number of non-space sequence start */
-    size_t CharsCount;                              /*!< Number of non-space characters in sequence */
-    gui_dim_t CharsWidth;                           /*!< Width of characters after last space detected */
-    const gui_char* CharsPtr;                       /*!< Pointer to chars start sequence */
+    size_t spaceindex;                              /*!< Index number of last space sequence start */
+    size_t spacecount;                              /*!< Number of spaces in last sequence */
+    gui_dim_t spacewidth;                           /*!< Width of last space sequence */
+    const gui_char* spaceptr;                       /*!< Pointer to space start sequence */
+    size_t charsindex;                              /*!< Index number of non-space sequence start */
+    size_t charscount;                              /*!< Number of non-space characters in sequence */
+    gui_dim_t charswidth;                           /*!< Width of characters after last space detected */
+    const gui_char* charsptr;                       /*!< Pointer to chars start sequence */
     uint8_t IsLineFeed;                             /*!< Status indicating character is line feed */
     uint8_t Final;                                  /*!< Status indicating we should do line check and finish */
     uint8_t IsBreak;                                /*!< Status indicating break occurred */
@@ -135,30 +135,30 @@ process_string_rectangle_before_return(gui_stringrectvars_t* var, gui_stringrect
         /*
          * If there was a word which was too long for single line, put it to next line
          */
-        if (var->CharsIndex > var->SpaceIndex && !end) {    /* If characters are the last values */
-            var->cW -= var->CharsWidth;             /* Decrease effective width for characters */
-            var->cnt -= var->CharsCount;            /* Decrease number of total count */
-            rect->ReadDraw -= var->CharsCount;      /* Decrease number of characters to read and draw */
-            rect->ReadTotal -= var->CharsCount;     /* Decrease number of characters to read */
+        if (var->charsindex > var->spaceindex && !end) {    /* If characters are the last values */
+            var->cW -= var->charswidth;             /* Decrease effective width for characters */
+            var->cnt -= var->charscount;            /* Decrease number of total count */
+            rect->ReadDraw -= var->charscount;      /* Decrease number of characters to read and draw */
+            rect->ReadTotal -= var->charscount;     /* Decrease number of characters to read */
         }
         return;
     }
     if (end) {                                      /* We received final line (end of string) */
-        if (var->SpaceIndex > var->CharsIndex) {    /* When spaces are last characters */
+        if (var->spaceindex > var->charsindex) {    /* When spaces are last characters */
             /*
              * When last line received, flush only white spaces and ignore other check
              */
-            var->cW -= var->SpaceWidth;             /* Decrease effective rectangle width */
-            rect->ReadDraw -= var->SpaceCount;      /* Decrease number of drawing characters by removing spaces */
+            var->cW -= var->spacewidth;             /* Decrease effective rectangle width */
+            rect->ReadDraw -= var->spacecount;      /* Decrease number of drawing characters by removing spaces */
         }
-    } else if (var->SpaceIndex > var->CharsIndex) { /* When spaces are last characters */
+    } else if (var->spaceindex > var->charsindex) { /* When spaces are last characters */
         /*
          * - Leave number of characters to read to flush white spaces from string 
          * - Decrease effective rectangle size by ignored white spaces
          */
-        var->cW -= var->SpaceWidth;                 /* Decrease effective rectangle width */
-        rect->ReadDraw -= var->SpaceCount;          /* Decrease number of drawing characters by removing spaces */
-    } else if (var->CharsIndex > var->SpaceIndex) { /* When non-spaces are last characters */
+        var->cW -= var->spacewidth;                 /* Decrease effective rectangle width */
+        rect->ReadDraw -= var->spacecount;          /* Decrease number of drawing characters by removing spaces */
+    } else if (var->charsindex > var->spaceindex) { /* When non-spaces are last characters */
         /*
          * - Decrease number of characters to read as we don't want to flush non-white space characters
          * - Decrease effective rectangle size by ignored non-white space characters
@@ -166,15 +166,15 @@ process_string_rectangle_before_return(gui_stringrectvars_t* var, gui_stringrect
          * - Leave number of characters to read to flush white spaces in front of non-white space characters
          * - Decrease effective rectangle size by ignored white space characters
          */
-        var->cnt -= var->CharsCount;
+        var->cnt -= var->charscount;
         if (!end) {                                 /* If not yet end string */
-            var->s.Str = var->CharsPtr;             /* Set string pointer to start of characters sequence */
+            var->s.Str = var->charsptr;             /* Set string pointer to start of characters sequence */
         }
-        var->cW -= var->CharsWidth;
-        rect->ReadDraw -= var->CharsCount;          /* Decrease number of drawing characters by removing spaces */
-        if (var->SpaceIndex + var->SpaceCount == var->CharsIndex) {
-            var->cW -= var->SpaceWidth;             /* Decrease effective width of line */
-            rect->ReadDraw -= var->SpaceCount;      /* Decrease number of characters we actually have to draw */
+        var->cW -= var->charswidth;
+        rect->ReadDraw -= var->charscount;          /* Decrease number of drawing characters by removing spaces */
+        if (var->spaceindex + var->spacecount == var->charsindex) {
+            var->cW -= var->spacewidth;             /* Decrease effective width of line */
+            rect->ReadDraw -= var->spacecount;      /* Decrease number of characters we actually have to draw */
         }
     } else {
         /*
@@ -208,7 +208,7 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
     var.IsBreak = onlyToNextLine;                   /* Set for break */
 
     tH = 0;
-    if (rect->StringDraw->Flags & GUI_FLAG_FONT_MULTILINE) {    /* We want to know exact rectangle for drawing multi line texts including new lines and carriage return */
+    if (rect->StringDraw->flags & GUI_FLAG_FONT_MULTILINE) {    /* We want to know exact rectangle for drawing multi line texts including new lines and carriage return */
         while (1) {                                 /* Unlimited execution */
             lastS = var.s.Str;                      /* Save current string pointer */
             if (gui_string_getch(&var.s, &var.ch, &i)) {/* Get next character from string */
@@ -227,13 +227,13 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
                 /* Check for white space character */
                 if (CH_WS == var.ch) {              /* We have white space character */
                     if (CH_WS != var.lastCh) {      /* Check if previous char was also white space */
-                        var.SpaceIndex = var.cnt;   /* Save index at which space sequence start appear */
-                        var.SpaceCount = 0;         /* Reset number of white spaces */
-                        var.SpaceWidth = 0;         /* Reset white spaces width */
-                        var.SpacePtr = lastS;       /* Save pointer to last string entry of spaces */
+                        var.spaceindex = var.cnt;   /* Save index at which space sequence start appear */
+                        var.spacecount = 0;         /* Reset number of white spaces */
+                        var.spacewidth = 0;         /* Reset white spaces width */
+                        var.spaceptr = lastS;       /* Save pointer to last string entry of spaces */
                     }
 
-                    if (var.SpaceIndex == 0) {      /* If we are on beginning of line */
+                    if (var.spaceindex == 0) {      /* If we are on beginning of line */
                         if (!rect->IsEditMode) {    /* Do not ignore front spaces when in edit mode = show plain text as is */
                             if (!var.IsLineFeed) {  /* Do not increase pointer if line feed was detected = force new line*/
                                 if (onlyToNextLine) {   /* Increase input pointer only in single line mode */
@@ -245,10 +245,10 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
                     }
                 } else {                            /* Non-space character */
                     if (CH_WS == var.lastCh) {      /* If character before was white space */
-                        var.CharsIndex = var.cnt;   /* Save index at which character sequence appear */
-                        var.CharsCount = 0;         /* Reset number of characters */
-                        var.CharsWidth = 0;         /* Reset characters width */
-                        var.CharsPtr = lastS;       /* Save pointer to last string entry */
+                        var.charsindex = var.cnt;   /* Save index at which character sequence appear */
+                        var.charscount = 0;         /* Reset number of characters */
+                        var.charswidth = 0;         /* Reset characters width */
+                        var.charsptr = lastS;       /* Save pointer to last string entry */
                     }
                 }
 
@@ -256,18 +256,18 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
                 if (var.IsLineFeed) {               /* Check for line feed */
                     var.Final = 1;                  /* Stop execution at this point */
                     var.cnt++;                      /* Increase number of elements manually */
-                    var.SpaceCount++;               /* Increase number of spaces on last element */
+                    var.spacecount++;               /* Increase number of spaces on last element */
                 } else {                            /* Try to get character size */
                     /* Try to fit character in current line */
                     string_get_char_size(rect->Font, var.ch, &w, &h);   /* Get character dimensions */
-                    if ((var.cW + w) < rect->StringDraw->Width) {   /* Do we have enough memory available */
+                    if ((var.cW + w) < rect->StringDraw->width) {   /* Do we have enough memory available */
                         var.cW += w;                /* Increase total line width */
                         if (CH_WS == var.ch) {      /* Check if character is white space */
-                            var.SpaceCount++;       /* Increase number of spaces in a row */
-                            var.SpaceWidth += w;    /* Increase width of spaces in a row */
+                            var.spacecount++;       /* Increase number of spaces in a row */
+                            var.spacewidth += w;    /* Increase width of spaces in a row */
                         } else {
-                            var.CharsCount++;       /* Increase number of characters in a row */
-                            var.CharsWidth += w;    /* Increase width of characters in a row */
+                            var.charscount++;       /* Increase number of characters in a row */
+                            var.charswidth += w;    /* Increase width of characters in a row */
                         }
                     } else {
                         var.Final = 1;              /* No more characters available in line, stop execution */
@@ -282,7 +282,7 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
                         mW = var.cW;                /* Set as new maximal width */
                     }
 
-                    tH += rect->StringDraw->LineHeight; /* Increase line height for next line processing */
+                    tH += rect->StringDraw->Lineheight; /* Increase line height for next line processing */
                     if (onlyToNextLine) {           /* Read only single line? */
                         break;                      /* Stop execution at this point */
                     }
@@ -297,19 +297,19 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
                 }
             } else {                                /* Everything has been read and line may still be free */
                 process_string_rectangle_before_return(&var, rect, 1);  /* Process size before return */
-                tH += rect->StringDraw->LineHeight; /* Increase line height for next line processing */
+                tH += rect->StringDraw->Lineheight; /* Increase line height for next line processing */
                 if (mW < var.cW) {                  /* Current width check */
                     mW = var.cW;                    /* Save as max width currently */
                 }
                 break;                              /* Stop while loop execution */
             }
         }
-        rect->Width = mW;                           /* Save rectangle width */
+        rect->width = mW;                           /* Save rectangle width */
     } else {
         var.cW = 0;
         while (gui_string_getch(&var.s, &var.ch, &i)) { /* Get next character from string */
             string_get_char_size(rect->Font, var.ch, &w, &h);   /* Get character width and height */
-            if (!(rect->StringDraw->Flags & GUI_FLAG_FONT_RIGHTALIGN) && (var.cW + w) > rect->StringDraw->Width) {  /* Check if end now */
+            if (!(rect->StringDraw->flags & GUI_FLAG_FONT_RIGHTALIGN) && (var.cW + w) > rect->StringDraw->width) {  /* Check if end now */
                 break;
             }
             if (CH_CR != var.ch && CH_LF != var.ch) {
@@ -318,10 +318,10 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
             var.cnt++;                              /* Increase number of characters to read */
         }
         rect->ReadTotal = rect->ReadDraw = var.cnt; /* Set values for drawing and reading */
-        rect->Width = var.cW;                       /* Save width value */
-        tH += rect->StringDraw->LineHeight;         /* Set line height */
+        rect->width = var.cW;                       /* Save width value */
+        tH += rect->StringDraw->Lineheight;         /* Set line height */
     }
-    rect->Height = tH;                              /* Save rectangle height value */
+    rect->height = tH;                              /* Save rectangle height value */
     return var.cnt;                                 /* Return number of characters to read in current line */
 }
 
@@ -355,7 +355,7 @@ create_char_entry_from_font(const gui_font_t* font, const gui_font_char_t* c) {
     /* Calculate memory size for data */
     memDataSize = c->x_size * c->y_size;
     
-    memsize += GUI_MEM_ALIGN(memDataSize);          /* Align memory before increase */
+    memsize += GUI_MEM_ALIGN(memDataSize);          /* align memory before increase */
     entry = GUI_MEMALLOC(memsize);                  /* Allocate memory for entry */
     if (entry != NULL) {                            /* Allocation was successful */
         uint16_t i, x;
@@ -451,11 +451,11 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_font
             entry = create_char_entry_from_font(font, c);   /* Create new entry */
         }
         if (entry != NULL) {                        /* We have valid data */
-            gui_dim_t width, height, offlineSrc, offlineDst, tmpX;
+            gui_dim_t width, height, offlineSrc, offlineDst, tmpx;
             uint8_t* dst = 0;
             uint8_t* ptr = (uint8_t *)entry;        /* Get pointer */
             
-            tmpX = x;                               /* Start X */
+            tmpx = x;                               /* Start X */
             
             ptr += sizeof(*entry);                  /* Go to start of data array */
             dst = (uint8_t *)(GUI.lcd.drawing_layer->start_address + ((y - GUI.lcd.drawing_layer->y_offset) * GUI.lcd.drawing_layer->width + (x - GUI.lcd.drawing_layer->x_offset)) * GUI.lcd.pixel_size);
@@ -475,7 +475,7 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_font
                 ptr += (disp->x1 - x);              /* Set offset of start address in X direction */
                 dst += (disp->x1 - x) * GUI.lcd.pixel_size; /* Set offset of start address in X direction */
                 width -= disp->x1 - x;              /* Increase source offline */
-                tmpX += disp->x1 - x;               /* Increase effective start X position */
+                tmpx += disp->x1 - x;               /* Increase effective start X position */
             }
             if ((x + c->x_size) > disp->x2) {
                 width -= x + c->x_size - disp->x2;  /* Decrease effective width */
@@ -487,13 +487,13 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_font
             /**
              * Check if character must be drawn with 2 colors, on the middle of color switch
              */
-            if (tmpX < (draw->X + draw->Color1Width) && (tmpX + width) > (draw->X + draw->Color1Width)) {
-                gui_dim_t firstWidth = (draw->X + draw->Color1Width) - tmpX;
+            if (tmpx < (draw->x + draw->color1width) && (tmpx + width) > (draw->x + draw->color1width)) {
+                gui_dim_t firstWidth = (draw->x + draw->color1width) - tmpx;
                 
                 /* First part draw */
                 GUI.ll.CopyChar(&GUI.lcd, GUI.lcd.drawing_layer, ptr, dst, 
                     firstWidth, height,
-                    offlineSrc + width - firstWidth, offlineDst + width - firstWidth, draw->Color1);
+                    offlineSrc + width - firstWidth, offlineDst + width - firstWidth, draw->color1);
                 
                 /* Second part draw */
                 GUI.ll.CopyChar(&GUI.lcd, GUI.lcd.drawing_layer, ptr + firstWidth, dst + firstWidth * GUI.lcd.pixel_size, 
@@ -503,7 +503,7 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_font
                 /* Draw entire character with single color */
                 GUI.ll.CopyChar(&GUI.lcd, GUI.lcd.drawing_layer, ptr, dst, 
                     width, height,
-                    offlineSrc, offlineDst, (draw->X + draw->Color1Width) > x ? draw->Color1 : draw->Color2);
+                    offlineSrc, offlineDst, (draw->x + draw->color1width) > x ? draw->color1 : draw->Color2);
             }
             return;
         }
@@ -519,7 +519,7 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_font
         }
         
         for (i = 0; i < columns * c->y_size; i++) { /* Go through all data bytes */
-            if (y >= disp->y1 && y <= disp->y2 && y < (draw->Y + draw->Height)) {   /* Do not draw when we are outside clipping are */            
+            if (y >= disp->y1 && y <= disp->y2 && y < (draw->y + draw->height)) {   /* Do not draw when we are outside clipping are */            
                 b = c->data[i];                     /* Get character byte */
                 for (k = 0; k < 4; k++) {           /* Scan each bit in byte */
                     gui_color_t baseColor;
@@ -527,8 +527,8 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_font
                     if (x1 < disp->x1 || x1 > disp->x2) {
                         continue;
                     }
-                    if (x1 < (draw->X + draw->Color1Width)) {
-                        baseColor = draw->Color1;
+                    if (x1 < (draw->x + draw->color1width)) {
+                        baseColor = draw->color1;
                     } else {
                         baseColor = draw->Color2;
                     }
@@ -559,7 +559,7 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_font
             columns++;
         }
         for (i = 0; i < columns * c->y_size; i++) { /* Go through all data bytes */
-            if (y >= disp->y1 && y <= disp->y2 && y < (draw->Y + draw->Height)) {   /* Do not draw when we are outside clipping are */
+            if (y >= disp->y1 && y <= disp->y2 && y < (draw->y + draw->height)) {   /* Do not draw when we are outside clipping are */
                 b = c->data[i];                     /* Get character byte */
                 for (k = 0; k < 8; k++) {           /* Scan each bit in byte */
                     if (b & (1 << (7 - k))) {       /* If bit is set, draw pixel */
@@ -567,8 +567,8 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_font
                         if (x1 < disp->x1 || x1 > disp->x2) {
                             continue;
                         }
-                        if (x1 <= (draw->X + draw->Color1Width)) {
-                            gui_draw_setpixel(disp, x1, y, draw->Color1);
+                        if (x1 <= (draw->x + draw->color1width)) {
+                            gui_draw_setpixel(disp, x1, y, draw->color1);
                         } else {
                             gui_draw_setpixel(disp, x1, y, draw->Color2);
                         }
@@ -597,10 +597,10 @@ string_get_pointer_for_width(const gui_font_t* font, gui_string_t* str, gui_draw
             break;
         }
         string_get_char_size(font, ch, &w, &h);
-        if ((tot + w) < draw->Width) {
+        if ((tot + w) < draw->width) {
             tot += w;
         } else {
-            draw->X += draw->Width - tot;           /* Add X position to align right */
+            draw->x += draw->width - tot;           /* Add X position to align right */
             break;
         }
     }
@@ -763,7 +763,7 @@ gui_draw_line(const gui_display_t* disp, gui_dim_t x1, gui_dim_t y1, gui_dim_t x
     /* Check if coordinates are inside drawing region */
 //    if (                                            /* Check if redraw is inside area */
 //        !__GUI_RECT_MATCH(  x1, y1, x2, y2,
-//                            disp->X1, disp->Y1, disp->X2, disp->Y2)) {
+//                            disp->x1, disp->y1, disp->x2, disp->y2)) {
 //        return;
 //    }
 
@@ -871,10 +871,10 @@ gui_draw_filledrectangle(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gu
  * \param[in]       y: Top left Y position
  * \param[in]       width: Rectangle width
  * \param[in]       height: Rectangle height
- * \param[in]       state: 3D state. This parameter can be a value of \ref GUI_DRAW_3D_State_t enumeration
+ * \param[in]       state: 3D state. This parameter can be a value of \ref gui_draw_3d_state_t enumeration
  */
 void
-gui_draw_rectangle3d(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, GUI_DRAW_3D_State_t state) {
+gui_draw_rectangle3d(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_draw_3d_state_t state) {
     gui_color_t c1, c2, c3;
     
     c1 = GUI_COLOR_BLACK;
@@ -1293,13 +1293,13 @@ gui_draw_poly(const gui_display_t* disp, const gui_draw_poly_t* points, size_t l
         return;
     }
 
-    gui_draw_line(disp, points->X, points->Y, (points + len - 1)->X, (points + len - 1)->Y, color);
+    gui_draw_line(disp, points->x, points->y, (points + len - 1)->x, (points + len - 1)->y, color);
 
     while (--len) {
-        x = points->X;
-        y = points->Y;
+        x = points->x;
+        y = points->y;
         points++;
-        gui_draw_line(disp, x, y, points->X, points->Y, color);
+        gui_draw_line(disp, x, y, points->x, points->y, color);
     }
 }
 
@@ -1320,55 +1320,55 @@ gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_
     gui_stringrect_t rect = {0};                    /* Get string object */
     gui_string_t currStr;
     
-    if (!draw->LineHeight) {                        /* When line height is not set */
-        draw->LineHeight = font->size;              /* Set font size */
+    if (!draw->Lineheight) {                        /* When line height is not set */
+        draw->Lineheight = font->size;              /* Set font size */
     }
     
     rect.Font = font;                               /* Save font structure */
     rect.StringDraw = draw;                         /* Set drawing pointer */
-    rect.IsEditMode = !!(draw->Flags & GUI_FLAG_FONT_EDITMODE); /* Check if in edit mode */
+    rect.IsEditMode = !!(draw->flags & GUI_FLAG_FONT_EDITMODE); /* Check if in edit mode */
       
     gui_string_prepare(&currStr, str);              /* Prepare string */
     string_rectangle(&rect, &currStr, 0);           /* Get string width for this box */
-    if (rect.Width > draw->Width) {                 /* If string is wider than available rectangle */
-        if (draw->Flags & GUI_FLAG_FONT_RIGHTALIGN) {   /* Check right align text */
+    if (rect.width > draw->width) {                 /* If string is wider than available rectangle */
+        if (draw->flags & GUI_FLAG_FONT_RIGHTALIGN) {   /* Check right align text */
             gui_string_prepare(&currStr, str);      /* Prepare string */
             str = string_get_pointer_for_width(font, &currStr, draw);  /* Get string pointer */
         } else {
-            rect.Width = draw->Width;               /* Strip text width to available */
+            rect.width = draw->width;               /* Strip text width to available */
         }
     }
     
-    x = draw->X;                                    /* Get start X position */
-    y = draw->Y;                                    /* Get start Y position */
+    x = draw->x;                                    /* Get start X position */
+    y = draw->y;                                    /* Get start Y position */
     
-    if (draw->Align & GUI_VALIGN_CENTER) {          /* Check for vertical align center */
-        y += (draw->Height - rect.Height) / 2;      /* Align center of drawing area */
-    } else if (draw->Align & GUI_VALIGN_BOTTOM) {   /* Check for vertical align bottom */
-        y += draw->Height - rect.Height;            /* Align bottom of drawing area */
+    if (draw->align & GUI_VALIGN_CENTER) {          /* Check for vertical align center */
+        y += (draw->height - rect.height) / 2;      /* align center of drawing area */
+    } else if (draw->align & GUI_VALIGN_BOTTOM) {   /* Check for vertical align bottom */
+        y += draw->height - rect.height;            /* align bottom of drawing area */
     }
     
-    if (y < draw->Y) {                              /* Check situation first */
-        y = draw->Y;
+    if (y < draw->y) {                              /* Check situation first */
+        y = draw->y;
     }
-    y -= draw->ScrollY;                             /* Go scroll top */
+    y -= draw->Scrolly;                             /* Go scroll top */
     
     /**
      * Check Y start value in case of edit mode = allow always on bottom
      */
-    if (draw->Flags & GUI_FLAG_FONT_MULTILINE && rect.IsEditMode) { /* In multi-line and edit mode */
-        if (rect.Height > draw->Height) {           /* If text is greater than visible area in edit mode, set it to bottom align */
-            y = draw->Y + draw->Height - rect.Height;
+    if (draw->flags & GUI_FLAG_FONT_MULTILINE && rect.IsEditMode) { /* In multi-line and edit mode */
+        if (rect.height > draw->height) {           /* If text is greater than visible area in edit mode, set it to bottom align */
+            y = draw->y + draw->height - rect.height;
         }
     }    
     
     gui_string_prepare(&currStr, str);              /* Prepare string again */
     while ((cnt = string_rectangle(&rect, &currStr, 1)) > 0) {
-        x = draw->X;                                       
-        if (draw->Align & GUI_HALIGN_CENTER) {      /* Check for horizontal align center */
-            x += (draw->Width - rect.Width) / 2;    /* Align center of drawing area */
-        } else if (draw->Align & GUI_HALIGN_RIGHT) {/* Check for horizontal align right */
-            x += draw->Width - rect.Width;          /* Align right of drawing area */
+        x = draw->x;                                       
+        if (draw->align & GUI_HALIGN_CENTER) {      /* Check for horizontal align center */
+            x += (draw->width - rect.width) / 2;    /* align center of drawing area */
+        } else if (draw->align & GUI_HALIGN_RIGHT) {/* Check for horizontal align right */
+            x += draw->width - rect.width;          /* align right of drawing area */
         }
         while (cnt-- && gui_string_getch(&currStr, &ch, &i)) {  /* Read character by character */
             if (rect.ReadDraw == 0) {               /* Anything to draw? */
@@ -1388,8 +1388,8 @@ gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_
             
             x += c->x_size + c->x_margin;           /* Increase X position */
         }
-        y += draw->LineHeight;                      /* Go to next line */
-        if (!(draw->Flags & GUI_FLAG_FONT_MULTILINE) || y > disp->y2) { /* Not multiline or over visible Y area */
+        y += draw->Lineheight;                      /* Go to next line */
+        if (!(draw->flags & GUI_FLAG_FONT_MULTILINE) || y > disp->y2) { /* Not multiline or over visible Y area */
             break;
         }
     }
@@ -1411,32 +1411,32 @@ gui_draw_scrollbar_init(gui_draw_sb_t* sb) {
  */
 void
 gui_draw_scrollbar(const gui_display_t* disp, gui_draw_sb_t* sb) {
-    gui_dim_t btnW, btnH, midHeight, rectHeight, midOffset = 0;
+    gui_dim_t btnW, btnH, midheight, rectheight, midOffset = 0;
 
-    btnW = sb->Width;
-    btnH = (sb->Width << 1) / 3;
+    btnW = sb->width;
+    btnH = (sb->width << 1) / 3;
     
     /* Top box */
-    gui_draw_rectangle3d(disp, sb->X, sb->Y, btnW, btnH, GUI_DRAW_3D_State_Raised);
-    gui_draw_filledrectangle(disp, sb->X + 2, sb->Y + 2, btnW - 4, btnH - 4, GUI_COLOR_WIN_MIDDLEGRAY);
+    gui_draw_rectangle3d(disp, sb->x, sb->y, btnW, btnH, GUI_DRAW_3D_State_Raised);
+    gui_draw_filledrectangle(disp, sb->x + 2, sb->y + 2, btnW - 4, btnH - 4, GUI_COLOR_WIN_MIDDLEGRAY);
     
     /* Bottom box */
-    gui_draw_rectangle3d(disp, sb->X, sb->Y + sb->Height - btnH, btnW, btnH, GUI_DRAW_3D_State_Raised);
-    gui_draw_filledrectangle(disp, sb->X + 2, sb->Y + sb->Height - btnH + 2, btnW - 4, btnH - 4, GUI_COLOR_WIN_MIDDLEGRAY);
+    gui_draw_rectangle3d(disp, sb->x, sb->y + sb->height - btnH, btnW, btnH, GUI_DRAW_3D_State_Raised);
+    gui_draw_filledrectangle(disp, sb->x + 2, sb->y + sb->height - btnH + 2, btnW - 4, btnH - 4, GUI_COLOR_WIN_MIDDLEGRAY);
     
     /* Middle part */
-    midHeight = (sb->Height - 2U * btnH);           /* Calculate middle rectangle part */
-    gui_draw_filledrectangle(disp, sb->X, sb->Y + btnH, sb->Width, midHeight, GUI_COLOR_WIN_MIDDLEGRAY);
+    midheight = (sb->height - 2U * btnH);           /* Calculate middle rectangle part */
+    gui_draw_filledrectangle(disp, sb->x, sb->y + btnH, sb->width, midheight, GUI_COLOR_WIN_MIDDLEGRAY);
     
     /* Calculate size and offset for middle part */
-    if (sb->EntriesVisible < sb->EntriesTotal) {    /* More entries than available visual space */
-        rectHeight = midHeight * sb->EntriesVisible / sb->EntriesTotal; /* Entire area for drawing middle part */
-        if (rectHeight < 6) {                       /* Calculate middle height */
-            rectHeight = 6;
+    if (sb->entriesvisible < sb->entriestotal) {    /* More entries than available visual space */
+        rectheight = midheight * sb->entriesvisible / sb->entriestotal; /* Entire area for drawing middle part */
+        if (rectheight < 6) {                       /* Calculate middle height */
+            rectheight = 6;
         }
-        midOffset = (midHeight - rectHeight) * sb->EntriesTop / (sb->EntriesTotal - sb->EntriesVisible);
+        midOffset = (midheight - rectheight) * sb->entriestop / (sb->entriestotal - sb->entriesvisible);
     } else {
-        rectHeight = midHeight;
+        rectheight = midheight;
     }
-    gui_draw_rectangle3d(disp, sb->X, sb->Y + btnH + midOffset, sb->Width, rectHeight, GUI_DRAW_3D_State_Raised); 
+    gui_draw_rectangle3d(disp, sb->x, sb->y + btnH + midOffset, sb->width, rectheight, GUI_DRAW_3D_State_Raised); 
 }

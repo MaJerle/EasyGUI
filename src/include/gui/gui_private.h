@@ -77,7 +77,7 @@ typedef struct {
     gui_lcd_t lcd;                          /*!< LCD low-level settings */
     gui_ll_t ll;                            /*!< Low-level drawing routines for LCD */
     
-    uint32_t Flags;                         /*!< Core GUI flags management */
+    uint32_t flags;                         /*!< Core GUI flags management */
     
     gui_display_t Display;                  /*!< Clipping management */
     gui_display_t DisplayTemp;              /*!< Clipping for widgets for drawing and touch */

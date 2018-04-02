@@ -57,10 +57,10 @@ gui_buffer_init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr) {
 			Buffer->Size = 0;                               /* Reset size */
 			return 1;                           			/* Return error */
 		} else {
-			Buffer->Flags |= GUI_BUFFER_MALLOC;     		/* Set flag for malloc */
+			Buffer->flags |= GUI_BUFFER_MALLOC;     		/* Set flag for malloc */
 		}
 	}
-	Buffer->Flags |= GUI_BUFFER_INITIALIZED;				/* We are initialized */
+	Buffer->flags |= GUI_BUFFER_INITIALIZED;				/* We are initialized */
 	
 	return 0;												/* Initialized OK */
 }
@@ -76,10 +76,10 @@ gui_buffer_free(GUI_BUFFER_t* Buffer) {
 	if (Buffer == NULL) {									/* Check buffer structure */
 		return;
 	}
-	if (Buffer->Flags & GUI_BUFFER_MALLOC) {			    /* If malloc was used for allocation */
+	if (Buffer->flags & GUI_BUFFER_MALLOC) {			    /* If malloc was used for allocation */
 		GUI_MEMFREE(Buffer->Buffer);                        /* Free memory */
 	}
-	Buffer->Flags = 0;
+	Buffer->flags = 0;
 	Buffer->Size = 0;
 }
 

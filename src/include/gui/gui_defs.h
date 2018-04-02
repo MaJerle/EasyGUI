@@ -51,7 +51,7 @@ extern "C" {
  */
 
 /**
- * \addtogroup      GUI_Flags Flags
+ * \addtogroup      GUI_flags flags
  * \brief           List of all flags in GUI library
  * \{
  */
@@ -77,7 +77,7 @@ extern "C" {
 
 /**
  * \defgroup        GUI_WIDGETS_CORE_FLAGS Widget type flags
- * \brief           Flags used for widget type description
+ * \brief           flags used for widget type description
  * \{
  */
 
@@ -261,7 +261,7 @@ typedef struct {
 #else
     gui_char Keys[1];                       /*!< Key pressed, no unicode support */
 #endif
-    uint8_t flags;                          /*!< Flags for special keys */
+    uint8_t flags;                          /*!< flags for special keys */
     uint32_t time;                          /*!< Event time */
 } gui_keyboard_data_t;
 

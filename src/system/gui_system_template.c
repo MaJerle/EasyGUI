@@ -148,7 +148,7 @@ gui_sys_sem_invalid(gui_sys_sem_t* p) {
 uint8_t
 gui_sys_mbox_create(gui_sys_mbox_t* b, size_t size) {
     osMessageQDef(MBOX, size, void *);          /* Define new macro */
-    return (*b = osMessageCreate(osMessageQ(MBOX), NULL)) == 0; /* Create message box */
+    return (*b = osMessageCreate(osMessageQ(MBOx), NULL)) == 0; /* Create message box */
 }
 
 uint8_t

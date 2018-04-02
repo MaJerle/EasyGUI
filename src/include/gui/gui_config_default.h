@@ -137,9 +137,9 @@
  * \note            Value must be power of 2, in most cases number 4 will be ok.
  *
  *                  1: No memory alignment
- *                  2: Align memory to 2 bytes
- *                  4: Align memory to 4 bytes
- *                  8: Align memory to 8 bytes
+ *                  2: align memory to 2 bytes
+ *                  4: align memory to 4 bytes
+ *                  8: align memory to 8 bytes
  */
 #ifndef GUI_CFG_MEM_ALIGNMENT
 #define GUI_CFG_MEM_ALIGNMENT                   4

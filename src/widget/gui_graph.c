@@ -107,7 +107,7 @@ graph_zoom(gui_handle_p h, float zoom, float xpos, float ypos) {
 static uint8_t
 gui_graph_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
 #if GUI_CFG_USE_TOUCH
-    static gui_dim_t tX[GUI_CFG_TOUCH_MAX_PRESSES], tY[GUI_CFG_TOUCH_MAX_PRESSES];
+    static gui_dim_t tx[GUI_CFG_TOUCH_MAX_PRESSES], ty[GUI_CFG_TOUCH_MAX_PRESSES];
 #endif /* GUI_CFG_USE_TOUCH */    
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
@@ -270,8 +270,8 @@ gui_graph_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             uint8_t i = 0;
             for (i = 0; i < ts->ts.count; i++) {
-                tX[i] = ts->x_rel[i];               /* Relative X position on widget */
-                tY[i] = ts->y_rel[i];               /* Relative Y position on widget */
+                tx[i] = ts->x_rel[i];               /* Relative X position on widget */
+                ty[i] = ts->y_rel[i];               /* Relative Y position on widget */
             }
             GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;  /* Set touch status */
             return 1;
@@ -287,12 +287,12 @@ gui_graph_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui
                 y = ts->y_rel[0];
                 
                 step = (float)(guii_widget_getwidth(h) - g->border[GUI_GRAPH_BORDER_LEFT] - g->border[GUI_GRAPH_BORDER_RIGHT]) / (float)(g->visible_max_x - g->visible_min_x);
-                diff = (float)(x - tX[0]) / step;
+                diff = (float)(x - tx[0]) / step;
                 g->visible_min_x -= diff;
                 g->visible_max_x -= diff;
                 
                 step = (float)(guii_widget_getheight(h) - g->border[GUI_GRAPH_BORDER_TOP] - g->border[GUI_GRAPH_BORDER_BOTTOM]) / (float)(g->visible_max_y - g->visible_min_y);
-                diff = (float)(y - tY[0]) / step;
+                diff = (float)(y - ty[0]) / step;
                 g->visible_min_y += diff;
                 g->visible_max_y += diff;
 #if GUI_CFG_TOUCH_MAX_PRESSES > 1
@@ -307,8 +307,8 @@ gui_graph_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui
             }
             
             for (i = 0; i < ts->ts.count; i++) {
-                tX[i] = ts->x_rel[i];               /* Relative X position on widget */
-                tY[i] = ts->y_rel[i];               /* Relative Y position on widget */
+                tx[i] = ts->x_rel[i];               /* Relative X position on widget */
+                ty[i] = ts->y_rel[i];               /* Relative Y position on widget */
             }
             
             guii_widget_invalidate(h);
@@ -379,7 +379,7 @@ graph_invalidate(gui_graph_data_p data) {
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
- * \param[in]       flags: Flags for create procedure
+ * \param[in]       flags: flags for create procedure
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p

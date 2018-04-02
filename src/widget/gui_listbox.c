@@ -131,8 +131,8 @@ slide(gui_handle_p h, int16_t dir) {
 /* Set selection for widget */
 static void
 set_selection(gui_handle_p h, int16_t selected) {
-    if (o->Selected != selected) {                  /* Set selected value */
-        o->Selected = selected;
+    if (o->selected != selected) {                  /* Set selected value */
+        o->selected = selected;
         guii_widget_callback(h, GUI_WC_SelectionChanged, NULL, NULL);  /* Notify about selection changed */
     }                         
 }
@@ -141,17 +141,17 @@ set_selection(gui_handle_p h, int16_t selected) {
 static void
 inc_selection(gui_handle_p h, int16_t dir) {
     if (dir < 0) {                                  /* Slide elements up */
-        if ((o->Selected + dir) < 0) {
+        if ((o->selected + dir) < 0) {
             set_selection(h, 0);
         } else {
-            set_selection(h, o->Selected + dir);
+            set_selection(h, o->selected + dir);
         }
         guii_widget_invalidate(h);
     } else if (dir > 0) {
-        if ((o->Selected + dir) > (o->Count - 1)) { /* Slide elements down */
+        if ((o->selected + dir) > (o->Count - 1)) { /* Slide elements down */
             set_selection(h, o->Count - 1);
         } else {
-            set_selection(h, o->Selected + dir);
+            set_selection(h, o->selected + dir);
         }
         guii_widget_invalidate(h);
     }
@@ -162,8 +162,8 @@ static void
 check_values(gui_handle_p h) {
     int16_t mPP = nr_entries_pp(h);                 /* Get number of lines visible in widget at a time */
    
-    if (o->Selected >= 0) {                         /* Check for selected value range */
-        if (o->Selected >= o->Count) {
+    if (o->selected >= 0) {                         /* Check for selected value range */
+        if (o->selected >= o->Count) {
             set_selection(h, o->Count - 1);
         }
     }
@@ -177,11 +177,11 @@ check_values(gui_handle_p h) {
         }
     }
     
-    if (o->Flags & GUI_FLAG_LISTBOX_SLIDER_AUTO) {  /* Check slider mode */
+    if (o->flags & GUI_FLAG_LISTBOX_SLIDER_AUTO) {  /* Check slider mode */
         if (o->Count > mPP) {
-            o->Flags |= GUI_FLAG_LISTBOX_SLIDER_ON;
+            o->flags |= GUI_FLAG_LISTBOX_SLIDER_ON;
         } else {
-            o->Flags &= ~GUI_FLAG_LISTBOX_SLIDER_ON;
+            o->flags &= ~GUI_FLAG_LISTBOX_SLIDER_ON;
         }
     }
 }
@@ -196,7 +196,7 @@ delete_item(gui_handle_p h, uint16_t index) {
         gui_linkedlist_remove_gen(&__GL(h)->Root, &item->list);
         __GL(h)->Count--;                           /* Decrease count */
         
-        if (o->Selected == index) {
+        if (o->selected == index) {
             set_selection(h, -1);
         }
         
@@ -218,14 +218,14 @@ delete_item(gui_handle_p h, uint16_t index) {
 static uint8_t
 gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
 #if GUI_CFG_USE_TOUCH
-    static gui_dim_t tY;
+    static gui_dim_t ty;
 #endif /* GUI_CFG_USE_TOUCH */
     
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
-            __GL(h)->Selected = -1;                 /* No selection */
-            __GL(h)->SliderWidth = 30;              /* Set slider width */
-            __GL(h)->Flags |= GUI_FLAG_LISTBOX_SLIDER_AUTO;   /* Set auto mode for slider */
+            __GL(h)->selected = -1;                 /* No selection */
+            __GL(h)->sliderwidth = 30;              /* Set slider width */
+            __GL(h)->flags |= GUI_FLAG_LISTBOX_SLIDER_AUTO;   /* Set auto mode for slider */
             return 1;
         }
         case GUI_WC_Draw: {
@@ -241,20 +241,20 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
             gui_draw_filledrectangle(disp, x + 2, y + 2, width - 4, height - 4, guii_widget_getcolor(h, GUI_LISTBOX_COLOR_BG));
             
             /* Draw side scrollbar */
-            if (o->Flags & GUI_FLAG_LISTBOX_SLIDER_ON) {
+            if (o->flags & GUI_FLAG_LISTBOX_SLIDER_ON) {
                 gui_draw_sb_t sb;
                 gui_draw_scrollbar_init(&sb);
                 
-                width -= o->SliderWidth;            /* Decrease available width */
+                width -= o->sliderwidth;            /* Decrease available width */
                 
-                sb.X = x + width - 1;
-                sb.Y = y + 1;
-                sb.Width = o->SliderWidth;
-                sb.Height = height - 2;
-                sb.Dir = GUI_DRAW_SB_DIR_VERTICAL;
-                sb.EntriesTop = o->visiblestartindex;
-                sb.EntriesTotal = o->Count;
-                sb.EntriesVisible = nr_entries_pp(h);
+                sb.x = x + width - 1;
+                sb.y = y + 1;
+                sb.width = o->sliderwidth;
+                sb.height = height - 2;
+                sb.dir = GUI_DRAW_SB_DIR_VERTICAL;
+                sb.entriestop = o->visiblestartindex;
+                sb.entriestotal = o->Count;
+                sb.entriesvisible = nr_entries_pp(h);
                 
                 gui_draw_scrollbar(disp, &sb);      /* Draw scroll bar */
             } else {
@@ -265,39 +265,39 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
             if (h->font != NULL && gui_linkedlist_hasentries(&__GL(h)->Root)) {   /* Is first set? */
                 gui_draw_font_t f;
                 gui_listbox_item_t* item;
-                uint16_t itemHeight;                /* Get item height */
+                uint16_t itemheight;                /* Get item height */
                 uint16_t index = 0;                 /* Start index */
                 gui_dim_t tmp;
                 
-                itemHeight = item_height(h, 0);     /* Get item height and Y offset */
+                itemheight = item_height(h, 0);     /* Get item height and Y offset */
                 
                 gui_draw_font_init(&f);             /* Init structure */
                 
-                f.X = x + 4;
-                f.Y = y + 2;
-                f.Width = width - 4;
-                f.Height = itemHeight;
-                f.Align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
-                f.Color1Width = f.Width;
+                f.x = x + 4;
+                f.y = y + 2;
+                f.width = width - 4;
+                f.height = itemheight;
+                f.align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
+                f.color1width = f.width;
                 
                 tmp = disp->y2;                     /* Scale out drawing area */
                 if (disp->y2 > (y + height - 2)) {
                     disp->y2 = y + height - 2;
                 }
                 
-                for (index = 0, item = (gui_listbox_item_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); item && f.Y <= disp->y2;
+                for (index = 0, item = (gui_listbox_item_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); item && f.y <= disp->y2;
                         item = (gui_listbox_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
                     if (index < o->visiblestartindex) { /* Check for start drawing index */
                         continue;
                     }
-                    if (index == __GL(h)->Selected) {
-                        gui_draw_filledrectangle(disp, x + 2, f.Y, width - 3, GUI_MIN(f.Height, itemHeight), guii_widget_isfocused(h) ? guii_widget_getcolor(h, GUI_LISTBOX_COLOR_SEL_FOC_BG) : guii_widget_getcolor(h, GUI_LISTBOX_COLOR_SEL_NOFOC_BG));
-                        f.Color1 = guii_widget_isfocused(h) ? guii_widget_getcolor(h, GUI_LISTBOX_COLOR_SEL_FOC) : guii_widget_getcolor(h, GUI_LISTBOX_COLOR_SEL_NOFOC);
+                    if (index == __GL(h)->selected) {
+                        gui_draw_filledrectangle(disp, x + 2, f.y, width - 3, GUI_MIN(f.height, itemheight), guii_widget_isfocused(h) ? guii_widget_getcolor(h, GUI_LISTBOX_COLOR_SEL_FOC_BG) : guii_widget_getcolor(h, GUI_LISTBOX_COLOR_SEL_NOFOC_BG));
+                        f.color1 = guii_widget_isfocused(h) ? guii_widget_getcolor(h, GUI_LISTBOX_COLOR_SEL_FOC) : guii_widget_getcolor(h, GUI_LISTBOX_COLOR_SEL_NOFOC);
                     } else {
-                        f.Color1 = guii_widget_getcolor(h, GUI_LISTBOX_COLOR_TEXT);
+                        f.color1 = guii_widget_getcolor(h, GUI_LISTBOX_COLOR_TEXT);
                     }
                     gui_draw_writetext(disp, guii_widget_getfont(h), item->Text, &f);
-                    f.Y += itemHeight;
+                    f.y += itemheight;
                 }
                 disp->y2 = tmp;
             }
@@ -314,7 +314,7 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
 #if GUI_CFG_USE_TOUCH
         case GUI_WC_TouchStart: {
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            tY = ts->y_rel[0];
+            ty = ts->y_rel[0];
             
             GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
@@ -323,11 +323,11 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             if (h->font != NULL) {
                 gui_dim_t height = item_height(h, NULL);   /* Get element height */
-                gui_dim_t diff = tY - ts->y_rel[0];
+                gui_dim_t diff = ty - ts->y_rel[0];
                 
                 if (GUI_ABS(diff) > height) {
                     slide(h, diff > 0 ? 1 : -1);    /* Slide widget */
-                    tY = ts->y_rel[0];               /* Save pointer */
+                    ty = ts->y_rel[0];               /* Save pointer */
                 }
             }
             return 1;
@@ -339,11 +339,11 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
             gui_dim_t width = guii_widget_getwidth(h); /* Get widget widget */
             gui_dim_t height = guii_widget_getheight(h);   /* Get widget height */
             
-            if (o->Flags & GUI_FLAG_LISTBOX_SLIDER_ON) {
-                if (ts->x_rel[0] > (width - o->SliderWidth)) {   /* Touch is inside slider */
-                    if (ts->y_rel[0] < o->SliderWidth) {
+            if (o->flags & GUI_FLAG_LISTBOX_SLIDER_ON) {
+                if (ts->x_rel[0] > (width - o->sliderwidth)) {   /* Touch is inside slider */
+                    if (ts->y_rel[0] < o->sliderwidth) {
                         slide(h, -1);               /* Slide one value up */
-                    } else if (ts->y_rel[0] > (height - o->SliderWidth)) {
+                    } else if (ts->y_rel[0] > (height - o->sliderwidth)) {
                         slide(h, 1);                /* Slide one value down */
                     }
                     handled = 1;
@@ -351,11 +351,11 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
             }
             if (!handled && h->font != NULL) {
                 uint16_t height = item_height(h, NULL);    /* Get element height */
-                uint16_t tmpSelected;
+                uint16_t tmpselected;
                 
-                tmpSelected = ts->y_rel[0] / height; /* Get temporary selected index */
-                if ((o->visiblestartindex + tmpSelected) <= o->Count) {
-                    set_selection(h, o->visiblestartindex + tmpSelected);
+                tmpselected = ts->y_rel[0] / height; /* Get temporary selected index */
+                if ((o->visiblestartindex + tmpselected) <= o->Count) {
+                    set_selection(h, o->visiblestartindex + tmpselected);
                     guii_widget_invalidate(h);     /* Choose new selection */
                 }
             }
@@ -393,7 +393,7 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
- * \param[in]       flags: Flags for widget creation
+ * \param[in]       flags: flags for widget creation
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p
@@ -539,11 +539,11 @@ gui_listbox_setsliderauto(gui_handle_p h, uint8_t autoMode) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (autoMode && !(__GL(h)->Flags & GUI_FLAG_LISTBOX_SLIDER_AUTO)) {
-        __GL(h)->Flags |= GUI_FLAG_LISTBOX_SLIDER_AUTO;
+    if (autoMode && !(__GL(h)->flags & GUI_FLAG_LISTBOX_SLIDER_AUTO)) {
+        __GL(h)->flags |= GUI_FLAG_LISTBOX_SLIDER_AUTO;
         guii_widget_invalidate(h);                 /* Invalidate widget */
-    } else if (!autoMode && (__GL(h)->Flags & GUI_FLAG_LISTBOX_SLIDER_AUTO)) {
-        __GL(h)->Flags &= ~GUI_FLAG_LISTBOX_SLIDER_AUTO;
+    } else if (!autoMode && (__GL(h)->flags & GUI_FLAG_LISTBOX_SLIDER_AUTO)) {
+        __GL(h)->flags &= ~GUI_FLAG_LISTBOX_SLIDER_AUTO;
         guii_widget_invalidate(h);                 /* Invalidate widget */
     }
     
@@ -566,13 +566,13 @@ gui_listbox_setslidervisibility(gui_handle_p h, uint8_t visible) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (!(__GL(h)->Flags & GUI_FLAG_LISTBOX_SLIDER_AUTO)) {
-        if (visible && !(__GL(h)->Flags & GUI_FLAG_LISTBOX_SLIDER_ON)) {
-            __GL(h)->Flags |= GUI_FLAG_LISTBOX_SLIDER_ON;
+    if (!(__GL(h)->flags & GUI_FLAG_LISTBOX_SLIDER_AUTO)) {
+        if (visible && !(__GL(h)->flags & GUI_FLAG_LISTBOX_SLIDER_ON)) {
+            __GL(h)->flags |= GUI_FLAG_LISTBOX_SLIDER_ON;
             guii_widget_invalidate(h);             /* Invalidate widget */
             ret = 1;
-        } else if (!visible && (__GL(h)->Flags & GUI_FLAG_LISTBOX_SLIDER_ON)) {
-            __GL(h)->Flags &= ~GUI_FLAG_LISTBOX_SLIDER_ON;
+        } else if (!visible && (__GL(h)->flags & GUI_FLAG_LISTBOX_SLIDER_ON)) {
+            __GL(h)->flags &= ~GUI_FLAG_LISTBOX_SLIDER_ON;
             guii_widget_invalidate(h);             /* Invalidate widget */
             ret = 1;
         }
@@ -643,7 +643,7 @@ gui_listbox_getselection(gui_handle_p h) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    selection = __GL(h)->Selected;                  /* Read selection */
+    selection = __GL(h)->selected;                  /* Read selection */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return selection;

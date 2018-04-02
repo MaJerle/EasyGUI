@@ -115,7 +115,7 @@ typedef struct {
     gui_linkedlistroot_t root;              /*!< Linked list root entry for \ref gui_listview_row_t for rows */
     
     int16_t count;                          /*!< Current number of strings attached to this widget */
-    int16_t selected;                       /*!< Selected text index */
+    int16_t selected;                       /*!< selected text index */
     int16_t visiblestartindex;              /*!< Index in array of string on top of visible area of widget */
     
     gui_dim_t sliderwidth;                  /*!< Slider width in units of pixels */

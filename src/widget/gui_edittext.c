@@ -86,8 +86,8 @@ gui_edittext_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
-            __GE(h)->VAlign = GUI_EDITTEXT_VALIGN_CENTER;
-            __GE(h)->HAlign = GUI_EDITTEXT_HALIGN_LEFT;
+            __GE(h)->valign = GUI_EDITTEXT_VALIGN_CENTER;
+            __GE(h)->halign = GUI_EDITTEXT_HALIGN_LEFT;
             return 1;
         }
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
@@ -101,10 +101,10 @@ gui_edittext_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                     }
                     break; /* Set max X value to widget */
                 case CFG_HALIGN: 
-                    e->HAlign = *(gui_edittext_halign_t *)p->data;
+                    e->halign = *(gui_edittext_halign_t *)p->data;
                     break;
                 case CFG_VALIGN: 
-                    e->VAlign = *(gui_edittext_valign_t *)p->data;
+                    e->valign = *(gui_edittext_valign_t *)p->data;
                     break;
                 default: break;
             }
@@ -131,17 +131,17 @@ gui_edittext_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 gui_draw_font_t f;
                 gui_draw_font_init(&f);             /* Init font drawing */
                 
-                f.X = x + 5;
-                f.Y = y + 5;
-                f.Width = width - 10;
-                f.Height = height - 10;
-                f.Align = (uint8_t)__GE(h)->HAlign | (uint8_t)__GE(h)->VAlign;
-                f.Color1Width = f.Width;
-                f.Color1 = guii_widget_getcolor(h, GUI_EDITTEXT_COLOR_FG);
-                f.Flags |= GUI_FLAG_FONT_RIGHTALIGN | GUI_FLAG_FONT_EDITMODE;
+                f.x = x + 5;
+                f.y = y + 5;
+                f.width = width - 10;
+                f.height = height - 10;
+                f.align = (uint8_t)__GE(h)->halign | (uint8_t)__GE(h)->valign;
+                f.color1width = f.width;
+                f.color1 = guii_widget_getcolor(h, GUI_EDITTEXT_COLOR_FG);
+                f.flags |= GUI_FLAG_FONT_RIGHTALIGN | GUI_FLAG_FONT_EDITMODE;
                 
                 if (is_multiline(h)) {
-                    f.Flags |= GUI_FLAG_FONT_MULTILINE; /* Set multiline flag for widget */
+                    f.flags |= GUI_FLAG_FONT_MULTILINE; /* Set multiline flag for widget */
                 }
                 
                 gui_draw_writetext(disp, guii_widget_getfont(h), guii_widget_gettext(h), &f);
@@ -190,7 +190,7 @@ gui_edittext_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
- * \param[in]       flags: Flags for widget creation
+ * \param[in]       flags: flags for widget creation
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p

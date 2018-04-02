@@ -65,8 +65,8 @@ typedef enum {
 typedef struct {
     gui_handle_root_t C;                    /*!< Global widget object */
     
-    gui_dim_t MaxScrollX;                  /*!< Maximal scroll on X axis */
-    gui_dim_t MaxScrollY;                  /*!< Maximal scroll on Y axis */
+    gui_dim_t maxscrollx;                   /*!< Maximal scroll on X axis */
+    gui_dim_t maxscrolly;                   /*!< Maximal scroll on Y axis */
 } gui_list_container_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 

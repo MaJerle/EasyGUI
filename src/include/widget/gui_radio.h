@@ -70,7 +70,7 @@ typedef struct {
     uint32_t value;                         /*!< Single radio value when selected */
     uint32_t selected_value;                /*!< Currently selected value in radio group. 
                                                     All Widgets in the same group share the same value in this field all the time */
-    uint8_t flags;                          /*!< Flags for checkbox */
+    uint8_t flags;                          /*!< flags for checkbox */
 } gui_radio_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 

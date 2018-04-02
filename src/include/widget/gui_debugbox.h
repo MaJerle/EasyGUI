@@ -78,8 +78,8 @@ typedef struct {
     
     gui_linkedlistroot_t Root;              /*!< Root of linked list entries */
     
-    gui_dim_t SliderWidth;                  /*!< Slider width in units of pixels */
-    uint8_t Flags;                          /*!< Widget flags */
+    gui_dim_t sliderwidth;                  /*!< Slider width in units of pixels */
+    uint8_t flags;                          /*!< Widget flags */
 } gui_debugbox_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 

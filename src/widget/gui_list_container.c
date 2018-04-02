@@ -91,20 +91,20 @@ calculate_limits(gui_handle_p h) {
     width = guii_widget_getinnerwidth(h);          /* Get widget width */
     height = guii_widget_getinnerheight(h);        /* Get widget height */
     
-    l->MaxScrollX = 0;
-    l->MaxScrollY = 0;
+    l->maxscrollx = 0;
+    l->maxscrolly = 0;
     if (width < cmx) {
-        l->MaxScrollX = cmx - width;
+        l->maxscrollx = cmx - width;
     }
     if (height < cmy) {
-        l->MaxScrollY = cmy - height;
+        l->maxscrolly = cmy - height;
     }
     
-    if (gui_widget_getscrollx(h) > l->MaxScrollX) {
-        gui_widget_setscrollx(h, l->MaxScrollX);
+    if (gui_widget_getscrollx(h) > l->maxscrollx) {
+        gui_widget_setscrollx(h, l->maxscrollx);
     }
-    if (gui_widget_getscrolly(h) > l->MaxScrollY) {
-        gui_widget_setscrolly(h, l->MaxScrollY);
+    if (gui_widget_getscrolly(h) > l->maxscrolly) {
+        gui_widget_setscrolly(h, l->maxscrolly);
     }
 }
 
@@ -133,10 +133,10 @@ gui_listcontainer_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* pa
             
             calculate_limits(h);                    /* Calculate new limits for scrolling */
             
-            x = guii_widget_getabsolutex(h);       /* Get absolute position on screen */
-            y = guii_widget_getabsolutey(h);       /* Get absolute position on screen */
-            width = guii_widget_getwidth(h);       /* Get widget width */
-            height = guii_widget_getheight(h);     /* Get widget height */
+            x = guii_widget_getabsolutex(h);        /* Get absolute position on screen */
+            y = guii_widget_getabsolutey(h);        /* Get absolute position on screen */
+            width = guii_widget_getwidth(h);        /* Get widget width */
+            height = guii_widget_getheight(h);      /* Get widget height */
             
             gui_draw_filledrectangle(disp, x, y, width, height, guii_widget_getcolor(h, GUI_LIST_CONTAINER_COLOR_BG));
             return 1;                               /* */
@@ -172,7 +172,7 @@ gui_listcontainer_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* pa
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
- * \param[in]       flags: Flags for widget creation
+ * \param[in]       flags: flags for widget creation
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p

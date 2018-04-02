@@ -132,7 +132,7 @@ gui_dialog_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       func: Widget create function used as dialog base. In most cases \ref gui_container_create will be used to create empty container
  * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
- * \param[in]       flags: Flags for widget creation
+ * \param[in]       flags: flags for widget creation
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p
@@ -166,7 +166,7 @@ gui_dialog_create(gui_id_t id, float x, float y, float width, float height, GUI_
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       func: Widget create function used as dialog base. In most cases \ref gui_container_create will be used to create empty container
  * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
- * \param[in]       flags: Flags for widget creation
+ * \param[in]       flags: flags for widget creation
  * \return          Value passed to \ref gui_dialog_dismiss when dialog is dismissed on success, -1 otherwise
  */
 int

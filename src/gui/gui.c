@@ -347,7 +347,7 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
  * \param[in]       x: Absolute X position of widget
  * \param[in]       y: Absolute Y position of widget
  * \param[in]       width: Width of widget
- * \param[in]       height: Height of widget
+ * \param[in]       height: height of widget
  */
 static void
 set_relative_coordinate(guii_touch_data_t* ts, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height) {
@@ -683,11 +683,11 @@ process_redraw(void) {
     uint8_t result = 1;
     gui_display_t* dispA = &active->display;
     
-    if ((GUI.lcd.flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM) || !(GUI.Flags & GUI_FLAG_REDRAW)) {  /* Check if anything to draw first */
+    if ((GUI.lcd.flags & GUI_FLAG_LCD_WAIT_LAYER_CONFIRM) || !(GUI.flags & GUI_FLAG_REDRAW)) {  /* Check if anything to draw first */
         return;
     }
     
-    GUI.Flags &= ~GUI_FLAG_REDRAW;                  /* Clear redraw flag */
+    GUI.flags &= ~GUI_FLAG_REDRAW;                  /* Clear redraw flag */
     
     /* Copy from currently active layer to drawing layer only changes on layer */
     GUI.ll.Copy(&GUI.lcd, drawing, 

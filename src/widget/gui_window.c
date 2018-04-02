@@ -74,7 +74,7 @@ gui_widget_t widget = {
 static uint8_t
 gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
 #if GUI_CFG_USE_TOUCH
-    static gui_dim_t tX, tY, Mode = 0;
+    static gui_dim_t tx, ty, Mode = 0;
 #endif /* GUI_CFG_USE_TOUCH */
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
@@ -97,7 +97,7 @@ gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
             
             gui_draw_filledrectangle(disp, x, y, wi, hi, guii_widget_getcolor(h, GUI_WINDOW_COLOR_BG));
             if (guii_widget_getflag(h, GUI_FLAG_CHILD)) {
-                gui_dim_t tX, tY, tW;
+                gui_dim_t tx, ty, tW;
                 
                 gui_draw_rectangle3d(disp, x, y, wi, hi, GUI_DRAW_3D_State_Lowered);
                 
@@ -120,16 +120,16 @@ gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
                 gui_draw_rectangle3d(disp, x + wi - 2 * topH, y + 2, topH - 2, topH - 2, GUI_DRAW_3D_State_Raised);
                 gui_draw_filledrectangle(disp, x + wi - 2 * topH + 2, y + 4, topH - 6, topH - 6, GUI_COLOR_GRAY);
                 if (guii_widget_isexpanded(h)) {
-                    gui_dim_t tmpX, tmpY;
-                    tmpX = x + wi - 2 * topH + 4;
-                    tmpY = y + 7;
-                    gui_draw_rectangle(disp, tmpX, tmpY + 4, topH - 14, topH - 14, GUI_COLOR_BLACK);
-                    gui_draw_hline(disp, tmpX + 1, tmpY + 5, topH - 16, GUI_COLOR_BLACK); 
+                    gui_dim_t tmpx, tmpy;
+                    tmpx = x + wi - 2 * topH + 4;
+                    tmpy = y + 7;
+                    gui_draw_rectangle(disp, tmpx, tmpy + 4, topH - 14, topH - 14, GUI_COLOR_BLACK);
+                    gui_draw_hline(disp, tmpx + 1, tmpy + 5, topH - 16, GUI_COLOR_BLACK); 
                     
-                    gui_draw_filledrectangle(disp, tmpX + 4, tmpY, topH - 15, 2, GUI_COLOR_BLACK);
-                    gui_draw_vline(disp, tmpX + 4, tmpY + 2, 2, GUI_COLOR_BLACK);
-                    gui_draw_vline(disp, tmpX + 4 + topH - 15, tmpY, topH - 15, GUI_COLOR_BLACK);
-                    gui_draw_hline(disp, tmpX + topH - 14, tmpY + topH - 15, 4, GUI_COLOR_BLACK);
+                    gui_draw_filledrectangle(disp, tmpx + 4, tmpy, topH - 15, 2, GUI_COLOR_BLACK);
+                    gui_draw_vline(disp, tmpx + 4, tmpy + 2, 2, GUI_COLOR_BLACK);
+                    gui_draw_vline(disp, tmpx + 4 + topH - 15, tmpy, topH - 15, GUI_COLOR_BLACK);
+                    gui_draw_hline(disp, tmpx + topH - 14, tmpy + topH - 15, 4, GUI_COLOR_BLACK);
                 } else {
                     gui_draw_rectangle(disp, x + wi - 2 * topH + 4, y + 7, topH - 10, topH - 10, GUI_COLOR_BLACK); 
                     gui_draw_hline(disp, x + wi - 2 * topH + 4, y + 8, topH - 10, GUI_COLOR_BLACK); 
@@ -139,29 +139,29 @@ gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
                 gui_draw_rectangle3d(disp, x + wi - topH, y + 2, topH - 2, topH - 2, GUI_DRAW_3D_State_Raised);
                 gui_draw_filledrectangle(disp, x + wi - topH + 2, y + 4, topH - 6, topH - 6, GUI_COLOR_WIN_RED);
                 
-                tX = x + wi - topH + 6;
-                tY = y + 8;
+                tx = x + wi - topH + 6;
+                ty = y + 8;
                 tW = topH - 15;
                 
-                gui_draw_line(disp, tX,     tY,     tX + tW,     tY + tW,     GUI_COLOR_WHITE);
-                gui_draw_line(disp, tX + 1, tY,     tX + tW,     tY + tW - 1, GUI_COLOR_WHITE);
-                gui_draw_line(disp, tX,     tY + 1, tX + tW - 1, tY + tW,     GUI_COLOR_WHITE);
+                gui_draw_line(disp, tx,     ty,     tx + tW,     ty + tW,     GUI_COLOR_WHITE);
+                gui_draw_line(disp, tx + 1, ty,     tx + tW,     ty + tW - 1, GUI_COLOR_WHITE);
+                gui_draw_line(disp, tx,     ty + 1, tx + tW - 1, ty + tW,     GUI_COLOR_WHITE);
                 
-                gui_draw_line(disp, tX,     tY + tW,     tX + tW,     tY,     GUI_COLOR_WHITE);
-                gui_draw_line(disp, tX + 1, tY + tW,     tX + tW,     tY + 1, GUI_COLOR_WHITE);
-                gui_draw_line(disp, tX,     tY + tW - 1, tX + tW - 1, tY,     GUI_COLOR_WHITE);
+                gui_draw_line(disp, tx,     ty + tW,     tx + tW,     ty,     GUI_COLOR_WHITE);
+                gui_draw_line(disp, tx + 1, ty + tW,     tx + tW,     ty + 1, GUI_COLOR_WHITE);
+                gui_draw_line(disp, tx,     ty + tW - 1, tx + tW - 1, ty,     GUI_COLOR_WHITE);
                 
                 if (guii_widget_isfontandtextset(h)) {
                     gui_draw_font_t f;
                     gui_draw_font_init(&f);         /* Init structure */
                     
-                    f.X = x + 3;
-                    f.Y = y + 3;
-                    f.Width = wi - 3 * topH - 5;
-                    f.Height = topH - 3;
-                    f.Align = GUI_HALIGN_CENTER | GUI_VALIGN_CENTER;
-                    f.Color1Width = f.Width;
-                    f.Color1 = guii_widget_getcolor(h, GUI_WINDOW_COLOR_TEXT);
+                    f.x = x + 3;
+                    f.y = y + 3;
+                    f.width = wi - 3 * topH - 5;
+                    f.height = topH - 3;
+                    f.align = GUI_HALIGN_CENTER | GUI_VALIGN_CENTER;
+                    f.color1width = f.width;
+                    f.color1 = guii_widget_getcolor(h, GUI_WINDOW_COLOR_TEXT);
                     gui_draw_writetext(disp, guii_widget_getfont(h), guii_widget_gettext(h), &f);
                 }
             }
@@ -183,8 +183,8 @@ gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
                 
                 if (ts->y_rel[0] < pt && ts->x_rel[0] < (wi - pt)) {
                     Mode = 1;
-                    tX = ts->x_rel[0];
-                    tY = ts->y_rel[0];
+                    tx = ts->x_rel[0];
+                    ty = ts->y_rel[0];
                 }
                 GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;  /* Set handled status */
             } else {
@@ -197,10 +197,10 @@ gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             
             if (Mode == 1 && guii_widget_getflag(h, GUI_FLAG_CHILD)) {
-                gui_dim_t pX, pY;
-                pX = guii_widget_getparentabsolutex(__GH(h));
-                pY = guii_widget_getparentabsolutey(__GH(h));
-                guii_widget_setposition(h, ts->ts.x[0] - pX - tX, ts->ts.y[0] - pY - tY);
+                gui_dim_t px, py;
+                px = guii_widget_getparentabsolutex(__GH(h));
+                py = guii_widget_getparentabsolutey(__GH(h));
+                guii_widget_setposition(h, ts->ts.x[0] - px - tx, ts->ts.y[0] - py - ty);
                 
                 if (guii_widget_isexpanded(h)) {   /* If it is expanded */
                     guii_widget_setexpanded(h, 0); /* Clear expanded mode */
@@ -291,7 +291,7 @@ gui_window_createdesktop(gui_id_t id, gui_widget_callback_t cb) {
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
- * \param[in]       flags: Flags for widget creation
+ * \param[in]       flags: flags for widget creation
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p

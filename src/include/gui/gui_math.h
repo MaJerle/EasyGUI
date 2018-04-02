@@ -54,7 +54,7 @@ extern "C" {
 uint8_t gui_math_sqrt(float x, float* result);
 uint8_t gui_math_rsqrt(float x, float* result);
 uint8_t gui_math_distancebetweenxy(float x1, float y1, float x2, float y2, float* result);
-uint8_t gui_math_centerofxy(float x1, float y1, float x2, float y2, float* resultX, float* resultY);
+uint8_t gui_math_centerofxy(float x1, float y1, float x2, float y2, float* resultx, float* resulty);
     
 /**
  * \}

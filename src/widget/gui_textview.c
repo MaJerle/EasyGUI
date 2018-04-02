@@ -77,10 +77,10 @@ gui_textview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             gui_widget_param* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
             switch (p->type) {
                 case CFG_HALIGN: 
-                    o->HAlign = *(gui_textalign_halign_t *)p->data;
+                    o->Halign = *(gui_textalign_halign_t *)p->data;
                     break;
                 case CFG_VALIGN: 
-                    o->VAlign = *(gui_textalign_valign_t *)p->data;
+                    o->Valign = *(gui_textalign_valign_t *)p->data;
                     break;
                 default: break;
             }
@@ -108,14 +108,14 @@ gui_textview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 
                 gui_draw_font_init(&f);             /* Init structure */
                 
-                f.X = x + 1;
-                f.Y = y + 1;
-                f.Width = wi - 2;
-                f.Height = hi - 2;
-                f.Align = (uint8_t)o->HAlign | (uint8_t)o->VAlign;
-                f.Flags |= GUI_FLAG_FONT_MULTILINE; /* Enable multiline */
-                f.Color1Width = f.Width;
-                f.Color1 = guii_widget_getcolor(h, GUI_TEXTVIEW_COLOR_TEXT);
+                f.x = x + 1;
+                f.y = y + 1;
+                f.width = wi - 2;
+                f.height = hi - 2;
+                f.align = (uint8_t)o->Halign | (uint8_t)o->Valign;
+                f.flags |= GUI_FLAG_FONT_MULTILINE; /* Enable multiline */
+                f.color1width = f.width;
+                f.color1 = guii_widget_getcolor(h, GUI_TEXTVIEW_COLOR_TEXT);
                 gui_draw_writetext(disp, guii_widget_getfont(h), guii_widget_gettext(h), &f);
             }
             return 1;
@@ -148,7 +148,7 @@ gui_textview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
- * \param[in]       flags: Flags for widget creation
+ * \param[in]       flags: flags for widget creation
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p

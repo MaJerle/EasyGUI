@@ -180,7 +180,7 @@ extern "C" {
 #define GUI_ROUND(x)                ((float)(x) + 0.5f)
 
 /**
- * \brief           Align x value to specific number of bits, provided from \ref GUI_CFG_MEM_ALIGNMENT configuration
+ * \brief           align x value to specific number of bits, provided from \ref GUI_CFG_MEM_ALIGNMENT configuration
  * \param[in]       x: Input value to align
  * \retval          Input value aligned to specific number of bytes
  */

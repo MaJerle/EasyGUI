@@ -79,9 +79,9 @@ typedef enum {
 typedef struct {
     gui_handle C;                           /*!< GUI handle object, must always be first on list */
 
-    gui_textalign_valign_t VAlign;           /*!< Vertical text align */
-    gui_textalign_halign_t HAlign;           /*!< Horizontal text align */
-    uint8_t Flags;                          /*!< Widget flags */
+    gui_textalign_valign_t Valign;           /*!< Vertical text align */
+    gui_textalign_halign_t Halign;           /*!< Horizontal text align */
+    uint8_t flags;                          /*!< Widget flags */
 } gui_textview_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 

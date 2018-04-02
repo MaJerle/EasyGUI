@@ -69,7 +69,7 @@ extern "C" {
  */
  
 /**
- * \defgroup        GUI_WIDGET_CREATE_FLAGS Flags for widget create
+ * \defgroup        GUI_WIDGET_CREATE_FLAGS flags for widget create
  * \brief           A list of flags supported for widget creation
  *
  * List of flags used on \ref guii_widget_create function when creating new widget
@@ -371,7 +371,7 @@ extern "C" {
  * \brief           Get inner width (total width - padding left - padding right)
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Pointer to \ref gui_handle_p structure
- * \retval          Height in units of pixels
+ * \retval          height in units of pixels
  * \hideinitializer
  */
 #define guii_widget_getinnerwidth(h)                (guii_widget_getwidth(h) - (guii_widget_getpaddingleft(h) + guii_widget_getpaddingright(h)))
@@ -392,7 +392,7 @@ extern "C" {
  * \retval          Parent width in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getparentwidth(h)               (guii_widget_hasparent(h) ? guii_widget_getwidth(guii_widget_getparent(h)) : GUI.lcd.Width)
+#define guii_widget_getparentwidth(h)               (guii_widget_hasparent(h) ? guii_widget_getwidth(guii_widget_getparent(h)) : GUI.lcd.width)
 
 /**
  * \brief           Returns height of parent element. If parent does not exists, it returns LCD height
@@ -401,7 +401,7 @@ extern "C" {
  * \retval          Parent height in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getparentheight(h)              (guii_widget_hasparent(h) ? guii_widget_getheight(guii_widget_getparent(h)) : GUI.lcd.Height)
+#define guii_widget_getparentheight(h)              (guii_widget_hasparent(h) ? guii_widget_getheight(guii_widget_getparent(h)) : GUI.lcd.height)
 
 /**
  * \brief           Returns inner width of parent element. If parent does not exists, it returns LCD width

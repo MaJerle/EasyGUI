@@ -67,7 +67,7 @@ typedef struct _GUI_BUFFER_t {
 	uint32_t In;                    /*!< Input pointer to save next value, DO NOT MOVE OFFSET, 1 */
 	uint32_t Out;                   /*!< Output pointer to read next value, DO NOT MOVE OFFSET, 2 */
 	uint8_t* Buffer;                /*!< Pointer to buffer data array, DO NOT MOVE OFFSET, 3 */
-	uint8_t Flags;                  /*!< Flags for buffer, DO NOT MOVE OFFSET, 4 */
+	uint8_t flags;                  /*!< flags for buffer, DO NOT MOVE OFFSET, 4 */
 	void* UserParameters;           /*!< Pointer to user value if needed */
 } GUI_BUFFER_t;
 

@@ -65,7 +65,7 @@ typedef struct {
     uint32_t Number;                        /*!< Window number */
     
     gui_dim_t BorderRadius;                 /*!< Radius in units of pixels for children windows */
-    gui_dim_t BorderWidth;                  /*!< Border width */
+    gui_dim_t Borderwidth;                  /*!< Border width */
 } gui_window_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
   

@@ -284,7 +284,7 @@ invalidate_widget(gui_handle_p h, uint8_t setclipping) {
         
     h1 = h;                                         /* Save temporary */
     guii_widget_setflag(h1, GUI_FLAG_REDRAW);       /* Redraw widget */
-    GUI.Flags |= GUI_FLAG_REDRAW;                   /* Notify stack about redraw operations */
+    GUI.flags |= GUI_FLAG_REDRAW;                   /* Notify stack about redraw operations */
     
     if (setclipping) {
         set_clipping_region(h);                     /* Set clipping region for widget redrawing operation */
@@ -403,7 +403,7 @@ get_common_parentwidget(gui_handle_p h1, gui_handle_p h2) {
  * \note            This function only sets width/height values, it does not change or modifies flags
  * \param[in]       h: Widget handle
  * \param[in]       x: Width in units of pixels or percents
- * \param[in]       y: Height in units of pixels or percents
+ * \param[in]       y: height in units of pixels or percents
  * \return          `1` on success, `0` otherwise
  */
 static uint8_t
@@ -525,9 +525,9 @@ guii_widget_init(void) {
  */
 uint8_t
 guii_widget_executeremove(void) {
-    if (GUI.Flags & GUI_FLAG_REMOVE) {              /* Anything to remove? */
+    if (GUI.flags & GUI_FLAG_REMOVE) {              /* Anything to remove? */
         remove_widgets(NULL);                       /* Remove widgets */
-        GUI.Flags &= ~GUI_FLAG_REMOVE;
+        GUI.flags &= ~GUI_FLAG_REMOVE;
         return 1;
     }
     return 0;
@@ -724,7 +724,7 @@ guii_widget_getheight(gui_handle_p h) {
     } else if (guii_widget_getflag(h, GUI_FLAG_HEIGHT_PERCENT)) {  /* Percentage height */
         return GUI_ROUND((h->height * guii_widget_getparentinnerheight(h)) / 100.0f);
     } else {                                        /* Normal height */
-        return h->height;                           /* Height in pixels */
+        return h->height;                           /* height in pixels */
     }
     return 0;
 }
@@ -936,7 +936,7 @@ guii_widget_set3dstyle(gui_handle_p h, uint8_t enable) {
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
  * \param[in]       cb: Widget callback function. Set to NULL to use default widget specific callback
- * \param[in]       flags: Flags for create procedure
+ * \param[in]       flags: flags for create procedure
  * \return          Created widget handle on success, NULL otherwise
  * \sa              __gui_widget_remove
  */
@@ -1048,7 +1048,7 @@ guii_widget_remove(gui_handle_p h) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     if (can_remove_widget(h)) {                     /* Check if we can delete widget */
         guii_widget_setflag(h, GUI_FLAG_REMOVE);    /* Set flag for widget delete */
-        GUI.Flags |= GUI_FLAG_REMOVE;               /* Set flag for to remove at least one widget from tree */
+        GUI.flags |= GUI_FLAG_REMOVE;               /* Set flag for to remove at least one widget from tree */
         if (guii_widget_isfocused(h)) {             /* In case current widget is in focus */
             guii_widget_focus_set(guii_widget_getparent(h)); /* Set parent as focused */
         }
@@ -1308,7 +1308,7 @@ guii_widget_setwidth(gui_handle_p h, gui_dim_t width) {
  * \brief           Set height of widget in units of pixels
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
- * \param[in]       height: Height in units of pixels
+ * \param[in]       height: height in units of pixels
  * \return          `1` on success, `0` otherwise
  * \sa              gui_widget_setwidth, gui_widget_setwidthpercent, gui_widget_setheightpercent
  */
@@ -1344,7 +1344,7 @@ guii_widget_setwidthpercent(gui_handle_p h, float width) {
  * \brief           Set height of widget in percentage relative to parent widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
- * \param[in]       height: Height in percentage
+ * \param[in]       height: height in percentage
  * \return          `1` on success, `0` otherwise
  * \sa              gui_widget_setwidth, gui_widget_setheight, gui_widget_setwidthpercent
  */
@@ -1983,7 +1983,7 @@ gui_widget_getfont(gui_handle_p h) {
  * \brief           Set widget size in units of pixels
  * \param[in,out]   h: Widget handle
  * \param[in]       width: Width value
- * \param[in]       height: Height value
+ * \param[in]       height: height value
  * \return          `1` on success, `0` otherwise
  * \sa              gui_widget_setsizepercent
  */
@@ -2004,7 +2004,7 @@ gui_widget_setsize(gui_handle_p h, gui_dim_t width, gui_dim_t height) {
  * \brief           Set widget size in units of percent
  * \param[in,out]   h: Widget handle
  * \param[in]       width: Width value
- * \param[in]       height: Height value
+ * \param[in]       height: height value
  * \return          `1` on success, `0` otherwise
  * \sa              gui_widget_setsize
  */
@@ -2044,7 +2044,7 @@ gui_widget_setwidth(gui_handle_p h, gui_dim_t width) {
 /**
  * \brief           Set height of widget in units of pixels
  * \param[in,out]   h: Widget handle
- * \param[in]       height: Height in units of pixels
+ * \param[in]       height: height in units of pixels
  * \return          `1` on success, `0` otherwise
  * \sa              gui_widget_setwidth, gui_widget_setwidthpercent, gui_widget_setheightpercent
  */
@@ -2083,7 +2083,7 @@ gui_widget_setwidthpercent(gui_handle_p h, float width) {
 /**
  * \brief           Set height of widget in percentage relative to parent widget
  * \param[in,out]   h: Widget handle
- * \param[in]       height: Height in percentage
+ * \param[in]       height: height in percentage
  * \return          `1` on success, `0` otherwise
  * \sa              gui_widget_setwidth, gui_widget_setheight, gui_widget_setwidthpercent
  */

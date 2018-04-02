@@ -105,14 +105,14 @@ gui_math_distancebetweenxy(float x1, float y1, float x2, float y2, float* result
  * \param[in]       y1: Y position of point 1
  * \param[in]       x2: X position of point 2
  * \param[in]       y2: Y position of point 2
- * \param[out]      resultX: Pointer to float variable to store result about X position to
- * \param[out]      resultY: Pointer to float variable to store result about Y position to
+ * \param[out]      resultx: Pointer to float variable to store result about X position to
+ * \param[out]      resulty: Pointer to float variable to store result about Y position to
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_math_centerofxy(float x1, float y1, float x2, float y2, float* resultX, float* resultY) {
-    *resultX = (x1 + x2) / 2.0f;                    /* Calculate middle point for X position */
-    *resultY = (y1 + y2) / 2.0f;                    /* Calculate middle point for Y position */
+gui_math_centerofxy(float x1, float y1, float x2, float y2, float* resultx, float* resulty) {
+    *resultx = (x1 + x2) / 2.0f;                    /* Calculate middle point for X position */
+    *resulty = (y1 + y2) / 2.0f;                    /* Calculate middle point for Y position */
     
     return 1;
 }
