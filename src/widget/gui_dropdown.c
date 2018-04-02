@@ -178,24 +178,24 @@ set_selection(gui_handle_p h, int16_t selected) {
 }
 
 /* Get item from listbox entry */
-static GUI_DROPDOWN_ITEM_t*
+static gui_dropdown_item_t*
 get_item(gui_handle_p h, uint16_t index) {
     uint16_t i = 0;
-    GUI_DROPDOWN_ITEM_t* item = 0;
+    gui_dropdown_item_t* item = 0;
     
     if (index >= o->Count) {                        /* Check if valid index */
         return 0;
     }
     
     if (index == 0) {                               /* Check for first element */
-        return (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getnext_gen(&o->Root, NULL);   /* Return first element */
+        return (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->Root, NULL);   /* Return first element */
     } else if (index == o->Count - 1) {
-        return (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getprev_gen(&o->Root, NULL);   /* Return last element */
+        return (gui_dropdown_item_t *)gui_linkedlist_getprev_gen(&o->Root, NULL);   /* Return last element */
     }
     
-    item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getnext_gen(&o->Root, NULL);
+    item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->Root, NULL);
     while (i++ < index) {
-        item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getnext_gen(NULL, &item->list);
+        item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(NULL, &item->list);
     }
     return item;
 }
@@ -258,7 +258,7 @@ inc_selection(gui_handle_p h, int16_t dir) {
 /* Delete list item box by index */
 static uint8_t
 delete_item(gui_handle_p h, uint16_t index) {
-    GUI_DROPDOWN_ITEM_t* item;
+    gui_dropdown_item_t* item;
     
     item = get_item(h, index);                      /* Get list item from handle */
     if (item) {
@@ -359,13 +359,13 @@ gui_dropdown_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 
             if (__GD(h)->Selected >= 0 && h->font != NULL) {
                 int16_t i;
-                GUI_DRAW_FONT_t f;
-                GUI_DROPDOWN_ITEM_t* item;
+                gui_draw_font_t f;
+                gui_dropdown_item_t* item;
                 gui_draw_font_init(&f);             /* Init structure */
                 
-                item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getnext_gen(&__GD(h)->Root, NULL);
+                item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&__GD(h)->Root, NULL);
                 for (i = 0; i < __GD(h)->Selected; i++) {
-                    item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item);
+                    item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item);
                 }
                 
                 f.X = x + 3;
@@ -379,7 +379,7 @@ gui_dropdown_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             }
             
             if (is_opened(h) && __GD(h)->Flags & GUI_FLAG_DROPDOWN_SLIDER_ON) {
-                GUI_DRAW_SB_t sb;
+                gui_draw_sb_t sb;
                 
                 width -= __GD(h)->SliderWidth;      /* Available width is decreased */
                 
@@ -400,8 +400,8 @@ gui_dropdown_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             }
             
             if (is_opened(h) && h->font != NULL && gui_linkedlist_hasentries(&__GD(h)->Root)) {
-                GUI_DRAW_FONT_t f;
-                GUI_DROPDOWN_ITEM_t* item;
+                gui_draw_font_t f;
+                gui_dropdown_item_t* item;
                 uint16_t yOffset;
                 uint16_t itemHeight;                /* Get item height */
                 uint16_t index = 0;                 /* Start index */
@@ -424,8 +424,8 @@ gui_dropdown_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 }
                 
                 /* Try to process all strings */
-                for (index = 0, item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); item != NULL && f.Y <= disp->y2;
-                        item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
+                for (index = 0, item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); item != NULL && f.Y <= disp->y2;
+                        item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
                     if (index < o->visiblestartindex) { /* Check for start visible */
                         continue;
                     }
@@ -443,8 +443,8 @@ gui_dropdown_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             return 1;
         }
         case GUI_WC_Remove: {
-            GUI_DROPDOWN_ITEM_t* item;
-            while ((item = (GUI_DROPDOWN_ITEM_t *)gui_linkedlist_remove_gen(&o->Root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&o->Root, NULL))) != NULL) {
+            gui_dropdown_item_t* item;
+            while ((item = (gui_dropdown_item_t *)gui_linkedlist_remove_gen(&o->Root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&o->Root, NULL))) != NULL) {
                 GUI_MEMFREE(item);                  /* Free memory */
             }
             return 1;
@@ -547,7 +547,7 @@ gui_dropdown_setcolor(gui_handle_p h, gui_dropdown_color_t index, gui_color_t co
  */
 uint8_t
 gui_dropdown_addstring(gui_handle_p h, const gui_char* text) {
-    GUI_DROPDOWN_ITEM_t* item;
+    gui_dropdown_item_t* item;
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
@@ -605,7 +605,7 @@ gui_dropdown_setopendirection(gui_handle_p h, gui_dropdown_opendir_t dir) {
  */
 uint8_t
 gui_dropdown_setstring(gui_handle_p h, uint16_t index, const gui_char* text) {
-    GUI_DROPDOWN_ITEM_t* item;
+    gui_dropdown_item_t* item;
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */

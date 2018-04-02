@@ -321,11 +321,7 @@ typedef struct {
 } gui_lcd_t;
 
 /**
- * \addtogroup      GUI_IMAGE
- * \{
- */
-
-/**
+ * \ingroup         GUI_IMAGE
  * \brief           Image descriptor structure
  */
 typedef struct {
@@ -334,10 +330,6 @@ typedef struct {
     uint8_t bpp;                            /*!< Bits per pixel */
     const uint8_t* image;                   /*!< Pointer to image byte array */
 } gui_image_desc_t;
-
-/**
- * \}
- */
 
 /**
  * \brief           Low-level LCD command enumeration
@@ -419,11 +411,11 @@ typedef struct {
 /**
  * \brief           Char temporary entry stored in RAM for faster copy with blending operations
  */
-typedef struct GUI_FONT_CharEntry_t {
+typedef struct {
     gui_linkedlist_t list;                  /*!< Linked list entry. Must always be first on the list */
     const gui_font_char_t* Ch;              /*!< Character value */
     const gui_font_t* Font;                 /*!< Pointer to font structure */
-} GUI_FONT_CharEntry_t;
+} gui_font_charentry_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 #if !__DOXYGEN__
@@ -721,7 +713,7 @@ typedef gui_timer_t* gui_timer_p;
  * \brief           Control parameters for widget
  * \note            Must always start with number 1
  */
-typedef enum GUI_WC_t {
+typedef enum {
     GUI_WC_None = 0x00,
 #if defined(GUI_INTERNAL) || __DOXYGEN__
     /**
@@ -1038,7 +1030,7 @@ typedef uint8_t (*gui_widget_callback_t) (gui_handle_p h, GUI_WC_t cmd, gui_widg
 /**
  * \brief           Structure for each widget type
  */
-typedef struct gui_widget_t {
+typedef struct {
     const gui_char* name;                   /*!< Widget name for display purpose */
     uint16_t size;                          /*!< Bytes required for widget memory allocation */
     uint32_t flags;                         /*!< List of flags for widget setup. This field can use \ref GUI_WIDGETS_CORE_FLAGS flags */
@@ -1101,11 +1093,7 @@ typedef gui_handle_p (*GUI_WIDGET_CreateFunc_t)(gui_id_t, gui_dim_t, gui_dim_t, 
  */
 
 /**
- * \addtogroup      GUI_TRANSLATE
- * \{
- */
-
-/**
+ * \ingroup         GUI_TRANSLATE
  * \brief           Translation language structure
  */
 typedef struct {
@@ -1115,16 +1103,13 @@ typedef struct {
 } gui_translate_language_t;
 
 /**
+ * \ingroup         GUI_TRANSLATE
  * \brief           Basic translation structure for internal use
  */
 typedef struct gui_translate_t {
     const gui_translate_language_t* source; /*!< Pointer to source language table */
     const gui_translate_language_t* active; /*!< Pointer to current language table */
 } gui_translate_t;
-
-/**
- * \}
- */
 
 /**
  * \}

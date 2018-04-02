@@ -83,16 +83,16 @@ gui_led_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_w
             switch (p->type) {
                 case CFG_SET:
                     if (*(uint8_t *)p->data) {
-                        l->Flags |= GUI_LED_FLAG_ON;
+                        l->flags |= GUI_LED_FLAG_ON;
                     } else {
-                        l->Flags &= ~GUI_LED_FLAG_ON;
+                        l->flags &= ~GUI_LED_FLAG_ON;
                     }
                     break;
                 case CFG_TOGGLE: 
-                    l->Flags ^= GUI_LED_FLAG_ON;    /* Toggle flag */
+                    l->flags ^= GUI_LED_FLAG_ON;    /* Toggle flag */
                     break;
                 case CFG_TYPE: 
-                    l->Type = *(GUI_LED_TYPE_t *)p->data;   /* Toggle flag */
+                    l->type = *(gui_led_type_t *)p->data;   /* Set type */
                     break;
                 default: break;
             }
@@ -110,7 +110,7 @@ gui_led_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_w
             height = guii_widget_getheight(h);     /* Get widget height */
             
             /* Get drawing colors */
-            if (l->Flags & GUI_LED_FLAG_ON) {       /* If LED is on */
+            if (l->flags & GUI_LED_FLAG_ON) {       /* If LED is on */
                 c1 = guii_widget_getcolor(h, GUI_LED_COLOR_ON);
                 c2 = guii_widget_getcolor(h, GUI_LED_COLOR_ON_BORDER);
             } else {
@@ -118,7 +118,7 @@ gui_led_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_w
                 c2 = guii_widget_getcolor(h, GUI_LED_COLOR_OFF_BORDER);
             }
             
-            if (l->Type == GUI_LED_TYPE_RECT) {     /* When led has rectangle shape */
+            if (l->type == GUI_LED_TYPE_RECT) {     /* When led has rectangle shape */
                 gui_draw_filledrectangle(disp, x + 1, y + 1, width - 2, height - 2, c1);
                 gui_draw_rectangle(disp, x, y, width, height, c2);
             } else {
@@ -159,7 +159,7 @@ gui_led_create(gui_id_t id, float x, float y, float width, float height, gui_han
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_led_setcolor(gui_handle_p h, GUI_LED_COLOR_t index, gui_color_t color) {
+gui_led_setcolor(gui_handle_p h, gui_led_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
 }
@@ -171,7 +171,7 @@ gui_led_setcolor(gui_handle_p h, GUI_LED_COLOR_t index, gui_color_t color) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_led_settype(gui_handle_p h, GUI_LED_TYPE_t type) {
+gui_led_settype(gui_handle_p h, gui_led_type_t type) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setparam(h, CFG_TYPE, &type, 1, 1); /* Set parameter */
 }
@@ -211,7 +211,7 @@ gui_led_ison(gui_handle_p h) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = !!(__GL(h)->Flags & GUI_LED_FLAG_ON);
+    ret = !!(__GL(h)->flags & GUI_LED_FLAG_ON);
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;

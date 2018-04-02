@@ -32,7 +32,7 @@
 #include "gui/gui_private.h"
 #include "widget/gui_slider.h"
 
-#define __GS(x)             ((GUI_SLIDER_t *)(x))
+#define __GS(x)             ((gui_slider_t *)(x))
 
 #define CFG_MODE            0x01
 #define CFG_VALUE           0x02
@@ -58,13 +58,13 @@ gui_color_t colors[] = {
 static const
 gui_widget_t widget = {
     .name = _GT("SLIDER"),                          /*!< Widget name */
-    .size = sizeof(GUI_SLIDER_t),                   /*!< Size of widget for memory allocation */
+    .size = sizeof(gui_slider_t),                   /*!< Size of widget for memory allocation */
     .flags = GUI_FLAG_WIDGET_INVALIDATE_PARENT,     /*!< List of widget flags */
     .callback = gui_slider_callback,                /*!< Callback function */
     .colors = colors,                               /*!< List of default colors */
     .color_count = GUI_COUNT_OF(colors),            /*!< Define number of colors */
 };
-#define o       ((GUI_SLIDER_t *)(h))
+#define o       ((gui_slider_t *)(h))
 
 /* Check if slider is horizontal */
 #define is_horizontal(h)   (o->Mode == GUI_SLIDER_MODE_LEFT_RIGHT || o->Mode == GUI_SLIDER_MODE_RIGHT_LEFT)
@@ -188,7 +188,7 @@ gui_slider_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
             int32_t tmp;
             switch (v->type) {
                 case CFG_MODE:                      /* Set current progress value */
-                    o->Mode = *(GUI_SLIDER_MODE_t *)v->data;
+                    o->Mode = *(gui_slider_mode_t *)v->data;
                     break;
                 case CFG_VALUE:                     /* Set current progress value */
                     set_value(h, *(int32_t *)v->data);
@@ -327,12 +327,12 @@ gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_
 /**
  * \brief           Set color to specific part of widget
  * \param[in,out]   h: Widget handle
- * \param[in]       index: Color index. This parameter can be a value of \ref GUI_SLIDER_COLOR_t enumeration
+ * \param[in]       index: Color index. This parameter can be a value of \ref gui_slider_color_t enumeration
  * \param[in]       color: Color value
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_slider_setcolor(gui_handle_p h, GUI_SLIDER_COLOR_t index, gui_color_t color) {
+gui_slider_setcolor(gui_handle_p h, gui_slider_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
 }
@@ -340,11 +340,11 @@ gui_slider_setcolor(gui_handle_p h, GUI_SLIDER_COLOR_t index, gui_color_t color)
 /**
  * \brief           Set slider mode (orientation)
  * \param[in]       h: Widget handle
- * \param[in]       mode: Slider mode. This parameter can be a value of \ref GUI_SLIDER_MODE_t enumeration
+ * \param[in]       mode: Slider mode. This parameter can be a value of \ref gui_slider_mode_t enumeration
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_slider_setmode(gui_handle_p h, GUI_SLIDER_MODE_t mode) {
+gui_slider_setmode(gui_handle_p h, gui_slider_mode_t mode) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setparam(h, CFG_MODE, &mode, 1, 0); /* Set parameter */
 }

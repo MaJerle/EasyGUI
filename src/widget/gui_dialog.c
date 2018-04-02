@@ -32,6 +32,9 @@
 #include "gui/gui_private.h"
 #include "widget/gui_dialog.h"
 
+/**
+ * \brief           Structure of dismissed dialogs
+ */
 typedef struct {
     gui_linkedlist_t list;                          /*!< Linked list entry element, must always be first on list */
     gui_id_t id;                                    /*!< Dialog ID */
@@ -42,8 +45,6 @@ typedef struct {
     uint8_t ib;                                     /*!< Indication if dialog is blocking */
 #endif /* GUI_CFG_OS */
 } dissmissed_dialog_list_t;
-
-#define __GW(x)             ((GUI_WINDOW_t *)(x))
 
 static uint8_t gui_dialog_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
@@ -65,7 +66,6 @@ gui_widget_t widget = {
     .colors = NULL,                                 /*!< Pointer to colors array */
     .color_count = 0,                               /*!< Number of colors */
 };
-
 
 /* Add widget to active dialogs (not yet dismissed) */
 static dissmissed_dialog_list_t *

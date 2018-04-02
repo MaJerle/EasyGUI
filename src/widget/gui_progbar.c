@@ -32,7 +32,7 @@
 #include "gui/gui_private.h"
 #include "widget/gui_progbar.h"
 
-#define __GP(x)             ((GUI_PROGBAR_t *)(x))
+#define __GP(x)             ((gui_progbar_t *)(x))
 
 #define GUI_PROGBAR_FLAG_PERCENT    0x01            /*!< Flag indicating percentages are enabled on view */
 #define GUI_PROGBAR_FLAG_ANIMATE    0x02            /*!< Animation for progress bar changes */
@@ -61,14 +61,14 @@ gui_color_t colors[] = {
 static const
 gui_widget_t widget = {
     .name = _GT("PROGBAR"),                         /*!< Widget name */
-    .size = sizeof(GUI_PROGBAR_t),                  /*!< Size of widget for memory allocation */
+    .size = sizeof(gui_progbar_t),                  /*!< Size of widget for memory allocation */
     .flags = 0,                                     /*!< List of widget flags */
     .callback = gui_progbar_callback,               /*!< Callback function */
     .colors = colors,                               /*!< List of default colors */
     .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 
-#define p           ((GUI_PROGBAR_t *)h)
+#define p           ((gui_progbar_t *)h)
 #define is_anim(h)  (!!(__GP(h)->Flags & GUI_PROGBAR_FLAG_ANIMATE))
 
 /* Set value for widget */
@@ -209,7 +209,7 @@ gui_progbar_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
                 }
                 
                 if (text != NULL) {                 /* If text is valid, print it */
-                    GUI_DRAW_FONT_t f;
+                    gui_draw_font_t f;
                     gui_draw_font_init(&f);         /* Init structure */
                     
                     f.X = x + 2;
@@ -250,12 +250,12 @@ gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui
 /**
  * \brief           Set color to specific part of widget
  * \param[in,out]   h: Widget handle
- * \param[in]       index: Color index. This parameter can be a value of \ref GUI_PROGBAR_COLOR_t enumeration
+ * \param[in]       index: Color index. This parameter can be a value of \ref gui_progbar_color_t enumeration
  * \param[in]       color: Color value
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_progbar_setcolor(gui_handle_p h, GUI_PROGBAR_COLOR_t index, gui_color_t color) {
+gui_progbar_setcolor(gui_handle_p h, gui_progbar_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
 }

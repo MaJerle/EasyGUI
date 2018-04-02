@@ -54,13 +54,13 @@ gui_color_t colors[] = {
 static const
 gui_widget_t widget = {
     .name = _GT("LED"),                             /*!< Widget name */ 
-    .size = sizeof(GUI_LIST_CONTAINER_t),           /*!< Size of widget for memory allocation */
+    .size = sizeof(gui_list_container_t),           /*!< Size of widget for memory allocation */
     .flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
     .callback = gui_listcontainer_callback,         /*!< Control function */
     .colors = colors,                               /*!< List of default colors */
     .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
-#define l           ((GUI_LIST_CONTAINER_t *)(h))
+#define l           ((gui_list_container_t *)(h))
 
 /* Calculate scroll limits according to children widgets */
 static void

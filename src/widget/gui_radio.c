@@ -154,7 +154,7 @@ gui_radio_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui
             
             /* Draw text if possible */
             if (guii_widget_isfontandtextset(h)) {
-                GUI_DRAW_FONT_t f;
+                gui_draw_font_t f;
                 gui_draw_font_init(&f);             /* Init structure */
                 
                 f.X = sx + size + 5;
@@ -204,12 +204,12 @@ gui_radio_create(gui_id_t id, float x, float y, float width, float height, gui_h
 /**
  * \brief           Set color to specific part of widget
  * \param[in,out]   h: Widget handle
- * \param[in]       index: Color index. This parameter can be a value of \ref GUI_RADIO_COLOR_t enumeration
+ * \param[in]       index: Color index. This parameter can be a value of \ref gui_radio_color_t enumeration
  * \param[in]       color: Color value
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_radio_setcolor(gui_handle_p h, GUI_RADIO_COLOR_t index, gui_color_t color) {
+gui_radio_setcolor(gui_handle_p h, gui_radio_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
 }

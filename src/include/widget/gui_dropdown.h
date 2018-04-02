@@ -60,7 +60,7 @@ extern "C" {
 /**
  * \brief           List of dropdown colors
  */
-typedef enum gui_dropdown_color_t {
+typedef enum {
     GUI_DROPDOWN_COLOR_BG = 0x00,           /*!< Background color index */
     GUI_DROPDOWN_COLOR_TEXT,                /*!< Text color index */
     GUI_DROPDOWN_COLOR_SEL_FOC,             /*!< Text color index of selected item when widget is in focus */
@@ -82,10 +82,10 @@ typedef enum {
 /**
  * \brief           Dropdown string item object
  */
-typedef struct GUI_DROPDOWN_ITEM_t {
+typedef struct {
     gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
     gui_char* Text;                         /*!< Text entry */
-} GUI_DROPDOWN_ITEM_t;
+} gui_dropdown_item_t;
     
 /**
  * \brief           Dropdown object structure

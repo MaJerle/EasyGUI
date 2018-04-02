@@ -53,7 +53,7 @@ extern "C" {
 /**
  * \brief           List of available colors for list container
  */
-typedef enum GUI_LIST_CONTAINER_COLOR_t {
+typedef enum {
     GUI_LIST_CONTAINER_COLOR_BG = 0x00,     /*!< Color index for LED on status */
 } GUI_LIST_CONTAINER_COLOR_t;
 
@@ -62,15 +62,15 @@ typedef enum GUI_LIST_CONTAINER_COLOR_t {
 /**
  * \brief           LIST CONTAINER object structure
  */
-typedef struct GUI_LIST_CONTAINER_t {
+typedef struct {
     gui_handle_root_t C;                    /*!< Global widget object */
     
     gui_dim_t MaxScrollX;                  /*!< Maximal scroll on X axis */
     gui_dim_t MaxScrollY;                  /*!< Maximal scroll on Y axis */
-} GUI_LIST_CONTAINER_t;
+} gui_list_container_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p gui_listcontainer_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+gui_handle_p    gui_listcontainer_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
 
 /**
  * \}

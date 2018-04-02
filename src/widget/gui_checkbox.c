@@ -161,7 +161,7 @@ gui_checkbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             
             /* Draw text if possible */
             if (guii_widget_isfontandtextset(h)) {
-                GUI_DRAW_FONT_t f;
+                gui_draw_font_t f;
                 gui_draw_font_init(&f);             /* Init structure */
                 
                 f.X = sx + size + 5;

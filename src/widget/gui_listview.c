@@ -270,7 +270,7 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
 
             /* Draw side scrollbar */
             if (o->flags & GUI_FLAG_LISTVIEW_SLIDER_ON) {
-                GUI_DRAW_SB_t sb;
+                gui_draw_sb_t sb;
                 gui_draw_scrollbar_init(&sb);
                 
                 width -= o->sliderwidth;            /* Decrease available width */
@@ -293,7 +293,7 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             gui_draw_filledrectangle(disp, x + 2, y + 2, width - 3, itemHeight, GUI_COLOR_WIN_LIGHTGRAY);
             if (o->cols != NULL && o->cols[0] != NULL) {    /* Draw all columns to screen */
                 gui_dim_t tmpX2, xTmp = x + 2;                
-                GUI_DRAW_FONT_t f;
+                gui_draw_font_t f;
                 
                 gui_draw_font_init(&f);             /* Init structure */
                 
@@ -518,12 +518,12 @@ gui_listview_create(gui_id_t id, float x, float y, float width, float height, gu
 /**
  * \brief           Set color to list view widget
  * \param[in,out]   h: Widget handle
- * \param[in]       index: Index in array of colors. This parameter can be a value of \ref GUI_LISTVIEW_COLOR_t enumeration
+ * \param[in]       index: Index in array of colors. This parameter can be a value of \ref gui_listview_color_t enumeration
  * \param[in]       color: Actual color code to set
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_listview_setcolor(gui_handle_p h, GUI_LISTVIEW_COLOR_t index, gui_color_t color) {
+gui_listview_setcolor(gui_handle_p h, gui_listview_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
 }

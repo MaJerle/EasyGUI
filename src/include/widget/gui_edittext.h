@@ -48,29 +48,29 @@ extern "C" {
 /**
  * \brief           Edit text color list enumeration
  */
-typedef enum GUI_EDITTEXT_COLOR_t {
+typedef enum {
     GUI_EDITTEXT_COLOR_BG = 0x00,           /*!< Background color index */
     GUI_EDITTEXT_COLOR_FG,                  /*!< Foreground color index */
     GUI_EDITTEXT_COLOR_BORDER,              /*!< Border color index */
-} GUI_EDITTEXT_COLOR_t;
+} gui_edittext_color_t;
 
 /**
  * \brief           Vertical align for edit text inside box
  */
-typedef enum GUI_EDITTEXT_VALIGN_t {        
+typedef enum {        
     GUI_EDITTEXT_VALIGN_TOP = GUI_VALIGN_TOP,       /*!< Vertical align top, default value */
     GUI_EDITTEXT_VALIGN_CENTER = GUI_VALIGN_CENTER, /*!< Vertical align center */
     GUI_EDITTEXT_VALIGN_BOTTOM = GUI_VALIGN_BOTTOM  /*!< Vertical align bottom */
-} GUI_EDITTEXT_VALIGN_t;
+} gui_edittext_valign_t;
 
 /**
  * \brief           Horizontal align for edit text inside box
  */
-typedef enum GUI_EDITTEXT_HALIGN_t {        
+typedef enum {        
     GUI_EDITTEXT_HALIGN_LEFT = GUI_HALIGN_LEFT,     /*!< Horizontal align left, default value */
     GUI_EDITTEXT_HALIGN_CENTER = GUI_HALIGN_CENTER, /*!< Horizontal align center */
     GUI_EDITTEXT_HALIGN_RIGHT = GUI_HALIGN_RIGHT    /*!< Horizontal align right */
-} GUI_EDITTEXT_HALIGN_t;
+} gui_edittext_halign_t;
     
 #if defined(GUI_INTERNAL) || __DOXYGEN__
 
@@ -79,20 +79,20 @@ typedef enum GUI_EDITTEXT_HALIGN_t {
 /**
  * \brief           GUI EDIT TEXT widget structure
  */
-typedef struct GUI_EDITTEXT_t {
+typedef struct {
     gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
-    uint8_t Flags;                          /*!< List of widget flags */
-    GUI_EDITTEXT_VALIGN_t VAlign;           /*!< Vertical align setup */
-    GUI_EDITTEXT_HALIGN_t HAlign;           /*!< Horizontal align setup */
+    uint8_t flags;                          /*!< List of widget flags */
+    gui_edittext_valign_t VAlign;           /*!< Vertical align setup */
+    gui_edittext_halign_t HAlign;           /*!< Horizontal align setup */
 } GUI_EDITTEXT_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
-uint8_t gui_edittext_setcolor(gui_handle_p h, GUI_EDITTEXT_COLOR_t index, gui_color_t color);
-uint8_t gui_edittext_setmultiline(gui_handle_p h, uint8_t multiline);
-uint8_t gui_edittext_setvalign(gui_handle_p h, GUI_EDITTEXT_VALIGN_t align);
-uint8_t gui_edittext_sethalign(gui_handle_p h, GUI_EDITTEXT_HALIGN_t align);
+gui_handle_p    gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+uint8_t         gui_edittext_setcolor(gui_handle_p h, gui_edittext_color_t index, gui_color_t color);
+uint8_t         gui_edittext_setmultiline(gui_handle_p h, uint8_t multiline);
+uint8_t         gui_edittext_setvalign(gui_handle_p h, gui_edittext_valign_t align);
+uint8_t         gui_edittext_sethalign(gui_handle_p h, gui_edittext_halign_t align);
 
 /**
  * \}

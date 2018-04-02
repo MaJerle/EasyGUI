@@ -58,23 +58,23 @@ extern "C" {
 /**
  * \brief           UNICODE processing information structure
  */
-typedef struct GUI_STRING_UNICODE_t {
+typedef struct {
     uint8_t t;                                      /*!< Total number of bytes in UTF-8 sequence */
     uint8_t r;                                      /*!< Remaining bytes in UTF-8 sequnce before we get valid data */
     uint32_t res;                                   /*!< Current result in UTF8 sequence */
-} GUI_STRING_UNICODE_t;
+} gui_string_unicode_t;
 
 /**
  * \brief           UNICODE processing result information
  */
-typedef enum GUI_STRING_UNICODE_Result_t {
+typedef enum {
     UNICODE_OK = 0x00,                              /*!< Indicates function successfully decode unicode sequence of 1-4 bytes */
     UNICODE_ERROR,                                  /*!< Indicates function got an error with input data from 2nd to 4th byte in UTF-8 encoding */
     UNICODE_PROGRESS,                               /*!< Indicates function decoding is still in progress and it waits for new character */
 } GUI_STRING_UNICODE_Result_t;
 
-void gui_string_unicode_init(GUI_STRING_UNICODE_t* s);
-GUI_STRING_UNICODE_Result_t gui_string_unicode_decode(GUI_STRING_UNICODE_t* s, const gui_char c);
+void gui_string_unicode_init(gui_string_unicode_t* s);
+GUI_STRING_UNICODE_Result_t gui_string_unicode_decode(gui_string_unicode_t* s, const gui_char c);
 uint8_t gui_string_unicode_encode(const uint32_t c, gui_char* out);
 
 /**
@@ -84,12 +84,12 @@ uint8_t gui_string_unicode_encode(const uint32_t c, gui_char* out);
 /**
  * \brief           String structure for parsing characters
  */
-typedef struct GUI_STRING_t {
+typedef struct {
     const gui_char* Str;                /*!< Pointer to source string */
 #if GUI_CFG_USE_UNICODE || __DOXYGEN__
-    GUI_STRING_UNICODE_t S;             /*!< Unicode processing structure */
+    gui_string_unicode_t S;             /*!< Unicode processing structure */
 #endif /* GUI_CFG_USE_UNICODE || __DOXYGEN__ */
-} GUI_STRING_t;
+} gui_string_t;
 
 size_t gui_string_length(const gui_char* src);
 size_t gui_string_lengthtotal(const gui_char* src);
@@ -97,10 +97,10 @@ gui_char* gui_string_copy(gui_char* dst, const gui_char* src);
 gui_char* gui_string_copyn(gui_char* dst, const gui_char* src, size_t len);
 int gui_string_compare(const gui_char* s1, const gui_char* s2);
 uint8_t gui_string_isprintable(uint32_t ch);
-uint8_t gui_string_prepare(GUI_STRING_t* s, const gui_char* str);
-uint8_t gui_string_getch(GUI_STRING_t* str, uint32_t* out, uint8_t* len);
-uint8_t gui_string_getchreverse(GUI_STRING_t* str, uint32_t* out, uint8_t* len);
-uint8_t gui_string_gotoend(GUI_STRING_t* str);
+uint8_t gui_string_prepare(gui_string_t* s, const gui_char* str);
+uint8_t gui_string_getch(gui_string_t* str, uint32_t* out, uint8_t* len);
+uint8_t gui_string_getchreverse(gui_string_t* str, uint32_t* out, uint8_t* len);
+uint8_t gui_string_gotoend(gui_string_t* str);
     
 /**
  * \}

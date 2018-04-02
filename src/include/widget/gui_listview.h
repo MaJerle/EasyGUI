@@ -51,7 +51,7 @@ extern "C" {
 /**
  * \brief           List of listview colors
  */
-typedef enum GUI_LISTVIEW_COLOR_t {
+typedef enum {
     GUI_LISTVIEW_COLOR_BG = 0x00,           /*!< Background color */
     GUI_LISTVIEW_COLOR_TEXT,                /*!< Text color index */
     GUI_LISTVIEW_COLOR_SEL_FOC,             /*!< Text color of selected item when widget is in focus */
@@ -59,7 +59,7 @@ typedef enum GUI_LISTVIEW_COLOR_t {
     GUI_LISTVIEW_COLOR_SEL_FOC_BG,          /*!< Background color of selected item when widget is in focus */
     GUI_LISTVIEW_COLOR_SEL_NOFOC_BG,        /*!< Background color of selected item when widget is not in focus */
     GUI_LISTVIEW_COLOR_BORDER,              /*!< Border color index for top line when not in 3D mode */
-} GUI_LISTVIEW_COLOR_t;
+} gui_listview_color_t;
 
 #if defined(GUI_INTERNAL) || __DOXYGEN__
     
@@ -128,23 +128,23 @@ typedef struct {
  */
 typedef void* gui_listview_row_p;
    
-gui_handle_p gui_listview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
-uint8_t gui_listview_setcolor(gui_handle_p h, GUI_LISTVIEW_COLOR_t index, gui_color_t color);
+gui_handle_p    gui_listview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+uint8_t         gui_listview_setcolor(gui_handle_p h, gui_listview_color_t index, gui_color_t color);
 
-uint8_t gui_listview_addcolumn(gui_handle_p h, const gui_char* text, gui_dim_t width);
-uint8_t gui_listview_setcolumnwidth(gui_handle_p h, uint16_t index, gui_dim_t width);
+uint8_t         gui_listview_addcolumn(gui_handle_p h, const gui_char* text, gui_dim_t width);
+uint8_t         gui_listview_setcolumnwidth(gui_handle_p h, uint16_t index, gui_dim_t width);
 
 gui_listview_row_p gui_listview_addrow(gui_handle_p h);
-uint8_t gui_listview_removerow(gui_handle_p h, gui_listview_row_p row);
-uint8_t gui_listview_removerows(gui_handle_p h);
+uint8_t         gui_listview_removerow(gui_handle_p h, gui_listview_row_p row);
+uint8_t         gui_listview_removerows(gui_handle_p h);
 
-uint8_t gui_listview_setitemstring(gui_handle_p h, gui_listview_row_p row, uint16_t col, const gui_char* text);
-uint8_t gui_listview_setselection(gui_handle_p h, int16_t selection);
-int16_t gui_listview_getselection(gui_handle_p h);
-uint8_t gui_listview_setsliderauto(gui_handle_p h, uint8_t autoMode);
-uint8_t gui_listview_setslidervisibility(gui_handle_p h, uint8_t visible);
-uint8_t gui_listview_scroll(gui_handle_p h, int16_t step);
-uint8_t gui_listview_getitemvalue(gui_handle_p h, uint16_t rindex, uint16_t cindex, gui_char* dst, size_t length);
+uint8_t         gui_listview_setitemstring(gui_handle_p h, gui_listview_row_p row, uint16_t col, const gui_char* text);
+uint8_t         gui_listview_setselection(gui_handle_p h, int16_t selection);
+int16_t         gui_listview_getselection(gui_handle_p h);
+uint8_t         gui_listview_setsliderauto(gui_handle_p h, uint8_t autoMode);
+uint8_t         gui_listview_setslidervisibility(gui_handle_p h, uint8_t visible);
+uint8_t         gui_listview_scroll(gui_handle_p h, int16_t step);
+uint8_t         gui_listview_getitemvalue(gui_handle_p h, uint16_t rindex, uint16_t cindex, gui_char* dst, size_t length);
 
 /**
  * \}

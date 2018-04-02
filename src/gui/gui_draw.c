@@ -32,7 +32,7 @@
 #include "gui/gui_private.h"
 #include "gui/gui_draw.h"
 
-typedef struct GUI_StringRect_t {
+typedef struct {
     size_t Lines;                                   /*!< Number of lines processed */
     gui_dim_t Width;                                /*!< Rectangle width */
     gui_dim_t Height;                               /*!< Rectangle height */
@@ -41,12 +41,12 @@ typedef struct GUI_StringRect_t {
     size_t ReadTotal;                               /*!< Total number of characters to read */
     size_t ReadDraw;                                /*!< Total number of characters to actually draw after read */
 
-    GUI_DRAW_FONT_t* StringDraw;                    /*!< Pointer to object to draw string */
+    gui_draw_font_t* StringDraw;                    /*!< Pointer to object to draw string */
     const gui_font_t* Font;                         /*!< Pointer to used font */
-} GUI_StringRect_t;
+} gui_stringrect_t;
 
-typedef struct GUI_StringRectVars_t {
-    GUI_STRING_t s;                                 /*!< Pointer to input string */
+typedef struct {
+    gui_string_t s;                                 /*!< Pointer to input string */
     uint32_t ch, lastCh;                            /*!< Current and previous characters */
     gui_dim_t cW;                                   /*!< Current line width */
     size_t cnt;                                     /*!< Current count in line */
@@ -62,14 +62,14 @@ typedef struct GUI_StringRectVars_t {
     uint8_t IsLineFeed;                             /*!< Status indicating character is line feed */
     uint8_t Final;                                  /*!< Status indicating we should do line check and finish */
     uint8_t IsBreak;                                /*!< Status indicating break occurred */
-} GUI_StringRectVars_t;
+} gui_stringrectvars_t;
 
 #define CH_CR           GUI_KEY_CR
 #define CH_LF           GUI_KEY_LF
 #define CH_WS           GUI_KEY_WS
 #define get_char_from_value(ch)      (uint32_t)((CH_CR == (ch) || CH_LF == (ch)) ? CH_WS : (ch))
 
-static GUI_StringRectVars_t var;
+static gui_stringrectvars_t var;
 
 /**
  * \brief           Get info structure from font for given character
@@ -96,7 +96,7 @@ string_get_char_ptr(const gui_font_t* font, uint32_t ch) {
  * \param[out]      width: Output height variable
  */
 static void
-__StringGetCharSize(const gui_font_t* font, uint32_t ch, gui_dim_t* width, gui_dim_t* height) {
+string_get_char_size(const gui_font_t* font, uint32_t ch, gui_dim_t* width, gui_dim_t* height) {
     const gui_font_char_t* c = 0;
     
     c = string_get_char_ptr(font, ch);              /* Get character from font */
@@ -123,7 +123,7 @@ __StringGetCharSize(const gui_font_t* font, uint32_t ch, gui_dim_t* width, gui_d
  * \param[in]       end: Flag set to 1 if this is last entry of string
  */
 static void
-process_string_rectangle_before_return(GUI_StringRectVars_t* var, GUI_StringRect_t* rect, uint8_t end) {
+process_string_rectangle_before_return(gui_stringrectvars_t* var, gui_stringrect_t* rect, uint8_t end) {
     /*
      * If spaces are last elements
      */
@@ -195,11 +195,11 @@ process_string_rectangle_before_return(GUI_StringRectVars_t* var, GUI_StringRect
  * \return          Length of string in current line
  */
 static size_t
-string_rectangle(GUI_StringRect_t* rect, GUI_STRING_t* str, uint8_t onlyToNextLine) {
+string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLine) {
     gui_dim_t w, h, mW = 0, tH = 0;                /* Maximal width and total height */
     uint8_t i;
     const gui_char* lastS;
-    GUI_STRING_t tmpStr;
+    gui_string_t tmpStr;
 
     memset(&var, 0x00, sizeof(var));                /* Reset structure */
     memcpy(&var.s, str, sizeof(*str));              /* Copy memory */
@@ -259,7 +259,7 @@ string_rectangle(GUI_StringRect_t* rect, GUI_STRING_t* str, uint8_t onlyToNextLi
                     var.SpaceCount++;               /* Increase number of spaces on last element */
                 } else {                            /* Try to get character size */
                     /* Try to fit character in current line */
-                    __StringGetCharSize(rect->Font, var.ch, &w, &h);    /* Get character dimensions */
+                    string_get_char_size(rect->Font, var.ch, &w, &h);   /* Get character dimensions */
                     if ((var.cW + w) < rect->StringDraw->Width) {   /* Do we have enough memory available */
                         var.cW += w;                /* Increase total line width */
                         if (CH_WS == var.ch) {      /* Check if character is white space */
@@ -308,7 +308,7 @@ string_rectangle(GUI_StringRect_t* rect, GUI_STRING_t* str, uint8_t onlyToNextLi
     } else {
         var.cW = 0;
         while (gui_string_getch(&var.s, &var.ch, &i)) { /* Get next character from string */
-            __StringGetCharSize(rect->Font, var.ch, &w, &h);/* Get character width and height */
+            string_get_char_size(rect->Font, var.ch, &w, &h);   /* Get character width and height */
             if (!(rect->StringDraw->Flags & GUI_FLAG_FONT_RIGHTALIGN) && (var.cW + w) > rect->StringDraw->Width) {  /* Check if end now */
                 break;
             }
@@ -331,12 +331,12 @@ string_rectangle(GUI_StringRect_t* rect, GUI_STRING_t* str, uint8_t onlyToNextLi
  * \param[in]       c: Character info handle
  * \return          Character entry or NULL on failure
  */
-static GUI_FONT_CharEntry_t *
+static gui_font_charentry_t *
 get_char_entry_from_font(const gui_font_t* font, const gui_font_char_t* c) {
-    GUI_FONT_CharEntry_t* entry;
+    gui_font_charentry_t* entry;
     
-    for (entry = (GUI_FONT_CharEntry_t *)gui_linkedlist_getnext_gen(&GUI.RootFonts, NULL); entry != NULL;
-        entry = (GUI_FONT_CharEntry_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)entry)) {
+    for (entry = (gui_font_charentry_t *)gui_linkedlist_getnext_gen(&GUI.RootFonts, NULL); entry != NULL;
+        entry = (gui_font_charentry_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)entry)) {
         if (entry->Font == font && entry->Ch == c) {
             return entry;
         }
@@ -345,9 +345,9 @@ get_char_entry_from_font(const gui_font_t* font, const gui_font_char_t* c) {
 }
 
 /* Create char and put it to RAM for fast drawing with memory to memory copy */
-static GUI_FONT_CharEntry_t *
+static gui_font_charentry_t *
 create_char_entry_from_font(const gui_font_t* font, const gui_font_char_t* c) {
-    GUI_FONT_CharEntry_t* entry = NULL;
+    gui_font_charentry_t* entry = NULL;
     uint16_t columns;
     uint16_t memsize = GUI_MEM_ALIGN(sizeof(*entry));   /* Get size of entry */
     uint16_t memDataSize;
@@ -428,7 +428,7 @@ create_char_entry_from_font(const gui_font_t* font, const gui_font_char_t* c) {
 /* Draw character to screen */
 /* X and Y coordinates are TOP LEFT coordinates for character */
 static void
-draw_char(const gui_display_t* disp, const gui_font_t* font, const GUI_DRAW_FONT_t* draw, gui_dim_t x, gui_dim_t y, const gui_font_char_t* c) {
+draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_font_t* draw, gui_dim_t x, gui_dim_t y, const gui_font_char_t* c) {
     uint8_t i, b, k, columns;
     gui_dim_t x1;
     
@@ -444,7 +444,7 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const GUI_DRAW_FONT
     }
     
     if (GUI.ll.CopyChar != NULL) {                  /* If copying character function exists in low-level part */
-        GUI_FONT_CharEntry_t* entry = NULL;
+        gui_font_charentry_t* entry = NULL;
         
         entry = get_char_entry_from_font(font, c);  /* Get char entry from font and character for fast alpha drawing operations */
         if (entry == NULL) {
@@ -584,7 +584,7 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const GUI_DRAW_FONT
 
 /* Get string pointer start address for specific width of rectangle */
 static const gui_char *
-string_get_pointer_for_width(const gui_font_t* font, GUI_STRING_t* str, GUI_DRAW_FONT_t* draw) {
+string_get_pointer_for_width(const gui_font_t* font, gui_string_t* str, gui_draw_font_t* draw) {
     gui_dim_t tot = 0, w, h;
     uint8_t i;
     uint32_t ch;
@@ -596,7 +596,7 @@ string_get_pointer_for_width(const gui_font_t* font, GUI_STRING_t* str, GUI_DRAW
         if (!gui_string_getchreverse(str, &ch, &i)) {   /* Get character in reverse order */
             break;
         }
-        __StringGetCharSize(font, ch, &w, &h);
+        string_get_char_size(font, ch, &w, &h);
         if ((tot + w) < draw->Width) {
             tot += w;
         } else {
@@ -643,17 +643,17 @@ gui_draw_fill(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t wid
 }
 
 /**
- * \brief           Initialize \ref GUI_DRAW_FONT_t structure for further usage
- * \param[in,out]   *f: Pointer to empty \ref GUI_DRAW_FONT_t structure 
+ * \brief           Initialize \ref gui_draw_font_t structure for further usage
+ * \param[in,out]   f: Pointer to empty \ref gui_draw_font_t structure 
  */
 void
-gui_draw_font_init(GUI_DRAW_FONT_t* f) {
+gui_draw_font_init(gui_draw_font_t* f) {
     memset((void *)f, 0x00, sizeof(*f));            /* Reset structure */
 }
 
 /**
  * \brief           Fill screen with color
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       color: Color to use for filling screen 
  */
 void
@@ -663,7 +663,7 @@ gui_draw_fillscreen(const gui_display_t* disp, gui_color_t color) {
 
 /**
  * \brief           Set single pixel at X and Y location
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x: X position on LCD
  * \param[in]       y: Y position on LCD
  * \param[in]       color: Color used for drawing operation 
@@ -679,7 +679,7 @@ gui_draw_setpixel(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_color
 
 /**
  * \brief           Get pixel color at X and Y location
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x: X position on LCD
  * \param[in]       y: Y position on LCD
  * \return          Pixel color at desired position
@@ -692,7 +692,7 @@ gui_draw_getpixel(const gui_display_t* disp, gui_dim_t x, gui_dim_t y) {
 
 /**
  * \brief           Draw vertical line to LCD
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x: Line top X position
  * \param[in]       y: Line top Y position
  * \param[in]       length: Length of vertical line
@@ -716,7 +716,7 @@ gui_draw_vline(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t le
 
 /**
  * \brief           Draw horizontal line to LCD
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x: Line left X position
  * \param[in]       y: Line left Y position
  * \param[in]       length: Length of horizontal line
@@ -746,7 +746,7 @@ gui_draw_hline(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t le
 
 /**
  * \brief           Draw line from point 1 to point 2
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x1: Line start X position
  * \param[in]       y1: Line start Y position
  * \param[in]       x2: Line end X position
@@ -829,7 +829,7 @@ gui_draw_line(const gui_display_t* disp, gui_dim_t x1, gui_dim_t y1, gui_dim_t x
 
 /**
  * \brief           Draw rectangle
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x: Top left X position
  * \param[in]       y: Top left Y position
  * \param[in]       width: Rectangle width
@@ -851,7 +851,7 @@ gui_draw_rectangle(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_
 
 /**
  * \brief           Draw filled rectangle
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x: Top left X position
  * \param[in]       y: Top left Y position
  * \param[in]       width: Rectangle width
@@ -866,7 +866,7 @@ gui_draw_filledrectangle(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gu
 
 /**
  * \brief           Draw rectangle with 3D view
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x: Top left X position
  * \param[in]       y: Top left Y position
  * \param[in]       width: Rectangle width
@@ -897,7 +897,7 @@ gui_draw_rectangle3d(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_di
 
 /**
  * \brief           Draw rectangle with rounded corners
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x: Top left X position
  * \param[in]       y: Top left Y position
  * \param[in]       width: Rectangle width
@@ -931,7 +931,7 @@ gui_draw_roundedrectangle(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, g
 
 /**
  * \brief           Draw filled rectangle with rounded corners
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x: Top left X position
  * \param[in]       y: Top left Y position
  * \param[in]       width: Rectangle width
@@ -968,7 +968,7 @@ gui_draw_filledroundedrectangle(const gui_display_t* disp, gui_dim_t x, gui_dim_
 
 /**
  * \brief           Draw circle
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x: X position of circle center
  * \param[in]       y: X position of circle center
  * \param[in]       r: Circle radius
@@ -985,7 +985,7 @@ gui_draw_circle(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t r
 
 /**
  * \brief           Draw filled circle
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x: X position of circle center
  * \param[in]       y: X position of circle center
  * \param[in]       r: Circle radius
@@ -1002,7 +1002,7 @@ gui_draw_filledcircle(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_d
 
 /**
  * \brief           Draw triangle
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x1: Triangle point 1 X position
  * \param[in]       y1: Triangle point 1 Y position
  * \param[in]       x2: Triangle point 2 X position
@@ -1021,7 +1021,7 @@ gui_draw_triangle(const gui_display_t* disp, gui_dim_t x1, gui_dim_t y1,  gui_di
 
 /**
  * \brief           Draw filled triangle
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x1: Triangle point 1 X position
  * \param[in]       y1: Triangle point 1 Y position
  * \param[in]       x2: Triangle point 2 X position
@@ -1090,7 +1090,7 @@ gui_draw_filledtriangle(const gui_display_t* disp, gui_dim_t x1, gui_dim_t y1, g
 
 /**
  * \brief           Draw circle corner, selected with parameter
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x0: X position of corner origin
  * \param[in]       y0: Y position of corner origin
  * \param[in]       r: Circle radius
@@ -1151,7 +1151,7 @@ gui_draw_circlecorner(const gui_display_t* disp, gui_dim_t x0, gui_dim_t y0, gui
 
 /**
  * \brief           Draw filled circle corner, selected with parameter
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x0: X position of corner origin
  * \param[in]       y0: Y position of corner origin
  * \param[in]       r: Circle radius
@@ -1209,7 +1209,7 @@ gui_draw_filledcirclecorner(const gui_display_t* disp, gui_dim_t x0, gui_dim_t y
 
 /**
  * \brief           Draw image to display of any depth and size
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       x: Top left X position
  * \param[in]       y: Top left Y position
  * \param[in]       img: Pointer to \ref gui_image_desc_t structure with image description 
@@ -1280,13 +1280,13 @@ gui_draw_image(gui_display_t* disp, gui_dim_t x, gui_dim_t y, const gui_image_de
 
 /**
  * \brief           Draw polygon lines
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
- * \param[in]       points: Pointer to array of \ref GUI_DRAW_Poly_t points to draw lines between
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in]       points: Pointer to array of \ref gui_draw_poly_t points to draw lines between
  * \param[in]       len: Number of points in array. There must be at least 2 points
  * \param[in]       color: Color to use for drawing 
  */
 void
-gui_draw_poly(const gui_display_t* disp, const GUI_DRAW_Poly_t* points, size_t len, gui_color_t color) {
+gui_draw_poly(const gui_display_t* disp, const gui_draw_poly_t* points, size_t len, gui_color_t color) {
     gui_dim_t x = 0, y = 0;
 
     if (len < 2) {
@@ -1305,20 +1305,20 @@ gui_draw_poly(const gui_display_t* disp, const GUI_DRAW_Poly_t* points, size_t l
 
 /**
  * \brief           Write text to screen
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       font: Pointer to \ref gui_font_t structure with font to use
  * \param[in]       str: Pointer to string to draw on screen
- * \param[in]       draw: Pointer to \ref GUI_DRAW_FONT_t structure with specifications about drawing style 
+ * \param[in]       draw: Pointer to \ref gui_draw_font_t structure with specifications about drawing style 
  */
 void
-gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_char* str, GUI_DRAW_FONT_t* draw) {
+gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_char* str, gui_draw_font_t* draw) {
     gui_dim_t x, y;
     uint32_t ch;
     uint8_t i;
     size_t cnt;
     const gui_font_char_t* c;
-    GUI_StringRect_t rect = {0};                    /* Get string object */
-    GUI_STRING_t currStr;
+    gui_stringrect_t rect = {0};                    /* Get string object */
+    gui_string_t currStr;
     
     if (!draw->LineHeight) {                        /* When line height is not set */
         draw->LineHeight = font->size;              /* Set font size */
@@ -1396,21 +1396,21 @@ gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_
 }
 
 /**
- * \brief           Initializes \ref GUI_DRAW_SB_t structure for drawing operations
- * \param[in]       sb: Pointer to \ref GUI_DRAW_SB_t to initialize to default values 
+ * \brief           Initializes \ref gui_draw_sb_t structure for drawing operations
+ * \param[in]       sb: Pointer to \ref gui_draw_sb_t to initialize to default values 
  */
 void
-gui_draw_scrollbar_init(GUI_DRAW_SB_t* sb) {
+gui_draw_scrollbar_init(gui_draw_sb_t* sb) {
     memset(sb, 0x00, sizeof(*sb));                  /* Reset structure */
 }
 
 /**
  * \brief           Draw scroll bar to screen
- * \param[in,out]   *disp: Pointer to \ref gui_display_t structure for display operations
- * \param[in]       sb: Pointer to \ref GUI_DRAW_SB_t parameters for scroll bar 
+ * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
+ * \param[in]       sb: Pointer to \ref gui_draw_sb_t parameters for scroll bar 
  */
 void
-gui_draw_scrollbar(const gui_display_t* disp, GUI_DRAW_SB_t* sb) {
+gui_draw_scrollbar(const gui_display_t* disp, gui_draw_sb_t* sb) {
     gui_dim_t btnW, btnH, midHeight, rectHeight, midOffset = 0;
 
     btnW = sb->Width;

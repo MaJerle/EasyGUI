@@ -32,7 +32,7 @@
 #include "gui/gui_private.h"
 #include "widget/gui_listbox.h"
 
-#define __GL(x)             ((GUI_LISTBOX_t *)(x))
+#define __GL(x)             ((gui_listbox_t *)(x))
 
 static uint8_t gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
@@ -55,34 +55,34 @@ gui_color_t colors[] = {
 static const
 gui_widget_t widget = {
     .name = _GT("LISTBOX"),                         /*!< Widget name */
-    .size = sizeof(GUI_LISTBOX_t),                  /*!< Size of widget for memory allocation */
+    .size = sizeof(gui_listbox_t),                  /*!< Size of widget for memory allocation */
     .flags = 0,                                     /*!< List of widget flags */
     .callback = gui_listbox_callback,               /*!< Callback function */
     .colors = colors,                               /*!< List of default colors */
     .color_count = GUI_COUNT_OF(colors),            /*!< Define number of colors */
 };
 
-#define o                   ((GUI_LISTBOX_t *)(h))
+#define o                   ((gui_listbox_t *)(h))
 
 /* Get item from listbox entry */
-static GUI_LISTBOX_ITEM_t*
+static gui_listbox_item_t*
 get_item(gui_handle_p h, uint16_t index) {
     uint16_t i = 0;
-    GUI_LISTBOX_ITEM_t* item = 0;
+    gui_listbox_item_t* item = 0;
     
     if (index >= o->Count) {                        /* Check if valid index */
         return 0;
     }
     
     if (index == 0) {                               /* Check for first element */
-        return (GUI_LISTBOX_ITEM_t *)gui_linkedlist_getnext_gen(&o->Root, NULL);/* Return first element */
+        return (gui_listbox_item_t *)gui_linkedlist_getnext_gen(&o->Root, NULL);/* Return first element */
     } else if (index == o->Count - 1) {
-        return (GUI_LISTBOX_ITEM_t *)gui_linkedlist_getprev_gen(&o->Root, NULL);/* Return last element */
+        return (gui_listbox_item_t *)gui_linkedlist_getprev_gen(&o->Root, NULL);/* Return last element */
     }
     
-    item = (GUI_LISTBOX_ITEM_t *)gui_linkedlist_getnext_gen(&o->Root, NULL);
+    item = (gui_listbox_item_t *)gui_linkedlist_getnext_gen(&o->Root, NULL);
     while (i++ < index) {
-        item = (GUI_LISTBOX_ITEM_t *)gui_linkedlist_getnext_gen(NULL, &item->list);
+        item = (gui_listbox_item_t *)gui_linkedlist_getnext_gen(NULL, &item->list);
     }
     return item;
 }
@@ -189,7 +189,7 @@ check_values(gui_handle_p h) {
 /* Delete list item box by index */
 static uint8_t
 delete_item(gui_handle_p h, uint16_t index) {
-    GUI_LISTBOX_ITEM_t* item;
+    gui_listbox_item_t* item;
     
     item = get_item(h, index);                      /* Get list item from handle */
     if (item) {
@@ -242,7 +242,7 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
             
             /* Draw side scrollbar */
             if (o->Flags & GUI_FLAG_LISTBOX_SLIDER_ON) {
-                GUI_DRAW_SB_t sb;
+                gui_draw_sb_t sb;
                 gui_draw_scrollbar_init(&sb);
                 
                 width -= o->SliderWidth;            /* Decrease available width */
@@ -263,8 +263,8 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
             
             /* Draw text if possible */
             if (h->font != NULL && gui_linkedlist_hasentries(&__GL(h)->Root)) {   /* Is first set? */
-                GUI_DRAW_FONT_t f;
-                GUI_LISTBOX_ITEM_t* item;
+                gui_draw_font_t f;
+                gui_listbox_item_t* item;
                 uint16_t itemHeight;                /* Get item height */
                 uint16_t index = 0;                 /* Start index */
                 gui_dim_t tmp;
@@ -285,8 +285,8 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
                     disp->y2 = y + height - 2;
                 }
                 
-                for (index = 0, item = (GUI_LISTBOX_ITEM_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); item && f.Y <= disp->y2;
-                        item = (GUI_LISTBOX_ITEM_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
+                for (index = 0, item = (gui_listbox_item_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); item && f.Y <= disp->y2;
+                        item = (gui_listbox_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
                     if (index < o->visiblestartindex) { /* Check for start drawing index */
                         continue;
                     }
@@ -305,8 +305,8 @@ gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, g
             return 1;
         }
         case GUI_WC_Remove: {
-            GUI_LISTBOX_ITEM_t* item;
-            while ((item = (GUI_LISTBOX_ITEM_t *)gui_linkedlist_remove_gen(&o->Root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&o->Root, NULL))) != NULL) {
+            gui_listbox_item_t* item;
+            while ((item = (gui_listbox_item_t *)gui_linkedlist_remove_gen(&o->Root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&o->Root, NULL))) != NULL) {
                 GUI_MEMFREE(item);                  /* Free memory */
             }
             return 1;
@@ -404,12 +404,12 @@ gui_listbox_create(gui_id_t id, float x, float y, float width, float height, gui
 /**
  * \brief           Set color to listbox
  * \param[in,out]   h: Widget handle
- * \param[in]       index: Index in array of colors. This parameter can be a value of \ref GUI_LISTBOX_COLOR_t enumeration
+ * \param[in]       index: Index in array of colors. This parameter can be a value of \ref gui_listbox_color_t enumeration
  * \param[in]       color: Actual color code to set
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_listbox_setcolor(gui_handle_p h, GUI_LISTBOX_COLOR_t index, gui_color_t color) {
+gui_listbox_setcolor(gui_handle_p h, gui_listbox_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
 }
@@ -422,7 +422,7 @@ gui_listbox_setcolor(gui_handle_p h, GUI_LISTBOX_COLOR_t index, gui_color_t colo
  */
 uint8_t
 gui_listbox_addstring(gui_handle_p h, const gui_char* text) {
-    GUI_LISTBOX_ITEM_t* item;
+    gui_listbox_item_t* item;
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
@@ -453,7 +453,7 @@ gui_listbox_addstring(gui_handle_p h, const gui_char* text) {
  */
 uint8_t
 gui_listbox_setstring(gui_handle_p h, uint16_t index, const gui_char* text) {
-    GUI_LISTBOX_ITEM_t* item;
+    gui_listbox_item_t* item;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */

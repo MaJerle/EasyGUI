@@ -32,7 +32,7 @@
 #include "gui/gui_private.h"
 #include "widget/gui_debugbox.h"
 
-#define __GL(x)             ((GUI_DEBUGBOX_t *)(x))
+#define __GL(x)             ((gui_debugbox_t *)(x))
 
 static uint8_t gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
@@ -51,14 +51,14 @@ gui_color_t colors[] = {
 static const
 gui_widget_t widget = {
     .name = _GT("DEBUGBOX"),                        /*!< Widget name */
-    .size = sizeof(GUI_DEBUGBOX_t),                 /*!< Size of widget for memory allocation */
+    .size = sizeof(gui_debugbox_t),                 /*!< Size of widget for memory allocation */
     .flags = 0,                                     /*!< List of widget flags */
     .callback = gui_debugbox_callback,              /*!< Callback function */
     .colors = colors,                               /*!< List of default colors */
     .color_count = GUI_COUNT_OF(colors),            /*!< Define number of colors */
 };
 
-#define o                   ((GUI_DEBUGBOX_t *)(h))
+#define o                   ((gui_debugbox_t *)(h))
 
 /* Get item height in debugbox */
 static uint16_t
@@ -165,7 +165,7 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             
             /* Draw side scrollbar */
             if (o->Flags & GUI_FLAG_DEBUGBOX_SLIDER_ON) {
-                GUI_DRAW_SB_t sb;
+                gui_draw_sb_t sb;
                 gui_draw_scrollbar_init(&sb);
                 
                 width -= o->SliderWidth;            /* Decrease available width */
@@ -186,8 +186,8 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             
             /* Draw text if possible */
             if (h->font != NULL && gui_linkedlist_hasentries(&__GL(h)->Root)) { /* Is first set? */
-                GUI_DRAW_FONT_t f;
-                GUI_DEBUGBOX_ITEM_t* item;
+                gui_draw_font_t f;
+                gui_debugbox_item_t* item;
                 uint16_t itemHeight;                /* Get item height */
                 uint16_t index = 0;                 /* Start index */
                 gui_dim_t tmp;
@@ -208,8 +208,8 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                     disp->y2 = y + height - 2;
                 }
                 
-                for (index = 0, item = (GUI_DEBUGBOX_ITEM_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); item && f.Y <= disp->y2;
-                        item = (GUI_DEBUGBOX_ITEM_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
+                for (index = 0, item = (gui_debugbox_item_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); item && f.Y <= disp->y2;
+                        item = (gui_debugbox_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
                     if (index < o->visiblestartindex) { /* Check for start drawing index */
                         continue;
                     }
@@ -223,8 +223,8 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             return 1;
         }
         case GUI_WC_Remove: {
-            GUI_DEBUGBOX_ITEM_t* item;
-            while ((item = (GUI_DEBUGBOX_ITEM_t *)gui_linkedlist_remove_gen(&o->Root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&o->Root, NULL))) != NULL) {
+            gui_debugbox_item_t* item;
+            while ((item = (gui_debugbox_item_t *)gui_linkedlist_remove_gen(&o->Root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&o->Root, NULL))) != NULL) {
                 GUI_MEMFREE(item);                  /* Free memory */
             }
             return 1;
@@ -245,7 +245,7 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 
                 if (GUI_ABS(diff) > height) {
                     slide(h, diff > 0 ? 1 : -1);    /* Slide widget */
-                    tY = ts->y_rel[0];               /* Save pointer */
+                    tY = ts->y_rel[0];              /* Save pointer */
                 }
             }
             return 1;
@@ -253,11 +253,11 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
 #endif /* GUI_CFG_USE_TOUCH */
         case GUI_WC_Click: {
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            gui_dim_t width = guii_widget_getwidth(h); /* Get widget widget */
-            gui_dim_t height = guii_widget_getheight(h);   /* Get widget height */
+            gui_dim_t width = guii_widget_getwidth(h);  /* Get widget widget */
+            gui_dim_t height = guii_widget_getheight(h);/* Get widget height */
             
             if (o->Flags & GUI_FLAG_DEBUGBOX_SLIDER_ON) {
-                if (ts->x_rel[0] > (width - o->SliderWidth)) {   /* Touch is inside slider */
+                if (ts->x_rel[0] > (width - o->SliderWidth)) {  /* Touch is inside slider */
                     if (ts->y_rel[0] < o->SliderWidth) {
                         slide(h, -1);               /* Slide one value up */
                     } else if (ts->y_rel[0] > (height - o->SliderWidth)) {
@@ -312,7 +312,7 @@ gui_debugbox_setcolor(gui_handle_p h, GUI_DEBUGBOX_COLOR_t index, gui_color_t co
  */
 uint8_t
 gui_debugbox_addstring(gui_handle_p h, const gui_char* text) {
-    GUI_DEBUGBOX_ITEM_t* item;
+    gui_debugbox_item_t* item;
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
@@ -332,8 +332,8 @@ gui_debugbox_addstring(gui_handle_p h, const gui_char* text) {
          * In this case we have to remove more than just one element
          */
         while (__GL(h)->Count > __GL(h)->MaxCount) {
-            GUI_DEBUGBOX_ITEM_t* firstItem;
-            firstItem = (GUI_DEBUGBOX_ITEM_t *)gui_linkedlist_getnext_gen(&__GL(h)->Root, NULL);
+            gui_debugbox_item_t* firstItem;
+            firstItem = (gui_debugbox_item_t *)gui_linkedlist_getnext_gen(&__GL(h)->Root, NULL);
             if (firstItem != NULL) {
                 gui_linkedlist_remove_gen(&__GL(h)->Root, (gui_linkedlist_t *)firstItem);
                 GUI_MEMFREE(firstItem);

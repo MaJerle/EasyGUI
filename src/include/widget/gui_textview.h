@@ -48,47 +48,47 @@ extern "C" {
 /**
  * \brief           List of text view colors
  */
-typedef enum GUI_TEXTVIEW_COLOR_t {
+typedef enum {
     GUI_TEXTVIEW_COLOR_BG = 0x00,           /*!< Background color */
     GUI_TEXTVIEW_COLOR_TEXT,                /*!< Default text color */
-} GUI_TEXTVIEW_COLOR_t;
+} gui_textview_color_t;
 
 /**
  * \brief           Vertical align for text view inside box
  */
-typedef enum GUI_TEXTVIEW_VALIGN_t {        
+typedef enum {        
     GUI_TEXTVIEW_VALIGN_TOP = GUI_VALIGN_TOP,       /*!< Vertical align top, default value */
     GUI_TEXTVIEW_VALIGN_CENTER = GUI_VALIGN_CENTER, /*!< Vertical align center */
     GUI_TEXTVIEW_VALIGN_BOTTOM = GUI_VALIGN_BOTTOM  /*!< Vertical align bottom */
-} GUI_TEXTVIEW_VALIGN_t;
+} gui_textalign_valign_t;
 
 /**
  * \brief           Horizontal align for text view inside box
  */
-typedef enum GUI_TEXTVIEW_HALIGN_t {        
+typedef enum {        
     GUI_TEXTVIEW_HALIGN_LEFT = GUI_HALIGN_LEFT,     /*!< Horizontal align left, default value */
     GUI_TEXTVIEW_HALIGN_CENTER = GUI_HALIGN_CENTER, /*!< Horizontal align center */
     GUI_TEXTVIEW_HALIGN_RIGHT = GUI_HALIGN_RIGHT    /*!< Horizontal align right */
-} GUI_TEXTVIEW_HALIGN_t;
+} gui_textalign_halign_t;
 
 #if defined(GUI_INTERNAL) || __DOXYGEN__
     
 /**
  * \brief           Dropdown object structure
  */
-typedef struct GUI_TEXTVIEW_t {
+typedef struct {
     gui_handle C;                           /*!< GUI handle object, must always be first on list */
 
-    GUI_TEXTVIEW_VALIGN_t VAlign;           /*!< Vertical text align */
-    GUI_TEXTVIEW_HALIGN_t HAlign;           /*!< Horizontal text align */
+    gui_textalign_valign_t VAlign;           /*!< Vertical text align */
+    gui_textalign_halign_t HAlign;           /*!< Horizontal text align */
     uint8_t Flags;                          /*!< Widget flags */
-} GUI_TEXTVIEW_t;
+} gui_textview_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p gui_textview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
-uint8_t gui_textview_setcolor(gui_handle_p h, GUI_TEXTVIEW_COLOR_t index, gui_color_t color);
-uint8_t gui_textview_setvalign(gui_handle_p h, GUI_TEXTVIEW_VALIGN_t align);
-uint8_t gui_textview_sethalign(gui_handle_p h, GUI_TEXTVIEW_HALIGN_t align);
+gui_handle_p    gui_textview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+uint8_t         gui_textview_setcolor(gui_handle_p h, gui_textview_color_t index, gui_color_t color);
+uint8_t         gui_textview_setvalign(gui_handle_p h, gui_textalign_valign_t align);
+uint8_t         gui_textview_sethalign(gui_handle_p h, gui_textalign_halign_t align);
     
 /**
  * \}

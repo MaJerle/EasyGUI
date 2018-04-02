@@ -48,52 +48,52 @@ extern "C" {
 /**
  * \brief           List of slider colors
  */
-typedef enum GUI_SLIDER_COLOR_t {
+typedef enum {
     GUI_SLIDER_COLOR_BG_NONACTIVE = 0x00,   /*!< Background color index on slider part of non-active area */
     GUI_SLIDER_COLOR_BG_ACTIVE,             /*!< Background color index on slider part of active area */
     GUI_SLIDER_COLOR_FG,                    /*!< Foreground color index for foreground (circle, ...) part */
     GUI_SLIDER_COLOR_BORDER,                /*!< Border color index for bottom part */
-} GUI_SLIDER_COLOR_t;
+} gui_slider_color_t;
 
 /**
  * \brief           List of slider modes
  */
-typedef enum GUI_SLIDER_MODE_t {
+typedef enum {
     GUI_SLIDER_MODE_LEFT_RIGHT = 0x00,      /*!< Slider is horizontal, min on the left, max on the right */
     GUI_SLIDER_MODE_RIGHT_LEFT,             /*!< Slider is horizontal, min on the right, max on the left */
     GUI_SLIDER_MODE_BOTTOM_TOP,             /*!< Slider is horizontal, min on the bottom, max on the top */
     GUI_SLIDER_MODE_TOP_BOTTOM,             /*!< Slider is horizontal, min on the top, max on the bottom */
-} GUI_SLIDER_MODE_t;
+} gui_slider_mode_t;
 
 #if defined(GUI_INTERNAL) || __DOXYGEN__
     
 /**
  * \brief           SLIDER object structure
  */
-typedef struct GUI_SLIDER_t {
+typedef struct {
     gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
     int32_t Min;                            /*!< Low value for slider */
     int32_t Max;                            /*!< High value for slider */
     int32_t Value;                          /*!< Current value for slider */
-    GUI_SLIDER_MODE_t Mode;                 /*!< Slider mode */
+    gui_slider_mode_t Mode;                 /*!< Slider mode */
     
     uint8_t MaxSize;                        /*!< Max size for animation */
     uint8_t CurrentSize;                    /*!< Current size for animation */
     
     uint8_t Flags;                          /*!< Widget flags */
-} GUI_SLIDER_t;
+} gui_slider_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
-uint8_t gui_slider_setcolor(gui_handle_p h, GUI_SLIDER_COLOR_t index, gui_color_t color);
-uint8_t gui_slider_setmode(gui_handle_p h, GUI_SLIDER_MODE_t mode);
-uint8_t gui_slider_setmin(gui_handle_p h, int32_t val);
-uint8_t gui_slider_setmax(gui_handle_p h, int32_t val);
-uint8_t gui_slider_setvalue(gui_handle_p h, int32_t val);
-int32_t gui_slider_getmin(gui_handle_p h);
-int32_t gui_slider_getmax(gui_handle_p h);
-int32_t gui_slider_getvalue(gui_handle_p h);
+gui_handle_p    gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+uint8_t         gui_slider_setcolor(gui_handle_p h, gui_slider_color_t index, gui_color_t color);
+uint8_t         gui_slider_setmode(gui_handle_p h, gui_slider_mode_t mode);
+uint8_t         gui_slider_setmin(gui_handle_p h, int32_t val);
+uint8_t         gui_slider_setmax(gui_handle_p h, int32_t val);
+uint8_t         gui_slider_setvalue(gui_handle_p h, int32_t val);
+int32_t         gui_slider_getmin(gui_handle_p h);
+int32_t         gui_slider_getmax(gui_handle_p h);
+int32_t         gui_slider_getvalue(gui_handle_p h);
 
 /**
  * \}

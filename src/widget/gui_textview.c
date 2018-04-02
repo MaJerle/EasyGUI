@@ -32,7 +32,7 @@
 #include "gui/gui_private.h"
 #include "widget/gui_textview.h"
 
-#define __GT(x)             ((GUI_TEXTVIEW_t *)(x))
+#define __GT(x)             ((gui_textview_t *)(x))
 
 #define CFG_VALIGN          0x01
 #define CFG_HALIGN          0x02
@@ -54,13 +54,13 @@ gui_color_t colors[] = {
 static const
 gui_widget_t widget = {
     .name = _GT("TEXTVIEW"),                        /*!< Widget name */
-    .size = sizeof(GUI_TEXTVIEW_t),                 /*!< Size of widget for memory allocation */
+    .size = sizeof(gui_textview_t),                 /*!< Size of widget for memory allocation */
     .flags = 0,                                     /*!< List of widget flags */
     .callback = gui_textview_callback,              /*!< Callback function */
     .colors = colors,                               /*!< List of default colors */
     .color_count = GUI_COUNT_OF(colors),            /*!< Define number of colors */
 };
-#define o                   ((GUI_TEXTVIEW_t *)(h))
+#define o                   ((gui_textview_t *)(h))
 
 /**
  * \brief           Default widget callback function
@@ -77,10 +77,10 @@ gui_textview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             gui_widget_param* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
             switch (p->type) {
                 case CFG_HALIGN: 
-                    o->HAlign = *(GUI_TEXTVIEW_HALIGN_t *)p->data;
+                    o->HAlign = *(gui_textalign_halign_t *)p->data;
                     break;
                 case CFG_VALIGN: 
-                    o->VAlign = *(GUI_TEXTVIEW_VALIGN_t *)p->data;
+                    o->VAlign = *(gui_textalign_valign_t *)p->data;
                     break;
                 default: break;
             }
@@ -93,7 +93,7 @@ gui_textview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             gui_color_t bg;
             
             if (guii_widget_isfontandtextset(h)) { /* Check if font is prepared for drawing */
-                GUI_DRAW_FONT_t f;
+                gui_draw_font_t f;
                 
                 x = guii_widget_getabsolutex(h);   /* Get absolute X coordinate */
                 y = guii_widget_getabsolutey(h);   /* Get absolute Y coordinate */
@@ -159,12 +159,12 @@ gui_textview_create(gui_id_t id, float x, float y, float width, float height, gu
 /**
  * \brief           Set color to specific part of widget
  * \param[in,out]   h: Widget handle
- * \param[in]       index: Color index. This parameter can be a value of \ref GUI_TEXTVIEW_COLOR_t enumeration
+ * \param[in]       index: Color index. This parameter can be a value of \ref gui_textview_color_t enumeration
  * \param[in]       color: Color value
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_textview_setcolor(gui_handle_p h, GUI_TEXTVIEW_COLOR_t index, gui_color_t color) {
+gui_textview_setcolor(gui_handle_p h, gui_textview_color_t index, gui_color_t color) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     ret = guii_widget_setcolor(h, (uint8_t)index, color);  /* Set color */
@@ -182,11 +182,11 @@ gui_textview_setcolor(gui_handle_p h, GUI_TEXTVIEW_COLOR_t index, gui_color_t co
 /**
  * \brief           Set vertical align for text inside text box
  * \param[in,out]   h: Widget handle
- * \param[in]       align: Vertical align. This parameter can be a value of \ref GUI_TEXTVIEW_VALIGN_t enumeration
+ * \param[in]       align: Vertical align. This parameter can be a value of \ref gui_textalign_valign_t enumeration
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_textview_setvalign(gui_handle_p h, GUI_TEXTVIEW_VALIGN_t align) {
+gui_textview_setvalign(gui_handle_p h, gui_textalign_valign_t align) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setparam(h, CFG_VALIGN, &align, 1, 1);  /* Set parameter */
 }
@@ -194,11 +194,11 @@ gui_textview_setvalign(gui_handle_p h, GUI_TEXTVIEW_VALIGN_t align) {
 /**
  * \brief           Set horizontal align for text inside text box
  * \param[in,out]   h: Widget handle
- * \param[in]       align: Vertical align. This parameter can be a value of \ref GUI_TEXTVIEW_HALIGN_t enumeration
+ * \param[in]       align: Vertical align. This parameter can be a value of \ref gui_textalign_halign_t enumeration
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_textview_sethalign(gui_handle_p h, GUI_TEXTVIEW_HALIGN_t align) {
+gui_textview_sethalign(gui_handle_p h, gui_textalign_halign_t align) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setparam(h, CFG_HALIGN, &align, 1, 1);  /* Set parameter */
 }

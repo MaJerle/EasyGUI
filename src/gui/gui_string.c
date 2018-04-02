@@ -33,23 +33,23 @@
 
 /**
  * \brief           Initialize unicode processing structure
- * \param[in]       s: Pointer to \ref GUI_STRING_UNICODE_t to initialize to default values
+ * \param[in]       s: Pointer to \ref gui_string_unicode_t to initialize to default values
  * \sa              gui_string_unicode_decode, gui_string_unicode_encode
  */
 void
-gui_string_unicode_init(GUI_STRING_UNICODE_t* s) {
+gui_string_unicode_init(gui_string_unicode_t* s) {
     memset(s, 0x00, sizeof(*s));            /* Reset structure */
 }
 
 /**
  * \brief           Decodes single input byte of unicode formatted text
- * \param[in,out]   *s: Pointer to working \ref GUI_STRING_UNICODE_t structure for processing
+ * \param[in,out]   *s: Pointer to working \ref gui_string_unicode_t structure for processing
  * \param[in]       c: Character to be used for decoding
  * \return          Member of \ref GUI_STRING_UNICODE_Result_t indicating decoding status
  * \sa              gui_string_unicode_init, gui_string_unicode_encode
  */
 GUI_STRING_UNICODE_Result_t
-gui_string_unicode_decode(GUI_STRING_UNICODE_t* s, const gui_char c) {    
+gui_string_unicode_decode(gui_string_unicode_t* s, const gui_char c) {    
     if (!s->r) {                            /* First byte received */
         s->t = 0;
         if (c < 0x80) {                     /* One byte only in UTF-8 representation */
@@ -136,7 +136,7 @@ gui_string_length(const gui_char* src) {
 #if GUI_CFG_USE_UNICODE
     size_t out = 0;
     const gui_char* tmp = src;
-    GUI_STRING_UNICODE_t s;
+    gui_string_unicode_t s;
     
     gui_string_unicode_init(&s);            /* Init unicode */
     while (*tmp) {                          /* Process string */
@@ -202,12 +202,12 @@ gui_string_compare(const gui_char* s1, const gui_char* s2) {
 
 /**
  * \brief           Prepare string before it can be used with \ref gui_string_getch or \ref gui_string_getchreverse functions
- * \param[in,out]   *s: Pointer to \ref GUI_STRING_t as base string object
+ * \param[in,out]   *s: Pointer to \ref gui_string_t as base string object
  * \param[in]       str: Pointer to \ref gui_char with string used for manupulation
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_string_prepare(GUI_STRING_t* s, const gui_char* str) {
+gui_string_prepare(gui_string_t* s, const gui_char* str) {
     s->Str = str;                           /* Save string pointer */
 #if GUI_CFG_USE_UNICODE
     gui_string_unicode_init(&s->S);         /* Prepare unicode structure */
@@ -221,7 +221,7 @@ gui_string_prepare(GUI_STRING_t* s, const gui_char* str) {
  * \include         _example_string_getch.c
  * 
  * \note            When \ref GUI_CFG_USE_UNICODE is set to 1, multiple bytes may be used for single character
- * \param[in,out]   *s: Pointer to \ref GUI_STRING_t structure with input string. 
+ * \param[in,out]   *s: Pointer to \ref gui_string_t structure with input string. 
                         Function will internally change pointer of actual string where it points to to next character
  * \param[out]      out: Pointer to output memory where output character will be saved
  * \param[out]      len: Pointer to output memory where number of bytes for string will be saved
@@ -229,7 +229,7 @@ gui_string_prepare(GUI_STRING_t* s, const gui_char* str) {
  * \sa              gui_string_getchreverse
  */
 uint8_t
-gui_string_getch(GUI_STRING_t* s, uint32_t* out, uint8_t* len) {
+gui_string_getch(gui_string_t* s, uint32_t* out, uint8_t* len) {
 #if GUI_CFG_USE_UNICODE
     GUI_STRING_UNICODE_Result_t r;
     
@@ -270,7 +270,7 @@ gui_string_getch(GUI_STRING_t* s, uint32_t* out, uint8_t* len) {
  * \include         _example_string_getchreverse.c
  *
  * \note            When \ref GUI_CFG_USE_UNICODE is set to 1, multiple bytes may be used for single character
- * \param[in,out]   *str: Pointer to \ref GUI_STRING_t structure with input string. 
+ * \param[in,out]   *str: Pointer to \ref gui_string_t structure with input string. 
                         Function will internally change pointer of actual string where it points to to next character
  * \param[out]      out: Pointer to output memory where output character will be saved
  * \param[out]      len: Pointer to output memory where number of bytes for string will be saved
@@ -278,7 +278,7 @@ gui_string_getch(GUI_STRING_t* s, uint32_t* out, uint8_t* len) {
  * \sa              gui_string_getch, gui_string_gotoend
  */
 uint8_t
-gui_string_getchreverse(GUI_STRING_t* str, uint32_t* out, uint8_t* len) {
+gui_string_getchreverse(gui_string_t* str, uint32_t* out, uint8_t* len) {
 #if GUI_CFG_USE_UNICODE
     const gui_char* ch = (str->Str) - 3;    /* Save character pointer, start 3 bytes before current active character */
     if (ch[3] < 0x80) {                     /* Normal ASCII character */
@@ -329,12 +329,12 @@ gui_string_getchreverse(GUI_STRING_t* str, uint32_t* out, uint8_t* len) {
 /**
  *
  * \brief           Set character pointer to the last character in sequence
- * \param[in,out]   *str: Pointer to \ref GUI_STRING_t structure with string informations
+ * \param[in,out]   *str: Pointer to \ref gui_string_t structure with string informations
  * \return          `1` on success, `0` otherwise
  * \sa              gui_string_getchreverse
  */
 uint8_t
-gui_string_gotoend(GUI_STRING_t* str) {
+gui_string_gotoend(gui_string_t* str) {
     while (*str->Str) {                     /* Check characters */
         str->Str++;                         /* Go to next character */
     }

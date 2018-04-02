@@ -71,7 +71,7 @@ gui_widget_t widget = {
 #define e          ((GUI_EDITTEXT_t *)h)
 
 /* Check if edit text is multiline */
-#define is_multiline(h)            (__GE(h)->Flags & GUI_EDITTEXT_FLAG_MULTILINE)
+#define is_multiline(h)            (__GE(h)->flags & GUI_EDITTEXT_FLAG_MULTILINE)
 
 /**
  * \brief           Default widget callback function
@@ -95,16 +95,16 @@ gui_edittext_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             switch (p->type) {
                 case CFG_MULTILINE:                 /* Enable/Disable multiline */
                     if (*(uint8_t *)p->data && !is_multiline(h)) {
-                        __GE(h)->Flags |= GUI_EDITTEXT_FLAG_MULTILINE;
+                        __GE(h)->flags |= GUI_EDITTEXT_FLAG_MULTILINE;
                     } else if (!*(uint8_t *)p->data && is_multiline(h)) {
-                        __GE(h)->Flags &= ~GUI_EDITTEXT_FLAG_MULTILINE;
+                        __GE(h)->flags &= ~GUI_EDITTEXT_FLAG_MULTILINE;
                     }
                     break; /* Set max X value to widget */
                 case CFG_HALIGN: 
-                    e->HAlign = *(GUI_EDITTEXT_HALIGN_t *)p->data;
+                    e->HAlign = *(gui_edittext_halign_t *)p->data;
                     break;
                 case CFG_VALIGN: 
-                    e->VAlign = *(GUI_EDITTEXT_VALIGN_t *)p->data;
+                    e->VAlign = *(gui_edittext_valign_t *)p->data;
                     break;
                 default: break;
             }
@@ -128,7 +128,7 @@ gui_edittext_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             }
             
             if (guii_widget_isfontandtextset(h)) { /* Ready to write string */
-                GUI_DRAW_FONT_t f;
+                gui_draw_font_t f;
                 gui_draw_font_init(&f);             /* Init font drawing */
                 
                 f.X = x + 5;
@@ -206,7 +206,7 @@ gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gu
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_edittext_setcolor(gui_handle_p h, GUI_EDITTEXT_COLOR_t index, gui_color_t color) {
+gui_edittext_setcolor(gui_handle_p h, gui_edittext_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setcolor(h, (uint8_t)index, color);  /* Set color */
 }
@@ -231,7 +231,7 @@ gui_edittext_setmultiline(gui_handle_p h, uint8_t multiline) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_edittext_setvalign(gui_handle_p h, GUI_EDITTEXT_VALIGN_t align) {
+gui_edittext_setvalign(gui_handle_p h, gui_edittext_valign_t align) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setparam(h, CFG_VALIGN, &align, 1, 1);  /* Set parameter */
 }
@@ -243,7 +243,7 @@ gui_edittext_setvalign(gui_handle_p h, GUI_EDITTEXT_VALIGN_t align) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_edittext_sethalign(gui_handle_p h, GUI_EDITTEXT_HALIGN_t align) {
+gui_edittext_sethalign(gui_handle_p h, gui_edittext_halign_t align) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setparam(h, CFG_HALIGN, &align, 1, 1);  /* Set parameter */
 }

@@ -33,7 +33,7 @@
 #include "gui/gui_private.h"
 #include "widget/gui_window.h"
 
-#define __GW(x)             ((GUI_WINDOW_t *)(x))
+#define __GW(x)             ((gui_window_t *)(x))
 
 static uint8_t gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
@@ -54,14 +54,14 @@ gui_color_t colors[] = {
 static const
 gui_widget_t widget = {
     .name = _GT("WINDOW"),                          /*!< Widget name */
-    .size = sizeof(GUI_WINDOW_t),                   /*!< Size of widget for memory allocation */
+    .size = sizeof(gui_window_t),                   /*!< Size of widget for memory allocation */
     .flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
     .callback = gui_window_callback,                /*!< Control function */
     .colors = colors,                               /*!< Pointer to colors array */
     .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 
-#define w          ((GUI_WINDOW_t *)h)
+#define w          ((gui_window_t *)h)
 
 /**
  * \brief           Default widget callback function
@@ -152,7 +152,7 @@ gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
                 gui_draw_line(disp, tX,     tY + tW - 1, tX + tW - 1, tY,     GUI_COLOR_WHITE);
                 
                 if (guii_widget_isfontandtextset(h)) {
-                    GUI_DRAW_FONT_t f;
+                    gui_draw_font_t f;
                     gui_draw_font_init(&f);         /* Init structure */
                     
                     f.X = x + 3;
@@ -296,7 +296,7 @@ gui_window_createdesktop(gui_id_t id, gui_widget_callback_t cb) {
  */
 gui_handle_p
 gui_window_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    GUI_WINDOW_t* ptr;
+    gui_window_t* ptr;
 
     ptr = guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
     if (ptr) {
@@ -316,12 +316,12 @@ gui_window_create(gui_id_t id, float x, float y, float width, float height, gui_
 /**
  * \brief           Set color to specific part of widget
  * \param[in,out]   h: Widget handle
- * \param[in]       index: Color index. This parameter can be a value of \ref GUI_WINDOW_COLOR_t enumeration
+ * \param[in]       index: Color index. This parameter can be a value of \ref gui_window_color_t enumeration
  * \param[in]       color: Color value
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_window_setcolor(gui_handle_p h, GUI_WINDOW_COLOR_t index, gui_color_t color) {
+gui_window_setcolor(gui_handle_p h, gui_window_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
 }

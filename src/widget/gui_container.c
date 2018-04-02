@@ -32,7 +32,7 @@
 #include "gui/gui_private.h"
 #include "widget/gui_container.h"
 
-#define __GW(x)             ((GUI_WINDOW_t *)(x))
+#define __GW(x)             ((gui_window_t *)(x))
 
 static uint8_t gui_container_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 

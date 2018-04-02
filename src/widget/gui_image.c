@@ -66,10 +66,10 @@ gui_image_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui
             gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
             gui_dim_t x, y;
 
-            x = guii_widget_getabsolutex(h);       /* Get absolute X coordinate */
-            y = guii_widget_getabsolutey(h);       /* Get absolute Y coordinate */
+            x = guii_widget_getabsolutex(h);        /* Get absolute X coordinate */
+            y = guii_widget_getabsolutey(h);        /* Get absolute Y coordinate */
             
-            gui_draw_image(disp, x, y, o->Image);   /* Draw actual image on screen */
+            gui_draw_image(disp, x, y, o->image);   /* Draw actual image on screen */
             return 1;
         }
         default:                                    /* Handle default option */
@@ -106,11 +106,11 @@ uint8_t
 gui_image_setsource(gui_handle_p h, const gui_image_desc_t* img) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h && __GH(h)->widget == &widget && img != NULL); /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && img != NULL);   /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    __GI(h)->Image = img;                           /* Set image */
-    guii_widget_setinvalidatewithparent(h, img && img->bpp == 32);  /* Set how invalidation functon hebaves */
+    __GI(h)->image = img;                           /* Set image */
+    guii_widget_setinvalidatewithparent(h, img != NULL && img->bpp == 32);  /* Set how invalidation functon hebaves */
     guii_widget_invalidatewithparent(h);           /* Invalidate widget */
 
     __GUI_LEAVE();                                  /* Leave GUI */

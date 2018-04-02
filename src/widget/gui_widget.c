@@ -1198,7 +1198,7 @@ guii_widget_processtextkey(gui_handle_p h, guii_keyboard_data_t* kb) {
     size_t len, tlen;
     uint32_t ch;
     uint8_t l;
-    GUI_STRING_t currStr;
+    gui_string_t currStr;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     

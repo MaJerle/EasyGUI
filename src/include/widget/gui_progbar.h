@@ -48,17 +48,17 @@ extern "C" {
 /**
  * \brief           Progress bar color list enumeration
  */
-typedef enum GUI_PROGBAR_COLOR_t {
+typedef enum {
     GUI_PROGBAR_COLOR_BG = 0x00,            /*!< Background color index */
     GUI_PROGBAR_COLOR_FG = 0x01,            /*!< Foreground (active part) color index */
     GUI_PROGBAR_COLOR_BORDER = 0x02         /*!< Border color index */
-} GUI_PROGBAR_COLOR_t;
+} gui_progbar_color_t;
 
 #if defined(GUI_INTERNAL) || __DOXYGEN__
 /**
  * \brief           Progress bar widget structure
  */
-typedef struct GUI_PROGBAR_t {
+typedef struct {
     gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
     int32_t Min;                            /*!< Low value for progress bar */
@@ -66,19 +66,19 @@ typedef struct GUI_PROGBAR_t {
     int32_t CurrentValue;                   /*!< Current value for progress bar */
     int32_t DesiredValue;                   /*!< Desired value, set by used */
     uint8_t Flags;                          /*!< Flags variable */
-} GUI_PROGBAR_t;
+} gui_progbar_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
-uint8_t gui_progbar_setcolor(gui_handle_p h, GUI_PROGBAR_COLOR_t index, gui_color_t color);
-uint8_t gui_progbar_setmin(gui_handle_p h, int32_t val);
-uint8_t gui_progbar_setmax(gui_handle_p h, int32_t val);
-uint8_t gui_progbar_setvalue(gui_handle_p h, int32_t val);
-uint8_t gui_progbar_setanimation(gui_handle_p h, uint8_t anim);
-int32_t gui_progbar_getmin(gui_handle_p h);
-int32_t gui_progbar_getmax(gui_handle_p h);
-int32_t gui_progbar_getvalue(gui_handle_p h);
-uint8_t gui_progbar_setpercentmode(gui_handle_p h, uint8_t enable);
+gui_handle_p    gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+uint8_t         gui_progbar_setcolor(gui_handle_p h, gui_progbar_color_t index, gui_color_t color);
+uint8_t         gui_progbar_setmin(gui_handle_p h, int32_t val);
+uint8_t         gui_progbar_setmax(gui_handle_p h, int32_t val);
+uint8_t         gui_progbar_setvalue(gui_handle_p h, int32_t val);
+uint8_t         gui_progbar_setanimation(gui_handle_p h, uint8_t anim);
+int32_t         gui_progbar_getmin(gui_handle_p h);
+int32_t         gui_progbar_getmax(gui_handle_p h);
+int32_t         gui_progbar_getvalue(gui_handle_p h);
+uint8_t         gui_progbar_setpercentmode(gui_handle_p h, uint8_t enable);
 
 /**
  * \}

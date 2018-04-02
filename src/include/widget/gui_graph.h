@@ -49,22 +49,22 @@ extern "C" {
  * \brief           Graph color list enumeration
  * \sa              gui_graph_setcolor
  */
-typedef enum GUI_GRAPH_COLOR_t {
+typedef enum {
     GUI_GRAPH_COLOR_BG = 0x00,              /*!< Background color index */
     GUI_GRAPH_COLOR_FG = 0x01,              /*!< Foreground color index (background of plotting area) */
     GUI_GRAPH_COLOR_BORDER = 0x02,          /*!< Border color index */
     GUI_GRAPH_COLOR_GRID = 0x03             /*!< Grid color index */
-} GUI_GRAPH_COLOR_t;
+} gui_graph_color_t;
 
 /**
  * \brief           Graph border list enumeration
  */
-typedef enum GUI_GRAPH_BORDER_t {
+typedef enum {
     GUI_GRAPH_BORDER_TOP = 0x00,            /*!< Border top index */
     GUI_GRAPH_BORDER_RIGHT = 0x01,          /*!< Border right index */
     GUI_GRAPH_BORDER_BOTTOM = 0x02,         /*!< Border bottom index */
     GUI_GRAPH_BORDER_LEFT = 0x03            /*!< Border left index */
-} GUI_GRAPH_BORDER_t;
+} gui_graph_border_t;
 
 /**
  * \brief           Graph type enumeration
@@ -117,7 +117,7 @@ typedef struct {
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 gui_handle_p    gui_graph_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
-uint8_t         gui_graph_setcolor(gui_handle_p h, GUI_GRAPH_COLOR_t index, gui_color_t color);
+uint8_t         gui_graph_setcolor(gui_handle_p h, gui_graph_color_t index, gui_color_t color);
 uint8_t         gui_graph_setminx(gui_handle_p h, float v);
 uint8_t         gui_graph_setmaxx(gui_handle_p h, float v);
 uint8_t         gui_graph_setminy(gui_handle_p h, float v);

@@ -48,12 +48,12 @@ extern "C" {
 /**
  * \brief           List of radio colors
  */
-typedef enum GUI_RADIO_COLOR_t {
+typedef enum {
     GUI_RADIO_COLOR_BG = 0x00,              /*!< Background color index */
     GUI_RADIO_COLOR_FG,                     /*!< Foreground color index */
     GUI_RADIO_COLOR_BORDER,                 /*!< Border color index */
     GUI_RADIO_COLOR_DISABLED_BG,            /*!< Background color index when disabled */
-} GUI_RADIO_COLOR_t;
+} gui_radio_color_t;
     
 #if defined(GUI_INTERNAL) || __DOXYGEN__
     
@@ -74,16 +74,16 @@ typedef struct {
 } gui_radio_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p gui_radio_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
-uint8_t gui_radio_setcolor(gui_handle_p h, GUI_RADIO_COLOR_t index, gui_color_t color);
-uint8_t gui_radio_setgroup(gui_handle_p h, uint8_t groupId);
-uint8_t gui_radio_getgroup(gui_handle_p h);
-uint8_t gui_radio_setvalue(gui_handle_p h, uint32_t value);
-uint32_t gui_radio_getvalue(gui_handle_p h);
-uint32_t gui_radio_getselectedvalue(gui_handle_p h);
-uint8_t gui_radio_setdisabled(gui_handle_p h, uint8_t disabled);
-uint8_t gui_radio_isdisabled(gui_handle_p h);
-uint8_t gui_radio_setselected(gui_handle_p h);
+gui_handle_p    gui_radio_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+uint8_t         gui_radio_setcolor(gui_handle_p h, gui_radio_color_t index, gui_color_t color);
+uint8_t         gui_radio_setgroup(gui_handle_p h, uint8_t groupId);
+uint8_t         gui_radio_getgroup(gui_handle_p h);
+uint8_t         gui_radio_setvalue(gui_handle_p h, uint32_t value);
+uint32_t        gui_radio_getvalue(gui_handle_p h);
+uint32_t        gui_radio_getselectedvalue(gui_handle_p h);
+uint8_t         gui_radio_setdisabled(gui_handle_p h, uint8_t disabled);
+uint8_t         gui_radio_isdisabled(gui_handle_p h);
+uint8_t         gui_radio_setselected(gui_handle_p h);
     
 /**
  * \}
