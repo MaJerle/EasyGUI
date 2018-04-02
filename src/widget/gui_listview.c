@@ -90,7 +90,7 @@ get_item_for_row(gui_handle_p h, gui_listview_row_t* row, uint8_t c) {
         return NULL;
     }
     
-    return (gui_listview_item_t *)gui_linkedlist_getnext_byindex_gen(&row->Root, c);/* Get item by index value = column number */
+    return (gui_listview_item_t *)gui_linkedlist_getnext_byindex_gen(&row->root, c);/* Get item by index value = column number */
 }
 
 /* Get item height in LISTVIEW */
@@ -202,7 +202,7 @@ static void
 remove_row_items(gui_listview_row_t* row) {
     gui_listview_item_t* item;
     
-    while ((item = (gui_listview_item_t *)gui_linkedlist_remove_gen(&row->Root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&row->Root, NULL))) != NULL) {
+    while ((item = (gui_listview_item_t *)gui_linkedlist_remove_gen(&row->root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&row->root, NULL))) != NULL) {
         GUI_MEMFREE(item);
     }
 }
@@ -346,7 +346,7 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                             f.color1 = guii_widget_getcolor(h, GUI_LISTVIEW_COLOR_TEXT);
                         }
                         xTmp = x + 2;
-                        for (i = 0, item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(&row->Root, NULL); item && i < o->col_count;
+                        for (i = 0, item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(&row->root, NULL); item && i < o->col_count;
                                 item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), i++) {
                             if (item->text != NULL) {   /* Draw if text set */
                                 f.width = o->cols[i]->width - 6;    /* Set width */
@@ -665,7 +665,7 @@ gui_listview_setitemstring(gui_handle_p h, gui_listview_row_p row, uint16_t col,
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && row != NULL);   /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
 
-    item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(&__GLR(row)->Root, NULL);  /* Get first in linked list */
+    item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(&__GLR(row)->root, NULL);  /* Get first in linked list */
     col++;
     while (col--) {                                 /* Find proper column */
         if (item == NULL) {
@@ -673,7 +673,7 @@ gui_listview_setitemstring(gui_handle_p h, gui_listview_row_p row, uint16_t col,
             if (item == NULL) {
                 break;
             }
-            gui_linkedlist_add_gen(&__GLR(row)->Root, (gui_linkedlist_t *)item);/* Add element to linked list */
+            gui_linkedlist_add_gen(&__GLR(row)->root, (gui_linkedlist_t *)item);/* Add element to linked list */
         }
         if (col) {
             item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item);   /* Get next in linked list */

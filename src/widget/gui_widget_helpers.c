@@ -1,6 +1,6 @@
-/** 
- * \file            gui_template.h
- * \brief           Template
+/**	
+ * \file            gui_widget_helpers.c
+ * \brief           Helper functions shared between widgets
  */
  
 /*
@@ -28,29 +28,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef GUI_TEMPLATE_H
-#define GUI_TEMPLATE_H
+#define GUI_INTERNAL
+#include "gui/gui_private.h"
+#include "widget/gui_widget_helpers.h"
 
-/* C++ detection */
-#ifdef __cplusplus
-extern "C" {
-#endif
 
-#include "gui_widget.h"
-
-/**
- * \ingroup         GUI_WIDGETS
- * \defgroup        GUI_TEMPLATE
- * \{
- */
-
-/**
- * \}
- */
-
-/* C++ detection */
-#ifdef __cplusplus
-}
-#endif
-
-#endif

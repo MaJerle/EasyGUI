@@ -95,8 +95,8 @@ slide(gui_handle_p h, int16_t dir) {
         }
         guii_widget_invalidate(h);
     } else if (dir > 0) {
-        if ((o->visiblestartindex + dir) > (o->Count - mPP - 1)) {  /* Slide elements down */
-            o->visiblestartindex = o->Count - mPP;
+        if ((o->visiblestartindex + dir) > (o->count - mPP - 1)) {  /* Slide elements down */
+            o->visiblestartindex = o->count - mPP;
         } else {
             o->visiblestartindex += dir;
         }
@@ -112,9 +112,9 @@ check_values(gui_handle_p h) {
     if (o->visiblestartindex < 0) {                 /* Check visible start index position */
         o->visiblestartindex = 0;
     } else if (o->visiblestartindex > 0) {
-        if (o->Count > mPP) {
-            if (o->visiblestartindex + mPP >= o->Count) {
-                o->visiblestartindex = o->Count - mPP;
+        if (o->count > mPP) {
+            if (o->visiblestartindex + mPP >= o->count) {
+                o->visiblestartindex = o->count - mPP;
             }
         } else {
             o->visiblestartindex = 0;
@@ -122,7 +122,7 @@ check_values(gui_handle_p h) {
     }
     
     if (o->flags & GUI_FLAG_DEBUGBOX_SLIDER_AUTO) {  /* Check slider mode */
-        if (o->Count > mPP) {
+        if (o->count > mPP) {
             o->flags |= GUI_FLAG_DEBUGBOX_SLIDER_ON;
         } else {
             o->flags &= ~GUI_FLAG_DEBUGBOX_SLIDER_ON;
@@ -147,7 +147,7 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
             __GL(h)->sliderwidth = 30;              /* Set slider width */
-            __GL(h)->MaxCount = 15;                 /* Number of maximal entries for debug */
+            __GL(h)->maxcount = 15;                 /* Number of maximal entries for debug */
             __GL(h)->flags |= GUI_FLAG_DEBUGBOX_SLIDER_AUTO;   /* Set auto mode for slider */
             return 1;
         }
@@ -176,7 +176,7 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 sb.height = height - 2;
                 sb.dir = GUI_DRAW_SB_DIR_VERTICAL;
                 sb.entriestop = o->visiblestartindex;
-                sb.entriestotal = o->Count;
+                sb.entriestotal = o->count;
                 sb.entriesvisible = nr_entries_pp(h);
                 
                 gui_draw_scrollbar(disp, &sb);      /* Draw scroll bar */
@@ -185,7 +185,7 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
             }
             
             /* Draw text if possible */
-            if (h->font != NULL && gui_linkedlist_hasentries(&__GL(h)->Root)) { /* Is first set? */
+            if (h->font != NULL && gui_linkedlist_hasentries(&__GL(h)->root)) { /* Is first set? */
                 gui_draw_font_t f;
                 gui_debugbox_item_t* item;
                 uint16_t itemheight;                /* Get item height */
@@ -208,13 +208,13 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                     disp->y2 = y + height - 2;
                 }
                 
-                for (index = 0, item = (gui_debugbox_item_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); item && f.y <= disp->y2;
+                for (index = 0, item = (gui_debugbox_item_t *)gui_linkedlist_getnext_gen(&o->root, NULL); item && f.y <= disp->y2;
                         item = (gui_debugbox_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
                     if (index < o->visiblestartindex) { /* Check for start drawing index */
                         continue;
                     }
                     f.color1 = guii_widget_getcolor(h, GUI_DEBUGBOX_COLOR_TEXT);
-                    gui_draw_writetext(disp, guii_widget_getfont(h), item->Text, &f);
+                    gui_draw_writetext(disp, guii_widget_getfont(h), item->text, &f);
                     f.y += itemheight;
                 }
                 disp->y2 = tmp;
@@ -224,7 +224,7 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
         }
         case GUI_WC_Remove: {
             gui_debugbox_item_t* item;
-            while ((item = (gui_debugbox_item_t *)gui_linkedlist_remove_gen(&o->Root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&o->Root, NULL))) != NULL) {
+            while ((item = (gui_debugbox_item_t *)gui_linkedlist_remove_gen(&o->root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&o->root, NULL))) != NULL) {
                 GUI_MEMFREE(item);                  /* Free memory */
             }
             return 1;
@@ -320,10 +320,10 @@ gui_debugbox_addstring(gui_handle_p h, const gui_char* text) {
     item = GUI_MEMALLOC(sizeof(*item) + gui_string_lengthtotal(text) + 1);  /* Allocate memory for entry */
     if (item != NULL) {
         __GUI_ENTER();                              /* Enter GUI */
-        item->Text = (void *)((char *)item + sizeof(*item));/* Add text to entry */
-        gui_string_copy(item->Text, text);          /* Copy text */
-        gui_linkedlist_add_gen(&__GL(h)->Root, &item->list);/* Add to linked list */
-        __GL(h)->Count++;                           /* Increase number of strings */
+        item->text = (void *)((char *)item + sizeof(*item));/* Add text to entry */
+        gui_string_copy(item->text, text);          /* Copy text */
+        gui_linkedlist_add_gen(&__GL(h)->root, &item->list);/* Add to linked list */
+        __GL(h)->count++;                           /* Increase number of strings */
         
         /*
          * Use while loop in case user later changed max
@@ -331,19 +331,19 @@ gui_debugbox_addstring(gui_handle_p h, const gui_char* text) {
          *
          * In this case we have to remove more than just one element
          */
-        while (__GL(h)->Count > __GL(h)->MaxCount) {
+        while (__GL(h)->count > __GL(h)->maxcount) {
             gui_debugbox_item_t* firstItem;
-            firstItem = (gui_debugbox_item_t *)gui_linkedlist_getnext_gen(&__GL(h)->Root, NULL);
+            firstItem = (gui_debugbox_item_t *)gui_linkedlist_getnext_gen(&__GL(h)->root, NULL);
             if (firstItem != NULL) {
-                gui_linkedlist_remove_gen(&__GL(h)->Root, (gui_linkedlist_t *)firstItem);
+                gui_linkedlist_remove_gen(&__GL(h)->root, (gui_linkedlist_t *)firstItem);
                 GUI_MEMFREE(firstItem);
-                __GL(h)->Count--;
+                __GL(h)->count--;
             } else {
                 break;
             }
         }
         
-        __GL(h)->visiblestartindex = __GL(h)->Count;/* Invalidate visible start index */
+        __GL(h)->visiblestartindex = __GL(h)->count;/* Invalidate visible start index */
         check_values(h);                            /* Check values */
         guii_widget_invalidate(h);                 /* Invalidate widget */
         __GUI_LEAVE();                              /* Leave GUI */
@@ -451,7 +451,7 @@ gui_debugbox_setmaxitems(gui_handle_p h, int16_t max_items) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && max_items > 0);   /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    __GL(h)->MaxCount = max_items;
+    __GL(h)->maxcount = max_items;
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 0;

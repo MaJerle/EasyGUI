@@ -90,7 +90,7 @@ get_opened_positions(gui_handle_p h, gui_dim_t* y, gui_dim_t* height, gui_dim_t*
 static uint16_t
 item_height(gui_handle_p h, uint16_t* offset) {
     uint16_t size = (float)h->font->size * 1.3f;
-    if (offset != NULL) {                                   /* Calculate top offset */
+    if (offset != NULL) {                           /* Calculate top offset */
         *offset = (size - h->font->size) >> 1;
     }
     return size;                                    /* Return height for element */
@@ -117,7 +117,7 @@ static uint8_t
 open_close(gui_handle_p h, uint8_t state) {
     if (state && !is_opened(h)) {
         o->flags |= GUI_FLAG_DROPDOWN_OPENED;
-        o->Oldheight = o->C.height;                 /* Save height for restore */
+        o->oldheight = o->C.height;                 /* Save height for restore */
         o->oldy = o->C.y;                           /* Save Y position for restore */
         if (is_dir_up(h)) {                         /* On up direction */
             o->C.y = o->C.y - (HEIGHT_CONST(h) - 1) * o->C.height; /* Go up for 3 height values */
@@ -128,15 +128,15 @@ open_close(gui_handle_p h, uint8_t state) {
     } else if (!state && (o->flags & GUI_FLAG_DROPDOWN_OPENED)) {
         guii_widget_invalidatewithparent(h);        /* Invalidate widget */
         o->flags &= ~GUI_FLAG_DROPDOWN_OPENED;      /* Clear flag */
-        o->C.height = o->Oldheight;                 /* Restore height value */
+        o->C.height = o->oldheight;                 /* Restore height value */
         o->C.y = o->oldy;                           /* Restore position */
         if (o->selected == -1) {                    /* Go to top selection */
             o->visiblestartindex = 0;               /* Start from top again */
         } else {                                    /* We have one selection */
             int16_t perPage = nr_entries_pp(h);
             o->visiblestartindex = o->selected;
-            if ((o->visiblestartindex + perPage) >= o->Count) {
-                o->visiblestartindex = o->Count - perPage;
+            if ((o->visiblestartindex + perPage) >= o->count) {
+                o->visiblestartindex = o->count - perPage;
                 if (o->visiblestartindex < 0) {
                     o->visiblestartindex = 0;
                 }
@@ -159,8 +159,8 @@ slide(gui_handle_p h, int16_t dir) {
         }
         guii_widget_invalidate(h);
     } else if (dir > 0) {
-        if ((o->visiblestartindex + dir) > (o->Count - mPP - 1)) {  /* Slide elements down */
-            o->visiblestartindex = o->Count - mPP;
+        if ((o->visiblestartindex + dir) > (o->count - mPP - 1)) {  /* Slide elements down */
+            o->visiblestartindex = o->count - mPP;
         } else {
             o->visiblestartindex += dir;
         }
@@ -183,17 +183,17 @@ get_item(gui_handle_p h, uint16_t index) {
     uint16_t i = 0;
     gui_dropdown_item_t* item = 0;
     
-    if (index >= o->Count) {                        /* Check if valid index */
+    if (index >= o->count) {                        /* Check if valid index */
         return 0;
     }
     
     if (index == 0) {                               /* Check for first element */
-        return (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->Root, NULL);   /* Return first element */
-    } else if (index == o->Count - 1) {
-        return (gui_dropdown_item_t *)gui_linkedlist_getprev_gen(&o->Root, NULL);   /* Return last element */
+        return (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->root, NULL);   /* Return first element */
+    } else if (index == o->count - 1) {
+        return (gui_dropdown_item_t *)gui_linkedlist_getprev_gen(&o->root, NULL);   /* Return last element */
     }
     
-    item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->Root, NULL);
+    item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->root, NULL);
     while (i++ < index) {
         item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(NULL, &item->list);
     }
@@ -212,22 +212,22 @@ check_values(gui_handle_p h) {
     int16_t mPP = nr_entries_pp(h);                 /* Get number of lines visible in widget at a time */
    
     if (o->selected >= 0) {                         /* Check for selected value range */
-        if (o->selected >= o->Count) {
-            set_selection(h, o->Count - 1);
+        if (o->selected >= o->count) {
+            set_selection(h, o->count - 1);
         }
     }
     if (o->visiblestartindex < 0) {                 /* Check visible start index position */
         o->visiblestartindex = 0;
     } else if (o->visiblestartindex > 0) {
-        if (o->Count > mPP) {
-            if (o->visiblestartindex + mPP >= o->Count) {
-                o->visiblestartindex = o->Count - mPP;
+        if (o->count > mPP) {
+            if (o->visiblestartindex + mPP >= o->count) {
+                o->visiblestartindex = o->count - mPP;
             }
         }
     }
     
     if (o->flags & GUI_FLAG_DROPDOWN_SLIDER_AUTO) { /* Check slider mode */
-        if (o->Count > mPP) {
+        if (o->count > mPP) {
             o->flags |= GUI_FLAG_DROPDOWN_SLIDER_ON;
         } else {
             o->flags &= ~GUI_FLAG_DROPDOWN_SLIDER_ON;
@@ -246,8 +246,8 @@ inc_selection(gui_handle_p h, int16_t dir) {
         }
         guii_widget_invalidate(h);
     } else if (dir > 0) {
-        if ((o->selected + dir) > (o->Count - 1)) { /* Slide elements down */
-            set_selection(h, o->Count - 1);
+        if ((o->selected + dir) > (o->count - 1)) { /* Slide elements down */
+            set_selection(h, o->count - 1);
         } else {
             set_selection(h, o->selected + dir);
         }
@@ -262,8 +262,8 @@ delete_item(gui_handle_p h, uint16_t index) {
     
     item = get_item(h, index);                      /* Get list item from handle */
     if (item) {
-        gui_linkedlist_remove_gen(&__GD(h)->Root, &item->list);
-        __GD(h)->Count--;                           /* Decrease count */
+        gui_linkedlist_remove_gen(&__GD(h)->root, &item->list);
+        __GD(h)->count--;                           /* Decrease count */
         
         if (o->selected == index) {
             set_selection(h, -1);
@@ -301,7 +301,7 @@ process_click(gui_handle_p h, guii_touch_data_t* ts) {
         } else {
             tmpselected = (ts->y_rel[0] - height1) / item_height(h, NULL);  /* Get temporary selected index */
         }
-        if ((o->visiblestartindex + tmpselected) < o->Count) {
+        if ((o->visiblestartindex + tmpselected) < o->count) {
             set_selection(h, o->visiblestartindex + tmpselected);
             guii_widget_invalidate(h);             /* Choose new selection */
         }
@@ -363,7 +363,7 @@ gui_dropdown_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 gui_dropdown_item_t* item;
                 gui_draw_font_init(&f);             /* Init structure */
                 
-                item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&__GD(h)->Root, NULL);
+                item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&__GD(h)->root, NULL);
                 for (i = 0; i < __GD(h)->selected; i++) {
                     item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item);
                 }
@@ -375,7 +375,7 @@ gui_dropdown_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 f.align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.color1width = f.width;
                 f.color1 = guii_widget_getcolor(h, GUI_DROPDOWN_COLOR_TEXT);
-                gui_draw_writetext(disp, guii_widget_getfont(h), item->Text, &f);
+                gui_draw_writetext(disp, guii_widget_getfont(h), item->text, &f);
             }
             
             if (is_opened(h) && __GD(h)->flags & GUI_FLAG_DROPDOWN_SLIDER_ON) {
@@ -391,7 +391,7 @@ gui_dropdown_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 sb.height = height - 2;
                 sb.dir = GUI_DRAW_SB_DIR_VERTICAL;
                 sb.entriestop = o->visiblestartindex;
-                sb.entriestotal = o->Count;
+                sb.entriestotal = o->count;
                 sb.entriesvisible = nr_entries_pp(h);
                 
                 gui_draw_scrollbar(disp, &sb);      /* Draw scroll bar */
@@ -399,7 +399,7 @@ gui_dropdown_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 width--;                            /* Go down for one for alignment on non-slider */
             }
             
-            if (is_opened(h) && h->font != NULL && gui_linkedlist_hasentries(&__GD(h)->Root)) {
+            if (is_opened(h) && h->font != NULL && gui_linkedlist_hasentries(&__GD(h)->root)) {
                 gui_draw_font_t f;
                 gui_dropdown_item_t* item;
                 uint16_t yOffset;
@@ -424,7 +424,7 @@ gui_dropdown_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                 }
                 
                 /* Try to process all strings */
-                for (index = 0, item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->Root, NULL); item != NULL && f.y <= disp->y2;
+                for (index = 0, item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->root, NULL); item != NULL && f.y <= disp->y2;
                         item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
                     if (index < o->visiblestartindex) { /* Check for start visible */
                         continue;
@@ -435,7 +435,7 @@ gui_dropdown_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
                     } else {
                         f.color1 = guii_widget_getcolor(h, GUI_DROPDOWN_COLOR_TEXT);
                     }
-                    gui_draw_writetext(disp, guii_widget_getfont(h), item->Text, &f);
+                    gui_draw_writetext(disp, guii_widget_getfont(h), item->text, &f);
                     f.y += itemheight;
                 }
                 disp->y2 = tmp;                     /* Set temporary value back */
@@ -444,7 +444,7 @@ gui_dropdown_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
         }
         case GUI_WC_Remove: {
             gui_dropdown_item_t* item;
-            while ((item = (gui_dropdown_item_t *)gui_linkedlist_remove_gen(&o->Root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&o->Root, NULL))) != NULL) {
+            while ((item = (gui_dropdown_item_t *)gui_linkedlist_remove_gen(&o->root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&o->root, NULL))) != NULL) {
                 GUI_MEMFREE(item);                  /* Free memory */
             }
             return 1;
@@ -555,9 +555,9 @@ gui_dropdown_addstring(gui_handle_p h, const gui_char* text) {
     item = GUI_MEMALLOC(sizeof(*item));             /* Allocate memory for entry */
     if (item != NULL) {
         __GUI_ENTER();                              /* Enter GUI */
-        item->Text = (gui_char *)text;              /* Add text to entry */
-        gui_linkedlist_add_gen(&__GD(h)->Root, &item->list);/* Add to linked list */
-        __GD(h)->Count++;                           /* Increase number of strings */
+        item->text = (gui_char *)text;              /* Add text to entry */
+        gui_linkedlist_add_gen(&__GD(h)->root, &item->list);/* Add to linked list */
+        __GD(h)->count++;                           /* Increase number of strings */
         
         check_values(h);                            /* Check values */
         guii_widget_invalidate(h);                 /* Invalidate widget */
@@ -613,7 +613,7 @@ gui_dropdown_setstring(gui_handle_p h, uint16_t index, const gui_char* text) {
     
     item = get_item(h, index);                      /* Get list item from handle */
     if (item) {
-        item->Text = (gui_char *)text;              /* Set new text */
+        item->text = (gui_char *)text;              /* Set new text */
         guii_widget_invalidate(h);                 /* Invalidate widget */
     }
 
@@ -653,7 +653,7 @@ gui_dropdown_deletelaststring(gui_handle_p h) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = delete_item(h, __GD(h)->Count - 1);       /* Delete last item */
+    ret = delete_item(h, __GD(h)->count - 1);       /* Delete last item */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;

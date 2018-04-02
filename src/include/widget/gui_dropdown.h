@@ -84,7 +84,7 @@ typedef enum {
  */
 typedef struct {
     gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
-    gui_char* Text;                         /*!< Text entry */
+    gui_char* text;                         /*!< Text entry */
 } gui_dropdown_item_t;
     
 /**
@@ -93,14 +93,14 @@ typedef struct {
 typedef struct {
     gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
-    gui_dim_t oldy;                        /*!< Y coordinate register before widget opened */
-    gui_dim_t Oldheight;                   /*!< height value register before widget opened */
+    gui_dim_t oldy;                         /*!< Y coordinate register before widget opened */
+    gui_dim_t oldheight;                    /*!< height value register before widget opened */
     
-    int16_t Count;                          /*!< Current number of strings attached to this widget */
+    int16_t count;                          /*!< Current number of strings attached to this widget */
     int16_t selected;                       /*!< selected text index */
     int16_t visiblestartindex;              /*!< Index in array of string on top of visible area of widget */
     
-    gui_linkedlistroot_t Root;              /*!< Root of linked list entries */
+    gui_linkedlistroot_t root;              /*!< Root of linked list entries */
     
     gui_dim_t sliderwidth;                  /*!< Slider width in units of pixels */
     uint8_t flags;                          /*!< Widget flags */

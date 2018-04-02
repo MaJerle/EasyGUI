@@ -1,8 +1,8 @@
-/** 
- * \file            gui_template.h
- * \brief           Template
+/**	
+ * \file            gui_widget_helpers.h
+ * \brief           Helper functions shared between widgets
  */
- 
+
 /*
  * Copyright (c) 2017 Tilen Majerle
  *  
@@ -28,8 +28,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef GUI_TEMPLATE_H
-#define GUI_TEMPLATE_H
+#ifndef __GUI_WIDGET_HELPERS_H
+#define __GUI_WIDGET_HELPERS_H
 
 /* C++ detection */
 #ifdef __cplusplus

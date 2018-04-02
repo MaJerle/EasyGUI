@@ -61,10 +61,10 @@ typedef enum {
 typedef struct {
     gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
-    int32_t Min;                            /*!< Low value for progress bar */
-    int32_t Max;                            /*!< High value for progress bar */
-    int32_t CurrentValue;                   /*!< Current value for progress bar */
-    int32_t DesiredValue;                   /*!< Desired value, set by used */
+    int32_t min;                            /*!< Low value for progress bar */
+    int32_t max;                            /*!< High value for progress bar */
+    int32_t currentvalue;                   /*!< Current value for progress bar */
+    int32_t desiredvalue;                   /*!< Desired value, set by used */
     uint8_t flags;                          /*!< flags variable */
 } gui_progbar_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */

@@ -69,9 +69,9 @@ typedef enum {
 /**
  * \brief           Listview main row item
  */
-typedef struct gui_listview_row_t {
+typedef struct {
     gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
-    gui_linkedlistroot_t Root;              /*!< Linked list root entry for \ref gui_listview_item_t column data entries */
+    gui_linkedlistroot_t root;              /*!< Linked list root entry for \ref gui_listview_item_t column data entries */
 } gui_listview_row_t;
 
 /**
@@ -83,7 +83,7 @@ typedef struct gui_listview_row_t {
 /**
  * \brief           Listview column item
  */
-typedef struct gui_listview_col_t {
+typedef struct {
     gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
     gui_dim_t width;                       /*!< Column width in units of pixels */
     gui_char* text;                         /*!< Header column text size */
@@ -92,7 +92,7 @@ typedef struct gui_listview_col_t {
 /**
  * \brief           Listview string item object
  */
-typedef struct gui_listview_item_t {
+typedef struct {
     gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
     gui_char* text;                         /*!< Text entry */
 } gui_listview_item_t;
