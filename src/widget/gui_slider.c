@@ -39,7 +39,7 @@
 #define CFG_MIN             0x03
 #define CFG_MAX             0x04
 
-static uint8_t gui_slider_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+static uint8_t gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -167,7 +167,7 @@ timer_callback(gui_timer_t* timer) {
  * \return          1 if command processed, 0 otherwise
  */
 static uint8_t
-gui_slider_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) { 
+gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) { 
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {

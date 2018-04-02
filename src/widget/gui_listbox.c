@@ -34,7 +34,7 @@
 
 #define __GL(x)             ((gui_listbox_t *)(x))
 
-static uint8_t gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+static uint8_t gui_listbox_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -216,7 +216,7 @@ delete_item(gui_handle_p h, uint16_t index) {
  * \return          1 if command processed, 0 otherwise
  */
 static uint8_t
-gui_listbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_listbox_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
 #if GUI_CFG_USE_TOUCH
     static gui_dim_t ty;
 #endif /* GUI_CFG_USE_TOUCH */

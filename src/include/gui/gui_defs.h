@@ -956,7 +956,7 @@ typedef enum {
      * \param[out]  *result: None
      */
     GUI_WC_OnDismiss,
-} GUI_WC_t;
+} gui_wc_t;
 
 /**
  * \brief           Basic widget structure
@@ -1013,7 +1013,7 @@ typedef struct {
  *                      - Value change, selection change
  *                      - and more
  */
-typedef uint8_t (*gui_widget_callback_t) (gui_handle_p h, GUI_WC_t cmd, gui_widget_param_t* param, gui_widget_result_t* result);
+typedef uint8_t (*gui_widget_callback_t) (gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, gui_widget_result_t* result);
 
 #define GUI_WIDGET_PARAMTYPE_DISP(x)            (x)->u.disp
 #define GUI_WIDGET_PARAMTYPE_TOUCH(x)           (x)->u.td

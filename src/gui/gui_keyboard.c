@@ -301,7 +301,7 @@ keyboard = {
  * \brief           Keyboard button callback function
  */
 static uint8_t
-keyboard_btn_callback(gui_handle_p h, GUI_WC_t cmd, gui_widget_param_t* param, gui_widget_result_t* result) {
+keyboard_btn_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, gui_widget_result_t* result) {
     switch (cmd) {                                  /* Process commands */
         case GUI_WC_Draw: {                         /* Draw button */
             gui_char str[10] = {0};
@@ -444,7 +444,7 @@ keyboard_btn_callback(gui_handle_p h, GUI_WC_t cmd, gui_widget_param_t* param, g
 
 /* Callback for keyboard base widget */
 static uint8_t
-keyboard_callback(gui_handle_p h, GUI_WC_t cmd, gui_widget_param_t* param, gui_widget_result_t* result) {
+keyboard_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, gui_widget_result_t* result) {
     switch (cmd) {
         case GUI_WC_Init: {
             return 1;
@@ -482,7 +482,7 @@ keyboard_timer_callback(gui_timer_t* timer) {
 
 /* Callback function for base element of keyboard */
 static uint8_t
-keyboard_base_callback(gui_handle_p h, GUI_WC_t cmd, gui_widget_param_t* param, gui_widget_result_t* result) {
+keyboard_base_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, gui_widget_result_t* result) {
     switch (cmd) {
         case GUI_WC_PreInit: {
             h->timer = guii_timer_create(60, keyboard_timer_callback, 0);   /* Create timer */

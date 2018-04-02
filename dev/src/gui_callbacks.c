@@ -9,7 +9,7 @@
  * \brief           Window event function
  */
 uint8_t
-gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_window_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
     uint8_t res;
     
     res = gui_widget_processdefaultcallback(h, ctrl, param, result);
@@ -21,7 +21,7 @@ gui_window_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
  * \brief           Container event function
  */
 uint8_t
-gui_container_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_container_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
     gui_id_t id;
     uint8_t res;
     gui_dim_t width;
@@ -64,7 +64,7 @@ gui_container_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param,
  * \brief           Image event function
  */
 uint8_t
-gui_image_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_image_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
     gui_id_t id;
     uint8_t res;
     
@@ -101,7 +101,7 @@ gui_image_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui
  * \brief           Text view event function
  */
 uint8_t
-gui_textview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_textview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
     gui_id_t id;
     uint8_t res;
     
@@ -137,7 +137,7 @@ gui_textview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
  * \brief           Listview event function
  */
 uint8_t
-gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_listview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
     gui_id_t id;
     uint8_t res;
     gui_handle_p tmp;
@@ -182,7 +182,7 @@ gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
  * \brief           Debugbox event function
  */
 uint8_t
-gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_debugbox_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
     gui_id_t id;
     uint8_t res;
     
@@ -211,7 +211,7 @@ gui_debugbox_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, 
  * \brief           Button event function
  */
 uint8_t
-gui_button_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
     gui_id_t id;
     uint8_t res;
     gui_handle_p tmp;
@@ -281,7 +281,7 @@ gui_button_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gu
  * \brief           Edit text event function
  */
 uint8_t
-gui_edittext_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_edittext_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
     gui_id_t id;
     uint8_t res;
     

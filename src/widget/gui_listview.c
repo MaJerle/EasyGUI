@@ -34,7 +34,7 @@
 
 #define __GL(x)             ((gui_listview_t *)(x))
 
-static uint8_t gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+static uint8_t gui_listview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -232,7 +232,7 @@ remove_rows(gui_handle_p h) {
  * \return          1 if command processed, 0 otherwise
  */
 static uint8_t
-gui_listview_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_listview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
 #if GUI_CFG_USE_TOUCH
     static gui_dim_t tx, ty;
 #endif /* GUI_CFG_USE_TOUCH */

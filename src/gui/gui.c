@@ -244,12 +244,12 @@ redraw_widgets(gui_handle_p parent) {
  * \return          PT thread result
  */
 static
-PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, uint8_t v, GUI_WC_t* result)) {
+PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, uint8_t v, gui_wc_t* result)) {
     static volatile uint32_t time;
     static uint8_t i = 0;
     static gui_dim_t x[2], y[2];
     
-    *result = (GUI_WC_t)0;                          /* Reset widget control variable */          
+    *result = (gui_wc_t)0;                          /* Reset widget control variable */          
     
     PT_BEGIN(&ts->pt);                              /* Start thread execution */
     
@@ -523,7 +523,7 @@ static void
 gui_process_touch(void) {
     gui_widget_param_t param = {0};
     gui_widget_result_t result = {0};
-    GUI_WC_t rresult;
+    gui_wc_t rresult;
     
     if (gui_input_touchavailable()) {               /* Check if any touch available */
         while (gui_input_touchread(&GUI.Touch.ts)) {/* Process all touch events possible */

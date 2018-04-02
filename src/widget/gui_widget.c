@@ -2479,13 +2479,13 @@ gui_widget_getuserdata(gui_handle_p h) {
  * \note            Call this function inside custom callback widget function for unhandled events
  *                     It will automatically call required function according to input widget
  * \param[in,out]   h: Widget handle where callback occurred
- * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
- * \param[in]       param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
- * \param[out]      result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
+ * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref gui_wc_t enumeration
+ * \param[in]       param: Pointer to optional input data for command. Check \ref gui_wc_t enumeration for more informations
+ * \param[out]      result: Pointer to optional result value. Check \ref gui_wc_t enumeration for more informations
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_processdefaultcallback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_widget_processdefaultcallback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
@@ -2522,14 +2522,14 @@ gui_widget_setcallback(gui_handle_p h, gui_widget_callback_t callback) {
  *                      If called from inside widget callback, it may result in recursive calls.
  *
  * \param[in,out]   h: Widget handle where callback occurred
- * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref GUI_WC_t enumeration
- * \param[in]       param: Pointer to optional input data for command. Check \ref GUI_WC_t enumeration for more informations
- * \param[out]      result: Pointer to optional result value. Check \ref GUI_WC_t enumeration for more informations
+ * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref gui_wc_t enumeration
+ * \param[in]       param: Pointer to optional input data for command. Check \ref gui_wc_t enumeration for more informations
+ * \param[out]      result: Pointer to optional result value. Check \ref gui_wc_t enumeration for more informations
  * \return          `1` on success, `0` otherwise
  * \sa              gui_widget_setcallback
  */
 uint8_t
-gui_widget_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_widget_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */

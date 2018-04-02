@@ -41,7 +41,7 @@
 #define CFG_MAX_Y           0x04
 #define CFG_ZOOM_RESET      0x05
 
-static uint8_t gui_graph_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+static uint8_t gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -105,7 +105,7 @@ graph_zoom(gui_handle_p h, float zoom, float xpos, float ypos) {
  * \return          1 if command processed, 0 otherwise
  */
 static uint8_t
-gui_graph_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
 #if GUI_CFG_USE_TOUCH
     static gui_dim_t tx[GUI_CFG_TOUCH_MAX_PRESSES], ty[GUI_CFG_TOUCH_MAX_PRESSES];
 #endif /* GUI_CFG_USE_TOUCH */    

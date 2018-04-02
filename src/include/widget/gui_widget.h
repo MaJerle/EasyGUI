@@ -348,7 +348,7 @@ extern "C" {
  * \brief           Process widget callback with command, parameters and result pointers
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
- * \param[in]       cmd: Callback command. This parameter can be a value of \ref GUI_WC_t enumeration
+ * \param[in]       cmd: Callback command. This parameter can be a value of \ref gui_wc_t enumeration
  * \param[in]       param: Pointer to parameters if any for this command
  * \param[out]      result: Pointer to result pointer where calback can store result
  * \return          `1` on success, `0` otherwise
@@ -707,9 +707,9 @@ gui_dim_t gui_widget_getpaddingleft(gui_handle_p h);
  * \{
  */
 
-uint8_t gui_widget_processdefaultcallback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+uint8_t gui_widget_processdefaultcallback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 uint8_t gui_widget_setcallback(gui_handle_p h, gui_widget_callback_t callback);
-uint8_t gui_widget_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+uint8_t gui_widget_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
 /**
  * \}

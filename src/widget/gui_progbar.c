@@ -43,7 +43,7 @@
 #define CFG_PERCENT         0x04
 #define CFG_ANIM            0x05
 
-static uint8_t gui_progbar_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+static uint8_t gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -119,7 +119,7 @@ timer_callback(gui_timer_t* t) {
  * \return          1 if command processed, 0 otherwise
  */
 static uint8_t
-gui_progbar_callback(gui_handle_p h, GUI_WC_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
