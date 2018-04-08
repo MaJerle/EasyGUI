@@ -36,13 +36,10 @@
 extern "C" {
 #endif
 
-/**
- * \addtogroup      GUI_UTILS
- * \{
- */
 #include "gui_utils.h"
 
 /**
+ * \ingroup         GUI_UTILS
  * \defgroup        GUI_MEM Memory management
  * \brief           Common memory management functions
  * \{
@@ -71,10 +68,6 @@ size_t gui_mem_getminfree(void);
 
 uint8_t gui_mem_assignmemory(const GUI_MEM_Region_t* regions, size_t size);
     
-/**
- * \}
- */
-
 /**
  * \}
  */

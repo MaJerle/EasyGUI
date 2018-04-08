@@ -136,7 +136,7 @@ gui_dialog_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
  * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
  */
 gui_handle_p
-gui_dialog_create(gui_id_t id, float x, float y, float width, float height, GUI_WIDGET_CreateFunc_t func, gui_widget_callback_t cb, uint16_t flags) {
+gui_dialog_create(gui_id_t id, float x, float y, float width, float height, gui_widget_createfunc_t func, gui_widget_callback_t cb, uint16_t flags) {
     gui_handle_p ptr;
     if (func == NULL) {                             /* Check create function */
         return NULL;
@@ -170,7 +170,7 @@ gui_dialog_create(gui_id_t id, float x, float y, float width, float height, GUI_
  * \return          Value passed to \ref gui_dialog_dismiss when dialog is dismissed on success, -1 otherwise
  */
 int
-gui_dialog_createblocking(gui_id_t id, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, GUI_WIDGET_CreateFunc_t func, gui_widget_callback_t cb, uint16_t flags) {
+gui_dialog_createblocking(gui_id_t id, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_widget_createfunc_t func, gui_widget_callback_t cb, uint16_t flags) {
     gui_handle_p ptr;
     int resp = -1;                                  /* Dialog not created error */
     

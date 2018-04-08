@@ -77,10 +77,10 @@ gui_textview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
             gui_widget_param* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
             switch (p->type) {
                 case CFG_HALIGN: 
-                    o->Halign = *(gui_textalign_halign_t *)p->data;
+                    o->halign = *(gui_textalign_halign_t *)p->data;
                     break;
                 case CFG_VALIGN: 
-                    o->Valign = *(gui_textalign_valign_t *)p->data;
+                    o->valign = *(gui_textalign_valign_t *)p->data;
                     break;
                 default: break;
             }
@@ -112,7 +112,7 @@ gui_textview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                 f.y = y + 1;
                 f.width = wi - 2;
                 f.height = hi - 2;
-                f.align = (uint8_t)o->Halign | (uint8_t)o->Valign;
+                f.align = (uint8_t)o->halign | (uint8_t)o->valign;
                 f.flags |= GUI_FLAG_FONT_MULTILINE; /* Enable multiline */
                 f.color1width = f.width;
                 f.color1 = guii_widget_getcolor(h, GUI_TEXTVIEW_COLOR_TEXT);

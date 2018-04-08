@@ -36,16 +36,12 @@
 extern "C" {
 #endif
 
-/**
- * \addtogroup      GUI_UTILS
- * \{
- */
-
 #include "gui_utils.h"
 #include "math.h"
 #include "errno.h"
 
 /**
+ * \ingroup         GUI_UTILS
  * \defgroup        GUI_MATH Mathematical
  * \brief           Common mathematical functions used by GUI
  * \{
@@ -56,10 +52,6 @@ uint8_t gui_math_rsqrt(float x, float* result);
 uint8_t gui_math_distancebetweenxy(float x1, float y1, float x2, float y2, float* result);
 uint8_t gui_math_centerofxy(float x1, float y1, float x2, float y2, float* resultx, float* resulty);
     
-/**
- * \}
- */
-
 /**
  * \}
  */

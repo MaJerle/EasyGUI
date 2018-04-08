@@ -28,8 +28,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef GUI_CHECKBOX_H
-#define GUI_CHECKBOX_H
+#ifndef __GUI_CHECKBOX_H
+#define __GUI_CHECKBOX_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -87,4 +87,4 @@ uint8_t         gui_checkbox_isdisabled(gui_handle_p h);
 }
 #endif
 
-#endif
+#endif /* __GUI_CHECKBOX_H */

@@ -28,8 +28,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef GUI_IMAGE_H
-#define GUI_IMAGE_H
+#ifndef __GUI_IMAGE_H
+#define __GUI_IMAGE_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -68,4 +68,4 @@ uint8_t         gui_image_setsource(gui_handle_p h, const gui_image_desc_t* img)
 }
 #endif
 
-#endif
+#endif /* __GUI_IMAGE_H */

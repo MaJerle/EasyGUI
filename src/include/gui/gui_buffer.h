@@ -35,13 +35,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * \addtogroup      GUI_UTILS
- * \{
- */
     
 /**
+ * \ingroup         GUI_UTILS
  * \defgroup        GUI_BUFFER Ring buffer
  * \brief           Generic cyclic buffer library
  * \{
@@ -79,10 +75,6 @@ uint32_t gui_buffer_getfree(GUI_BUFFER_t* Buffer);
 uint32_t gui_buffer_getfull(GUI_BUFFER_t* Buffer);
 void gui_buffer_reset(GUI_BUFFER_t* Buffer);
 
-/**
- * \}
- */
- 
 /**
  * \}
  */

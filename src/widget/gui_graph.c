@@ -327,7 +327,7 @@ gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
             gui_graph_data_p data;
             gui_linkedlistmulti_t* link;
             
-            /**
+            /*
              * Go through all data objects in this widget
              */
             for (link = gui_linkedlist_multi_getnext_gen(&g->root, NULL); link != NULL;
@@ -347,7 +347,11 @@ gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
 #undef g
 
 #if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
-/* Invalidate graphs attached to data */
+
+/**
+ * \brief           Invalidate all graphs where data plot is attached at
+ * \param[in]       data: Data handle
+ */
 static void
 graph_invalidate(gui_graph_data_p data) {
     gui_handle_p h;
@@ -355,7 +359,7 @@ graph_invalidate(gui_graph_data_p data) {
     /*
      * Invalidate all graphs attached to this data plot
      */
-    for (link = gui_linkedlist_multi_getnext_gen(&data->root, NULL); link;
+    for (link = gui_linkedlist_multi_getnext_gen(&data->root, NULL); link != NULL;
             link = gui_linkedlist_multi_getnext_gen(NULL, link)) {
         /*
          * Linked list of graph member in data structure is not on top

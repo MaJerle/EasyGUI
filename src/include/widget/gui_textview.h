@@ -28,8 +28,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef GUI_TEXTVIEW_H
-#define GUI_TEXTVIEW_H
+#ifndef __GUI_TEXTVIEW_H
+#define __GUI_TEXTVIEW_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -79,8 +79,8 @@ typedef enum {
 typedef struct {
     gui_handle C;                           /*!< GUI handle object, must always be first on list */
 
-    gui_textalign_valign_t Valign;           /*!< Vertical text align */
-    gui_textalign_halign_t Halign;           /*!< Horizontal text align */
+    gui_textalign_valign_t valign;           /*!< Vertical text align */
+    gui_textalign_halign_t halign;           /*!< Horizontal text align */
     uint8_t flags;                          /*!< Widget flags */
 } gui_textview_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
@@ -99,4 +99,4 @@ uint8_t         gui_textview_sethalign(gui_handle_p h, gui_textalign_halign_t al
 }
 #endif
 
-#endif
+#endif /* __GUI_TEXTVIEW_H */

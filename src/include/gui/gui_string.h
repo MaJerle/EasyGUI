@@ -36,14 +36,10 @@
 extern "C" {
 #endif
 
-/**
- * \addtogroup      GUI_UTILS
- * \brief       
- * \{
- */
 #include "gui_utils.h"
 
 /**
+ * \ingroup         GUI_UTILS
  * \defgroup        GUI_STRING String functions
  * \brief           String functions with UNICODE support
  * \{
@@ -102,10 +98,6 @@ uint8_t gui_string_getch(gui_string_t* str, uint32_t* out, uint8_t* len);
 uint8_t gui_string_getchreverse(gui_string_t* str, uint32_t* out, uint8_t* len);
 uint8_t gui_string_gotoend(gui_string_t* str);
     
-/**
- * \}
- */
-
 /**
  * \}
  */

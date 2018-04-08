@@ -28,8 +28,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef GUI_DROPDOWN_H
-#define GUI_DROPDOWN_H
+#ifndef __GUI_DROPDOWN_H
+#define __GUI_DROPDOWN_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -134,4 +134,4 @@ uint8_t         gui_dropdown_setopendirection(gui_handle_p h, gui_dropdown_opend
 }
 #endif
 
-#endif
+#endif /* __GUI_DROPDOWN_H */
