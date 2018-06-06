@@ -23,6 +23,7 @@ osThreadDef(user_thread, user_thread, osPriorityNormal, 0, 512);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_DFSDM1_Init(void);
+static void led_init(void);
 
 #define ARR_SIZE(x)         (sizeof(x) / sizeof((x)[0]))
 
@@ -40,10 +41,15 @@ typedef struct {
     uint32_t freq_start;                        /*!< Start frequency in units of Hertz */
     uint32_t freq_end;                          /*!< End frequency in units of Hertz */
     
+    GPIO_TypeDef* gpio;
+    uint16_t pin;
+    
     uint32_t freq_start_index;
     uint32_t freq_end_index;
     
     float sum;                                  /*!< Sum of values in band */
+    float average;                              /*!< Average between samples */
+    float treshold;                             /*!< Treshold value to turn on LED */
 } freq_band_t;
 
 /**
@@ -51,9 +57,9 @@ typedef struct {
  */
 freq_band_t
 freq_bands[] = {
-    { 10, 300 },
-    { 300, 1000 },
-    { 1000, 4000 },
+    { 10, 300 , LED1_PORT, LED1_PIN},
+    { 300, 1000, LED2_PORT, LED2_PIN },
+    { 1000, 4000, LED3_PORT, LED3_PIN },
 };
 
 /**
@@ -137,6 +143,8 @@ iir_filt_coeffs[] = {
 };
 
 char tmp_text[100];
+uint32_t processed_count;
+uint32_t processed_count_divider;
 
 /**
  * \brief           User thread
@@ -232,27 +240,33 @@ user_thread(void const * arg) {
                 
                 for (i = 0; i < ARR_SIZE(audio_buff_fft_out_real_int32); i++) {
                     audio_buff_fft_out_real_int32[i] = (int32_t)audio_buff_fft_out_real[i];
-                    gui_graph_data_addvalue(d, 0, (int16_t)(audio_buff_fft_out_real[i] * scale));
+                    //gui_graph_data_addvalue(d, 0, (int16_t)(audio_buff_fft_out_real[i] * scale));
                 }
                 
-                /* Set maximal graph value */
-                gui_graph_setmaxy(h, max_value * scale);
-                gui_graph_zoomreset(h);         /* Reset zoom to default */
-                gui_widget_invalidate(h);
+//                /* Set maximal graph value */
+//                gui_graph_setmaxy(h, max_value * scale);
+//                gui_graph_zoomreset(h);         /* Reset zoom to default */
+//                gui_widget_invalidate(h);
                 
                 /* Calculate sum values */
+                processed_count++;              /* Increase processed count used for averaging */
+                processed_count_divider = processed_count > 10 ? 10 : processed_count;
                 for (j = 0; j < ARR_SIZE(freq_bands); j++) {
-                    freq_bands[i].sum = 0;
+                    freq_bands[j].sum = 0;
                     for (i = 0; i < ARR_SIZE(audio_buff_fft_out_real_int32); i++) {
                         if (i >= freq_bands[j].freq_start_index && i < freq_bands[j].freq_end_index) {
                             freq_bands[j].sum += audio_buff_fft_out_real_int32[i];
                         }
                     }
+                    freq_bands[j].average = (freq_bands[j].average * ((float)(processed_count_divider) - 1.0f) + freq_bands[j].sum) / (float)processed_count_divider;
+                
+                    if (freq_bands[j].sum > freq_bands[j].average) {
+                        freq_bands[j].gpio->BSRR = freq_bands[j].pin;
+                    } else {
+                        freq_bands[j].gpio->BSRR = freq_bands[j].pin << 16;
+                    }
                 }
-                sprintf(tmp_text, "L: %10.0f M: %10.0f H:%10.0f", 
-                    freq_bands[0].sum, freq_bands[1].sum, freq_bands[2].sum);
-                gui_widget_settext(h_text, _GT(tmp_text));
-                gui_widget_invalidate(h_text);
+                
             }
             psrc = NULL;                        /* Clear pbuf once not used anymore */
         }
@@ -313,6 +327,27 @@ MX_DMA_Init(void) {
     /* DMA2_Stream0_IRQn interrupt configuration */
     HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
+}
+
+static void
+led_init(void) {
+    GPIO_InitTypeDef GPIO_InitStruct;
+    
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+    __HAL_RCC_GPIOJ_CLK_ENABLE();
+    
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    
+    GPIO_InitStruct.Pin = LED1_PIN;
+    HAL_GPIO_Init(LED1_PORT, &GPIO_InitStruct);
+    
+    GPIO_InitStruct.Pin = LED2_PIN;
+    HAL_GPIO_Init(LED2_PORT, &GPIO_InitStruct);
+    
+    GPIO_InitStruct.Pin = LED3_PIN;
+    HAL_GPIO_Init(LED3_PORT, &GPIO_InitStruct);
 }
 
 /** Pinout Configuration
@@ -524,6 +559,7 @@ init_thread(void const * arg) {
     MX_GPIO_Init();
     MX_DMA_Init();
     MX_DFSDM1_Init();
+    led_init();
     
     /* GUI setup */
     gui_init();
