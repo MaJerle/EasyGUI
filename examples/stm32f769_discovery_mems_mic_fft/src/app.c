@@ -15,6 +15,8 @@ DFSDM_Filter_HandleTypeDef hdfsdm1_filter0;
 DFSDM_Channel_HandleTypeDef hdfsdm1_channel1;
 DMA_HandleTypeDef hdma_dfsdm1_flt0;
 
+extern gui_const gui_font_t GUI_Font_Arial_Bold_18;
+
 /* Thread definitions */
 osThreadDef(user_thread, user_thread, osPriorityNormal, 0, 512);
 
@@ -34,13 +36,38 @@ static void MX_DFSDM1_Init(void);
 uint8_t DmaRecHalfBuffCplt;
 uint8_t DmaRecBuffCplt;
 
+typedef struct {
+    uint32_t freq_start;                        /*!< Start frequency in units of Hertz */
+    uint32_t freq_end;                          /*!< End frequency in units of Hertz */
+    
+    uint32_t freq_start_index;
+    uint32_t freq_end_index;
+    
+    float sum;                                  /*!< Sum of values in band */
+} freq_band_t;
+
+/**
+ * \brief           List of frequency bands
+ */
+freq_band_t
+freq_bands[] = {
+    { 10, 300 },
+    { 300, 1000 },
+    { 1000, 4000 },
+};
+
+/**
+ * Sampling frequency in units of hertz
+ */
+#define AUDIO_SAMPLING_FREQUENCY                8000
+
 /**
  * Length of single audio buffer to be filled before processed.
  * Note that DMA will work in "double-buffer" mode and actual length will be twice as value here.
  *
  * The same value is used for FFT later. Make sure value is power of 2 and not below 32 and not above 4096.
  */
-#define AUDIO_BUFF_SIZE                            1024
+#define AUDIO_BUFF_SIZE                         1024
 
 /**
  * Raw AUDIO buffer for DMA, split into 2 sections for DMA complete and half-transfer complete
@@ -52,7 +79,7 @@ int32_t     audio_raw_buff[2 * AUDIO_BUFF_SIZE];
  * FFT size is the same as audio buffer size.
  * We have to process all input elements
  */
-#define FFT_SIZE                                    (AUDIO_BUFF_SIZE)
+#define FFT_SIZE                                (AUDIO_BUFF_SIZE)
 
 /**
  * FFT input samples to be processed
@@ -109,20 +136,22 @@ iir_filt_coeffs[] = {
     1, -1, 0, 0.8,   0
 };
 
+char tmp_text[100];
+
 /**
  * \brief           User thread
  */
 void
 user_thread(void const * arg) {
-    gui_handle_p h;
+    gui_handle_p h, h_text;
     gui_graph_data_p d;
-    size_t i;
+    size_t i, j;
     int32_t* psrc = NULL;
     uint32_t update = 0;
     float32_t max_value, max_value_signal;
     uint32_t max_index, max_index_signal;
     
-    h = gui_graph_create(GUI_ID_GRAPH_FFT, 10, 10, 780, 460, NULL, gui_graph_callback, 0);
+    h = gui_graph_create(GUI_ID_GRAPH_FFT, 10, 10, 780, 400, NULL, gui_graph_callback, 0);
     d = gui_graph_data_create(0, GUI_GRAPH_TYPE_YT, (FFT_SIZE / 2));
     gui_graph_attachdata(h, d);                 /* Attach data to graph */
     
@@ -135,11 +164,22 @@ user_thread(void const * arg) {
     
     gui_graph_data_setcolor(d, GUI_COLOR_BLUE);
     
+    /* Create texts for band values */
+    h_text = gui_textview_create(0, 10, 410, 780, 50, NULL, NULL, 0);
+    gui_widget_alloctextmemory(h_text, 100);
+    gui_textview_setcolor(h_text, GUI_TEXTVIEW_COLOR_TEXT, GUI_COLOR_GREEN);
+    
     /* Prepare biquad cascade filter, for DC voltage remove */
     arm_biquad_cascade_df1_init_f32(&iir_filt, 1, iir_filt_coeffs, iir_filt_states);
 
     /* Start DFSDM data reception */
     HAL_DFSDM_FilterRegularStart_DMA(&hdfsdm1_filter0, (int32_t *)audio_raw_buff, 2 * AUDIO_BUFF_SIZE);
+    
+    /* Calculate indexes for frequency */
+    for (i = 0; i < ARR_SIZE(freq_bands); i++) {
+        freq_bands[i].freq_start_index = (uint32_t)((float)freq_bands[i].freq_start / ((float)AUDIO_SAMPLING_FREQUENCY / (float)(AUDIO_BUFF_SIZE)));
+        freq_bands[i].freq_end_index = (uint32_t)((float)freq_bands[i].freq_end / ((float)AUDIO_SAMPLING_FREQUENCY / (float)(AUDIO_BUFF_SIZE)));
+    }
     
     while (1) {
         /*
@@ -164,41 +204,55 @@ user_thread(void const * arg) {
         if (psrc != NULL) {                     /* Check if anything to process */
             /* Do the post processing, shift data down 8-bits */
             for (i = 0; i < ARR_SIZE(audio_buff_fft_in); i++) {
-                audio_buff_fft_in[i] = (float32_t)(psrc[i] >> 8);
+                audio_buff_fft_in[i] = (float32_t)(psrc[i] >> 16);
             }
             
             /* Process with high-pass filter to remove DC voltage */
             /* Set the same buffer as input and output */
             arm_biquad_cascade_df1_f32(&iir_filt, audio_buff_fft_in, audio_buff_fft_in, ARR_SIZE(audio_buff_fft_in));
             
-            /* Check if UART is free to send new data */  
+            /* Check if UART is free to send new data */
             if (++update) {
                 float32_t scale;
-                
                 update = 0;
                 
                 /* Process with Real-FFT */
                 arm_max_f32(audio_buff_fft_in, ARR_SIZE(audio_buff_fft_in), &max_value_signal, &max_index_signal);
                 arm_rfft_fast_init_f32(&rfft_f32, FFT_SIZE);
                 arm_rfft_fast_f32(&rfft_f32, audio_buff_fft_in, audio_buff_fft_out, 0);
-                arm_cmplx_mag_f32(audio_buff_fft_out, audio_buff_fft_out_real, ARR_SIZE(audio_buff_fft_out_real));  /* Calculate absolute value from real-cplx pairs */
-                arm_max_f32(audio_buff_fft_out_real, ARR_SIZE(audio_buff_fft_out_real), &max_value, &max_index);
+                arm_cmplx_mag_f32(audio_buff_fft_out, audio_buff_fft_out_real, ARR_SIZE(audio_buff_fft_out_real));  /* Calculate absolute value from real-cplx pairs */               
                 
-                /* Calculate scale */
+                for (i = 0; i < ARR_SIZE(audio_buff_fft_out_real); i++) {
+                    audio_buff_fft_out_real[i] /= FFT_SIZE;
+                }
+                
+                /* Calculate max value and scale */
+                arm_max_f32(audio_buff_fft_out_real, ARR_SIZE(audio_buff_fft_out_real), &max_value, &max_index);
                 scale = 32767.0f / max_value;
-                 
-                /* Send via DMA */
+                
                 for (i = 0; i < ARR_SIZE(audio_buff_fft_out_real_int32); i++) {
                     audio_buff_fft_out_real_int32[i] = (int32_t)audio_buff_fft_out_real[i];
-                    
-                    gui_graph_data_addvalue(d, 0, (audio_buff_fft_out_real_int32[i] * scale));
+                    gui_graph_data_addvalue(d, 0, (int16_t)(audio_buff_fft_out_real[i] * scale));
                 }
                 
                 /* Set maximal graph value */
                 gui_graph_setmaxy(h, max_value * scale);
                 gui_graph_zoomreset(h);         /* Reset zoom to default */
-                
                 gui_widget_invalidate(h);
+                
+                /* Calculate sum values */
+                for (j = 0; j < ARR_SIZE(freq_bands); j++) {
+                    freq_bands[i].sum = 0;
+                    for (i = 0; i < ARR_SIZE(audio_buff_fft_out_real_int32); i++) {
+                        if (i >= freq_bands[j].freq_start_index && i < freq_bands[j].freq_end_index) {
+                            freq_bands[j].sum += audio_buff_fft_out_real_int32[i];
+                        }
+                    }
+                }
+                sprintf(tmp_text, "L: %10.0f M: %10.0f H:%10.0f", 
+                    freq_bands[0].sum, freq_bands[1].sum, freq_bands[2].sum);
+                gui_widget_settext(h_text, _GT(tmp_text));
+                gui_widget_invalidate(h_text);
             }
             psrc = NULL;                        /* Clear pbuf once not used anymore */
         }
@@ -473,6 +527,7 @@ init_thread(void const * arg) {
     
     /* GUI setup */
     gui_init();
+    gui_widget_setfontdefault(&GUI_Font_Arial_Bold_18);
     
     osThreadCreate(osThread(user_thread), NULL);/* Create user thread */
     osThreadTerminate(NULL);                    /* Stop current thread */

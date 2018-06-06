@@ -586,9 +586,9 @@ uint8_t         gui_widget_freetextmemory(gui_handle_p h);
 uint8_t         gui_widget_settext(gui_handle_p h, const gui_char* text);
 const gui_char* gui_widget_gettext(gui_handle_p h);
 const gui_char* gui_widget_gettextcopy(gui_handle_p h, gui_char* dst, uint32_t len);
-uint8_t         guii_widget_setfont(gui_handle_p h, const gui_font_t* font);
+uint8_t         gui_widget_setfont(gui_handle_p h, const gui_font_t* font);
 const gui_font_t*   gui_widget_getfont(gui_handle_p h);
-uint8_t         guii_widget_setfontdefault(const gui_font_t* font);
+uint8_t         gui_widget_setfontdefault(const gui_font_t* font);
 
 /**
  * \}

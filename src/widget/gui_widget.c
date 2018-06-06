@@ -2690,7 +2690,8 @@ gui_widget_setfocus(gui_handle_p h) {
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
-    guii_widget_focus_set(h);                        /* Put widget in focus */
+    
+    guii_widget_focus_set(h);                       /* Put widget in focus */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -2702,7 +2703,7 @@ gui_widget_setfocus(gui_handle_p h) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-guii_widget_setfontdefault(const gui_font_t* font) {
+gui_widget_setfontdefault(const gui_font_t* font) {
     widget_default.font = font;                     /* Set default font */
     return 1;
 }
