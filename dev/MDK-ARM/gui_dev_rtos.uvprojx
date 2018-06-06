@@ -933,6 +933,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\src\widget\gui_debugbox.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_widget_helpers.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\widget\gui_widget_helpers.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2282,6 +2287,11 @@
               <FileName>gui_debugbox.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\widget\gui_debugbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_widget_helpers.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\widget\gui_widget_helpers.c</FilePath>
             </File>
           </Files>
         </Group>
