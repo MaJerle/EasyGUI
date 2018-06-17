@@ -34,12 +34,12 @@
 #include "system/gui_sys.h"
 
 #if GUI_CFG_USE_TOUCH
-static GUI_BUFFER_t TSBuffer;
-static uint8_t TSBufferData[GUI_CFG_TOUCH_BUFFER_SIZE * sizeof(gui_touch_data_t) + 1];
+static gui_buff_t buff_ts;
+static uint8_t buff_ts_data[GUI_CFG_TOUCH_BUFFER_SIZE * sizeof(gui_touch_data_t) + 1];
 #endif /* GUI_CFG_USE_TOUCH */
 #if GUI_CFG_USE_KEYBOARD
-static GUI_BUFFER_t KBBuffer;
-static uint8_t KBBufferData[GUI_CFG_KEYBOARD_BUFFER_SIZE * sizeof(gui_keyboard_data_t) + 1];
+static gui_buff_t buff_kb;
+static uint8_t buff_kb_data[GUI_CFG_KEYBOARD_BUFFER_SIZE * sizeof(gui_keyboard_data_t) + 1];
 #endif /* GUI_CFG_USE_KEYBOARD */
 
 #if GUI_CFG_USE_TOUCH || __DOXYGEN__
@@ -54,7 +54,7 @@ gui_input_touchadd(gui_touch_data_t* ts) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(ts);                         /* Check input parameters */
     ts->time = gui_sys_now();                       /* Set event time */
-    ret = gui_buffer_write(&TSBuffer, ts, sizeof(*ts)) ? 1 : 0; /* Write data to buffer */
+    ret = gui_buffer_write(&buff_ts, ts, sizeof(*ts)) ? 1 : 0;  /* Write data to buffer */
     
 #if GUI_CFG_OS
     /*
@@ -73,8 +73,8 @@ gui_input_touchadd(gui_touch_data_t* ts) {
  */
 uint8_t
 gui_input_touchread(gui_touch_data_t* ts) {
-    if (gui_buffer_getfull(&TSBuffer) >= sizeof(*ts)) {
-        return (uint8_t)gui_buffer_read(&TSBuffer, ts, sizeof(*ts)); /* Read data fro mbuffer */
+    if (gui_buffer_getfull(&buff_ts) >= sizeof(*ts)) {
+        return (uint8_t)gui_buffer_read(&buff_ts, ts, sizeof(*ts)); /* Read data fro mbuffer */
     }
     return 0;
 }
@@ -85,7 +85,7 @@ gui_input_touchread(gui_touch_data_t* ts) {
  */
 uint8_t
 gui_input_touchavailable(void) {
-    return gui_buffer_getfull(&TSBuffer) > 0;       /* Check if any available touch */
+    return gui_buffer_getfull(&buff_ts) > 0;       /* Check if any available touch */
 }
 
 #endif /* GUI_CFG_USE_TOUCH || __DOXYGEN__ */
@@ -102,7 +102,7 @@ gui_input_keyadd(gui_keyboard_data_t* kb) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(kb);                         /* Check input parameters */
     kb->time = gui_sys_now();                       /* Set event time */
-    ret = gui_buffer_write(&KBBuffer, kb, sizeof(*kb)) ? 1 : 0; /* Write data to buffer */
+    ret = gui_buffer_write(&buff_kb, kb, sizeof(*kb)) ? 1 : 0; /* Write data to buffer */
     
 #if GUI_CFG_OS
     /*
@@ -121,8 +121,8 @@ gui_input_keyadd(gui_keyboard_data_t* kb) {
  */
 uint8_t
 gui_input_keyread(gui_keyboard_data_t* kb) {
-    if (gui_buffer_getfull(&KBBuffer) >= sizeof(*kb)) {
-        return (uint8_t)gui_buffer_read(&KBBuffer, kb, sizeof(*kb)); /* Read data fro mbuffer */
+    if (gui_buffer_getfull(&buff_kb) >= sizeof(*kb)) {
+        return (uint8_t)gui_buffer_read(&buff_kb, kb, sizeof(*kb)); /* Read data fro mbuffer */
     }
     return 0;
 }
@@ -134,9 +134,9 @@ gui_input_keyread(gui_keyboard_data_t* kb) {
 void
 gui_input_init(void) {
 #if GUI_CFG_USE_TOUCH
-    gui_buffer_init(&TSBuffer, sizeof(TSBufferData), TSBufferData);
+    gui_buffer_init(&buff_ts, sizeof(buff_ts_data), buff_ts_data);
 #endif /* GUI_CFG_USE_TOUCH */
 #if GUI_CFG_USE_KEYBOARD
-    gui_buffer_init(&KBBuffer, sizeof(KBBufferData), KBBufferData);
+    gui_buffer_init(&buff_kb, sizeof(buff_kb_data), buff_kb_data);
 #endif /* GUI_CFG_USE_KEYBOARD */
 }
