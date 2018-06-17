@@ -58,22 +58,22 @@ extern "C" {
 /**
  * \brief  Buffer structure
  */
-typedef struct _GUI_BUFFER_t {
-	uint32_t Size;                  /*!< Size of buffer in units of bytes, DO NOT MOVE OFFSET, 0 */
-	uint32_t In;                    /*!< Input pointer to save next value, DO NOT MOVE OFFSET, 1 */
-	uint32_t Out;                   /*!< Output pointer to read next value, DO NOT MOVE OFFSET, 2 */
-	uint8_t* Buffer;                /*!< Pointer to buffer data array, DO NOT MOVE OFFSET, 3 */
+typedef struct gui_buff_t {
+	uint32_t size;                  /*!< Size of buffer in units of bytes, DO NOT MOVE OFFSET, 0 */
+	uint32_t in;                    /*!< Input pointer to save next value, DO NOT MOVE OFFSET, 1 */
+	uint32_t out;                   /*!< Output pointer to read next value, DO NOT MOVE OFFSET, 2 */
+	uint8_t* buff;                  /*!< Pointer to buffer data array, DO NOT MOVE OFFSET, 3 */
 	uint8_t flags;                  /*!< flags for buffer, DO NOT MOVE OFFSET, 4 */
-	void* UserParameters;           /*!< Pointer to user value if needed */
-} GUI_BUFFER_t;
+	void* arg;                      /*!< Pointer to user value if needed */
+} gui_buff_t;
 
-uint8_t gui_buffer_init(GUI_BUFFER_t* Buffer, uint32_t Size, void* BufferPtr);
-void gui_buffer_free(GUI_BUFFER_t* Buffer);
-uint32_t gui_buffer_write(GUI_BUFFER_t* Buffer, const void* Data, uint32_t count);
-uint32_t gui_buffer_read(GUI_BUFFER_t* Buffer, void* Data, uint32_t count);
-uint32_t gui_buffer_getfree(GUI_BUFFER_t* Buffer);
-uint32_t gui_buffer_getfull(GUI_BUFFER_t* Buffer);
-void gui_buffer_reset(GUI_BUFFER_t* Buffer);
+uint8_t gui_buffer_init(gui_buff_t* buff, uint32_t size, void* buff_ptr);
+void gui_buffer_free(gui_buff_t* buff);
+uint32_t gui_buffer_write(gui_buff_t* buff, const void* data, uint32_t count);
+uint32_t gui_buffer_read(gui_buff_t* buff, void* data, uint32_t count);
+uint32_t gui_buffer_getfree(gui_buff_t* buff);
+uint32_t gui_buffer_getfull(gui_buff_t* buff);
+void gui_buffer_reset(gui_buff_t* buff);
 
 /**
  * \}
