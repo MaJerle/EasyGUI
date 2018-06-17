@@ -94,7 +94,7 @@ remove_widget(gui_handle_p h) {
      * - Remove software timer if exists
      * - Remove custom colors
      * - Remove widget from its linkedlist
-     * - Free widget required memory
+     * - Free widget memory
      */
     guii_widget_invalidatewithparent(h);            /* Invalidate object and its parent */
     guii_widget_freetextmemory(h);                  /* Free text memory */
@@ -192,15 +192,15 @@ remove_widgets(gui_handle_p parent) {
  * \return          `1` on success, `0` otherwise
  */
 static uint8_t
-get_lcd_abs_position_and_visible_width_height(gui_handle_p h, gui_dim_t* x1, gui_dim_t* y1, gui_dim_t* x2, gui_dim_t* y2) {
+get_widget_abs_position_and_visible_width_height(gui_handle_p h, gui_dim_t* x1, gui_dim_t* y1, gui_dim_t* x2, gui_dim_t* y2) {
     gui_dim_t x, y, wi, hi;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    x = guii_widget_getabsolutex(h);               /* Get absolute X position */
-    y = guii_widget_getabsolutey(h);               /* Get absolute Y position */
-    wi = guii_widget_getwidth(h);                  /* Get absolute width */
-    hi = guii_widget_getheight(h);                 /* Get absolute height */
+    x = guii_widget_getabsolutex(h);                /* Get absolute X position */
+    y = guii_widget_getabsolutey(h);                /* Get absolute Y position */
+    wi = guii_widget_getwidth(h);                   /* Get absolute width */
+    hi = guii_widget_getheight(h);                  /* Get absolute height */
     
     /*
      * Set widget visible positions with X and Y coordinates
@@ -214,10 +214,10 @@ get_lcd_abs_position_and_visible_width_height(gui_handle_p h, gui_dim_t* x1, gui
      * Check if widget is hidden by any parent or any parent is hidden by its parent
      */
     for (; h != NULL; h = guii_widget_getparent(h)) {
-        x = guii_widget_getparentabsolutex(h);     /* Parent absolute X position for inner widgets */
-        y = guii_widget_getparentabsolutey(h);     /* Parent absolute Y position for inner widgets */
-        wi = guii_widget_getparentinnerwidth(h);   /* Get parent inner width */
-        hi = guii_widget_getparentinnerheight(h);  /* Get parent inner height */
+        x = guii_widget_getparentabsolutex(h);      /* Parent absolute X position for inner widgets */
+        y = guii_widget_getparentabsolutey(h);      /* Parent absolute Y position for inner widgets */
+        wi = guii_widget_getparentinnerwidth(h);    /* Get parent inner width */
+        hi = guii_widget_getparentinnerheight(h);   /* Get parent inner height */
     
         if (*x1 < x)        { *x1 = x; }
         if (*x2 > x + wi)   { *x2 = x + wi; }
@@ -240,9 +240,16 @@ set_clipping_region(gui_handle_p h) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
     /* Get visible widget part and absolute position on screen according to parent */
-    get_lcd_abs_position_and_visible_width_height(h, &x1, &y1, &x2, &y2);
+    get_widget_abs_position_and_visible_width_height(h, &x1, &y1, &x2, &y2);
     
-    /* TODO Get actual visible widget part according to other widgets above current one */
+    /* Possible improvement */
+    /*
+     * If widget has direct children widgets which are not transparent,
+     * it is possible to limit clipping region for update process to only
+     * part of widget which is actually visible on screen.
+     *
+     * This may only work if padding is 0 and widget position wasn't changed
+     */
     
     /* Set invalid clipping region */
     if (GUI.Display.x1 > x1)    { GUI.Display.x1 = x1; }
@@ -306,10 +313,10 @@ invalidate_widget(gui_handle_p h, uint8_t setclipping) {
     }
 #endif /* GUI_CFG_USE_TRANSPARENCY */
     for (; h1 != NULL; h1 = gui_linkedlist_widgetgetnext(NULL, h1)) {
-        get_lcd_abs_position_and_visible_width_height(h1, &h1x1, &h1y1, &h1x2, &h1y2); /* Get visible position on LCD for widget */
+        get_widget_abs_position_and_visible_width_height(h1, &h1x1, &h1y1, &h1x2, &h1y2); /* Get visible position on LCD for widget */
         for (h2 = gui_linkedlist_widgetgetnext(NULL, h1); h2;
                 h2 = gui_linkedlist_widgetgetnext(NULL, h2)) {
-            get_lcd_abs_position_and_visible_width_height(h2, &h2x1, &h2y1, &h2x2, &h2y2);
+            get_widget_abs_position_and_visible_width_height(h2, &h2x1, &h2y1, &h2x2, &h2y2);
             if (
                 guii_widget_getflag(h2, GUI_FLAG_REDRAW) ||    /* Flag is already set */
                 !__GUI_RECT_MATCH(                  /* Widgets are not one over another */
@@ -504,7 +511,7 @@ guii_widget_isinsideclippingregion(gui_handle_p h) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
     /* Get widget visible section */
-    get_lcd_abs_position_and_visible_width_height(h, &x1, &y1, &x2, &y2);
+    get_widget_abs_position_and_visible_width_height(h, &x1, &y1, &x2, &y2);
     return __GUI_RECT_MATCH(
         x1, y1, x2, y2,
         GUI.Display.x1, GUI.Display.y1, GUI.Display.x2, GUI.Display.y2
