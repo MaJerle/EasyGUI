@@ -85,7 +85,7 @@ get_row(gui_handle_p h, uint16_t r) {
 
 /* Get item pointer from row pointer and column index */
 static gui_listview_item_t *
-get_item_for_row(gui_handle_p h, gui_listview_row_t* row, uint8_t c) {
+get_item_for_row(gui_handle_p h, gui_listview_row_t* row, uint16_t c) {
     if (row == NULL) {                              /* Check input value if exists */
         return NULL;
     }
@@ -96,7 +96,7 @@ get_item_for_row(gui_handle_p h, gui_listview_row_t* row, uint8_t c) {
 /* Get item height in LISTVIEW */
 static gui_dim_t
 item_height(gui_handle_p h, gui_dim_t* offset) {
-    gui_dim_t size = (float)h->font->size * 1.3f;
+    gui_dim_t size = GUI_DIM((float)h->font->size * 1.3f);
     if (offset != NULL) {                           /* Calculate top offset */
         *offset = (size - h->font->size) >> 1;
     }
@@ -836,5 +836,5 @@ gui_listview_getitemvalue(gui_handle_p h, uint16_t rindex, uint16_t cindex, gui_
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return ret;
+    return GUI_U8(ret);
 }

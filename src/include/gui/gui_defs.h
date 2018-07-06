@@ -193,6 +193,15 @@ typedef uint8_t     gui_char;               /*!< GUI char data type for all stri
  */
 #define             gui_containerof(ptr, type, memb)      (type *)((char *)(ptr) - (char *)offsetof(type, memb))
 
+#define GUI_U8(x)               ((uint8_t)(x))
+#define GUI_I8(x)               ((int8_t)(x))
+#define GUI_U16(x)              ((uint16_t)(x))
+#define GUI_I16(x)              ((int16_t)(x))
+#define GUI_U32(x)              ((uint32_t)(x))
+#define GUI_I32(x)              ((int32_t)(x))
+#define GUI_FLOAT(x)            ((float)(x))
+#define GUI_DIM(x)              ((gui_dim_t)(x))
+
 /**
  * \brief           Global event callback function declaration
  */
@@ -1055,6 +1064,12 @@ typedef struct gui_handle {
     float y;                                /*!< Object Y position relative to parent window in units of pixels */
     float width;                            /*!< Object width in units of pixels or percentages */
     float height;                           /*!< Object height in units of pixels or percentages */
+#if GUI_CFG_USE_POS_SIZE_CACHE
+    gui_dim_t abs_x;
+    gui_dim_t abs_y;
+    gui_dim_t abs_width;
+    gui_dim_t abs_height;
+#endif /* GUI_CFG_USE_POS_SIZE_CACHE */
     uint32_t padding;                       /*!< 4-bytes long padding, each byte of one side, MSB = top padding, LSB = left padding.
                                                     Used for children widgets if virtual padding should be used */
     int32_t zindex;                         /*!< Z-Index value of widget, which can be set by user. All widgets with same z-index are changeable when active on visible area */
@@ -1086,7 +1101,7 @@ typedef struct gui_handle_root {
 /**
  * \brief           Widget create function footprint for structures as callbacks
  */
-typedef gui_handle_p (*gui_widget_createfunc_t)(gui_id_t, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t, gui_handle_p, gui_widget_callback_t, uint16_t);
+typedef gui_handle_p (*gui_widget_createfunc_t)(gui_id_t, float, float, float, float, gui_handle_p, gui_widget_callback_t, uint16_t);
 
 /**
  * \}

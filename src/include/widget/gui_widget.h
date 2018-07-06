@@ -115,9 +115,9 @@ extern "C" {
  * \retval          Relative X according to parent widget
  * \hideinitializer
  */
-#define guii_widget_getrelativex(h)                 (guii_widget_isexpanded(h) ? 0 : \
+#define guii_widget_getrelativex(h)                 GUI_DIM((guii_widget_isexpanded(h) ? 0 : \
                                                         (guii_widget_getflag(h, GUI_FLAG_XPOS_PERCENT) ? (gui_dim_t)((float)GUI_ROUND((h)->x * guii_widget_getparentinnerwidth(h)) / 100.0f) : (h)->x) \
-                                                    )
+                                                    ))
 
 /**
  * \brief           Get widget relative Y position according to parent widget
@@ -126,7 +126,7 @@ extern "C" {
  * \retval          Relative Y according to parent widget
  * \hideinitializer
  */
-#define guii_widget_getrelativey(h)                 (guii_widget_isexpanded(h) ? 0 : \
+#define guii_widget_getrelativey(h)                 GUI_DIM(guii_widget_isexpanded(h) ? 0 : \
                                                         (guii_widget_getflag(h, GUI_FLAG_YPOS_PERCENT) ? (gui_dim_t)((float)GUI_ROUND((h)->y * guii_widget_getparentinnerheight(h)) / 100.0f) : (h)->y) \
                                                     )
 
@@ -137,7 +137,7 @@ extern "C" {
  * \retval          Padding in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getpaddingtop(h)                ((uint8_t)(((h)->padding >> 24) & 0xFFUL))
+#define guii_widget_getpaddingtop(h)                GUI_DIM((uint8_t)(((h)->padding >> 24) & 0xFFUL))
 
 /**
  * \brief           Get widget right padding as 8-bit value
@@ -146,7 +146,7 @@ extern "C" {
  * \retval          Padding in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getpaddingright(h)              ((uint8_t)(((h)->padding >> 16) & 0xFFUL))
+#define guii_widget_getpaddingright(h)              GUI_DIM((uint8_t)(((h)->padding >> 16) & 0xFFUL))
 
 /**
  * \brief           Get widget bottom padding as 8-bit value
@@ -155,7 +155,7 @@ extern "C" {
  * \retval          Padding in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getpaddingbottom(h)             ((uint8_t)(((h)->padding >>  8) & 0xFFUL))
+#define guii_widget_getpaddingbottom(h)             GUI_DIM((uint8_t)(((h)->padding >>  8) & 0xFFUL))
 
 /**
  * \brief           Get widget left padding as 8-bit value
@@ -164,7 +164,7 @@ extern "C" {
  * \retval          Padding in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getpaddingleft(h)               ((uint8_t)(((h)->padding >>  0) & 0xFFUL))
+#define guii_widget_getpaddingleft(h)               GUI_DIM((uint8_t)(((h)->padding >>  0) & 0xFFUL))
 
 /**
  * \brief           Set top padding on widget
@@ -176,7 +176,10 @@ extern "C" {
  * \param[in]       x: Padding in byte format
  * \hideinitializer
  */
-#define guii_widget_setpaddingtop(h, x)              ((h)->padding = (uint32_t)(((h)->padding & 0x00FFFFFFUL) | (uint32_t)((uint8_t)(x)) << 24))
+#define guii_widget_setpaddingtop(h, x)              do {\
+    (h)->padding = (uint32_t)(((h)->padding & 0x00FFFFFFUL) | (uint32_t)((uint8_t)(x)) << 24);  /* Padding top */       \
+    SET_WIDGET_ABS_VALUES(h);   \
+} while (0)
 
 /**
  * \brief           Set right padding on widget
@@ -188,7 +191,10 @@ extern "C" {
  * \param[in]       x: Padding in byte format
  * \hideinitializer
  */
-#define guii_widget_setpaddingright(h, x)            ((h)->padding = (uint32_t)(((h)->padding & 0xFF00FFFFUL) | (uint32_t)((uint8_t)(x)) << 16))
+#define guii_widget_setpaddingright(h, x)            do {\
+    (h)->padding = (uint32_t)(((h)->padding & 0xFF00FFFFUL) | (uint32_t)((uint8_t)(x)) << 16);  /* Padding right */     \
+    SET_WIDGET_ABS_VALUES(h);   \
+} while (0)
 
 /**
  * \brief           Set bottom padding on widget
@@ -200,7 +206,10 @@ extern "C" {
  * \param[in]       x: Padding in byte format
  * \hideinitializer
  */
-#define guii_widget_setpaddingbottom(h, x)           ((h)->padding = (uint32_t)(((h)->padding & 0xFFFF00FFUL) | (uint32_t)((uint8_t)(x)) <<  8))
+#define guii_widget_setpaddingbottom(h, x)           do {\
+    (h)->padding = (uint32_t)(((h)->padding & 0xFFFF00FFUL) | (uint32_t)((uint8_t)(x)) <<  8);  /* Padding bottom */    \
+    SET_WIDGET_ABS_VALUES(h);   \
+} while (0)
 
 /**
  * \brief           Set left padding on widget
@@ -212,7 +221,10 @@ extern "C" {
  * \param[in]       x: Padding in byte format
  * \hideinitializer
  */
-#define guii_widget_setpaddingleft(h, x)             ((h)->padding = (uint32_t)(((h)->padding & 0xFFFFFF00UL) | (uint32_t)((uint8_t)(x)) <<  0))
+#define guii_widget_setpaddingleft(h, x)             do {\
+    (h)->padding = (uint32_t)(((h)->padding & 0xFFFFFF00UL) | (uint32_t)((uint8_t)(x)) <<  0);  /* Padding left */      \
+    SET_WIDGET_ABS_VALUES(h);   \
+} while (0)
 
 /**
  * \brief           Set top and bottom paddings on widget
@@ -225,8 +237,9 @@ extern "C" {
  * \hideinitializer
  */
 #define guii_widget_setpaddingtopbottom(h, x)       do {\
-    guii_widget_setpaddingtop(h, x);                    \
-    guii_widget_setpaddingbottom(h, x);                 \
+    (h)->padding = (uint32_t)(((h)->padding & 0x00FFFFFFUL) | (uint32_t)((uint8_t)(x)) <<  24); /* Padding top */       \
+    (h)->padding = (uint32_t)(((h)->padding & 0xFFFF00FFUL) | (uint32_t)((uint8_t)(x)) <<  8);  /* Padding bottom */    \
+    SET_WIDGET_ABS_VALUES(h);   \
 } while (0)
 
 /**
@@ -240,8 +253,9 @@ extern "C" {
  * \hideinitializer
  */
 #define guii_widget_setpaddingleftright(h, x)      do {\
-    guii_widget_setpaddingleft(h, x);                   \
-    guii_widget_setpaddingright(h, x);                  \
+    (h)->padding = (uint32_t)(((h)->padding & 0xFF00FFFFUL) | (uint32_t)((uint8_t)(x)) <<  16); /* Padding right */     \
+    (h)->padding = (uint32_t)(((h)->padding & 0xFFFFFF00UL) | (uint32_t)((uint8_t)(x)) <<  0);  /* Padding left */      \
+    SET_WIDGET_ABS_VALUES(h);   \
 } while (0)
 
 /**
@@ -255,10 +269,8 @@ extern "C" {
  * \hideinitializer
  */
 #define guii_widget_setpadding(h, x)                do {\
-    guii_widget_setpaddingtop(h, x);                    \
-    guii_widget_setpaddingleft(h, x);                   \
-    guii_widget_setpaddingbottom(h, x);                 \
-    guii_widget_setpaddingright(h, x);                  \
+    (h)->padding = GUI_U8(x) << 24 | GUI_U8(x) << 16 | GUI_U8(x) << 8 | GUI_U8(x) << 0;         /* Padding */           \
+    SET_WIDGET_ABS_VALUES(h);   \
 } while (0)
 
 /**
@@ -268,7 +280,7 @@ extern "C" {
  * \retval          Widget ID
  * \hideinitializer
  */
-#define guii_widget_getid(h)                        ((h)->id)
+#define guii_widget_getid(h)                        ((gui_id_t)((h)->id))
 
 /**
  * \brief           Get widget flag(s)
@@ -333,7 +345,7 @@ extern "C" {
  * \retval          Pointer to parent widget
  * \hideinitializer
  */
-#define guii_widget_getparent(h)                    (__GH(h)->parent)
+#define guii_widget_getparent(h)                    ((h)->parent)
 
 /**
  * \brief           Check if widget has parent widget
@@ -342,7 +354,7 @@ extern "C" {
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
-#define guii_widget_hasparent(h)                    ((h) != NULL && __GH(h)->parent != NULL)
+#define guii_widget_hasparent(h)                    ((h) != NULL && (h)->parent != NULL)
 
 /**
  * \brief           Process widget callback with command, parameters and result pointers
@@ -374,7 +386,7 @@ extern "C" {
  * \retval          height in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getinnerwidth(h)                (guii_widget_getwidth(h) - (guii_widget_getpaddingleft(h) + guii_widget_getpaddingright(h)))
+#define guii_widget_getinnerwidth(h)                GUI_DIM((guii_widget_getwidth(h) - (guii_widget_getpaddingleft(h) + guii_widget_getpaddingright(h))))
 
 /**
  * \brief           Get inner height (total height - padding top - padding bottom)
@@ -383,7 +395,7 @@ extern "C" {
  * \retval          Inner height in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getinnerheight(h)               (guii_widget_getheight(h) - (guii_widget_getpaddingtop(h) + guii_widget_getpaddingbottom(h)))
+#define guii_widget_getinnerheight(h)               GUI_DIM((guii_widget_getheight(h) - (guii_widget_getpaddingtop(h) + guii_widget_getpaddingbottom(h))))
 
 /**
  * \brief           Returns width of parent element. If parent does not exists, it returns LCD width
@@ -392,7 +404,7 @@ extern "C" {
  * \retval          Parent width in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getparentwidth(h)               (guii_widget_hasparent(h) ? guii_widget_getwidth(guii_widget_getparent(h)) : GUI.lcd.width)
+#define guii_widget_getparentwidth(h)               GUI_DIM((guii_widget_hasparent(h) ? guii_widget_getwidth(guii_widget_getparent(h)) : GUI.lcd.width))
 
 /**
  * \brief           Returns height of parent element. If parent does not exists, it returns LCD height
@@ -401,7 +413,7 @@ extern "C" {
  * \retval          Parent height in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getparentheight(h)              (guii_widget_hasparent(h) ? guii_widget_getheight(guii_widget_getparent(h)) : GUI.lcd.height)
+#define guii_widget_getparentheight(h)              GUI_DIM((guii_widget_hasparent(h) ? guii_widget_getheight(guii_widget_getparent(h)) : GUI.lcd.height))
 
 /**
  * \brief           Returns inner width of parent element. If parent does not exists, it returns LCD width
@@ -412,7 +424,7 @@ extern "C" {
  * \retval          Parent width in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getparentinnerwidth(h)          (guii_widget_hasparent(h) ? guii_widget_getinnerwidth(guii_widget_getparent(h)) : GUI.lcd.width)
+#define guii_widget_getparentinnerwidth(h)          GUI_DIM((guii_widget_hasparent(h) ? guii_widget_getinnerwidth(guii_widget_getparent(h)) : GUI.lcd.width))
 
 /**
  * \brief           Returns inner height of parent element. If parent does not exists, it returns LCD height
@@ -423,7 +435,7 @@ extern "C" {
  * \retval          Parent height in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getparentinnerheight(h)         (guii_widget_hasparent(h) ? guii_widget_getinnerheight(guii_widget_getparent(h)) : GUI.lcd.height)
+#define guii_widget_getparentinnerheight(h)         GUI_DIM((guii_widget_hasparent(h) ? guii_widget_getinnerheight(guii_widget_getparent(h)) : GUI.lcd.height))
 
 /**
  * \brief           Check if widget is visible in any way, either with transparency or hidden flag
@@ -434,9 +446,9 @@ extern "C" {
  */
 #if GUI_CFG_USE_TRANSPARENCY
 #define guii_widget_isvisible(h)                    (!guii_widget_getflag(h, GUI_FLAG_HIDDEN) && (h)->transparency)
-#else
+#else /* GUI_CFG_USE_TRANSPARENCY */
 #define guii_widget_isvisible(h)                    (!guii_widget_getflag(h, GUI_FLAG_HIDDEN))
-#endif
+#endif /* !GUI_CFG_USE_TRANSPARENCY */
 
 /**
  * \brief           Check if widget is hidden
@@ -463,7 +475,7 @@ extern "C" {
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
-#define guii_widget_isdialogbase(h)                 (!!guii_widget_getcoreflag(h, GUI_FLAG_WIDGET_DIALOG_BASE) || !!guii_widget_getflag(h, GUI_FLAG_WIDGET_DIALOG_BASE))
+#define guii_widget_isdialogbase(h)                 (!!(guii_widget_getcoreflag(h, GUI_FLAG_WIDGET_DIALOG_BASE) || guii_widget_getflag(h, GUI_FLAG_WIDGET_DIALOG_BASE)))
 
 /**
  * \brief           Checks if widget handle is currently in focus
@@ -506,7 +518,7 @@ extern "C" {
  * \retval          Trasparency value
  * \hideinitializer
  */
-#define guii_widget_gettransparency(h)              ((uint8_t)((h)->transparency))
+#define guii_widget_gettransparency(h)              GUI_U8((h)->transparency)
 #endif /* GUI_CFG_USE_TRANSPARENCY || __DOXYGEN__ */
 
 /**
@@ -516,7 +528,7 @@ extern "C" {
  * \retval          z-index value
  * \hideinitializer
  */
-#define guii_widget_getzindex(h)                   ((int32_t)((h)->zindex))
+#define guii_widget_getzindex(h)                   GUI_I32((h)->zindex)
 
 gui_dim_t       guii_widget_getabsolutex(gui_handle_p h);
 gui_dim_t       guii_widget_getabsolutey(gui_handle_p h);

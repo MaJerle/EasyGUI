@@ -155,6 +155,33 @@
 #endif
 
 /**
+ * \brief           Enables (1) or disables (0) widgets' position and size cache
+ *
+ *                  All position/size values are relative to parent which means
+ *                  that when drawing is in process, first step is to calculate
+ *                  absolute coordinates on screen. This may take time as
+ *                  there might be many parent widgets in tree and in case of many
+ *                  widgets on same level, we can enter into huge loop calculations.
+ *
+ *                  To prevent calculation each time and to save time,
+ *                  cache is introduced. In this case, every widget change in position/size values
+ *                  will immediately calculate absolute values and save into additional information fields.
+ *
+ * \note            When modifying widget position/size, all children widgets must be modified too
+ *                  as absolute position/size may change on them aswell
+ *
+ * \note            Enabling this feature significantly reduces calculation time,
+ *                  but requires more memory for `4` dimension values (usually `8` bytes) per widget
+ */
+#ifndef GUI_CFG_USE_POS_SIZE_CACHE
+#define GUI_CFG_USE_POS_SIZE_CACHE              1
+#endif
+
+#ifndef GUI_CFG_SYS_PORT
+#define GUI_CFG_SYS_PORT                        GUI_SYS_PORT_CMSIS_OS
+#endif
+
+/**
  * \}
  */
 

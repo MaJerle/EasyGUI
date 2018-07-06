@@ -43,7 +43,7 @@
 uint8_t
 gui_math_sqrt(float x, float* result) {
     if (x > 0) {                                    /* Check valid input */
-        *result = sqrt(x);                          /* Calculate on positive number */
+        *result = GUI_FLOAT(sqrt(x));               /* Calculate on positive number */
         return 1;
     }
     return 0;

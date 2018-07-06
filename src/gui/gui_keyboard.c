@@ -123,7 +123,7 @@ buttons_l1_r3[] = {
     KEY_ROW('y', 'Y', 15.5f, 9.0f, 0),
     KEY_ROW('x', 'X', 25.5f, 9.0f, 0),
     KEY_ROW('c', 'C', 35.5f, 9.0f, 0),
-    KEY_ROW('g', 'V', 45.5f, 9.0f, 0),
+    KEY_ROW('v', 'V', 45.5f, 9.0f, 0),
     KEY_ROW('b', 'B', 55.5f, 9.0f, 0),
     KEY_ROW('n', 'N', 65.5f, 9.0f, 0),
     KEY_ROW('m', 'M', 75.5f, 9.0f, 0),

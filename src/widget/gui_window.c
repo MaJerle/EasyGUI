@@ -248,16 +248,16 @@ gui_window_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
         case GUI_WC_KeyPress: {
             guii_keyboard_data_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (kb->kb.keys[0] == GUI_KEY_DOWN) {
-                guii_widget_setposition(h, h->x, h->y + 1);
+                guii_widget_setposition(h, GUI_DIM(h->x), GUI_DIM(h->y + 1));
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             } else if (kb->kb.keys[0] == GUI_KEY_UP) {
-                guii_widget_setposition(h, h->x, h->y - 1);
+                guii_widget_setposition(h, GUI_DIM(h->x), GUI_DIM(h->y - 1));
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             } else if (kb->kb.keys[0] == GUI_KEY_LEFT) {
-                guii_widget_setposition(h, h->x - 1, h->y);
+                guii_widget_setposition(h, GUI_DIM(h->x - 1), GUI_DIM(h->y));
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             } else if (kb->kb.keys[0] == GUI_KEY_RIGHT) {
-                guii_widget_setposition(h, h->x + 1, h->y);
+                guii_widget_setposition(h, GUI_DIM(h->x + 1), GUI_DIM(h->y));
                 GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }
             return 1;
@@ -299,14 +299,14 @@ gui_window_create(gui_id_t id, float x, float y, float width, float height, gui_
     gui_window_t* ptr;
 
     ptr = guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
-    if (ptr) {
+    if (ptr != NULL) {
         __GUI_ENTER();                              /* Enter GUI */
         
-        guii_widget_setflag(__GH(ptr), GUI_FLAG_CHILD);    /* This window is child window */
-        guii_widget_setpaddingtop(__GH(ptr), 30);
-        guii_widget_setpaddingright(__GH(ptr), 2);
-        guii_widget_setpaddingbottom(__GH(ptr), 2);
-        guii_widget_setpaddingleft(__GH(ptr), 2);
+        guii_widget_setflag(__GH(ptr), GUI_FLAG_CHILD); /* This window is child window */
+        gui_widget_setpaddingtop(__GH(ptr), 30);
+        gui_widget_setpaddingright(__GH(ptr), 2);
+        gui_widget_setpaddingbottom(__GH(ptr), 2);
+        gui_widget_setpaddingleft(__GH(ptr), 2);
         
         __GUI_LEAVE();                              /* Leave GUI */
     }

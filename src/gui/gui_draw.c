@@ -540,9 +540,9 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_font
                         color = gui_draw_getpixel(disp, x1, y); /* Read current color */
                         
                         /* Calculate new values for pixel */
-                        r1 = (float)t * (float)((color >> 16) & 0xFF) + (float)(1.0f - (float)t) * (float)((baseColor >> 16) & 0xFF);
-                        g1 = (float)t * (float)((color >>  8) & 0xFF) + (float)(1.0f - (float)t) * (float)((baseColor >>  8) & 0xFF);
-                        b1 = (float)t * (float)((color >>  0) & 0xFF) + (float)(1.0f - (float)t) * (float)((baseColor >>  0) & 0xFF);
+                        r1 = GUI_U8((float)t * (float)((color >> 16) & 0xFF) + (float)(1.0f - (float)t) * (float)((baseColor >> 16) & 0xFF));
+                        g1 = GUI_U8((float)t * (float)((color >>  8) & 0xFF) + (float)(1.0f - (float)t) * (float)((baseColor >>  8) & 0xFF));
+                        b1 = GUI_U8((float)t * (float)((color >>  0) & 0xFF) + (float)(1.0f - (float)t) * (float)((baseColor >>  0) & 0xFF));
                         
                         /* Draw actual pixel to screen */
                         gui_draw_setpixel(disp, x1, y, (color & 0xFF000000UL) | r1 << 16 | g1 << 8 | b1);

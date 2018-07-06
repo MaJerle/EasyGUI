@@ -36,7 +36,7 @@
 extern "C" {
 #endif
 
-#include "gui_widget.h"
+#include "widget/gui_widget.h"
 
 /**
  * \ingroup         GUI_WIDGETS
@@ -53,4 +53,4 @@ extern "C" {
 }
 #endif
 
-#endif
+#endif /* GUI_TEMPLATE_H */

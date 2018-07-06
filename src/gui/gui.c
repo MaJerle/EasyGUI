@@ -248,11 +248,11 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
     static volatile uint32_t time;
     static uint8_t i = 0;
     static gui_dim_t x[2], y[2];
-    
+
     *result = (gui_wc_t)0;                          /* Reset widget control variable */          
-    
+
     PT_BEGIN(&ts->pt);                              /* Start thread execution */
-    
+
     memset(x, 0x00, sizeof(x));                     /* Reset X values */
     memset(y, 0x00, sizeof(y));                     /* Reset Y values */
     for (i = 0; i < 2;) {                           /* Allow up to 2 touch presses */
@@ -265,9 +265,7 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
         x[i] = ts->x_rel[0];                        /* Save X value */
         y[i] = ts->y_rel[0];                        /* Save Y value */
         
-        /*
-         * Either wait for released status or timeout
-         */
+        /* Either wait for released status or timeout */
         do {
             PT_YIELD(&ts->pt);                      /* Stop thread for now and wait next call */
             PT_WAIT_UNTIL(&ts->pt, v || (gui_sys_now() - time) > 2000); /* Wait touch with released state or timeout */

@@ -43,90 +43,42 @@ extern "C" {
 #include "gui_config.h"
 
 /**
- * \addtogroup      GUI_PORT
- * \{
- */
- 
-/**
+ * \ingroup         GUI_PORT
  * \defgroup        GUI_SYS System functions
  * \brief           System based function for OS management, timings, etc
  * \{
  */
 
-#if GUI_CFG_OS || __DOXYGEN__
-#include "cmsis_os.h"
+/**
+ * \ingroup         GUI_SYS
+ * \brief           Thread function prototype
+ */
+typedef void (*gui_sys_thread_fn)(void *);
 
 /**
- * \brief           GUI system mutex ID type
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
+ * \ingroup         GUI_SYS
+ * \name            GUI_SYS_PORTS System ports
+ * \anchor          GUI_SYS_PORTS
+ * \{
+ *
+ * List of already available system ports. 
+ * Configure \ref GUI_CFG_SYS_PORT with one of these values to use preconfigured ports
  */
-typedef osMutexId           gui_sys_mutex_t;
+ 
+#define GUI_SYS_PORT_CMSIS_OS               1   /*!< CMSIS-OS based port for OS systems capable of ARM CMSIS standard */
+#define GUI_SYS_PORT_WIN32                  2   /*!< WIN32 based port to use ESP library with Windows applications */
 
-/**
- * \brief           GUI system semaphore ID type
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
- */
-typedef osSemaphoreId       gui_sys_sem_t;
-
-/**
- * \brief           GUI system message queue ID type
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
- */
-typedef osMessageQId        gui_sys_mbox_t;
-
-/**
- * \brief           GUI system thread ID type
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
- */
-typedef osThreadId          gui_sys_thread_t;
-
-/**
- * \brief           GUI system thread priority type
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
- */
-typedef osPriority          gui_sys_thread_prio_t;
-
-/**
- * \brief           Value indicating message queue is not valid
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
- */
-#define GUI_SYS_MBOX_NULL           (osMessageQId)0
-
-/**
- * \brief           Value indicating semaphore is not valid
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
- */
-#define GUI_SYS_SEM_NULL            (osSemaphoreId)0
-
-/**
- * \brief           Value indicating mutex is not valid
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
- */
-#define GUI_SYS_MUTEX_NULL          (osMutexId)0
-
-/**
- * \brief           Value indicating timeout for OS timings
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
- */
-#define GUI_SYS_TIMEOUT             ((uint32_t)osWaitForever)
-
-/**
- * \brief           GUI stack threads priority parameter
- * \note            Usually normal priority is ok. If many threads are in the system and high traffic is introduced
- *                  This value might need to be set to higher value
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
- */
-#define GUI_SYS_THREAD_PRIO         (osPriorityNormal)
-
-/**
- * \brief           Stack size of system threads
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
- */
-#define GUI_SYS_THREAD_SS           (1024)
-#endif /* GUI_OS || __DOXYGEN__ */
+/* Decide which port to include */
+#if GUI_CFG_SYS_PORT == GUI_SYS_PORT_CMSIS_OS
+#include "system/gui_sys_cmsis_os.h"
+#elif GUI_CFG_SYS_PORT == GUI_SYS_PORT_WIN32
+#include "system/gui_sys_win32.h"
+#endif
 
 uint8_t     gui_sys_init(void);
 uint32_t    gui_sys_now(void);
+
+#if GUI_CFG_OS || __DOXYGEN__
 
 uint8_t     gui_sys_protect(void);
 uint8_t     gui_sys_unprotect(void);
@@ -154,15 +106,9 @@ uint8_t     gui_sys_mbox_getnow(gui_sys_mbox_t* b, void** m);
 uint8_t     gui_sys_mbox_isvalid(gui_sys_mbox_t* b);
 uint8_t     gui_sys_mbox_invalid(gui_sys_mbox_t* b);
 
-uint8_t     gui_sys_thread_create(gui_sys_thread_t* t, const char* name, void(*thread_func)(void *), void* const arg, size_t stack_size, gui_sys_thread_prio_t prio);
- 
-/**
- * \}
- */
- 
-/**
- * \}
- */
+uint8_t     gui_sys_thread_create(gui_sys_thread_t* t, const char* name, gui_sys_thread_fn thread_fn, void* const arg, size_t stack_size, gui_sys_thread_prio_t prio);
+
+#endif /* GUI_CFG_OS || __DOXYGEN__ */
 
 #ifdef __cplusplus
 };

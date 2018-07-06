@@ -90,7 +90,7 @@ get_item(gui_handle_p h, uint16_t index) {
 /* Get item height in listbox */
 static uint16_t
 item_height(gui_handle_p h, uint16_t* offset) {
-    uint16_t size = (float)h->font->size * 1.3f;
+    uint16_t size = GUI_U16((float)h->font->size * 1.3f);
     if (offset != NULL) {                           /* Calculate top offset */
         *offset = (size - h->font->size) >> 1;
     }
@@ -607,7 +607,7 @@ gui_listbox_scroll(gui_handle_p h, int16_t step) {
     }
     
     __GUI_LEAVE();                                  /* Leave GUI */
-    return start;
+    return GUI_U8(start);
 }
 
 /**

@@ -121,7 +121,7 @@ gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* pa
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
-            guii_widget_setpadding(h, 3);          /* Set padding */
+            gui_widget_setpadding(h, 3);            /* Set padding */
             return 1;
         }
         case GUI_WC_ChildWidgetCreated: {           /* Child widget has been created */

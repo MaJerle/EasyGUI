@@ -35,13 +35,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+	
 /**
- * \addtogroup      GUI_PORT
- * \{
- */
-
-/**
+ * \ingroup         GUI_PORT
  * \defgroup        GUI_LL Low-level layer
  * \brief       
  * \{
@@ -73,10 +69,6 @@ uint8_t gui_ll_init(gui_lcd_t* LCD, gui_ll_t* LL);
  */
 uint8_t gui_ll_control(gui_lcd_t* LCD, GUI_LL_Command_t cmd, void* param, void* result);
  
-/**
- * \}
- */
-
 /**
  * \}
  */
