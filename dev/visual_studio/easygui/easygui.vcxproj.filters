@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{5dbb3fe7-1dab-4bf1-9481-2ba5d94dc0a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\WIDGET">
+      <UniqueIdentifier>{037abdd5-fd6d-442d-b8ee-2c7f7c8d8613}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\CORE">
+      <UniqueIdentifier>{a1bce9a6-f72f-4a57-9299-93ba08af5b2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\FONT">
+      <UniqueIdentifier>{8ae95178-a6e9-4edc-8b53-b068e31eead7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\SYSTEM">
+      <UniqueIdentifier>{061928e2-99d3-42b7-bdb6-e4359fd017ee}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\gui\gui.c">
+      <Filter>GUI\CORE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_buffer.c">
+      <Filter>GUI\CORE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_draw.c">
+      <Filter>GUI\CORE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_input.c">
+      <Filter>GUI\CORE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_keyboard.c">
+      <Filter>GUI\CORE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_lcd.c">
+      <Filter>GUI\CORE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_linkedlist.c">
+      <Filter>GUI\CORE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_math.c">
+      <Filter>GUI\CORE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_mem.c">
+      <Filter>GUI\CORE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_string.c">
+      <Filter>GUI\CORE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_template.c">
+      <Filter>GUI\CORE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_timer.c">
+      <Filter>GUI\CORE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_translate.c">
+      <Filter>GUI\CORE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\fonts\Arial_Bold_AA.c">
+      <Filter>GUI\FONT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\fonts\Arial_Narrow_Italic.c">
+      <Filter>GUI\FONT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\fonts\Arial_Narrow_Italic_AA.c">
+      <Filter>GUI\FONT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\fonts\Calibri_Bold.c">
+      <Filter>GUI\FONT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\fonts\Comic_Sans_MS_Regular.c">
+      <Filter>GUI\FONT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\fonts\FontAwesome_Regular.c">
+      <Filter>GUI\FONT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_button.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_checkbox.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_container.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_debugbox.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_dialog.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_dropdown.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_edittext.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_graph.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_image.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_led.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_list_container.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_listbox.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_listview.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_progbar.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_radio.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_slider.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_textview.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_widget.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_widget_helpers.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_window.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\system\gui_sys_win32.c">
+      <Filter>GUI\SYSTEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\system\gui_ll_sdl_win32.c">
+      <Filter>GUI\SYSTEM</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

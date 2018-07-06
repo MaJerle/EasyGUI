@@ -112,11 +112,6 @@ float32_t   audio_buff_fft_out[FFT_SIZE];
 float32_t   audio_buff_fft_out_real[FFT_SIZE / 2];
 
 /**
- * Same as real output, but in integer format
- */
-int32_t     audio_buff_fft_out_real_int32[FFT_SIZE / 2];
-
-/**
  * \brief           Real-FFT instance
  */
 arm_rfft_fast_instance_f32 
@@ -156,8 +151,8 @@ user_thread(void const * arg) {
     size_t i, j;
     int32_t* psrc = NULL;
     uint32_t update = 0;
-    float32_t max_value, max_value_signal;
-    uint32_t max_index, max_index_signal;
+    float32_t max_value;
+    uint32_t max_index;
     
     h = gui_graph_create(GUI_ID_GRAPH_FFT, 10, 10, 780, 400, NULL, gui_graph_callback, 0);
     d = gui_graph_data_create(0, GUI_GRAPH_TYPE_YT, (FFT_SIZE / 2));
@@ -183,7 +178,7 @@ user_thread(void const * arg) {
     /* Start DFSDM data reception */
     HAL_DFSDM_FilterRegularStart_DMA(&hdfsdm1_filter0, (int32_t *)audio_raw_buff, 2 * AUDIO_BUFF_SIZE);
     
-    /* Calculate indexes for frequency */
+    /* Calculate indexes for frequency bands */
     for (i = 0; i < ARR_SIZE(freq_bands); i++) {
         freq_bands[i].freq_start_index = (uint32_t)((float)freq_bands[i].freq_start / ((float)AUDIO_SAMPLING_FREQUENCY / (float)(AUDIO_BUFF_SIZE)));
         freq_bands[i].freq_end_index = (uint32_t)((float)freq_bands[i].freq_end / ((float)AUDIO_SAMPLING_FREQUENCY / (float)(AUDIO_BUFF_SIZE)));
@@ -225,24 +220,24 @@ user_thread(void const * arg) {
                 update = 0;
                 
                 /* Process with Real-FFT */
-                arm_max_f32(audio_buff_fft_in, ARR_SIZE(audio_buff_fft_in), &max_value_signal, &max_index_signal);
                 arm_rfft_fast_init_f32(&rfft_f32, FFT_SIZE);
                 arm_rfft_fast_f32(&rfft_f32, audio_buff_fft_in, audio_buff_fft_out, 0);
                 arm_cmplx_mag_f32(audio_buff_fft_out, audio_buff_fft_out_real, ARR_SIZE(audio_buff_fft_out_real));  /* Calculate absolute value from real-cplx pairs */               
                 
+                /* Normalize FFT result back to normal */
                 for (i = 0; i < ARR_SIZE(audio_buff_fft_out_real); i++) {
                     audio_buff_fft_out_real[i] /= FFT_SIZE;
                 }
                 
-                /* Calculate max value and scale */
-                arm_max_f32(audio_buff_fft_out_real, ARR_SIZE(audio_buff_fft_out_real), &max_value, &max_index);
-                scale = 32767.0f / max_value;
-                
-                for (i = 0; i < ARR_SIZE(audio_buff_fft_out_real_int32); i++) {
-                    audio_buff_fft_out_real_int32[i] = (int32_t)audio_buff_fft_out_real[i];
-                    //gui_graph_data_addvalue(d, 0, (int16_t)(audio_buff_fft_out_real[i] * scale));
-                }
-                
+//                /* Calculate max value and scale */
+//                arm_max_f32(audio_buff_fft_out_real, ARR_SIZE(audio_buff_fft_out_real), &max_value, &max_index);
+//                scale = 32767.0f / max_value;
+//                
+//                /* Add data to plot */
+//                for (i = 0; i < ARR_SIZE(audio_buff_fft_out_real); i++) {
+//                    //gui_graph_data_addvalue(d, 0, (int16_t)(audio_buff_fft_out_real[i] * scale));
+//                }
+//                
 //                /* Set maximal graph value */
 //                gui_graph_setmaxy(h, max_value * scale);
 //                gui_graph_zoomreset(h);         /* Reset zoom to default */
@@ -250,29 +245,31 @@ user_thread(void const * arg) {
                 
                 /* Calculate sum values */
                 processed_count++;              /* Increase processed count used for averaging */
-                processed_count_divider = processed_count > 10 ? 10 : processed_count;
+                processed_count_divider = processed_count > 5 ? 5 : processed_count;
                 for (j = 0; j < ARR_SIZE(freq_bands); j++) {
                     freq_bands[j].sum = 0;
-                    for (i = 0; i < ARR_SIZE(audio_buff_fft_out_real_int32); i++) {
+                    for (i = 0; i < ARR_SIZE(audio_buff_fft_out_real); i++) {
                         if (i >= freq_bands[j].freq_start_index && i < freq_bands[j].freq_end_index) {
-                            freq_bands[j].sum += audio_buff_fft_out_real_int32[i];
+                            freq_bands[j].sum += audio_buff_fft_out_real[i];
                         }
                     }
-                    freq_bands[j].average = (freq_bands[j].average * ((float)(processed_count_divider) - 1.0f) + freq_bands[j].sum) / (float)processed_count_divider;
+                    
+                    /* Calculate new average value */
+                    freq_bands[j].average = (freq_bands[j].average * ((float)(processed_count_divider) - 1.0f) + freq_bands[j].sum * 1.01f) / ((float)processed_count_divider);
                 
+                    /* Decide to turn on/off LED */
                     if (freq_bands[j].sum > freq_bands[j].average) {
                         freq_bands[j].gpio->BSRR = freq_bands[j].pin;
                     } else {
                         freq_bands[j].gpio->BSRR = freq_bands[j].pin << 16;
                     }
                 }
-                
             }
             psrc = NULL;                        /* Clear pbuf once not used anymore */
         }
         osDelay(1);
     }
-} 
+}
 
 void
 HAL_DFSDM_FilterRegConvHalfCpltCallback(DFSDM_Filter_HandleTypeDef *hdfsdm_filter) {
@@ -292,7 +289,7 @@ MX_DFSDM1_Init(void) {
     hdfsdm1_filter0.Init.RegularParam.FastMode = ENABLE;
     hdfsdm1_filter0.Init.RegularParam.DmaMode = ENABLE;
     hdfsdm1_filter0.Init.FilterParam.SincOrder = DFSDM_FILTER_SINC3_ORDER;
-    hdfsdm1_filter0.Init.FilterParam.Oversampling = 250;
+    hdfsdm1_filter0.Init.FilterParam.Oversampling = 2000000 / AUDIO_SAMPLING_FREQUENCY;
     hdfsdm1_filter0.Init.FilterParam.IntOversampling = 1;
     HAL_DFSDM_FilterInit(&hdfsdm1_filter0);
 
@@ -329,6 +326,9 @@ MX_DMA_Init(void) {
     HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
 }
 
+/**
+ * \brief           Initialize LEDs on F769-Discovery board
+ */
 static void
 led_init(void) {
     GPIO_InitTypeDef GPIO_InitStruct;
@@ -350,8 +350,9 @@ led_init(void) {
     HAL_GPIO_Init(LED3_PORT, &GPIO_InitStruct);
 }
 
-/** Pinout Configuration
-*/
+/*
+ * Pinout Configuration
+ */
 static void
 MX_GPIO_Init(void) {
     /* GPIO Ports Clock Enable */
@@ -359,8 +360,7 @@ MX_GPIO_Init(void) {
     __HAL_RCC_GPIOC_CLK_ENABLE();
 }
 
-static uint32_t HAL_RCC_DFSDM1_CLK_ENABLED=0;
-
+static uint32_t HAL_RCC_DFSDM1_CLK_ENABLED = 0;
 static uint32_t DFSDM1_Init = 0;
 
 void
@@ -430,19 +430,12 @@ void
 HAL_DFSDM_ChannelMspInit(DFSDM_Channel_HandleTypeDef* hdfsdm_channel) {
     GPIO_InitTypeDef GPIO_InitStruct;
     if (DFSDM1_Init == 0) {
-        /* USER CODE BEGIN DFSDM1_MspInit 0 */
-
-        /* USER CODE END DFSDM1_MspInit 0 */
         /* Peripheral clock enable */
         HAL_RCC_DFSDM1_CLK_ENABLED++;
-        if(HAL_RCC_DFSDM1_CLK_ENABLED==1){
+        if (HAL_RCC_DFSDM1_CLK_ENABLED == 1) {
             __HAL_RCC_DFSDM1_CLK_ENABLE();
         }
-
-        /**DFSDM1 GPIO Configuration    
-        PD3     ------> DFSDM1_CKOUT
-        PC3     ------> DFSDM1_DATIN1 
-        */
+        
         GPIO_InitStruct.Pin = GPIO_PIN_3;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -456,10 +449,6 @@ HAL_DFSDM_ChannelMspInit(DFSDM_Channel_HandleTypeDef* hdfsdm_channel) {
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
         GPIO_InitStruct.Alternate = GPIO_AF3_DFSDM1;
         HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-        /* USER CODE BEGIN DFSDM1_MspInit 1 */
-
-        /* USER CODE END DFSDM1_MspInit 1 */
     }
 }
 
@@ -467,18 +456,10 @@ void
 HAL_DFSDM_FilterMspDeInit(DFSDM_Filter_HandleTypeDef* hdfsdm_filter) {
     DFSDM1_Init--;
     if (DFSDM1_Init == 0) {
-        /* USER CODE BEGIN DFSDM1_MspDeInit 0 */
-
-        /* USER CODE END DFSDM1_MspDeInit 0 */
         /* Peripheral clock disable */
         __HAL_RCC_DFSDM1_CLK_DISABLE();
-
-        /**DFSDM1 GPIO Configuration
-        PD3     ------> DFSDM1_CKOUT
-        PC3     ------> DFSDM1_DATIN1
-        */
+        
         HAL_GPIO_DeInit(GPIOD, GPIO_PIN_3);
-
         HAL_GPIO_DeInit(GPIOC, GPIO_PIN_3);
 
         /* DFSDM1 interrupt DeInit */
@@ -487,9 +468,6 @@ HAL_DFSDM_FilterMspDeInit(DFSDM_Filter_HandleTypeDef* hdfsdm_filter) {
         /* DFSDM1 DMA DeInit */
         HAL_DMA_DeInit(hdfsdm_filter->hdmaInj);
         HAL_DMA_DeInit(hdfsdm_filter->hdmaReg);
-        /* USER CODE BEGIN DFSDM1_MspDeInit 1 */
-
-        /* USER CODE END DFSDM1_MspDeInit 1 */
     }
 }
 
@@ -523,13 +501,7 @@ HAL_DFSDM_ChannelMspDeInit(DFSDM_Channel_HandleTypeDef* hdfsdm_channel) {
 */
 void
 DMA2_Stream0_IRQHandler(void) {
-    /* USER CODE BEGIN DMA2_Stream0_IRQn 0 */
-
-    /* USER CODE END DMA2_Stream0_IRQn 0 */
     HAL_DMA_IRQHandler(&hdma_dfsdm1_flt0);
-    /* USER CODE BEGIN DMA2_Stream0_IRQn 1 */
-
-    /* USER CODE END DMA2_Stream0_IRQn 1 */
 }
 
 /**
@@ -537,13 +509,7 @@ DMA2_Stream0_IRQHandler(void) {
 */
 void
 DFSDM1_FLT0_IRQHandler(void) {
-    /* USER CODE BEGIN DFSDM1_FLT0_IRQn 0 */
-
-    /* USER CODE END DFSDM1_FLT0_IRQn 0 */
     HAL_DFSDM_IRQHandler(&hdfsdm1_filter0);
-    /* USER CODE BEGIN DFSDM1_FLT0_IRQn 1 */
-
-    /* USER CODE END DFSDM1_FLT0_IRQn 1 */
 }
 
 /**

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\GUI UTILITY">
+      <UniqueIdentifier>{02e7c796-b0dc-463f-af2e-3b2df3f51568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GUI WIDGET">
+      <UniqueIdentifier>{3b168bfe-6e12-448e-92ae-07a112537abc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_widget.c">
+      <Filter>Source Files\GUI WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\utility\gui_linkedlist.c">
+      <Filter>Source Files\GUI UTILITY</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

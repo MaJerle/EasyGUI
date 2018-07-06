@@ -726,14 +726,14 @@
           <GroupName>GUI SYS LL</GroupName>
           <Files>
             <File>
-              <FileName>gui_system_cmsis_os.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\src\system\gui_system_cmsis_os.c</FilePath>
-            </File>
-            <File>
               <FileName>gui_ll_stm32_dma2d.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\src\system\gui_ll_stm32_dma2d.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_sys_cmsis_os.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\src\system\gui_sys_cmsis_os.c</FilePath>
             </File>
           </Files>
         </Group>
