@@ -72,7 +72,7 @@ set_active(gui_handle_p h) {
      * Find radio widgets on the same page
      * and with the same group ID as widget to be set as active
      */
-    for (handle = gui_linkedlist_widgetgetnext((gui_handle_root_t *)guii_widget_getparent(h), NULL); handle != NULL; 
+    for (handle = gui_linkedlist_widgetgetnext(guii_widget_getparent(h), NULL); handle != NULL; 
             handle = gui_linkedlist_widgetgetnext(NULL, handle)) {
         if (handle != h && handle->widget == &widget && __GR(handle)->group_id == __GR(h)->group_id) {  /* Check if widget is radio box and group is the same as clicked widget */
             __GR(handle)->selected_value = __GR(h)->value;  /* Set selected value for widget */
@@ -236,7 +236,7 @@ gui_radio_setgroup(gui_handle_p h, uint8_t groupId) {
          *
          * This is to set selected value to new radio with new group ID
          */
-        for (handle = gui_linkedlist_widgetgetnext((gui_handle_root_t *)guii_widget_getparent(h), NULL); handle;
+        for (handle = gui_linkedlist_widgetgetnext(guii_widget_getparent(h), NULL); handle;
                 handle = gui_linkedlist_widgetgetnext(NULL, handle)) {
             if (handle != h && __GH(handle)->widget == &widget && __GR(handle)->group_id == groupId) {  /* Check if widget is radio box and group is the same as input group */
                 __GR(h)->selected_value = __GR(handle)->selected_value;   /* Set selected value for widget */

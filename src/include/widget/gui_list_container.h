@@ -63,7 +63,7 @@ typedef enum {
  * \brief           LIST CONTAINER object structure
  */
 typedef struct {
-    gui_handle_root_t C;                    /*!< Global widget object */
+    gui_handle C;                           /*!< Global widget object */
     
     gui_dim_t maxscrollx;                   /*!< Maximal scroll on X axis */
     gui_dim_t maxscrolly;                   /*!< Maximal scroll on Y axis */

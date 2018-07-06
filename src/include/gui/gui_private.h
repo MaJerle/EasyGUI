@@ -136,13 +136,6 @@ extern gui_t GUI;
 #define __GH(x)                     ((struct gui_handle *)(x))
 
 /**
- * \brief           GUI Handle root object from main object with children widgets
- * \retval          Pointer to GUI root handle
- * \hideinitializer
- */ 
-#define __GHR(x)                    ((struct gui_handle_root *)(x))
-
-/**
  * \brief           Check input parameters and return value on failure
  * \hideinitializer
  */

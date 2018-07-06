@@ -37,9 +37,9 @@
  * \param[in]       root: Root linked list element
  */
 static void
-print_list(gui_handle_root_t* root) {
+print_list(gui_handle_p root) {
     static uint8_t depth = 0;
-    gui_handle_root_t* h;
+    gui_handle_p h;
     gui_linkedlistroot_t* list;
     
     depth++;
@@ -48,13 +48,13 @@ print_list(gui_handle_root_t* root) {
     } else {
         list = &GUI.root;
     }
-    for (h = (gui_handle_root_t *)list->first; h != NULL; h = h->handle.list.next) {
+    for (h = list->first; h != NULL; h = h->list.next) {
         GUI_DEBUG("%*d: W: %s; A: 0x%p, R: %lu; D: %lu\r\n",
             depth, depth,
-            (const char *)h->handle.widget->name,
+            (const char *)h->widget->name,
             h,
-            (unsigned long)!!(h->handle.flags & GUI_FLAG_REDRAW),
-            (unsigned long)!!(h->handle.flags & GUI_FLAG_REMOVE)
+            (unsigned long)!!(h->flags & GUI_FLAG_REDRAW),
+            (unsigned long)!!(h->flags & GUI_FLAG_REMOVE)
         );
         if (guii_widget_allowchildren(h)) {
             print_list(h);
@@ -97,10 +97,9 @@ gui_linkedlist_add_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
  */
 gui_linkedlist_t *
 gui_linkedlist_remove_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
-    gui_linkedlist_t* prev;
-    gui_linkedlist_t* next;
+    gui_linkedlist_t *prev, *next;
     
-    if (!element) {                                 /* Maybe element is not even valid? */
+    if (element == NULL) {
         return 0;
     }
 
@@ -130,10 +129,10 @@ gui_linkedlist_remove_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element)
  * \note            With combination of input parameters, function acts different:
  *                  <table>
  *                      <tr><th>root    <th>element <th>gui_linkedlist_getnext_gen(root, element)
- *                      <tr><td>0       <td>0       <td>0
- *                      <tr><td>0       <td>> 0     <td>Next element of <b>element</b> if exists, <b>0</b> otherwise
- *                      <tr><td>> 0     <td>0       <td>First element in <b>parent</b> list if exists, <b>0</b> otherwise
- *                      <tr><td>> 0     <td>> 0     <td>Next element of <b>element</b> if exists, first element of <b>root</b> if exists, <b>0</b> otherwise
+ *                      <tr><td>NULL    <td>NULL    <td>NULL
+ *                      <tr><td>NULL    <td>!= NULL <td>Next element of <b>element</b> if exists, <b>NULL</b> otherwise
+ *                      <tr><td>!= NULL <td>NULL    <td>First element in <b>parent</b> list if exists, <b>NULL</b> otherwise
+ *                      <tr><td>!= NULL <td>!= NULL <td>Next element of <b>element</b> if exists, first element of <b>root</b> if exists, <b>NULL</b> otherwise
  *                  </table>
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
@@ -146,7 +145,7 @@ gui_linkedlist_t *
 gui_linkedlist_getnext_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
     if (element == NULL) { 
         if (root != NULL) {
-            return (void *)root->first;
+            return root->first;
         } else {
             return NULL;
         }
@@ -159,10 +158,10 @@ gui_linkedlist_getnext_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element
  * \note            With combination of input parameters, function acts different:
  *                  <table>
  *                      <tr><th>root    <th>element <th>gui_linkedlist_getnext_gen(root, element)
- *                      <tr><td>0       <td>0       <td>0
- *                      <tr><td>0       <td>> 0     <td>Previous element of <b>element</b> if exists, <b>0</b> otherwise
- *                      <tr><td>> 0     <td>0       <td>Last element in <b>parent</b> list if exists, <b>0</b> otherwise
- *                      <tr><td>> 0     <td>> 0     <td>Previous element of <b>element</b> if exists, last element of <b>root</b> if exists, <b>0</b> otherwise
+ *                      <tr><td>NULL    <td>NULL    <td>NULL
+ *                      <tr><td>NULL    <td>!= NULL <td>Previous element of <b>element</b> if exists, <b>NULL</b> otherwise
+ *                      <tr><td>!= NULL <td>NULL    <td>Last element in <b>parent</b> list if exists, <b>NULL</b> otherwise
+ *                      <tr><td>!= NULL <td>!= NULL <td>Previous element of <b>element</b> if exists, last element of <b>root</b> if exists, <b>NULL</b> otherwise
  *                  </table>
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
@@ -310,6 +309,7 @@ gui_linkedlist_getnext_byindex_gen(gui_linkedlistroot_t* root, uint16_t index) {
 gui_linkedlistmulti_t *
 gui_linkedlist_multi_add_gen(gui_linkedlistroot_t* root, void* element) {
     gui_linkedlistmulti_t* ptr;
+    
     ptr = GUI_MEMALLOC(sizeof(gui_linkedlistmulti_t));  /* Create memory for linked list */
     if (ptr != NULL) {
         ptr->element = element;                     /* Save pointer to our element */
@@ -342,10 +342,10 @@ gui_linkedlist_multi_remove_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_
  * \note            With combination of input parameters, function acts different:
  *                  <table>
  *                      <tr><th>root    <th>element <th>gui_linkedlist_multi_getnext_gen(root, element)
- *                      <tr><td>0       <td>0       <td>0
- *                      <tr><td>0       <td>> 0     <td>Next element of <b>element</b> if exists, <b>0</b> otherwise
- *                      <tr><td>> 0     <td>0       <td>First element in <b>parent</b> list if exists, <b>0</b> otherwise
- *                      <tr><td>> 0     <td>> 0     <td>Next element of <b>element</b> if exists, first element of <b>root</b> if exists, <b>0</b> otherwise
+ *                      <tr><td>NULL    <td>NULL    <td>NULL
+ *                      <tr><td>NULL    <td>!= NULL <td>Next element of <b>element</b> if exists, <b>NULL</b> otherwise
+ *                      <tr><td>!= NULL <td>NULL    <td>First element in <b>parent</b> list if exists, <b>NULL</b> otherwise
+ *                      <tr><td>!= NULL <td>!= NULL <td>Next element of <b>element</b> if exists, first element of <b>root</b> if exists, <b>NULL</b> otherwise
  *                  </table>
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
@@ -371,10 +371,10 @@ gui_linkedlist_multi_getnext_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti
  * \note            With combination of input parameters, function acts different:
  *                  <table>
  *                      <tr><th>root    <th>element <th>gui_linkedlist_multi_getprev_gen(root, element)
- *                      <tr><td>0       <td>0       <td>0
- *                      <tr><td>0       <td>> 0     <td>Previous element of <b>element</b> if exists, <b>0</b> otherwise
- *                      <tr><td>> 0     <td>0       <td>Last element in <b>parent</b> list if exists, <b>0</b> otherwise
- *                      <tr><td>> 0     <td>> 0     <td>Previous element of <b>element</b> if exists, last element of <b>root</b> if exists, <b>0</b> otherwise
+ *                      <tr><td>NULL    <td>NULL    <td>NULL
+ *                      <tr><td>NULL    <td>!= NULL <td>Previous element of <b>element</b> if exists, <b>NULL</b> otherwise
+ *                      <tr><td>!= NULL <td>NULL    <td>Last element in <b>parent</b> list if exists, <b>NULL</b> otherwise
+ *                      <tr><td>!= NULL <td>!= NULL <td>Previous element of <b>element</b> if exists, last element of <b>root</b> if exists, <b>NULL</b> otherwise
  *                  </table>
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
@@ -456,9 +456,9 @@ gui_linkedlist_multi_find_remove(gui_linkedlistroot_t* root, void* element) {
  * \sa              gui_linkedlist_widgetremove
  */
 void
-gui_linkedlist_widgetadd(gui_handle_root_t* root, gui_handle_p h) {    
-    if (root != NULL) {
-        gui_linkedlist_add_gen(&root->root_list, (gui_linkedlist_t *)h);
+gui_linkedlist_widgetadd(gui_handle_p parent, gui_handle_p h) {    
+    if (parent != NULL) {
+        gui_linkedlist_add_gen(&parent->root_list, (gui_linkedlist_t *)h);
     } else {
         gui_linkedlist_add_gen(&GUI.root, (gui_linkedlist_t *)h);
     }
@@ -475,7 +475,7 @@ gui_linkedlist_widgetadd(gui_handle_root_t* root, gui_handle_p h) {
 void
 gui_linkedlist_widgetremove(gui_handle_p h) {    
     if (guii_widget_hasparent(h)) {
-        gui_linkedlist_remove_gen(&((gui_handle_root_t *)guii_widget_getparent(h))->root_list, (gui_linkedlist_t *)h);
+        gui_linkedlist_remove_gen(&(guii_widget_getparent(h)->root_list), (gui_linkedlist_t *)h);
     } else {
         gui_linkedlist_remove_gen(&GUI.root, (gui_linkedlist_t *)h);
     }
@@ -491,7 +491,7 @@ gui_linkedlist_widgetremove(gui_handle_p h) {
 uint8_t
 gui_linkedlist_widgetmoveup(gui_handle_p h) {
     if (guii_widget_hasparent(h)) {
-        return gui_linkedlist_moveup_gen(&__GHR(guii_widget_getparent(h))->root_list, (gui_linkedlist_t *)h);
+        return gui_linkedlist_moveup_gen(&(guii_widget_getparent(h)->root_list), (gui_linkedlist_t *)h);
     }
     return gui_linkedlist_moveup_gen(&GUI.root, (gui_linkedlist_t *)h);
 }
@@ -506,7 +506,7 @@ gui_linkedlist_widgetmoveup(gui_handle_p h) {
 uint8_t
 gui_linkedlist_widgetmovedown(gui_handle_p h) {
     if (guii_widget_hasparent(h)) {
-        return gui_linkedlist_movedown_gen(&__GHR(guii_widget_getparent(h))->root_list, (gui_linkedlist_t *)h);
+        return gui_linkedlist_movedown_gen(&(guii_widget_getparent(h)->root_list), (gui_linkedlist_t *)h);
     }
     return gui_linkedlist_movedown_gen(&GUI.root, (gui_linkedlist_t *)h);
 }
@@ -515,11 +515,11 @@ gui_linkedlist_widgetmovedown(gui_handle_p h) {
  * \brief           Get next widget from current widget handle
  * \note            With combination of input parameters, function acts different:
  *                  <table>
- *                      <tr><th>parent  <th>h   <th>gui_linkedlist_widgetgetnext(parent, h)
- *                      <tr><td>0       <td>0   <td>0
- *                      <tr><td>0       <td>> 0 <td>Next widget of <b>h</b> if exists, <b>0</b> otherwise
- *                      <tr><td>> 0     <td>0   <td>First widget in <b>parent</b> list if exists, <b>0</b> otherwise
- *                      <tr><td>> 0     <td>> 0 <td>Next widget of <b>h</b> if exists, first widget of <b>parent</b> if exists, <b>0</b> otherwise
+ *                      <tr><th>parent  <th>h       <th>gui_linkedlist_widgetgetnext(parent, h)
+ *                      <tr><td>NULL    <td>NULL    <td>NULL
+ *                      <tr><td>NULL    <td>!= NULL <td>Next widget of <b>h</b> if exists, <b>NULL</b> otherwise
+ *                      <tr><td>!= NULL <td>NULL    <td>First widget in <b>parent</b> list if exists, <b>NULL</b> otherwise
+ *                      <tr><td>!= NULL <td>!= NULL <td>Next widget of <b>h</b> if exists, first widget of <b>parent</b> if exists, <b>NULL</b> otherwise
  *                  </table>
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
@@ -532,26 +532,26 @@ gui_linkedlist_widgetmovedown(gui_handle_p h) {
  * \sa              gui_linkedlist_widgetgetprev
  */
 gui_handle_p
-gui_linkedlist_widgetgetnext(gui_handle_root_t* parent, gui_handle_p h) {
+gui_linkedlist_widgetgetnext(gui_handle_p parent, gui_handle_p h) {
     if (h == NULL) {                                /* Get first widget on list */
         if (parent != NULL) {                       /* If parent exists... */
-            return (gui_handle_p)parent->root_list.first;   /* ...get first widget on parent */
+            return parent->root_list.first;         /* ...get first widget on parent */
         } else {
-            return (gui_handle_p)GUI.root.first;    /* Get first widget in GUI */
+            return GUI.root.first;                  /* Get first widget in GUI */
         }
     }
-    return (gui_handle_p)h->list.next;              /* Get next widget of current in linked list */
+    return h->list.next;                            /* Get next widget of current in linked list */
 }
 
 /**
  * \brief           Get previous widget from current widget handle
  * \note            With combination of input parameters, function acts different:
  *                  <table>
- *                      <tr><th>parent  <th>h   <th>gui_linkedlist_widgetgetprev(parent, h)
- *                      <tr><td>0       <td>0   <td>0
- *                      <tr><td>0       <td>> 0 <td>Previous widget of <b>h</b> if exists, <b>0</b> otherwise
- *                      <tr><td>> 0     <td>0   <td>Last widget in <b>parent</b> list if exists, <b>0</b> otherwise
- *                      <tr><td>> 0     <td>> 0 <td>Previous widget of <b>h</b> if exists, last widget of <b>parent</b> if exists, <b>0</b> otherwise
+ *                      <tr><th>parent  <th>h       <th>gui_linkedlist_widgetgetprev(parent, h)
+ *                      <tr><td>NULL    <td>NULL    <td>NULL
+ *                      <tr><td>NULL    <td>!= NULL <td>Previous widget of <b>h</b> if exists, <b>NULL</b> otherwise
+ *                      <tr><td>!= NULL <td>NULL    <td>Last widget in <b>parent</b> list if exists, <b>NULL</b> otherwise
+ *                      <tr><td>!= NULL <td>!= NULL <td>Previous widget of <b>h</b> if exists, last widget of <b>parent</b> if exists, <b>NULL</b> otherwise
  *                  </table>
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
@@ -564,15 +564,15 @@ gui_linkedlist_widgetgetnext(gui_handle_root_t* parent, gui_handle_p h) {
  * \sa              gui_linkedlist_widgetgetnext
  */
 gui_handle_p
-gui_linkedlist_widgetgetprev(gui_handle_root_t* parent, gui_handle_p h) {
+gui_linkedlist_widgetgetprev(gui_handle_p parent, gui_handle_p h) {
     if (h == NULL) {                                /* Get last widget on list */
         if (parent != NULL) {                       /* If parent exists... */
-            return (gui_handle_p)parent->root_list.last;/* ...get last widget on parent */
+            return parent->root_list.last;          /* ...get last widget on parent */
         } else {
-            return (gui_handle_p)GUI.root.last;     /* Get last widget in GUI */
+            return GUI.root.last;                   /* Get last widget in GUI */
         }
     }
-    return (gui_handle_p)h->list.prev;      /* Get next widget of current in linked list */
+    return h->list.prev;                            /* Get next widget of current in linked list */
 }
 
 /*

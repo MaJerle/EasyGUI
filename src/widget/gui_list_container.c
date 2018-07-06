@@ -72,7 +72,7 @@ calculate_limits(gui_handle_p h) {
     /*
      * Scan all children widgets and check for maximal possible scroll
      */
-    for (w = gui_linkedlist_widgetgetnext((gui_handle_root_t *)h, NULL); w;
+    for (w = gui_linkedlist_widgetgetnext(h, NULL); w != NULL;
             w = gui_linkedlist_widgetgetnext(NULL, w)) {
 
         x = guii_widget_getrelativex(w);           /* Get absolute position on screen */

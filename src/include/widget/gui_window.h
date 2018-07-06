@@ -60,7 +60,7 @@ typedef enum {
  * \brief           Window object structure
  */
 typedef struct {
-    gui_handle_root_t C;                    /*!< GUI handle object, must always be first on list */
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
     uint32_t Number;                        /*!< Window number */
     

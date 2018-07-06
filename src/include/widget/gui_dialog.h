@@ -50,7 +50,7 @@ extern "C" {
  * \brief           Dialog object structure
  */
 typedef struct {
-    gui_handle_root_t C;                    /*!< GUI handle object, must always be first on list */
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
 } GUI_DIALOG_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 

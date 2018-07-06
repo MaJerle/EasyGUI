@@ -98,7 +98,7 @@ redraw_widgets(gui_handle_p parent) {
     static uint32_t level = 0;
 
     /* Go through all elements of parent */
-    for (h = gui_linkedlist_widgetgetnext((gui_handle_root_t *)parent, NULL); h != NULL; 
+    for (h = gui_linkedlist_widgetgetnext(parent, NULL); h != NULL; 
             h = gui_linkedlist_widgetgetnext(NULL, h)) {
         if (!guii_widget_isvisible(h)) {            /* Check if visible */
             guii_widget_clrflag(h, GUI_FLAG_REDRAW);   /* Clear flag to be sure */
@@ -156,10 +156,11 @@ redraw_widgets(gui_handle_p parent) {
                     gui_handle_p tmp;
                     
                     /* Set drawing flag to all widgets  first... */
-                    for (tmp = gui_linkedlist_widgetgetnext((gui_handle_root_t *)h, NULL); tmp != NULL; 
+                    for (tmp = gui_linkedlist_widgetgetnext(h, NULL); tmp != NULL; 
                             tmp = gui_linkedlist_widgetgetnext(NULL, tmp)) {
                         guii_widget_setflag(tmp, GUI_FLAG_REDRAW); /* Set redraw bit to all children elements */
                     }
+                            
                     /* ...now call function for actual redrawing process */
                     level++;
                     cnt += redraw_widgets(h);       /* Redraw children widgets */
@@ -393,7 +394,7 @@ process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
      * This is due to the fact that widget with most deep level,
      * is displayed on top of screen = should be detected first
      */
-    for (h = gui_linkedlist_widgetgetprev((gui_handle_root_t *)parent, NULL); h != NULL; 
+    for (h = gui_linkedlist_widgetgetprev(parent, NULL); h != NULL; 
             h = gui_linkedlist_widgetgetprev(NULL, h)) {
         if (guii_widget_ishidden(h)) {             /* Ignore hidden widget */
             continue;
@@ -653,7 +654,7 @@ process_keyboard(void) {
                         h = NULL;
                     }
                     if (h == NULL) {                /* There is no next widget */
-                        for (h = gui_linkedlist_widgetgetnext((gui_handle_root_t *)guii_widget_getparent(GUI.FocusedWidget), NULL); 
+                        for (h = gui_linkedlist_widgetgetnext(guii_widget_getparent(GUI.FocusedWidget), NULL); 
                             h != NULL; h = gui_linkedlist_widgetgetnext(NULL, h)) {
                             if (guii_widget_isvisible(h)) {    /* Check if widget is visible */
                                 break;

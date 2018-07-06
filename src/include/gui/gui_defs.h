@@ -1055,6 +1055,8 @@ typedef struct {
  */
 typedef struct gui_handle {
     gui_linkedlist_t list;                  /*!< Linked list entry, must always be on top for casting */
+    gui_linkedlistroot_t root_list;         /*!< Linked list root of children widgets */
+
     gui_id_t id;                            /*!< Widget ID number */
     uint32_t footprint;                     /*!< Footprint indicates widget is valid */
     const gui_widget_t* widget;             /*!< Widget parameters with callback functions */
@@ -1084,18 +1086,10 @@ typedef struct gui_handle {
     gui_timer_t* timer;                     /*!< Software timer pointer */
     gui_color_t* colors;                    /*!< Pointer to allocated color memory when custom colors are used */
     void* UserData;                         /*!< Pointer to optional user data */
-} gui_handle;
-
-/**
- * \brief           Common GUI values for widgets who can have children widgets (windows, panels)
- */
-typedef struct gui_handle_root {
-    gui_handle handle;                      /*!< Root widget structure, must be first in structure */
     
-    gui_linkedlistroot_t root_list;         /*!< Linked list root of children widgets */
     gui_dim_t x_scroll;                     /*!< Scroll of widgets in horizontal direction in units of pixels */
     gui_dim_t y_scroll;                     /*!< Scroll of widgets in vertical direction in units of pixels */
-} gui_handle_root_t;
+} gui_handle;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 /**

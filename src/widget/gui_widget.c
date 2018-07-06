@@ -122,7 +122,7 @@ calculate_widget_absolute_x(gui_handle_p h) {
     for (w = guii_widget_getparent(h); w != NULL;
         w = guii_widget_getparent(w)) {             /* Go through all parent windows */
         out += guii_widget_getrelativex(w) + guii_widget_getpaddingleft(w);   /* Add X offset from parent and left padding of parent */
-        out -= __GHR(w)->x_scroll;                  /* Decrease by scroll value */
+        out -= w->x_scroll;                         /* Decrease by scroll value */
     }
     return out;
 }
@@ -147,7 +147,7 @@ calculate_widget_absolute_y(gui_handle_p h) {
     for (w = guii_widget_getparent(h); w != NULL;
         w = guii_widget_getparent(w)) {             /* Go through all parent windows */
         out += guii_widget_getrelativey(w) + guii_widget_getpaddingtop(w);  /* Add Y offset from parent and top padding of parent */
-        out -= __GHR(w)->y_scroll;                  /* Decrease by scroll value */
+        out -= w->y_scroll;                         /* Decrease by scroll value */
     }
     return out;
 }
@@ -160,7 +160,7 @@ calculate_widget_absolute_y(gui_handle_p h) {
  */
 static uint8_t
 set_widget_abs_values(gui_handle_p h) {
-    /* Update widget values */
+    /* Update widget absolute values */
     h->abs_x = calculate_widget_absolute_x(h);
     h->abs_y = calculate_widget_absolute_y(h);
     h->abs_width = calculate_widget_width(h);
@@ -171,7 +171,7 @@ set_widget_abs_values(gui_handle_p h) {
         gui_handle_p child;
         
         /* Scan all children widgets */
-        for (child = gui_linkedlist_widgetgetnext(__GHR(h), NULL); child != NULL;
+        for (child = gui_linkedlist_widgetgetnext(h, NULL); child != NULL;
             child = gui_linkedlist_widgetgetnext(NULL, child)) {
             
             set_widget_abs_values(child);   /* Process child widget */
@@ -257,7 +257,7 @@ remove_widgets(gui_handle_p parent) {
     /*
      * Scan all widgets in system
      */
-    for (h = gui_linkedlist_widgetgetnext((gui_handle_root_t *)parent, NULL); h != NULL; ) {        
+    for (h = gui_linkedlist_widgetgetnext(parent, NULL); h != NULL; ) {        
         if (guii_widget_getflag(h, GUI_FLAG_REMOVE)) { /* Widget should be deleted */
             next = gui_linkedlist_widgetgetnext(NULL, h);   /* Get next widget of current */
             
@@ -278,7 +278,7 @@ remove_widgets(gui_handle_p parent) {
                 gui_handle_p tmp;
                 
                 /* Step 1 */
-                for (tmp = gui_linkedlist_widgetgetnext((gui_handle_root_t *)h, NULL); tmp != NULL; 
+                for (tmp = gui_linkedlist_widgetgetnext(h, NULL); tmp != NULL; 
                         tmp = gui_linkedlist_widgetgetnext(NULL, tmp)) {
                     guii_widget_setflag(tmp, GUI_FLAG_REMOVE); /* Set remove bit to all children elements */
                 }
@@ -499,7 +499,7 @@ static gui_handle_p
 get_widget_by_id(gui_handle_p parent, gui_id_t id, uint8_t deep) {
     gui_handle_p h;
     
-    for (h = gui_linkedlist_widgetgetnext(__GHR(parent), NULL); h != NULL;
+    for (h = gui_linkedlist_widgetgetnext(parent, NULL); h != NULL;
             h = gui_linkedlist_widgetgetnext(NULL, h)) {
         if (guii_widget_getid(h) == id) {          /* Compare ID values */
             return h;
@@ -557,13 +557,15 @@ set_widget_size(gui_handle_p h, float wi, float hi, uint8_t wp, uint8_t hp) {
         (hp && !guii_widget_getflag(h, GUI_FLAG_HEIGHT_PERCENT)) || /* New height is in percent, old is not */
         (!hp && guii_widget_getflag(h, GUI_FLAG_HEIGHT_PERCENT))    /* New height is not in percent, old is */
     ) {
-        uint8_t invalidateSecond = 0;
+        gui_dim_t wc, hc;
+        
         if (!guii_widget_isexpanded(h)) {           /* First invalidate current position if not expanded before change of size */
             guii_widget_invalidatewithparent(h);    /* Set old clipping region first */
-            if (wi > h->width || hi > h->height) {
-                invalidateSecond = 1;
-            }
         }
+        
+        /* Get current values */
+        wc = guii_widget_getwidth(h);               /* Get current width */
+        hc = guii_widget_getheight(h);              /* Get current height */
         
         /* Check percent flag */
         if (wp) {
@@ -582,8 +584,10 @@ set_widget_size(gui_handle_p h, float wi, float hi, uint8_t wp, uint8_t hp) {
         h->height = hi;                             /* Set parameter */
         SET_WIDGET_ABS_VALUES(h);                   /* Set widget absolute values */
         
-        if (invalidateSecond) {                     /* Invalidate second time only if widget greater than before */
-            guii_widget_invalidatewithparent(h);    /* Set new clipping region */
+        /* Check if any of dimensions are bigger than before */
+        if (!guii_widget_isexpanded(h) &&
+            (guii_widget_getwidth(h) > wc || guii_widget_getheight(h) > hc)) {
+            guii_widget_invalidate(h);              /* Invalidate widget */
         }
     }
     return 1;
@@ -665,7 +669,7 @@ can_remove_widget(gui_handle_p h) {
      */
     if (GUI_WIDGET_RESULTTYPE_U8(&result) && guii_widget_allowchildren(h)) {   /* Check if we can delete all children widgets */
         gui_handle_p h1;
-        for (h1 = gui_linkedlist_widgetgetnext((gui_handle_root_t *)h, NULL); h1 != NULL;
+        for (h1 = gui_linkedlist_widgetgetnext(h, NULL); h1 != NULL;
                 h1 = gui_linkedlist_widgetgetnext(NULL, h1)) {
             if (!can_remove_widget(h1)) {           /* If we should not delete it */
                 return 0;                           /* Stop on first call */
@@ -1091,8 +1095,7 @@ guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, fl
      * - Size must be at least for widget size
      * - If widget supports children widgets, size must be for at least parent handle structure
      */
-    if (widget->size < sizeof(gui_handle) ||
-        ((widget->flags & GUI_FLAG_WIDGET_ALLOW_CHILDREN) && widget->size < sizeof(gui_handle_root_t))) { 
+    if (widget->size < sizeof(gui_handle)) { 
         return 0;
     }
     
@@ -1152,7 +1155,7 @@ guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, fl
         GUI_WIDGET_RESULTTYPE_U8(&result) = 0;
         guii_widget_callback(h, GUI_WC_ExcludeLinkedList, NULL, &result);
         if (!GUI_WIDGET_RESULTTYPE_U8(&result)) {   /* Check if widget should be added to linked list */
-            gui_linkedlist_widgetadd((gui_handle_root_t *)h->parent, h); /* Add entry to linkedlist of parent widget */
+            gui_linkedlist_widgetadd(h->parent, h); /* Add entry to linkedlist of parent widget */
         }
         guii_widget_callback(h, GUI_WC_Init, NULL, NULL);  /* Notify user about init successful */
         guii_widget_invalidate(h);                  /* Invalidate object */
@@ -1213,7 +1216,7 @@ guii_widget_empty(gui_handle_p h) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));/* Check valid parameter */
 
     /* Process all children widgets */
-    for (child = gui_linkedlist_widgetgetnext(__GHR(h), NULL); child != NULL;
+    for (child = gui_linkedlist_widgetgetnext(h, NULL); child != NULL;
         child = gui_linkedlist_widgetgetnext(NULL, child)) {
         if (!can_remove_widget(child)) {            /* Stop execution if cannot be deleted */
             ret = 0;
@@ -1756,7 +1759,7 @@ guii_widget_hidechildren(gui_handle_p h) {
     /*
      * Scan all widgets of current widget and hide them
      */
-    for (t = gui_linkedlist_widgetgetnext((gui_handle_root_t *)h, NULL); t != NULL;
+    for (t = gui_linkedlist_widgetgetnext(h, NULL); t != NULL;
         t = gui_linkedlist_widgetgetnext(NULL, t)) {
         guii_widget_hide(t);
     }
@@ -2719,8 +2722,9 @@ gui_widget_setscrollx(gui_handle_p h, gui_dim_t scroll) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (__GHR(h)->x_scroll != scroll) {             /* Only widgets with children support can set scroll */
-        __GHR(h)->x_scroll = scroll;
+    if (h->x_scroll != scroll) {                    /* Only widgets with children support can set scroll */
+        h->x_scroll = scroll;
+        SET_WIDGET_ABS_VALUES(h);                   /* Set new absolute values */
         guii_widget_invalidate(h);
         ret = 1;
     }
@@ -2744,8 +2748,9 @@ gui_widget_setscrolly(gui_handle_p h, gui_dim_t scroll) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    if (__GHR(h)->y_scroll != scroll) {             /* Only widgets with children support can set scroll */
-        __GHR(h)->y_scroll = scroll;
+    if (h->y_scroll != scroll) {                    /* Only widgets with children support can set scroll */
+        h->y_scroll = scroll;
+        SET_WIDGET_ABS_VALUES(h);                   /* Set new absolute values */
         guii_widget_invalidate(h);
         ret = 1;
     }
@@ -2770,7 +2775,8 @@ gui_widget_incscrollx(gui_handle_p h, gui_dim_t scroll) {
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (scroll) {                                   /* Only widgets with children support can set scroll */
-        __GHR(h)->x_scroll += scroll;
+        h->x_scroll += scroll;
+        SET_WIDGET_ABS_VALUES(h);                   /* Set new absolute values */
         guii_widget_invalidate(h);
         ret = 1;
     }
@@ -2795,7 +2801,8 @@ gui_widget_incscrolly(gui_handle_p h, gui_dim_t scroll) {
     __GUI_ENTER();                                  /* Enter GUI */
     
     if (scroll) {                                   /* Only widgets with children support can set scroll */
-        __GHR(h)->y_scroll += scroll;
+        h->y_scroll += scroll;
+        SET_WIDGET_ABS_VALUES(h);                   /* Set new absolute values */
         guii_widget_invalidate(h);
         ret = 1;
     }
@@ -2817,7 +2824,7 @@ gui_widget_getscrollx(gui_handle_p h) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    value = __GHR(h)->x_scroll;
+    value = h->x_scroll;
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return value;
@@ -2836,7 +2843,7 @@ gui_widget_getscrolly(gui_handle_p h) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    value = __GHR(h)->y_scroll;
+    value = h->y_scroll;
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return value;

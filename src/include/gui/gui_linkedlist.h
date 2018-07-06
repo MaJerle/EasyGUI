@@ -107,12 +107,12 @@ uint8_t                 gui_linkedlist_multi_find_remove(gui_linkedlistroot_t* r
  */
 #define gui_linkedlist_iswidgetlast(h)        ((h) == NULL || (__GH(h))->list.next == NULL)
 
-void            gui_linkedlist_widgetadd(gui_handle_root_t* parent, gui_handle_p h);
+void            gui_linkedlist_widgetadd(gui_handle_p parent, gui_handle_p h);
 void            gui_linkedlist_widgetremove(gui_handle_p h);
 uint8_t         gui_linkedlist_widgetmoveup(gui_handle_p h);
 uint8_t         gui_linkedlist_widgetmovedown(gui_handle_p h);
-gui_handle_p    gui_linkedlist_widgetgetnext(gui_handle_root_t* parent, gui_handle_p h);
-gui_handle_p    gui_linkedlist_widgetgetprev(gui_handle_root_t* parent, gui_handle_p h);
+gui_handle_p    gui_linkedlist_widgetgetnext(gui_handle_p parent, gui_handle_p h);
+gui_handle_p    gui_linkedlist_widgetgetprev(gui_handle_p parent, gui_handle_p h);
 uint8_t         gui_linkedlist_widgetmovetobottom(gui_handle_p h);
 uint8_t         gui_linkedlist_widgetmovetotop(gui_handle_p h);
 
