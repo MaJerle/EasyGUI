@@ -192,7 +192,7 @@ redraw_widgets(gui_handle_p parent) {
                             (void *)GUI.lcd.drawing_layer->start_address,
                             guii_widget_gettransparency(h), 0xFF,
                             GUI.lcd.drawing_layer->width, GUI.lcd.drawing_layer->height,
-                            0, layerPrev->width - GUI.lcd.drawing_layer->width
+                            layerPrev->width - GUI.lcd.drawing_layer->width, 0
                         );
                     } else {                        /* Software way, ugly and slow way */
                         gui_dim_t x, y;
@@ -210,7 +210,9 @@ redraw_widgets(gui_handle_p parent) {
                                 g = GUI_U8(((fg >> 8) & 0xFF) * a + (1.0f - a) * ((bg >> 8) & 0xFF));
                                 b = GUI_U8(((fg >> 0) & 0xFF) * a + (1.0f - a) * ((bg >> 0) & 0xFF));
                                 
-                                GUI.ll.SetPixel(&GUI.lcd, layerPrev, GUI.lcd.drawing_layer->x_offset + x, GUI.lcd.drawing_layer->y_offset + y, 0xFF << 24 | r << 16 | g << 8 | b);
+                                fg = (gui_color_t)(0xFF000000UL | (uint8_t)r << 16 | (uint8_t)g << 8 | (uint8_t)b);
+                                
+                                GUI.ll.SetPixel(&GUI.lcd, layerPrev, GUI.lcd.drawing_layer->x_offset + x, GUI.lcd.drawing_layer->y_offset + y, fg);
                             }
                         }                        
                     }
@@ -230,7 +232,7 @@ redraw_widgets(gui_handle_p parent) {
         }
     }
     if (level == 0) {
-        printf("Number of widgets: %d\r\n", (int)cnt);
+        GUI_DEBUG("Number of widgets: %d\r\n", (int)cnt);
     }
     return cnt;                                     /* Return number of redrawn objects */
 }
@@ -723,16 +725,18 @@ process_redraw(void) {
     }
     
     GUI.flags &= ~GUI_FLAG_REDRAW;                  /* Clear redraw flag */
-    
+
     /* Copy from currently active layer to drawing layer only changes on layer */
-    GUI.ll.Copy(&GUI.lcd, drawing, 
-        (void *)(((uint8_t *)active->start_address) + GUI.lcd.pixel_size * (dispA->y1 * active->width + dispA->x1)), /* Source address */
-        (void *)(((uint8_t *)drawing->start_address) + GUI.lcd.pixel_size * (dispA->y1 * drawing->width + dispA->x1)),   /* Destination address */
-        dispA->x2 - dispA->x1,                      /* Area width */
-        dispA->y2 - dispA->y1,                      /* Area height */
-        active->width - (dispA->x2 - dispA->x1),    /* Offline source */
-        drawing->width - (dispA->x2 - dispA->x1)    /* Offline destination */
-    );
+    if (dispA->x1 < GUI.lcd.width && dispA->x2 >= 0 && dispA->y1 < GUI.lcd.height && dispA->y2 >= 0) {
+        GUI.ll.Copy(&GUI.lcd, drawing, 
+            (void *)(((uint8_t *)drawing->start_address) + GUI.lcd.pixel_size * (dispA->y1 * drawing->width + dispA->x1)),   /* Destination address */
+            (void *)(((uint8_t *)active->start_address) + GUI.lcd.pixel_size * (dispA->y1 * active->width + dispA->x1)), /* Source address */
+            dispA->x2 - dispA->x1,                  /* Area width */
+            dispA->y2 - dispA->y1,                  /* Area height */
+            drawing->width - (dispA->x2 - dispA->x1),   /* Offline destination */
+            active->width - (dispA->x2 - dispA->x1) /* Offline source */
+        );
+    }
     
     redraw_widgets(NULL);                           /* Redraw all widgets now on drawing layer */
     drawing->pending = 1;                           /* Set drawing layer as pending */
@@ -785,7 +789,7 @@ gui_thread(void * const argument) {
 guir_t
 gui_init(void) {
     uint8_t result;
-    
+
     memset((void *)&GUI, 0x00, sizeof(GUI));        /* Reset GUI structure */
     
     gui_seteventcallback(NULL);                     /* Set event callback */

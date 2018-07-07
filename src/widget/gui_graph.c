@@ -168,7 +168,7 @@ gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
                 float step;
                 step = (float)(height - bt - bb) / (float)g->rows;
                 for (i = 1; i < g->rows; i++) {
-                    gui_draw_hline(disp, x + bl, y + bt + i * step, width - bl - br, guii_widget_getcolor(h, GUI_GRAPH_COLOR_GRID));
+                    gui_draw_hline(disp, GUI_DIM(x + bl), GUI_DIM(y + bt + i * step), GUI_DIM(width - bl - br), guii_widget_getcolor(h, GUI_GRAPH_COLOR_GRID));
                 }
             }
             /* Draw vertical lines */
@@ -176,7 +176,7 @@ gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
                 float step;
                 step = (float)(width - bl - br) / (float)g->columns;
                 for (i = 1; i < g->columns; i++) {
-                    gui_draw_vline(disp, x + bl + i * step, y + bt, height - bt - bb, guii_widget_getcolor(h, GUI_GRAPH_COLOR_GRID));
+                    gui_draw_vline(disp, GUI_DIM(x + bl + i * step), GUI_DIM(y + bt), GUI_DIM(height - bt - bb), guii_widget_getcolor(h, GUI_GRAPH_COLOR_GRID));
                 }
             }
             
@@ -252,7 +252,7 @@ gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
                         while (read != write) {     /* Calculate next points */
                             x2 = xLeft + ((float)(data->data[2 * read + 0] - g->visible_min_x) * xStep);
                             y2 = yBottom - ((float)(data->data[2 * read + 1] - g->visible_min_y) * yStep);
-                            gui_draw_line(disp, x1, y1, x2, y2, data->color);   /* Draw actual line */
+                            gui_draw_line(disp, GUI_DIM(x1), GUI_DIM(y1), GUI_DIM(x2), GUI_DIM(y2), data->color);   /* Draw actual line */
                             x1 = x2, y1 = y2;       /* Check overflow */
                             
                             if (++read == data->length) {   /* Check overflow */
@@ -296,7 +296,7 @@ gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
                 g->visible_min_y += diff;
                 g->visible_max_y += diff;
 #if GUI_CFG_TOUCH_MAX_PRESSES > 1
-            } else if (ts->ts.count == 2) {         /* Scale widget on multiple widgets */
+            } else if (ts->ts.count == 2) {         /* Scale widget on multiple touches */
                 float centerX, centerY, zoom;
                 
                 gui_math_centerofxy(ts->x_rel[0], ts->y_rel[0], ts->x_rel[1], ts->y_rel[1], &centerX, &centerY);    /* Calculate center position between points */

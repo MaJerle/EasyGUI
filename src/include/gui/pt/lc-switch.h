@@ -60,6 +60,10 @@
 /* WARNING! lc implementation using switch() does not work if an
    LC_SET() is done within another switch() statement! */
 
+
+#define         MY_CAT(x, y)        MY_CAT2(x, y)
+#define         MY_CAT2(x, y)       x##y
+
 /** \hideinitializer */
 typedef unsigned short lc_t;
 
@@ -67,7 +71,7 @@ typedef unsigned short lc_t;
 
 #define LC_RESUME(s) switch(s) { case 0:
 
-#define LC_SET(s) s = __LINE__; case __LINE__:
+#define LC_SET(s) s = (unsigned short)MY_CAT(__LINE__, U); case (unsigned short)MY_CAT(__LINE__, U):
 
 #define LC_END(s) }
 

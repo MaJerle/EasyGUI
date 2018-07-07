@@ -70,7 +70,7 @@ uint8_t LCD_Ready(gui_lcd_t* LCD) {
 static
 gui_color_t LCD_GetPixel(gui_lcd_t* LCD, gui_layer_t* layer, gui_dim_t x, gui_dim_t y) {
 #if defined(LCD_COLOR_FORMAT_ARGB8888)
-    return *(gui_color_t *)(layer->start_address + GUI.lcd.pixel_size * (layer->width * y + x));
+    return *(gui_color_t *)((uint32_t)layer->start_address + GUI.lcd.pixel_size * (layer->width * y + x));
 #else
     gui_color_t color;
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait till end */
@@ -116,7 +116,7 @@ void LCD_Fill(gui_lcd_t* LCD, gui_layer_t* layer, void* dst, gui_dim_t xSize, gu
 }
 
 static
-void LCD_Copy(gui_lcd_t* LCD, gui_layer_t* layer, const void* src, void* dst, gui_dim_t xSize, gui_dim_t ySize, gui_dim_t offLineSrc, gui_dim_t offLineDst) {
+void LCD_Copy(gui_lcd_t* LCD, gui_layer_t* layer, void* dst, const void* src, gui_dim_t xSize, gui_dim_t ySize, gui_dim_t offLineDst, gui_dim_t offLineSrc) {
     uint32_t PixelFormat = GetPixelFormat(layer);
     
     if (!xSize || !ySize) {
@@ -139,7 +139,7 @@ void LCD_Copy(gui_lcd_t* LCD, gui_layer_t* layer, const void* src, void* dst, gu
 
 /* Copy layers with blending with alpha combine */
 static
-void LCD_CopyBlending(gui_lcd_t* LCD, gui_layer_t* layer, const void* src, void* dst, uint8_t alphaSrc, uint8_t alphaDst, gui_dim_t xSize, gui_dim_t ySize, gui_dim_t offLineSrc, gui_dim_t offLineDst) {
+void LCD_CopyBlending(gui_lcd_t* LCD, gui_layer_t* layer, void* dst, const void* src, uint8_t alphaSrc, uint8_t alphaDst, gui_dim_t xSize, gui_dim_t ySize, gui_dim_t offLineDst, gui_dim_t offLineSrc) {
     uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait finished */
     DMA2D->FGMAR = (uint32_t)src;
@@ -161,7 +161,7 @@ void LCD_CopyBlending(gui_lcd_t* LCD, gui_layer_t* layer, const void* src, void*
 }
 
 static
-void LCD_DrawImage16(gui_lcd_t* LCD, gui_layer_t* layer, const gui_image_desc_t* img, const void* src, void* dst, gui_dim_t xSize, gui_dim_t ySize, gui_dim_t offLineSrc, gui_dim_t offLineDst) {
+void LCD_DrawImage16(gui_lcd_t* LCD, gui_layer_t* layer, const gui_image_desc_t* img, void* dst, const void* src, gui_dim_t xSize, gui_dim_t ySize, gui_dim_t offLineDst, gui_dim_t offLineSrc) {
     uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
     if (!xSize || !ySize) {
         return;
@@ -187,7 +187,7 @@ void LCD_DrawImage16(gui_lcd_t* LCD, gui_layer_t* layer, const gui_image_desc_t*
 }
 
 static
-void LCD_DrawImage24(gui_lcd_t* LCD, gui_layer_t* layer, const gui_image_desc_t* img, const void* src, void* dst, gui_dim_t xSize, gui_dim_t ySize, gui_dim_t offLineSrc, gui_dim_t offLineDst) {
+void LCD_DrawImage24(gui_lcd_t* LCD, gui_layer_t* layer, const gui_image_desc_t* img, void* dst, const void* src, gui_dim_t xSize, gui_dim_t ySize, gui_dim_t offLineDst, gui_dim_t offLineSrc) {
     uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait finished */
     DMA2D->FGMAR = (uint32_t)src;
@@ -210,7 +210,7 @@ void LCD_DrawImage24(gui_lcd_t* LCD, gui_layer_t* layer, const gui_image_desc_t*
 }
 
 static
-void LCD_DrawImage32(gui_lcd_t* LCD, gui_layer_t* layer, const gui_image_desc_t* img, const void* src, void* dst, gui_dim_t xSize, gui_dim_t ySize, gui_dim_t offLineSrc, gui_dim_t offLineDst) {
+void LCD_DrawImage32(gui_lcd_t* LCD, gui_layer_t* layer, const gui_image_desc_t* img, void* dst, const void* src, gui_dim_t xSize, gui_dim_t ySize, gui_dim_t offLineDst, gui_dim_t offLineSrc) {
     uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
     while (DMA2D->CR & DMA2D_CR_START);             /* Wait finished */
     DMA2D->FGMAR = (uint32_t)src;
@@ -233,7 +233,7 @@ void LCD_DrawImage32(gui_lcd_t* LCD, gui_layer_t* layer, const gui_image_desc_t*
 }
 
 static
-void LCD_CopyChar(gui_lcd_t* LCD, gui_layer_t* layer, const void* src, void* dst, gui_dim_t xSize, gui_dim_t ySize, gui_dim_t offLineSrc, gui_dim_t offLineDst, gui_color_t color) {
+void LCD_CopyChar(gui_lcd_t* LCD, gui_layer_t* layer, void* dst, const void* src, gui_dim_t xSize, gui_dim_t ySize, gui_dim_t offLineDst, gui_dim_t offLineSrc, gui_color_t color) {
     uint32_t PixelFormat = GetPixelFormat(layer);   /* Get pixel format of specific layer */
     
     if (!xSize || !ySize) {
@@ -257,21 +257,21 @@ void LCD_CopyChar(gui_lcd_t* LCD, gui_layer_t* layer, const void* src, void* dst
 
 static
 void LCD_DrawHLine(gui_lcd_t* LCD, gui_layer_t* layer, gui_dim_t x, gui_dim_t y, gui_dim_t length, gui_color_t color) {
-    uint32_t addr = layer->start_address + (LCD->pixel_size * (layer->width * y + x));
+    uint32_t addr = (uint32_t)layer->start_address + (LCD->pixel_size * (layer->width * y + x));
     
     LCD_Fill(LCD, layer, (void *)addr, length, 1, layer->width - length, color);
 }
 
 static
 void LCD_DrawVLine(gui_lcd_t* LCD, gui_layer_t* layer, gui_dim_t x, gui_dim_t y, gui_dim_t length, gui_color_t color) {
-    uint32_t addr = layer->start_address + (LCD->pixel_size * (layer->width * y + x));
+    uint32_t addr = (uint32_t)layer->start_address + (LCD->pixel_size * (layer->width * y + x));
     
     LCD_Fill(LCD, layer, (void *)addr, 1, length, layer->width - 1, color);
 }
 
 static
 void LCD_FillRect(gui_lcd_t* LCD, gui_layer_t* layer, gui_dim_t x, gui_dim_t y, gui_dim_t xSize, gui_dim_t ySize, gui_color_t color) {
-    uint32_t addr = layer->start_address + (LCD->pixel_size * (layer->width * y + x));
+    uint32_t addr = (uint32_t)layer->start_address + (LCD->pixel_size * (layer->width * y + x));
     
     LCD_Fill(LCD, layer, (void *)addr, xSize, ySize, layer->width - xSize, color);
 }
@@ -332,7 +332,7 @@ uint8_t gui_ll_control(gui_lcd_t* LCD, GUI_LL_Command_t cmd, void* param, void* 
             LCD->layers = Layers;
             for (i = 0; i < GUI_LAYERS; i++) {  /* Set each layer */
                 Layers[i].num = i;
-                Layers[i].start_address = LCD_FRAME_BUFFER + (i * LCD_FRAME_BUFFER_SIZE);
+                Layers[i].start_address = (void *)(LCD_FRAME_BUFFER + (i * LCD_FRAME_BUFFER_SIZE));
             }
             
             /*******************************/

@@ -129,6 +129,12 @@ extern gui_t GUI;
     )
 
 /**
+ * \brief           Check if first rectangle is fully inside second rectangle
+ * \hideinitializer
+ */
+#define __GUI_RECT_IS_INSIDE(h1x1, h1y1, h1x2, h1y2, h2x1, h2y1, h2x2, h2y2)    (((h1x1) >= (h2x1)) && ((h1x2) <= (h2x2)) && ((h1y1) >= (h2y1)) && ((h1y2) <= (h2y2)))
+
+/**
  * \brief           GUI Handle object from main object
  * \retval          Pointer to GUI handle
  * \hideinitializer

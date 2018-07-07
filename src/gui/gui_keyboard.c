@@ -461,7 +461,7 @@ keyboard_timer_callback(gui_timer_t* timer) {
     if (keyboard.action == ACTION_HIDE) {       /* We should hide the keyboard */
         if (keyboard.action_value < 10) {
             keyboard.action_value++;
-            guii_widget_setpositionpercent(keyboard.handle, 0, 50 + keyboard.action_value * 5);
+            guii_widget_setpositionpercent(keyboard.handle, GUI_FLOAT(0), GUI_FLOAT(50 + keyboard.action_value * 5));
         } else {
             guii_widget_hide(keyboard.handle);  /* Hide keyboard */
             guii_timer_stop(timer);             /* Stop timer */
@@ -472,7 +472,7 @@ keyboard_timer_callback(gui_timer_t* timer) {
                 guii_widget_show(keyboard.handle);  /* First set keyboard as visible */
             }
             keyboard.action_value--;            /* Decrease value */
-            guii_widget_setpositionpercent(keyboard.handle, 0, 50 + keyboard.action_value * 5);
+            guii_widget_setpositionpercent(keyboard.handle, GUI_FLOAT(0), GUI_FLOAT(50 + keyboard.action_value * 5));
         }
         if (keyboard.action_value == 0) {
             guii_timer_stop(timer);             /* Stop timer */
@@ -538,7 +538,7 @@ keyboard_base_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, 
                         handle = gui_button_create(0, 0, 0, 1, 1, handleLayout, keyboard_btn_callback, 0);    /* Create button object */
                         guii_widget_setuserdata(handle, (void *)btn);  /* Set pointer to button */
                         guii_widget_setsizepercent(handle, btn->w, 23);    /* Set button percent */
-                        guii_widget_setpositionpercent(handle, btn->x, 1 + 25 * k);
+                        guii_widget_setpositionpercent(handle, btn->x, GUI_DIM(1 + 25 * k));
                         guii_widget_set3dstyle(handle, 0); /* Make buttons flat */
                     }
                 }

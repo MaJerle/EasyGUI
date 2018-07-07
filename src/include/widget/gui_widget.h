@@ -733,7 +733,7 @@ uint8_t gui_widget_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* p
 void guii_widget_init(void);
 
 //Clipping regions
-uint8_t guii_widget_isinsideclippingregion(gui_handle_p h);
+uint8_t guii_widget_isinsideclippingregion(gui_handle_p h, uint8_t check_sib_cover);
 
 //Move widget down and all its parents with it
 void guii_widget_movedowntree(gui_handle_p h);

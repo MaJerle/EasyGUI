@@ -458,7 +458,7 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_font
             tmpx = x;                               /* Start X */
             
             ptr += sizeof(*entry);                  /* Go to start of data array */
-            dst = (uint8_t *)(GUI.lcd.drawing_layer->start_address + ((y - GUI.lcd.drawing_layer->y_offset) * GUI.lcd.drawing_layer->width + (x - GUI.lcd.drawing_layer->x_offset)) * GUI.lcd.pixel_size);
+            dst = (uint8_t *)(((uint8_t *)GUI.lcd.drawing_layer->start_address) + ((y - GUI.lcd.drawing_layer->y_offset) * GUI.lcd.drawing_layer->width + (x - GUI.lcd.drawing_layer->x_offset)) * GUI.lcd.pixel_size);
             
             width = c->x_size;                      /* Get X size */
             height = c->y_size;                     /* Get Y size */
@@ -484,26 +484,26 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_font
             offlineSrc = c->x_size - width;         /* Set offline source */
             offlineDst = GUI.lcd.drawing_layer->width - width;   /* Set offline destination */
             
-            /**
+            /*
              * Check if character must be drawn with 2 colors, on the middle of color switch
              */
             if (tmpx < (draw->x + draw->color1width) && (tmpx + width) > (draw->x + draw->color1width)) {
                 gui_dim_t firstWidth = (draw->x + draw->color1width) - tmpx;
                 
                 /* First part draw */
-                GUI.ll.CopyChar(&GUI.lcd, GUI.lcd.drawing_layer, ptr, dst, 
+                GUI.ll.CopyChar(&GUI.lcd, GUI.lcd.drawing_layer, dst, ptr, 
                     firstWidth, height,
-                    offlineSrc + width - firstWidth, offlineDst + width - firstWidth, draw->color1);
+                    offlineDst + width - firstWidth, offlineSrc + width - firstWidth, draw->color1);
                 
                 /* Second part draw */
-                GUI.ll.CopyChar(&GUI.lcd, GUI.lcd.drawing_layer, ptr + firstWidth, dst + firstWidth * GUI.lcd.pixel_size, 
+                GUI.ll.CopyChar(&GUI.lcd, GUI.lcd.drawing_layer, dst + firstWidth * GUI.lcd.pixel_size, ptr + firstWidth, 
                     width - firstWidth, height,
-                    offlineSrc + firstWidth, offlineDst + firstWidth, draw->Color2);
+                    offlineDst + firstWidth, offlineSrc + firstWidth, draw->Color2);
             } else {
                 /* Draw entire character with single color */
-                GUI.ll.CopyChar(&GUI.lcd, GUI.lcd.drawing_layer, ptr, dst, 
+                GUI.ll.CopyChar(&GUI.lcd, GUI.lcd.drawing_layer, dst, ptr, 
                     width, height,
-                    offlineSrc, offlineDst, (draw->x + draw->color1width) > x ? draw->color1 : draw->Color2);
+                    offlineDst, offlineSrc, (draw->x + draw->color1width) > x ? draw->color1 : draw->Color2);
             }
             return;
         }
@@ -1237,7 +1237,7 @@ gui_draw_image(gui_display_t* disp, gui_dim_t x, gui_dim_t y, const gui_image_de
     height = img->y_size;                           /* Set default height */
     
     src = (uint8_t *)(img->image);                  /* Set source address */
-    dst = (uint8_t *)(layer->start_address + GUI.lcd.pixel_size * ((y - layer->y_offset) * layer->width + (x - layer->x_offset)));
+    dst = (uint8_t *)(((uint8_t *)layer->start_address) + GUI.lcd.pixel_size * ((y - layer->y_offset) * layer->width + (x - layer->x_offset)));
     
     //TODO: Check proper coordinates for memory!
     if (y < disp->y1) {
@@ -1264,16 +1264,16 @@ gui_draw_image(gui_display_t* disp, gui_dim_t x, gui_dim_t y, const gui_image_de
     /*    Draw image   */
     /*******************/
     if (bytes == 4) {                               /* Draw 32BPP image */
-        if (GUI.ll.DrawImage32) {                   /* Draw image 32BPP if possible */
-            GUI.ll.DrawImage32(&GUI.lcd, GUI.lcd.drawing_layer, img, (uint8_t *)src, (uint8_t *)dst, width, height, offlineSrc, offlineDst);
+        if (GUI.ll.DrawImage32 != NULL) {           /* Draw image 32BPP if possible */
+            GUI.ll.DrawImage32(&GUI.lcd, GUI.lcd.drawing_layer, img, (uint8_t *)dst, (const uint8_t *)src, width, height, offlineDst, offlineSrc);
         }
     } else if (bytes == 3) {                        /* Draw 24BPP image */
-        if (GUI.ll.DrawImage24) {                   /* Draw image 24BPP if possible */
-            GUI.ll.DrawImage24(&GUI.lcd, GUI.lcd.drawing_layer, img, (uint8_t *)src, (uint8_t *)dst, width, height, offlineSrc, offlineDst);
+        if (GUI.ll.DrawImage24 != NULL) {           /* Draw image 24BPP if possible */
+            GUI.ll.DrawImage24(&GUI.lcd, GUI.lcd.drawing_layer, img, (uint8_t *)dst, (const uint8_t *)src, width, height, offlineDst, offlineSrc);
         }
     } else if (bytes == 2) {                        /* Draw 16BPP image */
-        if (GUI.ll.DrawImage16) {                   /* Draw image 16BPP if possible */
-            GUI.ll.DrawImage16(&GUI.lcd, GUI.lcd.drawing_layer, img, (uint8_t *)src, (uint8_t *)dst, width, height, offlineSrc, offlineDst);
+        if (GUI.ll.DrawImage16 != NULL) {           /* Draw image 16BPP if possible */
+            GUI.ll.DrawImage16(&GUI.lcd, GUI.lcd.drawing_layer, img, (uint8_t *)dst, (const uint8_t *)src, width, height, offlineDst, offlineSrc);
         }
     }
 }

@@ -71,9 +71,10 @@ extern "C" {
 #define GUI_FLAG_EXPANDED                   ((uint32_t)0x00001000)  /*!< Indicates children widget is set to (temporary) XY = 0,0 and width/height = parent width / parent height (maximize windows function) */
 #define GUI_FLAG_REMOVE                     ((uint32_t)0x00002000)  /*!< Indicates widget should be deleted */
 #define GUI_FLAG_IGNORE_INVALIDATE          ((uint32_t)0x00004000)  /*!< Indicates widget invalidation is ignored completely when invalidating it directly */
-#define GUI_FLAG_TOUCH_MOVE                 ((uint32_t)0x00008000)  /*!< Indicates widget callback has processed touch move event. This parameter works in conjunction with \ref GUI_FLAG_ACTIVE flag */
-#define GUI_FLAG_XPOS_PERCENT               ((uint32_t)0x00010000)  /*!< Indicates widget X position is in percent relative to parent width */
-#define GUI_FLAG_YPOS_PERCENT               ((uint32_t)0x00020000)  /*!< Indicates widget Y position is in percent relative to parent height */
+#define GUI_FLAG_FIRST_INVALIDATE           ((uint32_t)0x00008000)  /*!< Indicates widget is invalidated for "first" time, thus ignore check if parent is hidden or not */
+#define GUI_FLAG_TOUCH_MOVE                 ((uint32_t)0x00010000)  /*!< Indicates widget callback has processed touch move event. This parameter works in conjunction with \ref GUI_FLAG_ACTIVE flag */
+#define GUI_FLAG_XPOS_PERCENT               ((uint32_t)0x00020000)  /*!< Indicates widget X position is in percent relative to parent width */
+#define GUI_FLAG_YPOS_PERCENT               ((uint32_t)0x00040000)  /*!< Indicates widget Y position is in percent relative to parent height */
 
 /**
  * \defgroup        GUI_WIDGETS_CORE_FLAGS Widget type flags
@@ -305,7 +306,7 @@ typedef struct {
  */
 typedef struct {
     uint8_t num;                            /*!< Layer number */
-    uint32_t start_address;                 /*!< Start address in memory if it exists */
+    void* start_address;                    /*!< Start address in memory if it exists */
     volatile uint8_t pending;               /*!< Layer pending for redrawing operation */
     gui_display_t display;                  /*!< Display setup for clipping regions for main layers (no virtual) */
     
@@ -370,15 +371,15 @@ typedef struct gui_ll_t {
     void            (*SetPixel)     (gui_lcd_t *, gui_layer_t *, gui_dim_t, gui_dim_t, gui_color_t);                    /*!< Pointer to LCD set pixel function */
     gui_color_t     (*GetPixel)     (gui_lcd_t *, gui_layer_t *, gui_dim_t, gui_dim_t);                                 /*!< Pointer to read pixel from LCD */
     void            (*Fill)         (gui_lcd_t *, gui_layer_t *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_color_t); /*!< Pointer to LCD fill screen or rectangle function */
-    void            (*Copy)         (gui_lcd_t *, gui_layer_t *, const void *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to LCD copy data from source to destination */
-    void            (*CopyBlend)    (gui_lcd_t *, gui_layer_t *, const void *, void *, uint8_t, uint8_t, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to function to copy layers together (blending) with support to set overall layer transparency */
+    void            (*Copy)         (gui_lcd_t *, gui_layer_t *, void *, const void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to LCD copy data from source to destination */
+    void            (*CopyBlend)    (gui_lcd_t *, gui_layer_t *, void *, const void *, uint8_t, uint8_t, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to function to copy layers together (blending) with support to set overall layer transparency */
     void            (*DrawHLine)    (gui_lcd_t *, gui_layer_t *, gui_dim_t, gui_dim_t, gui_dim_t, gui_color_t);         /*!< Pointer to horizontal line drawing. Set to 0 if you do not have optimized version */
     void            (*DrawVLine)    (gui_lcd_t *, gui_layer_t *, gui_dim_t, gui_dim_t, gui_dim_t, gui_color_t);         /*!< Pointer to vertical line drawing. Set to 0 if you do not have optimized version */
     void            (*FillRect)     (gui_lcd_t *, gui_layer_t *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t, gui_color_t);  /*!< Pointer to function for filling rectangle on LCD */
-    void            (*DrawImage16)  (gui_lcd_t *, gui_layer_t *, const gui_image_desc_t *, const void *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to function for drawing 16BPP (RGB565) images */
-    void            (*DrawImage24)  (gui_lcd_t *, gui_layer_t *, const gui_image_desc_t *, const void *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to function for drawing 24BPP (RGB888) images */
-    void            (*DrawImage32)  (gui_lcd_t *, gui_layer_t *, const gui_image_desc_t *, const void *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to function for drawing 32BPP (ARGB8888) images */
-    void            (*CopyChar)     (gui_lcd_t *, gui_layer_t *, const void *, void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t, gui_color_t);                /*!< Pointer to copy char function with alpha only as source */
+    void            (*DrawImage16)  (gui_lcd_t *, gui_layer_t *, const gui_image_desc_t *, void *, const void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to function for drawing 16BPP (RGB565) images */
+    void            (*DrawImage24)  (gui_lcd_t *, gui_layer_t *, const gui_image_desc_t *, void *, const void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to function for drawing 24BPP (RGB888) images */
+    void            (*DrawImage32)  (gui_lcd_t *, gui_layer_t *, const gui_image_desc_t *, void *, const void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t);   /*!< Pointer to function for drawing 32BPP (ARGB8888) images */
+    void            (*CopyChar)     (gui_lcd_t *, gui_layer_t *, void *, const void *, gui_dim_t, gui_dim_t, gui_dim_t, gui_dim_t, gui_color_t);                /*!< Pointer to copy char function with alpha only as source */
 } gui_ll_t;
 
 /**

@@ -31,6 +31,7 @@
 #define GUI_INTERNAL
 #include "gui/gui_private.h"
 #include "gui/gui_linkedlist.h"
+#include "widget/gui_widget.h"
 
 /**
  * \brief           Print linked list from root element
@@ -49,12 +50,15 @@ print_list(gui_handle_p root) {
         list = &GUI.root;
     }
     for (h = list->first; h != NULL; h = h->list.next) {
-        GUI_DEBUG("%*d: W: %s; A: 0x%p, R: %lu; D: %lu\r\n",
-            depth, depth,
+        GUI_DEBUG("%*d: W: %s; A: 0x%p, Hidden: %lu; Redraw: %lu; Remove: %lu; ABS_X: %d; ABS_Y: %d; ABS_W: %d; ABS_H: %d\r\n",
+            2 * depth, depth,
             (const char *)h->widget->name,
             h,
+            (unsigned long)!!(h->flags & GUI_FLAG_HIDDEN),
             (unsigned long)!!(h->flags & GUI_FLAG_REDRAW),
-            (unsigned long)!!(h->flags & GUI_FLAG_REMOVE)
+            (unsigned long)!!(h->flags & GUI_FLAG_REMOVE),
+            (int)h->abs_x, (int)h->abs_y,
+            (int)h->abs_width, (int)h->abs_height
         );
         if (guii_widget_allowchildren(h)) {
             print_list(h);
@@ -642,7 +646,7 @@ gui_linkedlist_widgetmovetobottom(gui_handle_p h) {
  */
 uint8_t
 gui_linkedlist_widgetmovetotop(gui_handle_p h) {
-    uint32_t cnt;
+    uint32_t cnt = 0;
     if (h->list.prev == NULL) {
         return 0;
     }
