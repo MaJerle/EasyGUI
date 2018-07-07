@@ -44,19 +44,38 @@ gui_t GUI;
  */
 static void
 check_disp_clipping(gui_handle_p h) {
-    gui_dim_t x, y;
-    gui_dim_t wi, hi;
+#if !GUI_CFG_USE_POS_SIZE_CACHE
+    gui_dim_t x, y, wi, hi;
+#endif /* !GUI_CFG_USE_POS_SIZE_CACHE */
     
+    /* Copy current setup */
+    memcpy(&GUI.DisplayTemp, &GUI.Display, sizeof(GUI.DisplayTemp));
+    
+#if GUI_CFG_USE_POS_SIZE_CACHE
+    if (GUI.DisplayTemp.x1 == (gui_dim_t)0x7FFF || GUI.DisplayTemp.x1 < h->abs_visible_x1) {
+        GUI.DisplayTemp.x1 = h->abs_visible_x1;
+    }
+    if (GUI.DisplayTemp.y1 == (gui_dim_t)0x7FFF || GUI.DisplayTemp.y1 < h->abs_visible_y1) {
+        GUI.DisplayTemp.y1 = h->abs_visible_y1;
+    }
+    if (GUI.DisplayTemp.x2 == (gui_dim_t)0x8000 || GUI.DisplayTemp.x2 > h->abs_visible_x2) {
+        GUI.DisplayTemp.x2 = h->abs_visible_x2;
+    }
+    if (GUI.DisplayTemp.y2 == (gui_dim_t)0x8000 || GUI.DisplayTemp.y2 > h->abs_visible_y2) {
+        GUI.DisplayTemp.y2 = h->abs_visible_y2;
+    }
+#else /* GUI_CFG_USE_POS_SIZE_CACHE */
+
     /* Set widget itself first */
     x = guii_widget_getabsolutex(h);
     y = guii_widget_getabsolutey(h);
     wi = guii_widget_getwidth(h);
-    hi = guii_widget_getheight(h);
+    hi = guii_widget_getheight(h);container
+    
     
     /*
      * Step 1: Set active clipping area only for current widget
      */
-    memcpy(&GUI.DisplayTemp, &GUI.Display, sizeof(GUI.DisplayTemp));
     if (GUI.DisplayTemp.x1 == (gui_dim_t)0x7FFF)   { GUI.DisplayTemp.x1 = x; }
     if (GUI.DisplayTemp.y1 == (gui_dim_t)0x7FFF)   { GUI.DisplayTemp.y1 = y; }
     if (GUI.DisplayTemp.x2 == (gui_dim_t)0x8000)   { GUI.DisplayTemp.x2 = GUI.lcd.width; }
@@ -84,6 +103,7 @@ check_disp_clipping(gui_handle_p h) {
         if (GUI.DisplayTemp.y1 < y)         { GUI.DisplayTemp.y1 = y; }
         if (GUI.DisplayTemp.y2 > y + hi)    { GUI.DisplayTemp.y2 = y + hi; }
     }
+#endif /* !GUI_CFG_USE_POS_SIZE_CACHE */
 }
 
 /**
@@ -98,13 +118,12 @@ redraw_widgets(gui_handle_p parent) {
     static uint32_t level = 0;
 
     /* Go through all elements of parent */
-    for (h = gui_linkedlist_widgetgetnext(parent, NULL); h != NULL; 
-            h = gui_linkedlist_widgetgetnext(NULL, h)) {
+    GUI_LINKEDLIST_WIDGETSLISTNEXT(parent, h) {
         if (!guii_widget_isvisible(h)) {            /* Check if visible */
-            guii_widget_clrflag(h, GUI_FLAG_REDRAW);   /* Clear flag to be sure */
+            guii_widget_clrflag(h, GUI_FLAG_REDRAW);/* Clear flag to be sure */
             continue;                               /* Ignore hidden elements */
         }
-        if (guii_widget_isinsideclippingregion(h)) { /* If widget is inside clipping region */
+        if (guii_widget_isinsideclippingregion(h, 1)) { /* If widget is inside clipping region and not fully covered by any of its siblings */
             /* Draw main widget if required */
             if (guii_widget_getflag(h, GUI_FLAG_REDRAW)) {  /* Check if redraw required */
 #if GUI_CFG_USE_TRANSPARENCY
@@ -114,22 +133,18 @@ redraw_widgets(gui_handle_p parent) {
                 
                 guii_widget_clrflag(h, GUI_FLAG_REDRAW);    /* Clear flag for drawing on widget */
                 
-                /*
-                 * Prepare clipping region for this widget drawing
-                 */
+                /* Prepare clipping region for this widget drawing */
                 check_disp_clipping(h);             /* Check coordinates for drawings only particular widget */
 
 #if GUI_CFG_USE_TRANSPARENCY
                 /*
                  * Check transparency and check if blending function exists to merge layers later together
                  */
-                if (guii_widget_istransparent(h) && GUI.ll.CopyBlend) {
+                if (guii_widget_istransparent(h) && GUI.ll.CopyBlend != NULL) {
                     gui_dim_t width = GUI.DisplayTemp.x2 - GUI.DisplayTemp.x1;
                     gui_dim_t height = GUI.DisplayTemp.y2 - GUI.DisplayTemp.y1;
                     
-                    /*
-                     * Try to allocate memory for new virtual layer for temporary usage
-                     */
+                    /* Try to allocate memory for new virtual layer for temporary usage */
                     GUI.lcd.drawing_layer = GUI_MEMALLOC(sizeof(*GUI.lcd.drawing_layer) + (size_t)width * (size_t)height * (size_t)GUI.lcd.pixel_size);
                     
                     if (GUI.lcd.drawing_layer != NULL) {/* Check if allocation was successful */
@@ -137,7 +152,7 @@ redraw_widgets(gui_handle_p parent) {
                         GUI.lcd.drawing_layer->height = height;
                         GUI.lcd.drawing_layer->x_offset = GUI.DisplayTemp.x1;
                         GUI.lcd.drawing_layer->y_offset = GUI.DisplayTemp.y1;
-                        GUI.lcd.drawing_layer->start_address = (uint32_t)((char *)GUI.lcd.drawing_layer) + sizeof(*GUI.lcd.drawing_layer);
+                        GUI.lcd.drawing_layer->start_address = ((uint8_t *)GUI.lcd.drawing_layer) + sizeof(*GUI.lcd.drawing_layer);
                         transparent = 1;            /* We are going to transparent drawing mode */
                     } else {
                         GUI.lcd.drawing_layer = layerPrev;  /* Reset layer back */
@@ -145,9 +160,7 @@ redraw_widgets(gui_handle_p parent) {
                 }
 #endif /* GUI_CFG_USE_TRANSPARENCY */
                 
-                /*
-                 * Draw widget itself normally, don't care on layer offset and size
-                 */
+                /* Draw widget itself normally, don't care on layer offset and size */
                 GUI_WIDGET_PARAMTYPE_DISP(&GUI.WidgetParam) = &GUI.DisplayTemp;  /* Set parameter */
                 guii_widget_callback(h, GUI_WC_Draw, &GUI.WidgetParam, &GUI.WidgetResult); /* Draw widget */
                 
@@ -156,8 +169,7 @@ redraw_widgets(gui_handle_p parent) {
                     gui_handle_p tmp;
                     
                     /* Set drawing flag to all widgets  first... */
-                    for (tmp = gui_linkedlist_widgetgetnext(h, NULL); tmp != NULL; 
-                            tmp = gui_linkedlist_widgetgetnext(NULL, tmp)) {
+                    GUI_LINKEDLIST_WIDGETSLISTNEXT(h, tmp) {
                         guii_widget_setflag(tmp, GUI_FLAG_REDRAW); /* Set redraw bit to all children elements */
                     }
                             
@@ -173,20 +185,42 @@ redraw_widgets(gui_handle_p parent) {
                  */
                 if (transparent) {                  /* If we were in transparent mode */
                     /* Copy layers with blending */
-                    GUI.ll.CopyBlend(&GUI.lcd, GUI.lcd.drawing_layer,
-                        (void *)GUI.lcd.drawing_layer->start_address, 
-                        (void *)(layerPrev->start_address + 
-                            GUI.lcd.pixel_size * (layerPrev->width * (GUI.lcd.drawing_layer->y_offset - layerPrev->y_offset) + (GUI.lcd.drawing_layer->x_offset - layerPrev->x_offset))),
-                        guii_widget_gettransparency(h), 0xFF,
-                        GUI.lcd.drawing_layer->width, GUI.lcd.drawing_layer->height,
-                        0, layerPrev->width - GUI.lcd.drawing_layer->width
-                    );
+                    if (GUI.ll.CopyBlend != NULL) { /* Hardware way */
+                        GUI.ll.CopyBlend(&GUI.lcd, GUI.lcd.drawing_layer,
+                            (void *)(((uint8_t *)layerPrev->start_address) +
+                                GUI.lcd.pixel_size * (layerPrev->width * (GUI.lcd.drawing_layer->y_offset - layerPrev->y_offset) + (GUI.lcd.drawing_layer->x_offset - layerPrev->x_offset))),
+                            (void *)GUI.lcd.drawing_layer->start_address,
+                            guii_widget_gettransparency(h), 0xFF,
+                            GUI.lcd.drawing_layer->width, GUI.lcd.drawing_layer->height,
+                            0, layerPrev->width - GUI.lcd.drawing_layer->width
+                        );
+                    } else {                        /* Software way, ugly and slow way */
+                        gui_dim_t x, y;
+                        gui_color_t fg, bg;
+                        uint8_t r, g, b;
+                        float a;
+
+                        a = GUI_FLOAT(guii_widget_gettransparency(h)) / GUI_FLOAT(0xFF);
+                        for (y = 0; y < GUI.lcd.drawing_layer->height; y++) {
+                            for (x = 0; x < GUI.lcd.drawing_layer->width; x++) {
+                                fg = GUI.ll.GetPixel(&GUI.lcd, GUI.lcd.drawing_layer, x, y);
+                                bg = GUI.ll.GetPixel(&GUI.lcd, layerPrev, GUI.lcd.drawing_layer->x_offset + x, GUI.lcd.drawing_layer->y_offset + y);
+
+                                r = GUI_U8(((fg >> 16) & 0xFF) * a + (1.0f - a) * ((bg >> 16) & 0xFF));
+                                g = GUI_U8(((fg >> 8) & 0xFF) * a + (1.0f - a) * ((bg >> 8) & 0xFF));
+                                b = GUI_U8(((fg >> 0) & 0xFF) * a + (1.0f - a) * ((bg >> 0) & 0xFF));
+                                
+                                GUI.ll.SetPixel(&GUI.lcd, layerPrev, GUI.lcd.drawing_layer->x_offset + x, GUI.lcd.drawing_layer->y_offset + y, 0xFF << 24 | r << 16 | g << 8 | b);
+                            }
+                        }                        
+                    }
                     
                     GUI_MEMFREE(GUI.lcd.drawing_layer); /* Free memory for virtual layer */
                     GUI.lcd.drawing_layer = layerPrev;  /* Reset layer pointer */
                 }
 #endif /* GUI_CFG_USE_TRANSPARENCY */
-                
+
+                cnt++;
             /*
              * Check if any widget from children should be redrawn
              */
@@ -194,6 +228,9 @@ redraw_widgets(gui_handle_p parent) {
                 cnt += redraw_widgets(h);           /* Redraw children widgets */
             }
         }
+    }
+    if (level == 0) {
+        printf("Number of widgets: %d\r\n", (int)cnt);
     }
     return cnt;                                     /* Return number of redrawn objects */
 }
@@ -394,8 +431,7 @@ process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
      * This is due to the fact that widget with most deep level,
      * is displayed on top of screen = should be detected first
      */
-    for (h = gui_linkedlist_widgetgetprev(parent, NULL); h != NULL; 
-            h = gui_linkedlist_widgetgetprev(NULL, h)) {
+    GUI_LINKEDLIST_WIDGETSLISTPREV(parent, h) {
         if (guii_widget_ishidden(h)) {             /* Ignore hidden widget */
             continue;
         }
@@ -539,7 +575,7 @@ gui_process_touch(void) {
              * Action: Touch move on active element
              */
             if (GUI.Touch.ts.status && GUI.TouchOld.ts.status) {
-                if (GUI.ActiveWidget) {             /* If active widget exists */
+                if (GUI.ActiveWidget != NULL) {     /* If active widget exists */
                     if (GUI.Touch.ts.count == GUI.TouchOld.ts.count) {
                         gui_handle_p aw = GUI.ActiveWidget; /* Temporary set active widget */
                         do {
@@ -585,7 +621,7 @@ gui_process_touch(void) {
                 }
             }
             
-            /**
+            /*
              * Old status: released
              * New status: pressed
              * Action: Touch down on element, find element
@@ -605,7 +641,7 @@ gui_process_touch(void) {
                 __ProcessAfterTouchEventsThread();  /* Process after event macro */
             }
             
-            /**
+            /*
              * Old status: pressed
              * New status: released
              * Action: Touch up on active element
@@ -690,8 +726,8 @@ process_redraw(void) {
     
     /* Copy from currently active layer to drawing layer only changes on layer */
     GUI.ll.Copy(&GUI.lcd, drawing, 
-        (void *)(active->start_address + GUI.lcd.pixel_size * (dispA->y1 * active->width + dispA->x1)), /* Source address */
-        (void *)(drawing->start_address + GUI.lcd.pixel_size * (dispA->y1 * drawing->width + dispA->x1)),   /* Destination address */
+        (void *)(((uint8_t *)active->start_address) + GUI.lcd.pixel_size * (dispA->y1 * active->width + dispA->x1)), /* Source address */
+        (void *)(((uint8_t *)drawing->start_address) + GUI.lcd.pixel_size * (dispA->y1 * drawing->width + dispA->x1)),   /* Destination address */
         dispA->x2 - dispA->x1,                      /* Area width */
         dispA->y2 - dispA->y1,                      /* Area height */
         active->width - (dispA->x2 - dispA->x1),    /* Offline source */

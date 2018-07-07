@@ -161,20 +161,20 @@ calculate_widget_absolute_y(gui_handle_p h) {
  */
 uint8_t
 calculate_widget_absolute_visible_position_size(gui_handle_p h, gui_dim_t* x1, gui_dim_t* y1, gui_dim_t* x2, gui_dim_t* y2) {
-    gui_dim_t x, y, wi, hi;
+    gui_dim_t x, y, wi, hi, cx, cy, cw, ch;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    x = guii_widget_getabsolutex(h);                /* Get absolute X position */
-    y = guii_widget_getabsolutey(h);                /* Get absolute Y position */
-    wi = guii_widget_getwidth(h);                   /* Get absolute width */
-    hi = guii_widget_getheight(h);                  /* Get absolute height */
+    cx = guii_widget_getabsolutex(h);               /* Get absolute X position */
+    cy = guii_widget_getabsolutey(h);               /* Get absolute Y position */
+    cw = guii_widget_getwidth(h);                   /* Get absolute width */
+    ch = guii_widget_getheight(h);                  /* Get absolute height */
     
     /* Set widget visible positions with X and Y coordinates */
-    *x1 = x;
-    *y1 = y;
-    *x2 = x + wi;
-    *y2 = y + hi;
+    *x1 = cx;
+    *y1 = cy;
+    *x2 = cx + cw;
+    *y2 = cy + ch;
     
     /* Check if widget is hidden by any parent or any parent is hidden by its parent */
     for (; h != NULL; h = guii_widget_getparent(h)) {
@@ -215,7 +215,7 @@ set_widget_abs_values(gui_handle_p h) {
         gui_handle_p child;
         
         /* Scan all children widgets */
-        GUI_LINKEDLIST_WIDGETSLISTNEXT(h, child) {
+        GUI_LINKEDLIST_WIDGETSLISTPREV(h, child) {
             set_widget_abs_values(child);   /* Process child widget */
         }
     }
@@ -296,9 +296,7 @@ remove_widgets(gui_handle_p parent) {
     gui_handle_p h, next;
     static uint32_t lvl = 0;
     
-    /*
-     * Scan all widgets in system
-     */
+    /* Scan all widgets in system */
     for (h = gui_linkedlist_widgetgetnext(parent, NULL); h != NULL; ) {        
         if (guii_widget_getflag(h, GUI_FLAG_REMOVE)) { /* Widget should be deleted */
             next = gui_linkedlist_widgetgetnext(NULL, h);   /* Get next widget of current */
@@ -708,19 +706,52 @@ can_remove_widget(gui_handle_p h) {
 /**
  * \brief           Check if visible part of widget is inside clipping region for redraw
  * \param[in]       h: Widget handle
+ * \param[in]       check_sib_cover: Set to `1` to check if any sibling is fully covering current widget
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-guii_widget_isinsideclippingregion(gui_handle_p h) {
+guii_widget_isinsideclippingregion(gui_handle_p h, uint8_t check_sib_cover) {
     gui_dim_t x1, y1, x2, y2;
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
     /* Get widget visible section */
     get_widget_abs_visible_position_size(h, &x1, &y1, &x2, &y2);
-    return __GUI_RECT_MATCH(
+    
+    /* Check if widget is inside drawing area */
+    if (!__GUI_RECT_MATCH(
         x1, y1, x2, y2,
         GUI.Display.x1, GUI.Display.y1, GUI.Display.x2, GUI.Display.y2
-    );
+    )) {
+        return 0;
+    }
+
+    /* 
+     * Seems like it is inside drawing area 
+     * Now check if this widget is fully hidden by any of its siblings.
+     * Check only widgets on linked list after current widget
+     */
+    if (check_sib_cover) {
+        gui_dim_t tx1, ty1, tx2, ty2;
+        gui_handle_p tmp;
+
+        /* Process all widgets after current one */
+        for (tmp = gui_linkedlist_widgetgetnext(NULL, h); tmp != NULL;
+            tmp = gui_linkedlist_widgetgetnext(NULL, tmp)) {
+            /* Get display information for new widget */
+            get_widget_abs_visible_position_size(tmp, &tx1, &ty1, &tx2, &ty2);
+
+            /* Check if widget is inside */
+            if (__GUI_RECT_IS_INSIDE(x1, y1, x2, y2, tx1, ty1, tx2, ty2)
+#if GUI_CFG_USE_TRANSPARENCY
+                && !guii_widget_istransparent(tmp)  /* Must not have transparency enabled */
+#endif
+                ) {
+                return 0;                           /* Widget fully covered by another! */
+            }
+        }
+    }
+
+    return 1;                                       /* We have to draw it */
 }
 
 /**
@@ -1855,6 +1886,7 @@ guii_widget_settransparency(gui_handle_p h, uint8_t trans) {
     
     if (h->transparency != trans) {                 /* Check transparency match */
         h->transparency = trans;                    /* Set new transparency level */
+        SET_WIDGET_ABS_VALUES(h);
         guii_widget_invalidate(h);                  /* Invalidate widget */
     }
     
