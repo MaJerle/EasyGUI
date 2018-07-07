@@ -19,6 +19,9 @@
     <Filter Include="GUI\SYSTEM">
       <UniqueIdentifier>{061928e2-99d3-42b7-bdb6-e4359fd017ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DEMO">
+      <UniqueIdentifier>{a47baea1-a658-4e23-8dd0-a057122b76af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\gui\gui.c">
@@ -143,6 +146,13 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\system\gui_ll_sdl_win32.c">
       <Filter>GUI\SYSTEM</Filter>
+    </ClCompile>
+    <ClCompile Include="main.c" />
+    <ClCompile Include="..\..\..\examples_demo\demo_init.c">
+      <Filter>DEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="demo\demo_window.c">
+      <Filter>DEMO</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -44,7 +44,7 @@ main(void) {
     osKernelStart();                            /* Start RTOS kernel */
     
 	while (1) {
- 
+
 	}
 }
 

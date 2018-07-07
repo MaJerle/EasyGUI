@@ -319,7 +319,7 @@ _LCD_Init(void) {
     /*******************************/
     /*******************************/
     /*******************************/
-    LCD_LayertInit(0, Layers[0].start_address);
+    LCD_LayertInit(0, (uint32_t)Layers[0].start_address);
   
     /*******************************/
     /*******************************/
@@ -365,7 +365,7 @@ void HAL_DSI_EndOfRefreshCallback(DSI_HandleTypeDef *hdsi) {
             HAL_DSI_ShortWrite(hdsi, 0, DSI_DCS_SHORT_PKT_WRITE_P1, OTM8009A_CMD_TEOFF, 0x00);
 
             __HAL_DSI_WRAPPER_DISABLE(hdsi);
-            LTDC_LAYER(&LTDCHandle, 0)->CFBAR = currentLayer->start_address + 400 * 4;
+            LTDC_LAYER(&LTDCHandle, 0)->CFBAR = (uint32_t)currentLayer->start_address + 400 * 4;
             __HAL_LTDC_RELOAD_CONFIG(&LTDCHandle);
             __HAL_DSI_WRAPPER_ENABLE(hdsi);
 
@@ -385,7 +385,7 @@ void HAL_DSI_EndOfRefreshCallback(DSI_HandleTypeDef *hdsi) {
             }
 
             __HAL_DSI_WRAPPER_DISABLE(hdsi);
-            LTDC_LAYER(&LTDCHandle, 0)->CFBAR = currentLayer != NULL ? currentLayer->start_address : Layers[0].start_address;
+            LTDC_LAYER(&LTDCHandle, 0)->CFBAR = (uint32_t)(currentLayer != NULL ? currentLayer->start_address : Layers[0].start_address);
             __HAL_LTDC_RELOAD_CONFIG(&LTDCHandle);
             __HAL_DSI_WRAPPER_ENABLE(hdsi);
             HAL_DSI_LongWrite(hdsi, 0, DSI_DCS_LONG_PKT_WRITE, 4, OTM8009A_CMD_CASET, pColLeft);
