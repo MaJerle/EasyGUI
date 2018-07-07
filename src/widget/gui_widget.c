@@ -430,13 +430,22 @@ invalidate_widget(gui_handle_p h, uint8_t setclipping) {
     
     /*
      * First check if any of parent widgets are hidden = ignore redraw
+     *
+     * When widget is invalidated for first first time,
+     * ignore this check and force widget invalidation to create absolute visible positions for later usage
      */
-    for (h1 = guii_widget_getparent(h); h1 != NULL;
-        h1 = guii_widget_getparent(h1)) {
-        if (guii_widget_ishidden(h1)) {
-            return 1;
+#if GUI_CFG_USE_POS_SIZE_CACHE
+    if (!guii_widget_getflag(h, GUI_FLAG_FIRST_INVALIDATE)) 
+#endif /* GUI_CFG_USE_POS_SIZE_CACHE */
+    {
+        for (h1 = guii_widget_getparent(h); h1 != NULL;
+            h1 = guii_widget_getparent(h1)) {
+            if (guii_widget_ishidden(h1)) {
+                return 1;
+            }
         }
     }
+    guii_widget_clrflag(h, GUI_FLAG_FIRST_INVALIDATE);  /* Clear flag */
         
     h1 = h;                                         /* Save temporary */
     guii_widget_setflag(h1, GUI_FLAG_REDRAW);       /* Redraw widget */
@@ -716,7 +725,7 @@ guii_widget_isinsideclippingregion(gui_handle_p h, uint8_t check_sib_cover) {
     
     /* Get widget visible section */
     get_widget_abs_visible_position_size(h, &x1, &y1, &x2, &y2);
-    
+
     /* Check if widget is inside drawing area */
     if (!__GUI_RECT_MATCH(
         x1, y1, x2, y2,
@@ -737,6 +746,11 @@ guii_widget_isinsideclippingregion(gui_handle_p h, uint8_t check_sib_cover) {
         /* Process all widgets after current one */
         for (tmp = gui_linkedlist_widgetgetnext(NULL, h); tmp != NULL;
             tmp = gui_linkedlist_widgetgetnext(NULL, tmp)) {
+
+            if (guii_widget_ishidden(tmp)) {        /* Ignore hidden widgets */
+                continue;
+            }
+
             /* Get display information for new widget */
             get_widget_abs_visible_position_size(tmp, &tx1, &ty1, &tx2, &ty2);
 
@@ -1206,6 +1220,7 @@ guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, fl
         guii_widget_setsize(h, GUI_DIM(width), GUI_DIM(height));/* Set widget size */
         guii_widget_setposition(h, GUI_DIM(x), GUI_DIM(y)); /* Set widget position */
         guii_widget_clrflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Include invalidation process */
+        guii_widget_setflag(h, GUI_FLAG_FIRST_INVALIDATE);  /* Include invalidation process */
         guii_widget_invalidate(h);                  /* Invalidate properly now when everything is set correctly = set for valid clipping region part */
 
         GUI_WIDGET_RESULTTYPE_U8(&result) = 0;
