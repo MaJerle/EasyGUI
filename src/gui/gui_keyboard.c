@@ -346,19 +346,19 @@ keyboard_btn_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, g
                 guii_widget_setfont(h, keyboard.default_font); /* Set drawing font */
             }
             
-            guii_widget_settext(h, str);       /* Temporary set text */
+            guii_widget_settext(h, str);            /* Temporary set text */
             gui_widget_processdefaultcallback(h, cmd, param, result);   /* Process default callback with drawing */
             return 1;
         }
-        case GUI_WC_Click: {                    /* Handle pressed button */
+        case GUI_WC_Click: {                        /* Handle pressed button */
             gui_handle_p tmp1, tmp2, tmp3;
             const key_btn_t* kbtn;
             uint32_t ch = 0;
             gui_keyboard_data_t kbd = {0};
             
-            kbtn = guii_widget_getuserdata(h); /* Get data from widget */
-            if (kbtn->s) {                      /* Has button special function? */
-                switch (kbtn->s) {              /* Check special function */
+            kbtn = guii_widget_getuserdata(h);      /* Get data from widget */
+            if (kbtn->s) {                          /* Has button special function? */
+                switch (kbtn->s) {                  /* Check special function */
                     case SPECIAL_123:
                     case SPECIAL_ABC: 
                     case SPECIAL_CALC: {            /* Special functions 123 or ABC */
