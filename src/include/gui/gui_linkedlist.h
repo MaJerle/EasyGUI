@@ -96,7 +96,7 @@ uint8_t                 gui_linkedlist_multi_find_remove(gui_linkedlistroot_t* r
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
-#define gui_linkedlist_iswidgetfirst(h)       ((h) == NULL || (__GH(h))->list.prev == NULL)
+#define gui_linkedlist_iswidgetfirst(h)       ((h) == NULL || (h)->list.prev == NULL)
 
 /**
  * \brief           Check if widget is last child element in linked list
@@ -105,7 +105,7 @@ uint8_t                 gui_linkedlist_multi_find_remove(gui_linkedlistroot_t* r
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
-#define gui_linkedlist_iswidgetlast(h)        ((h) == NULL || (__GH(h))->list.next == NULL)
+#define gui_linkedlist_iswidgetlast(h)        ((h) == NULL || (h)->list.next == NULL)
 
 void            gui_linkedlist_widgetadd(gui_handle_p parent, gui_handle_p h);
 void            gui_linkedlist_widgetremove(gui_handle_p h);
@@ -115,6 +115,9 @@ gui_handle_p    gui_linkedlist_widgetgetnext(gui_handle_p parent, gui_handle_p h
 gui_handle_p    gui_linkedlist_widgetgetprev(gui_handle_p parent, gui_handle_p h);
 uint8_t         gui_linkedlist_widgetmovetobottom(gui_handle_p h);
 uint8_t         gui_linkedlist_widgetmovetotop(gui_handle_p h);
+
+#define GUI_LINKEDLIST_WIDGETSLISTNEXT(parent, current)     for ((current) = gui_linkedlist_widgetgetnext((parent), NULL); (current) != NULL; (current) = gui_linkedlist_widgetgetnext(NULL, (current))) 
+#define GUI_LINKEDLIST_WIDGETSLISTPREV(parent, current)     for ((current) = gui_linkedlist_widgetgetprev((parent), NULL); (current) != NULL; (current) = gui_linkedlist_widgetgetprev(NULL, (current))) 
 
 /**
  * \}

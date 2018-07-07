@@ -1062,19 +1062,30 @@ typedef struct gui_handle {
     const gui_widget_t* widget;             /*!< Widget parameters with callback functions */
     gui_widget_callback_t callback;         /*!< Callback function prototype */
     struct gui_handle* parent;              /*!< Pointer to parent widget */
-    float x;                                /*!< Object X position relative to parent window in units of pixels */
-    float y;                                /*!< Object Y position relative to parent window in units of pixels */
-    float width;                            /*!< Object width in units of pixels or percentages */
-    float height;                           /*!< Object height in units of pixels or percentages */
-#if GUI_CFG_USE_POS_SIZE_CACHE
+
+    float x;                                /*!< Object X position relative to parent window in units of pixel/percent */
+    float y;                                /*!< Object Y position relative to parent window in units of pixel/percent */
+    float width;                            /*!< Object width in units of pixel/percent */
+    float height;                           /*!< Object height in units of pixel/percent */
+
+#if GUI_CFG_USE_POS_SIZE_CACHE || __DOXYGEN__
+    /* Absolute values for position and size, changed each time position/size is modified */
     gui_dim_t abs_x;
     gui_dim_t abs_y;
     gui_dim_t abs_width;
     gui_dim_t abs_height;
+    
+    /* Visible parts on screen, used on clipping calculations */
+    gui_dim_t abs_visible_x1;
+    gui_dim_t abs_visible_y1;
+    gui_dim_t abs_visible_x2;
+    gui_dim_t abs_visible_y2;
 #endif /* GUI_CFG_USE_POS_SIZE_CACHE */
+
     uint32_t padding;                       /*!< 4-bytes long padding, each byte of one side, MSB = top padding, LSB = left padding.
                                                     Used for children widgets if virtual padding should be used */
-    int32_t zindex;                         /*!< Z-Index value of widget, which can be set by user. All widgets with same z-index are changeable when active on visible area */
+    int32_t zindex;                         /*!< Z-Index value of widget, which can be set by user.
+                                                    All widgets with same z-index are changeable when active on visible area */
 #if GUI_CFG_USE_TRANSPARENCY || __DOXYGEN__
     uint8_t transparency;                   /*!< Widget transparency relative to parent widget */
 #endif /* GUI_CFG_USE_TRANSPARENCY */
@@ -1085,10 +1096,12 @@ typedef struct gui_handle {
     size_t textcursor;                      /*!< Text cursor position */
     gui_timer_t* timer;                     /*!< Software timer pointer */
     gui_color_t* colors;                    /*!< Pointer to allocated color memory when custom colors are used */
-    void* UserData;                         /*!< Pointer to optional user data */
     
+    /* Scroll feature, available only for widgets with children support */
     gui_dim_t x_scroll;                     /*!< Scroll of widgets in horizontal direction in units of pixels */
     gui_dim_t y_scroll;                     /*!< Scroll of widgets in vertical direction in units of pixels */
+    
+    void* arg;                              /*!< Pointer to optional user data */
 } gui_handle;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 

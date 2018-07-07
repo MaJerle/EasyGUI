@@ -152,6 +152,45 @@ calculate_widget_absolute_y(gui_handle_p h) {
     return out;
 }
 
+/**
+ * \brief           Calculates absolute visible position and size on screen.
+ *                  Actual visible position may change when other widgets cover current one
+ *                  which we can take as advantage when drawing widget or when calculating clipping area
+ *
+ * \param[in]       h: Widget handle
+ */
+uint8_t
+calculate_widget_absolute_visible_position_size(gui_handle_p h, gui_dim_t* x1, gui_dim_t* y1, gui_dim_t* x2, gui_dim_t* y2) {
+    gui_dim_t x, y, wi, hi;
+    
+    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    
+    x = guii_widget_getabsolutex(h);                /* Get absolute X position */
+    y = guii_widget_getabsolutey(h);                /* Get absolute Y position */
+    wi = guii_widget_getwidth(h);                   /* Get absolute width */
+    hi = guii_widget_getheight(h);                  /* Get absolute height */
+    
+    /* Set widget visible positions with X and Y coordinates */
+    *x1 = x;
+    *y1 = y;
+    *x2 = x + wi;
+    *y2 = y + hi;
+    
+    /* Check if widget is hidden by any parent or any parent is hidden by its parent */
+    for (; h != NULL; h = guii_widget_getparent(h)) {
+        x = guii_widget_getparentabsolutex(h);      /* Parent absolute X position for inner widgets */
+        y = guii_widget_getparentabsolutey(h);      /* Parent absolute Y position for inner widgets */
+        wi = guii_widget_getparentinnerwidth(h);    /* Get parent inner width */
+        hi = guii_widget_getparentinnerheight(h);   /* Get parent inner height */
+    
+        if (*x1 < x)        { *x1 = x; }
+        if (*x2 > x + wi)   { *x2 = x + wi; }
+        if (*y1 < y)        { *y1 = y; }
+        if (*y2 > y + hi)   { *y2 = y + hi; }
+    }
+    return 1;
+}
+
 #if GUI_CFG_USE_POS_SIZE_CACHE
 
 /**
@@ -166,18 +205,21 @@ set_widget_abs_values(gui_handle_p h) {
     h->abs_width = calculate_widget_width(h);
     h->abs_height = calculate_widget_height(h);
     
+    /* Calculate absolute visible position/size on screen */
+    calculate_widget_absolute_visible_position_size(h,
+        &h->abs_visible_x1, &h->abs_visible_y1,
+        &h->abs_visible_x2, &h->abs_visible_y2);
+    
     /* Update children widgets */
     if (guii_widget_allowchildren(h)) {
         gui_handle_p child;
         
         /* Scan all children widgets */
-        for (child = gui_linkedlist_widgetgetnext(h, NULL); child != NULL;
-            child = gui_linkedlist_widgetgetnext(NULL, child)) {
-            
+        GUI_LINKEDLIST_WIDGETSLISTNEXT(h, child) {
             set_widget_abs_values(child);   /* Process child widget */
         }
     }
-    return 0;
+    return 1;
 }
 #endif /* GUI_CFG_USE_POS_SIZE_CACHE */
 
@@ -278,8 +320,7 @@ remove_widgets(gui_handle_p parent) {
                 gui_handle_p tmp;
                 
                 /* Step 1 */
-                for (tmp = gui_linkedlist_widgetgetnext(h, NULL); tmp != NULL; 
-                        tmp = gui_linkedlist_widgetgetnext(NULL, tmp)) {
+                GUI_LINKEDLIST_WIDGETSLISTNEXT(h, tmp) {
                     guii_widget_setflag(tmp, GUI_FLAG_REMOVE); /* Set remove bit to all children elements */
                 }
                 
@@ -326,36 +367,16 @@ remove_widgets(gui_handle_p parent) {
  * \return          `1` on success, `0` otherwise
  */
 static uint8_t
-get_widget_abs_position_and_visible_width_height(gui_handle_p h, gui_dim_t* x1, gui_dim_t* y1, gui_dim_t* x2, gui_dim_t* y2) {
-    gui_dim_t x, y, wi, hi;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    x = guii_widget_getabsolutex(h);                /* Get absolute X position */
-    y = guii_widget_getabsolutey(h);                /* Get absolute Y position */
-    wi = guii_widget_getwidth(h);                   /* Get absolute width */
-    hi = guii_widget_getheight(h);                  /* Get absolute height */
-    
-    /* Set widget visible positions with X and Y coordinates */
-    *x1 = x;
-    *y1 = y;
-    *x2 = x + wi;
-    *y2 = y + hi;
-    
-    /* Check if widget is hidden by any parent or any parent is hidden by its parent */
-    for (; h != NULL; h = guii_widget_getparent(h)) {
-        x = guii_widget_getparentabsolutex(h);      /* Parent absolute X position for inner widgets */
-        y = guii_widget_getparentabsolutey(h);      /* Parent absolute Y position for inner widgets */
-        wi = guii_widget_getparentinnerwidth(h);    /* Get parent inner width */
-        hi = guii_widget_getparentinnerheight(h);   /* Get parent inner height */
-    
-        if (*x1 < x)        { *x1 = x; }
-        if (*x2 > x + wi)   { *x2 = x + wi; }
-        if (*y1 < y)        { *y1 = y; }
-        if (*y2 > y + hi)   { *y2 = y + hi; }
-    }
-    
+get_widget_abs_visible_position_size(gui_handle_p h, gui_dim_t* x1, gui_dim_t* y1, gui_dim_t* x2, gui_dim_t* y2) {
+#if GUI_CFG_USE_POS_SIZE_CACHE
+    *x1 = h->abs_visible_x1;
+    *y1 = h->abs_visible_y1;
+    *x2 = h->abs_visible_x2;
+    *y2 = h->abs_visible_y2;
     return 1;
+#else /* GUI_CFG_USE_POS_SIZE_CACHE */
+    return calculate_widget_absolute_visible_position_size(h, x1, y1, x2, y2);
+#endif /* !GUI_CFG_USE_POS_SIZE_CACHE */
 }
 
 /**
@@ -370,7 +391,7 @@ set_clipping_region(gui_handle_p h) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
     /* Get visible widget part and absolute position on screen according to parent */
-    get_widget_abs_position_and_visible_width_height(h, &x1, &y1, &x2, &y2);
+    get_widget_abs_visible_position_size(h, &x1, &y1, &x2, &y2);
     
     /* Possible improvement */
     /*
@@ -410,7 +431,7 @@ invalidate_widget(gui_handle_p h, uint8_t setclipping) {
     }
     
     /*
-     * First check if any of parent widgets is hidden = ignore redraw
+     * First check if any of parent widgets are hidden = ignore redraw
      */
     for (h1 = guii_widget_getparent(h); h1 != NULL;
         h1 = guii_widget_getparent(h1)) {
@@ -443,10 +464,15 @@ invalidate_widget(gui_handle_p h, uint8_t setclipping) {
     }
 #endif /* GUI_CFG_USE_TRANSPARENCY */
     for (; h1 != NULL; h1 = gui_linkedlist_widgetgetnext(NULL, h1)) {
-        get_widget_abs_position_and_visible_width_height(h1, &h1x1, &h1y1, &h1x2, &h1y2); /* Get visible position on LCD for widget */
-        for (h2 = gui_linkedlist_widgetgetnext(NULL, h1); h2;
+        get_widget_abs_visible_position_size(h1, &h1x1, &h1y1, &h1x2, &h1y2); /* Get visible position on LCD for widget */
+        
+        /* Scan widgets on top of current widget */
+        for (h2 = gui_linkedlist_widgetgetnext(NULL, h1); h2 != NULL;
                 h2 = gui_linkedlist_widgetgetnext(NULL, h2)) {
-            get_widget_abs_position_and_visible_width_height(h2, &h2x1, &h2y1, &h2x2, &h2y2);
+            /* Get visible position on second widget */
+            get_widget_abs_visible_position_size(h2, &h2x1, &h2y1, &h2x2, &h2y2);
+                    
+            /* Check if next widget is on top of current one */
             if (
                 guii_widget_getflag(h2, GUI_FLAG_REDRAW) ||    /* Flag is already set */
                 !__GUI_RECT_MATCH(                  /* Widgets are not one over another */
@@ -478,8 +504,8 @@ invalidate_widget(gui_handle_p h, uint8_t setclipping) {
      * Since recursion is used, call function only once and recursion will take care for upper level of parent widgets
      */
     for (h = guii_widget_getparent(h); h != NULL; h = guii_widget_getparent(h)) {
-        if (guii_widget_istransparent(h)) {        /* If widget is transparent */
-            invalidate_widget(h, 0);                /* Invalidate this parent too */
+        if (guii_widget_istransparent(h)) {         /* If widget has transparency */
+            invalidate_widget(h, 0);                /* Invalidate parent too */
             break;
         }
     }
@@ -669,8 +695,7 @@ can_remove_widget(gui_handle_p h) {
      */
     if (GUI_WIDGET_RESULTTYPE_U8(&result) && guii_widget_allowchildren(h)) {   /* Check if we can delete all children widgets */
         gui_handle_p h1;
-        for (h1 = gui_linkedlist_widgetgetnext(h, NULL); h1 != NULL;
-                h1 = gui_linkedlist_widgetgetnext(NULL, h1)) {
+        GUI_LINKEDLIST_WIDGETSLISTNEXT(h, h1) {
             if (!can_remove_widget(h1)) {           /* If we should not delete it */
                 return 0;                           /* Stop on first call */
             }
@@ -691,7 +716,7 @@ guii_widget_isinsideclippingregion(gui_handle_p h) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
     /* Get widget visible section */
-    get_widget_abs_position_and_visible_width_height(h, &x1, &y1, &x2, &y2);
+    get_widget_abs_visible_position_size(h, &x1, &y1, &x2, &y2);
     return __GUI_RECT_MATCH(
         x1, y1, x2, y2,
         GUI.Display.x1, GUI.Display.y1, GUI.Display.x2, GUI.Display.y2
@@ -1756,9 +1781,7 @@ guii_widget_hidechildren(gui_handle_p h) {
     gui_handle_p t;
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
     
-    /*
-     * Scan all widgets of current widget and hide them
-     */
+    /* Scan all widgets of current widget and hide them */
     for (t = gui_linkedlist_widgetgetnext(h, NULL); t != NULL;
         t = gui_linkedlist_widgetgetnext(NULL, t)) {
         guii_widget_hide(t);
@@ -1903,7 +1926,7 @@ guii_widget_getbyid(gui_id_t id) {
 uint8_t
 guii_widget_setuserdata(gui_handle_p h, void* data) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */    
-    __GH(h)->UserData = data;                       /* Set user data */
+    h->arg = data;                                  /* Set user data */
     return 1;
 }
 
@@ -1918,7 +1941,7 @@ guii_widget_getuserdata(gui_handle_p h) {
     void* data;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    data = h->UserData;                             /* Get user data */
+    data = h->arg;                                  /* Get user data */
     return data;
 }
 
@@ -2097,7 +2120,7 @@ gui_widget_gettextcopy(gui_handle_p h, gui_char* dst, uint32_t len) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    t = guii_widget_gettext(h);                    /* Return text */
+    t = guii_widget_gettext(h);                     /* Return text */
     gui_string_copyn(dst, t, len);                  /* Copy text after */
     dst[len] = 0;                                   /* Set trailling zero */
     
@@ -2516,8 +2539,8 @@ gui_widget_putonfront(gui_handle_p h) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    guii_widget_movedowntree(h);                     /* Put widget on front */
-    guii_widget_focus_set(h);                        /* Set widget to focused state */
+    guii_widget_movedowntree(h);                    /* Put widget on front */
+    guii_widget_focus_set(h);                       /* Set widget to focused state */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return 1;
