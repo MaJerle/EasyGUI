@@ -31,8 +31,6 @@
 #define GUI_INTERNAL
 #include "gui/gui_private.h"
 #include "widget/gui_list_container.h"
-
-
 #define __GL(x)             ((GUI_LED_t *)(x))
 
 #define CFG_TOGGLE          0x01
@@ -53,7 +51,7 @@ gui_color_t colors[] = {
  */
 static const
 gui_widget_t widget = {
-    .name = _GT("LED"),                             /*!< Widget name */ 
+    .name = _GT("LIST_CONTAINER"),                  /*!< Widget name */ 
     .size = sizeof(gui_list_container_t),           /*!< Size of widget for memory allocation */
     .flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
     .callback = gui_listcontainer_callback,         /*!< Control function */
@@ -69,9 +67,7 @@ calculate_limits(gui_handle_p h) {
     gui_dim_t x, y, width, height;
     gui_dim_t cmx = 0, cmy = 0;
     
-    /*
-     * Scan all children widgets and check for maximal possible scroll
-     */
+    /* Scan all children widgets and check for maximal possible scroll */
     for (w = gui_linkedlist_widgetgetnext(h, NULL); w != NULL;
             w = gui_linkedlist_widgetgetnext(NULL, w)) {
 

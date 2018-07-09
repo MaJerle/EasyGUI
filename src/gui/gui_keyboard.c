@@ -574,8 +574,8 @@ keyboard_base_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, 
 uint8_t
 guii_keyboard_hide(void) {
     __GUI_ASSERTPARAMS(keyboard.handle != NULL);    /* Check parameters */
-    guii_widget_hide(keyboard.handle);              /* Show keyboard widget */
-    guii_widget_show(GUI.root.first);               /* Hide first on linked list */
+    guii_widget_hide(keyboard.handle);              /* Hide keyboard widget */
+    guii_widget_show(GUI.root.first);               /* Show first on linked list */
     //keyboard.action = ACTION_HIDE;                /* Set action to hide */
     //guii_timer_startperiodic(keyboard.handle->timer); /* Start periodic timer */
     

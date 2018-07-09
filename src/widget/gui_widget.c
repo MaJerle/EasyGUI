@@ -1895,7 +1895,7 @@ guii_widget_setzindex(gui_handle_p h, int32_t zindex) {
  * \param[in,out]   h: Widget handle
  * \param[in]       trans: Transparency level, where 0x00 means hidden and 0xFF means totally visible widget
  * \return          `1` on success, `0` otherwise
- * \sa              __gui_widget_settransparency
+ * \sa              guii_widget_settransparency
  */
 uint8_t
 guii_widget_settransparency(gui_handle_p h, uint8_t trans) {

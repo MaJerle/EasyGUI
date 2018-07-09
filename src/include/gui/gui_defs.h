@@ -994,8 +994,8 @@ typedef struct {
         int i;                              /*!< Integer value */
         int16_t i16;                        /*!< Signed 16-bit value */
         gui_display_t* disp;                /*!< Pointer to input display data */
-        guii_touch_data_t* td;               /*!< Pointer to input touch data */
-        guii_keyboard_data_t* kd;            /*!< Pointer to input keyboard data */
+        guii_touch_data_t* td;              /*!< Pointer to input touch data */
+        guii_keyboard_data_t* kd;           /*!< Pointer to input keyboard data */
         gui_widget_param* wp;               /*!< Widget parameter */
         gui_handle_p h;                     /*!< Widget handle */
     } u;                                    /*!< Union of possible parameters */
