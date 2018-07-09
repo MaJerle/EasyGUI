@@ -59,12 +59,10 @@ mem_insertfreeblock(MemBlock_t* newBlock) {
     MemBlock_t* ptr;
     uint8_t* addr;
 
-    /**
-     * Find block position to insert new block between
-     */
-    for (ptr = &StartBlock; ptr && ptr->NextFreeBlock < newBlock; ptr = ptr->NextFreeBlock);
+    /* Find block position to insert new block between */
+    for (ptr = &StartBlock; ptr != NULL && ptr->NextFreeBlock < newBlock; ptr = ptr->NextFreeBlock);
 
-    /**
+    /*
      * If the new inserted block and block before create a one big block (contiguous)
      * then try to merge them together
      */
@@ -74,7 +72,7 @@ mem_insertfreeblock(MemBlock_t* newBlock) {
         newBlock = ptr;                             /* Set new block pointer to block before (expanded block) */
     }
 
-    /**
+    /*
      * Check if new block and its size is the same address as next free block newBlock points to
      */
     addr = (uint8_t *)newBlock;
@@ -89,12 +87,12 @@ mem_insertfreeblock(MemBlock_t* newBlock) {
         newBlock->NextFreeBlock = ptr->NextFreeBlock;   /* Our next element is now from pointer next element */
     }
 
-    /**
-    * If merge with new block and block before was not made then there
-    * is a gap between free memory before and new free memory.
-    *
-    * We have to set block before to point to next free which is new block
-    */
+    /*
+     * If merge with new block and block before was not made then there
+     * is a gap between free memory before and new free memory.
+     *
+     * We have to set block before to point to next free which is new block
+     */
     if (ptr != newBlock) {
         ptr->NextFreeBlock = newBlock;
     }
@@ -108,11 +106,11 @@ mem_assignmem(const mem_region_t* regions, size_t len) {
     MemBlock_t* PreviousEndBlock = 0;
     size_t i;
     
-    if (EndBlock) {                                 /* Regions already defined */
+    if (EndBlock != NULL) {                         /* Regions already defined */
         return 0;
     }
     
-    /**
+    /*
      * Check if region address are linear and rising
      */
     MemStartAddr = (uint8_t *)0;
@@ -124,7 +122,7 @@ mem_assignmem(const mem_region_t* regions, size_t len) {
     }
 
     while (len--) {
-        /**
+        /*
          * Check minimum region size
          */
         MemSize = regions->Size;
@@ -132,7 +130,7 @@ mem_assignmem(const mem_region_t* regions, size_t len) {
             regions++;
             continue;
         }
-        /**
+        /*
          * Get start address and check memory alignment
          * if necessary, decrease memory region size
          */
@@ -142,14 +140,12 @@ mem_assignmem(const mem_region_t* regions, size_t len) {
             MemSize -= MemStartAddr - (uint8_t *)regions->StartAddress;
         }
         
-        /**
-         * Check memory size alignment if match
-         */
+        /* Check memory size alignment if match */
         if (MemSize & MEM_ALIGN_BITS) {
             MemSize &= ~MEM_ALIGN_BITS;             /* Clear lower bits of memory size only */
         }
 
-        /**
+        /*
          * StartBlock is fixed variable for start list of free blocks
          *
          * Set free blocks linked list on initialized
@@ -163,7 +159,7 @@ mem_assignmem(const mem_region_t* regions, size_t len) {
         
         PreviousEndBlock = EndBlock;                /* Save previous end block to set next block later */
         
-        /**
+        /*
          * Set pointer to end of free memory - block region memory
          * Calculate new end block in region
          */
@@ -171,7 +167,7 @@ mem_assignmem(const mem_region_t* regions, size_t len) {
         EndBlock->NextFreeBlock = 0;                /* No more free blocks after end is reached */
         EndBlock->Size = 0;                         /* Empty block */
 
-        /**
+        /*
          * Initialize start of region memory
          * Create first block in region
          */
@@ -179,7 +175,7 @@ mem_assignmem(const mem_region_t* regions, size_t len) {
         FirstBlock->Size = MemSize - MEMBLOCK_METASIZE; /* Exclude end block in chain */
         FirstBlock->NextFreeBlock = EndBlock;       /* Last block is next free in chain */
 
-        /**
+        /*
          * If we have previous end block
          * End block of previous region
          *
@@ -189,9 +185,7 @@ mem_assignmem(const mem_region_t* regions, size_t len) {
             PreviousEndBlock->NextFreeBlock = FirstBlock;
         }
         
-        /**
-         * Set number of free bytes available to allocate in region
-         */
+        /* Set number of free bytes available to allocate in region */
         MemAvailableBytes += FirstBlock->Size;
         
         regions++;                                  /* Go to next region */
@@ -199,7 +193,7 @@ mem_assignmem(const mem_region_t* regions, size_t len) {
     
     MemMinAvailableBytes = MemAvailableBytes;       /* Save minimum ever available bytes in region */
     
-    /**
+    /*
      * Set upper bit in memory allocation bit
      */
     MemAllocBit = (size_t)((size_t)1 << ((sizeof(size_t) * 8 - 1)));
@@ -212,13 +206,11 @@ mem_alloc(size_t size) {
     MemBlock_t *Prev, *Curr, *Next;
     void* retval = 0;
 
-    if (!EndBlock) {                                /* If end block is not yet defined */
+    if (EndBlock == NULL) {                         /* If end block is not yet defined */
         return 0;                                   /* Invalid, not initialized */
     }
     
-    /**
-     * TODO: Check alignment maybe?
-     */    
+    /* TODO: Check alignment maybe? */    
     if (!size || size >= MemAllocBit) {             /* Check input parameters */
         return 0;
     }
@@ -228,7 +220,7 @@ mem_alloc(size_t size) {
         return 0;
     }
 
-    /**
+    /*
      * Try to find sufficient block for data
      * Go through free blocks until enough memory is found
      * or end block is reached (no next free block)
@@ -240,7 +232,7 @@ mem_alloc(size_t size) {
         Curr = Curr->NextFreeBlock;
     }
     
-    /**
+    /*
      * Possible improvements
      * Try to find smallest available block for desired amount of memory
      * 
@@ -251,7 +243,7 @@ mem_alloc(size_t size) {
         retval = (void *)((uint8_t *)Prev->NextFreeBlock + MEMBLOCK_METASIZE);    /* Set return value */
         Prev->NextFreeBlock = Curr->NextFreeBlock;  /* Since block is now allocated, remove it from free chain */
 
-        /**
+        /*
          * If found free block is much bigger than required, 
          * then split big block by 2 blocks (one used, second available)
          * There should be available memory for at least 2 metadata block size = 8 bytes of useful memory
@@ -261,7 +253,7 @@ mem_alloc(size_t size) {
             Next->Size = Curr->Size - size;         /* Set new block size for remaining of before and used */
             Curr->Size = size;                      /* Set block size for used block */
 
-            /**
+            /*
              * Add virtual block to list of free blocks.
              * It is placed directly after currently allocated memory
              */
@@ -285,18 +277,18 @@ static void
 mem_free(void* ptr) {
     MemBlock_t* block;
 
-    if (!ptr) {                                     /* To be in compliance with C free function */
+    if (ptr == NULL) {                              /* To be in compliance with C free function */
         return;
     }
 
     block = (MemBlock_t *)(((uint8_t *)ptr) - MEMBLOCK_METASIZE);   /* Get block data pointer from input pointer */
 
-    /**
+    /*
      * Check if block is even allocated by upper bit on size
      * and next free block must be set to NULL in order to work properly
      */
     if ((block->Size & MemAllocBit) && !block->NextFreeBlock) {
-        /**
+        /*
          * Clear allocated bit before entering back to free list
          * List will automatically take care for fragmentation and mix segments back
          */
@@ -311,7 +303,7 @@ static size_t
 mem_getusersize(void* ptr) {
     MemBlock_t* block;
     
-    if (!ptr) {
+    if (ptr == NULL) {
         return 0;
     }
     block = (MemBlock_t *)(((uint8_t *)ptr) - MEMBLOCK_METASIZE);   /* Get block meta data pointer */

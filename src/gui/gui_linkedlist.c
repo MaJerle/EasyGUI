@@ -78,17 +78,14 @@ print_list(gui_handle_p root) {
  */
 void
 gui_linkedlist_add_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
+    element->prev = root->last;                 /* Previous element of new entry is currently last element */
+    element->next = NULL;                       /* There is no next element */
     if (root->first == NULL || root->last == NULL) {/* First widget is about to be created */
-        element->prev = NULL;                       /* There is no previous element */
-        element->next = NULL;                       /* There is no next element */
-        root->first = element;                      /* Set as first widget */
-        root->last = element;                       /* Set as last widget */
+        root->first = element;                  /* Set as first widget */
     } else {
-        element->next = NULL;                       /* Next element of last is not known */
-        element->prev = root->last;                 /* Previous element of new entry is currently last element */
         ((gui_linkedlist_t *)root->last)->next = element;   /* Previous's element next element is current element */
-        root->last = element;                       /* Add new element as last */
     }
+    root->last = element;                       /* Add new element as last */
 }
     
 /**
@@ -196,40 +193,38 @@ gui_linkedlist_getprev_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element
  */
 uint8_t
 gui_linkedlist_movedown_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
-    gui_linkedlist_t* Prev = 0;
-    gui_linkedlist_t* Next = 0;
-    gui_linkedlist_t* NextNext = 0;
+    gui_linkedlist_t *nextnext = NULL, *prev = NULL, *next = NULL;
     
     if (element == NULL || element == root->last) { /* Check if move is available */
         return 0;                                   /* Could not move */
     }
     
-    Prev = element->prev;                           /* Get previous element */
-    Next = element->next;                           /* Get next element */
-    if (Next) {                                     /* Check if next is available */
-        NextNext = Next->next;                      /* Get next element of next element */
+    prev = element->prev;                           /* Get previous element */
+    next = element->next;                           /* Get next element */
+    if (next != NULL) {                             /* Check if next is available */
+        nextnext = next->next;                      /* Get next element of next element */
     }
     
-    if (NextNext != NULL) {                         /* If there is available memory */
-        NextNext->prev = element;                   /* Previous element of next next element is current element */
+    if (nextnext != NULL) {                         /* If there is available memory */
+        nextnext->prev = element;                   /* Previous element of next next element is current element */
     } else {
         root->last = element;                       /* There is no next next element so we will be last element after move */
     }
     
-    if (Next != NULL) {                             /* If there is next element */
-        Next->next = element;                       /* Next element will become previous and set next element as current */
-        Next->prev = Prev;                          /* Set previous element to next element as current previous */
+    if (next != NULL) {                             /* If there is next element */
+        next->next = element;                       /* Next element will become previous and set next element as current */
+        next->prev = prev;                          /* Set previous element to next element as current previous */
     }
     
-    element->next = NextNext;                       /* Set next next element to current next element */
-    element->prev = Next;                           /* Set next element as previous (swap current and next elements) */
+    element->next = nextnext;                       /* Set next next element to current next element */
+    element->prev = next;                           /* Set next element as previous (swap current and next elements) */
     
-    if (Prev != NULL) {                             /* Check if next exists */
-        Prev->next = Next;                          /* Set previous element to next */
+    if (prev != NULL) {                             /* Check if next exists */
+        prev->next = next;                          /* Set previous element to next */
     }
     
     if (root->first == element) {                   /* Check for current element */
-        root->first = Next;                         /* Set new element as first in linked list */
+        root->first = next;                         /* Set new element as first in linked list */
     }
     
     return 1;                                       /* Move was successful */
@@ -245,40 +240,38 @@ gui_linkedlist_movedown_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* elemen
  */
 uint8_t
 gui_linkedlist_moveup_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
-    gui_linkedlist_t* PrevPrev = 0;
-    gui_linkedlist_t* Prev = 0;
-    gui_linkedlist_t* Next = 0;
+    gui_linkedlist_t *prevprev = NULL, *prev = NULL, *next = NULL;
     
     if (element == NULL || element == root->first) {/* Check if move is available */
         return 0;                                   /* Could not move */
     }
     
-    Prev = element->prev;                           /* Get previous element */
-    Next = element->next;                           /* Get next element */
-    if (Prev != NULL) {                             /* Check if previous is available */
-        PrevPrev = Prev->prev;                      /* Get previous element of previous element */
+    prev = element->prev;                           /* Get previous element */
+    next = element->next;                           /* Get next element */
+    if (prev != NULL) {                             /* Check if previous is available */
+        prevprev = prev->prev;                      /* Get previous element of previous element */
     }
     
-    if (PrevPrev != NULL) {                         /* If there is available memory */
-        PrevPrev->next = element;                   /* Next element of previous previous element is current element */
+    if (prevprev != NULL) {                         /* If there is available memory */
+        prevprev->next = element;                   /* Next element of previous previous element is current element */
     } else {
         root->first = element;                      /* There is no previous previous element so we will be first element after move */
     }
     
-    if (Prev != NULL) {                             /* If there is previous element */
-        Prev->prev = element;                       /* Previous element will become next and set previous element as current */
-        Prev->next = Next;                          /* Set next element to previous element as current previous */
+    if (prev != NULL) {                             /* If there is previous element */
+        prev->prev = element;                       /* Previous element will become next and set previous element as current */
+        prev->next = next;                          /* Set next element to previous element as current previous */
     }
     
-    element->prev = PrevPrev;                       /* Set previous previous element to current previous element */
-    element->next = Prev;                           /* Set previous element as next (swap current and previous elements) */
+    element->prev = prevprev;                       /* Set previous previous element to current previous element */
+    element->next = prev;                           /* Set previous element as next (swap current and previous elements) */
     
-    if (Next != NULL) {                             /* Check if previous exists */
-        Next->prev = Prev;                          /* Set next element to previous */
+    if (next != NULL) {                             /* Check if previous exists */
+        next->prev = prev;                          /* Set next element to previous */
     }
     
     if (root->last == element) {                    /* Check for current element */
-        root->last = Prev;                          /* Set new last as first in linked list */
+        root->last = prev;                          /* Set new last as first in linked list */
     }
     
     return 1;                                       /* Move was successful */

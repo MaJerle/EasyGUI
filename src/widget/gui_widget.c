@@ -240,25 +240,25 @@ remove_widget(gui_handle_p h) {
      * Step 3: If widget is active, clear it
      * Step 4: If widget is set as previous active, set its parent as previous active
      */
-    if (GUI.FocusedWidget == h) {                   /* Step 1 */
+    if (GUI.focused_widget == h) {                  /* Step 1 */
         if (guii_widget_hasparent(h)) {             /* Should always happen as top parent (window) can't be removed */
-            GUI.FocusedWidget = guii_widget_getparent(h);   /* Set parent widget as focused */
+            GUI.focused_widget = guii_widget_getparent(h);  /* Set parent widget as focused */
         } else {
-            guii_widget_focus_clear();               /* Clear all widgets from focused */
-            GUI.FocusedWidget = NULL;
+            guii_widget_focus_clear();              /* Clear all widgets from focused */
+            GUI.focused_widget = NULL;
         }
     }
-    if (GUI.FocusedWidgetPrev == h) {               /* Step 2 */
-        GUI.FocusedWidgetPrev = NULL;
+    if (GUI.focused_widget_prev == h) {             /* Step 2 */
+        GUI.focused_widget_prev = NULL;
     }
-    if (GUI.ActiveWidget == h) {                    /* Step 3 */
-        GUI.ActiveWidget = NULL;                    /* Invalidate active widget */
+    if (GUI.active_widget == h) {                   /* Step 3 */
+        GUI.active_widget = NULL;                   /* Invalidate active widget */
     }
-    if (GUI.ActiveWidgetPrev == h) {                /* Step 4 */
-        GUI.ActiveWidgetPrev = guii_widget_getparent(h);/* Set widget as previous active */
+    if (GUI.active_widget_prev == h) {              /* Step 4 */
+        GUI.active_widget_prev = guii_widget_getparent(h);  /* Set widget as previous active */
     }
-    if (GUI.WindowActive != NULL && h == GUI.WindowActive) {/* Check for parent window */
-        GUI.WindowActive = guii_widget_getparent(GUI.WindowActive);
+    if (GUI.window_active != NULL && h == GUI.window_active) {  /* Check for parent window */
+        GUI.window_active = guii_widget_getparent(GUI.window_active);
     }
     
     /*
@@ -298,7 +298,7 @@ remove_widgets(gui_handle_p parent) {
     
     /* Scan all widgets in system */
     for (h = gui_linkedlist_widgetgetnext(parent, NULL); h != NULL; ) {        
-        if (guii_widget_getflag(h, GUI_FLAG_REMOVE)) { /* Widget should be deleted */
+        if (guii_widget_getflag(h, GUI_FLAG_REMOVE)) {  /* Widget should be deleted */
             next = gui_linkedlist_widgetgetnext(NULL, h);   /* Get next widget of current */
             
             /*
@@ -314,7 +314,7 @@ remove_widgets(gui_handle_p parent) {
              * - Step 2: Perform mass erase of children widgets 
              *      This step is recursive operation.
              */
-            if (guii_widget_allowchildren(h)) {    /* Children widgets are supported */
+            if (guii_widget_allowchildren(h)) {     /* Children widgets are supported */
                 gui_handle_p tmp;
                 
                 /* Step 1 */
@@ -339,7 +339,7 @@ remove_widgets(gui_handle_p parent) {
              */
             h = next;                               /* Set current pointer to next one */
             continue;                               /* Continue to prevent further execution */
-        } else if (guii_widget_allowchildren(h)) { /* Children widgets are supported */
+        } else if (guii_widget_allowchildren(h)) {  /* Children widgets are supported */
             remove_widgets(h);                      /* Check children widgets if anything to remove */
         }
         h = gui_linkedlist_widgetgetnext(NULL, h);  /* Get next widget of current */
@@ -401,10 +401,10 @@ set_clipping_region(gui_handle_p h) {
      */
     
     /* Set invalid clipping region */
-    if (GUI.Display.x1 > x1)    { GUI.Display.x1 = x1; }
-    if (GUI.Display.x2 < x2)    { GUI.Display.x2 = x2; }
-    if (GUI.Display.y1 > y1)    { GUI.Display.y1 = y1; }
-    if (GUI.Display.y2 < y2)    { GUI.Display.y2 = y2; }
+    if (GUI.display.x1 > x1)    { GUI.display.x1 = x1; }
+    if (GUI.display.x2 < x2)    { GUI.display.x2 = x2; }
+    if (GUI.display.y1 > y1)    { GUI.display.y1 = y1; }
+    if (GUI.display.y2 < y2)    { GUI.display.y2 = y2; }
     
     return 1;
 }
@@ -454,7 +454,7 @@ invalidate_widget(gui_handle_p h, uint8_t setclipping) {
     if (setclipping) {
         set_clipping_region(h);                     /* Set clipping region for widget redrawing operation */
     }
-    
+
     /*
      * Invalid only widget with higher Z-index (lowered on linked list) of current object
      * 
@@ -481,14 +481,14 @@ invalidate_widget(gui_handle_p h, uint8_t setclipping) {
                     
             /* Check if next widget is on top of current one */
             if (
-                guii_widget_getflag(h2, GUI_FLAG_REDRAW) ||    /* Flag is already set */
+                guii_widget_getflag(h2, GUI_FLAG_REDRAW) || /* Flag is already set */
                 !__GUI_RECT_MATCH(                  /* Widgets are not one over another */
                     h1x1, h1y1, h1x2, h1y2,
                     h2x1, h2y1, h2x2, h2y2)
             ) {
                 continue;
             }
-            guii_widget_setflag(h2, GUI_FLAG_REDRAW);  /* Redraw widget on next loop */
+            guii_widget_setflag(h2, GUI_FLAG_REDRAW);   /* Redraw widget on next loop */
         }
     }
     
@@ -534,9 +534,9 @@ get_widget_by_id(gui_handle_p parent, gui_id_t id, uint8_t deep) {
     
     for (h = gui_linkedlist_widgetgetnext(parent, NULL); h != NULL;
             h = gui_linkedlist_widgetgetnext(NULL, h)) {
-        if (guii_widget_getid(h) == id) {          /* Compare ID values */
+        if (guii_widget_getid(h) == id) {           /* Compare ID values */
             return h;
-        } else if (deep && guii_widget_allowchildren(h)) { /* Check children if possible */
+        } else if (deep && guii_widget_allowchildren(h)) {  /* Check children if possible */
             gui_handle_p tmp = get_widget_by_id(h, id, deep);
             if (tmp != NULL) {
                 return tmp;
@@ -729,7 +729,7 @@ guii_widget_isinsideclippingregion(gui_handle_p h, uint8_t check_sib_cover) {
     /* Check if widget is inside drawing area */
     if (!__GUI_RECT_MATCH(
         x1, y1, x2, y2,
-        GUI.Display.x1, GUI.Display.y1, GUI.Display.x2, GUI.Display.y2
+        GUI.display.x1, GUI.display.y1, GUI.display.x2, GUI.display.y2
     )) {
         return 0;
     }
@@ -827,15 +827,15 @@ guii_widget_movedowntree(gui_handle_p h) {
  */
 void
 guii_widget_focus_clear(void) {
-    if (GUI.FocusedWidget != NULL && GUI.FocusedWidget != GUI.root.first) { /* First widget is always in focus */
-        GUI.FocusedWidgetPrev = GUI.FocusedWidget;  /* Clear everything */
+    if (GUI.focused_widget != NULL && GUI.focused_widget != GUI.root.first) { /* First widget is always in focus */
+        GUI.focused_widget_prev = GUI.focused_widget;  /* Clear everything */
         do {
-            guii_widget_callback(GUI.FocusedWidget, GUI_WC_FocusOut, NULL, NULL);
-            guii_widget_clrflag(GUI.FocusedWidget, GUI_FLAG_FOCUS); /* Clear focused widget */
-            guii_widget_invalidate(GUI.FocusedWidget); /* Invalidate widget */
-            GUI.FocusedWidget = guii_widget_getparent(GUI.FocusedWidget);   /* Get parent widget */
-        } while (GUI.FocusedWidget != GUI.root.first);  /* Loop to the bottom */
-        GUI.FocusedWidget = NULL;                   /* Reset focused widget */
+            guii_widget_callback(GUI.focused_widget, GUI_WC_FocusOut, NULL, NULL);
+            guii_widget_clrflag(GUI.focused_widget, GUI_FLAG_FOCUS); /* Clear focused widget */
+            guii_widget_invalidate(GUI.focused_widget); /* Invalidate widget */
+            GUI.focused_widget = guii_widget_getparent(GUI.focused_widget);   /* Get parent widget */
+        } while (GUI.focused_widget != GUI.root.first);  /* Loop to the bottom */
+        GUI.focused_widget = NULL;                   /* Reset focused widget */
     }
 }
 
@@ -847,7 +847,7 @@ void
 guii_widget_focus_set(gui_handle_p h) {
     gui_handle_p common = NULL;
     
-    if (GUI.FocusedWidget == h) {                   /* Check current focused widget */
+    if (GUI.focused_widget == h) {                   /* Check current focused widget */
         return;
     }
     
@@ -861,15 +861,15 @@ guii_widget_focus_set(gui_handle_p h) {
      * Identify common parent from new and old focused widget
      * Remove focused flag on widget which are not in tree between old and new widgets
      */
-    if (GUI.FocusedWidget != NULL) {                /* We already have one widget in focus */
-        common = get_common_parentwidget(GUI.FocusedWidget, h); /* Get first widget in common */
+    if (GUI.focused_widget != NULL) {                /* We already have one widget in focus */
+        common = get_common_parentwidget(GUI.focused_widget, h); /* Get first widget in common */
         if (common != NULL) {                       /* We have common object, invalidate only those which are not common in tree */
             for (; 
-                GUI.FocusedWidget != NULL && common != NULL && GUI.FocusedWidget != common;
-                GUI.FocusedWidget = guii_widget_getparent(GUI.FocusedWidget)) {
-                guii_widget_clrflag(GUI.FocusedWidget, GUI_FLAG_FOCUS);    /* Clear focused flag */
-                guii_widget_callback(GUI.FocusedWidget, GUI_WC_FocusOut, NULL, NULL);  /* Notify with callback */
-                guii_widget_invalidate(GUI.FocusedWidget); /* Invalidate widget */
+                GUI.focused_widget != NULL && common != NULL && GUI.focused_widget != common;
+                GUI.focused_widget = guii_widget_getparent(GUI.focused_widget)) {
+                guii_widget_clrflag(GUI.focused_widget, GUI_FLAG_FOCUS);    /* Clear focused flag */
+                guii_widget_callback(GUI.focused_widget, GUI_WC_FocusOut, NULL, NULL);  /* Notify with callback */
+                guii_widget_invalidate(GUI.focused_widget); /* Invalidate widget */
             }
         }
     } else {
@@ -882,7 +882,7 @@ guii_widget_focus_set(gui_handle_p h) {
      * Set new widget as focused
      * Set all widget from common to current as focused
      */ 
-    GUI.FocusedWidget = h;                          /* Set new focused widget */
+    GUI.focused_widget = h;                          /* Set new focused widget */
     while (h != NULL && common != NULL && h != common) {
         guii_widget_setflag(h, GUI_FLAG_FOCUS);     /* Set focused flag */
         guii_widget_callback(h, GUI_WC_FocusIn, NULL, NULL);   /* Notify with callback */
@@ -896,11 +896,11 @@ guii_widget_focus_set(gui_handle_p h) {
  */
 void
 guii_widget_active_clear(void) {
-    if (GUI.ActiveWidget != NULL) {
-        guii_widget_callback(GUI.ActiveWidget, GUI_WC_ActiveOut, NULL, NULL);  /* Notify user about change */
-        guii_widget_clrflag(GUI.ActiveWidget, GUI_FLAG_ACTIVE | GUI_FLAG_TOUCH_MOVE);  /* Clear all widget based flags */
-        GUI.ActiveWidgetPrev = GUI.ActiveWidget;    /* Save as previous active */
-        GUI.ActiveWidget = NULL;                    /* Clear active widget handle */
+    if (GUI.active_widget != NULL) {
+        guii_widget_callback(GUI.active_widget, GUI_WC_ActiveOut, NULL, NULL);  /* Notify user about change */
+        guii_widget_clrflag(GUI.active_widget, GUI_FLAG_ACTIVE | GUI_FLAG_TOUCH_MOVE);  /* Clear all widget based flags */
+        GUI.active_widget_prev = GUI.active_widget;  /* Save as previous active */
+        GUI.active_widget = NULL;                    /* Clear active widget handle */
     }
 }
 
@@ -911,10 +911,10 @@ guii_widget_active_clear(void) {
 void
 guii_widget_active_set(gui_handle_p h) {
     guii_widget_active_clear();                      /* Clear active widget flag */
-    GUI.ActiveWidget = h;                           /* Set new active widget */
+    GUI.active_widget = h;                           /* Set new active widget */
     if (h != NULL) {
-        guii_widget_setflag(GUI.ActiveWidget, GUI_FLAG_ACTIVE);    /* Set active widget flag */
-        guii_widget_callback(GUI.ActiveWidget, GUI_WC_ActiveIn, NULL, NULL);
+        guii_widget_setflag(GUI.active_widget, GUI_FLAG_ACTIVE);    /* Set active widget flag */
+        guii_widget_callback(GUI.active_widget, GUI_WC_ActiveIn, NULL, NULL);
     }
 }
 
@@ -930,7 +930,7 @@ guii_widget_active_set(gui_handle_p h) {
  */
 gui_dim_t
 guii_widget_getwidth(gui_handle_p h) {
-    if (!(guii_widget_iswidget(h)) || !(GUI.Initialized)) {
+    if (!(guii_widget_iswidget(h)) || !(GUI.initialized)) {
         return 0;
     }
 #if GUI_CFG_USE_POS_SIZE_CACHE
@@ -952,7 +952,7 @@ guii_widget_getwidth(gui_handle_p h) {
  */
 gui_dim_t
 guii_widget_getheight(gui_handle_p h) {
-    if (!(guii_widget_iswidget(h)) || !(GUI.Initialized)) {
+    if (!(guii_widget_iswidget(h)) || !(GUI.initialized)) {
         return 0;
     }
 #if GUI_CFG_USE_POS_SIZE_CACHE
@@ -1193,13 +1193,15 @@ guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, fl
          * - If flag for parent desktop is set, parent widget is also desktop
          * - Otherwise parent widget passed as parameter is used if it supports children widgets
          */
-        if (guii_widget_isdialogbase(h) || flags & GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP) {/* Dialogs do not have parent widget */
+        if (flags & GUI_FLAG_WIDGET_CREATE_NO_PARENT) {
+            h->parent = NULL;
+        } else if (guii_widget_isdialogbase(h) || flags & GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP) {  /* Dialogs do not have parent widget */
             h->parent = gui_window_getdesktop();    /* Set parent object */
         } else {
             if (parent != NULL && guii_widget_allowchildren(parent)) {
                 h->parent = parent;
             } else {
-                h->parent = GUI.WindowActive;       /* Set parent object. It will be NULL on first call */
+                h->parent = GUI.window_active;       /* Set parent object. It will be NULL on first call */
             }
         }
         
@@ -1807,10 +1809,10 @@ guii_widget_hide(gui_handle_p h) {
     }
     
     /* TODO: Check if active/focused widget is maybe children of this widget */
-    if (GUI.FocusedWidget != NULL && (GUI.FocusedWidget == h || guii_widget_ischildof(GUI.FocusedWidget, h))) {    /* Clear focus */
-        guii_widget_focus_set(guii_widget_getparent(GUI.FocusedWidget)); /* Set parent widget as focused now */
+    if (GUI.focused_widget != NULL && (GUI.focused_widget == h || guii_widget_ischildof(GUI.focused_widget, h))) {    /* Clear focus */
+        guii_widget_focus_set(guii_widget_getparent(GUI.focused_widget)); /* Set parent widget as focused now */
     }
-    if (GUI.ActiveWidget && (GUI.ActiveWidget == h || guii_widget_ischildof(GUI.ActiveWidget, h))) {   /* Clear active */
+    if (GUI.active_widget && (GUI.active_widget == h || guii_widget_ischildof(GUI.active_widget, h))) {   /* Clear active */
         guii_widget_active_clear();
     }
     return 1;
@@ -1847,7 +1849,7 @@ uint8_t
 guii_widget_ischildof(gui_handle_p h, gui_handle_p parent) {
     //__GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_iswidget(parent));  /* Check valid parameter */
     
-    if (!(guii_widget_iswidget(h) && guii_widget_iswidget(parent)) || !(GUI.Initialized)) {
+    if (!(guii_widget_iswidget(h) && guii_widget_iswidget(parent)) || !(GUI.initialized)) {
         return 0;
     }
     

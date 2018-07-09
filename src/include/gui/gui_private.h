@@ -79,12 +79,12 @@ typedef struct {
     
     uint32_t flags;                         /*!< Core GUI flags management */
     
-    gui_display_t Display;                  /*!< Clipping management */
-    gui_display_t DisplayTemp;              /*!< Clipping for widgets for drawing and touch */
+    gui_display_t display;                  /*!< Clipping management */
+    gui_display_t display_temp;             /*!< Clipping for widgets for drawing and touch, used for drawing area of current widget */
     
-    gui_handle_p WindowActive;              /*!< Pointer to currently active window when creating new widgets */
-    gui_handle_p FocusedWidget;             /*!< Pointer to focused widget for keyboard events if any */
-    gui_handle_p FocusedWidgetPrev;         /*!< Pointer to previously focused widget */
+    gui_handle_p window_active;             /*!< Pointer to currently active window when creating new widgets */
+    gui_handle_p focused_widget;            /*!< Pointer to focused widget for keyboard events if any */
+    gui_handle_p focused_widget_prev;       /*!< Pointer to previously focused widget */
     
     gui_linkedlistroot_t root;              /*!< Root linked list of widgets */
     gui_timer_core_t timers;                /*!< Software structure management */
@@ -95,10 +95,10 @@ typedef struct {
     gui_widget_result_t WidgetResult;
     
 #if GUI_CFG_USE_TOUCH || __DOXYGEN__
-    guii_touch_data_t TouchOld;             /*!< Old touch data, used for event management */
-    guii_touch_data_t Touch;                /*!< Current touch data and processing tool */
-    gui_handle_p ActiveWidget;              /*!< Pointer to widget currently active by touch */
-    gui_handle_p ActiveWidgetPrev;          /*!< Previously active widget */
+    guii_touch_data_t touch_old;            /*!< Old touch data, used for event management */
+    guii_touch_data_t touch;                /*!< Current touch data and processing tool */
+    gui_handle_p active_widget;             /*!< Pointer to widget currently active by touch */
+    gui_handle_p active_widget_prev;        /*!< Previously active widget */
 #endif /* GUI_CFG_USE_TOUCH */
 
 #if GUI_CFG_USE_TRANSLATE
@@ -111,7 +111,7 @@ typedef struct {
 
     gui_eventcallback_t evt_cb;             /*!< Pointer to global GUI event callback function */
     
-    uint8_t Initialized;                    /*!< Status indicating GUI is initialized */
+    uint8_t initialized;                    /*!< Status indicating GUI is initialized */
 } gui_t;
 
 extern gui_t GUI;
@@ -146,7 +146,7 @@ extern gui_t GUI;
  * \hideinitializer
  */
 #define __GUI_ASSERTPARAMS(c)       do {            \
-    if (!(c) || !(GUI.Initialized)) {                                     \
+    if (!(c) || !(GUI.initialized)) {                                     \
         GUI_DEBUG("Assert param failed in file %s and line %d\r\n", (const char *)__FILE__, (unsigned)__LINE__);  \
         return 0;                                   \
     }                                               \
@@ -157,7 +157,7 @@ extern gui_t GUI;
  * \hideinitializer
  */
 #define __GUI_ASSERTACTIVEWIN()     do {            \
-    if (GUI.WindowActive == NULL) {                        \
+    if (GUI.window_active == NULL) {                \
         __GUI_DEBUG("There is no active window for widget in file %s on line %d\r\n", __FILE__, __LINE__);  \
         return NULL;                                \
     }                                               \

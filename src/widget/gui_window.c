@@ -336,7 +336,7 @@ gui_window_setactive(gui_handle_p h) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    GUI.WindowActive = h;                           /* Set new active window */
+    GUI.window_active = h;                           /* Set new active window */
     guii_widget_movedowntree(h);                     /* Move widget down on tree */
     
     guii_widget_focus_clear();                       /* Clear focus on widget */

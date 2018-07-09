@@ -58,6 +58,7 @@ typedef struct {
     uint8_t is_shift;                               /*!< Status indicating shift mode is enabled */
     gui_handle_p handle;                            /*!< Pointer to keyboard handle */
     gui_handle_p main_layout_handle;                /*!< Pointer to main keyboard layout */
+    gui_handle_p target;                            /*!< Target key */
     
     const gui_font_t* font;                         /*!< Pointer to used font */
     const gui_font_t* default_font;                 /*!< Pointer to default font */
@@ -282,19 +283,19 @@ keyboard = {
 
 #define SHIFT_DISABLE()     if (keyboard.is_shift) {        \
     keyboard.is_shift = 0;                                  \
-    guii_widget_invalidate(keyboard.main_layout_handle);   \
+    guii_widget_invalidate(keyboard.main_layout_handle);    \
 }
 
 #define SHIFT_ENABLE(mode)  do {                            \
     if (!keyboard.is_shift && (mode)) {                     \
-        guii_widget_invalidate(keyboard.main_layout_handle);  \
+        guii_widget_invalidate(keyboard.main_layout_handle);\
     }                                                       \
     keyboard.is_shift = (mode);                             \
 } while (0)
 
 #define SHIFT_TOGGLE()      do {                            \
     keyboard.is_shift = !keyboard.is_shift;                 \
-    guii_widget_invalidate(keyboard.main_layout_handle);   \
+    guii_widget_invalidate(keyboard.main_layout_handle);    \
 } while (0)
 
 /**
@@ -354,7 +355,7 @@ keyboard_btn_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, g
             gui_handle_p tmp1, tmp2, tmp3;
             const key_btn_t* kbtn;
             uint32_t ch = 0;
-            gui_keyboard_data_t kbd = {0};
+            /* gui_keyboard_data_t kbd = {0}; */
             
             kbtn = guii_widget_getuserdata(h);      /* Get data from widget */
             if (kbtn->s) {                          /* Has button special function? */
@@ -379,55 +380,68 @@ keyboard_btn_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, g
                             guii_widget_hide(tmp2);
                             guii_widget_show(tmp3);
                         }
-                        SHIFT_DISABLE();        /* Clear shift mode */
+                        SHIFT_DISABLE();            /* Clear shift mode */
                         break;
                     }
                     case SPECIAL_SHIFT: {
-                        SHIFT_TOGGLE();         /* Toggle shift mode */
+                        SHIFT_TOGGLE();             /* Toggle shift mode */
                         break;
                     }
                     case SPECIAL_BACKSPACE: {
-                        ch = GUI_KEY_BACKSPACE; /* Fake backspace key */
+                        ch = GUI_KEY_BACKSPACE;     /* Fake backspace key */
                         break;
                     }
-                    case SPECIAL_HIDE: {        /* Hide button pressed */
-                        guii_keyboard_hide();  /* Hide keyboard */
+                    case SPECIAL_HIDE: {            /* Hide button pressed */
+                        guii_keyboard_hide();       /* Hide keyboard */
                         break;
                     }
                 }
             }
-            
+                                                    
             /*
              * Check if we have to add key to input buffer
              */
-            if (ch || !kbtn->s) {               /* If character from special is set or normal key pressed */
-                if (!ch) {                      /* Only if char not yet set */
+            if (ch || !kbtn->s) {                   /* If character from special is set or normal key pressed */
+                if (!ch) {                          /* Only if char not yet set */
                     if (keyboard.is_shift && kbtn->cs) {/* If shift mode enabled and character has shift mode character */
-                        ch = kbtn->cs;          /* Use shift mode character */
+                        ch = kbtn->cs;              /* Use shift mode character */
                     } else {
-                        ch = kbtn->c;           /* Use normal character */
+                        ch = kbtn->c;               /* Use normal character */
                     }
                 }
                 
                 /* Clear shift mode if necessary */
                 if (keyboard.is_shift != SHIFT_UPPERCASE) {   /* When not in uppercase shift mode */
-                    SHIFT_DISABLE();            /* Clear shift mode */
+                    SHIFT_DISABLE();                /* Clear shift mode */
                 }
                 
                 /************************************/
                 /* Send character to focused widget */
                 /************************************/
-                gui_string_unicode_encode(ch, kbd.keys);/* Decode key */
-                gui_input_keyadd(&kbd);         /* Add actual key */
-                kbd.keys[0] = 0;                /* Set key to 0 */
-                gui_input_keyadd(&kbd);         /* Add end key */
+                if (keyboard.target != NULL) {
+                    gui_widget_param_t param;
+                    gui_widget_result_t result;
+                    guii_keyboard_data_t key;
+
+                    gui_string_unicode_encode(ch, key.kb.keys);/* Decode key */
+                    GUI_WIDGET_PARAMTYPE_KEYBOARD(&param) = &key;
+                    GUI_WIDGET_RESULTTYPE_KEYBOARD(&result) = keyCONTINUE;
+                    guii_widget_callback(keyboard.target, GUI_WC_KeyPress, &param, &result);
+
+                    key.kb.keys[0] = 0;             /* Set key to 0 */
+                    GUI_WIDGET_PARAMTYPE_KEYBOARD(&param) = &key;
+                    GUI_WIDGET_RESULTTYPE_KEYBOARD(&result) = keyCONTINUE;
+                    guii_widget_callback(keyboard.target, GUI_WC_KeyPress, &param, &result);
+                }
+                //kbd.keys[0] = 0;                    /* Set key to 0 */
+                //gui_input_keyadd(&kbd);             /* Add end key */
             }
             return 1;
         }
         case GUI_WC_DblClick: {
             const key_btn_t* kbtn;
             
-            kbtn = guii_widget_getuserdata(h); /* Get data from widget */
+            kbtn = guii_widget_getuserdata(h);      /* Get data from widget */
             switch (kbtn->s) {
                 case SPECIAL_SHIFT: {
                     SHIFT_ENABLE(SHIFT_UPPERCASE);  /* Enable shift upper case mode */
@@ -437,7 +451,7 @@ keyboard_btn_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, g
             return 0;
         }
         default:
-            GUI_UNUSED3(h, param, result);      /* Unused elements to prevent compiler warnings */
+            GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return gui_widget_processdefaultcallback(h, cmd, param, result);    /* Process default callback */
     }
 }
@@ -449,8 +463,8 @@ keyboard_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, gui_w
         case GUI_WC_Init: {
             return 1;
         }
-        default:                                /* Handle default option */
-            GUI_UNUSED3(h, param, result);      /* Unused elements to prevent compiler warnings */
+        default:                                    /* Handle default option */
+            GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return gui_widget_processdefaultcallback(h, cmd, param, result);    /* Process default callback */
     }
 }
@@ -458,24 +472,24 @@ keyboard_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, gui_w
 /* Timer callback for keyboard */
 static void
 keyboard_timer_callback(gui_timer_t* timer) {
-    if (keyboard.action == ACTION_HIDE) {       /* We should hide the keyboard */
+    if (keyboard.action == ACTION_HIDE) {           /* We should hide the keyboard */
         if (keyboard.action_value < 10) {
             keyboard.action_value++;
             guii_widget_setpositionpercent(keyboard.handle, GUI_FLOAT(0), GUI_FLOAT(50 + keyboard.action_value * 5));
         } else {
-            guii_widget_hide(keyboard.handle);  /* Hide keyboard */
-            guii_timer_stop(timer);             /* Stop timer */
+            guii_widget_hide(keyboard.handle);      /* Hide keyboard */
+            guii_timer_stop(timer);                 /* Stop timer */
         }
-    } else if (keyboard.action == ACTION_SHOW) {/* We should show the keyboard */
+    } else if (keyboard.action == ACTION_SHOW) {    /* We should show the keyboard */
         if (keyboard.action_value) {
-            if (keyboard.action_value == 10) {  /* At the bottom? */
+            if (keyboard.action_value == 10) {      /* At the bottom? */
                 guii_widget_show(keyboard.handle);  /* First set keyboard as visible */
             }
-            keyboard.action_value--;            /* Decrease value */
+            keyboard.action_value--;                /* Decrease value */
             guii_widget_setpositionpercent(keyboard.handle, GUI_FLOAT(0), GUI_FLOAT(50 + keyboard.action_value * 5));
         }
         if (keyboard.action_value == 0) {
-            guii_timer_stop(timer);             /* Stop timer */
+            guii_timer_stop(timer);                 /* Stop timer */
         }
     }
 }
@@ -491,7 +505,7 @@ keyboard_base_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, 
             }
             return 1;
         }
-        case GUI_WC_Init: {                     /* When base element is initialized */
+        case GUI_WC_Init: {                         /* When base element is initialized */
             gui_handle_p handle, handleLayout;
             size_t i, k, z;
             const key_layout_t* layout;
@@ -501,29 +515,29 @@ keyboard_base_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, 
             /***************************/
             /*   Configure keyboard    */
             /***************************/
-            guii_widget_setsizepercent(h, 100, 50); /* Set keyboard size */
-            guii_widget_setpositionpercent(h, 0, 50);   /* Set position of keyboard outside visible area */
-            guii_widget_setzindex(h, GUI_WIDGET_ZINDEX_MAX);   /* Set to maximal z-index */
-            guii_widget_hide(h);                /* Hide keyboard by default */
+            guii_widget_setsizepercent(h, 100, 100);/* Set keyboard size */
+            guii_widget_setpositionpercent(h, 0, 0);/* Set position of keyboard outside visible area */
+            guii_widget_setzindex(h, GUI_WIDGET_ZINDEX_MAX);/* Set to maximal z-index */
+            guii_widget_hide(h);                    /* Hide keyboard by default */
             
-            keyboard.default_font = h->font;    /* Save current font */
+            keyboard.default_font = h->font;        /* Save current font */
             
             /***************************/
             /* Create keyboard layouts */
             /***************************/
             for (i = 0; i < GUI_COUNT_OF(layouts); i++) {
-                layout = &layouts[i];           /* Get layout data */
+                layout = &layouts[i];               /* Get layout data */
                 
                 /***************************/
                 /* Create keyboard layout  */
                 /***************************/
                 handleLayout = gui_container_create(layout->id, 0, 0, 100, 100, h, keyboard_callback, 0);
-                guii_widget_setsizepercent(handleLayout, 100, 100);
-                guii_widget_setpositionpercent(handleLayout, 0, 0);
+                guii_widget_setsizepercent(handleLayout, 100, 50);
+                guii_widget_setpositionpercent(handleLayout, 0, 50);
                 guii_widget_setuserdata(handleLayout, (void *)layout);
-                if (i) {                        /* Show only first layout */
+                if (i) {                            /* Show only first layout */
                     guii_widget_hide(handleLayout);
-                } else {                        /* Save main layout handle */
+                } else {                            /* Save main layout handle */
                     keyboard.main_layout_handle = handleLayout;
                 }
                 
@@ -531,22 +545,22 @@ keyboard_base_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, 
                 /* Draw buttons on layout  */
                 /***************************/
                 for (k = 0; k < layout->rows_count; k++) {
-                    row = &layout->rows[k];     /* Get row pointer */
+                    row = &layout->rows[k];         /* Get row pointer */
                     for (z = 0; z < row->btns_count; z++) {
-                        btn = &row->btns[z];    /* Get button pointer */
+                        btn = &row->btns[z];        /* Get button pointer */
                         
                         handle = gui_button_create(0, 0, 0, 1, 1, handleLayout, keyboard_btn_callback, 0);    /* Create button object */
                         guii_widget_setuserdata(handle, (void *)btn);  /* Set pointer to button */
                         guii_widget_setsizepercent(handle, btn->w, 23);    /* Set button percent */
-                        guii_widget_setpositionpercent(handle, btn->x, GUI_DIM(1 + 25 * k));
+                        guii_widget_setpositionpercent(handle, btn->x, GUI_DIM(1 + (100.0f / layout->rows_count) * k));
                         guii_widget_set3dstyle(handle, 0); /* Make buttons flat */
                     }
                 }
             }
             return 1;
         }
-        default:                                /* Handle default option */
-            GUI_UNUSED3(h, param, result);      /* Unused elements to prevent compiler warnings */
+        default:                                    /* Handle default option */
+            GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return gui_widget_processdefaultcallback(h, cmd, param, result);    /* Process default callback */
     }
 }
@@ -559,10 +573,11 @@ keyboard_base_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, 
  */
 uint8_t
 guii_keyboard_hide(void) {
-    __GUI_ASSERTPARAMS(keyboard.handle != NULL);/* Check parameters */
-    guii_widget_hide(keyboard.handle);          /* Show keyboard widget */
-    //keyboard.action = ACTION_HIDE;              /* Set action to hide */
-    //guii_timer_startperiodic(keyboard.handle->timer);   /* Start periodic timer */
+    __GUI_ASSERTPARAMS(keyboard.handle != NULL);    /* Check parameters */
+    guii_widget_hide(keyboard.handle);              /* Show keyboard widget */
+    guii_widget_show(GUI.root.first);               /* Hide first on linked list */
+    //keyboard.action = ACTION_HIDE;                /* Set action to hide */
+    //guii_timer_startperiodic(keyboard.handle->timer); /* Start periodic timer */
     
     return 1;
 }
@@ -576,17 +591,19 @@ guii_keyboard_hide(void) {
  */
 uint8_t
 guii_keyboard_show(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(keyboard.handle != NULL);/* Check parameters */
-    if (h != NULL && h->font != NULL) {         /* Check widget and font for it */
-        keyboard.font = h->font;                /* Save font as display font */
-        guii_widget_invalidate(keyboard.handle);/* Force invalidation */
+    __GUI_ASSERTPARAMS(keyboard.handle != NULL);    /* Check parameters */
+    keyboard.target = h;                            /* Save target widget */
+    if (h != NULL && h->font != NULL) {             /* Check widget and font for it */
+        keyboard.font = h->font;                    /* Save font as display font */
+        guii_widget_invalidate(keyboard.handle);    /* Force invalidation */
     }
-    guii_widget_show(keyboard.handle);          /* Show keyboard widget */
-    
-//    keyboard.action = ACTION_SHOW;              /* Set action to show */
-//    if (h != NULL && h->font != NULL) {         /* Check widget and font for it */
-//        keyboard.font = h->font;                /* Save font as display font */
-//        guii_widget_invalidate(keyboard.handle);/* Force invalidation */
+    guii_widget_hide(GUI.root.first);               /* Hide first on linked list */
+    guii_widget_show(keyboard.handle);              /* Show keyboard widget */
+
+//    keyboard.action = ACTION_SHOW;                  /* Set action to show */
+//    if (h != NULL && h->font != NULL) {             /* Check widget and font for it */
+//        keyboard.font = h->font;                    /* Save font as display font */
+//        guii_widget_invalidate(keyboard.handle);    /* Force invalidation */
 //    }
 //    guii_timer_startperiodic(keyboard.handle->timer);   /* Start periodic timer */
     
@@ -600,13 +617,13 @@ guii_keyboard_show(gui_handle_p h) {
  */
 gui_handle_p
 gui_keyboard_create(void) {    
-    __GUI_ENTER();                              /* Enter GUI */
+    __GUI_ENTER();                                  /* Enter GUI */
     
     if (keyboard.handle == NULL) {
-        keyboard.handle = gui_container_create(GUI_ID_KEYBOARD_BASE, 0, 0, 1, 1, 0, keyboard_base_callback, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);  /* Create keyboard base element with desktop as parent */
+        keyboard.handle = gui_container_create(GUI_ID_KEYBOARD_BASE, 0, 0, 1, 1, 0, keyboard_base_callback, GUI_FLAG_WIDGET_CREATE_NO_PARENT);  /* Create keyboard base element with desktop as parent */
     }
     
-    __GUI_LEAVE();                              /* Leave GUI */
+    __GUI_LEAVE();                                  /* Leave GUI */
     return keyboard.handle;
 }
 
@@ -618,11 +635,11 @@ gui_keyboard_create(void) {
 uint8_t
 gui_keyboard_hide(void) {
     uint8_t ret;
-    __GUI_ENTER();                              /* Enter GUI */
+    __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = guii_keyboard_hide();                 /* Hide keyboard */
+    ret = guii_keyboard_hide();                     /* Hide keyboard */
     
-    __GUI_LEAVE();                              /* Leave GUI */
+    __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
 }
 
@@ -635,10 +652,10 @@ gui_keyboard_hide(void) {
 uint8_t
 gui_keyboard_show(gui_handle_p h) {
     uint8_t ret;
-    __GUI_ENTER();                              /* Enter GUI */
+    __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = guii_keyboard_show(h);                /* Show keyboard */
+    ret = guii_keyboard_show(h);                    /* Show keyboard */
     
-    __GUI_LEAVE();                              /* Leave GUI */
+    __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
 }
