@@ -335,7 +335,7 @@ static gui_font_charentry_t *
 get_char_entry_from_font(const gui_font_t* font, const gui_font_char_t* c) {
     gui_font_charentry_t* entry;
     
-    for (entry = (gui_font_charentry_t *)gui_linkedlist_getnext_gen(&GUI.RootFonts, NULL); entry != NULL;
+    for (entry = (gui_font_charentry_t *)gui_linkedlist_getnext_gen(&GUI.root_fonts, NULL); entry != NULL;
         entry = (gui_font_charentry_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)entry)) {
         if (entry->Font == font && entry->Ch == c) {
             return entry;
@@ -419,8 +419,7 @@ create_char_entry_from_font(const gui_font_t* font, const gui_font_char_t* c) {
                 }
             }
         }
-        
-        gui_linkedlist_add_gen(&GUI.RootFonts, (gui_linkedlist_t *)entry);  /* Add entry to linked list */
+        gui_linkedlist_add_gen(&GUI.root_fonts, (gui_linkedlist_t *)entry);  /* Add entry to linked list */
     }
     return entry;                                   /* Return new created entry */
 }

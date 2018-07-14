@@ -109,7 +109,7 @@ sdl_thread(void* arg) {
 
 static int 
 sdl_event_filter(void* userdata, SDL_Event* evt) {
-
+    return 0;
 }
 
 static int
@@ -157,8 +157,8 @@ my_mouse_evt(void) {
 }
 
 /**
-*
-*/
+ *
+ */
 void
 lcd_fill(gui_lcd_t* LCD, gui_layer_t* layer, void* dst, gui_dim_t xSize, gui_dim_t ySize, gui_dim_t OffLine, gui_color_t color) {
     gui_dim_t x, y;

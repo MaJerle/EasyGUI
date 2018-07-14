@@ -158,8 +158,8 @@ redraw_widgets(gui_handle_p parent) {
 #endif /* GUI_CFG_USE_TRANSPARENCY */
                 
                 /* Draw widget itself normally, don't care on layer offset and size */
-                GUI_WIDGET_PARAMTYPE_DISP(&GUI.WidgetParam) = &GUI.display_temp;  /* Set parameter */
-                guii_widget_callback(h, GUI_WC_Draw, &GUI.WidgetParam, &GUI.WidgetResult); /* Draw widget */
+                GUI_WIDGET_PARAMTYPE_DISP(&GUI.widget_param) = &GUI.display_temp;   /* Set parameter */
+                guii_widget_callback(h, GUI_WC_Draw, &GUI.widget_param, &GUI.widget_result);    /* Draw widget */
                 
                 /* Check if there are children widgets in this widget */
                 if (guii_widget_allowchildren(h)) {
@@ -476,9 +476,9 @@ process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
                 ); 
             
                 /* Call touch start callback to see if widget accepts touches */
-                GUI_WIDGET_PARAMTYPE_TOUCH(&GUI.WidgetParam) = touch;
-                guii_widget_callback(h, GUI_WC_TouchStart, &GUI.WidgetParam, &GUI.WidgetResult);
-                tStat = GUI_WIDGET_RESULTTYPE_TOUCH(&GUI.WidgetResult);
+                GUI_WIDGET_PARAMTYPE_TOUCH(&GUI.widget_param) = touch;
+                guii_widget_callback(h, GUI_WC_TouchStart, &GUI.widget_param, &GUI.widget_result);
+                tStat = GUI_WIDGET_RESULTTYPE_TOUCH(&GUI.widget_result);
                 if (tStat == touchCONTINUE) {       /* Check result status */
                     tStat = touchHANDLED;           /* If command is processed, touchCONTINUE can't work */
                 }

@@ -89,10 +89,10 @@ typedef struct {
     gui_linkedlistroot_t root;              /*!< Root linked list of widgets */
     gui_timer_core_t timers;                /*!< Software structure management */
     
-    gui_linkedlistroot_t RootFonts;         /*!< Root linked list of font widgets */
+    gui_linkedlistroot_t root_fonts;        /*!< Root linked list of font widgets */
     
-    gui_widget_param_t WidgetParam;
-    gui_widget_result_t WidgetResult;
+    gui_widget_param_t widget_param;
+    gui_widget_result_t widget_result;
     
 #if GUI_CFG_USE_TOUCH || __DOXYGEN__
     guii_touch_data_t touch_old;            /*!< Old touch data, used for event management */

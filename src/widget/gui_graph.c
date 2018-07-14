@@ -233,7 +233,7 @@ gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
                             x2 = x1 + xStep;                /* Calculate next X */
                             y2 = yBottom - ((float)data->data[read] - g->visible_min_y) * yStep;/* Calculate next Y */
                             if ((x1 >= disp->x1 || x2 >= disp->x1) && (x1 < disp->x2 || x2 < disp->x2)) {
-                                gui_draw_line(disp, x1, y1, x2, y2, data->color);   /* Draw actual line */
+                                gui_draw_line(disp, GUI_DIM(x1, GUI_DIM(y1), GUI_DIM(x2), GUI_DIM(y2), data->color);/* Draw actual line */
                             }
                             x1 = x2, y1 = y2;       /* Copy values as old */
                             
