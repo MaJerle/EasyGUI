@@ -50,7 +50,7 @@ extern "C" {
 /**
  * \brief           Get data from multi linked list object
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       element: Linked list element of \ref gui_linkedlistmulti_t structure
+ * \param[in]       e: Linked list element of \ref gui_linkedlistmulti_t structure
  * \retval          Element in linked list
  * \hideinitializer
  */

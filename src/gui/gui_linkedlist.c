@@ -448,7 +448,7 @@ gui_linkedlist_multi_find_remove(gui_linkedlistroot_t* root, void* element) {
 /**
  * \brief           Add new widget to linked list of parent widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       root: Pointer to parent widget where to put this widget on list
+ * \param[in]       parent: Pointer to parent widget where to put this widget on list
  * \param[in]       h: Widget handle to add to list 
  * \sa              gui_linkedlist_widgetremove
  */

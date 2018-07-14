@@ -553,7 +553,8 @@ keyboard_base_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, 
                         guii_widget_setuserdata(handle, (void *)btn);  /* Set pointer to button */
                         guii_widget_setsizepercent(handle, btn->w, 23);    /* Set button percent */
                         guii_widget_setpositionpercent(handle, btn->x, GUI_DIM(1 + (100.0f / layout->rows_count) * k));
-                        guii_widget_set3dstyle(handle, 0); /* Make buttons flat */
+                        guii_widget_set3dstyle(handle, 0);  /* Make buttons flat */
+                        guii_widget_setzindex(handle, z);   /* Set fixed Z-index position */
                     }
                 }
             }

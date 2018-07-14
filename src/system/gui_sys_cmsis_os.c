@@ -32,13 +32,17 @@
 #include "system/gui_sys.h"
 #include "stm32f7xx_hal.h"
 
+#if !__DOXYGEN__
+
 #if GUI_CFG_OS
 static osMutexId sys_mutex;                     /* Mutex ID for main protection */
 #endif /* GUI_CFG_OS */
 
 uint8_t
 gui_sys_init(void) {
+#if GUI_CFG_OS
     gui_sys_mutex_create(&sys_mutex);           /* Create system mutex */
+#endif /* GUI_CFG_OS */
     return 1;
 }
 
@@ -201,3 +205,4 @@ gui_sys_thread_create(gui_sys_thread_t* t, const char* name, void (*thread_func)
     return !!*t;
 }
 #endif /* GUI_CFG_OS */
+#endif /* !__DOXYGEN__ */

@@ -148,7 +148,7 @@ gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
 #endif /* GUI_CFG_USE_KEYBOARD */
         case GUI_WC_ActiveIn:
         case GUI_WC_ActiveOut: {
-            guii_widget_invalidate(h);             /* Invalidate widget */
+            guii_widget_invalidate(h);              /* Invalidate widget */
             return 1;
         }
         default:                                    /* Handle default option */

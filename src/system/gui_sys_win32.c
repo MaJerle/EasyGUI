@@ -33,6 +33,8 @@
 #include "stdlib.h"
 #include "windows.h"
 
+#if !__DOXYGEN__
+
 static LARGE_INTEGER freq, sys_start_time;
 
 #if GUI_CFG_OS
@@ -379,3 +381,4 @@ gui_sys_thread_yield(void) {
 }
 
 #endif /* GUI_CFG_OS */
+#endif /* !__DOXYGEN__ */

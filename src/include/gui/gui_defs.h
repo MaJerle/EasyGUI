@@ -1071,16 +1071,16 @@ typedef struct gui_handle {
 
 #if GUI_CFG_USE_POS_SIZE_CACHE || __DOXYGEN__
     /* Absolute values for position and size, changed each time position/size is modified */
-    gui_dim_t abs_x;
-    gui_dim_t abs_y;
-    gui_dim_t abs_width;
-    gui_dim_t abs_height;
+    gui_dim_t abs_x;                        /*!< Absolute X position of top-left corner on screen */
+    gui_dim_t abs_y;                        /*!< Absolute Y position of top-left corner on screen */
+    gui_dim_t abs_width;                    /*!< Absolute width on screen in units of pixels */
+    gui_dim_t abs_height;                   /*!< Absolute height on screen in units of pixels */
     
     /* Visible parts on screen, used on clipping calculations */
-    gui_dim_t abs_visible_x1;
-    gui_dim_t abs_visible_y1;
-    gui_dim_t abs_visible_x2;
-    gui_dim_t abs_visible_y2;
+    gui_dim_t abs_visible_x1;               /*!< Absolute visible left X position on screen for widget */
+    gui_dim_t abs_visible_y1;               /*!< Absolute visible top Y positon on screen for widget */
+    gui_dim_t abs_visible_x2;               /*!< Absolute visible right X position on screen for widget */
+    gui_dim_t abs_visible_y2;               /*!< Absolute visible bottom Y positon on screen for widget */
 #endif /* GUI_CFG_USE_POS_SIZE_CACHE */
 
     uint32_t padding;                       /*!< 4-bytes long padding, each byte of one side, MSB = top padding, LSB = left padding.

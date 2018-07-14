@@ -137,7 +137,7 @@ redraw_widgets(gui_handle_p parent) {
                 /*
                  * Check transparency and check if blending function exists to merge layers later together
                  */
-                if (guii_widget_istransparent(h) && GUI.ll.CopyBlend != NULL) {
+                if (guii_widget_istransparent(h) /* && GUI.ll.CopyBlend != NULL */) {
                     gui_dim_t width = GUI.display_temp.x2 - GUI.display_temp.x1;
                     gui_dim_t height = GUI.display_temp.y2 - GUI.display_temp.y1;
                     
@@ -180,7 +180,7 @@ redraw_widgets(gui_handle_p parent) {
                 /*
                  * If transparent mode is used on widget, copy content back
                  */
-                if (transparent) {                  /* If we were in transparent mode */
+                if (transparent) {                  /* If we are in transparent mode */
                     /* Copy layers with blending */
                     if (GUI.ll.CopyBlend != NULL) { /* Hardware way */
                         GUI.ll.CopyBlend(&GUI.lcd, GUI.lcd.drawing_layer,
@@ -220,16 +220,11 @@ redraw_widgets(gui_handle_p parent) {
 #endif /* GUI_CFG_USE_TRANSPARENCY */
 
                 cnt++;
-            /*
-             * Check if any widget from children should be redrawn
-             */
+            /* Check if any widget from children needs drawing */
             } else if (guii_widget_allowchildren(h)) {
                 cnt += redraw_widgets(h);           /* Redraw children widgets */
             }
         }
-    }
-    if (level == 0) {
-        GUI_DEBUG("Number of widgets: %d\r\n", (int)cnt);
     }
     return cnt;                                     /* Return number of redrawn objects */
 }

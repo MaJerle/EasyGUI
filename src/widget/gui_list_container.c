@@ -43,7 +43,7 @@ static uint8_t gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_wid
  */
 static const
 gui_color_t colors[] = {
-    GUI_COLOR_LIGHTBLUE,                            /*!< Default color when led is on */
+    GUI_COLOR_TRANS,                                /*!< Default color when led is on */
 };
 
 /**
@@ -53,7 +53,7 @@ static const
 gui_widget_t widget = {
     .name = _GT("LIST_CONTAINER"),                  /*!< Widget name */ 
     .size = sizeof(gui_list_container_t),           /*!< Size of widget for memory allocation */
-    .flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN,        /*!< List of widget flags */
+    .flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN | GUI_FLAG_WIDGET_INVALIDATE_PARENT,    /*!< List of widget flags */
     .callback = gui_listcontainer_callback,         /*!< Control function */
     .colors = colors,                               /*!< List of default colors */
     .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */

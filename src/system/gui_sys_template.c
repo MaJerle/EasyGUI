@@ -1,78 +1,123 @@
 #define GUI_INTERNAL
-#include "gui_sys.h"
+#include "system/gui_sys.h"
 #include "stm32f7xx_hal.h"
 
 #define VAL_MUTEX_INVALID           (osMutexId)0
 #define VAL_SEM_INVALID             (osSemaphoreId)0
 #define VAL_MBOX_INVALID            (osMessageQId)0
 
-#if GUI_OS
+#if GUI_CFG_OS
 static osMutexDef(sys_mutex);                   /* Define a mutex structure */
 static osMutexId sys_mutex;                     /* Mutex ID for main protection */
-#endif /* GUI_OS */
+#endif /* GUI_CFG_OS */
 
 /**
- * \defgroup        SYS Port functions
- * \brief           System dependant functions
- * \{
+ * \brief           Init system dependant parameters
+ * \note            Called from high-level application layer when required
+ * \return          `1` on success, `0` otherwise
  */
- 
+uint8_t
+gui_sys_init(void) {
+#if GUI_CFG_OS
+    sys_mutex = osMutexCreate(osMutex(sys_mutex));  /* Create main system mutex for protection */
+#endif /* GUI_CFG_OS */
+    return 0;
+}
+
+/**
+ * \brief           Get current time in units of milliseconds
+ * \return          Current time in units of milliseconds
+ */
 uint32_t
 gui_sys_now(void) {
     return HAL_GetTick();                       /* Get current tick in units of milliseconds */
 }
 
-#if GUI_OS || __DOXYGEN__
-uint8_t
-gui_sys_init(void) {
-    sys_mutex = osMutexCreate(osMutex(sys_mutex));  /* Create main system mutex for protection */
-    return 0;
-}
+#if GUI_CFG_OS || __DOXYGEN__
 
+/**
+ * \brief           Unprotect stack core
+ * \note            This function is required with OS
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_sys_protect(void) {
     return osMutexWait(sys_mutex, osWaitForever) != osOK;   /* Wait forever for mutex */
 }
 
+/**
+ * \brief           Unprotect stack core
+ * \note            This function is required with OS
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_sys_unprotect(void) {
     return osMutexRelease(sys_mutex) != osOK;   /* Release the mutex */
 }
 
 /**
- * \defgroup        SYS_MUTEX Mutexes
- * \brief           Port functions for mutexes
- * \{
- *
- * Mutexes must support recursive lock, which means that it can be locked again if it is already
+ * \brief           Create a new mutex and pass it to input pointer
+ * \note            This function is required with OS
+ * \note            Recursive mutex must be created as it may be locked multiple times before unlocked
+ * \param[out]      p: Pointer to mutex structure to save result to
+ * \return          `1` on success, `0` otherwise
  */
-
 uint8_t
 gui_sys_mutex_create(gui_sys_mutex_t* p) {
     osMutexDef(MUT);                            /* Define a mutex */
     return (*p = osMutexCreate(osMutex(MUT))) == 0; /* Create mutex from init */
 }
 
+/**
+ * \brief           Delete mutex from OS
+ * \note            This function is required with OS
+ * \param[in]       p: Pointer to mutex structure
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_sys_mutex_delete(gui_sys_mutex_t* p) {
     return osMutexDelete(*p) != osOK;           /* Delete mutex */
 }
   
+/**
+ * \brief           Wait forever to lock the mutex
+ * \note            This function is required with OS
+ * \param[in]       p: Pointer to mutex structure
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_sys_mutex_lock(gui_sys_mutex_t* p) {
     return osMutexWait(*p, osWaitForever) != osOK;  /* Wait forever for mutex */
 }
   
+/**
+ * \brief           Unlock mutex
+ * \note            This function is required with OS
+ * \param[in]       p: Pointer to mutex structure
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_sys_mutex_unlock(gui_sys_mutex_t* p) {
     return osMutexRelease(*p) != osOK;          /* Release mutex */
 }
 
+/**
+ * \brief           Check if mutex structure is valid OS entry
+ * \note            This function is required with OS
+ * \param[in]       p: Pointer to mutex structure
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_sys_mutex_isvalid(gui_sys_mutex_t* p) {
     return !*p;                                 /* Check if mutex is valid */
 }
 
+/**
+ * \brief           Set mutex structure as invalid
+ * \note            This function is required with OS
+ * \param[in]       p: Pointer to mutex structure
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_sys_mutex_invalid(gui_sys_mutex_t* p) {
     *p = VAL_MUTEX_INVALID;                     /* Set mutex as invalid */
@@ -80,17 +125,15 @@ gui_sys_mutex_invalid(gui_sys_mutex_t* p) {
 }
 
 /**
- * \}
+ * \brief           Create a new binary semaphore and set initial state
+ * \note            Semaphore may only have 1 token available
+ * \note            This function is required with OS
+ * \param[out]      p: Pointer to semaphore structure to fill with result
+ * \param[in]       cnt: Count indicating default semaphore state:
+ *                     0: Lock it immediteally
+ *                     1: Leave it unlocked
+ * \return          `1` on success, `0` otherwise
  */
-    
-/**
- * \defgroup        SYS_SEM Semaphores
- * \brief           Port functions for semaphores
- * \{
- *
- * Semaphores must be binary (single token) only
- */
-
 uint8_t
 gui_sys_sem_create(gui_sys_sem_t* p, uint8_t cnt) {
     osSemaphoreDef(SEM);                        /* Define semaphore info */
@@ -102,11 +145,24 @@ gui_sys_sem_create(gui_sys_sem_t* p, uint8_t cnt) {
     return !*p;
 }
 
+/**
+ * \brief           Delete binary semaphore
+ * \note            This function is required with OS
+ * \param[in]       p: Pointer to semaphore structure
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_sys_sem_delete(gui_sys_sem_t* p) {
     return osSemaphoreDelete(*p) != osOK;       /* Delete semaphore */
 }
 
+/**
+ * \brief           Wait for semaphore to be available
+ * \note            This function is required with OS
+ * \param[in]       p: Pointer to semaphore structure
+ * \param[in]       timeout: Timeout to wait in milliseconds. When 0 is applied, wait forever
+ * \return          Number of milliseconds waited for semaphore to become available
+ */
 uint32_t
 gui_sys_sem_wait(gui_sys_sem_t* p, uint32_t timeout) {
     uint32_t tick = osKernelSysTick();          /* Get start tick time */
@@ -117,40 +173,59 @@ gui_sys_sem_wait(gui_sys_sem_t* p, uint32_t timeout) {
     return SYS_TIMEOUT;                         /* We reached timeout */
 }
 
+/**
+ * \brief           Release semaphore
+ * \note            This function is required with OS
+ * \param[in]       p: Pointer to semaphore structure
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_sys_sem_release(gui_sys_sem_t* p) {
     return osSemaphoreRelease(*p) == osOK;      /* Release semaphore */
 }
 
+/**
+ * \brief           Check if semaphore is valid
+ * \note            This function is required with OS
+ * \param[in]       p: Pointer to semaphore structure
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_sys_sem_isvalid(gui_sys_sem_t* p) {
     return !*p;                                 /* Check if valid */
 }
 
+/**
+ * \brief           Invalid semaphore
+ * \note            This function is required with OS
+ * \param[in]       p: Pointer to semaphore structure
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_sys_sem_invalid(gui_sys_sem_t* p) {
     *p = VAL_SEM_INVALID;                       /* Invaldiate semaphore */
     return 0;
 }
-
-/**
- * \}
- */
-
-/**
- * \defgroup        SYS_MESSAGE Messages
- * \brief           Port functions for messages
- * \{
- *
- * Messages are used for communication between different threads
- */
     
+/**
+ * \brief           Create a new message queue with entry type of "void *"
+ * \note            This function is required with OS
+ * \param[out]      b: Pointer to message queue structure
+ * \param[in]       size: Number of entries for message queue to hold
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_sys_mbox_create(gui_sys_mbox_t* b, size_t size) {
     osMessageQDef(MBOX, size, void *);          /* Define new macro */
     return (*b = osMessageCreate(osMessageQ(MBOx), NULL)) == 0; /* Create message box */
 }
 
+/**
+ * \brief           Delete message queue
+ * \note            This function is required with OS
+ * \param[in]       b: Pointer to message queue structure
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_sys_mbox_delete(gui_sys_mbox_t* b) {
     if (osMessageWaiting(*b)) {                 /* We still have messages in queue, should not delete queue */
@@ -159,12 +234,27 @@ gui_sys_mbox_delete(gui_sys_mbox_t* b) {
     return osMessageDelete(*b) != osOK;         /* Delete message queue */
 }
 
+/**
+ * \brief           Put a new entry to message queue and wait until memory available
+ * \note            This function is required with OS
+ * \param[in]       b: Pointer to message queue structure
+ * \param[in]       m: Pointer to entry to insert to message queue
+ * \return          Time in units of milliseconds needed to put a message to queue
+ */
 uint32_t
 gui_sys_mbox_put(gui_sys_mbox_t* b, void* m) {
     uint32_t tick = osKernelSysTick();          /* Get start time */
     return osMessagePut(*b, (uint32_t)m, osWaitForever) == osOK ? (osKernelSysTick() - tick) : SYS_TIMEOUT; /* Put new message with forever timeout */
 }
 
+/**
+ * \brief           Get a new entry from message queue with timeout
+ * \note            This function is required with OS
+ * \param[in]       b: Pointer to message queue structure
+ * \param[in]       m: Pointer to pointer to result to save value from message queue to
+ * \param[in]       timeout: Maximal timeout to wait for new message. When 0 is applied, wait for unlimited time
+ * \return          Time in units of milliseconds needed to put a message to queue
+ */
 uint32_t
 gui_sys_mbox_get(gui_sys_mbox_t* b, void** m, uint32_t timeout) {
     osEvent evt;
@@ -178,11 +268,25 @@ gui_sys_mbox_get(gui_sys_mbox_t* b, void** m, uint32_t timeout) {
     return SYS_TIMEOUT;
 }
 
+/**
+ * \brief           Put a new entry to message queue without timeout (now or fail)
+ * \note            This function is required with OS
+ * \param[in]       b: Pointer to message queue structure
+ * \param[in]       m: Pointer to message to save to queue
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_sys_mbox_putnow(gui_sys_mbox_t* b, void* m) {
     return osMessagePut(*b, (uint32_t)m, 0) != osOK;   /* Put new message without timeout */
 }
 
+/**
+ * \brief           Get an entry from message queue immediatelly
+ * \note            This function is required with OS
+ * \param[in]       b: Pointer to message queue structure
+ * \param[in]       m: Pointer to pointer to result to save value from message queue to
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_sys_mbox_getnow(gui_sys_mbox_t* b, void** m) {
     osEvent evt;
@@ -195,11 +299,23 @@ gui_sys_mbox_getnow(gui_sys_mbox_t* b, void** m) {
     return 1;
 }
 
+/**
+ * \brief           Check if message queue is valid
+ * \note            This function is required with OS
+ * \param[in]       b: Pointer to message queue structure
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_sys_mbox_isvalid(gui_sys_mbox_t* b) {
     return !*b;                                 /* Return status if message box is valid */
 }
 
+/**
+ * \brief           Invalid message queue
+ * \note            This function is required with OS
+ * \param[in]       b: Pointer to message queue structure
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_sys_mbox_invalid(gui_sys_mbox_t* b) {
     *b = VAL_MBOX_INVALID;                      /* Invalidate message box */
@@ -207,27 +323,21 @@ gui_sys_mbox_invalid(gui_sys_mbox_t* b) {
 }
 
 /**
- * \}
+ * \brief           Create a new thread
+ * \note            This function is required with OS
+ * \param[out]      t: Pointer to thread identifier if create was successful
+ * \param[in]       name: Name of a new thread
+ * \param[in]       thread_func: Thread function to use as thread body
+ * \param[in]       arg: Thread function argument
+ * \param[in]       stack_size: Size of thread stack in uints of bytes. If set to 0, reserve default stack size
+ * \param[in]       prio: Thread priority 
+ * \return          `1` on success, `0` otherwise
  */
-
-/**
- * \defgroup        SYS_THREAD Threads
- * \brief           Port functions for threads
- * \{
- */
-    
-gui_sys_thread_t
-gui_sys_thread_create(const char* name, void (*thread_func)(void *), void* const arg, size_t stack_size, gui_sys_thread_prio_t prio) {
+uint8_t
+gui_sys_thread_create(gui_sys_thread_t* t, const char* name, void (*thread_func)(void *), void* const arg, size_t stack_size, gui_sys_thread_prio_t prio) {
     const osThreadDef_t thread_def = {(char *)name, (os_pthread)thread_func, (osPriority)prio, 0, stack_size};  /* Create thread description */
-    return osThreadCreate(&thread_def, arg);    /* Create thread */
+    *t = osThreadCreate(&thread_def, arg);      /* Create thread */
+    return !!*t;
 }
 
-#endif /* GUI_OS || __DOXYGEN__ */
-
-/**
- * \}
- */
-
-/**
- * \}
- */
+#endif /* GUI_CFG_OS || __DOXYGEN__ */

@@ -32,6 +32,8 @@
 #include "gui/gui_mem.h"
 #include "SDL.h"
 
+#if !__DOXYGEN__
+
 #define LCD_WIDTH                           800
 #define LCD_HEIGHT                          480
 #define LCD_PIXEL_SIZE                      4
@@ -304,3 +306,5 @@ gui_ll_control(gui_lcd_t* LCD, GUI_LL_Command_t cmd, void* param, void* result) 
             return 0;
     }
 }
+
+#endif /* !__DOXYGEN__ */

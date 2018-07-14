@@ -427,7 +427,7 @@ invalidate_widget(gui_handle_p h, uint8_t setclipping) {
     if (guii_widget_getflag(h, GUI_FLAG_IGNORE_INVALIDATE)) {   /* Check ignore flag */
         return 0;                                   /* Ignore invalidate process */
     }
-    
+
     /*
      * First check if any of parent widgets are hidden = ignore redraw
      *
@@ -689,17 +689,13 @@ can_remove_widget(gui_handle_p h) {
         return 0;
     }
     
-    /*
-     * Check widget status itself
-     */
+    /* Check widget status itself */
     GUI_WIDGET_RESULTTYPE_U8(&result) = 1;
     if (!guii_widget_callback(h, GUI_WC_Remove, NULL, &result) || GUI_WIDGET_RESULTTYPE_U8(&result)) { /* If command was not processed, allow delete */
         GUI_WIDGET_RESULTTYPE_U8(&result) = 1;      /* Manually allow delete */
     }
     
-    /*
-     * Check children widgets recursively
-     */
+    /* Check children widgets recursively */
     if (GUI_WIDGET_RESULTTYPE_U8(&result) && guii_widget_allowchildren(h)) {   /* Check if we can delete all children widgets */
         gui_handle_p h1;
         GUI_LINKEDLIST_WIDGETSLISTNEXT(h, h1) {
@@ -756,6 +752,7 @@ guii_widget_isinsideclippingregion(gui_handle_p h, uint8_t check_sib_cover) {
 
             /* Check if widget is inside */
             if (__GUI_RECT_IS_INSIDE(x1, y1, x2, y2, tx1, ty1, tx2, ty2)
+                && !guii_widget_getflag(tmp, GUI_FLAG_WIDGET_INVALIDATE_PARENT)
 #if GUI_CFG_USE_TRANSPARENCY
                 && !guii_widget_istransparent(tmp)  /* Must not have transparency enabled */
 #endif
@@ -846,8 +843,8 @@ guii_widget_focus_clear(void) {
 void
 guii_widget_focus_set(gui_handle_p h) {
     gui_handle_p common = NULL;
-    
-    if (GUI.focused_widget == h) {                   /* Check current focused widget */
+
+    if (GUI.focused_widget == h || h == NULL) {     /* Check current focused widget */
         return;
     }
     
@@ -1802,18 +1799,18 @@ guii_widget_show(gui_handle_p h) {
 uint8_t
 guii_widget_hide(gui_handle_p h) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
+
     if (!guii_widget_getflag(h, GUI_FLAG_HIDDEN)) { /* If visible, hide it */
-        guii_widget_setflag(h, GUI_FLAG_HIDDEN);
+        /* TODO: Check if active/focused widget is maybe children of this widget */
+        if (GUI.focused_widget != NULL && (GUI.focused_widget == h || guii_widget_ischildof(GUI.focused_widget, h))) {    /* Clear focus */
+            guii_widget_focus_set(guii_widget_getparent(GUI.focused_widget)); /* Set parent widget as focused now */
+        }
+        if (GUI.active_widget != NULL && (GUI.active_widget == h || guii_widget_ischildof(GUI.active_widget, h))) {   /* Clear active */
+            guii_widget_active_clear();
+        }
+
         guii_widget_invalidatewithparent(h);        /* Invalidate it for redraw with parent */
-    }
-    
-    /* TODO: Check if active/focused widget is maybe children of this widget */
-    if (GUI.focused_widget != NULL && (GUI.focused_widget == h || guii_widget_ischildof(GUI.focused_widget, h))) {    /* Clear focus */
-        guii_widget_focus_set(guii_widget_getparent(GUI.focused_widget)); /* Set parent widget as focused now */
-    }
-    if (GUI.active_widget && (GUI.active_widget == h || guii_widget_ischildof(GUI.active_widget, h))) {   /* Clear active */
-        guii_widget_active_clear();
+        guii_widget_setflag(h, GUI_FLAG_HIDDEN);    /* Hide widget */
     }
     return 1;
 }
@@ -1830,8 +1827,7 @@ guii_widget_hidechildren(gui_handle_p h) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
     
     /* Scan all widgets of current widget and hide them */
-    for (t = gui_linkedlist_widgetgetnext(h, NULL); t != NULL;
-        t = gui_linkedlist_widgetgetnext(NULL, t)) {
+    GUI_LINKEDLIST_WIDGETSLISTNEXT(h, t) {
         guii_widget_hide(t);
     }
     
@@ -1903,7 +1899,7 @@ guii_widget_settransparency(gui_handle_p h, uint8_t trans) {
     
     if (h->transparency != trans) {                 /* Check transparency match */
         h->transparency = trans;                    /* Set new transparency level */
-        SET_WIDGET_ABS_VALUES(h);
+        SET_WIDGET_ABS_VALUES(h);                   /* Set widget absolute values */
         guii_widget_invalidate(h);                  /* Invalidate widget */
     }
     

@@ -459,9 +459,9 @@ gui_listbox_setstring(gui_handle_p h, uint16_t index, const gui_char* text) {
     __GUI_ENTER();                                  /* Enter GUI */
     
     item = get_item(h, index);                      /* Get list item from handle */
-    if (item) {
+    if (item != NULL) {
         item->text = (gui_char *)text;              /* Set new text */
-        guii_widget_invalidate(h);                 /* Invalidate widget */
+        guii_widget_invalidate(h);                  /* Invalidate widget */
     }
 
     __GUI_LEAVE();                                  /* Leave GUI */

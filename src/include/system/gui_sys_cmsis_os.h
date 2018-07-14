@@ -40,7 +40,7 @@ extern "C" {
 
 #include "gui_config.h"
 
-#if GUI_CFG_OS || __DOXYGEN__
+#if GUI_CFG_OS && !__DOXYGEN__
 	
 #include "cmsis_os.h"
 
@@ -56,7 +56,7 @@ typedef osPriority                  gui_sys_thread_prio_t;
 #define GUI_SYS_THREAD_PRIO         (osPriorityNormal)
 #define GUI_SYS_THREAD_SS           (1024)
 
-#endif /* GUI_OS || __DOXYGEN__ */
+#endif /* GUI_CFG_OS && !__DOXYGEN__ */
 
 #ifdef __cplusplus
 };

@@ -611,15 +611,15 @@ string_get_pointer_for_width(const gui_font_t* font, gui_string_t* str, gui_draw
 static void
 gui_draw_fill(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_color_t color) {
     if (                                            /* Check if redraw is inside area */
-        !__GUI_RECT_MATCH(  x, y, x + width, y + height,
-                            disp->x1, disp->y1, disp->x2, disp->y2)) {
+        !__GUI_RECT_MATCH(x, y, x + width, y + height,
+            disp->x1, disp->y1, disp->x2, disp->y2)) {
         return;
     }
-        
-    if (width <= 0 || height <= 0) {
+
+    if (width <= 0 || height <= 0 || color == GUI_COLOR_TRANS) {
         return;
     }
-    
+
     /* We are in region */
     if (x < disp->x1) {
         width -= (disp->x1 - x);
@@ -629,7 +629,7 @@ gui_draw_fill(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t wid
         height -= (disp->y1 - y);
         y = disp->y1;
     }
-    
+
     /* Check out of regions */
     if ((x + width) > disp->x2) {
         width = disp->x2 - x;

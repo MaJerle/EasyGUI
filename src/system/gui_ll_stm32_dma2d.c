@@ -32,6 +32,8 @@
 #include "gui/gui_private.h"
 #include "system/gui_ll.h"
 
+#if !__DOXYGEN__
+
 #include "lcd_discovery.h"
 
 gui_layer_t Layers[GUI_LAYERS];
@@ -376,3 +378,5 @@ uint8_t gui_ll_control(gui_lcd_t* LCD, GUI_LL_Command_t cmd, void* param, void* 
             return 0;
     }
 }
+
+#endif /* !__DOXYGEN__ */
