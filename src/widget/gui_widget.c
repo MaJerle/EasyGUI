@@ -532,8 +532,7 @@ static gui_handle_p
 get_widget_by_id(gui_handle_p parent, gui_id_t id, uint8_t deep) {
     gui_handle_p h;
     
-    for (h = gui_linkedlist_widgetgetnext(parent, NULL); h != NULL;
-            h = gui_linkedlist_widgetgetnext(NULL, h)) {
+    GUI_LINKEDLIST_WIDGETSLISTNEXT(parent, h) {
         if (guii_widget_getid(h) == id) {           /* Compare ID values */
             return h;
         } else if (deep && guii_widget_allowchildren(h)) {  /* Check children if possible */

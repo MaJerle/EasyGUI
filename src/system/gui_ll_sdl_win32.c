@@ -109,7 +109,7 @@ sdl_thread(void* arg) {
 
 static int 
 sdl_event_filter(void* userdata, SDL_Event* evt) {
-    return 0;
+    return 1;
 }
 
 static int

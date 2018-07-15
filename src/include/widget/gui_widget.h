@@ -346,7 +346,7 @@ extern "C" {
  * \retval          Pointer to parent widget
  * \hideinitializer
  */
-#define guii_widget_getparent(h)                    ((h)->parent)
+#define guii_widget_getparent(h)                    ((h) != NULL ? (h)->parent : NULL)
 
 /**
  * \brief           Check if widget has parent widget

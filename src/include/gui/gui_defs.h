@@ -181,11 +181,14 @@ typedef uint8_t     gui_char;               /*!< GUI char data type for all stri
 #define gui_const   const                   /*!< Macro for constant keyword */
 
 /**
- * \brief           Count number of elements in array
- * \warning         This does not work with pointers
+ * \brief           Get size of statically declared array
+ * \param[in]       x: Input array
+ * \return          Number of array elements
  * \hideinitializer
  */
-#define GUI_COUNT_OF(x)         (sizeof(x) / sizeof((x)[0]))
+#define GUI_ARRAYSIZE(x)                    (sizeof(x) / sizeof((x)[0]))
+
+#define GUI_COUNT_OF(x)                     GUI_ARRAYSIZE(x)
     
 /**
  * \brief           Get container object from member
@@ -194,14 +197,14 @@ typedef uint8_t     gui_char;               /*!< GUI char data type for all stri
  */
 #define             gui_containerof(ptr, type, memb)      (type *)((char *)(ptr) - (char *)offsetof(type, memb))
 
-#define GUI_U8(x)               ((uint8_t)(x))
-#define GUI_I8(x)               ((int8_t)(x))
-#define GUI_U16(x)              ((uint16_t)(x))
-#define GUI_I16(x)              ((int16_t)(x))
-#define GUI_U32(x)              ((uint32_t)(x))
-#define GUI_I32(x)              ((int32_t)(x))
-#define GUI_FLOAT(x)            ((float)(x))
-#define GUI_DIM(x)              ((gui_dim_t)(x))
+#define GUI_U8(x)                           ((uint8_t)(x))
+#define GUI_I8(x)                           ((int8_t)(x))
+#define GUI_U16(x)                          ((uint16_t)(x))
+#define GUI_I16(x)                          ((int16_t)(x))
+#define GUI_U32(x)                          ((uint32_t)(x))
+#define GUI_I32(x)                          ((int32_t)(x))
+#define GUI_FLOAT(x)                        ((float)(x))
+#define GUI_DIM(x)                          ((gui_dim_t)(x))
 
 /**
  * \brief           Global event callback function declaration

@@ -233,7 +233,7 @@ gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
                             x2 = x1 + xStep;                /* Calculate next X */
                             y2 = yBottom - ((float)data->data[read] - g->visible_min_y) * yStep;/* Calculate next Y */
                             if ((x1 >= disp->x1 || x2 >= disp->x1) && (x1 < disp->x2 || x2 < disp->x2)) {
-                                gui_draw_line(disp, GUI_DIM(x1, GUI_DIM(y1), GUI_DIM(x2), GUI_DIM(y2), data->color);/* Draw actual line */
+                                gui_draw_line(disp, GUI_DIM(x1), GUI_DIM(y1), GUI_DIM(x2), GUI_DIM(y2), data->color);   /* Draw actual line */
                             }
                             x1 = x2, y1 = y2;       /* Copy values as old */
                             
@@ -327,9 +327,7 @@ gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
             gui_graph_data_p data;
             gui_linkedlistmulti_t* link;
             
-            /*
-             * Go through all data objects in this widget
-             */
+            /* Go through all data objects in this widget */
             for (link = gui_linkedlist_multi_getnext_gen(&g->root, NULL); link != NULL;
                     link = gui_linkedlist_multi_getnext_gen(NULL, link)) {
                 data = (gui_graph_data_p)gui_linkedlist_multi_getdata(link);    /* Get data from list */
@@ -356,19 +354,14 @@ static void
 graph_invalidate(gui_graph_data_p data) {
     gui_handle_p h;
     gui_linkedlistmulti_t* link;
-    /*
-     * Invalidate all graphs attached to this data plot
-     */
+
+    /* Invalidate all graphs attached to this data plot */
     for (link = gui_linkedlist_multi_getnext_gen(&data->root, NULL); link != NULL;
             link = gui_linkedlist_multi_getnext_gen(NULL, link)) {
-        /*
-         * Linked list of graph member in data structure is not on top
-         */
+        /* Linked list of graph member in data structure is not on top */
         h = (gui_handle_p)gui_linkedlist_multi_getdata(link); /* Get data from linked list object */
         
-        /*
-         * Invalidate each object attached to this data graph
-         */
+        /* Invalidate each object attached to this data graph */
         guii_widget_invalidate(h);
     }
 }
