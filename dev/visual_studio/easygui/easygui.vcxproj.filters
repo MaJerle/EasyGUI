@@ -151,7 +151,22 @@
     <ClCompile Include="..\..\..\examples_demo\demo_init.c">
       <Filter>DEMO</Filter>
     </ClCompile>
-    <ClCompile Include="demo\demo_window.c">
+    <ClCompile Include="..\..\..\examples_demo\demo_window.c">
+      <Filter>DEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\examples_demo\demo_button.c">
+      <Filter>DEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\examples_demo\demo_list_container.c">
+      <Filter>DEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\examples_demo\demo_edit_text.c">
+      <Filter>DEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\examples_demo\demo_progbar.c">
+      <Filter>DEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\examples_demo\demo_graph.c">
       <Filter>DEMO</Filter>
     </ClCompile>
   </ItemGroup>

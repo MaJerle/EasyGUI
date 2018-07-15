@@ -144,7 +144,13 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\examples_demo\demo_button.c" />
+    <ClCompile Include="..\..\..\examples_demo\demo_edit_text.c" />
+    <ClCompile Include="..\..\..\examples_demo\demo_graph.c" />
     <ClCompile Include="..\..\..\examples_demo\demo_init.c" />
+    <ClCompile Include="..\..\..\examples_demo\demo_list_container.c" />
+    <ClCompile Include="..\..\..\examples_demo\demo_progbar.c" />
+    <ClCompile Include="..\..\..\examples_demo\demo_window.c" />
     <ClCompile Include="..\..\..\src\fonts\Arial_Bold_AA.c" />
     <ClCompile Include="..\..\..\src\fonts\Arial_Narrow_Italic.c" />
     <ClCompile Include="..\..\..\src\fonts\Arial_Narrow_Italic_AA.c" />
@@ -186,7 +192,6 @@
     <ClCompile Include="..\..\..\src\widget\gui_widget.c" />
     <ClCompile Include="..\..\..\src\widget\gui_widget_helpers.c" />
     <ClCompile Include="..\..\..\src\widget\gui_window.c" />
-    <ClCompile Include="demo\demo_window.c" />
     <ClCompile Include="main.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
