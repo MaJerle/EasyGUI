@@ -219,7 +219,7 @@ gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
                     f.align = GUI_HALIGN_CENTER | GUI_VALIGN_CENTER;
                     f.color1width = w ? w - 1 : 0;
                     f.color1 = guii_widget_getcolor(h, GUI_PROGBAR_COLOR_BG);
-                    f.Color2 = guii_widget_getcolor(h, GUI_PROGBAR_COLOR_FG);
+                    f.color2 = guii_widget_getcolor(h, GUI_PROGBAR_COLOR_FG);
                     gui_draw_writetext(disp, guii_widget_getfont(h), text, &f);
                 }
             }

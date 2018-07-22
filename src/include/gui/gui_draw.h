@@ -153,13 +153,31 @@ typedef struct {
     gui_dim_t width;                        /*!< Rectangle width for string draw */
     gui_dim_t height;                       /*!< Rectangle height for string draw */
     uint8_t align;                          /*!< alignment parameters */
-    gui_dim_t Lineheight;                   /*!< Line height, only when multiline mode is enabled */
+    gui_dim_t lineheight;                   /*!< Line height, only when multiline mode is enabled */
     uint8_t flags;                          /*!< flags for future use */
     gui_dim_t color1width;                  /*!< Width for color 1 */
     gui_color_t color1;                     /*!< Color 1 */
-    gui_color_t Color2;                     /*!< Color 2 */
-    uint32_t Scrolly;                       /*!< Scroll in vertical direction */
+    gui_color_t color2;                     /*!< Color 2 */
+    uint32_t scrolly;                       /*!< Scroll in vertical direction */
 } gui_draw_font_t;
+
+#define GUI_DRAW_FLAG_GRAD_VER              0x01
+#define GUI_DRAW_FLAG_GRAD_HOR              0x02
+#define GUI_DRAW_FLAG_FILLED                0x04
+
+/**
+ * \brief           Extended rectangle structure
+ */
+typedef struct {
+    gui_dim_t x;                            /*!< Rectangle top-left X position */
+    gui_dim_t y;                            /*!< Rectangle top-left Y position */
+    gui_dim_t width;                        /*!< Rectangle width */
+    gui_dim_t height;                       /*!< Rectangle height */
+    uint8_t flags;
+    gui_color_t color;                      /*!< Solid color or start color when gradient is used */
+    gui_color_t color_end;                  /*!< End color in case of gradient */
+    gui_dim_t radius;                       /*!< Radius in units of pixels */
+} gui_draw_rect_ex_t;
 
 /**
  * \brief           Scroll bar direction enumeration
@@ -209,6 +227,7 @@ void        gui_draw_vline(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, 
 void        gui_draw_hline(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t length, gui_color_t color);
 void        gui_draw_line(const gui_display_t* disp, gui_dim_t x1, gui_dim_t y1, gui_dim_t x2, gui_dim_t y2, gui_color_t color);
 void        gui_draw_rectangle(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_color_t color);
+void        gui_draw_rectangle_ex(const gui_display_t* disp, gui_draw_rect_ex_t* rect);
 void        gui_draw_filledrectangle(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_color_t color);
 void        gui_draw_roundedrectangle(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_dim_t r, gui_color_t color);
 void        gui_draw_filledroundedrectangle(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_dim_t r, gui_color_t color);
@@ -216,7 +235,7 @@ void        gui_draw_circle(const gui_display_t* disp, gui_dim_t x0, gui_dim_t y
 void        gui_draw_filledcircle(const gui_display_t* disp, gui_dim_t x0, gui_dim_t y0, gui_dim_t r, gui_color_t color);
 void        gui_draw_circlecorner(const gui_display_t* disp, gui_dim_t x0, gui_dim_t y0, gui_dim_t r, uint8_t c, gui_color_t color);
 void        gui_draw_filledcirclecorner(const gui_display_t* disp, gui_dim_t x0, gui_dim_t y0, gui_dim_t r, uint8_t c, uint32_t color);
-void         gui_draw_triangle(const gui_display_t* disp, gui_dim_t x1, gui_dim_t y1,  gui_dim_t x2, gui_dim_t y2, gui_dim_t x3, gui_dim_t y3, gui_color_t color);
+void        gui_draw_triangle(const gui_display_t* disp, gui_dim_t x1, gui_dim_t y1,  gui_dim_t x2, gui_dim_t y2, gui_dim_t x3, gui_dim_t y3, gui_color_t color);
 void        gui_draw_filledtriangle(const gui_display_t* disp, gui_dim_t x1, gui_dim_t y1, gui_dim_t x2, gui_dim_t y2, gui_dim_t x3, gui_dim_t y3, gui_color_t color);
 void        gui_draw_image(gui_display_t* disp, gui_dim_t x, gui_dim_t y, const gui_image_desc_t* img);
 void        gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_char* str, gui_draw_font_t* draw);

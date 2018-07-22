@@ -246,17 +246,16 @@ gui_listview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
         }
         case GUI_WC_Draw: {
             gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
-            gui_dim_t x, y, width, height;
+            gui_dim_t x, y, width, height, itemheight;
             uint16_t i;
-            gui_dim_t itemheight;
             gui_listview_row_t* row;
             gui_listview_item_t* item;
-            uint8_t is3D = guii_widget_is3d(h);    /* Is 3D mode enabled */
+            uint8_t is3D = guii_widget_is3d(h);     /* Is 3D mode enabled */
 
-            x = guii_widget_getabsolutex(h);       /* Get absolute X coordinate */
-            y = guii_widget_getabsolutey(h);       /* Get absolute Y coordinate */
-            width = guii_widget_getwidth(h);       /* Get widget width */
-            height = guii_widget_getheight(h);     /* Get widget height */
+            x = guii_widget_getabsolutex(h);        /* Get absolute X coordinate */
+            y = guii_widget_getabsolutey(h);        /* Get absolute Y coordinate */
+            width = guii_widget_getwidth(h);        /* Get widget width */
+            height = guii_widget_getheight(h);      /* Get widget height */
             
             check_values(h);                        /* Check values if size changed */
             
@@ -370,9 +369,7 @@ gui_listview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
             
             remove_rows(h);                         /* Remove all rows from widget */
             
-            /*
-             * Remove all columns
-             */
+            /* Remove all columns */
             if (o->cols != NULL) {
                 for (i = 0; i < o->col_count; i++) {
                     GUI_MEMFREE(o->cols[i]);        /* Remove column object */

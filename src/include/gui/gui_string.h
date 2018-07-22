@@ -81,9 +81,9 @@ uint8_t gui_string_unicode_encode(const uint32_t c, gui_char* out);
  * \brief           String structure for parsing characters
  */
 typedef struct {
-    const gui_char* Str;                /*!< Pointer to source string */
+    const gui_char* str;                /*!< Pointer to source string */
 #if GUI_CFG_USE_UNICODE || __DOXYGEN__
-    gui_string_unicode_t S;             /*!< Unicode processing structure */
+    gui_string_unicode_t s;             /*!< Unicode processing structure */
 #endif /* GUI_CFG_USE_UNICODE || __DOXYGEN__ */
 } gui_string_t;
 

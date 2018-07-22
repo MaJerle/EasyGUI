@@ -169,7 +169,7 @@ typedef struct gui_linkedlistroot_t {
  * \brief           Core timer structure for GUI timers
  */
 typedef struct gui_timer_core_t {
-    uint32_t Time;                          /*!< Last processed time */
+    uint32_t time;                          /*!< Last processed time */
     gui_linkedlistroot_t list;              /*!< Root linked list object */
 } gui_timer_core_t;
 
@@ -426,8 +426,8 @@ typedef struct {
  */
 typedef struct {
     gui_linkedlist_t list;                  /*!< Linked list entry. Must always be first on the list */
-    const gui_font_char_t* Ch;              /*!< Character value */
-    const gui_font_t* Font;                 /*!< Pointer to font structure */
+    const gui_font_char_t* ch;              /*!< Character value */
+    const gui_font_t* font;                 /*!< Pointer to font structure */
 } gui_font_charentry_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 

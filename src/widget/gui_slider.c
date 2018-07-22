@@ -103,7 +103,7 @@ touch_handle(gui_handle_p h, guii_touch_data_t* ts) {
     deltaH = delta >> 1;
     if (is_horizontal(h)) {                         /* Horizontal widget */
         if (o->Mode == GUI_SLIDER_MODE_LEFT_RIGHT) {/* Inverted version to normal */
-            pos = ts->x_rel[0];                      /* Invert position */
+            pos = ts->x_rel[0];                     /* Invert position */
         } else {
             pos = width - ts->x_rel[0];
         }
@@ -119,7 +119,7 @@ touch_handle(gui_handle_p h, guii_touch_data_t* ts) {
         value = (int32_t)(((float)(o->Max - o->Min)) * (float)pos / (float)width) + o->Min;
     } else {                                        /* Vertical widget */
         if (o->Mode == GUI_SLIDER_MODE_TOP_BOTTOM) {/* Inverted version to normal */
-            pos = ts->y_rel[0];                      /* Invert position */
+            pos = ts->y_rel[0];                     /* Invert position */
         } else {
             pos = height - ts->y_rel[0];
         }

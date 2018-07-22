@@ -82,10 +82,10 @@ guii_timer_create(uint16_t period, void (*callback)(gui_timer_t *), void* params
  */
 uint8_t
 guii_timer_remove(gui_timer_t** t) {  
-    __GUI_ASSERTPARAMS(t && *t);                    /* Check input parameters */  
+    __GUI_ASSERTPARAMS(t != NULL && *t != NULL);    /* Check input parameters */  
     gui_linkedlist_remove_gen(&GUI.timers.list, (gui_linkedlist_t *)(*t));  /* Remove timer from linked list */
     GUI_MEMFREE(*t);                                /* Free memory for timer */
-    *t = 0;                                         /* Clear pointer */
+    *t = NULL;                                      /* Clear pointer */
     
     return 1;
 }
@@ -162,7 +162,7 @@ void
 guii_timer_process(void) {
     gui_timer_t* t;
     volatile uint32_t time = gui_sys_now();         /* Get current time */
-    volatile uint32_t lastTime = GUI.timers.Time;
+    volatile uint32_t lastTime = GUI.timers.time;
     uint32_t diff = time - lastTime;                /* Get difference in time */
     
     if (diff == 0) {                                /* No difference in time */
@@ -197,7 +197,7 @@ guii_timer_process(void) {
         }
     }
     
-    GUI.timers.Time = time;                         /* Reset time */
+    GUI.timers.time = time;                         /* Reset time */
 }
 
 /**

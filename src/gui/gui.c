@@ -134,9 +134,7 @@ redraw_widgets(gui_handle_p parent) {
                 check_disp_clipping(h);             /* Check coordinates for drawings only particular widget */
 
 #if GUI_CFG_USE_TRANSPARENCY
-                /*
-                 * Check transparency and check if blending function exists to merge layers later together
-                 */
+                /* Check transparency and check if blending function exists to merge layers later together */
                 if (guii_widget_istransparent(h) /* && GUI.ll.CopyBlend != NULL */) {
                     gui_dim_t width = GUI.display_temp.x2 - GUI.display_temp.x1;
                     gui_dim_t height = GUI.display_temp.y2 - GUI.display_temp.y1;
@@ -220,7 +218,7 @@ redraw_widgets(gui_handle_p parent) {
 #endif /* GUI_CFG_USE_TRANSPARENCY */
 
                 cnt++;
-            /* Check if any widget from children needs drawing */
+            /* Check if any child widget needs drawing */
             } else if (guii_widget_allowchildren(h)) {
                 cnt += redraw_widgets(h);           /* Redraw children widgets */
             }
