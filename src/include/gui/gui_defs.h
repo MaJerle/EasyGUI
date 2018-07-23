@@ -912,7 +912,7 @@ typedef enum {
      */
     GUI_WC_KeyPress,
     
-    /**     
+    /**
      * \brief       Notification when widget selection has changed
      *
      * \note        Called from widget by user when necessary. Not all widget reports this value by itself
@@ -925,7 +925,7 @@ typedef enum {
      */
     GUI_WC_SelectionChanged,
     
-    /**     
+    /**
      * \brief       Value of widget has been changed
      *
      * \note        Called from widget by user when necessary. Not all widget reports this value by itself

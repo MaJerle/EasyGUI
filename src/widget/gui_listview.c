@@ -345,7 +345,7 @@ gui_listview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                             f.color1 = guii_widget_getcolor(h, GUI_LISTVIEW_COLOR_TEXT);
                         }
                         xTmp = x + 2;
-                        for (i = 0, item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(&row->root, NULL); item && i < o->col_count;
+                        for (i = 0, item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(&row->root, NULL); item != NULL && i < o->col_count;
                                 item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), i++) {
                             if (item->text != NULL) {   /* Draw if text set */
                                 f.width = o->cols[i]->width - 6;    /* Set width */
@@ -381,8 +381,8 @@ gui_listview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
 #if GUI_CFG_USE_TOUCH
         case GUI_WC_TouchStart: {
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            tx = ts->x_rel[0];                       /* Save X position */
-            ty = ts->y_rel[0];                       /* Save Y position */
+            tx = ts->x_rel[0];                      /* Save X position */
+            ty = ts->y_rel[0];                      /* Save Y position */
             
             GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
@@ -393,18 +393,18 @@ gui_listview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                 gui_dim_t height = item_height(h, NULL);   /* Get element height */
                 gui_dim_t diff;
                 
-                diff = ty - ts->y_rel[0];            /* Check Y difference */
+                diff = ty - ts->y_rel[0];           /* Check Y difference */
                 if (GUI_ABS(diff) > height) {       /* Difference must be greater than 1 height entry */
                     slide(h, diff > 0 ? 1 : -1);    /* Slide widget */
-                    ty = ts->y_rel[0];               /* Save pointer */
+                    ty = ts->y_rel[0];              /* Save pointer */
                 }
                 
                 if (ty < height) {                  /* Check if we are in top region part */
                     uint16_t i;
                     gui_dim_t sum = 0;
                     
-                    diff = tx - ts->x_rel[0];        /* Check X difference too */
-                    for (i = 0; i < o->col_count; i++) {    /* Check X position for column first */
+                    diff = tx - ts->x_rel[0];       /* Check X difference too */
+                    for (i = 0; i < o->col_count; i++) {/* Check X position for column first */
                         sum += o->cols[i]->width;   /* Check width */
                         if (GUI_ABS(tx - sum) < 10) {
                             break;
@@ -414,8 +414,8 @@ gui_listview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                         if (o->cols[i]->width - diff >= 4) {
                             o->cols[i]->width -= diff;  /* Set new width for difference */
                         }
-                        tx = ts->x_rel[0];           /* Set new start X position for relative calculation */
-                        guii_widget_invalidate(h); /* Invalidate widget */
+                        tx = ts->x_rel[0];          /* Set new start X position for relative calculation */
+                        guii_widget_invalidate(h);  /* Invalidate widget */
                     }
                 }
             }
@@ -443,11 +443,11 @@ gui_listview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
             if (!handled) {
                 uint16_t tmpselected;
                 
-                if (ts->y_rel[0] > itemheight) {     /* Check item height */
+                if (ts->y_rel[0] > itemheight) {    /* Check item height */
                     tmpselected = (ts->y_rel[0] - itemheight) / itemheight;  /* Get temporary selected index */
                     if ((o->visiblestartindex + tmpselected) < o->count) {
                         set_selection(h, o->visiblestartindex + tmpselected);
-                        guii_widget_invalidate(h); /* Choose new selection */
+                        guii_widget_invalidate(h);  /* Choose new selection */
                     }
                     handled = 1;
                 }
@@ -522,7 +522,7 @@ gui_listview_create(gui_id_t id, float x, float y, float width, float height, gu
 uint8_t
 gui_listview_setcolor(gui_handle_p h, gui_listview_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color);  /* Set color */
 }
 
 /**
@@ -575,7 +575,7 @@ gui_listview_setcolumnwidth(gui_handle_p h, uint16_t index, gui_dim_t width) {
     
     if (index < __GL(h)->col_count) {
         __GL(h)->cols[index]->width = width > 4 ? width : 4;    /* Set new width */
-        guii_widget_invalidate(h);                 /* Invalidate widget */
+        guii_widget_invalidate(h);                  /* Invalidate widget */
         ret = 1;
     }
 
