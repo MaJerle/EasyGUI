@@ -445,11 +445,11 @@ extern "C" {
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
-#if GUI_CFG_USE_TRANSPARENCY
-#define guii_widget_isvisible(h)                    (!guii_widget_getflag(h, GUI_FLAG_HIDDEN) && (h)->transparency)
-#else /* GUI_CFG_USE_TRANSPARENCY */
+#if GUI_CFG_USE_ALPHA
+#define guii_widget_isvisible(h)                    (!guii_widget_getflag(h, GUI_FLAG_HIDDEN) && (h)->alpha)
+#else /* GUI_CFG_USE_ALPHA */
 #define guii_widget_isvisible(h)                    (!guii_widget_getflag(h, GUI_FLAG_HIDDEN))
-#endif /* !GUI_CFG_USE_TRANSPARENCY */
+#endif /* !GUI_CFG_USE_ALPHA */
 
 /**
  * \brief           Check if widget is hidden
@@ -496,31 +496,33 @@ extern "C" {
  */
 #define guii_widget_isactive(h)                     (!!guii_widget_getflag(h, GUI_FLAG_ACTIVE))
 
-#if GUI_CFG_USE_TRANSPARENCY || __DOXYGEN__
 /**
- * \brief           Check is widget has transparency
- * \note            Check if widget is visible and transparency is not set to 1 (full view)
+ * \brief           Check is widget has alpha less than maximum
+ * \note            Check if widget is visible and alpha is not set to 1 (full view)
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \return          `1` on success, `0` otherwise
  */
-#define guii_widget_istransparent(h)                (guii_widget_isvisible(h) && guii_widget_gettransparency(h) < 0xFF)
+#define guii_widget_hasalpha(h)                     (guii_widget_isvisible(h) && guii_widget_getalpha(h) < 0xFF)
 
 /**
- * \brief           Get widget transparency value
+ * \brief           Get widget alpha value
  * \note            Value between 0 and 0xFF is used:
  *                      - 0x00: Widget is hidden
  *                      - 0xFF: Widget is fully visible
- *                      - between: Widget has transparency value
+ *                      - between: Widget has alpha value
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in,out]   h: Widget handle
  * \retval          Trasparency value
  * \hideinitializer
  */
-#define guii_widget_gettransparency(h)              GUI_U8((h)->transparency)
-#endif /* GUI_CFG_USE_TRANSPARENCY || __DOXYGEN__ */
+#if GUI_CFG_USE_ALPHA || __DOXYGEN__
+#define guii_widget_getalpha(h)                     GUI_U8((h)->alpha)
+#else /* GUI_CFG_USE_ALPHA || __DOXYGEN__ */
+#define guii_widget_getalpha(h)                     GUI_U8(0xFF)
+#endif /* GUI_CFG_USE_ALPHA || __DOXYGEN__ */
 
 /**
  * \brief           Get z-index value from widget
@@ -572,7 +574,7 @@ uint8_t         guii_widget_processtextkey(gui_handle_p h, guii_keyboard_data_t*
 uint8_t         guii_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color);
 gui_handle_p    guii_widget_getbyid(gui_id_t id);
 
-uint8_t         guii_widget_settransparency(gui_handle_p h, uint8_t trans);
+uint8_t         guii_widget_setalpha(gui_handle_p h, uint8_t trans);
 uint8_t         guii_widget_setzindex(gui_handle_p h, int32_t zindex);
 
 gui_dim_t       guii_widget_getwidth(gui_handle_p h);
@@ -661,8 +663,8 @@ uint8_t gui_widget_show(gui_handle_p h);
 uint8_t gui_widget_hide(gui_handle_p h);
 uint8_t gui_widget_hidechildren(gui_handle_p h);
 uint8_t gui_widget_putonfront(gui_handle_p h);
-uint8_t gui_widget_gettransparency(gui_handle_p h);
-uint8_t gui_widget_settransparency(gui_handle_p h, uint8_t trans);
+uint8_t gui_widget_getalpha(gui_handle_p h);
+uint8_t gui_widget_setalpha(gui_handle_p h, uint8_t alpha);
  
 /**
  * \}

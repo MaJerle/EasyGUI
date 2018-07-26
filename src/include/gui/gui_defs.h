@@ -1090,9 +1090,9 @@ typedef struct gui_handle {
                                                     Used for children widgets if virtual padding should be used */
     int32_t zindex;                         /*!< Z-Index value of widget, which can be set by user.
                                                     All widgets with same z-index are changeable when active on visible area */
-#if GUI_CFG_USE_TRANSPARENCY || __DOXYGEN__
-    uint8_t transparency;                   /*!< Widget transparency relative to parent widget */
-#endif /* GUI_CFG_USE_TRANSPARENCY */
+#if GUI_CFG_USE_ALPHA || __DOXYGEN__
+    uint8_t alpha;                          /*!< Widget alpha relative to parent widget */
+#endif /* GUI_CFG_USE_ALPHA */
     uint32_t flags;                         /*!< All possible flags for specific widget */
     gui_const gui_font_t* font;             /*!< Font used for widget drawings */
     gui_char* text;                         /*!< Pointer to widget text if exists */

@@ -465,11 +465,11 @@ invalidate_widget(gui_handle_p h, uint8_t setclipping) {
      * If widget is transparent, check all widgets, even those which are below current widget in list
      * Get first element of parent linked list for checking
      */
-#if GUI_CFG_USE_TRANSPARENCY
-    if (guii_widget_istransparent(h1)) {
+#if GUI_CFG_USE_ALPHA
+    if (guii_widget_hasalpha(h1)) {
         invalidate_widget(guii_widget_getparent(h1), 0);    /* Invalidate parent widget */
     }
-#endif /* GUI_CFG_USE_TRANSPARENCY */
+#endif /* GUI_CFG_USE_ALPHA */
     for (; h1 != NULL; h1 = gui_linkedlist_widgetgetnext(NULL, h1)) {
         get_widget_abs_visible_position_size(h1, &h1x1, &h1y1, &h1x2, &h1y2); /* Get visible position on LCD for widget */
         
@@ -504,19 +504,19 @@ invalidate_widget(gui_handle_p h, uint8_t setclipping) {
         }
     }
 
-#if GUI_CFG_USE_TRANSPARENCY    
+#if GUI_CFG_USE_ALPHA    
     /*
-     * Check if any of parent widgets has transparency = should be invalidated too
+     * Check if any of parent widgets has alpha = should be invalidated too
      *
      * Since recursion is used, call function only once and recursion will take care for upper level of parent widgets
      */
     for (h = guii_widget_getparent(h); h != NULL; h = guii_widget_getparent(h)) {
-        if (guii_widget_istransparent(h)) {         /* If widget has transparency */
+        if (guii_widget_hasalpha(h)) {              /* If widget has alpha */
             invalidate_widget(h, 0);                /* Invalidate parent too */
             break;
         }
     }
-#endif /* GUI_CFG_USE_TRANSPARENCY */
+#endif /* GUI_CFG_USE_ALPHA */
     
     return 1;
 }
@@ -752,9 +752,7 @@ guii_widget_isinsideclippingregion(gui_handle_p h, uint8_t check_sib_cover) {
             /* Check if widget is inside */
             if (__GUI_RECT_IS_INSIDE(x1, y1, x2, y2, tx1, ty1, tx2, ty2)
                 && !guii_widget_getflag(tmp, GUI_FLAG_WIDGET_INVALIDATE_PARENT)
-#if GUI_CFG_USE_TRANSPARENCY
-                && !guii_widget_istransparent(tmp)  /* Must not have transparency enabled */
-#endif
+                && !guii_widget_hasalpha(tmp)       /* Must not have transparency enabled */
                 ) {
                 return 0;                           /* Widget fully covered by another! */
             }
@@ -917,7 +915,7 @@ guii_widget_active_set(gui_handle_p h) {
 /**
  * \brief           Get total width of widget in units of pixels
  *                     Function returns width of widget according to current widget setup (expanded, fill, percent, etc.)
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  *
  * \note            Even if percentage width is used, function will always return value in pixels
  * \param[in]       h: Pointer to \ref gui_handle_p structure
@@ -939,7 +937,7 @@ guii_widget_getwidth(gui_handle_p h) {
 /**
  * \brief           Get total height of widget
  *                     Function returns height of widget according to current widget setup (expanded, fill, percent, etc.)
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  *
  * \note            Even if percentage height is used, function will always return value in pixels
  * \param[in]       h: Pointer to \ref gui_handle_p structure
@@ -960,7 +958,7 @@ guii_widget_getheight(gui_handle_p h) {
 
 /**
  * \brief           Get absolute X position on LCD for specific widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \return          X position on LCD
  */
@@ -978,7 +976,7 @@ guii_widget_getabsolutex(gui_handle_p h) {
 
 /**
  * \brief           Get absolute Y position on LCD for specific widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \return          Y position on LCD
  */
@@ -999,7 +997,7 @@ guii_widget_getabsolutey(gui_handle_p h) {
  * \note            This function returns inner X position in absolute form.
  *                     Imagine parent absolute X is 10, and left padding is 2. Function returns 12.
  *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle for which parent should be calculated
  * \return          Parent absolute inner X position
  */
@@ -1009,11 +1007,9 @@ guii_widget_getparentabsolutex(gui_handle_p h) {
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    if (h != NULL) {                                /* Check input value */
-        h = guii_widget_getparent(h);               /* Get parent of widget */
-        if (h != NULL) {                            /* Save left padding */
-            out = guii_widget_getpaddingleft(h);    /* Get left padding from parent widget */
-        }
+    h = guii_widget_getparent(h);                   /* Get parent of widget */
+    if (h != NULL) {                                /* Save left padding */
+        out = guii_widget_getpaddingleft(h);        /* Get left padding from parent widget */
     }
     out += guii_widget_getabsolutex(h);             /* Add absolute X of parent and to current padding */
     return out;
@@ -1024,7 +1020,7 @@ guii_widget_getparentabsolutex(gui_handle_p h) {
  * \note            This function returns inner Y position in absolute form.
  *                     Imagine parent absolute Y is 10, and top padding is 2. Function returns 12.
  *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle for which parent should be calculated
  * \return          Parent absolute inner Y position
  */
@@ -1034,11 +1030,9 @@ guii_widget_getparentabsolutey(gui_handle_p h) {
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    if (h != NULL) {                                /* Check valid widget */
-        h = guii_widget_getparent(h);               /* Get parent of widget */
-        if (h != NULL) {                            /* Save left padding */
-            out = guii_widget_getpaddingtop(h);     /* Get top padding from parent widget */
-        }
+    h = guii_widget_getparent(h);                   /* Get parent of widget */
+    if (h != NULL) {                                /* Save left padding */
+        out = guii_widget_getpaddingtop(h);         /* Get top padding from parent widget */
     }
     out += guii_widget_getabsolutey(h);             /* Add absolute Y of parent and to current padding */
     return out;
@@ -1046,7 +1040,7 @@ guii_widget_getparentabsolutey(gui_handle_p h) {
 
 /**
  * \brief           Invalidate widget for redraw 
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
@@ -1061,10 +1055,8 @@ guii_widget_invalidate(gui_handle_p h) {
     if (
         (
             guii_widget_getflag(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT) || 
-            guii_widget_getcoreflag(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT)
-#if GUI_CFG_USE_TRANSPARENCY
-            || guii_widget_istransparent(h)        /* At least little transparent */
-#endif /* GUI_CFG_USE_TRANSPARENCY */
+            guii_widget_getcoreflag(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT) ||
+            guii_widget_hasalpha(h)                 /* At least little alpha */
         ) && guii_widget_hasparent(h)) {
         invalidate_widget(guii_widget_getparent(h), 0); /* Invalidate parent object too but without clipping */
     }
@@ -1076,7 +1068,7 @@ guii_widget_invalidate(gui_handle_p h) {
 
 /**
  * \brief           Invalidate widget and parent widget for redraw 
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
@@ -1093,7 +1085,7 @@ guii_widget_invalidatewithparent(gui_handle_p h) {
 
 /**
  * \brief           Set if parent widget should be invalidated when we invalidate primary widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \note            Useful for widgets where there is no background: Transparent images, textview, slider, etc
  * \param[in]       h: Widget handle
  * \param[in]       value: Value either to enable or disable. 0 = disable, > 0 = enable
@@ -1112,7 +1104,7 @@ guii_widget_setinvalidatewithparent(gui_handle_p h, uint8_t value) {
 
 /**
  * \brief           Set 3D mode on widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       enable: Value to enable, either 1 or 0
  * \return          `1` on success, `0` otherwise
@@ -1136,7 +1128,7 @@ guii_widget_set3dstyle(gui_handle_p h, uint8_t enable) {
 
 /**
  * \brief           Create new widget and add it to linked list to parent object
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       widget: Pointer to \ref gui_widget_t structure with widget description
  * \param[in]       id: Widget unique ID to use for identity for callback processing
  * \param[in]       x: Widget X position relative to parent widget
@@ -1178,9 +1170,9 @@ guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, fl
         h->widget = widget;                         /* Widget object structure */
         h->footprint = GUI_WIDGET_FOOTPRINT;        /* Set widget footprint */
         h->callback = cb;                           /* Set widget callback */
-#if GUI_CFG_USE_TRANSPARENCY
-        h->transparency = 0xFF;                     /* Set full transparency by default */
-#endif /* GUI_CFG_USE_TRANSPARENCY */
+#if GUI_CFG_USE_ALPHA
+        h->alpha = 0xFF;                            /* Set full transparency by default */
+#endif /* GUI_CFG_USE_ALPHA */
         
         /*
          * Parent window check
@@ -1250,7 +1242,7 @@ guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, fl
  *                  Function checks widget and all its children if they can be deleted. 
  *                  If so, flag for delete will be set and procedure will be executed later when all other processing is done
  *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param           *h: Widget handle to remove
  * \return          `1` on success, `0` otherwise
  * \sa              __gui_widget_create, gui_widget_remove
@@ -1274,7 +1266,7 @@ guii_widget_remove(gui_handle_p h) {
 
 /**
  * \brief           Remove children widgets of current widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param           h: Widget handle
  * \return          `1` on success, `0` otherwise
  */
@@ -1301,7 +1293,7 @@ guii_widget_empty(gui_handle_p h) {
 /*******************************************/
 /**
  * \brief           Set font used for widget drawing
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       font: Pointer to \ref gui_font_t structure with font information
  * \return          `1` on success, `0` otherwise
@@ -1318,7 +1310,7 @@ guii_widget_setfont(gui_handle_p h, const gui_font_t* font) {
 
 /**
  * \brief           Set text for widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  *
  * \note            When memory for text is dynamically allocated, text will be copied to allocated memory,
  *                     otherwise it will just set the pointer to new text.
@@ -1359,7 +1351,7 @@ guii_widget_settext(gui_handle_p h, const gui_char* text) {
 
 /**
  * \brief           Allocate text memory for widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       size: Number of bytes to allocate
  * \return          `1` on success, `0` otherwise
@@ -1390,7 +1382,7 @@ guii_widget_alloctextmemory(gui_handle_p h, uint32_t size) {
 
 /**
  * \brief           Free text memory for widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \return          `1` on success, `0` otherwise
  * \sa              __gui_widget_alloctextmemory, gui_widget_alloctextmemory, gui_widget_freetextmemory
@@ -1412,7 +1404,7 @@ guii_widget_freetextmemory(gui_handle_p h) {
 
 /**
  * \brief           Check if widget has set font and text
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       h: Widget handle
  * \return          `1` on success, `0` otherwise
  */
@@ -1424,7 +1416,7 @@ guii_widget_isfontandtextset(gui_handle_p h) {
 
 /**
  * \brief           Process text key (add character, remove it, move cursor, etc)
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       kb: Pointer to \ref guii_keyboard_data_t structure
  * \return          `1` on success, `0` otherwise
@@ -1489,7 +1481,7 @@ guii_widget_processtextkey(gui_handle_p h, guii_keyboard_data_t* kb) {
 
 /**
  * \brief           Get text from widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \return          Pointer to text from widget
  */
@@ -1509,7 +1501,7 @@ guii_widget_gettext(gui_handle_p h) {
 
 /**
  * \brief           Get font from widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \return          Pointer to font used for widget
  */
@@ -1524,7 +1516,7 @@ guii_widget_getfont(gui_handle_p h) {
 /*******************************************/
 /**
  * \brief           Set width of widget in units of pixels
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       width: Width in units of pixels
  * \return          `1` on success, `0` otherwise
@@ -1543,7 +1535,7 @@ guii_widget_setwidth(gui_handle_p h, gui_dim_t width) {
 
 /**
  * \brief           Set height of widget in units of pixels
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       height: height in units of pixels
  * \return          `1` on success, `0` otherwise
@@ -1562,7 +1554,7 @@ guii_widget_setheight(gui_handle_p h, gui_dim_t height) {
 
 /**
  * \brief           Set width of widget in percentage relative to parent widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       width: Width in percentage
  * \return          `1` on success, `0` otherwise
@@ -1581,7 +1573,7 @@ guii_widget_setwidthpercent(gui_handle_p h, float width) {
 
 /**
  * \brief           Set height of widget in percentage relative to parent widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       height: height in percentage
  * \return          `1` on success, `0` otherwise
@@ -1600,7 +1592,7 @@ guii_widget_setheightpercent(gui_handle_p h, float height) {
 
 /**
  * \brief           Set widget size in units of pixels
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       wi: Widget width
  * \param[in]       hi: Widget height
@@ -1614,7 +1606,7 @@ guii_widget_setsize(gui_handle_p h, gui_dim_t wi, gui_dim_t hi) {
 
 /**
  * \brief           Set widget size in units of percent
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       wi: Widget width
  * \param[in]       hi: Widget height
@@ -1628,7 +1620,7 @@ guii_widget_setsizepercent(gui_handle_p h, float wi, float hi) {
 
 /**
  * \brief           Toggle expandend (maximized) mode of widget (mostly of windows)
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \return          `1` on success, `0` otherwise
  */
@@ -1640,7 +1632,7 @@ guii_widget_toggleexpanded(gui_handle_p h) {
 
 /**
  * \brief           Set expandend mode on widget. When enabled, widget will be at X,Y = 0,0 relative to parent and will have width,height = 100%,100%
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       state: State for expanded mode
  * \return          `1` on success, `0` otherwise
@@ -1665,7 +1657,7 @@ guii_widget_setexpanded(gui_handle_p h, uint8_t state) {
 /*******************************************/
 /**
  * \brief           Set widget position relative to parent object in units of pixels
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       x: X position relative to parent object
  * \param[in]       y: Y position relative to parent object
@@ -1679,7 +1671,7 @@ guii_widget_setposition(gui_handle_p h, gui_dim_t x, gui_dim_t y) {
  
 /**
  * \brief           Set widget position relative to parent object in units of percent
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       x: X position relative to parent object
  * \param[in]       y: Y position relative to parent object
@@ -1693,7 +1685,7 @@ guii_widget_setpositionpercent(gui_handle_p h, float x, float y) {
  
 /**
  * \brief           Set widget X position relative to parent object in units of pixels
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       x: X position relative to parent object
  * \return          `1` on success, `0` otherwise
@@ -1712,7 +1704,7 @@ guii_widget_setxposition(gui_handle_p h, gui_dim_t x) {
  
 /**
  * \brief           Set widget X position relative to parent object in units of percent
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       x: X position relative to parent object
  * \return          `1` on success, `0` otherwise
@@ -1731,7 +1723,7 @@ guii_widget_setxpositionpercent(gui_handle_p h, float x) {
  
 /**
  * \brief           Set widget Y position relative to parent object in units of pixels
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       y: Y position relative to parent object
  * \return          `1` on success, `0` otherwise
@@ -1750,7 +1742,7 @@ guii_widget_setyposition(gui_handle_p h, gui_dim_t y) {
  
 /**
  * \brief           Set widget Y position relative to parent object in units of percent
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       y: Y position relative to parent object
  * \return          `1` on success, `0` otherwise
@@ -1772,7 +1764,7 @@ guii_widget_setypositionpercent(gui_handle_p h, float y) {
 /*******************************************/
 /**
  * \brief           Show widget from visible area
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \return          `1` on success, `0` otherwise
  * \sa              guii_widget_hide
@@ -1790,7 +1782,7 @@ guii_widget_show(gui_handle_p h) {
 
 /**
  * \brief           Hide widget from visible area
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \return          `1` on success, `0` otherwise
  * \sa              guii_widget_show
@@ -1816,7 +1808,7 @@ guii_widget_hide(gui_handle_p h) {
 
 /**
  * \brief           Hide direct children widgets of current widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \return          `1` on success, `0` otherwise
  */
@@ -1835,7 +1827,7 @@ guii_widget_hidechildren(gui_handle_p h) {
 
 /**
  * \brief           Check if widget is children of parent
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       h: Widget handle to test
  * \param[in]       parent: Parent widget handle to test if is parent
  * \return          `1` on success, `0` otherwise
@@ -1861,7 +1853,7 @@ guii_widget_ischildof(gui_handle_p h, gui_handle_p parent) {
  * \brief           Set z-Index for widgets on the same level. This feature applies on widgets which are not dialogs
  * \note            Larger z-index value means greater position on screen. In case of multiple widgets on same z-index level, they are automatically modified for correct display
  *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       zindex: Z-Index value for widget. Any value can be used
  * \return          `1` on success, `0` otherwise
@@ -1883,32 +1875,32 @@ guii_widget_setzindex(gui_handle_p h, int32_t zindex) {
     return ret;
 }
 
-#if GUI_CFG_USE_TRANSPARENCY || __DOXYGEN__
+#if GUI_CFG_USE_ALPHA || __DOXYGEN__
 /**
  * \brief           Set transparency level to widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
- * \param[in]       trans: Transparency level, where 0x00 means hidden and 0xFF means totally visible widget
+ * \param[in]       alpha: Alpha level, where `0x00` means hidden and `0xFF` means totally visible widget
  * \return          `1` on success, `0` otherwise
- * \sa              guii_widget_settransparency
+ * \sa              guii_widget_setalpha
  */
 uint8_t
-guii_widget_settransparency(gui_handle_p h, uint8_t trans) {
+guii_widget_setalpha(gui_handle_p h, uint8_t alpha) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    if (h->transparency != trans) {                 /* Check transparency match */
-        h->transparency = trans;                    /* Set new transparency level */
+    if (h->alpha != alpha) {                        /* Check transparency match */
+        h->alpha = alpha;                            /* Set new transparency level */
         SET_WIDGET_ABS_VALUES(h);                   /* Set widget absolute values */
         guii_widget_invalidate(h);                  /* Invalidate widget */
     }
     
     return 1;
 }
-#endif /* GUI_CFG_USE_TRANSPARENCY */
+#endif /* GUI_CFG_USE_ALPHA */
 
 /**
  * \brief           Set color to widget specific index
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Index in array of colors
  * \param[in]       color: Actual color code to set
@@ -1947,7 +1939,7 @@ guii_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color) {
  * \brief           Get first widget handle by ID
  * \note            If multiple widgets have the same ID, first found will be used
  *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   id: Widget ID to search for
  * \return          > 0: Widget handle when widget found
  * \return          `1` on success, `0` otherwise
@@ -1959,7 +1951,7 @@ guii_widget_getbyid(gui_id_t id) {
 
 /**
  * \brief           Set custom user data to widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  *
  * \note            Specially useful in callback processing if required
  * \param[in,out]   h: Widget handle
@@ -1976,7 +1968,7 @@ guii_widget_setuserdata(gui_handle_p h, void* data) {
 
 /**
  * \brief           Get custom user data from widget previously set with \ref gui_widget_setuserdata
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \return          Pointer to user data
  */
@@ -2193,7 +2185,7 @@ gui_widget_setfont(gui_handle_p h, const gui_font_t* font) {
 
 /**
  * \brief           Get font from widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \return          Pointer to font used for widget
  */
@@ -3009,22 +3001,23 @@ gui_widget_getzindex(gui_handle_p h) {
     return ret;
 }
 
-#if GUI_CFG_USE_TRANSPARENCY || __DOXYGEN__
+#if GUI_CFG_USE_ALPHA || __DOXYGEN__
+
 /**
  * \brief           Set transparency level to widget
  * \param[in,out]   h: Widget handle
  * \param[in]       trans: Transparency level, where 0x00 means hidden and 0xFF means totally visible widget
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_gettransparency
+ * \sa              gui_widget_getalpha
  */
 uint8_t
-gui_widget_settransparency(gui_handle_p h, uint8_t trans) {
+gui_widget_setalpha(gui_handle_p h, uint8_t trans) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    ret = guii_widget_settransparency(h, trans);    /* Set widget transparency */
+    ret = guii_widget_setalpha(h, trans);           /* Set widget transparency */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return ret;
@@ -3038,21 +3031,21 @@ gui_widget_settransparency(gui_handle_p h, uint8_t trans) {
  *                      - between: Widget has transparency value
  * \param[in,out]   h: Widget handle
  * \return          Trasparency value
- * \sa              gui_widget_settransparency
+ * \sa              gui_widget_setalpha
  */
 uint8_t
-gui_widget_gettransparency(gui_handle_p h) {
+gui_widget_getalpha(gui_handle_p h) {
     uint8_t trans;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     __GUI_ENTER();                                  /* Enter GUI */
     
-    trans = guii_widget_gettransparency(h);         /* Get widget transparency */
+    trans = guii_widget_getalpha(h);                /* Get widget transparency */
     
     __GUI_LEAVE();                                  /* Leave GUI */
     return trans;
 }
-#endif /* GUI_CFG_USE_TRANSPARENCY || __DOXYGEN__ */
+#endif /* GUI_CFG_USE_ALPHA || __DOXYGEN__ */
 
 /**
  * \brief           Set 3D mode on widget

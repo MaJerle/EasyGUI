@@ -146,12 +146,12 @@
 #endif
 
 /**
- * \brief           Enables (1) or disables (0) transparency option for widgets
+ * \brief           Enables (1) or disables (0) alpha option for widgets
  *
  *                  When enabled, widgets can overlay each other and bottom widget can be visible below top one
  */
-#ifndef GUI_CFG_USE_TRANSPARENCY
-#define GUI_CFG_USE_TRANSPARENCY                0
+#ifndef GUI_CFG_USE_ALPHA
+#define GUI_CFG_USE_ALPHA                      0
 #endif
 
 /**
@@ -174,7 +174,7 @@
  *                  but requires more memory for `4` dimension values (usually `8` bytes) per widget
  */
 #ifndef GUI_CFG_USE_POS_SIZE_CACHE
-#define GUI_CFG_USE_POS_SIZE_CACHE              1
+#define GUI_CFG_USE_POS_SIZE_CACHE              0
 #endif
 
 #ifndef GUI_CFG_SYS_PORT

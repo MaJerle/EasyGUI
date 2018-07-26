@@ -45,7 +45,7 @@ static gui_mbox_msg_t timer_msg = {GUI_SYS_MBOX_TYPE_TIMER};
 
 /**
  * \brief           Create new software timer
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       period: Timer period in units of milliseconds
  * \param[in]       callback: Pointer to timer callback
  * \param[in]       params: Pointer to user parameters used in callback
@@ -75,7 +75,7 @@ guii_timer_create(uint16_t period, void (*callback)(gui_timer_t *), void* params
 
 /**
  * \brief           Remove timer
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       *t: Pointer to pointer to \ref gui_timer_t structure.
  *                      After timer remove, pointer value where it points to will be changed
  * \return          `1` on success, `0` otherwise
@@ -92,7 +92,7 @@ guii_timer_remove(gui_timer_t** t) {
 
 /**
  * \brief           Start timer
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       t: Pointer to \ref gui_timer_t structure
  * \return          `1` on success, `0` otherwise
  */
@@ -111,7 +111,7 @@ guii_timer_start(gui_timer_t* t) {
 
 /**
  * \brief           Start timer periodically. It will start again when callback is called
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       t: Pointer to \ref gui_timer_t structure
  * \return          `1` on success, `0` otherwise
  */
@@ -126,7 +126,7 @@ guii_timer_startperiodic(gui_timer_t* t) {
 
 /**
  * \brief           Stop timer
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       t: Pointer to \ref gui_timer_t structure
  * \return          `1` on success, `0` otherwise
  */
@@ -141,7 +141,7 @@ guii_timer_stop(gui_timer_t* t) {
 
 /**
  * \brief           Reset timer to zero
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       t: Pointer to \ref gui_timer_t structure
  * \return          `1` on success, `0` otherwise
  */
@@ -155,7 +155,7 @@ guii_timer_reset(gui_timer_t* t) {
 
 /**
  * \brief           Internal processing called by GUI library
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \note            Processes all timers in loop and calls callback function if needed 
  */
 void

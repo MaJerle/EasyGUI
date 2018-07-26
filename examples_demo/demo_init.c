@@ -36,6 +36,7 @@ demo_init(void) {
     gui_keyboard_create();
 
     lcd_w = gui_lcd_getwidth();                 /* Get LCD width */
+    parent = gui_window_getdesktop();
 
     /* Print all buttons on screen */
     for (i = 0; i < GUI_COUNT_OF(btns); i++) {

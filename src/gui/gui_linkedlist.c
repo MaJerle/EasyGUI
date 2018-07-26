@@ -50,15 +50,13 @@ print_list(gui_handle_p root) {
         list = &GUI.root;
     }
     for (h = list->first; h != NULL; h = h->list.next) {
-        GUI_DEBUG("%*d: W: %s; A: 0x%p, Hidden: %lu; Redraw: %lu; Remove: %lu; ABS_X: %d; ABS_Y: %d; ABS_W: %d; ABS_H: %d\r\n",
+        GUI_DEBUG("%*d: W: %s; A: 0x%p, Hidden: %lu; Redraw: %lu; Remove: %lu\r\n",
             2 * depth, depth,
             (const char *)h->widget->name,
             h,
             (unsigned long)!!(h->flags & GUI_FLAG_HIDDEN),
             (unsigned long)!!(h->flags & GUI_FLAG_REDRAW),
-            (unsigned long)!!(h->flags & GUI_FLAG_REMOVE),
-            (int)h->abs_x, (int)h->abs_y,
-            (int)h->abs_width, (int)h->abs_height
+            (unsigned long)!!(h->flags & GUI_FLAG_REMOVE)
         );
         if (guii_widget_allowchildren(h)) {
             print_list(h);
@@ -71,7 +69,7 @@ print_list(gui_handle_p root) {
  * \brief           Add element to doubly linked list
  * \note            Element added to linkedlist must have \ref gui_linkedlist_t as top structure
  *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Pointer to \ref gui_linkedlist_t element to add to base linked list 
  * \sa              gui_linkedlist_remove_gen, gui_linkedlist_multi_add_gen, gui_linkedlist_multi_remove_gen
@@ -90,7 +88,7 @@ gui_linkedlist_add_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element) {
     
 /**
  * \brief           Remove element from doubly linked list
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Pointer to \ref gui_linkedlist_t element to remove from base linked list
  * \return          Removed element handle
@@ -136,7 +134,7 @@ gui_linkedlist_remove_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element)
  *                      <tr><td>!= NULL <td>!= NULL <td>Next element of <b>element</b> if exists, first element of <b>root</b> if exists, <b>NULL</b> otherwise
  *                  </table>
  *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Pointer to \ref gui_linkedlist_t element to get next element of
  * \return          Next element handle on success, NULL otherwise
@@ -165,7 +163,7 @@ gui_linkedlist_getnext_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element
  *                      <tr><td>!= NULL <td>!= NULL <td>Previous element of <b>element</b> if exists, last element of <b>root</b> if exists, <b>NULL</b> otherwise
  *                  </table>
  *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Pointer to \ref gui_linkedlist_t element to get next element of
  * \return          Previous element handle on success, NULL otherwise
@@ -185,7 +183,7 @@ gui_linkedlist_getprev_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element
 
 /**
  * \brief           Move widget down for one on doubly linked list
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Pointer to \ref gui_linkedlist_t element to move down on base linked list
  * \return          `1` on success, `0` otherwise
@@ -232,7 +230,7 @@ gui_linkedlist_movedown_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* elemen
 
 /**
  * \brief           Move widget up for one on doubly linked list
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Pointer to \ref gui_linkedlist_t element to move up on base linked list
  * \return          `1` on success, `0` otherwise
@@ -297,7 +295,7 @@ gui_linkedlist_getnext_byindex_gen(gui_linkedlistroot_t* root, uint16_t index) {
  * \brief           Add element to multi linked list
  * \note            Element can be any type since \ref gui_linkedlistmulti_t structure is dynamicall allocated
  *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Pointer to \ref gui_linkedlist_t element to add to base linked list
  * \return          Multi linked list handle on success, NULL otherwise
@@ -318,7 +316,7 @@ gui_linkedlist_multi_add_gen(gui_linkedlistroot_t* root, void* element) {
     
 /**
  * \brief           Remove element from linked list in multi linked list
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Pointer to \ref gui_linkedlist_t element to remove from base linked list
  * \return          `1` on success, `0` otherwise
@@ -345,7 +343,7 @@ gui_linkedlist_multi_remove_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_
  *                      <tr><td>!= NULL <td>!= NULL <td>Next element of <b>element</b> if exists, first element of <b>root</b> if exists, <b>NULL</b> otherwise
  *                  </table>
  *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Pointer to \ref gui_linkedlistmulti_t element to get next element of
  * \return          Next element on success, NULL otherwise
@@ -374,7 +372,7 @@ gui_linkedlist_multi_getnext_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti
  *                      <tr><td>!= NULL <td>!= NULL <td>Previous element of <b>element</b> if exists, last element of <b>root</b> if exists, <b>NULL</b> otherwise
  *                  </table>
  *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Pointer to \ref gui_linkedlistmulti_t element to get next element of
  * \return          Previous element on success, NULL otherwise
@@ -394,7 +392,7 @@ gui_linkedlist_multi_getprev_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti
 
 /**
  * \brief           Move widget down for one on multi linked list
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Pointer to \ref gui_linkedlistmulti_t element to move down on base linked list
  * \return          `1` on success, `0` otherwise
@@ -407,7 +405,7 @@ gui_linkedlist_multi_movedown_gen(gui_linkedlistroot_t* root, gui_linkedlistmult
 
 /**
  * \brief           Move widget up for one on multi linked list
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Pointer to \ref gui_linkedlistmulti_t element to move up on base linked list
  * \return          `1` on success, `0` otherwise
@@ -422,7 +420,7 @@ gui_linkedlist_multi_moveup_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_
  * \brief           Remove element from linked list in multi linked list
  * \note            Delete by element pointer, not by list item. It searches in all entries for element pointers and deletes all links with that element pointer
  *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       element: Memory address in data part of linked list entry
  * \return          `1` on success, `0` otherwise
@@ -447,7 +445,7 @@ gui_linkedlist_multi_find_remove(gui_linkedlistroot_t* root, void* element) {
 
 /**
  * \brief           Add new widget to linked list of parent widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       parent: Pointer to parent widget where to put this widget on list
  * \param[in]       h: Widget handle to add to list 
  * \sa              gui_linkedlist_widgetremove
@@ -465,7 +463,7 @@ gui_linkedlist_widgetadd(gui_handle_p parent, gui_handle_p h) {
 
 /**
  * \brief           Remove widget from linked list of parent widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       h: Widget handle to remove from linked list 
  * \sa              gui_linkedlist_widgetadd
  */
@@ -480,7 +478,7 @@ gui_linkedlist_widgetremove(gui_handle_p h) {
 
 /**
  * \brief           Move widget up for one in linked list
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       h: Widget handle to move up
  * \return          `1` on success, `0` otherwise
  * \sa              gui_linkedlist_widgetmovedown
@@ -495,7 +493,7 @@ gui_linkedlist_widgetmoveup(gui_handle_p h) {
 
 /**
  * \brief           Move widget down for one in linked list
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       h: Widget handle to move down
  * \return          `1` on success, `0` otherwise
  * \sa              gui_linkedlist_widgetmoveup
@@ -519,7 +517,7 @@ gui_linkedlist_widgetmovedown(gui_handle_p h) {
  *                      <tr><td>!= NULL <td>!= NULL <td>Next widget of <b>h</b> if exists, first widget of <b>parent</b> if exists, <b>NULL</b> otherwise
  *                  </table>
  *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  *
  * \include         _example_linkedlist_widgetgetnext.c 
  *
@@ -551,7 +549,7 @@ gui_linkedlist_widgetgetnext(gui_handle_p parent, gui_handle_p h) {
  *                      <tr><td>!= NULL <td>!= NULL <td>Previous widget of <b>h</b> if exists, last widget of <b>parent</b> if exists, <b>NULL</b> otherwise
  *                  </table>
  *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  *
  * \include         _example_linkedlist_widgetgetprev.c 
  *
@@ -582,7 +580,7 @@ gui_linkedlist_widgetgetprev(gui_handle_p parent, gui_handle_p h) {
 
 /**
  * \brief           Move widget to bottom in linked list of parent widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       h: Widget to move to bottom
  * \return          Number of moves on linked list, `0` if move not available
  * \sa              gui_linkedlist_widgetmovetotop
@@ -632,7 +630,7 @@ gui_linkedlist_widgetmovetobottom(gui_handle_p h) {
 
 /**
  * \brief           Move widget to top in linked list of parent widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       h: Widget to move to top
  * \return          Number of moves on linked list, `0` if move not available
  * \sa              gui_linkedlist_widgetmovetobottom

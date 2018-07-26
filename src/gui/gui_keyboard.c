@@ -568,7 +568,7 @@ keyboard_base_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, 
 
 /**
  * \brief           Hide opened virtual keyboard
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \return          `1` on success, `0` otherwise
  * \sa              guii_keyboard_show
  */
@@ -585,7 +585,7 @@ guii_keyboard_hide(void) {
 
 /**
  * \brief           Show hidden virtual keyboard
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \note            This function is private and may be called only when OS protection is active
  * \param[in]       h: Widget handle for which keyboard will be opened
  * \return          `1` on success, `0` otherwise
  * \sa              guii_keyboard_hide
