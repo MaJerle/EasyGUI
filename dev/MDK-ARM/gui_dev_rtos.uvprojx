@@ -576,11 +576,6 @@
           <GroupName>User</GroupName>
           <Files>
             <File>
-              <FileName>netconn_server.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\netconn_server.c</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
@@ -589,26 +584,6 @@
               <FileName>stm32fxxx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\stm32fxxx_it.c</FilePath>
-            </File>
-            <File>
-              <FileName>gui_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\gui_app.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\esp_app.c</FilePath>
-            </File>
-            <File>
-              <FileName>app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\app.c</FilePath>
-            </File>
-            <File>
-              <FileName>gui_callbacks.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\gui_callbacks.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -924,9 +899,9 @@
               <FilePath>..\..\src\widget\gui_debugbox.c</FilePath>
             </File>
             <File>
-              <FileName>gui_widget_helpers.c</FileName>
+              <FileName>gui_widget_api.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\src\widget\gui_widget_helpers.c</FilePath>
+              <FilePath>..\..\src\widget\gui_widget_api.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1089,157 +1064,47 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>ASSETS</GroupName>
+          <GroupName>GUI DEMO</GroupName>
           <Files>
             <File>
-              <FileName>wifi_icon.c</FileName>
+              <FileName>demo_button.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\images\wifi_icon.c</FilePath>
+              <FilePath>..\..\examples_demo\demo_button.c</FilePath>
             </File>
             <File>
-              <FileName>wifi_icon_off.c</FileName>
+              <FileName>demo_edit_text.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\images\wifi_icon_off.c</FilePath>
+              <FilePath>..\..\examples_demo\demo_edit_text.c</FilePath>
             </File>
             <File>
-              <FileName>console_icon.c</FileName>
+              <FileName>demo_graph.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\images\console_icon.c</FilePath>
+              <FilePath>..\..\examples_demo\demo_graph.c</FilePath>
             </File>
             <File>
-              <FileName>log_icon.c</FileName>
+              <FileName>demo_init.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\images\log_icon.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ESP CORE</GroupName>
-          <Files>
-            <File>
-              <FileName>esp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp.c</FilePath>
+              <FilePath>..\..\examples_demo\demo_init.c</FilePath>
             </File>
             <File>
-              <FileName>esp_ap.c</FileName>
+              <FileName>demo_list_container.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_ap.c</FilePath>
+              <FilePath>..\..\examples_demo\demo_list_container.c</FilePath>
             </File>
             <File>
-              <FileName>esp_buff.c</FileName>
+              <FileName>demo_progbar.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_buff.c</FilePath>
+              <FilePath>..\..\examples_demo\demo_progbar.c</FilePath>
             </File>
             <File>
-              <FileName>esp_conn.c</FileName>
+              <FileName>demo_template.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_conn.c</FilePath>
+              <FilePath>..\..\examples_demo\demo_template.c</FilePath>
             </File>
             <File>
-              <FileName>esp_debug.c</FileName>
+              <FileName>demo_window.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_debug.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_hostname.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_hostname.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_input.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_input.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_int.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_int.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_mem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_mem.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_pbuf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_pbuf.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_ping.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_ping.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_sntp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_sntp.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_sta.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_sta.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_threads.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_threads.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_timeout.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_timeout.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_unicode.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_unicode.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_evt.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_evt.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ESP API</GroupName>
-          <Files>
-            <File>
-              <FileName>esp_netconn.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\api\esp_netconn.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ESP SYS LL</GroupName>
-          <Files>
-            <File>
-              <FileName>esp_ll_stm32f769_discovery.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\system\esp_ll_stm32f769_discovery.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_sys_cmsis_os.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\system\esp_sys_cmsis_os.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ESP APP MQTT</GroupName>
-          <Files>
-            <File>
-              <FileName>esp_mqtt_client.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\apps\mqtt\esp_mqtt_client.c</FilePath>
+              <FilePath>..\..\examples_demo\demo_window.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1581,7 +1446,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F769xx,USE_HAL_DRIVER,USE_FULL_LL_DRIVER,ARM_MATH_CM7,__FPU_PRESENT=1,STM32F7XX,STM32F769_DISCOVERY,HSE_VALUE=25000000,RCC_OSCILLATORTYPE=RCC_OSCILLATORTYPE_HSE,RCC_PLLSOURCE=RCC_PLLSOURCE_HSE,RCC_PLLM=25,RCC_PLLN=400,RCC_PLLP=2,RCC_PLLQ=7,RCC_PLLR=6</Define>
               <Undefine></Undefine>
-              <IncludePath>..\include;..\..\src\include;..\..\libs;..\..\libs\st_hal\CMSIS\Include;..\..\libs\st_hal\CMSIS\Device\ST\STM32F7xx\Include;..\..\libs\st_hal\STM32F7xx_HAL_Driver\Inc;..\..\libs\FreeRTOS\include;..\..\libs\FreeRTOS\CMSIS_RTOS;..\..\libs\FreeRTOS\portable\RVDS\ARM_CM4F;..\esp\src\include</IncludePath>
+              <IncludePath>..\include;..\..\src\include;..\..\libs;..\..\libs\st_hal\CMSIS\Include;..\..\libs\st_hal\CMSIS\Device\ST\STM32F7xx\Include;..\..\libs\st_hal\STM32F7xx_HAL_Driver\Inc;..\..\libs\FreeRTOS\include;..\..\libs\FreeRTOS\CMSIS_RTOS;..\..\libs\FreeRTOS\portable\RVDS\ARM_CM4F;..\..\examples_demo\include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1821,11 +1686,6 @@
           <GroupName>User</GroupName>
           <Files>
             <File>
-              <FileName>netconn_server.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\netconn_server.c</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
@@ -1834,26 +1694,6 @@
               <FileName>stm32fxxx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\stm32fxxx_it.c</FilePath>
-            </File>
-            <File>
-              <FileName>gui_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\gui_app.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\esp_app.c</FilePath>
-            </File>
-            <File>
-              <FileName>app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\app.c</FilePath>
-            </File>
-            <File>
-              <FileName>gui_callbacks.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\gui_callbacks.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2169,9 +2009,9 @@
               <FilePath>..\..\src\widget\gui_debugbox.c</FilePath>
             </File>
             <File>
-              <FileName>gui_widget_helpers.c</FileName>
+              <FileName>gui_widget_api.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\src\widget\gui_widget_helpers.c</FilePath>
+              <FilePath>..\..\src\widget\gui_widget_api.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2266,157 +2106,47 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>ASSETS</GroupName>
+          <GroupName>GUI DEMO</GroupName>
           <Files>
             <File>
-              <FileName>wifi_icon.c</FileName>
+              <FileName>demo_button.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\images\wifi_icon.c</FilePath>
+              <FilePath>..\..\examples_demo\demo_button.c</FilePath>
             </File>
             <File>
-              <FileName>wifi_icon_off.c</FileName>
+              <FileName>demo_edit_text.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\images\wifi_icon_off.c</FilePath>
+              <FilePath>..\..\examples_demo\demo_edit_text.c</FilePath>
             </File>
             <File>
-              <FileName>console_icon.c</FileName>
+              <FileName>demo_graph.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\images\console_icon.c</FilePath>
+              <FilePath>..\..\examples_demo\demo_graph.c</FilePath>
             </File>
             <File>
-              <FileName>log_icon.c</FileName>
+              <FileName>demo_init.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\images\log_icon.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ESP CORE</GroupName>
-          <Files>
-            <File>
-              <FileName>esp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp.c</FilePath>
+              <FilePath>..\..\examples_demo\demo_init.c</FilePath>
             </File>
             <File>
-              <FileName>esp_ap.c</FileName>
+              <FileName>demo_list_container.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_ap.c</FilePath>
+              <FilePath>..\..\examples_demo\demo_list_container.c</FilePath>
             </File>
             <File>
-              <FileName>esp_buff.c</FileName>
+              <FileName>demo_progbar.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_buff.c</FilePath>
+              <FilePath>..\..\examples_demo\demo_progbar.c</FilePath>
             </File>
             <File>
-              <FileName>esp_conn.c</FileName>
+              <FileName>demo_template.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_conn.c</FilePath>
+              <FilePath>..\..\examples_demo\demo_template.c</FilePath>
             </File>
             <File>
-              <FileName>esp_debug.c</FileName>
+              <FileName>demo_window.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_debug.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_hostname.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_hostname.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_input.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_input.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_int.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_int.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_mem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_mem.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_parser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_parser.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_pbuf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_pbuf.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_ping.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_ping.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_sntp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_sntp.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_sta.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_sta.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_threads.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_threads.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_timeout.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_timeout.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_unicode.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_unicode.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_evt.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\esp\esp_evt.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ESP API</GroupName>
-          <Files>
-            <File>
-              <FileName>esp_netconn.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\api\esp_netconn.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ESP SYS LL</GroupName>
-          <Files>
-            <File>
-              <FileName>esp_ll_stm32f769_discovery.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\system\esp_ll_stm32f769_discovery.c</FilePath>
-            </File>
-            <File>
-              <FileName>esp_sys_cmsis_os.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\system\esp_sys_cmsis_os.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ESP APP MQTT</GroupName>
-          <Files>
-            <File>
-              <FileName>esp_mqtt_client.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\esp\src\apps\mqtt\esp_mqtt_client.c</FilePath>
+              <FilePath>..\..\examples_demo\demo_window.c</FilePath>
             </File>
           </Files>
         </Group>
