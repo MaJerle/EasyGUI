@@ -750,9 +750,9 @@ guii_widget_isinsideclippingregion(gui_handle_p h, uint8_t check_sib_cover) {
             get_widget_abs_visible_position_size(tmp, &tx1, &ty1, &tx2, &ty2);
 
             /* Check if widget is inside */
-            if (__GUI_RECT_IS_INSIDE(x1, y1, x2, y2, tx1, ty1, tx2, ty2)
-                && !guii_widget_getflag(tmp, GUI_FLAG_WIDGET_INVALIDATE_PARENT)
-                && !guii_widget_hasalpha(tmp)       /* Must not have transparency enabled */
+            if (__GUI_RECT_IS_INSIDE(x1, y1, x2, y2, tx1, ty1, tx2, ty2) &&
+                !guii_widget_getflag(tmp, GUI_FLAG_WIDGET_INVALIDATE_PARENT) &&
+                !guii_widget_hasalpha(tmp)          /* Must not have transparency enabled */
                 ) {
                 return 0;                           /* Widget fully covered by another! */
             }
@@ -822,14 +822,14 @@ guii_widget_movedowntree(gui_handle_p h) {
 void
 guii_widget_focus_clear(void) {
     if (GUI.focused_widget != NULL && GUI.focused_widget != GUI.root.first) { /* First widget is always in focus */
-        GUI.focused_widget_prev = GUI.focused_widget;  /* Clear everything */
+        GUI.focused_widget_prev = GUI.focused_widget;   /* Clear everything */
         do {
             guii_widget_callback(GUI.focused_widget, GUI_WC_FocusOut, NULL, NULL);
             guii_widget_clrflag(GUI.focused_widget, GUI_FLAG_FOCUS); /* Clear focused widget */
             guii_widget_invalidate(GUI.focused_widget); /* Invalidate widget */
             GUI.focused_widget = guii_widget_getparent(GUI.focused_widget);   /* Get parent widget */
-        } while (GUI.focused_widget != GUI.root.first);  /* Loop to the bottom */
-        GUI.focused_widget = NULL;                   /* Reset focused widget */
+        } while (GUI.focused_widget != GUI.root.first); /* Loop to the bottom */
+        GUI.focused_widget = NULL;                  /* Reset focused widget */
     }
 }
 
@@ -876,7 +876,7 @@ guii_widget_focus_set(gui_handle_p h) {
      * Set new widget as focused
      * Set all widget from common to current as focused
      */ 
-    GUI.focused_widget = h;                          /* Set new focused widget */
+    GUI.focused_widget = h;                         /* Set new focused widget */
     while (h != NULL && common != NULL && h != common) {
         guii_widget_setflag(h, GUI_FLAG_FOCUS);     /* Set focused flag */
         guii_widget_callback(h, GUI_WC_FocusIn, NULL, NULL);   /* Notify with callback */
@@ -893,8 +893,8 @@ guii_widget_active_clear(void) {
     if (GUI.active_widget != NULL) {
         guii_widget_callback(GUI.active_widget, GUI_WC_ActiveOut, NULL, NULL);  /* Notify user about change */
         guii_widget_clrflag(GUI.active_widget, GUI_FLAG_ACTIVE | GUI_FLAG_TOUCH_MOVE);  /* Clear all widget based flags */
-        GUI.active_widget_prev = GUI.active_widget;  /* Save as previous active */
-        GUI.active_widget = NULL;                    /* Clear active widget handle */
+        GUI.active_widget_prev = GUI.active_widget; /* Save as previous active */
+        GUI.active_widget = NULL;                   /* Clear active widget handle */
     }
 }
 
@@ -904,8 +904,8 @@ guii_widget_active_clear(void) {
  */
 void
 guii_widget_active_set(gui_handle_p h) {
-    guii_widget_active_clear();                      /* Clear active widget flag */
-    GUI.active_widget = h;                           /* Set new active widget */
+    guii_widget_active_clear();                     /* Clear active widget flag */
+    GUI.active_widget = h;                          /* Set new active widget */
     if (h != NULL) {
         guii_widget_setflag(GUI.active_widget, GUI_FLAG_ACTIVE);    /* Set active widget flag */
         guii_widget_callback(GUI.active_widget, GUI_WC_ActiveIn, NULL, NULL);
@@ -928,9 +928,9 @@ guii_widget_getwidth(gui_handle_p h) {
         return 0;
     }
 #if GUI_CFG_USE_POS_SIZE_CACHE
-    return h->abs_width;
+    return h->abs_width;                            /* Cached value */
 #else /* GUI_CFG_USE_POS_SIZE_CACHE */
-    return calculate_widget_width(h);               /* Calculate actual widget width */
+    return calculate_widget_width(h);               /* Calculate value */
 #endif /* GUI_CFG_USE_POS_SIZE_CACHE */
 }
 
@@ -950,9 +950,9 @@ guii_widget_getheight(gui_handle_p h) {
         return 0;
     }
 #if GUI_CFG_USE_POS_SIZE_CACHE
-    return h->abs_height;
+    return h->abs_height;                           /* Cached value */
 #else /* GUI_CFG_USE_POS_SIZE_CACHE */
-    return calculate_widget_height(h);              /* Calculate actual widget width */
+    return calculate_widget_height(h);              /* Calculate value */
 #endif /* GUI_CFG_USE_POS_SIZE_CACHE */
 }
 
@@ -968,9 +968,9 @@ guii_widget_getabsolutex(gui_handle_p h) {
         return 0;                                   /* At left value */
     }
 #if GUI_CFG_USE_POS_SIZE_CACHE
-    return h->abs_x;                                /* Return cached value */
+    return h->abs_x;                                /* Cached value */
 #else /* GUI_CFG_USE_POS_SIZE_CACHE */
-    return calculate_widget_absolute_x(h);          /* Return calculated value */
+    return calculate_widget_absolute_x(h);          /* Calculate value */
 #endif /* !GUI_CFG_USE_POS_SIZE_CACHE */
 }
 
@@ -986,9 +986,9 @@ guii_widget_getabsolutey(gui_handle_p h) {
         return 0;                                   /* At left value */
     }
 #if GUI_CFG_USE_POS_SIZE_CACHE
-    return h->abs_y;                                /* Return cached value */
+    return h->abs_y;                                /* Cached value */
 #else /* GUI_CFG_USE_POS_SIZE_CACHE */
-    return calculate_widget_absolute_y(h);          /* Return calculated value */
+    return calculate_widget_absolute_y(h);          /* Calculate value */
 #endif /* !GUI_CFG_USE_POS_SIZE_CACHE */
 }
 
@@ -1052,12 +1052,11 @@ guii_widget_invalidate(gui_handle_p h) {
     
     ret = invalidate_widget(h, 1);                  /* Invalidate widget with clipping */
     
-    if (
-        (
+    if (guii_widget_hasparent(h) && (
             guii_widget_getflag(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT) || 
             guii_widget_getcoreflag(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT) ||
             guii_widget_hasalpha(h)                 /* At least little alpha */
-        ) && guii_widget_hasparent(h)) {
+        )) {
         invalidate_widget(guii_widget_getparent(h), 0); /* Invalidate parent object too but without clipping */
     }
 #if GUI_CFG_OS
@@ -1257,7 +1256,7 @@ guii_widget_remove(gui_handle_p h) {
             guii_widget_focus_set(guii_widget_getparent(h)); /* Set parent as focused */
         }
 #if GUI_CFG_OS
-    gui_sys_mbox_putnow(&GUI.OS.mbox, &msg_widget_remove);  /* Put message to queue */
+        gui_sys_mbox_putnow(&GUI.OS.mbox, &msg_widget_remove);  /* Put message to queue */
 #endif /* GUI_CFG_OS */
         return 1;                                   /* Widget will be deleted */
     }

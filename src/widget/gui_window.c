@@ -219,17 +219,17 @@ gui_window_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
             gui_dim_t pt, wi;
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
 
-            pt = guii_widget_getpaddingtop(h);     /* Get top padding */
-            wi = guii_widget_getwidth(h);          /* Get widget width */
+            pt = guii_widget_getpaddingtop(h);      /* Get top padding */
+            wi = guii_widget_getwidth(h);           /* Get widget width */
             
-            if (ts->y_rel[0] <= pt) {                /* Top widget part detected */
+            if (ts->y_rel[0] <= pt) {               /* Top widget part detected */
                 pt = pt - 4;
                 if (ts->x_rel[0] > (wi - 3 * pt) && ts->x_rel[0] < (wi - 2 * pt)) {
-                    guii_widget_hide(h);           /* Hide widget */
+                    guii_widget_hide(h);            /* Hide widget */
                 } else if (ts->x_rel[0] > (wi - 2 * pt) && ts->x_rel[0] < (wi - pt)) {
-                    guii_widget_toggleexpanded(h); /* Hide widget */
+                    guii_widget_toggleexpanded(h);  /* Hide widget */
                 } else if (ts->x_rel[0] >= (wi - pt)) {
-                    guii_widget_remove(h);         /* Remove widget */
+                    guii_widget_remove(h);          /* Remove widget */
                 }
             }
             return 1;
@@ -238,10 +238,10 @@ gui_window_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
             gui_dim_t pt;
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
             
-            pt = guii_widget_getpaddingtop(h);     /* Get top padding */
+            pt = guii_widget_getpaddingtop(h);      /* Get top padding */
             
-            if (ts->y_rel[0] <= pt) {                /* Top widget part detected */
-                guii_widget_toggleexpanded(h);     /* Toggle expanded mode */
+            if (ts->y_rel[0] <= pt) {               /* Top widget part detected */
+                guii_widget_toggleexpanded(h);      /* Toggle expanded mode */
             }
             return 1;
         }
