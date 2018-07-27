@@ -8,7 +8,7 @@ static uint8_t  template_callback(gui_handle_p h, gui_wc_t wc, gui_widget_param_
  */
 void
 demo_create_feature_template(gui_handle_p parent) {
-    
+    gui_button_create(0, 0, 0, 1, 1, parent, template_callback, 0);
 }
 
 /**

@@ -14,6 +14,7 @@ demo_create_feature_window(win_data_t* data) {
     h = gui_widget_getbyid(data->id);           /* Get widget by ID first */
     if (h == NULL) {                            /* If it does not exists yet */
         h = gui_window_create(data->id, 50, 50, gui_lcd_getwidth() - 100, gui_lcd_getheight() - 100, base, main_win_callback, 0);
+        gui_widget_setpaddingtop(h, 80);
         gui_widget_settext(h, data->title);     /* Set label */
         if (data->feature_create_fn != NULL) {
             data->feature_create_fn(h);         /* Call create feature function */

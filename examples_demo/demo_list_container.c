@@ -22,7 +22,7 @@ demo_create_feature_list_container(gui_handle_p parent) {
     size_t i;
 
     /* Create list container */
-    h = gui_listcontainer_create(0, 10, 10, 300, 50, parent, NULL, 0);
+    h = gui_listcontainer_create(0, 10, 10, 300, 50, parent, list_container_callback, 0);
     gui_widget_setpositionpercent(h, 5, 5);
     gui_widget_setsizepercent(h, 90, 90);
 
@@ -31,7 +31,7 @@ demo_create_feature_list_container(gui_handle_p parent) {
         btn = gui_button_create(0, 10, 10, 10, 10, h, NULL, 0);
         gui_widget_setpositionpercent(btn, 5.0f, 5.0f + i * 20.0f);
         gui_widget_setsizepercent(btn, 90, 17);
-        gui_widget_settext(btn, buttons[i]);
+        gui_widget_settext(btn, _GT(buttons[i]));
     }
 }
 

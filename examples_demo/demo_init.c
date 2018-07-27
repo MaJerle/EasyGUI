@@ -13,13 +13,13 @@ typedef struct {
 /* Create list of all buttons */
 static main_win_btn_t
 btns[] = {
-    BTN_ENTRY(ID_BTN_MAINWIN_WINDOW, "Window", ID_WIN_WINDOW, demo_create_feature_windows)
-    BTN_ENTRY(ID_BTN_MAINWIN_BUTTONS, "Buttons", ID_WIN_BUTTONS, demo_create_feature_button)
-    BTN_ENTRY(ID_BTN_MAINWIN_EDITTEXT, "Edit text", ID_WIN_EDITTEXT, demo_create_feature_edit_text)
-    BTN_ENTRY(ID_BTN_MAINWIN_GRAPH, "Graph", ID_WIN_GRAPH, demo_create_feature_graph)
-    BTN_ENTRY(ID_BTN_MAINWIN_PROGBAR, "Progress bar", ID_WIN_PROGBAR, demo_create_feature_progbar)
-    BTN_ENTRY(ID_BTN_MAINWIN_LED, "Led", ID_WIN_LED, NULL)
-    BTN_ENTRY(ID_BTN_MAINWIN_LIST_CONTAINER, "ListContainer", ID_WIN_LIST_CONTAINER, demo_create_feature_list_container)
+    BTN_ENTRY(ID_BTN_MAINWIN_WINDOW, _GT("Window"), ID_WIN_WINDOW, demo_create_feature_windows)
+    BTN_ENTRY(ID_BTN_MAINWIN_BUTTONS, _GT("Buttons"), ID_WIN_BUTTONS, demo_create_feature_button)
+    BTN_ENTRY(ID_BTN_MAINWIN_EDITTEXT, _GT("Edit text"), ID_WIN_EDITTEXT, demo_create_feature_edit_text)
+    BTN_ENTRY(ID_BTN_MAINWIN_GRAPH, _GT("Graph"), ID_WIN_GRAPH, demo_create_feature_graph)
+    BTN_ENTRY(ID_BTN_MAINWIN_PROGBAR, _GT("Progress bar"), ID_WIN_PROGBAR, demo_create_feature_progbar)
+    BTN_ENTRY(ID_BTN_MAINWIN_LED, _GT("Led"), ID_WIN_LED, NULL)
+    BTN_ENTRY(ID_BTN_MAINWIN_LIST_CONTAINER, _GT("ListContainer"), ID_WIN_LIST_CONTAINER, demo_create_feature_list_container)
 };
 
 static uint8_t  main_win_btn_callback(gui_handle_p h, gui_wc_t wc, gui_widget_param_t* param, gui_widget_result_t* result);
@@ -44,7 +44,7 @@ demo_init(void) {
         h = gui_button_create(btns[i].id,
             GUI_FLOAT((i % 4) * (lcd_w - 10) / 4 + 10), GUI_FLOAT((i / 4) * 40 + 5),
             GUI_FLOAT(lcd_w / 4 - 10), GUI_FLOAT(35),
-            NULL, main_win_btn_callback, 0
+            parent, main_win_btn_callback, 0
         );
         gui_widget_settext(h, _GT(btns[i].label));
         btns[i].data.id = btns[i].win_id;
