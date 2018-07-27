@@ -555,8 +555,8 @@ uint8_t         guii_widget_setheightpercent(gui_handle_p h, float height);
 uint8_t         guii_widget_set3dstyle(gui_handle_p h, uint8_t enable);
 uint8_t         guii_widget_setfont(gui_handle_p h, const gui_font_t* font);
 uint8_t         guii_widget_settext(gui_handle_p h, const gui_char* text);
-const gui_char*     guii_widget_gettext(gui_handle_p h);
-const gui_font_t*   guii_widget_getfont(gui_handle_p h);
+const gui_char *    guii_widget_gettext(gui_handle_p h);
+const gui_font_t *  guii_widget_getfont(gui_handle_p h);
 
 uint8_t         guii_widget_alloctextmemory(gui_handle_p h, uint32_t size);
 uint8_t         guii_widget_freetextmemory(gui_handle_p h);
@@ -581,7 +581,7 @@ gui_dim_t       guii_widget_getwidth(gui_handle_p h);
 gui_dim_t       guii_widget_getheight(gui_handle_p h);
 
 uint8_t         guii_widget_setuserdata(gui_handle_p h, void* data);
-void*           guii_widget_getuserdata(gui_handle_p h);
+void *          guii_widget_getuserdata(gui_handle_p h);
 
 uint8_t         guii_widget_setparam(gui_handle_p h, uint16_t cfg, const void* data, uint8_t invalidate, uint8_t invalidateparent);
 uint8_t         guii_widget_getparam(gui_handle_p h, uint16_t cfg, void* data);
@@ -599,10 +599,10 @@ uint8_t         guii_widget_getparam(gui_handle_p h, uint16_t cfg, void* data);
 uint32_t        gui_widget_alloctextmemory(gui_handle_p h, uint32_t size);
 uint8_t         gui_widget_freetextmemory(gui_handle_p h);
 uint8_t         gui_widget_settext(gui_handle_p h, const gui_char* text);
-const gui_char* gui_widget_gettext(gui_handle_p h);
-const gui_char* gui_widget_gettextcopy(gui_handle_p h, gui_char* dst, uint32_t len);
+const gui_char *    gui_widget_gettext(gui_handle_p h);
+const gui_char *    gui_widget_gettextcopy(gui_handle_p h, gui_char* dst, uint32_t len);
 uint8_t         gui_widget_setfont(gui_handle_p h, const gui_font_t* font);
-const gui_font_t*   gui_widget_getfont(gui_handle_p h);
+const gui_font_t *  gui_widget_getfont(gui_handle_p h);
 uint8_t         gui_widget_setfontdefault(const gui_font_t* font);
 
 /**
@@ -659,12 +659,12 @@ gui_dim_t       gui_widget_getscrolly(gui_handle_p h);
  * \{
  */
 
-uint8_t gui_widget_show(gui_handle_p h);
-uint8_t gui_widget_hide(gui_handle_p h);
-uint8_t gui_widget_hidechildren(gui_handle_p h);
-uint8_t gui_widget_putonfront(gui_handle_p h);
-uint8_t gui_widget_getalpha(gui_handle_p h);
-uint8_t gui_widget_setalpha(gui_handle_p h, uint8_t alpha);
+uint8_t         gui_widget_show(gui_handle_p h);
+uint8_t         gui_widget_hide(gui_handle_p h);
+uint8_t         gui_widget_hidechildren(gui_handle_p h);
+uint8_t         gui_widget_putonfront(gui_handle_p h, uint8_t focus);
+uint8_t         gui_widget_getalpha(gui_handle_p h);
+uint8_t         gui_widget_setalpha(gui_handle_p h, uint8_t alpha);
  
 /**
  * \}
@@ -676,18 +676,18 @@ uint8_t gui_widget_setalpha(gui_handle_p h, uint8_t alpha);
  * \{
  */
 
-uint8_t gui_widget_invalidate(gui_handle_p h);
-uint8_t gui_widget_setuserdata(gui_handle_p h, void* data);
-void* gui_widget_getuserdata(gui_handle_p h);
-uint8_t gui_widget_ischildof(gui_handle_p h, gui_handle_p parent);
-uint8_t gui_widget_incselection(gui_handle_p h, int16_t dir);
-uint8_t gui_widget_setfocus(gui_handle_p h);
-uint8_t gui_widget_setzindex(gui_handle_p h, int32_t zindex);
-int32_t gui_widget_getzindex(gui_handle_p h);
-uint8_t gui_widget_set3dstyle(gui_handle_p h, uint8_t enable);
-gui_id_t gui_widget_getid(gui_handle_p h);
-gui_handle_p gui_widget_getbyid(gui_id_t id);
-uint8_t gui_widget_remove(gui_handle_p* h);
+uint8_t         gui_widget_invalidate(gui_handle_p h);
+uint8_t         gui_widget_setuserdata(gui_handle_p h, void* data);
+void *          gui_widget_getuserdata(gui_handle_p h);
+uint8_t         gui_widget_ischildof(gui_handle_p h, gui_handle_p parent);
+uint8_t         gui_widget_incselection(gui_handle_p h, int16_t dir);
+uint8_t         gui_widget_setfocus(gui_handle_p h);
+uint8_t         gui_widget_setzindex(gui_handle_p h, int32_t zindex);
+int32_t         gui_widget_getzindex(gui_handle_p h);
+uint8_t         gui_widget_set3dstyle(gui_handle_p h, uint8_t enable);
+gui_id_t        gui_widget_getid(gui_handle_p h);
+gui_handle_p    gui_widget_getbyid(gui_id_t id);
+uint8_t         gui_widget_remove(gui_handle_p* h);
 
 /**
  * \}
@@ -699,18 +699,18 @@ uint8_t gui_widget_remove(gui_handle_p* h);
  * \{
  */
  
-uint8_t gui_widget_setpaddingtop(gui_handle_p h, gui_dim_t x);
-uint8_t gui_widget_setpaddingright(gui_handle_p h, gui_dim_t x);
-uint8_t gui_widget_setpaddingbottom(gui_handle_p h, gui_dim_t x);
-uint8_t gui_widget_setpaddingleft(gui_handle_p h, gui_dim_t x);
-uint8_t gui_widget_setpaddingtopbottom(gui_handle_p h, gui_dim_t x);      
-uint8_t gui_widget_setpaddingleftright(gui_handle_p h, gui_dim_t x);
-uint8_t gui_widget_setpadding(gui_handle_p h, gui_dim_t x);
+uint8_t         gui_widget_setpaddingtop(gui_handle_p h, gui_dim_t x);
+uint8_t         gui_widget_setpaddingright(gui_handle_p h, gui_dim_t x);
+uint8_t         gui_widget_setpaddingbottom(gui_handle_p h, gui_dim_t x);
+uint8_t         gui_widget_setpaddingleft(gui_handle_p h, gui_dim_t x);
+uint8_t         gui_widget_setpaddingtopbottom(gui_handle_p h, gui_dim_t x);      
+uint8_t         gui_widget_setpaddingleftright(gui_handle_p h, gui_dim_t x);
+uint8_t         gui_widget_setpadding(gui_handle_p h, gui_dim_t x);
 
-gui_dim_t gui_widget_getpaddingtop(gui_handle_p h);
-gui_dim_t gui_widget_getpaddingright(gui_handle_p h);
-gui_dim_t gui_widget_getpaddingbottom(gui_handle_p h);
-gui_dim_t gui_widget_getpaddingleft(gui_handle_p h);
+gui_dim_t       gui_widget_getpaddingtop(gui_handle_p h);
+gui_dim_t       gui_widget_getpaddingright(gui_handle_p h);
+gui_dim_t       gui_widget_getpaddingbottom(gui_handle_p h);
+gui_dim_t       gui_widget_getpaddingleft(gui_handle_p h);
 
 /**
  * \}
@@ -722,9 +722,9 @@ gui_dim_t gui_widget_getpaddingleft(gui_handle_p h);
  * \{
  */
 
-uint8_t gui_widget_processdefaultcallback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
-uint8_t gui_widget_setcallback(gui_handle_p h, gui_widget_callback_t callback);
-uint8_t gui_widget_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+uint8_t         gui_widget_processdefaultcallback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+uint8_t         gui_widget_setcallback(gui_handle_p h, gui_widget_callback_t callback);
+uint8_t         gui_widget_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
 /**
  * \}

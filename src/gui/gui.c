@@ -291,9 +291,7 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
     memset(x, 0x00, sizeof(x));                     /* Reset X values */
     memset(y, 0x00, sizeof(y));                     /* Reset Y values */
     for (i = 0; i < 2;) {                           /* Allow up to 2 touch presses */
-        /*
-         * Wait for valid input with pressed state
-         */
+        /* Wait for valid input with pressed state */
         PT_WAIT_UNTIL(&ts->pt, v && ts->ts.status && !old->ts.status && ts->ts.count == 1);
         
         time = ts->ts.time;                         /* Get start time of this touch */
@@ -324,9 +322,7 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
             }
         } while (1);
         
-        /*
-         * Check what was the reason for thread to continue
-         */
+        /* Check what was the reason for thread to continue */
         if (v) {                                    /* New touch event occurred */
             if (!ts->ts.status) {                   /* We received released state */
                 if (i) {                            /* Try to get second click, check difference for double click */
@@ -557,8 +553,8 @@ gui_process_touch(void) {
     gui_widget_result_t result = {0};
     gui_wc_t rresult;
     
-    if (gui_input_touchavailable()) {               /* Check if any touch available */
-        while (gui_input_touchread(&GUI.touch.ts)) {/* Process all touch events possible */
+    if (guii_input_touchavailable()) {              /* Check if any touch available */
+        while (guii_input_touchread(&GUI.touch.ts)) {   /* Process all touch events possible */
             if (GUI.active_widget && GUI.touch.ts.status) { /* Check active widget for touch and pressed status */
                 set_relative_coordinate(&GUI.touch, /* Set relative touch (for widget) from current touch */
                     guii_widget_getabsolutex(GUI.active_widget), guii_widget_getabsolutey(GUI.active_widget),
@@ -581,9 +577,9 @@ gui_process_touch(void) {
                             GUI_WIDGET_RESULTTYPE_TOUCH(&result) = touchCONTINUE;
                             r = guii_widget_callback(aw, GUI_WC_TouchMove, &param, &result);   /* The same amount of touch events currently */
                             if (r) {                /* Check if touch move processed */
-                                guii_widget_setflag(aw, GUI_FLAG_TOUCH_MOVE);    /* Touch move has been processed */
+                                guii_widget_setflag(aw, GUI_FLAG_TOUCH_MOVE);   /* Touch move has been processed */
                             } else {
-                                guii_widget_clrflag(aw, GUI_FLAG_TOUCH_MOVE);    /* Touch move has not been processed */
+                                guii_widget_clrflag(aw, GUI_FLAG_TOUCH_MOVE);   /* Touch move has not been processed */
                             }
                             if (GUI_WIDGET_RESULTTYPE_TOUCH(&result) != touchCONTINUE) {
                                 break;
@@ -675,8 +671,8 @@ process_keyboard(void) {
     gui_widget_param_t param = {0};
     gui_widget_result_t result = {0};
     
-    while (gui_input_keyread(&key.kb)) {            /* Read all keyboard entires */
-        if (GUI.focused_widget != NULL) {            /* Check if any widget is in focus already */
+    while (guii_input_keyread(&key.kb)) {           /* Read all keyboard entires */
+        if (GUI.focused_widget != NULL) {           /* Check if any widget is in focus already */
             GUI_WIDGET_PARAMTYPE_KEYBOARD(&param) = &key;
             GUI_WIDGET_RESULTTYPE_KEYBOARD(&result) = keyCONTINUE;
             guii_widget_callback(GUI.focused_widget, GUI_WC_KeyPress, &param, &result);
@@ -824,16 +820,16 @@ gui_init(void) {
         return guiERROR;
     }
     
-    gui_input_init();                               /* Init input devices */
+    guii_input_init();                              /* Init input devices */
     GUI.initialized = 1;                            /* GUI is initialized */
-    guii_widget_init();                              /* Init widgets */
+    guii_widget_init();                             /* Init widgets */
     
 #if GUI_CFG_OS
     /* Create graphical thread */
     if (GUI.OS.thread_id == NULL) {
         gui_sys_thread_create(&GUI.OS.thread_id, "gui_thread", gui_thread, NULL, GUI_SYS_THREAD_SS, GUI_SYS_THREAD_PRIO);
     }
-#endif
+#endif /* GUI_CFG_OS */
     
     return guiOK;
 }
@@ -858,9 +854,7 @@ gui_process(void) {
    
     __GUI_SYS_PROTECT();                            /* Protect from multiple access */
     
-    /*
-     * Periodically process everything
-     */
+    /* Periodically process everything */
     guii_timer_process();                           /* Process all timers */
     guii_widget_executeremove();                    /* Delete widgets */
 #if GUI_CFG_USE_TOUCH
@@ -872,6 +866,7 @@ gui_process(void) {
     process_redraw();                               /* Redraw widgets */
     
     __GUI_SYS_UNPROTECT();                          /* Release protection */
+    
     return 0;                                       /* Return number of elements updated on GUI */
 }
 
