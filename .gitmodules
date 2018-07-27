@@ -1,7 +1,3 @@
 [submodule "libs"]
 	path = libs
 	url = https://github.com/MaJerle/Embedded_Libs
-[submodule "dev/esp"]
-	path = dev/esp
-	url = https://github.com/MaJerle/ESP_AT_Lib
-	branch = master
