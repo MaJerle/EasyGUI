@@ -457,7 +457,7 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_font
             tmpx = x;                               /* Start X */
             
             ptr += sizeof(*entry);                  /* Go to start of data array */
-            dst = (uint8_t *)(((uint8_t *)GUI.lcd.drawing_layer->start_address) + ((y - GUI.lcd.drawing_layer->y_offset) * GUI.lcd.drawing_layer->width + (x - GUI.lcd.drawing_layer->x_offset)) * GUI.lcd.pixel_size);
+            dst = (uint8_t *)(((uint8_t *)GUI.lcd.drawing_layer->start_address) + ((y - GUI.lcd.drawing_layer->y_pos) * GUI.lcd.drawing_layer->width + (x - GUI.lcd.drawing_layer->x_pos)) * GUI.lcd.pixel_size);
             
             width = c->x_size;                      /* Get X size */
             height = c->y_size;                     /* Get Y size */
@@ -637,7 +637,7 @@ gui_draw_fill(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t wid
         height = disp->y2 - y;
     }
     if (width > 0 && height > 0) {
-        GUI.ll.FillRect(&GUI.lcd, GUI.lcd.drawing_layer, x - GUI.lcd.drawing_layer->x_offset, y - GUI.lcd.drawing_layer->y_offset, width, height, color);
+        GUI.ll.FillRect(&GUI.lcd, GUI.lcd.drawing_layer, x - GUI.lcd.drawing_layer->x_pos, y - GUI.lcd.drawing_layer->y_pos, width, height, color);
     }
 }
 
@@ -673,7 +673,7 @@ gui_draw_setpixel(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_color
     if (y < disp->y1 || y >= disp->y2 || x < disp->x1 || x >= disp->x2) {
         return;
     }
-    GUI.ll.SetPixel(&GUI.lcd, GUI.lcd.drawing_layer, x - GUI.lcd.drawing_layer->x_offset, y - GUI.lcd.drawing_layer->y_offset, color);
+    GUI.ll.SetPixel(&GUI.lcd, GUI.lcd.drawing_layer, x - GUI.lcd.drawing_layer->x_pos, y - GUI.lcd.drawing_layer->y_pos, color);
 }
 
 /**
@@ -686,7 +686,7 @@ gui_draw_setpixel(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_color
  */
 gui_color_t
 gui_draw_getpixel(const gui_display_t* disp, gui_dim_t x, gui_dim_t y) {
-    return GUI.ll.GetPixel(&GUI.lcd, GUI.lcd.drawing_layer, x - GUI.lcd.drawing_layer->x_offset, y - GUI.lcd.drawing_layer->y_offset);
+    return GUI.ll.GetPixel(&GUI.lcd, GUI.lcd.drawing_layer, x - GUI.lcd.drawing_layer->x_pos, y - GUI.lcd.drawing_layer->y_pos);
 }
 
 /**
@@ -710,7 +710,7 @@ gui_draw_vline(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t le
     if ((y + length) > disp->y2) {
         length = disp->y2 - y;
     }
-    GUI.ll.DrawVLine(&GUI.lcd, GUI.lcd.drawing_layer, x - GUI.lcd.drawing_layer->x_offset, y - GUI.lcd.drawing_layer->y_offset, length, color);
+    GUI.ll.DrawVLine(&GUI.lcd, GUI.lcd.drawing_layer, x - GUI.lcd.drawing_layer->x_pos, y - GUI.lcd.drawing_layer->y_pos, length, color);
 }
 
 /**
@@ -734,7 +734,7 @@ gui_draw_hline(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t le
     if ((x + length) > disp->x2) {
         length = disp->x2 - x;
     }
-    GUI.ll.DrawHLine(&GUI.lcd, GUI.lcd.drawing_layer, x - GUI.lcd.drawing_layer->x_offset, y - GUI.lcd.drawing_layer->y_offset, length, color);
+    GUI.ll.DrawHLine(&GUI.lcd, GUI.lcd.drawing_layer, x - GUI.lcd.drawing_layer->x_pos, y - GUI.lcd.drawing_layer->y_pos, length, color);
 }
 
 /******************************************************************************/
@@ -1246,7 +1246,7 @@ gui_draw_image(gui_display_t* disp, gui_dim_t x, gui_dim_t y, const gui_image_de
     height = img->y_size;                           /* Set default height */
     
     src = (uint8_t *)(img->image);                  /* Set source address */
-    dst = (uint8_t *)(((uint8_t *)layer->start_address) + GUI.lcd.pixel_size * ((y - layer->y_offset) * layer->width + (x - layer->x_offset)));
+    dst = (uint8_t *)(((uint8_t *)layer->start_address) + GUI.lcd.pixel_size * ((y - layer->y_pos) * layer->width + (x - layer->x_pos)));
     
     //TODO: Check proper coordinates for memory!
     if (y < disp->y1) {

@@ -34,6 +34,7 @@ typedef struct {
 #define ID_BTN_MAINWIN_PROGBAR              (ID_BTN_BASIC + 0x004)
 #define ID_BTN_MAINWIN_LED                  (ID_BTN_BASIC + 0x005)
 #define ID_BTN_MAINWIN_LIST_CONTAINER       (ID_BTN_BASIC + 0x006)
+#define ID_BTN_MAINWIN_WINDOW               (ID_BTN_BASIC + 0x007)
 
 /* List of windows IDs */
 #define ID_WIN_BASIC                        (GUI_ID_USER + 0x200)
@@ -43,6 +44,7 @@ typedef struct {
 #define ID_WIN_PROGBAR				        (ID_WIN_BASIC + 0x004)
 #define ID_WIN_LED				            (ID_WIN_BASIC + 0x005)
 #define ID_WIN_LIST_CONTAINER			    (ID_WIN_BASIC + 0x006)
+#define ID_WIN_WINDOW                       (ID_WIN_BASIC + 0x007)
 
 /* Graph ID */
 #define ID_WIDGET_BASIC                     (GUI_ID_USER + 0x300)
@@ -56,6 +58,7 @@ extern gui_const gui_font_t GUI_Font_Arial_Bold_18;
 void    demo_init(void);
 void    demo_create_feature_window(win_data_t* data);
 
+void    demo_create_feature_windows(gui_handle_p parent);
 void    demo_create_feature_list_container(gui_handle_p parent);
 void    demo_create_feature_button(gui_handle_p parent);
 void    demo_create_feature_edit_text(gui_handle_p parent);

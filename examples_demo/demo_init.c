@@ -13,6 +13,7 @@ typedef struct {
 /* Create list of all buttons */
 static main_win_btn_t
 btns[] = {
+    BTN_ENTRY(ID_BTN_MAINWIN_WINDOW, "Window", ID_WIN_WINDOW, demo_create_feature_windows)
     BTN_ENTRY(ID_BTN_MAINWIN_BUTTONS, "Buttons", ID_WIN_BUTTONS, demo_create_feature_button)
     BTN_ENTRY(ID_BTN_MAINWIN_EDITTEXT, "Edit text", ID_WIN_EDITTEXT, demo_create_feature_edit_text)
     BTN_ENTRY(ID_BTN_MAINWIN_GRAPH, "Graph", ID_WIN_GRAPH, demo_create_feature_graph)

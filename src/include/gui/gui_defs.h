@@ -315,8 +315,8 @@ typedef struct {
     
     gui_dim_t width;                        /*!< Layer width, used for virtual layers mainly */
     gui_dim_t height;                       /*!< Layer height, used for virtual layers mainly */
-    gui_dim_t x_offset;                     /*!< Offset value for pixel position calculation in X direction, used for virtual layers */
-    gui_dim_t y_offset;                     /*!< Offset value for pixel position calculation in Y direction, used for virtual layers */
+    gui_dim_t x_pos;                        /*!< Absolute X position on screen, used for virtual layers */
+    gui_dim_t y_pos;                        /*!< Absolute Y position on screen, used for virtual layers */
 } gui_layer_t;
 
 /**

@@ -148,8 +148,8 @@ redraw_widgets(gui_handle_p parent) {
                     if (GUI.lcd.drawing_layer != NULL) {/* Check if allocation was successful */
                         GUI.lcd.drawing_layer->width = width;
                         GUI.lcd.drawing_layer->height = height;
-                        GUI.lcd.drawing_layer->x_offset = GUI.display_temp.x1;
-                        GUI.lcd.drawing_layer->y_offset = GUI.display_temp.y1;
+                        GUI.lcd.drawing_layer->x_pos = GUI.display_temp.x1;
+                        GUI.lcd.drawing_layer->y_pos = GUI.display_temp.y1;
                         GUI.lcd.drawing_layer->start_address = ((uint8_t *)GUI.lcd.drawing_layer) + sizeof(*GUI.lcd.drawing_layer);
                         transparent = 1;            /* We are going to transparent drawing mode */
                     } else {
@@ -178,31 +178,33 @@ redraw_widgets(gui_handle_p parent) {
                 }
                 
 #if GUI_CFG_USE_ALPHA
-                /*
-                 * If transparent mode is used on widget, copy content back
-                 */
+                /* If transparent mode is used on widget, copy content back */
                 if (transparent) {                  /* If we are in transparent mode */
                     /* Copy layers with blending */
                     if (GUI.ll.CopyBlend != NULL) { /* Hardware way */
                         GUI.ll.CopyBlend(&GUI.lcd, GUI.lcd.drawing_layer,
                             (void *)(((uint8_t *)layerPrev->start_address) +
-                                GUI.lcd.pixel_size * (layerPrev->width * (GUI.lcd.drawing_layer->y_offset - layerPrev->y_offset) + (GUI.lcd.drawing_layer->x_offset - layerPrev->x_offset))),
+                                GUI.lcd.pixel_size * (layerPrev->width * (GUI.lcd.drawing_layer->y_pos - layerPrev->y_pos) + (GUI.lcd.drawing_layer->x_pos - layerPrev->x_pos))),
                             (void *)GUI.lcd.drawing_layer->start_address,
                             guii_widget_getalpha(h), 0xFF,
                             GUI.lcd.drawing_layer->width, GUI.lcd.drawing_layer->height,
                             layerPrev->width - GUI.lcd.drawing_layer->width, 0
                         );
                     } else {                        /* Software way, ugly and slow way */
-                        gui_dim_t x, y;
+                        gui_dim_t x, y, dxo, dyo;
                         gui_color_t fg, bg;
                         uint8_t r, g, b;
                         float a;
+
+                        /* Get difference in offset */
+                        dxo = GUI.lcd.drawing_layer->x_pos - layerPrev->x_pos;
+                        dyo = GUI.lcd.drawing_layer->y_pos - layerPrev->y_pos;;
 
                         a = GUI_FLOAT(guii_widget_getalpha(h)) / GUI_FLOAT(0xFF);
                         for (y = 0; y < GUI.lcd.drawing_layer->height; y++) {
                             for (x = 0; x < GUI.lcd.drawing_layer->width; x++) {
                                 fg = GUI.ll.GetPixel(&GUI.lcd, GUI.lcd.drawing_layer, x, y);
-                                bg = GUI.ll.GetPixel(&GUI.lcd, layerPrev, GUI.lcd.drawing_layer->x_offset + x, GUI.lcd.drawing_layer->y_offset + y);
+                                bg = GUI.ll.GetPixel(&GUI.lcd, layerPrev, dxo + x, dyo + y);
 
                                 r = GUI_U8(((fg >> 16) & 0xFF) * a + (1.0f - a) * ((bg >> 16) & 0xFF));
                                 g = GUI_U8(((fg >> 8) & 0xFF) * a + (1.0f - a) * ((bg >> 8) & 0xFF));
@@ -210,7 +212,7 @@ redraw_widgets(gui_handle_p parent) {
                                 
                                 fg = (gui_color_t)(0xFF000000UL | (uint8_t)r << 16 | (uint8_t)g << 8 | (uint8_t)b);
                                 
-                                GUI.ll.SetPixel(&GUI.lcd, layerPrev, GUI.lcd.drawing_layer->x_offset + x, GUI.lcd.drawing_layer->y_offset + y, fg);
+                                GUI.ll.SetPixel(&GUI.lcd, layerPrev, dxo + x, dyo + y, fg);
                             }
                         }                        
                     }
@@ -805,9 +807,10 @@ gui_init(void) {
     if (GUI.lcd.layer_count >= 1) {
         size_t i;
         /* Set default values for all layers */
+        /* User layers use full screen */
         for (i = 0; i < GUI.lcd.layer_count; i++) {
-            GUI.lcd.layers[i].x_offset = 0;
-            GUI.lcd.layers[i].y_offset = 0;
+            GUI.lcd.layers[i].x_pos = 0;
+            GUI.lcd.layers[i].y_pos = 0;
             GUI.lcd.layers[i].width = GUI.lcd.width;
             GUI.lcd.layers[i].height = GUI.lcd.height;
         }

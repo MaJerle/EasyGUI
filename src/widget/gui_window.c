@@ -173,7 +173,8 @@ gui_window_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
 #if GUI_CFG_USE_TOUCH
         case GUI_WC_TouchStart: {
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            if (!guii_widget_getparent(h)) {       /* Ignore on base window */
+            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;  /* Set handled status */
+            if (!guii_widget_hasparent(h)) {       /* Ignore on base window */
                 return 1;
             }
             if (ts->ts.count == 1 && guii_widget_getflag(h, GUI_FLAG_CHILD)) { /* For children widgets only on single touch */
@@ -198,8 +199,8 @@ gui_window_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
             
             if (Mode == 1 && guii_widget_getflag(h, GUI_FLAG_CHILD)) {
                 gui_dim_t px, py;
-                px = guii_widget_getparentabsolutex(__GH(h));
-                py = guii_widget_getparentabsolutey(__GH(h));
+                px = guii_widget_getparentabsolutex(h);
+                py = guii_widget_getparentabsolutey(h);
                 guii_widget_setposition(h, ts->ts.x[0] - px - tx, ts->ts.y[0] - py - ty);
                 
                 if (guii_widget_isexpanded(h)) {   /* If it is expanded */
@@ -217,7 +218,7 @@ gui_window_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
         case GUI_WC_Click: {
             gui_dim_t pt, wi;
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            
+
             pt = guii_widget_getpaddingtop(h);     /* Get top padding */
             wi = guii_widget_getwidth(h);          /* Get widget width */
             
@@ -279,7 +280,7 @@ gui_window_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
  */
 gui_handle_p
 gui_window_createdesktop(gui_id_t id, gui_widget_callback_t cb) {
-    return (gui_handle_p)guii_widget_create(&widget, id, 0, 0, GUI.lcd.width, GUI.lcd.height, 0, cb, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);/* Allocate memory for basic widget */
+    return (gui_handle_p)guii_widget_create(&widget, id, 0, 0, gui_lcd_getwidth(), gui_lcd_getheight(), 0, cb, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);  /* Allocate memory for basic widget */
 }
 
 /**
