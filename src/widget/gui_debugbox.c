@@ -301,7 +301,7 @@ gui_debugbox_create(gui_id_t id, float x, float y, float width, float height, gu
 uint8_t
 gui_debugbox_setcolor(gui_handle_p h, GUI_DEBUGBOX_COLOR_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
 }
 
 /**
@@ -319,7 +319,7 @@ gui_debugbox_addstring(gui_handle_p h, const gui_char* text) {
     
     item = GUI_MEMALLOC(sizeof(*item) + gui_string_lengthtotal(text) + 1);  /* Allocate memory for entry */
     if (item != NULL) {
-        __GUI_ENTER();                              /* Enter GUI */
+        __GUI_LEAVE(1);                             /* Enter GUI */
         item->text = (void *)((char *)item + sizeof(*item));/* Add text to entry */
         gui_string_copy(item->text, text);          /* Copy text */
         gui_linkedlist_add_gen(&__GL(h)->root, &item->list);/* Add to linked list */
@@ -346,7 +346,7 @@ gui_debugbox_addstring(gui_handle_p h, const gui_char* text) {
         __GL(h)->visiblestartindex = __GL(h)->count;/* Invalidate visible start index */
         check_values(h);                            /* Check values */
         guii_widget_invalidate(h);                 /* Invalidate widget */
-        __GUI_LEAVE();                              /* Leave GUI */
+        __GUI_LEAVE(1);                             /* Leave GUI */
         
         ret = 1;
     }
@@ -365,7 +365,7 @@ gui_debugbox_addstring(gui_handle_p h, const gui_char* text) {
 uint8_t
 gui_debugbox_setsliderauto(gui_handle_p h, uint8_t autoMode) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     if (autoMode && !(__GL(h)->flags & GUI_FLAG_DEBUGBOX_SLIDER_AUTO)) {
         __GL(h)->flags |= GUI_FLAG_DEBUGBOX_SLIDER_AUTO;
@@ -375,7 +375,7 @@ gui_debugbox_setsliderauto(gui_handle_p h, uint8_t autoMode) {
         guii_widget_invalidate(h);                 /* Invalidate widget */
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 1;
 }
 
@@ -392,7 +392,7 @@ gui_debugbox_setslidervisibility(gui_handle_p h, uint8_t visible) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     if (!(__GL(h)->flags & GUI_FLAG_DEBUGBOX_SLIDER_AUTO)) {
         if (visible && !(__GL(h)->flags & GUI_FLAG_DEBUGBOX_SLIDER_ON)) {
@@ -406,7 +406,7 @@ gui_debugbox_setslidervisibility(gui_handle_p h, uint8_t visible) {
         }
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }
 
@@ -421,7 +421,7 @@ gui_debugbox_scroll(gui_handle_p h, int16_t step) {
     volatile int16_t start;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     start = __GL(h)->visiblestartindex;
     __GL(h)->visiblestartindex += step;
@@ -434,7 +434,7 @@ gui_debugbox_scroll(gui_handle_p h, int16_t step) {
         guii_widget_invalidate(h);
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return GUI_U8(start);
 }
 
@@ -447,10 +447,10 @@ gui_debugbox_scroll(gui_handle_p h, int16_t step) {
 uint8_t
 gui_debugbox_setmaxitems(gui_handle_p h, int16_t max_items) {    
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && max_items > 0);   /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     __GL(h)->maxcount = max_items;
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 0;
 }

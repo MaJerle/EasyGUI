@@ -618,13 +618,12 @@ guii_keyboard_show(gui_handle_p h) {
  */
 gui_handle_p
 gui_keyboard_create(void) {    
-    __GUI_ENTER();                                  /* Enter GUI */
-    
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     if (keyboard.handle == NULL) {
         keyboard.handle = gui_container_create(GUI_ID_KEYBOARD_BASE, 0, 0, 1, 1, 0, keyboard_base_callback, GUI_FLAG_WIDGET_CREATE_NO_PARENT);  /* Create keyboard base element with desktop as parent */
     }
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
+
     return keyboard.handle;
 }
 
@@ -636,11 +635,11 @@ gui_keyboard_create(void) {
 uint8_t
 gui_keyboard_hide(void) {
     uint8_t ret;
-    __GUI_ENTER();                                  /* Enter GUI */
-    
+
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     ret = guii_keyboard_hide();                     /* Hide keyboard */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
+
     return ret;
 }
 
@@ -653,10 +652,10 @@ gui_keyboard_hide(void) {
 uint8_t
 gui_keyboard_show(gui_handle_p h) {
     uint8_t ret;
-    __GUI_ENTER();                                  /* Enter GUI */
-    
+
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     ret = guii_keyboard_show(h);                    /* Show keyboard */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
+
     return ret;
 }

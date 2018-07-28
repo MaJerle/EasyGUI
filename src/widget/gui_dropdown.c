@@ -536,7 +536,7 @@ gui_dropdown_create(gui_id_t id, float x, float y, float width, float height, gu
 uint8_t
 gui_dropdown_setcolor(gui_handle_p h, gui_dropdown_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
 }
 
 /**
@@ -554,7 +554,7 @@ gui_dropdown_addstring(gui_handle_p h, const gui_char* text) {
     
     item = GUI_MEMALLOC(sizeof(*item));             /* Allocate memory for entry */
     if (item != NULL) {
-        __GUI_ENTER();                              /* Enter GUI */
+        __GUI_LEAVE(1);                             /* Enter GUI */
         item->text = (gui_char *)text;              /* Add text to entry */
         gui_linkedlist_add_gen(&__GD(h)->root, &item->list);/* Add to linked list */
         __GD(h)->count++;                           /* Increase number of strings */
@@ -563,7 +563,7 @@ gui_dropdown_addstring(gui_handle_p h, const gui_char* text) {
         guii_widget_invalidate(h);                 /* Invalidate widget */
          
         ret = 1;
-        __GUI_LEAVE();                              /* Leave GUI */
+        __GUI_LEAVE(1);                             /* Leave GUI */
     }
     
     return ret;
@@ -580,7 +580,7 @@ gui_dropdown_setopendirection(gui_handle_p h, gui_dropdown_opendir_t dir) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     if (!is_opened(h)) {                            /* Must be closed */
         if ((__GD(h)->flags & GUI_FLAG_DROPDOWN_OPEN_UP) && dir == GUI_DROPDOWN_OPENDIR_DOWN) {
@@ -592,7 +592,7 @@ gui_dropdown_setopendirection(gui_handle_p h, gui_dropdown_opendir_t dir) {
         }
     }
 
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }
 
@@ -609,7 +609,7 @@ gui_dropdown_setstring(gui_handle_p h, uint16_t index, const gui_char* text) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     item = get_item(h, index);                      /* Get list item from handle */
     if (item) {
@@ -617,7 +617,7 @@ gui_dropdown_setstring(gui_handle_p h, uint16_t index, const gui_char* text) {
         guii_widget_invalidate(h);                 /* Invalidate widget */
     }
 
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }
 
@@ -632,11 +632,11 @@ gui_dropdown_deletefirststring(gui_handle_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     ret = delete_item(h, 0);                        /* Delete first item */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }
 
@@ -651,11 +651,11 @@ gui_dropdown_deletelaststring(gui_handle_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     ret = delete_item(h, __GD(h)->count - 1);       /* Delete last item */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }
 
@@ -671,11 +671,11 @@ gui_dropdown_deletestring(gui_handle_p h, uint16_t index) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     ret = delete_item(h, index);                    /* Delete item */
 
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }
 
@@ -690,7 +690,7 @@ gui_dropdown_deletestring(gui_handle_p h, uint16_t index) {
 uint8_t
 gui_dropdown_setsliderauto(gui_handle_p h, uint8_t autoMode) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     if (autoMode && !(__GD(h)->flags & GUI_FLAG_DROPDOWN_SLIDER_AUTO)) {
         __GD(h)->flags |= GUI_FLAG_DROPDOWN_SLIDER_AUTO;
@@ -700,7 +700,7 @@ gui_dropdown_setsliderauto(gui_handle_p h, uint8_t autoMode) {
         guii_widget_invalidate(h);                 /* Invalidate widget */
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 1;
 }
 
@@ -717,7 +717,7 @@ gui_dropdown_setslidervisibility(gui_handle_p h, uint8_t visible) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     if (!(__GD(h)->flags & GUI_FLAG_DROPDOWN_SLIDER_AUTO)) {
         if (visible && !(__GD(h)->flags & GUI_FLAG_DROPDOWN_SLIDER_ON)) {
@@ -731,7 +731,7 @@ gui_dropdown_setslidervisibility(gui_handle_p h, uint8_t visible) {
         }
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }
 
@@ -746,7 +746,7 @@ gui_dropdown_scroll(gui_handle_p h, int16_t step) {
     volatile int16_t start;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     start = __GD(h)->visiblestartindex;
     __GD(h)->visiblestartindex += step;
@@ -759,7 +759,7 @@ gui_dropdown_scroll(gui_handle_p h, int16_t step) {
         guii_widget_invalidate(h);
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return GUI_U8(start);
 }
 
@@ -773,13 +773,13 @@ gui_dropdown_scroll(gui_handle_p h, int16_t step) {
 uint8_t
 gui_dropdown_setselection(gui_handle_p h, int16_t selection) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     set_selection(h, selection);                    /* Set selection */
     check_values(h);                                /* Check values */
     guii_widget_invalidate(h);                     /* Invalidate widget */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 1;
 }
 
@@ -794,10 +794,10 @@ gui_dropdown_getselection(gui_handle_p h) {
     int16_t selection;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     selection = __GD(h)->selected;                  /* Read selection */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return selection;
 }

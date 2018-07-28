@@ -257,7 +257,7 @@ gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui
 uint8_t
 gui_progbar_setcolor(gui_handle_p h, gui_progbar_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
 }
 
 /**
@@ -270,7 +270,7 @@ gui_progbar_setcolor(gui_handle_p h, gui_progbar_color_t index, gui_color_t colo
 uint8_t
 gui_progbar_setvalue(gui_handle_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_VALUE, &val, 1, 0); /* Set parameter */
+    return guii_widget_setparam(h, CFG_VALUE, &val, 1, 0, 1);   /* Set parameter */
 }
 
 /**
@@ -283,7 +283,7 @@ gui_progbar_setvalue(gui_handle_p h, int32_t val) {
 uint8_t
 gui_progbar_setmin(gui_handle_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MIN, &val, 1, 0);   /* Set parameter */
+    return guii_widget_setparam(h, CFG_MIN, &val, 1, 0, 1); /* Set parameter */
 }
 
 /**
@@ -296,7 +296,7 @@ gui_progbar_setmin(gui_handle_p h, int32_t val) {
 uint8_t
 gui_progbar_setmax(gui_handle_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MAX, &val, 1, 0);   /* Set parameter */
+    return guii_widget_setparam(h, CFG_MAX, &val, 1, 0, 1); /* Set parameter */
 }
 
 /**
@@ -308,7 +308,7 @@ gui_progbar_setmax(gui_handle_p h, int32_t val) {
 uint8_t
 gui_progbar_setpercentmode(gui_handle_p h, uint8_t enable) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_PERCENT, &enable, 1, 0);    /* Set parameter */
+    return guii_widget_setparam(h, CFG_PERCENT, &enable, 1, 0, 1);  /* Set parameter */
 }
 
 /**
@@ -320,7 +320,7 @@ gui_progbar_setpercentmode(gui_handle_p h, uint8_t enable) {
 uint8_t
 gui_progbar_setanimation(gui_handle_p h, uint8_t anim) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_ANIM, &anim, 1, 0); /* Set parameter */
+    return guii_widget_setparam(h, CFG_ANIM, &anim, 1, 0, 1);   /* Set parameter */
 }
 
 /**
@@ -332,12 +332,13 @@ gui_progbar_setanimation(gui_handle_p h, uint8_t anim) {
 int32_t
 gui_progbar_getmin(gui_handle_p h) {
     int32_t val;
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
 
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     val = __GP(h)->min;                             /* Get minimal value */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
+
     return val;
 }
 
@@ -350,12 +351,13 @@ gui_progbar_getmin(gui_handle_p h) {
 int32_t
 gui_progbar_getmax(gui_handle_p h) {
     int32_t val;
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
 
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     val = __GP(h)->max;                             /* Get maximal value */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
+
     return val;
 }
 
@@ -368,11 +370,12 @@ gui_progbar_getmax(gui_handle_p h) {
 int32_t
 gui_progbar_getvalue(gui_handle_p h) {
     int32_t val;
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
 
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     val = __GP(h)->desiredvalue;                    /* Get current value */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
+
     return val;
 }

@@ -161,7 +161,7 @@ gui_led_create(gui_id_t id, float x, float y, float width, float height, gui_han
 uint8_t
 gui_led_setcolor(gui_handle_p h, gui_led_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
 }
 
 /**
@@ -173,7 +173,7 @@ gui_led_setcolor(gui_handle_p h, gui_led_color_t index, gui_color_t color) {
 uint8_t
 gui_led_settype(gui_handle_p h, gui_led_type_t type) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_TYPE, &type, 1, 1); /* Set parameter */
+    return guii_widget_setparam(h, CFG_TYPE, &type, 1, 1, 1);   /* Set parameter */
 }
 
 /**
@@ -184,7 +184,7 @@ gui_led_settype(gui_handle_p h, gui_led_type_t type) {
 uint8_t
 gui_led_toggle(gui_handle_p h) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_TOGGLE, NULL, 1, 0);/* Set parameter */
+    return guii_widget_setparam(h, CFG_TOGGLE, NULL, 1, 0, 1);  /* Set parameter */
 }
 
 /**
@@ -196,7 +196,7 @@ gui_led_toggle(gui_handle_p h) {
 uint8_t
 gui_led_set(gui_handle_p h, uint8_t state) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_SET, &state, 1, 0); /* Set parameter */
+    return guii_widget_setparam(h, CFG_SET, &state, 1, 0, 1);   /* Set parameter */
 }
 
 /**
@@ -209,10 +209,10 @@ gui_led_ison(gui_handle_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     ret = !!(__GL(h)->flags & GUI_LED_FLAG_ON);
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }

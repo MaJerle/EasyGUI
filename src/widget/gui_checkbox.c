@@ -217,7 +217,7 @@ gui_checkbox_create(gui_id_t id, float x, float y, float width, float height, gu
 uint8_t
 gui_checkbox_setcolor(gui_handle_p h, gui_checkbox_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
 }
 
 /**
@@ -229,7 +229,7 @@ gui_checkbox_setcolor(gui_handle_p h, gui_checkbox_color_t index, gui_color_t co
 uint8_t
 gui_checkbox_setchecked(gui_handle_p h, uint8_t checked) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_CHECK, &checked, 0, 0); /* Set parameter */
+    return guii_widget_setparam(h, CFG_CHECK, &checked, 0, 0, 1);   /* Set parameter */
 }
 
 /**
@@ -241,7 +241,7 @@ gui_checkbox_setchecked(gui_handle_p h, uint8_t checked) {
 uint8_t
 gui_checkbox_setdisabled(gui_handle_p h, uint8_t disabled) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_DISABLE, &disabled, 0, 0);  /* Set parameter */
+    return guii_widget_setparam(h, CFG_DISABLE, &disabled, 0, 0, 1);/* Set parameter */
 }
 
 /**
@@ -254,11 +254,11 @@ gui_checkbox_ischecked(gui_handle_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
 
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     ret = !!(__GC(h)->flags & GUI_FLAG_CHECKBOX_CHECKED);
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
+
     return ret;
 }
 
@@ -272,10 +272,10 @@ gui_checkbox_isdisabled(gui_handle_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
 
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     ret = !!(__GC(h)->flags & GUI_FLAG_CHECKBOX_DISABLED);
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
+
     return ret;
 }

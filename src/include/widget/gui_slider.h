@@ -73,13 +73,13 @@ typedef enum {
 typedef struct {
     gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
-    int32_t Min;                            /*!< Low value for slider */
-    int32_t Max;                            /*!< High value for slider */
-    int32_t Value;                          /*!< Current value for slider */
-    gui_slider_mode_t Mode;                 /*!< Slider mode */
+    int32_t min;                            /*!< Low value for slider */
+    int32_t max;                            /*!< High value for slider */
+    int32_t value;                          /*!< Current value for slider */
+    gui_slider_mode_t mode;                 /*!< Slider mode */
     
-    uint8_t MaxSize;                        /*!< Max size for animation */
-    uint8_t CurrentSize;                    /*!< Current size for animation */
+    uint8_t max_size;                       /*!< Max size for animation */
+    uint8_t current_size;                   /*!< Current size for animation */
     
     uint8_t flags;                          /*!< Widget flags */
 } gui_slider_t;

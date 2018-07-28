@@ -370,13 +370,15 @@ mem_getminfree(void) {
 void*
 gui_mem_alloc(uint32_t size) {
     void* ptr;
-    __GUI_SYS_PROTECT();                            /* Lock system protection */
+
 #if GUI_CFG_USE_MEM
+    __GUI_SYS_PROTECT(1);                           /* Lock system protection */
     ptr = mem_alloc(size);                          /* Allocate memory and return pointer */ 
-#else
+    __GUI_SYS_UNPROTECT(1);                         /* Unlock protection */
+#else /* GUI_CFG_USE_MEM */
     ptr = malloc(size);
-#endif
-    __GUI_SYS_UNPROTECT();                          /* Unlock protection */
+#endif /* !GUI_CFG_USE_MEM */
+
     return ptr;
 }
 
@@ -391,13 +393,13 @@ gui_mem_alloc(uint32_t size) {
  */
 void*
 gui_mem_realloc(void* ptr, size_t size) {
-    __GUI_SYS_PROTECT();                            /* Lock system protection */
 #if GUI_CFG_USE_MEM
+    __GUI_SYS_PROTECT(1);                           /* Lock system protection */
     ptr = mem_realloc(ptr, size);                   /* Reallocate and return pointer */
-#else
+    __GUI_SYS_UNPROTECT(1);                         /* Unlock protection */
+#else /* GUI_CFG_USE_MEM */
     ptr = realloc(ptr, size);
-#endif
-    __GUI_SYS_UNPROTECT();                          /* Unlock protection */
+#endif /* GUI_CFG_USE_MEM */
     return ptr;
 }
 
@@ -411,13 +413,14 @@ gui_mem_realloc(void* ptr, size_t size) {
 void*
 gui_mem_calloc(size_t num, size_t size) {
     void* ptr;
-    __GUI_SYS_PROTECT();                            /* Lock system protection */
+
 #if GUI_CFG_USE_MEM
-    ptr = mem_calloc(num, size);                   /* Allocate memory and clear it to 0. Then return pointer */
-#else
+    __GUI_SYS_PROTECT(1);                           /* Lock system protection */
+    ptr = mem_calloc(num, size);                    /* Allocate memory and clear it to 0. Then return pointer */
+    __GUI_SYS_UNPROTECT(1);                         /* Unlock protection */
+#else /* GUI_CFG_USE_MEM */
     ptr = calloc(num, size);
-#endif
-    __GUI_SYS_UNPROTECT();                          /* Unlock protection */
+#endif /* !GUI_CFG_USE_MEM */
     return ptr;
 }
 
@@ -427,13 +430,13 @@ gui_mem_calloc(size_t num, size_t size) {
  */
 void
 gui_mem_free(void* ptr) {
-    __GUI_SYS_PROTECT();                            /* Lock system protection */
 #if GUI_CFG_USE_MEM
+    __GUI_SYS_PROTECT(1);                           /* Lock system protection */
     mem_free(ptr);                                  /* Free already allocated memory */
-#else
+    __GUI_SYS_UNPROTECT(1);                         /* Unlock protection */
+#else /* GUI_CFG_USE_MEM */
     free(ptr);
-#endif
-    __GUI_SYS_UNPROTECT();                          /* Unlock protection */
+#endif /* !GUI_CFG_USE_MEM */
 }
 
 /**
@@ -476,8 +479,10 @@ gui_mem_getminfree(void) {
 uint8_t
 gui_mem_assignmemory(const GUI_MEM_Region_t* regions, size_t len) {
     uint8_t ret;
-    __GUI_SYS_PROTECT();                            /* Enter GUI */
+    
+    __GUI_SYS_PROTECT(1);                           /* Enter GUI */
     ret = mem_assignmem(regions, len);              /* Assign memory */
-    __GUI_SYS_UNPROTECT();                          /* Leave GUI */
+    __GUI_SYS_UNPROTECT(1);                         /* Leave GUI */
+
     return ret;                                     
 }

@@ -73,17 +73,17 @@ extern "C" {
 
 #if GUI_CFG_OS
 
-#define __GUI_SYS_PROTECT()     gui_sys_protect()
-#define __GUI_SYS_UNPROTECT()   gui_sys_unprotect()
-#define __GUI_ENTER()           __GUI_SYS_PROTECT()
-#define __GUI_LEAVE()           do { __GUI_SYS_UNPROTECT(); gui_sys_mbox_putnow(&GUI.OS.mbox, 0x00); } while (0)
+#define __GUI_SYS_PROTECT(p)        gui_sys_protect()
+#define __GUI_SYS_UNPROTECT(p)      gui_sys_unprotect()
+#define __GUI_ENTER(p)              __GUI_SYS_PROTECT(p)
+#define __GUI_LEAVE(p)              do { __GUI_SYS_UNPROTECT(p); gui_sys_mbox_putnow(&GUI.OS.mbox, 0x00); } while (0)
 
 #else
 
-#define __GUI_ENTER()
-#define __GUI_LEAVE()
-#define __GUI_SYS_PROTECT()
-#define __GUI_SYS_UNPROTECT()
+#define __GUI_ENTER(p)
+#define __GUI_LEAVE(p)
+#define __GUI_SYS_PROTECT(p)
+#define __GUI_SYS_UNPROTECT(p)
 
 #endif /* GUI_CFG_OS */
 

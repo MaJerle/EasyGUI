@@ -394,7 +394,7 @@ gui_graph_create(gui_id_t id, float x, float y, float width, float height, gui_h
 uint8_t
 gui_graph_setcolor(gui_handle_p h, gui_graph_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color);  /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
 }
 
 /**
@@ -407,7 +407,7 @@ gui_graph_setcolor(gui_handle_p h, gui_graph_color_t index, gui_color_t color) {
 uint8_t
 gui_graph_setminx(gui_handle_p h, float v) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MIN_X, &v, 1, 0);    /* Set parameter */
+    return guii_widget_setparam(h, CFG_MIN_X, &v, 1, 0, 1); /* Set parameter */
 }
 
 /**
@@ -420,7 +420,7 @@ gui_graph_setminx(gui_handle_p h, float v) {
 uint8_t
 gui_graph_setmaxx(gui_handle_p h, float v) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MAX_X, &v, 1, 0);    /* Set parameter */
+    return guii_widget_setparam(h, CFG_MAX_X, &v, 1, 0, 1); /* Set parameter */
 }
 
 /**
@@ -433,7 +433,7 @@ gui_graph_setmaxx(gui_handle_p h, float v) {
 uint8_t
 gui_graph_setminy(gui_handle_p h, float v) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MIN_Y, &v, 1, 0);    /* Set parameter */
+    return guii_widget_setparam(h, CFG_MIN_Y, &v, 1, 0, 1); /* Set parameter */
 }
 
 /**
@@ -446,7 +446,7 @@ gui_graph_setminy(gui_handle_p h, float v) {
 uint8_t
 gui_graph_setmaxy(gui_handle_p h, float v) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MAX_Y, &v, 1, 0);    /* Set parameter */
+    return guii_widget_setparam(h, CFG_MAX_Y, &v, 1, 0, 1); /* Set parameter */
 }
 
 /**
@@ -457,7 +457,7 @@ gui_graph_setmaxy(gui_handle_p h, float v) {
 uint8_t
 gui_graph_zoomreset(gui_handle_p h) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_ZOOM_RESET, NULL, 1, 0);  /* Set parameter */
+    return guii_widget_setparam(h, CFG_ZOOM_RESET, NULL, 1, 0, 1);  /* Set parameter */
 }
 
 /**
@@ -471,11 +471,11 @@ gui_graph_zoomreset(gui_handle_p h) {
 uint8_t
 gui_graph_zoom(gui_handle_p h, float zoom, float x, float y) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     graph_zoom(h, zoom, x, y);                      /* Reset zoom */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 1;
 }
 
@@ -489,7 +489,7 @@ gui_graph_zoom(gui_handle_p h, float zoom, float x, float y) {
 uint8_t
 gui_graph_attachdata(gui_handle_p h, gui_graph_data_p data) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     /*
      * Linked list of data plots for this graph
@@ -505,7 +505,7 @@ gui_graph_attachdata(gui_handle_p h, gui_graph_data_p data) {
     gui_linkedlist_multi_add_gen(&data->root, h);
 #endif /* GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 1;
 }
 
@@ -519,7 +519,7 @@ gui_graph_attachdata(gui_handle_p h, gui_graph_data_p data) {
 uint8_t
 gui_graph_detachdata(gui_handle_p h, gui_graph_data_p data) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && data != NULL);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     /*
      * Linked list of data plots for this graph
@@ -535,7 +535,7 @@ gui_graph_detachdata(gui_handle_p h, gui_graph_data_p data) {
     gui_linkedlist_multi_find_remove(&data->root, h);
 #endif /* GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 1;
 }
 
@@ -555,7 +555,7 @@ gui_graph_data_create(gui_id_t id, gui_graph_type_t type, size_t length) {
 
     data = GUI_MEMALLOC(sizeof(*data));             /* Allocate memory for basic widget */
     if (data != NULL) {
-        __GUI_ENTER();                              /* Enter GUI */
+        __GUI_LEAVE(1);                             /* Enter GUI */
         data->id = id;
         data->type = type;
         data->length = length;
@@ -568,7 +568,7 @@ gui_graph_data_create(gui_id_t id, gui_graph_type_t type, size_t length) {
             GUI_MEMFREE(data);                      /* Remove widget because data memory could not be allocated */
             data = NULL;
         }
-        __GUI_LEAVE();                              /* Leave GUI */
+        __GUI_LEAVE(1);                             /* Leave GUI */
     }
     
     return (gui_graph_data_p)data;
@@ -584,7 +584,7 @@ gui_graph_data_create(gui_id_t id, gui_graph_type_t type, size_t length) {
 uint8_t
 gui_graph_data_addvalue(gui_graph_data_p data, int16_t x, int16_t y) {
     __GUI_ASSERTPARAMS(data);                       /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     if (data->type == GUI_GRAPH_TYPE_YT) {          /* YT plot */
         data->data[data->ptr] = y;                  /* Only Y value is relevant */
@@ -602,7 +602,7 @@ gui_graph_data_addvalue(gui_graph_data_p data, int16_t x, int16_t y) {
     graph_invalidate(data);                         /* Invalidate graphs attached to this data object */
 #endif /* GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 1;
 }
 
@@ -615,7 +615,7 @@ gui_graph_data_addvalue(gui_graph_data_p data, int16_t x, int16_t y) {
 uint8_t
 gui_graph_data_setcolor(gui_graph_data_p data, gui_color_t color) {
     __GUI_ASSERTPARAMS(data != NULL);               /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     if (data->color != color) {                     /* Check color change */
         data->color = color;                        /* Set new color */
@@ -624,7 +624,7 @@ gui_graph_data_setcolor(gui_graph_data_p data, gui_color_t color) {
 #endif /* GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 1;
 }
 
@@ -640,7 +640,7 @@ gui_graph_data_get_by_id(gui_handle_p graph_h, gui_id_t id) {
     gui_linkedlistmulti_t* link;
     
     __GUI_ASSERTPARAMS(graph_h != NULL && graph_h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     /* Draw all plot attached to graph */
     for (link = gui_linkedlist_multi_getnext_gen(&__GG(graph_h)->root, NULL); link != NULL; 
@@ -651,6 +651,6 @@ gui_graph_data_get_by_id(gui_handle_p graph_h, gui_id_t id) {
         }
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return link != NULL ? data : NULL;
 }

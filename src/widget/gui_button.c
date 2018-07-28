@@ -185,7 +185,7 @@ gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_
 uint8_t
 gui_button_setcolor(gui_handle_p h, gui_button_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
 }
 
 /**
@@ -197,5 +197,5 @@ gui_button_setcolor(gui_handle_p h, gui_button_color_t index, gui_color_t color)
 uint8_t
 gui_button_setborderradius(gui_handle_p h, gui_dim_t size) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_BORDER_RADIUS, &size, 1, 1);    /* Set parameter */
+    return guii_widget_setparam(h, CFG_BORDER_RADIUS, &size, 1, 1, 1);  /* Set parameter */
 }

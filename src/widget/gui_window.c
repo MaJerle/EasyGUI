@@ -187,10 +187,10 @@ gui_window_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
                     tx = ts->x_rel[0];
                     ty = ts->y_rel[0];
                 }
-                GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;  /* Set handled status */
+                GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED; /* Set handled status */
             } else {
                 Mode = 0;
-                GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLEDNOFOCUS;   /* Set handled status */
+                GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLEDNOFOCUS;  /* Set handled status */
             }
             return 1;
         }
@@ -199,6 +199,7 @@ gui_window_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
             
             if (Mode == 1 && guii_widget_getflag(h, GUI_FLAG_CHILD)) {
                 gui_dim_t px, py;
+
                 px = guii_widget_getparentabsolutex(h);
                 py = guii_widget_getparentabsolutey(h);
                 guii_widget_setposition(h, ts->ts.x[0] - px - tx, ts->ts.y[0] - py - ty);
@@ -206,6 +207,7 @@ gui_window_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
                 if (guii_widget_isexpanded(h)) {   /* If it is expanded */
                     guii_widget_setexpanded(h, 0); /* Clear expanded mode */
                 }
+                GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED; /* Set handled status */
             }
             
             return 1;
@@ -227,7 +229,7 @@ gui_window_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
                 if (ts->x_rel[0] > (wi - 3 * pt) && ts->x_rel[0] < (wi - 2 * pt)) {
                     guii_widget_hide(h);            /* Hide widget */
                 } else if (ts->x_rel[0] > (wi - 2 * pt) && ts->x_rel[0] < (wi - pt)) {
-                    guii_widget_toggleexpanded(h);  /* Hide widget */
+                    guii_widget_toggleexpanded(h);  /* Change expanded mode */
                 } else if (ts->x_rel[0] >= (wi - pt)) {
                     guii_widget_remove(h);          /* Remove widget */
                 }
@@ -301,15 +303,13 @@ gui_window_create(gui_id_t id, float x, float y, float width, float height, gui_
 
     ptr = guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags); /* Allocate memory for basic widget */
     if (ptr != NULL) {
-        __GUI_ENTER();                              /* Enter GUI */
-        
+        __GUI_LEAVE(1);                             /* Enter GUI */
         guii_widget_setflag(__GH(ptr), GUI_FLAG_CHILD); /* This window is child window */
         gui_widget_setpaddingtop(__GH(ptr), 30);
         gui_widget_setpaddingright(__GH(ptr), 2);
         gui_widget_setpaddingbottom(__GH(ptr), 2);
         gui_widget_setpaddingleft(__GH(ptr), 2);
-        
-        __GUI_LEAVE();                              /* Leave GUI */
+        __GUI_LEAVE(1);                             /* Leave GUI */
     }
     return (gui_handle_p)ptr;
 }
@@ -324,7 +324,7 @@ gui_window_create(gui_id_t id, float x, float y, float width, float height, gui_
 uint8_t
 gui_window_setcolor(gui_handle_p h, gui_window_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
 }
  
 /**
@@ -335,15 +335,15 @@ gui_window_setcolor(gui_handle_p h, gui_window_color_t index, gui_color_t color)
 uint8_t
 gui_window_setactive(gui_handle_p h) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
-    GUI.window_active = h;                           /* Set new active window */
-    guii_widget_movedowntree(h);                     /* Move widget down on tree */
+    GUI.window_active = h;                          /* Set new active window */
+    guii_widget_movedowntree(h);                    /* Move widget down on tree */
     
-    guii_widget_focus_clear();                       /* Clear focus on widget */
-    guii_widget_active_clear();                      /* Clear active on widget */
+    guii_widget_focus_clear();                      /* Clear focus on widget */
+    guii_widget_active_clear();                     /* Clear active on widget */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 1;
 }
 

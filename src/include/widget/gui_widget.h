@@ -571,8 +571,9 @@ uint8_t         guii_widget_ischildof(gui_handle_p h, gui_handle_p parent);
 uint8_t         guii_widget_isfontandtextset(gui_handle_p h);
 
 uint8_t         guii_widget_processtextkey(gui_handle_p h, guii_keyboard_data_t* key);
-uint8_t         guii_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color);
+uint8_t         guii_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color, uint8_t protect);
 gui_handle_p    guii_widget_getbyid(gui_id_t id);
+gui_handle_p    guii_widget_getbyid_ex(gui_id_t id, gui_handle_p parent, uint8_t deep);
 
 uint8_t         guii_widget_setalpha(gui_handle_p h, uint8_t trans);
 uint8_t         guii_widget_setzindex(gui_handle_p h, int32_t zindex);
@@ -583,7 +584,7 @@ gui_dim_t       guii_widget_getheight(gui_handle_p h);
 uint8_t         guii_widget_setuserdata(gui_handle_p h, void* data);
 void *          guii_widget_getuserdata(gui_handle_p h);
 
-uint8_t         guii_widget_setparam(gui_handle_p h, uint16_t cfg, const void* data, uint8_t invalidate, uint8_t invalidateparent);
+uint8_t         guii_widget_setparam(gui_handle_p h, uint16_t cfg, const void* data, uint8_t invalidate, uint8_t invalidateparent, uint8_t protect);
 uint8_t         guii_widget_getparam(gui_handle_p h, uint16_t cfg, void* data);
 
 /**
@@ -687,6 +688,7 @@ int32_t         gui_widget_getzindex(gui_handle_p h);
 uint8_t         gui_widget_set3dstyle(gui_handle_p h, uint8_t enable);
 gui_id_t        gui_widget_getid(gui_handle_p h);
 gui_handle_p    gui_widget_getbyid(gui_id_t id);
+gui_handle_p    gui_widget_getbyid_ex(gui_id_t id, gui_handle_p parent, uint8_t deep);
 uint8_t         gui_widget_remove(gui_handle_p* h);
 
 /**

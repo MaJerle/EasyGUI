@@ -211,7 +211,7 @@ gui_radio_create(gui_id_t id, float x, float y, float width, float height, gui_h
 uint8_t
 gui_radio_setcolor(gui_handle_p h, gui_radio_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
 }
 
 /**
@@ -225,7 +225,7 @@ gui_radio_setcolor(gui_handle_p h, gui_radio_color_t index, gui_color_t color) {
 uint8_t
 gui_radio_setgroup(gui_handle_p h, uint8_t groupId) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     if (__GR(h)->group_id != groupId) {
         gui_handle_p handle;
@@ -248,7 +248,7 @@ gui_radio_setgroup(gui_handle_p h, uint8_t groupId) {
         guii_widget_invalidate(h);                  /* Invalidate widget */
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 1;
 }
 
@@ -262,11 +262,11 @@ uint8_t
 gui_radio_getgroup(gui_handle_p h) {
     uint8_t group = 0;
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     group = __GR(h)->group_id;
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return group;
 }
 
@@ -280,7 +280,7 @@ gui_radio_getgroup(gui_handle_p h) {
 uint8_t
 gui_radio_setvalue(gui_handle_p h, uint32_t value) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     if (__GR(h)->value != value) {
         __GR(h)->value = value;                     /* Set new value */
@@ -289,7 +289,7 @@ gui_radio_setvalue(gui_handle_p h, uint32_t value) {
         }
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 1;
 }
 
@@ -304,11 +304,11 @@ gui_radio_getvalue(gui_handle_p h) {
     uint32_t val;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     val = __GR(h)->value;
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return val;
 }
 
@@ -321,11 +321,11 @@ uint8_t gui_radio_setselected(gui_handle_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     ret = set_active(h);                            /* Set radio active */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }
 
@@ -340,11 +340,11 @@ gui_radio_getselectedvalue(gui_handle_p h) {
     uint32_t val;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     val = __GR(h)->selected_value;
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return val;
 }
 
@@ -359,11 +359,11 @@ gui_radio_setdisabled(gui_handle_p h, uint8_t disabled) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
 
     ret = set_disabled(h, disabled);                /* Set checked status */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }
 
@@ -377,10 +377,10 @@ gui_radio_isdisabled(gui_handle_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
 
     ret = !!(__GR(h)->flags & GUI_FLAG_RADIO_DISABLED);
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }

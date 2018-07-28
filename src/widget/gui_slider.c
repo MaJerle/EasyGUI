@@ -67,7 +67,7 @@ gui_widget_t widget = {
 #define o       ((gui_slider_t *)(h))
 
 /* Check if slider is horizontal */
-#define is_horizontal(h)   (o->Mode == GUI_SLIDER_MODE_LEFT_RIGHT || o->Mode == GUI_SLIDER_MODE_RIGHT_LEFT)
+#define is_horizontal(h)   (o->mode == GUI_SLIDER_MODE_LEFT_RIGHT || o->mode == GUI_SLIDER_MODE_RIGHT_LEFT)
 
 /* Get delta value from widget */
 static gui_dim_t
@@ -78,13 +78,13 @@ get_delta(gui_handle_p h, gui_dim_t wi, gui_dim_t he) {
 /* Set slider value */
 static uint8_t 
 set_value(gui_handle_p h, int32_t value) {
-    if (value > o->Max) {
-        value = o->Max;
-    } else if (value < o->Min) {
-        value = o->Min;
+    if (value > o->max) {
+        value = o->max;
+    } else if (value < o->min) {
+        value = o->min;
     }
-    if (value != o->Value) {                        /* Check difference in values */
-        o->Value = value;                           /* Set new value */
+    if (value != o->value) {                        /* Check difference in values */
+        o->value = value;                           /* Set new value */
         guii_widget_callback(h, GUI_WC_ValueChanged, NULL, NULL);  /* Callback process */
         return 1;
     }
@@ -102,7 +102,7 @@ touch_handle(gui_handle_p h, guii_touch_data_t* ts) {
     delta = get_delta(h, ts->widget_width, ts->widget_height);  /* Get delta value */
     deltaH = delta >> 1;
     if (is_horizontal(h)) {                         /* Horizontal widget */
-        if (o->Mode == GUI_SLIDER_MODE_LEFT_RIGHT) {/* Inverted version to normal */
+        if (o->mode == GUI_SLIDER_MODE_LEFT_RIGHT) {/* Inverted version to normal */
             pos = ts->x_rel[0];                     /* Invert position */
         } else {
             pos = width - ts->x_rel[0];
@@ -116,9 +116,9 @@ touch_handle(gui_handle_p h, guii_touch_data_t* ts) {
         if (pos > width) {
             pos = width;
         }
-        value = (int32_t)(((float)(o->Max - o->Min)) * (float)pos / (float)width) + o->Min;
+        value = (int32_t)(((float)(o->max - o->min)) * (float)pos / (float)width) + o->min;
     } else {                                        /* Vertical widget */
-        if (o->Mode == GUI_SLIDER_MODE_TOP_BOTTOM) {/* Inverted version to normal */
+        if (o->mode == GUI_SLIDER_MODE_TOP_BOTTOM) {/* Inverted version to normal */
             pos = ts->y_rel[0];                     /* Invert position */
         } else {
             pos = height - ts->y_rel[0];
@@ -132,7 +132,7 @@ touch_handle(gui_handle_p h, guii_touch_data_t* ts) {
         if (pos > height) {
             pos = height;
         }
-        value = (int32_t)(((float)(o->Max - o->Min)) * (float)pos / (float)height) + o->Min;
+        value = (int32_t)(((float)(o->max - o->min)) * (float)pos / (float)height) + o->min;
     }
     
     guii_widget_invalidate(h);                      /* Redraw widget */
@@ -144,13 +144,13 @@ static void
 timer_callback(gui_timer_t* timer) {
     gui_handle_p h = (gui_handle_p)guii_timer_getparams(timer); /* Get user parameters */
     if (guii_widget_isactive(h)) {                  /* Timer is in focus */
-        if (__GS(h)->CurrentSize < __GS(h)->MaxSize) {
-            __GS(h)->CurrentSize++;                 /* Increase size */
+        if (__GS(h)->current_size < __GS(h)->max_size) {
+            __GS(h)->current_size++;                /* Increase size */
             guii_widget_invalidate(h);              /* Invalidate widget */
         }
     } else {
-        if (__GS(h)->CurrentSize > 0) {
-            __GS(h)->CurrentSize--;
+        if (__GS(h)->current_size > 0) {
+            __GS(h)->current_size--;
             guii_widget_invalidate(h);              /* Invalidate widget */
         } else {
             guii_timer_stop(timer);                 /* Stop timer execution */
@@ -171,12 +171,12 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
-            o->Min = 0;                             /* Set default minimal value */
-            o->Max = 100;                           /* Set default maximal value */
-            o->Value = 50;                          /* Set default value */
+            o->min = 0;                             /* Set default minimal value */
+            o->max = 100;                           /* Set default maximal value */
+            o->value = 50;                          /* Set default value */
             
-            o->MaxSize = 4;
-            o->CurrentSize = 0;
+            o->max_size = 4;
+            o->current_size = 0;
             h->timer = guii_timer_create(30, timer_callback, o);    /* Create timer for widget, when widget is deleted, timer will be automatically deleted too */
             if (h->timer == NULL) {                 /* Check if timer created */
                 GUI_WIDGET_RESULTTYPE_U8(result) = 0;   /* Failed, widget will be deleted */
@@ -188,25 +188,25 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
             int32_t tmp;
             switch (v->type) {
                 case CFG_MODE:                      /* Set current progress value */
-                    o->Mode = *(gui_slider_mode_t *)v->data;
+                    o->mode = *(gui_slider_mode_t *)v->data;
                     break;
                 case CFG_VALUE:                     /* Set current progress value */
                     set_value(h, *(int32_t *)v->data);
                     break;
                 case CFG_MAX:                       /* Set maximal value */
                     tmp = *(int32_t *)v->data;
-                    if (tmp > o->Min) {
-                        o->Max = tmp;
-                        if (o->Value > o->Max) {
+                    if (tmp > o->min) {
+                        o->max = tmp;
+                        if (o->value > o->max) {
                             set_value(h, tmp);
                         }
                     }
                     break;
                 case CFG_MIN:                       /* Set minimal value */
                     tmp = *(int32_t *)v->data;
-                    if (tmp < o->Max) {
-                        o->Min = tmp;
-                        if (o->Value < o->Min) {
+                    if (tmp < o->max) {
+                        o->min = tmp;
+                        if (o->value < o->min) {
                             set_value(h, tmp);
                         }
                     }
@@ -235,7 +235,7 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
             }
             
             /* Set color for inverted sliders */
-            if (o->Mode == GUI_SLIDER_MODE_BOTTOM_TOP || o->Mode == GUI_SLIDER_MODE_RIGHT_LEFT) {
+            if (o->mode == GUI_SLIDER_MODE_BOTTOM_TOP || o->mode == GUI_SLIDER_MODE_RIGHT_LEFT) {
                 c1 = guii_widget_getcolor(h, GUI_SLIDER_COLOR_BG_NONACTIVE);
                 c2 = guii_widget_getcolor(h, GUI_SLIDER_COLOR_BG_ACTIVE);
             } else {
@@ -243,16 +243,16 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
                 c2 = guii_widget_getcolor(h, GUI_SLIDER_COLOR_BG_NONACTIVE);
             }
             
-            circleSize = (deltaH >> 2) + o->CurrentSize * (deltaH - (deltaH >> 2)) / o->MaxSize;    /* Get circle size */
+            circleSize = (deltaH >> 2) + o->current_size * (deltaH - (deltaH >> 2)) / o->max_size;    /* Get circle size */
             
             /* Draw bottom rectangle */
             if (is_horizontal(h)) {                 /* Horizontal slider */
                 offset = 0;                         /* Make start offset */
                 width -= delta;
-                if (o->Mode == GUI_SLIDER_MODE_RIGHT_LEFT) {/* Right left version */
-                    offset = width - (gui_dim_t)(((float)(width) * (float)(o->Value - o->Min)) / (float)(o->Max - o->Min));
+                if (o->mode == GUI_SLIDER_MODE_RIGHT_LEFT) {/* Right left version */
+                    offset = width - (gui_dim_t)(((float)(width) * (float)(o->value - o->min)) / (float)(o->max - o->min));
                 } else {                            /* Left right version */
-                    offset = (gui_dim_t)(((float)(width) * (float)(o->Value - o->Min)) / (float)(o->Max - o->Min));
+                    offset = (gui_dim_t)(((float)(width) * (float)(o->value - o->min)) / (float)(o->max - o->min));
                 }
                 x += deltaH;
                 gui_draw_filledroundedrectangle(disp, x, y + ((delta - recParam) >> 1), offset, recParam, (recParam >> 1), c1);   
@@ -263,10 +263,10 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
             } else {                                /* Vertical slider */
                 offset = 0;                         /* Make start offset */
                 height -= delta;
-                if (o->Mode == GUI_SLIDER_MODE_BOTTOM_TOP) {    /* Bottom top version */
-                    offset = height - (gui_dim_t)(((float)(height) * (float)o->Value) / (float)(o->Max - o->Min));
+                if (o->mode == GUI_SLIDER_MODE_BOTTOM_TOP) {    /* Bottom top version */
+                    offset = height - (gui_dim_t)(((float)(height) * (float)o->value) / (float)(o->max - o->min));
                 } else {                            /* Top bottom version */
-                    offset = (gui_dim_t)(((float)(height) * (float)o->Value) / (float)(o->Max - o->Min));
+                    offset = (gui_dim_t)(((float)(height) * (float)o->value) / (float)(o->max - o->min));
                 }
                 y += deltaH;
                 gui_draw_filledroundedrectangle(disp, x + ((delta - recParam) >> 1), y, recParam, offset, (recParam >> 1), c1);   
@@ -334,7 +334,7 @@ gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_
 uint8_t
 gui_slider_setcolor(gui_handle_p h, gui_slider_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
 }
 
 /**
@@ -346,7 +346,7 @@ gui_slider_setcolor(gui_handle_p h, gui_slider_color_t index, gui_color_t color)
 uint8_t
 gui_slider_setmode(gui_handle_p h, gui_slider_mode_t mode) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MODE, &mode, 1, 0); /* Set parameter */
+    return guii_widget_setparam(h, CFG_MODE, &mode, 1, 0, 1);   /* Set parameter */
 }
 
 /**
@@ -359,7 +359,7 @@ gui_slider_setmode(gui_handle_p h, gui_slider_mode_t mode) {
 uint8_t
 gui_slider_setvalue(gui_handle_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_VALUE, &val, 1, 0); /* Set parameter */
+    return guii_widget_setparam(h, CFG_VALUE, &val, 1, 0, 1);   /* Set parameter */
 }
 
 /**
@@ -372,7 +372,7 @@ gui_slider_setvalue(gui_handle_p h, int32_t val) {
 uint8_t
 gui_slider_setmin(gui_handle_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MIN, &val, 1, 0);   /* Set parameter */
+    return guii_widget_setparam(h, CFG_MIN, &val, 1, 0, 1); /* Set parameter */
 }
 
 /**
@@ -385,7 +385,7 @@ gui_slider_setmin(gui_handle_p h, int32_t val) {
 uint8_t
 gui_slider_setmax(gui_handle_p h, int32_t val) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MAX, &val, 1, 0);   /* Set parameter */
+    return guii_widget_setparam(h, CFG_MAX, &val, 1, 0, 1); /* Set parameter */
 }
 
 /**
@@ -397,12 +397,13 @@ gui_slider_setmax(gui_handle_p h, int32_t val) {
 int32_t
 gui_slider_getmin(gui_handle_p h) {
     int32_t val;
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
 
-    val = __GS(h)->Min;                             /* Get minimal value */
-    
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+
+    __GUI_LEAVE(1);                                 /* Enter GUI */
+    val = __GS(h)->min;                             /* Get minimal value */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
+
     return val;
 }
 
@@ -416,11 +417,11 @@ int32_t
 gui_slider_getmax(gui_handle_p h) {
     int32_t val;
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
 
-    val = __GS(h)->Max;                             /* Get maximal value */
+    val = __GS(h)->max;                             /* Get maximal value */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return val;
 }
 
@@ -434,10 +435,10 @@ int32_t
 gui_slider_getvalue(gui_handle_p h) {
     int32_t val;
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
 
-    val = __GS(h)->Value;                           /* Get current value */
+    val = __GS(h)->value;                           /* Get current value */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return val;
 }

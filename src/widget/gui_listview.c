@@ -522,7 +522,7 @@ gui_listview_create(gui_id_t id, float x, float y, float width, float height, gu
 uint8_t
 gui_listview_setcolor(gui_handle_p h, gui_listview_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color);  /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
 }
 
 /**
@@ -539,7 +539,7 @@ gui_listview_addcolumn(gui_handle_p h, const gui_char* text, gui_dim_t width) {
     gui_listview_col_t** cols;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     cols = GUI_MEMREALLOC(__GL(h)->cols, sizeof(*__GL(h)->cols) * (__GL(h)->col_count + 2));/* Allocate new memory block for new pointers of columns */
     if (cols != NULL) {
@@ -555,7 +555,7 @@ gui_listview_addcolumn(gui_handle_p h, const gui_char* text, gui_dim_t width) {
         }
     }
 
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }
 
@@ -571,7 +571,7 @@ gui_listview_setcolumnwidth(gui_handle_p h, uint16_t index, gui_dim_t width) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     if (index < __GL(h)->col_count) {
         __GL(h)->cols[index]->width = width > 4 ? width : 4;    /* Set new width */
@@ -579,7 +579,7 @@ gui_listview_setcolumnwidth(gui_handle_p h, uint16_t index, gui_dim_t width) {
         ret = 1;
     }
 
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }
 
@@ -596,11 +596,11 @@ gui_listview_addrow(gui_handle_p h) {
 
     row = GUI_MEMALLOC(sizeof(*row));               /* Allocate memory for new row(s) */
     if (row != NULL) {
-        __GUI_ENTER();                              /* Enter GUI */
+        __GUI_LEAVE(1);                             /* Enter GUI */
         gui_linkedlist_add_gen(&__GL(h)->root, (gui_linkedlist_t *)row);/* Add new row to linked list */
         __GL(h)->count++;                           /* Increase number of rows */
         check_values(h);                            /* Check values situation */
-        __GUI_LEAVE();                              /* Leave GUI */
+        __GUI_LEAVE(1);                             /* Leave GUI */
     }
     
     return (gui_listview_row_p)row;
@@ -616,7 +616,7 @@ uint8_t
 gui_listview_removerow(gui_handle_p h, gui_listview_row_p row) {
     __GUI_ASSERTPARAMS(h != NULL && row != NULL && h->widget == &widget);   /* Check input parameters */
     
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     gui_linkedlist_remove_gen(&__GL(h)->root, (gui_linkedlist_t *)row);
     remove_row_items(row);                          /* Remove row items */
@@ -624,7 +624,7 @@ gui_listview_removerow(gui_handle_p h, gui_listview_row_p row) {
     __GL(h)->count--;                               /* Decrease number of elements */
     check_values(h);
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 1;
 }
 
@@ -637,12 +637,12 @@ uint8_t
 gui_listview_removerows(gui_handle_p h) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget); /* Check input parameters */
     
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     remove_rows(h);                                 /* Remove all rows */
     check_values(h);
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 1;
 }
 
@@ -660,7 +660,7 @@ gui_listview_setitemstring(gui_handle_p h, gui_listview_row_p row, uint16_t col,
     gui_listview_item_t* item = 0;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && row != NULL);   /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
 
     item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(&__GLR(row)->root, NULL);  /* Get first in linked list */
     col++;
@@ -681,7 +681,7 @@ gui_listview_setitemstring(gui_handle_p h, gui_listview_row_p row, uint16_t col,
         ret = 1;
     }
 
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }
 
@@ -696,7 +696,7 @@ gui_listview_setitemstring(gui_handle_p h, gui_listview_row_p row, uint16_t col,
 uint8_t
 gui_listview_setsliderauto(gui_handle_p h, uint8_t autoMode) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     if (autoMode && !(__GL(h)->flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO)) {
         __GL(h)->flags |= GUI_FLAG_LISTVIEW_SLIDER_AUTO;
@@ -706,7 +706,7 @@ gui_listview_setsliderauto(gui_handle_p h, uint8_t autoMode) {
         guii_widget_invalidate(h);                 /* Invalidate widget */
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 1;
 }
 
@@ -723,7 +723,7 @@ gui_listview_setslidervisibility(gui_handle_p h, uint8_t visible) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     if (!(__GL(h)->flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO)) {
         if (visible && !(__GL(h)->flags & GUI_FLAG_LISTVIEW_SLIDER_ON)) {
@@ -737,7 +737,7 @@ gui_listview_setslidervisibility(gui_handle_p h, uint8_t visible) {
         }
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }
 
@@ -752,7 +752,7 @@ gui_listview_scroll(gui_handle_p h, int16_t step) {
     volatile int16_t start;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     start = __GL(h)->visiblestartindex;
     __GL(h)->visiblestartindex += step;
@@ -764,7 +764,7 @@ gui_listview_scroll(gui_handle_p h, int16_t step) {
         guii_widget_invalidate(h);
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return (uint8_t)start;
 }
 
@@ -777,13 +777,13 @@ gui_listview_scroll(gui_handle_p h, int16_t step) {
 uint8_t
 gui_listview_setselection(gui_handle_p h, int16_t selection) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     set_selection(h, selection);                    /* Set selection */
     check_values(h);                                /* Check values */
     guii_widget_invalidate(h);                     /* Invalidate widget */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 1;
 }
 
@@ -797,11 +797,11 @@ gui_listview_getselection(gui_handle_p h) {
     int16_t selection;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     selection = __GL(h)->selected;                  /* Read selection */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return selection;
 }
 
@@ -820,7 +820,7 @@ gui_listview_getitemvalue(gui_handle_p h, uint16_t rindex, uint16_t cindex, gui_
     gui_listview_row_t* row;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && dst && length > 1); /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     *dst = 0;
     row = (gui_listview_row_t *)get_row(h, rindex); /* Get row pointer */
@@ -832,6 +832,6 @@ gui_listview_getitemvalue(gui_handle_p h, uint16_t rindex, uint16_t cindex, gui_
         }
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return GUI_U8(ret);
 }

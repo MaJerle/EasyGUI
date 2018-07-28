@@ -411,7 +411,7 @@ gui_listbox_create(gui_id_t id, float x, float y, float width, float height, gui
 uint8_t
 gui_listbox_setcolor(gui_handle_p h, gui_listbox_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color); /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
 }
 
 /**
@@ -429,14 +429,14 @@ gui_listbox_addstring(gui_handle_p h, const gui_char* text) {
     
     item = GUI_MEMALLOC(sizeof(*item));             /* Allocate memory for entry */
     if (item != NULL) {
-        __GUI_ENTER();                              /* Enter GUI */
+        __GUI_LEAVE(1);                             /* Enter GUI */
         item->text = (gui_char *)text;              /* Add text to entry */
         gui_linkedlist_add_gen(&__GL(h)->root, &item->list);/* Add to linked list */
         __GL(h)->count++;                           /* Increase number of strings */
         
         check_values(h);                            /* Check values */
         guii_widget_invalidate(h);                 /* Invalidate widget */
-        __GUI_LEAVE();                              /* Leave GUI */
+        __GUI_LEAVE(1);                             /* Leave GUI */
         
         ret = 1;
     }
@@ -456,7 +456,7 @@ gui_listbox_setstring(gui_handle_p h, uint16_t index, const gui_char* text) {
     gui_listbox_item_t* item;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     item = get_item(h, index);                      /* Get list item from handle */
     if (item != NULL) {
@@ -464,7 +464,7 @@ gui_listbox_setstring(gui_handle_p h, uint16_t index, const gui_char* text) {
         guii_widget_invalidate(h);                  /* Invalidate widget */
     }
 
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return item ? 1 : 0;
 }
 
@@ -479,11 +479,11 @@ gui_listbox_deletefirststring(gui_handle_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     ret = delete_item(h, 0);                        /* Delete first item */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }
 
@@ -498,11 +498,11 @@ gui_listbox_deletelaststring(gui_handle_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     ret = delete_item(h, __GL(h)->count - 1);       /* Delete last item */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }
 
@@ -518,11 +518,11 @@ gui_listbox_deletestring(gui_handle_p h, uint16_t index) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     ret = delete_item(h, index);                    /* Delete item */
 
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }
 
@@ -537,7 +537,7 @@ gui_listbox_deletestring(gui_handle_p h, uint16_t index) {
 uint8_t
 gui_listbox_setsliderauto(gui_handle_p h, uint8_t autoMode) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     if (autoMode && !(__GL(h)->flags & GUI_FLAG_LISTBOX_SLIDER_AUTO)) {
         __GL(h)->flags |= GUI_FLAG_LISTBOX_SLIDER_AUTO;
@@ -547,7 +547,7 @@ gui_listbox_setsliderauto(gui_handle_p h, uint8_t autoMode) {
         guii_widget_invalidate(h);                 /* Invalidate widget */
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 1;
 }
 
@@ -564,7 +564,7 @@ gui_listbox_setslidervisibility(gui_handle_p h, uint8_t visible) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     if (!(__GL(h)->flags & GUI_FLAG_LISTBOX_SLIDER_AUTO)) {
         if (visible && !(__GL(h)->flags & GUI_FLAG_LISTBOX_SLIDER_ON)) {
@@ -578,7 +578,7 @@ gui_listbox_setslidervisibility(gui_handle_p h, uint8_t visible) {
         }
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }
 
@@ -593,7 +593,7 @@ gui_listbox_scroll(gui_handle_p h, int16_t step) {
     volatile int16_t start;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     start = __GL(h)->visiblestartindex;
     __GL(h)->visiblestartindex += step;
@@ -606,7 +606,7 @@ gui_listbox_scroll(gui_handle_p h, int16_t step) {
         guii_widget_invalidate(h);
     }
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return GUI_U8(start);
 }
 
@@ -620,13 +620,13 @@ gui_listbox_scroll(gui_handle_p h, int16_t step) {
 uint8_t
 gui_listbox_setselection(gui_handle_p h, int16_t selection) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     set_selection(h, selection);                    /* Set selection */
     check_values(h);                                /* Check values */
     guii_widget_invalidate(h);                     /* Invalidate widget */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return 1;
 }
 
@@ -641,10 +641,10 @@ gui_listbox_getselection(gui_handle_p h) {
     int16_t selection;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     selection = __GL(h)->selected;                  /* Read selection */
     
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return selection;
 }

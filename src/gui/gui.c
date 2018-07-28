@@ -109,10 +109,11 @@ check_disp_clipping(gui_handle_p h) {
 /**
  * \brief           Redraw all widgets of selected parent
  * \param[in]       parent: Parent widget handle to draw widgets on
+ * \param[in]       force_redraw: Set to 1 to force drawing all widgets on linked list
  * \return          Number of widgets redrawn
  */
 static uint32_t
-redraw_widgets(gui_handle_p parent) {
+redraw_widgets(gui_handle_p parent, uint8_t force_redraw) {
     gui_handle_p h;
     uint32_t cnt = 0;
     static uint32_t level = 0;
@@ -125,7 +126,7 @@ redraw_widgets(gui_handle_p parent) {
         }
         if (guii_widget_isinsideclippingregion(h, 1)) { /* If widget is inside clipping region and not fully covered by any of its siblings */
             /* Draw main widget if required */
-            if (guii_widget_getflag(h, GUI_FLAG_REDRAW)) {  /* Check if redraw required */
+            if (guii_widget_getflag(h, GUI_FLAG_REDRAW) || force_redraw) {    /* Check if redraw required */
 #if GUI_CFG_USE_ALPHA
                 gui_layer_t* layerPrev = GUI.lcd.drawing_layer; /* Save drawing layer */
                 uint8_t transparent = 0;
@@ -163,17 +164,11 @@ redraw_widgets(gui_handle_p parent) {
                 guii_widget_callback(h, GUI_WC_Draw, &GUI.widget_param, &GUI.widget_result);    /* Draw widget */
                 
                 /* Check if there are children widgets in this widget */
-                if (guii_widget_allowchildren(h)) {
-                    gui_handle_p tmp;
-                    
-                    /* Set drawing flag to all widgets  first... */
-                    GUI_LINKEDLIST_WIDGETSLISTNEXT(h, tmp) {
-                        guii_widget_setflag(tmp, GUI_FLAG_REDRAW); /* Set redraw bit to all children elements */
-                    }
-                            
+                if (guii_widget_allowchildren(h)) {                            
                     /* ...now call function for actual redrawing process */
+                    /* Force children redraw operation, even if no redraw flag set */
                     level++;
-                    cnt += redraw_widgets(h);       /* Redraw children widgets */
+                    cnt += redraw_widgets(h, 1);    /* Redraw children widgets */
                     level--;
                 }
                 
@@ -225,7 +220,7 @@ redraw_widgets(gui_handle_p parent) {
                 cnt++;
             /* Check if any child widget needs drawing */
             } else if (guii_widget_allowchildren(h)) {
-                cnt += redraw_widgets(h);           /* Redraw children widgets */
+                cnt += redraw_widgets(h, 0);        /* Redraw children widgets */
             }
         }
     }
@@ -344,9 +339,7 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
                     time = ts->ts.time;             /* Save last time */
                     PT_YIELD(&ts->pt);              /* Stop thread for now and wait next call with new touch event */
                     
-                    /*
-                     * Wait for valid input with pressed state
-                     */
+                    /* Wait for valid input with pressed state */
                     PT_WAIT_UNTIL(&ts->pt, (v && ts->ts.status) || (gui_sys_now() - time) > 300);
                     if ((gui_sys_now() - time) > 300) { /* Check timeout for new pressed state */
                         PT_EXIT(&ts->pt);           /* Exit protothread */
@@ -555,7 +548,7 @@ gui_process_touch(void) {
     
     if (guii_input_touchavailable()) {              /* Check if any touch available */
         while (guii_input_touchread(&GUI.touch.ts)) {   /* Process all touch events possible */
-            if (GUI.active_widget && GUI.touch.ts.status) { /* Check active widget for touch and pressed status */
+            if (GUI.active_widget != NULL && GUI.touch.ts.status) { /* Check active widget for touch and pressed status */
                 set_relative_coordinate(&GUI.touch, /* Set relative touch (for widget) from current touch */
                     guii_widget_getabsolutex(GUI.active_widget), guii_widget_getabsolutey(GUI.active_widget),
                     guii_widget_getwidth(GUI.active_widget), guii_widget_getheight(GUI.active_widget)
@@ -584,7 +577,7 @@ gui_process_touch(void) {
                             if (GUI_WIDGET_RESULTTYPE_TOUCH(&result) != touchCONTINUE) {
                                 break;
                             }
-                            /**
+                            /*
                              * If widget does not detect touch start, then forward touch start to parent widget.
                              * With this approach, you can achieve slider on parent widget
                              */
@@ -729,7 +722,7 @@ process_redraw(void) {
         );
     }
     
-    redraw_widgets(NULL);                           /* Redraw all widgets now on drawing layer */
+    redraw_widgets(NULL, 0);                        /* Redraw all widgets now on drawing layer */
     drawing->pending = 1;                           /* Set drawing layer as pending */
 
     /* Draw clipping area rectangle on screen for debug */
@@ -768,6 +761,9 @@ default_event_cb(void) {
  */
 static void
 gui_thread(void * const argument) {
+    if (argument != NULL) {                         /* If argument exists */
+        *((volatile uint8_t *)argument) = 0x01;     /* Set it to 1, indicate thread started */
+    }
     while (1) {
         gui_process();                              /* Process graphical update */
     }
@@ -827,7 +823,12 @@ gui_init(void) {
 #if GUI_CFG_OS
     /* Create graphical thread */
     if (GUI.OS.thread_id == NULL) {
-        gui_sys_thread_create(&GUI.OS.thread_id, "gui_thread", gui_thread, NULL, GUI_SYS_THREAD_SS, GUI_SYS_THREAD_PRIO);
+        volatile uint8_t started = 0;
+        if (gui_sys_thread_create(&GUI.OS.thread_id, "gui_thread", gui_thread, (void *)&started, GUI_SYS_THREAD_SS, GUI_SYS_THREAD_PRIO)) {
+            while (!started) {                      /* Wait for thread to start */
+
+            }
+        }
     }
 #endif /* GUI_CFG_OS */
     
@@ -852,9 +853,7 @@ gui_process(void) {
     GUI_UNUSED(msg);                                /* Unused variable */
 #endif /* GUI_CFG_OS */
    
-    __GUI_SYS_PROTECT();                            /* Protect from multiple access */
-    
-    /* Periodically process everything */
+    __GUI_SYS_PROTECT(1);                           /* Protect from multiple access */
     guii_timer_process();                           /* Process all timers */
     guii_widget_executeremove();                    /* Delete widgets */
 #if GUI_CFG_USE_TOUCH
@@ -864,8 +863,7 @@ gui_process(void) {
     process_keyboard();                             /* Process keyboard inputs */
 #endif /* GUI_CFG_USE_KEYBOARD */
     process_redraw();                               /* Redraw widgets */
-    
-    __GUI_SYS_UNPROTECT();                          /* Release protection */
+    __GUI_SYS_UNPROTECT(1);                         /* Release protection */
     
     return 0;                                       /* Return number of elements updated on GUI */
 }

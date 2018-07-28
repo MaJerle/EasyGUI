@@ -28,8 +28,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_LIST_CONTAINER_H
-#define __GUI_LIST_CONTAINER_H
+#ifndef __GUI_LISTCONTAINER_H
+#define __GUI_LISTCONTAINER_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -40,7 +40,7 @@ extern "C" {
 
 /**
  * \ingroup         GUI_WIDGETS
- * \defgroup        GUI_LIST_CONTAINER List view container
+ * \defgroup        GUI_LISTCONTAINER List view container
  * \brief           List view container is basic widget for scrolling
  * \{
  *
@@ -54,8 +54,17 @@ extern "C" {
  * \brief           List of available colors for list container
  */
 typedef enum {
-    GUI_LIST_CONTAINER_COLOR_BG = 0x00,     /*!< Color index for LED on status */
-} GUI_LIST_CONTAINER_COLOR_t;
+    GUI_LISTCONTAINER_COLOR_BG = 0x00,      /*!< Color index for LED on status */
+} gui_listcontainer_color_t;
+
+/**
+ * \brief           List of available container modes
+ */
+typedef enum {
+    GUI_LISTCONTAINER_MODE_VERTICAL = 0x0,  /*!< Vertical mode */
+    GUI_LISTCONTAINER_MODE_HORIZONTAL,      /*!< Horizontal mode */
+    GUI_LISTCONTAINER_MODE_VERTICAL_HORIZONTAL, /*!< Vertical & Horizontal mode */
+} gui_listcontainer_mode_t;
 
 #if defined(GUI_INTERNAL) || __DOXYGEN__
 
@@ -65,12 +74,15 @@ typedef enum {
 typedef struct {
     gui_handle C;                           /*!< Global widget object */
     
+    gui_listcontainer_mode_t mode;          /*!< List container type */
     gui_dim_t maxscrollx;                   /*!< Maximal scroll on X axis */
     gui_dim_t maxscrolly;                   /*!< Maximal scroll on Y axis */
-} gui_list_container_t;
+} gui_listcontainer_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 gui_handle_p    gui_listcontainer_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+uint8_t         gui_listcontainer_setcolor(gui_handle_p h, gui_listcontainer_color_t index, gui_color_t color);
+uint8_t         gui_listcontainer_setmode(gui_handle_p h, gui_listcontainer_mode_t mode);
 
 /**
  * \}

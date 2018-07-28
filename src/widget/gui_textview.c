@@ -167,13 +167,13 @@ uint8_t
 gui_textview_setcolor(gui_handle_p h, gui_textview_color_t index, gui_color_t color) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    ret = guii_widget_setcolor(h, (uint8_t)index, color);  /* Set color */
+    ret = guii_widget_setcolor(h, (uint8_t)index, color, 1);/* Set color */
     
     if (ret) {                                      /* Check success */
         if (index == GUI_TEXTVIEW_COLOR_BG) {       /* If background is transparent */
-            __GUI_ENTER();
+            __GUI_ENTER(1);
             guii_widget_setinvalidatewithparent(h, color == GUI_COLOR_TRANS);  /* When widget is invalidated, invalidate parent too */
-            __GUI_LEAVE();
+            __GUI_LEAVE(1);
         }
     }
     return ret;
@@ -188,7 +188,7 @@ gui_textview_setcolor(gui_handle_p h, gui_textview_color_t index, gui_color_t co
 uint8_t
 gui_textview_setvalign(gui_handle_p h, gui_textalign_valign_t align) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_VALIGN, &align, 1, 1);  /* Set parameter */
+    return guii_widget_setparam(h, CFG_VALIGN, &align, 1, 1, 1);   /* Set parameter */
 }
 
 /**
@@ -200,5 +200,5 @@ gui_textview_setvalign(gui_handle_p h, gui_textalign_valign_t align) {
 uint8_t
 gui_textview_sethalign(gui_handle_p h, gui_textalign_halign_t align) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_HALIGN, &align, 1, 1);  /* Set parameter */
+    return guii_widget_setparam(h, CFG_HALIGN, &align, 1, 1, 1);/* Set parameter */
 }

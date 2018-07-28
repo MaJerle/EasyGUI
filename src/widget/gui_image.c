@@ -107,12 +107,12 @@ gui_image_setsource(gui_handle_p h, const gui_image_desc_t* img) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && img != NULL);   /* Check input parameters */
-    __GUI_ENTER();                                  /* Enter GUI */
+    __GUI_LEAVE(1);                                 /* Enter GUI */
     
     __GI(h)->image = img;                           /* Set image */
     guii_widget_setinvalidatewithparent(h, img != NULL && img->bpp == 32);  /* Set how invalidation functon hebaves */
     guii_widget_invalidatewithparent(h);           /* Invalidate widget */
 
-    __GUI_LEAVE();                                  /* Leave GUI */
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }

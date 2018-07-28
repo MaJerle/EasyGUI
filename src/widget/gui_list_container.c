@@ -31,13 +31,11 @@
 #define GUI_INTERNAL
 #include "gui/gui_private.h"
 #include "widget/gui_list_container.h"
-#define __GL(x)             ((GUI_LED_t *)(x))
 
-#define CFG_TOGGLE          0x01
-#define CFG_SET             0x02
-#define CFG_TYPE            0x03
+#define CFG_MODE            0x01
 
 static uint8_t gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+
 /**
  * \brief           List of default color in the same order of widget color enumeration
  */
@@ -52,20 +50,19 @@ gui_color_t colors[] = {
 static const
 gui_widget_t widget = {
     .name = _GT("LIST_CONTAINER"),                  /*!< Widget name */ 
-    .size = sizeof(gui_list_container_t),           /*!< Size of widget for memory allocation */
+    .size = sizeof(gui_listcontainer_t),            /*!< Size of widget for memory allocation */
     .flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN | GUI_FLAG_WIDGET_INVALIDATE_PARENT,    /*!< List of widget flags */
     .callback = gui_listcontainer_callback,         /*!< Control function */
     .colors = colors,                               /*!< List of default colors */
     .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
-#define l           ((gui_list_container_t *)(h))
+#define l           ((gui_listcontainer_t *)(h))
 
 /* Calculate scroll limits according to children widgets */
 static void
 calculate_limits(gui_handle_p h) {
     gui_handle_p w;
-    gui_dim_t x, y, width, height;
-    gui_dim_t cmx = 0, cmy = 0;
+    gui_dim_t x, y, width, height, cmx = 0, cmy = 0;
     
     /* Scan all children widgets and check for maximal possible scroll */
     for (w = gui_linkedlist_widgetgetnext(h, NULL); w != NULL;
@@ -75,7 +72,7 @@ calculate_limits(gui_handle_p h) {
         y = guii_widget_getrelativey(w);           /* Get absolute position on screen */
         width = guii_widget_getwidth(w);           /* Get widget width */
         height = guii_widget_getheight(w);         /* Get widget height */
-        
+
         if (x + width > cmx) {
             cmx = x + width;
         }
@@ -120,6 +117,17 @@ gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* pa
             gui_widget_setpadding(h, 3);            /* Set padding */
             return 1;
         }
+        case GUI_WC_SetParam: {                     /* Set parameter for widget */
+            gui_widget_param* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
+            switch (p->type) {
+                case CFG_MODE:
+                    l->mode = *(gui_listcontainer_mode_t *)p->data;
+                    break;
+                default: break;
+            }
+            GUI_WIDGET_RESULTTYPE_U8(result) = 1;   /* Save result */
+            return 1;
+        }
         case GUI_WC_ChildWidgetCreated: {           /* Child widget has been created */
             return 1;
         }
@@ -134,7 +142,7 @@ gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* pa
             width = guii_widget_getwidth(h);        /* Get widget width */
             height = guii_widget_getheight(h);      /* Get widget height */
             
-            gui_draw_filledrectangle(disp, x, y, width, height, guii_widget_getcolor(h, GUI_LIST_CONTAINER_COLOR_BG));
+            gui_draw_filledrectangle(disp, x, y, width, height, guii_widget_getcolor(h, GUI_LISTCONTAINER_COLOR_BG));
             return 1;                               /* */
         }
 #if GUI_CFG_USE_TOUCH
@@ -144,11 +152,31 @@ gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* pa
         }
         case GUI_WC_TouchMove: {
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
+
+            /*
+             * TODO:
+             * 
+             * If we are on the limits of scroll, 
+             * do not handle touch automatically, but allow
+             * parent widget to do it.
+             *
+             * In case of nested list container widgets, this feature is required
+             */
             GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
-            gui_widget_incscrolly(h, ts->y_rel_old[0] - ts->y_rel[0]);
-            if (gui_widget_getscrolly(h) < 0) {
-                gui_widget_setscrolly(h, 0);
+            if (l->mode == GUI_LISTCONTAINER_MODE_VERTICAL || l->mode == GUI_LISTCONTAINER_MODE_VERTICAL_HORIZONTAL) {
+                gui_widget_incscrolly(h, ts->y_rel_old[0] - ts->y_rel[0]);
+                if (gui_widget_getscrolly(h) < 0) {
+                    gui_widget_setscrolly(h, 0);
+                }
             }
+            if (l->mode == GUI_LISTCONTAINER_MODE_HORIZONTAL || l->mode == GUI_LISTCONTAINER_MODE_VERTICAL_HORIZONTAL) {
+                gui_widget_incscrollx(h, ts->x_rel_old[0] - ts->x_rel[0]);
+                if (gui_widget_getscrollx(h) < 0) {
+                    gui_widget_setscrollx(h, 0);
+                }
+            }
+            calculate_limits(h);
+
             return 1;
         }
 #endif /* GUI_CFG_USE_TOUCH */
@@ -174,4 +202,38 @@ gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* pa
 gui_handle_p
 gui_listcontainer_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
     return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+}
+
+/**
+ * \brief           Set color to specific part of widget
+ * \param[in,out]   h: Widget handle
+ * \param[in]       index: Color index
+ * \param[in]       color: Color value
+ * \return          `1` on success, `0` otherwise
+ */
+uint8_t
+gui_listcontainer_setcolor(gui_handle_p h, gui_listcontainer_color_t index, gui_color_t color) {
+    uint8_t ret;
+
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+    
+    ret = guii_widget_setcolor(h, (uint8_t)index, color, 1);    /* Set color */
+    if (ret && index == GUI_LISTCONTAINER_COLOR_BG) {       /* Check background color */
+        __GUI_ENTER(1);
+            guii_widget_setinvalidatewithparent(h, color == GUI_COLOR_TRANS);
+        __GUI_LEAVE(1);
+    }
+    return ret;
+}
+
+/**
+ * \brief           Set list container mode
+ * \param[in]       h: Widget handle
+ * \param[in]       mode: List container mode
+ * \return          `1` on success, `0` otherwise
+ */
+uint8_t
+gui_listcontainer_setmode(gui_handle_p h, gui_listcontainer_mode_t mode) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+    return guii_widget_setparam(h, CFG_MODE, &mode, 1, 0, 1);   /* Set parameter */
 }

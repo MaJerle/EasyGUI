@@ -208,7 +208,7 @@ gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gu
 uint8_t
 gui_edittext_setcolor(gui_handle_p h, gui_edittext_color_t index, gui_color_t color) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color);  /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
 }
 
 /**
@@ -221,7 +221,7 @@ gui_edittext_setcolor(gui_handle_p h, gui_edittext_color_t index, gui_color_t co
 uint8_t
 gui_edittext_setmultiline(gui_handle_p h, uint8_t multiline) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MULTILINE, &multiline, 1, 0);   /* Set parameter */
+    return guii_widget_setparam(h, CFG_MULTILINE, &multiline, 1, 0, 1); /* Set parameter */
 }
 
 /**
@@ -233,7 +233,7 @@ gui_edittext_setmultiline(gui_handle_p h, uint8_t multiline) {
 uint8_t
 gui_edittext_setvalign(gui_handle_p h, gui_edittext_valign_t align) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_VALIGN, &align, 1, 1);  /* Set parameter */
+    return guii_widget_setparam(h, CFG_VALIGN, &align, 1, 1, 1);/* Set parameter */
 }
 
 /**
@@ -245,5 +245,5 @@ gui_edittext_setvalign(gui_handle_p h, gui_edittext_valign_t align) {
 uint8_t
 gui_edittext_sethalign(gui_handle_p h, gui_edittext_halign_t align) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_HALIGN, &align, 1, 1);  /* Set parameter */
+    return guii_widget_setparam(h, CFG_HALIGN, &align, 1, 1, 1);/* Set parameter */
 }

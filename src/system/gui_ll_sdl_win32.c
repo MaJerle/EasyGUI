@@ -122,8 +122,8 @@ my_mouse_evt(void) {
             if (evt.button.button == SDL_BUTTON_LEFT) {
                 ts.count = 1;
                 ts.status = GUI_TOUCH_STATE_PRESSED;
-                ts.x[0] = evt.button.x;
-                ts.y[0] = evt.button.y;
+                ts.x[0] = (gui_dim_t)evt.button.x;
+                ts.y[0] = (gui_dim_t)evt.button.y;
                 gui_input_touchadd(&ts);
 
                 is_down = 1;
