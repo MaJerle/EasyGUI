@@ -190,7 +190,7 @@
     <ClCompile Include="..\..\..\src\widget\gui_slider.c" />
     <ClCompile Include="..\..\..\src\widget\gui_textview.c" />
     <ClCompile Include="..\..\..\src\widget\gui_widget.c" />
-    <ClCompile Include="..\..\..\src\widget\gui_widget_helpers.c" />
+    <ClCompile Include="..\..\..\src\widget\gui_widget_api.c" />
     <ClCompile Include="..\..\..\src\widget\gui_window.c" />
     <ClCompile Include="main.c" />
   </ItemGroup>

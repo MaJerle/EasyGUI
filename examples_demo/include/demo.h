@@ -14,6 +14,7 @@ extern "C" {
 #include "widget/gui_progbar.h"
 #include "widget/gui_led.h"
 #include "widget/gui_list_container.h"
+#include "widget/gui_container.h"
 #include "widget/gui_checkbox.h"
 #include "widget/gui_radio.h"
 
@@ -56,9 +57,9 @@ extern gui_const gui_font_t GUI_Font_Arial_Bold_18;
 
 /* Functions for export */
 void    demo_init(void);
-void    demo_create_feature_window(win_data_t* data);
+void    demo_create_feature(win_data_t* data);
 
-void    demo_create_feature_windows(gui_handle_p parent);
+void    demo_create_feature_window(gui_handle_p parent);
 void    demo_create_feature_list_container(gui_handle_p parent);
 void    demo_create_feature_button(gui_handle_p parent);
 void    demo_create_feature_edit_text(gui_handle_p parent);

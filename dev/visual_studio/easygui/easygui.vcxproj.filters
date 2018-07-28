@@ -135,9 +135,6 @@
     <ClCompile Include="..\..\..\src\widget\gui_widget.c">
       <Filter>GUI\WIDGET</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\widget\gui_widget_helpers.c">
-      <Filter>GUI\WIDGET</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\widget\gui_window.c">
       <Filter>GUI\WIDGET</Filter>
     </ClCompile>
@@ -168,6 +165,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\examples_demo\demo_graph.c">
       <Filter>DEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_widget_api.c">
+      <Filter>GUI\WIDGET</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
