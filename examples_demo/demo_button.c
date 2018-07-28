@@ -7,25 +7,31 @@ static uint8_t  button_callback(gui_handle_p h, gui_wc_t wc, gui_widget_param_t*
  * \param[in]       parent: Parent widget for new widgets
  */
 void
-demo_create_feature_button(gui_handle_p parent) {
+demo_create_feature_button(gui_handle_p parent, uint8_t protect) {
     gui_handle_p h;
 
-    h = gui_button_create(0, 10, 10, 100, 40, parent, button_callback, 0);
-    gui_widget_setposition(h, 0, 0);
-    gui_widget_setsizepercent(h, 100, 10);
-    gui_widget_settext(h, _GT("Button with 100% width"));
+    h = gui_button_create(0, 10, 10, 100, 40, parent, button_callback, 0, protect);
+    gui_widget_setignoreinvalidate(h, 1, 0, 0);
+    gui_widget_setposition(h, 0, 0, protect);
+    gui_widget_setsizepercent(h, 100, 10, protect);
+    gui_widget_settext(h, _GT("Button with 100% width"), protect);
+    gui_widget_setignoreinvalidate(h, 0, 1, 0);
 
-    h = gui_button_create(0, 10, 100, 100, 40, parent, button_callback, 0);
-    gui_widget_setsize(h, 300, 50);
-    gui_widget_setposition(h, 10, 100);
-    gui_widget_set3dstyle(h, 1);
-    gui_widget_settext(h, _GT("Default 3D button"));
+    h = gui_button_create(0, 10, 100, 100, 40, parent, button_callback, 0, protect);
+    gui_widget_setignoreinvalidate(h, 1, 0, 0);
+    gui_widget_setsize(h, 300, 50, protect);
+    gui_widget_setposition(h, 10, 100, protect);
+    gui_widget_set3dstyle(h, 1, protect);
+    gui_widget_settext(h, _GT("Default 3D button"), protect);
+    gui_widget_setignoreinvalidate(h, 0, 1, 0);
     
-    h = gui_button_create(0, 10, 300, 100, 40, parent, button_callback, 0);
-    gui_widget_setsize(h, 300, 50);
-    gui_widget_setposition(h, 10, 200);
-    gui_widget_set3dstyle(h, 0);
-    gui_widget_settext(h, _GT("Default flat button"));
+    h = gui_button_create(0, 10, 300, 100, 40, parent, button_callback, 0, protect);
+    gui_widget_setignoreinvalidate(h, 1, 0, 0);
+    gui_widget_setsize(h, 300, 50, protect);
+    gui_widget_setposition(h, 10, 200, protect);
+    gui_widget_set3dstyle(h, 0, protect);
+    gui_widget_settext(h, _GT("Default flat button"), protect);
+    gui_widget_setignoreinvalidate(h, 0, 1, 0);
 }
 
 /**

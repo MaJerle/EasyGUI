@@ -7,8 +7,12 @@ static uint8_t  template_callback(gui_handle_p h, gui_wc_t wc, gui_widget_param_
  * \param[in]       parent: Parent widget for new widgets
  */
 void
-demo_create_feature_template(gui_handle_p parent) {
-    gui_button_create(0, 0, 0, 1, 1, parent, template_callback, 0);
+demo_create_feature_template(gui_handle_p parent, uint8_t protect) {
+    gui_handle_p h;
+
+    gui_protect(protect);
+    
+    gui_unprotect(protect);
 }
 
 /**
@@ -16,5 +20,9 @@ demo_create_feature_template(gui_handle_p parent) {
  */
 static uint8_t
 template_callback(gui_handle_p h, gui_wc_t wc, gui_widget_param_t* param, gui_widget_result_t* result) {
-    return gui_widget_processdefaultcallback(h, wc, param, result);
+    uint8_t ret = gui_widget_processdefaultcallback(h, wc, param, result);
+    switch (wc) {
+        default: break;
+    }
+    return ret;
 }
