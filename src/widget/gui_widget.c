@@ -919,7 +919,7 @@ guii_widget_active_set(gui_handle_p h) {
  * \note            This function is private and may be called only when OS protection is active
  *
  * \note            Even if percentage width is used, function will always return value in pixels
- * \param[in]       h: Pointer to \ref gui_handle_p structure
+ * \param[in]       h: Widget handle
  * \return          Total width in units of pixels
  * \sa              guii_widget_getinnerwidth
  */
@@ -941,7 +941,7 @@ guii_widget_getwidth(gui_handle_p h) {
  * \note            This function is private and may be called only when OS protection is active
  *
  * \note            Even if percentage height is used, function will always return value in pixels
- * \param[in]       h: Pointer to \ref gui_handle_p structure
+ * \param[in]       h: Widget handle
  * \return          Total height in units of pixels
  * \sa              guii_widget_getinnerheight
  */
@@ -1135,11 +1135,11 @@ guii_widget_set3dstyle(gui_handle_p h, uint8_t enable) {
  * \note            This function is private and may be called only when OS protection is active
  * \param[in]       widget: Pointer to \ref gui_widget_t structure with widget description
  * \param[in]       id: Widget unique ID to use for identity for callback processing
- * \param[in]       x: Widget X position relative to parent widget
- * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       x: Widget `X` position relative to parent widget
+ * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
- * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
+ * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Widget callback function. Set to NULL to use default widget specific callback
  * \param[in]       flags: flags for create procedure
  * \return          Created widget handle on success, NULL otherwise
@@ -2261,7 +2261,7 @@ gui_widget_setheightpercent(gui_handle_p h, float height) {
  *                  
  *                  Function returns width of widget according to current widget setup (expanded, fill, percent, etc.)
  * \note            Even if percentage width is used, function will always return value in pixels
- * \param[in]       h: Pointer to \ref gui_handle_p structure
+ * \param[in]       h: Widget handle
  * \return          Total width in units of pixels
  * \sa              gui_widget_getheight, gui_widget_setwidth
  */
@@ -2284,7 +2284,7 @@ gui_widget_getwidth(gui_handle_p h) {
  *                  Function returns height of widget according to current widget setup (expanded, fill, percent, etc.)
  *
  * \note            Even if percentage height is used, function will always return value in pixels
- * \param[in]       h: Pointer to \ref gui_handle_p structure
+ * \param[in]       h: Widget handle
  * \return          Total height in units of pixels
  * \sa              gui_widget_getwidth, gui_widget_setheight
  * \hideinitializer

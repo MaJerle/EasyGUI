@@ -383,7 +383,7 @@ extern "C" {
 /**
  * \brief           Get inner width (total width - padding left - padding right)
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       h: Pointer to \ref gui_handle_p structure
+ * \param[in]       h: Widget handle
  * \retval          height in units of pixels
  * \hideinitializer
  */
@@ -392,7 +392,7 @@ extern "C" {
 /**
  * \brief           Get inner height (total height - padding top - padding bottom)
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       h: Pointer to \ref gui_handle_p structure
+ * \param[in]       h: Widget handle
  * \retval          Inner height in units of pixels
  * \hideinitializer
  */
@@ -401,7 +401,7 @@ extern "C" {
 /**
  * \brief           Returns width of parent element. If parent does not exists, it returns LCD width
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       h: Pointer to \ref gui_handle_p structure
+ * \param[in]       h: Widget handle
  * \retval          Parent width in units of pixels
  * \hideinitializer
  */
@@ -421,7 +421,7 @@ extern "C" {
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  *
  * \note            It returns inner width = total width - padding left - padding right
- * \param[in]       h: Pointer to \ref gui_handle_p structure
+ * \param[in]       h: Widget handle
  * \retval          Parent width in units of pixels
  * \hideinitializer
  */

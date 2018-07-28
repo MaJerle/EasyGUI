@@ -138,7 +138,7 @@ typedef enum guir_t {
 
 /**
  * \brief           Linked list structure
- * \note            This structure must be first element in \ref gui_handle_p structure
+ * \note            When used with widgets, this structure must be first element in \ref gui_handle structure
  * \sa              gui_linkedlistroot_t
  */
 typedef struct gui_linkedlist_t {

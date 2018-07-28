@@ -233,14 +233,14 @@ gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
 /**
  * \brief           Create new progress bar widget
  * \param[in]       id: Widget unique ID to use for identity for callback processing
- * \param[in]       x: Widget X position relative to parent widget
- * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       x: Widget `X` position relative to parent widget
+ * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
- * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
- * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
+ * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
+ * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for create procedure
- * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
+ * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
 gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
@@ -250,7 +250,7 @@ gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui
 /**
  * \brief           Set color to specific part of widget
  * \param[in,out]   h: Widget handle
- * \param[in]       index: Color index. This parameter can be a value of \ref gui_progbar_color_t enumeration
+ * \param[in]       index: Color index
  * \param[in]       color: Color value
  * \return          `1` on success, `0` otherwise
  */

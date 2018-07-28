@@ -126,14 +126,14 @@ gui_dialog_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
 /**
  * \brief           Create new dialog base element without any "design" style
  * \param[in]       id: Widget unique ID to use for identity for callback processing
- * \param[in]       x: Widget X position relative to parent widget
- * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       x: Widget `X` position relative to parent widget
+ * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       func: Widget create function used as dialog base. In most cases \ref gui_container_create will be used to create empty container
- * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
+ * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
- * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
+ * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
 gui_dialog_create(gui_id_t id, float x, float y, float width, float height, gui_widget_createfunc_t func, gui_widget_callback_t cb, uint16_t flags) {
@@ -160,12 +160,12 @@ gui_dialog_create(gui_id_t id, float x, float y, float width, float height, gui_
  * \note            Function will block thread until dialog is dismissed using \ref gui_dialog_dismiss function by user
  *
  * \param[in]       id: Widget unique ID to use for identity for callback processing
- * \param[in]       x: Widget X position relative to parent widget
- * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       x: Widget `X` position relative to parent widget
+ * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       func: Widget create function used as dialog base. In most cases \ref gui_container_create will be used to create empty container
- * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
+ * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
  * \return          Value passed to \ref gui_dialog_dismiss when dialog is dismissed on success, -1 otherwise
  */

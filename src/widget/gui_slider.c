@@ -310,14 +310,14 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
 /**
  * \brief           Create new slider widget
  * \param[in]       id: Widget unique ID to use for identity for callback processing
- * \param[in]       x: Widget X position relative to parent widget
- * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       x: Widget `X` position relative to parent widget
+ * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
- * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
- * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
+ * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
+ * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for create procedure
- * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
+ * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
 gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
@@ -327,7 +327,7 @@ gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_
 /**
  * \brief           Set color to specific part of widget
  * \param[in,out]   h: Widget handle
- * \param[in]       index: Color index. This parameter can be a value of \ref gui_slider_color_t enumeration
+ * \param[in]       index: Color index
  * \param[in]       color: Color value
  * \return          `1` on success, `0` otherwise
  */
@@ -340,7 +340,7 @@ gui_slider_setcolor(gui_handle_p h, gui_slider_color_t index, gui_color_t color)
 /**
  * \brief           Set slider mode (orientation)
  * \param[in]       h: Widget handle
- * \param[in]       mode: Slider mode. This parameter can be a value of \ref gui_slider_mode_t enumeration
+ * \param[in]       mode: Slider mode
  * \return          `1` on success, `0` otherwise
  */
 uint8_t

@@ -52,7 +52,7 @@ extern "C" {
 #include "gui/pt/pt.h"
     
 /* Include utilities */
-#include "gui/gui_buffer.h"
+#include "gui/gui_buff.h"
 #include "gui/gui_linkedlist.h"
 #include "gui/gui_string.h"
 #include "gui/gui_timer.h"

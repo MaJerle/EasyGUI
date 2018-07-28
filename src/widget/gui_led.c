@@ -137,14 +137,14 @@ gui_led_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_w
 /**
  * \brief           Create new led widget
  * \param[in]       id: Widget unique ID to use for identity for callback processing
- * \param[in]       x: Widget X position relative to parent widget
- * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       x: Widget `X` position relative to parent widget
+ * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
- * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
- * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
+ * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
+ * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
- * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
+ * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
 gui_led_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
@@ -154,7 +154,7 @@ gui_led_create(gui_id_t id, float x, float y, float width, float height, gui_han
 /**
  * \brief           Set color to specific part of widget
  * \param[in,out]   h: Widget handle
- * \param[in]       index: Color index. This parameter can be a value of \ref GUI_LED_COLOR_t enumeration
+ * \param[in]       index: Color index
  * \param[in]       color: Color value
  * \return          `1` on success, `0` otherwise
  */
@@ -167,7 +167,7 @@ gui_led_setcolor(gui_handle_p h, gui_led_color_t index, gui_color_t color) {
 /**
  * \brief           Set led type
  * \param[in,out]   h: Widget handle
- * \param[in]       type: New type for LED. This parameter can be a value of \ref GUI_LED_TYPE_t enumeration
+ * \param[in]       type: New type for LED
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -190,7 +190,7 @@ gui_led_toggle(gui_handle_p h) {
 /**
  * \brief           Set LED value either on (turn on) or off (turn off)
  * \param[in,out]   h: Widget handle
- * \param[in]       state: LED state, either 1 or 0 according to selected state
+ * \param[in]       state: LED state, either `1` or `0` according to selected state
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -209,10 +209,10 @@ gui_led_ison(gui_handle_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+    
     __GUI_LEAVE(1);                                 /* Enter GUI */
-    
     ret = !!(__GL(h)->flags & GUI_LED_FLAG_ON);
-    
     __GUI_LEAVE(1);                                 /* Leave GUI */
+
     return ret;
 }

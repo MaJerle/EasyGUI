@@ -101,7 +101,7 @@ static int16_t
 nr_entries_pp(gui_handle_p h) {
     int16_t res = 0;
     if (h->font != NULL) {                          /* Font is responsible for this setup */
-        gui_dim_t height = guii_widget_getheight(h);    /* Get item height */
+        gui_dim_t height = guii_widget_getheight(h);/* Get item height */
         if (!is_opened(h)) {
             height *= HEIGHT_CONST(h) - 1;          /* Get height of opened area part */
         } else {
@@ -512,14 +512,14 @@ gui_dropdown_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
 /**
  * \brief           Create new dropdown widget
  * \param[in]       id: Widget unique ID to use for identity for callback processing
- * \param[in]       x: Widget X position relative to parent widget
- * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       x: Widget `X` position relative to parent widget
+ * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
- * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
- * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
+ * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
+ * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
- * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
+ * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
 gui_dropdown_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {

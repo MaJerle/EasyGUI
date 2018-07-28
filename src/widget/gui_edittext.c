@@ -184,14 +184,14 @@ gui_edittext_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
 /**
  * \brief           Create new edit text widget
  * \param[in]       id: Widget unique ID to use for identity for callback processing
- * \param[in]       x: Widget X position relative to parent widget
- * \param[in]       y: Widget Y position relative to parent widget
+ * \param[in]       x: Widget `X` position relative to parent widget
+ * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
- * \param[in]       parent: Parent widget handle. Set to NULL to use current active parent widget
- * \param[in]       cb: Pointer to \ref gui_widget_callback_t callback function. Set to NULL to use default widget callback
+ * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
+ * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
- * \return          \ref gui_handle_p object of created widget on success, NULL otherwise
+ * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
 gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
@@ -201,7 +201,7 @@ gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gu
 /**
  * \brief           Set color to specific part of widget
  * \param[in,out]   h: Widget handle
- * \param[in]       index: Color index. This parameter can be a value of \ref GUI_EDITTEXT_COLOR_t enumeration
+ * \param[in]       index: Color index
  * \param[in]       color: Color value
  * \return          `1` on success, `0` otherwise
  */
@@ -215,7 +215,7 @@ gui_edittext_setcolor(gui_handle_p h, gui_edittext_color_t index, gui_color_t co
  * \brief           Set edit text to multi line mode
  * \note            When multiline is enabled, vertical text alignment is always top positioned
  * \param[in,out]   h: Widget handle
- * \param[in]       multiline: Set to 1 to enable multiline or 0 to disable
+ * \param[in]       multiline: Set to `1` to enable multiline or `0` to disable
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -227,7 +227,7 @@ gui_edittext_setmultiline(gui_handle_p h, uint8_t multiline) {
 /**
  * \brief           Set vertical align for text inside text box
  * \param[in,out]   h: Widget handle
- * \param[in]       align: Vertical align. This parameter can be a value of \ref GUI_EDITTEXT_VALIGN_t enumeration
+ * \param[in]       align: Vertical align
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -239,7 +239,7 @@ gui_edittext_setvalign(gui_handle_p h, gui_edittext_valign_t align) {
 /**
  * \brief           Set horizontal align for text inside text box
  * \param[in,out]   h: Widget handle
- * \param[in]       align: Vertical align. This parameter can be a value of \ref GUI_EDITTEXT_HALIGN_t enumeration
+ * \param[in]       align: Vertical align
  * \return          `1` on success, `0` otherwise
  */
 uint8_t

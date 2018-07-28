@@ -314,8 +314,8 @@ gui_ll_init(gui_lcd_t* LCD, gui_ll_t* LL) {
 /**
  * \brief           Send command to for LCD from GUI
  * \param[in,out]   LCD: Pointer to \ref gui_lcd_t structure with LCD properties
- * \param[in]       cmd: Command to be executed. This parameter can be a value of \ref GUI_LL_Command_t enumeration
- * \param[in]       param: Optional data included in command. Check \ref GUI_LL_Command_t enumeration what is used for each command
+ * \param[in]       cmd: Command to be executed
+ * \param[in]       param: Optional data included in command
  * \param[out]      result: Result from command
  * \return          1 on success, 0 otherwise
  */
