@@ -28,8 +28,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_BUFFER_H
-#define __GUI_BUFFER_H
+#ifndef __GUI_BUFF_H
+#define __GUI_BUFF_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -50,10 +50,6 @@ extern "C" {
 
 #define GUI_BUFFER_INITIALIZED      0x01    /*!< Buffer initialized flag */
 #define GUI_BUFFER_MALLOC           0x02    /*!< Buffer uses malloc for memory */
-
-#ifndef GUI_BUFFER_FAST
-#define GUI_BUFFER_FAST             1
-#endif
 
 /**
  * \brief  Buffer structure
@@ -84,4 +80,4 @@ void gui_buffer_reset(gui_buff_t* buff);
 }
 #endif
 
-#endif /* __GUI_BUFFER_H */
+#endif /* __GUI_BUFF_H */
