@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
@@ -110,22 +112,18 @@ mem_assignmem(const mem_region_t* regions, size_t len) {
         return 0;
     }
     
-    /*
-     * Check if region address are linear and rising
-     */
+    /* Check if region address are linear and rising */
     MemStartAddr = (uint8_t *)0;
     for (i = 0; i < len; i++) {
-        if (MemStartAddr >= (uint8_t *)regions[i].StartAddress) {   /* Check if previous greater than current */
+        if (MemStartAddr >= (uint8_t *)regions[i].start_address) {  /* Check if previous greater than current */
             return 0;                               /* Return as invalid and failed */
         }
-        MemStartAddr = (uint8_t *)regions[i].StartAddress;  /* Save as previous address */
+        MemStartAddr = (uint8_t *)regions[i].start_address; /* Save as previous address */
     }
 
     while (len--) {
-        /*
-         * Check minimum region size
-         */
-        MemSize = regions->Size;
+        /* Check minimum region size */
+        MemSize = regions->size;
         if (MemSize < (MEM_ALIGN_NUM + MEMBLOCK_METASIZE)) {
             regions++;
             continue;
@@ -134,10 +132,10 @@ mem_assignmem(const mem_region_t* regions, size_t len) {
          * Get start address and check memory alignment
          * if necessary, decrease memory region size
          */
-        MemStartAddr = (uint8_t *)regions->StartAddress;    /* Actual heap memory address */
+        MemStartAddr = (uint8_t *)regions->start_address;   /* Actual heap memory address */
         if ((size_t)MemStartAddr & MEM_ALIGN_BITS) {    /* Check alignment boundary */
             MemStartAddr += MEM_ALIGN_NUM - ((size_t)MemStartAddr & MEM_ALIGN_BITS);
-            MemSize -= MemStartAddr - (uint8_t *)regions->StartAddress;
+            MemSize -= MemStartAddr - (uint8_t *)regions->start_address;
         }
         
         /* Check memory size alignment if match */
@@ -368,13 +366,13 @@ mem_getminfree(void) {
  * \return          >0: Pointer to allocated memory
  */
 void*
-gui_mem_alloc(uint32_t size) {
+gui_mem_alloc(uint32_t size, const uint8_t protect) {
     void* ptr;
 
 #if GUI_CFG_USE_MEM
-    __GUI_SYS_PROTECT(1);                           /* Lock system protection */
+    __GUI_SYS_PROTECT(protect);                     /* Lock system protection */
     ptr = mem_alloc(size);                          /* Allocate memory and return pointer */ 
-    __GUI_SYS_UNPROTECT(1);                         /* Unlock protection */
+    __GUI_SYS_UNPROTECT(protect);                   /* Unlock protection */
 #else /* GUI_CFG_USE_MEM */
     ptr = malloc(size);
 #endif /* !GUI_CFG_USE_MEM */
@@ -392,11 +390,11 @@ gui_mem_alloc(uint32_t size) {
  * \return          Allocated memory on success, NULL otherwise
  */
 void*
-gui_mem_realloc(void* ptr, size_t size) {
+gui_mem_realloc(void* ptr, size_t size, const uint8_t protect) {
 #if GUI_CFG_USE_MEM
-    __GUI_SYS_PROTECT(1);                           /* Lock system protection */
+    __GUI_SYS_PROTECT(protect);                     /* Lock system protection */
     ptr = mem_realloc(ptr, size);                   /* Reallocate and return pointer */
-    __GUI_SYS_UNPROTECT(1);                         /* Unlock protection */
+    __GUI_SYS_UNPROTECT(protect);                   /* Unlock protection */
 #else /* GUI_CFG_USE_MEM */
     ptr = realloc(ptr, size);
 #endif /* GUI_CFG_USE_MEM */
@@ -411,13 +409,13 @@ gui_mem_realloc(void* ptr, size_t size) {
  * \return          Allocated memory on success, NULL otherwise
  */
 void*
-gui_mem_calloc(size_t num, size_t size) {
+gui_mem_calloc(size_t num, size_t size, const uint8_t protect) {
     void* ptr;
 
 #if GUI_CFG_USE_MEM
-    __GUI_SYS_PROTECT(1);                           /* Lock system protection */
+    __GUI_SYS_PROTECT(protect);                     /* Lock system protection */
     ptr = mem_calloc(num, size);                    /* Allocate memory and clear it to 0. Then return pointer */
-    __GUI_SYS_UNPROTECT(1);                         /* Unlock protection */
+    __GUI_SYS_UNPROTECT(protect);                   /* Unlock protection */
 #else /* GUI_CFG_USE_MEM */
     ptr = calloc(num, size);
 #endif /* !GUI_CFG_USE_MEM */
@@ -429,11 +427,11 @@ gui_mem_calloc(size_t num, size_t size) {
  * \param[in]       ptr: Pointer to memory previously returned using \ref gui_mem_alloc, \ref gui_mem_calloc or \ref gui_mem_realloc functions
  */
 void
-gui_mem_free(void* ptr) {
+gui_mem_free(void* ptr, const uint8_t protect) {
 #if GUI_CFG_USE_MEM
-    __GUI_SYS_PROTECT(1);                           /* Lock system protection */
+    __GUI_SYS_PROTECT(protect);                     /* Lock system protection */
     mem_free(ptr);                                  /* Free already allocated memory */
-    __GUI_SYS_UNPROTECT(1);                         /* Unlock protection */
+    __GUI_SYS_UNPROTECT(protect);                   /* Unlock protection */
 #else /* GUI_CFG_USE_MEM */
     free(ptr);
 #endif /* !GUI_CFG_USE_MEM */
@@ -477,7 +475,7 @@ gui_mem_getminfree(void) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_mem_assignmemory(const GUI_MEM_Region_t* regions, size_t len) {
+gui_mem_assignmemory(const gui_mem_region_t* regions, size_t len) {
     uint8_t ret;
     
     __GUI_SYS_PROTECT(1);                           /* Enter GUI */

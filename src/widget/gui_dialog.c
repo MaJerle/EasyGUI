@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
@@ -72,10 +74,10 @@ static dissmissed_dialog_list_t *
 add_to_active_dialogs(gui_handle_p h) {
     dissmissed_dialog_list_t* l;
     
-    l = GUI_MEMALLOC(sizeof(*l));                   /* Allocate memory for dismissed dialog list */
+    l = GUI_MEMALLOC(sizeof(*l), 0);                /* Allocate memory for dismissed dialog list */
     if (l != NULL) {
         l->h = h;
-        l->id = guii_widget_getid(h);
+        l->id = gui_widget_getid(h, 0);
         gui_linkedlist_add_gen(&ddlist, &l->list);  /* Add entry to linked list */
     }
     return l;
@@ -85,7 +87,7 @@ add_to_active_dialogs(gui_handle_p h) {
 static void
 remove_from_active_dialogs(dissmissed_dialog_list_t* l) {
     gui_linkedlist_remove_gen(&ddlist, &l->list);   /* Remove entry from linked list first */
-    GUI_MEMFREE(l);                                 /* Free memory */
+    GUI_MEMFREE(l, 0);                              /* Free memory */
 }
 
 /* Get entry from linked list for specific dialog */
@@ -94,7 +96,7 @@ get_dialog(gui_handle_p h) {
     dissmissed_dialog_list_t* l = NULL;
     gui_id_t id;
     
-    id = guii_widget_getid(h);                     /* Get id of widget */
+    id = gui_widget_getid(h, 0);                    /* Get id of widget */
     
     for (l = (dissmissed_dialog_list_t *)gui_linkedlist_getnext_gen((gui_linkedlistroot_t *)&ddlist, NULL); l != NULL;
         l = (dissmissed_dialog_list_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)l)) {
@@ -136,20 +138,20 @@ gui_dialog_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_dialog_create(gui_id_t id, float x, float y, float width, float height, gui_widget_createfunc_t func, gui_widget_callback_t cb, uint16_t flags) {
+gui_dialog_create(gui_id_t id, float x, float y, float width, float height, gui_widget_createfunc_t func, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
     gui_handle_p ptr;
     if (func == NULL) {                             /* Check create function */
         return NULL;
     }
-    
-    ptr = func(id, x, y, width, height, NULL, cb, flags | GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);   /* Create desired widget */
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    ptr = func(id, x, y, width, height, NULL, cb, flags | GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP, 0);    /* Create desired widget */
     if (ptr != NULL) {
-        __GUI_LEAVE(1);                             /* Enter GUI */
         guii_widget_setflag(ptr, GUI_FLAG_WIDGET_DIALOG_BASE); /* Add dialog base flag to widget */
         gui_linkedlist_widgetmovetobottom(ptr);     /* Move to bottom on linked list make it on top now with flag set as dialog */
         add_to_active_dialogs(ptr);                 /* Add this dialog to active dialogs */
-        __GUI_LEAVE(1);                             /* Leave GUI */
     }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return (gui_handle_p)ptr;
 }
@@ -174,11 +176,11 @@ gui_dialog_createblocking(gui_id_t id, gui_dim_t x, gui_dim_t y, gui_dim_t width
     gui_handle_p ptr;
     int resp = -1;                                  /* Dialog not created error */
     
-    ptr = gui_dialog_create(id, x, y, width, height, func, cb, flags);  /* Create dialog first */
+    __GUI_ENTER(1);                                 /* Enter GUI */
+    ptr = gui_dialog_create(id, x, y, width, height, func, cb, flags, 0);   /* Create dialog first */
     if (ptr != NULL) {                              /* Widget created */
         dissmissed_dialog_list_t* l;
         
-        __GUI_LEAVE(1);                             /* Enter GUI */
         l = get_dialog(ptr);                        /* Get entry from active dialogs */
         if (l != NULL) {                            /* Check if successfully added widget to active dialogs */
             l->ib = 1;                              /* Blocking entry */
@@ -190,13 +192,13 @@ gui_dialog_createblocking(gui_id_t id, gui_dim_t x, gui_dim_t y, gui_dim_t width
                 resp = l->status;                   /* Get new status */
                 remove_from_active_dialogs(l);      /* Remove from active dialogs */
             } else {
-                guii_widget_remove(ptr);           /* Remove widget */
+                gui_widget_remove(&ptr, 0);         /* Remove widget */
             }
         } else {
-            guii_widget_remove(ptr);               /* Remove widget */
+            gui_widget_remove(&ptr, 0);             /* Remove widget */
         }
-        __GUI_LEAVE(1);                             /* Leave GUI */
     }
+    __GUI_LEAVE(1);                                 /* Leave GUI */
     
     return resp;
 }
@@ -209,15 +211,15 @@ gui_dialog_createblocking(gui_id_t id, gui_dim_t x, gui_dim_t y, gui_dim_t width
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_dialog_dismiss(gui_handle_p h, int status) {
+gui_dialog_dismiss(gui_handle_p h, int status, const uint8_t protect) {
     dissmissed_dialog_list_t* l;
     uint8_t ret = 0;
     gui_widget_param_t param = {0};
     
     /* Do not check widget type as it is not dialog type but create function widget type */
     __GUI_ASSERTPARAMS(h);                          /* Check input parameters */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
     l = get_dialog(h);                              /* Get entry from list */
     if (l != NULL) {
         l->status = status;                         /* Save status for later */
@@ -232,9 +234,9 @@ gui_dialog_dismiss(gui_handle_p h, int status) {
         {
             remove_from_active_dialogs(l);          /* Remove from active dialogs */
         }
-        guii_widget_remove(h);                     /* Remove widget */
+        gui_widget_remove(&h, 0);                   /* Remove widget */
     }
-    
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return ret;
 }

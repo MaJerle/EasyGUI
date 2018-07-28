@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
@@ -115,19 +117,19 @@ gui_edittext_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
             gui_dim_t x, y, width, height;
             gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
     
-            x = guii_widget_getabsolutex(h);       /* Get absolute X coordinate */
-            y = guii_widget_getabsolutey(h);       /* Get absolute Y coordinate */
-            width = guii_widget_getwidth(h);       /* Get widget width */
-            height = guii_widget_getheight(h);     /* Get widget height */
+            x = guii_widget_getabsolutex(h);        /* Get absolute X coordinate */
+            y = guii_widget_getabsolutey(h);        /* Get absolute Y coordinate */
+            width = gui_widget_getwidth(h, 0);      /* Get widget width */
+            height = gui_widget_getheight(h, 0);    /* Get widget height */
             
             gui_draw_rectangle3d(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
             gui_draw_filledrectangle(disp, x + 2, y + 2, width - 4, height - 4, guii_widget_getcolor(h, GUI_EDITTEXT_COLOR_BG));
             
-            if (guii_widget_isfocused(h)) {        /* Check if widget is in focus */
+            if (guii_widget_isfocused(h)) {         /* Check if widget is in focus */
                 gui_draw_rectangle(disp, x + 3, y + 3, width - 6, height - 6, guii_widget_getcolor(h, GUI_EDITTEXT_COLOR_BORDER));
             }
             
-            if (guii_widget_isfontandtextset(h)) { /* Ready to write string */
+            if (guii_widget_isfontandtextset(h)) {  /* Ready to write string */
                 gui_draw_font_t f;
                 gui_draw_font_init(&f);             /* Init font drawing */
                 
@@ -144,18 +146,18 @@ gui_edittext_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                     f.flags |= GUI_FLAG_FONT_MULTILINE; /* Set multiline flag for widget */
                 }
                 
-                gui_draw_writetext(disp, guii_widget_getfont(h), guii_widget_gettext(h), &f);
+                gui_draw_writetext(disp, gui_widget_getfont(h, 0), gui_widget_gettext(h, 0), &f);
             }
             return 1;
         }
         case GUI_WC_FocusIn:
 #if GUI_CFG_USE_KEYBOARD
-            guii_keyboard_show(h);                 /* Show keyboard */
+            gui_keyboard_show(h, 0);                /* Show keyboard */
 #endif /* GUI_CFG_USE_KEYBOARD */
             return 1;
         case GUI_WC_FocusOut:
 #if GUI_CFG_USE_KEYBOARD
-            guii_keyboard_hide();                  /* Hide keyboard */
+            gui_keyboard_hide( 0);                  /* Hide keyboard */
 #endif /* GUI_CFG_USE_KEYBOARD */
             return 1;
 #if GUI_CFG_USE_TOUCH
@@ -194,8 +196,8 @@ gui_edittext_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
+    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
 }
 
 /**

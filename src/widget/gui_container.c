@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
@@ -75,8 +77,8 @@ gui_container_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param,
             
             x = guii_widget_getabsolutex(h);
             y = guii_widget_getabsolutey(h);
-            wi = guii_widget_getwidth(h);
-            hi = guii_widget_getheight(h);
+            wi = gui_widget_getwidth(h, 0);
+            hi = gui_widget_getheight(h, 0);
  
             gui_draw_filledrectangle(disp, x, y, wi, hi, guii_widget_getcolor(h, GUI_CONTAINER_COLOR_BG));
             
@@ -101,8 +103,8 @@ gui_container_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param,
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_container_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+gui_container_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
+    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
 }
 
 /**
@@ -113,7 +115,7 @@ gui_container_create(gui_id_t id, float x, float y, float width, float height, g
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_container_setcolor(gui_handle_p h, gui_container_color_t index, gui_color_t color) {
+gui_container_setcolor(gui_handle_p h, gui_container_color_t index, gui_color_t color, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, protect); /* Set color */
 }

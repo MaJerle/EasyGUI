@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #ifndef __GUI_DIALOG_H
@@ -54,9 +56,9 @@ typedef struct {
 } GUI_DIALOG_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p    gui_dialog_create(gui_id_t id, float x, float y, float width, float height, gui_widget_createfunc_t func, gui_widget_callback_t cb, uint16_t flags);
+gui_handle_p    gui_dialog_create(gui_id_t id, float x, float y, float width, float height, gui_widget_createfunc_t func, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect);
 int             gui_dialog_createblocking(gui_id_t id, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_widget_createfunc_t func, gui_widget_callback_t cb, uint16_t flags);
-uint8_t         gui_dialog_dismiss(gui_handle_p h, int status);
+uint8_t         gui_dialog_dismiss(gui_handle_p h, int status, const uint8_t protect);
 
 /**
  * \}

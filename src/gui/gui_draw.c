@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
@@ -356,7 +358,7 @@ create_char_entry_from_font(const gui_font_t* font, const gui_font_char_t* c) {
     memDataSize = c->x_size * c->y_size;
     
     memsize += GUI_MEM_ALIGN(memDataSize);          /* align memory before increase */
-    entry = GUI_MEMALLOC(memsize);                  /* Allocate memory for entry */
+    entry = GUI_MEMALLOC(memsize, 0);               /* Allocate memory for entry */
     if (entry != NULL) {                            /* Allocation was successful */
         uint16_t i, x;
         uint8_t b, k, t;

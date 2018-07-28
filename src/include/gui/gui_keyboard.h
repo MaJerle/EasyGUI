@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #ifndef __GUI_KEYBOARD_H
@@ -46,24 +48,9 @@ extern "C" {
  * \{
  */
     
-/**
- * \defgroup        GUI_KEYBOARD_Private Private functions
- * \brief           Private keyboard functions
- * \{
- *
- * \note            This function may be called only when GUI core is protected
- */
- 
-uint8_t     guii_keyboard_hide(void);
-uint8_t     guii_keyboard_show(gui_handle_p h);
-    
-/**
- * \}
- */
-    
-gui_handle_p    gui_keyboard_create(void);
-uint8_t         gui_keyboard_hide(void);
-uint8_t         gui_keyboard_show(gui_handle_p h);
+gui_handle_p    gui_keyboard_create(const uint8_t protect);
+uint8_t         gui_keyboard_hide(const uint8_t protect);
+uint8_t         gui_keyboard_show(gui_handle_p h, const uint8_t protect);
     
 /**
  * \}

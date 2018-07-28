@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
@@ -76,7 +78,7 @@ gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
-            guii_widget_set3dstyle(h, 1);          /* By default set 3D */
+            gui_widget_set3dstyle(h, 1, 0);         /* By default set 3D */
             return 1;
         }
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
@@ -93,10 +95,10 @@ gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
             gui_color_t c1, c2;
             gui_dim_t x, y, width, height;
             
-            x = guii_widget_getabsolutex(h);       /* Get absolute X coordinate */
-            y = guii_widget_getabsolutey(h);       /* Get absolute Y coordinate */
-            width = guii_widget_getwidth(h);       /* Get widget width */
-            height = guii_widget_getheight(h);     /* Get widget height */
+            x = guii_widget_getabsolutex(h);        /* Get absolute X coordinate */
+            y = guii_widget_getabsolutey(h);        /* Get absolute Y coordinate */
+            width = gui_widget_getwidth(h, 0);      /* Get widget width */
+            height = gui_widget_getheight(h, 0);    /* Get widget height */
             
             if (guii_widget_getflag(h, GUI_FLAG_3D)) {
                 c1 = guii_widget_getcolor(h, GUI_BUTTON_COLOR_BG);
@@ -132,7 +134,7 @@ gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
                 f.align = GUI_HALIGN_CENTER | GUI_VALIGN_CENTER;
                 f.color1width = f.width;
                 f.color1 = c2;
-                gui_draw_writetext(disp, guii_widget_getfont(h), guii_widget_gettext(h), &f);
+                gui_draw_writetext(disp, gui_widget_getfont(h, 0), gui_widget_gettext(h, 0), &f);
             }
             return 1;
         }
@@ -171,8 +173,8 @@ gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
  * \return          \ref widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
+    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
 }
 
 /**

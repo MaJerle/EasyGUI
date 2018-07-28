@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
@@ -305,7 +307,7 @@ gui_linkedlistmulti_t *
 gui_linkedlist_multi_add_gen(gui_linkedlistroot_t* root, void* element) {
     gui_linkedlistmulti_t* ptr;
     
-    ptr = GUI_MEMALLOC(sizeof(gui_linkedlistmulti_t));  /* Create memory for linked list */
+    ptr = GUI_MEMALLOC(sizeof(gui_linkedlistmulti_t), 0);   /* Create memory for linked list */
     if (ptr != NULL) {
         ptr->element = element;                     /* Save pointer to our element */
         gui_linkedlist_add_gen(root, &ptr->list);   /* Add element to linked list */
@@ -328,7 +330,7 @@ gui_linkedlist_multi_remove_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_
         return 0;
     }
     gui_linkedlist_remove_gen(root, (gui_linkedlist_t *)element); /* Remove element from linked list */
-    GUI_MEMFREE(element);                           /* Free memory */
+    GUI_MEMFREE(element, 0);                        /* Free memory */
     return 1;
 }
 

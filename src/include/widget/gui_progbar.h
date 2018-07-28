@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #ifndef __GUI_PROGBAR_H
@@ -69,16 +71,16 @@ typedef struct {
 } gui_progbar_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p    gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
-uint8_t         gui_progbar_setcolor(gui_handle_p h, gui_progbar_color_t index, gui_color_t color);
-uint8_t         gui_progbar_setmin(gui_handle_p h, int32_t val);
-uint8_t         gui_progbar_setmax(gui_handle_p h, int32_t val);
-uint8_t         gui_progbar_setvalue(gui_handle_p h, int32_t val);
-uint8_t         gui_progbar_setanimation(gui_handle_p h, uint8_t anim);
-int32_t         gui_progbar_getmin(gui_handle_p h);
-int32_t         gui_progbar_getmax(gui_handle_p h);
-int32_t         gui_progbar_getvalue(gui_handle_p h);
-uint8_t         gui_progbar_setpercentmode(gui_handle_p h, uint8_t enable);
+gui_handle_p    gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect);
+uint8_t         gui_progbar_setcolor(gui_handle_p h, gui_progbar_color_t index, gui_color_t color, const uint8_t protect);
+uint8_t         gui_progbar_setmin(gui_handle_p h, int32_t val, const uint8_t protect);
+uint8_t         gui_progbar_setmax(gui_handle_p h, int32_t val, const uint8_t protect);
+uint8_t         gui_progbar_setvalue(gui_handle_p h, int32_t val, const uint8_t protect);
+uint8_t         gui_progbar_setanimation(gui_handle_p h, uint8_t anim, const uint8_t protect);
+int32_t         gui_progbar_getmin(gui_handle_p h, const uint8_t protect);
+int32_t         gui_progbar_getmax(gui_handle_p h, const uint8_t protect);
+int32_t         gui_progbar_getvalue(gui_handle_p h, const uint8_t protect);
+uint8_t         gui_progbar_setpercentmode(gui_handle_p h, uint8_t enable, const uint8_t protect);
 
 /**
  * \}

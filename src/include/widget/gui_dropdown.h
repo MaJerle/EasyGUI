@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #ifndef __GUI_DROPDOWN_H
@@ -107,19 +109,19 @@ typedef struct {
 } gui_dropdown_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p    gui_dropdown_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
-uint8_t         gui_dropdown_setcolor(gui_handle_p h, gui_dropdown_color_t index, gui_color_t color);
-uint8_t         gui_dropdown_addstring(gui_handle_p h, const gui_char* text);
-uint8_t         gui_dropdown_deletefirststring(gui_handle_p h);
-uint8_t         gui_dropdown_deletelaststring(gui_handle_p h);
-uint8_t         gui_dropdown_deletestring(gui_handle_p h, uint16_t index);
-uint8_t         gui_dropdown_setstring(gui_handle_p h, uint16_t index, const gui_char* text);
-uint8_t         gui_dropdown_setselection(gui_handle_p h, int16_t selection);
-int16_t         gui_dropdown_getselection(gui_handle_p h);
-uint8_t         gui_dropdown_setsliderauto(gui_handle_p h, uint8_t autoMode);
-uint8_t         gui_dropdown_setslidervisibility(gui_handle_p h, uint8_t visible);
-uint8_t         gui_dropdown_scroll(gui_handle_p h, int16_t step);
-uint8_t         gui_dropdown_setopendirection(gui_handle_p h, gui_dropdown_opendir_t dir);
+gui_handle_p    gui_dropdown_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect);
+uint8_t         gui_dropdown_setcolor(gui_handle_p h, gui_dropdown_color_t index, gui_color_t color, const uint8_t protect);
+uint8_t         gui_dropdown_addstring(gui_handle_p h, const gui_char* text, const uint8_t protect);
+uint8_t         gui_dropdown_deletefirststring(gui_handle_p h, const uint8_t protect);
+uint8_t         gui_dropdown_deletelaststring(gui_handle_p h, const uint8_t protect);
+uint8_t         gui_dropdown_deletestring(gui_handle_p h, uint16_t index, const uint8_t protect);
+uint8_t         gui_dropdown_setstring(gui_handle_p h, uint16_t index, const gui_char* text, const uint8_t protect);
+uint8_t         gui_dropdown_setselection(gui_handle_p h, int16_t selection, const uint8_t protect);
+int16_t         gui_dropdown_getselection(gui_handle_p h, const uint8_t protect);
+uint8_t         gui_dropdown_setsliderauto(gui_handle_p h, uint8_t autoMode, const uint8_t protect);
+uint8_t         gui_dropdown_setslidervisibility(gui_handle_p h, uint8_t visible, const uint8_t protect);
+uint8_t         gui_dropdown_scroll(gui_handle_p h, int16_t step, const uint8_t protect);
+uint8_t         gui_dropdown_setopendirection(gui_handle_p h, gui_dropdown_opendir_t dir, const uint8_t protect);
     
 /**
  * \}

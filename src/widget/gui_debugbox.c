@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
@@ -78,7 +80,7 @@ static int16_t
 nr_entries_pp(gui_handle_p h) {
     int16_t res = 0;
     if (h->font != NULL) {                          /* Font is responsible for this setup */
-        res = guii_widget_getheight(h) / item_height(h, NULL);
+        res = gui_widget_getheight(h, 0) / item_height(h, NULL);
     }
     return res;
 }
@@ -155,10 +157,10 @@ gui_debugbox_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
             gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
             gui_dim_t x, y, width, height;
             
-            x = guii_widget_getabsolutex(h);       /* Get absolute X coordinate */
-            y = guii_widget_getabsolutey(h);       /* Get absolute Y coordinate */
-            width = guii_widget_getwidth(h);       /* Get widget width */
-            height = guii_widget_getheight(h);     /* Get widget height */
+            x = guii_widget_getabsolutex(h);        /* Get absolute X coordinate */
+            y = guii_widget_getabsolutey(h);        /* Get absolute Y coordinate */
+            width = gui_widget_getwidth(h, 0);      /* Get widget width */
+            height = gui_widget_getheight(h, 0);    /* Get widget height */
             
             gui_draw_rectangle3d(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
             gui_draw_filledrectangle(disp, x + 2, y + 2, width - 4, height - 4, guii_widget_getcolor(h, GUI_DEBUGBOX_COLOR_BG));
@@ -214,7 +216,7 @@ gui_debugbox_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                         continue;
                     }
                     f.color1 = guii_widget_getcolor(h, GUI_DEBUGBOX_COLOR_TEXT);
-                    gui_draw_writetext(disp, guii_widget_getfont(h), item->text, &f);
+                    gui_draw_writetext(disp, gui_widget_getfont(h, 0), item->text, &f);
                     f.y += itemheight;
                 }
                 disp->y2 = tmp;
@@ -225,7 +227,7 @@ gui_debugbox_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
         case GUI_WC_Remove: {
             gui_debugbox_item_t* item;
             while ((item = (gui_debugbox_item_t *)gui_linkedlist_remove_gen(&o->root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&o->root, NULL))) != NULL) {
-                GUI_MEMFREE(item);                  /* Free memory */
+                GUI_MEMFREE(item, 0);               /* Free memory */
             }
             return 1;
         }
@@ -253,8 +255,8 @@ gui_debugbox_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
 #endif /* GUI_CFG_USE_TOUCH */
         case GUI_WC_Click: {
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            gui_dim_t width = guii_widget_getwidth(h);  /* Get widget widget */
-            gui_dim_t height = guii_widget_getheight(h);/* Get widget height */
+            gui_dim_t width = gui_widget_getwidth(h, 0);/* Get widget widget */
+            gui_dim_t height = gui_widget_getheight(h, 0);  /* Get widget height */
             
             if (o->flags & GUI_FLAG_DEBUGBOX_SLIDER_ON) {
                 if (ts->x_rel[0] > (width - o->sliderwidth)) {  /* Touch is inside slider */
@@ -287,21 +289,21 @@ gui_debugbox_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_debugbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+gui_debugbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
+    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
 }
 
 /**
  * \brief           Set color to debugbox
  * \param[in,out]   h: Widget handle
- * \param[in]       index: Index in array of colors. This parameter can be a value of \ref GUI_DEBUGBOX_COLOR_t enumeration
- * \param[in]       color: Actual color code to set
+ * \param[in]       index: Color index
+ * \param[in]       color: Color value
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_debugbox_setcolor(gui_handle_p h, GUI_DEBUGBOX_COLOR_t index, gui_color_t color) {
+gui_debugbox_setcolor(gui_handle_p h, gui_debugbox_color_t index, gui_color_t color, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, protect); /* Set color */
 }
 
 /**
@@ -311,15 +313,15 @@ gui_debugbox_setcolor(gui_handle_p h, GUI_DEBUGBOX_COLOR_t index, gui_color_t co
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_debugbox_addstring(gui_handle_p h, const gui_char* text) {
+gui_debugbox_addstring(gui_handle_p h, const gui_char* text, const uint8_t protect) {
     gui_debugbox_item_t* item;
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    
-    item = GUI_MEMALLOC(sizeof(*item) + gui_string_lengthtotal(text) + 1);  /* Allocate memory for entry */
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    item = GUI_MEMALLOC(sizeof(*item) + gui_string_lengthtotal(text) + 1, 0);   /* Allocate memory for entry */
     if (item != NULL) {
-        __GUI_LEAVE(1);                             /* Enter GUI */
         item->text = (void *)((char *)item + sizeof(*item));/* Add text to entry */
         gui_string_copy(item->text, text);          /* Copy text */
         gui_linkedlist_add_gen(&__GL(h)->root, &item->list);/* Add to linked list */
@@ -336,7 +338,7 @@ gui_debugbox_addstring(gui_handle_p h, const gui_char* text) {
             firstItem = (gui_debugbox_item_t *)gui_linkedlist_getnext_gen(&__GL(h)->root, NULL);
             if (firstItem != NULL) {
                 gui_linkedlist_remove_gen(&__GL(h)->root, (gui_linkedlist_t *)firstItem);
-                GUI_MEMFREE(firstItem);
+                GUI_MEMFREE(firstItem, 0);
                 __GL(h)->count--;
             } else {
                 break;
@@ -345,11 +347,11 @@ gui_debugbox_addstring(gui_handle_p h, const gui_char* text) {
         
         __GL(h)->visiblestartindex = __GL(h)->count;/* Invalidate visible start index */
         check_values(h);                            /* Check values */
-        guii_widget_invalidate(h);                 /* Invalidate widget */
-        __GUI_LEAVE(1);                             /* Leave GUI */
+        guii_widget_invalidate(h);                  /* Invalidate widget */
         
         ret = 1;
     }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return ret;
 }
@@ -363,19 +365,19 @@ gui_debugbox_addstring(gui_handle_p h, const gui_char* text) {
  * \sa              gui_debugbox_setslidervisibility
  */
 uint8_t
-gui_debugbox_setsliderauto(gui_handle_p h, uint8_t autoMode) {
+gui_debugbox_setsliderauto(gui_handle_p h, uint8_t autoMode, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
     if (autoMode && !(__GL(h)->flags & GUI_FLAG_DEBUGBOX_SLIDER_AUTO)) {
         __GL(h)->flags |= GUI_FLAG_DEBUGBOX_SLIDER_AUTO;
-        guii_widget_invalidate(h);                 /* Invalidate widget */
+        guii_widget_invalidate(h);                  /* Invalidate widget */
     } else if (!autoMode && (__GL(h)->flags & GUI_FLAG_DEBUGBOX_SLIDER_AUTO)) {
         __GL(h)->flags &= ~GUI_FLAG_DEBUGBOX_SLIDER_AUTO;
-        guii_widget_invalidate(h);                 /* Invalidate widget */
+        guii_widget_invalidate(h);                  /* Invalidate widget */
     }
-    
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return 1;
 }
 
@@ -388,25 +390,25 @@ gui_debugbox_setsliderauto(gui_handle_p h, uint8_t autoMode) {
  * \sa              gui_debugbox_setsliderauto
  */
 uint8_t
-gui_debugbox_setslidervisibility(gui_handle_p h, uint8_t visible) {
+gui_debugbox_setslidervisibility(gui_handle_p h, uint8_t visible, const uint8_t protect) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
     if (!(__GL(h)->flags & GUI_FLAG_DEBUGBOX_SLIDER_AUTO)) {
         if (visible && !(__GL(h)->flags & GUI_FLAG_DEBUGBOX_SLIDER_ON)) {
             __GL(h)->flags |= GUI_FLAG_DEBUGBOX_SLIDER_ON;
-            guii_widget_invalidate(h);             /* Invalidate widget */
+            guii_widget_invalidate(h);              /* Invalidate widget */
             ret = 1;
         } else if (!visible && (__GL(h)->flags & GUI_FLAG_DEBUGBOX_SLIDER_ON)) {
             __GL(h)->flags &= ~GUI_FLAG_DEBUGBOX_SLIDER_ON;
-            guii_widget_invalidate(h);             /* Invalidate widget */
+            guii_widget_invalidate(h);              /* Invalidate widget */
             ret = 1;
         }
     }
-    
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return ret;
 }
 
@@ -417,24 +419,23 @@ gui_debugbox_setslidervisibility(gui_handle_p h, uint8_t visible) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_debugbox_scroll(gui_handle_p h, int16_t step) {
+gui_debugbox_scroll(gui_handle_p h, int16_t step, const uint8_t protect) {
     volatile int16_t start;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    
+    __GUI_ENTER(protect);                           /* Enter GUI */
+
     start = __GL(h)->visiblestartindex;
     __GL(h)->visiblestartindex += step;
-        
+
     check_values(h);                                /* Check widget values */
-    
     start = start != __GL(h)->visiblestartindex;    /* Check if there was valid change */
     
     if (start) {
         guii_widget_invalidate(h);
     }
-    
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return GUI_U8(start);
 }
 
@@ -445,12 +446,12 @@ gui_debugbox_scroll(gui_handle_p h, int16_t step) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_debugbox_setmaxitems(gui_handle_p h, int16_t max_items) {    
+gui_debugbox_setmaxitems(gui_handle_p h, int16_t max_items, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && max_items > 0);   /* Check input parameters */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
     __GL(h)->maxcount = max_items;
-    
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return 0;
 }

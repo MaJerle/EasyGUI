@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
@@ -187,8 +189,8 @@ gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
     
             x = guii_widget_getabsolutex(h);        /* Get absolute position on screen */
             y = guii_widget_getabsolutey(h);        /* Get absolute position on screen */
-            width = guii_widget_getwidth(h);        /* Get widget width */
-            height = guii_widget_getheight(h);      /* Get widget height */
+            width = gui_widget_getwidth(h, 0);      /* Get widget width */
+            height = gui_widget_getheight(h, 0);    /* Get widget height */
            
             w = ((width - 4) * (p->currentvalue - p->min)) / (p->max - p->min); /* Get width for active part */
             
@@ -205,7 +207,7 @@ gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
                     sprintf((char *)buff, "%lu%%", (unsigned long)(((p->currentvalue - p->min) * 100) / (p->max - p->min)));
                     text = buff;
                 } else if (guii_widget_isfontandtextset(h)) {
-                    text = guii_widget_gettext(h);
+                    text = gui_widget_gettext(h, 0);
                 }
                 
                 if (text != NULL) {                 /* If text is valid, print it */
@@ -220,7 +222,7 @@ gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
                     f.color1width = w ? w - 1 : 0;
                     f.color1 = guii_widget_getcolor(h, GUI_PROGBAR_COLOR_BG);
                     f.color2 = guii_widget_getcolor(h, GUI_PROGBAR_COLOR_FG);
-                    gui_draw_writetext(disp, guii_widget_getfont(h), text, &f);
+                    gui_draw_writetext(disp, gui_widget_getfont(h, 0), text, &f);
                 }
             }
         }
@@ -243,8 +245,8 @@ gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
+    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
 }
 
 /**
@@ -255,9 +257,9 @@ gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_progbar_setcolor(gui_handle_p h, gui_progbar_color_t index, gui_color_t color) {
+gui_progbar_setcolor(gui_handle_p h, gui_progbar_color_t index, gui_color_t color, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, protect); /* Set color */
 }
 
 /**
@@ -268,9 +270,9 @@ gui_progbar_setcolor(gui_handle_p h, gui_progbar_color_t index, gui_color_t colo
  * \sa              gui_progbar_setmin, gui_progbar_setmax, gui_progbar_getvalue, gui_progbar_getmin, gui_progbar_getmax  
  */
 uint8_t
-gui_progbar_setvalue(gui_handle_p h, int32_t val) {
+gui_progbar_setvalue(gui_handle_p h, int32_t val, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_VALUE, &val, 1, 0, 1);   /* Set parameter */
+    return guii_widget_setparam(h, CFG_VALUE, &val, 1, 0, protect); /* Set parameter */
 }
 
 /**
@@ -281,9 +283,9 @@ gui_progbar_setvalue(gui_handle_p h, int32_t val) {
  * \sa              gui_progbar_setvalue, gui_progbar_setmax, gui_progbar_getvalue, gui_progbar_getmin, gui_progbar_getmax         
  */
 uint8_t
-gui_progbar_setmin(gui_handle_p h, int32_t val) {
+gui_progbar_setmin(gui_handle_p h, int32_t val, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MIN, &val, 1, 0, 1); /* Set parameter */
+    return guii_widget_setparam(h, CFG_MIN, &val, 1, 0, protect);   /* Set parameter */
 }
 
 /**
@@ -294,9 +296,9 @@ gui_progbar_setmin(gui_handle_p h, int32_t val) {
  * \sa              gui_progbar_setmin, gui_progbar_setvalue, gui_progbar_getvalue, gui_progbar_getmin, gui_progbar_getmax  
  */
 uint8_t
-gui_progbar_setmax(gui_handle_p h, int32_t val) {
+gui_progbar_setmax(gui_handle_p h, int32_t val, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MAX, &val, 1, 0, 1); /* Set parameter */
+    return guii_widget_setparam(h, CFG_MAX, &val, 1, 0, protect);   /* Set parameter */
 }
 
 /**
@@ -306,9 +308,9 @@ gui_progbar_setmax(gui_handle_p h, int32_t val) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_progbar_setpercentmode(gui_handle_p h, uint8_t enable) {
+gui_progbar_setpercentmode(gui_handle_p h, uint8_t enable, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_PERCENT, &enable, 1, 0, 1);  /* Set parameter */
+    return guii_widget_setparam(h, CFG_PERCENT, &enable, 1, 0, protect);/* Set parameter */
 }
 
 /**
@@ -318,9 +320,9 @@ gui_progbar_setpercentmode(gui_handle_p h, uint8_t enable) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_progbar_setanimation(gui_handle_p h, uint8_t anim) {
+gui_progbar_setanimation(gui_handle_p h, uint8_t anim, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_ANIM, &anim, 1, 0, 1);   /* Set parameter */
+    return guii_widget_setparam(h, CFG_ANIM, &anim, 1, 0, protect); /* Set parameter */
 }
 
 /**
@@ -330,14 +332,14 @@ gui_progbar_setanimation(gui_handle_p h, uint8_t anim) {
  * \sa              gui_progbar_setmin, gui_progbar_setvalue, gui_progbar_setmax, gui_progbar_getvalue, gui_progbar_getmax  
  */
 int32_t
-gui_progbar_getmin(gui_handle_p h) {
+gui_progbar_getmin(gui_handle_p h, const uint8_t protect) {
     int32_t val;
 
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
 
-    __GUI_LEAVE(1);                                 /* Enter GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
     val = __GP(h)->min;                             /* Get minimal value */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
 
     return val;
 }
@@ -349,14 +351,14 @@ gui_progbar_getmin(gui_handle_p h) {
  * \sa              gui_progbar_setmin, gui_progbar_setvalue, gui_progbar_setmax, gui_progbar_getvalue, gui_progbar_getmin  
  */
 int32_t
-gui_progbar_getmax(gui_handle_p h) {
+gui_progbar_getmax(gui_handle_p h, const uint8_t protect) {
     int32_t val;
 
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
 
-    __GUI_LEAVE(1);                                 /* Enter GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
     val = __GP(h)->max;                             /* Get maximal value */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
 
     return val;
 }
@@ -368,14 +370,14 @@ gui_progbar_getmax(gui_handle_p h) {
  * \sa              gui_progbar_setmin, gui_progbar_setvalue, gui_progbar_setmax, gui_progbar_getmin, gui_progbar_getmax  
  */
 int32_t
-gui_progbar_getvalue(gui_handle_p h) {
+gui_progbar_getvalue(gui_handle_p h, const uint8_t protect) {
     int32_t val;
 
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
 
-    __GUI_LEAVE(1);                                 /* Enter GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
     val = __GP(h)->desiredvalue;                    /* Get current value */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
 
     return val;
 }

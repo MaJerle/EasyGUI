@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
@@ -68,10 +70,10 @@ calculate_limits(gui_handle_p h) {
     for (w = gui_linkedlist_widgetgetnext(h, NULL); w != NULL;
             w = gui_linkedlist_widgetgetnext(NULL, w)) {
 
-        x = guii_widget_getrelativex(w);           /* Get absolute position on screen */
-        y = guii_widget_getrelativey(w);           /* Get absolute position on screen */
-        width = guii_widget_getwidth(w);           /* Get widget width */
-        height = guii_widget_getheight(w);         /* Get widget height */
+        x = guii_widget_getrelativex(w);            /* Get absolute position on screen */
+        y = guii_widget_getrelativey(w);            /* Get absolute position on screen */
+        width = gui_widget_getwidth(w, 0);          /* Get widget width */
+        height = gui_widget_getheight(w, 0);        /* Get widget height */
 
         if (x + width > cmx) {
             cmx = x + width;
@@ -81,8 +83,8 @@ calculate_limits(gui_handle_p h) {
         }
     }
 
-    width = guii_widget_getinnerwidth(h);          /* Get widget width */
-    height = guii_widget_getinnerheight(h);        /* Get widget height */
+    width = guii_widget_getinnerwidth(h);           /* Get widget width */
+    height = guii_widget_getinnerheight(h);         /* Get widget height */
     
     l->maxscrollx = 0;
     l->maxscrolly = 0;
@@ -93,11 +95,11 @@ calculate_limits(gui_handle_p h) {
         l->maxscrolly = cmy - height;
     }
     
-    if (gui_widget_getscrollx(h) > l->maxscrollx) {
-        gui_widget_setscrollx(h, l->maxscrollx);
+    if (gui_widget_getscrollx(h, 0) > l->maxscrollx) {
+        gui_widget_setscrollx(h, l->maxscrollx, 0);
     }
-    if (gui_widget_getscrolly(h) > l->maxscrolly) {
-        gui_widget_setscrolly(h, l->maxscrolly);
+    if (gui_widget_getscrolly(h, 0) > l->maxscrolly) {
+        gui_widget_setscrolly(h, l->maxscrolly, 0);
     }
 }
 
@@ -114,7 +116,7 @@ gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* pa
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
-            gui_widget_setpadding(h, 3);            /* Set padding */
+            gui_widget_setpadding(h, 3, 0);         /* Set padding */
             return 1;
         }
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
@@ -139,8 +141,8 @@ gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* pa
             
             x = guii_widget_getabsolutex(h);        /* Get absolute position on screen */
             y = guii_widget_getabsolutey(h);        /* Get absolute position on screen */
-            width = guii_widget_getwidth(h);        /* Get widget width */
-            height = guii_widget_getheight(h);      /* Get widget height */
+            width = gui_widget_getwidth(h, 0);      /* Get widget width */
+            height = gui_widget_getheight(h, 0);    /* Get widget height */
             
             gui_draw_filledrectangle(disp, x, y, width, height, guii_widget_getcolor(h, GUI_LISTCONTAINER_COLOR_BG));
             return 1;                               /* */
@@ -164,15 +166,15 @@ gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* pa
              */
             GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
             if (l->mode == GUI_LISTCONTAINER_MODE_VERTICAL || l->mode == GUI_LISTCONTAINER_MODE_VERTICAL_HORIZONTAL) {
-                gui_widget_incscrolly(h, ts->y_rel_old[0] - ts->y_rel[0]);
-                if (gui_widget_getscrolly(h) < 0) {
-                    gui_widget_setscrolly(h, 0);
+                gui_widget_incscrolly(h, ts->y_rel_old[0] - ts->y_rel[0], 0);
+                if (gui_widget_getscrolly(h, 0) < 0) {
+                    gui_widget_setscrolly(h, 0, 0);
                 }
             }
             if (l->mode == GUI_LISTCONTAINER_MODE_HORIZONTAL || l->mode == GUI_LISTCONTAINER_MODE_VERTICAL_HORIZONTAL) {
-                gui_widget_incscrollx(h, ts->x_rel_old[0] - ts->x_rel[0]);
-                if (gui_widget_getscrollx(h) < 0) {
-                    gui_widget_setscrollx(h, 0);
+                gui_widget_incscrollx(h, ts->x_rel_old[0] - ts->x_rel[0], 0);
+                if (gui_widget_getscrollx(h, 0) < 0) {
+                    gui_widget_setscrollx(h, 0, 0);
                 }
             }
             calculate_limits(h);
@@ -200,8 +202,8 @@ gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* pa
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_listcontainer_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+gui_listcontainer_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
+    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
 }
 
 /**
@@ -212,17 +214,18 @@ gui_listcontainer_create(gui_id_t id, float x, float y, float width, float heigh
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_listcontainer_setcolor(gui_handle_p h, gui_listcontainer_color_t index, gui_color_t color) {
+gui_listcontainer_setcolor(gui_handle_p h, gui_listcontainer_color_t index, gui_color_t color, const uint8_t protect) {
     uint8_t ret;
 
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    
-    ret = guii_widget_setcolor(h, (uint8_t)index, color, 1);    /* Set color */
-    if (ret && index == GUI_LISTCONTAINER_COLOR_BG) {       /* Check background color */
-        __GUI_ENTER(1);
-            guii_widget_setinvalidatewithparent(h, color == GUI_COLOR_TRANS);
-        __GUI_LEAVE(1);
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    ret = guii_widget_setcolor(h, (uint8_t)index, color, 0);    /* Set color */
+    if (ret && index == GUI_LISTCONTAINER_COLOR_BG) {   /* Check background color */
+        guii_widget_setinvalidatewithparent(h, color == GUI_COLOR_TRANS);
     }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return ret;
 }
 
@@ -233,7 +236,7 @@ gui_listcontainer_setcolor(gui_handle_p h, gui_listcontainer_color_t index, gui_
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_listcontainer_setmode(gui_handle_p h, gui_listcontainer_mode_t mode) {
+gui_listcontainer_setmode(gui_handle_p h, gui_listcontainer_mode_t mode, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MODE, &mode, 1, 0, 1);   /* Set parameter */
+    return guii_widget_setparam(h, CFG_MODE, &mode, 1, 0, protect); /* Set parameter */
 }

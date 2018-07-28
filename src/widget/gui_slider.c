@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
@@ -222,10 +224,10 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
             gui_color_t c1, c2;
             gui_dim_t circleSize;
 
-            x = guii_widget_getabsolutex(h);       /* Get absolute X coordinate */
-            y = guii_widget_getabsolutey(h);       /* Get absolute Y coordinate */
-            width = guii_widget_getwidth(h);       /* Get widget width */
-            height = guii_widget_getheight(h);     /* Get widget height */
+            x = guii_widget_getabsolutex(h);        /* Get absolute X coordinate */
+            y = guii_widget_getabsolutey(h);        /* Get absolute Y coordinate */
+            width = gui_widget_getwidth(h, 0);      /* Get widget width */
+            height = gui_widget_getheight(h, 0);    /* Get widget height */
             
             delta = get_delta(h, width, height);    /* Get delta value */
             deltaH = delta >> 1;                    /* Half of delta */
@@ -320,8 +322,8 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
+    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
 }
 
 /**
@@ -332,9 +334,9 @@ gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_slider_setcolor(gui_handle_p h, gui_slider_color_t index, gui_color_t color) {
+gui_slider_setcolor(gui_handle_p h, gui_slider_color_t index, gui_color_t color, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, protect); /* Set color */
 }
 
 /**
@@ -344,9 +346,9 @@ gui_slider_setcolor(gui_handle_p h, gui_slider_color_t index, gui_color_t color)
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_slider_setmode(gui_handle_p h, gui_slider_mode_t mode) {
+gui_slider_setmode(gui_handle_p h, gui_slider_mode_t mode, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MODE, &mode, 1, 0, 1);   /* Set parameter */
+    return guii_widget_setparam(h, CFG_MODE, &mode, 1, 0, protect); /* Set parameter */
 }
 
 /**
@@ -357,9 +359,9 @@ gui_slider_setmode(gui_handle_p h, gui_slider_mode_t mode) {
  * \sa              gui_slider_setmin, gui_slider_setmax, gui_slider_getvalue, gui_slider_getmin, gui_slider_getmax  
  */
 uint8_t
-gui_slider_setvalue(gui_handle_p h, int32_t val) {
+gui_slider_setvalue(gui_handle_p h, int32_t val, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_VALUE, &val, 1, 0, 1);   /* Set parameter */
+    return guii_widget_setparam(h, CFG_VALUE, &val, 1, 0, protect); /* Set parameter */
 }
 
 /**
@@ -370,9 +372,9 @@ gui_slider_setvalue(gui_handle_p h, int32_t val) {
  * \sa              gui_slider_setvalue, gui_slider_setmax, gui_slider_getvalue, gui_slider_getmin, gui_slider_getmax         
  */
 uint8_t
-gui_slider_setmin(gui_handle_p h, int32_t val) {
+gui_slider_setmin(gui_handle_p h, int32_t val, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MIN, &val, 1, 0, 1); /* Set parameter */
+    return guii_widget_setparam(h, CFG_MIN, &val, 1, 0, protect);   /* Set parameter */
 }
 
 /**
@@ -383,9 +385,9 @@ gui_slider_setmin(gui_handle_p h, int32_t val) {
  * \sa              gui_slider_setmin, gui_slider_setvalue, gui_slider_getvalue, gui_slider_getmin, gui_slider_getmax  
  */
 uint8_t
-gui_slider_setmax(gui_handle_p h, int32_t val) {
+gui_slider_setmax(gui_handle_p h, int32_t val, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MAX, &val, 1, 0, 1); /* Set parameter */
+    return guii_widget_setparam(h, CFG_MAX, &val, 1, 0, protect);   /* Set parameter */
 }
 
 /**
@@ -395,14 +397,14 @@ gui_slider_setmax(gui_handle_p h, int32_t val) {
  * \sa              gui_slider_setmin, gui_slider_setvalue, gui_slider_setmax, gui_slider_getvalue, gui_slider_getmax  
  */
 int32_t
-gui_slider_getmin(gui_handle_p h) {
+gui_slider_getmin(gui_handle_p h, const uint8_t protect) {
     int32_t val;
 
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
 
-    __GUI_LEAVE(1);                                 /* Enter GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
     val = __GS(h)->min;                             /* Get minimal value */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
 
     return val;
 }
@@ -414,14 +416,14 @@ gui_slider_getmin(gui_handle_p h) {
  * \sa              gui_slider_setmin, gui_slider_setvalue, gui_slider_setmax, gui_slider_getvalue, gui_slider_getmin  
  */
 int32_t
-gui_slider_getmax(gui_handle_p h) {
+gui_slider_getmax(gui_handle_p h, const uint8_t protect) {
     int32_t val;
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
 
+    __GUI_ENTER(protect);                           /* Enter GUI */
     val = __GS(h)->max;                             /* Get maximal value */
-    
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return val;
 }
 
@@ -432,13 +434,13 @@ gui_slider_getmax(gui_handle_p h) {
  * \sa              gui_slider_setmin, gui_slider_setvalue, gui_slider_setmax, gui_slider_getmin, gui_slider_getmax  
  */
 int32_t
-gui_slider_getvalue(gui_handle_p h) {
+gui_slider_getvalue(gui_handle_p h, const uint8_t protect) {
     int32_t val;
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
 
+    __GUI_ENTER(protect);                           /* Enter GUI */
     val = __GS(h)->value;                           /* Get current value */
-    
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return val;
 }

@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
@@ -125,10 +127,10 @@ gui_radio_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
             gui_color_t c1;
             gui_dim_t x, y, width, height, size, sx, sy;
             
-            x = guii_widget_getabsolutex(h);       /* Get absolute X coordinate */
-            y = guii_widget_getabsolutey(h);       /* Get absolute Y coordinate */
-            width = guii_widget_getwidth(h);       /* Get widget width */
-            height = guii_widget_getheight(h);     /* Get widget height */
+            x = guii_widget_getabsolutex(h);        /* Get absolute X coordinate */
+            y = guii_widget_getabsolutey(h);        /* Get absolute Y coordinate */
+            width = gui_widget_getwidth(h, 0);      /* Get widget width */
+            height = gui_widget_getheight(h, 0);    /* Get widget height */
             
             size = 20;                              /* Circle size in pixels */
             
@@ -164,7 +166,7 @@ gui_radio_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
                 f.align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.color1width = f.width;
                 f.color1 = guii_widget_getcolor(h, GUI_RADIO_COLOR_FG);
-                gui_draw_writetext(disp, guii_widget_getfont(h), guii_widget_gettext(h), &f);
+                gui_draw_writetext(disp, gui_widget_getfont(h, 0), gui_widget_gettext(h, 0), &f);
             }
             
             return 1;
@@ -197,8 +199,8 @@ gui_radio_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_radio_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+gui_radio_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
+    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
 }
 
 /**
@@ -209,9 +211,9 @@ gui_radio_create(gui_id_t id, float x, float y, float width, float height, gui_h
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_radio_setcolor(gui_handle_p h, gui_radio_color_t index, gui_color_t color) {
+gui_radio_setcolor(gui_handle_p h, gui_radio_color_t index, gui_color_t color, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, protect); /* Set color */
 }
 
 /**
@@ -223,10 +225,10 @@ gui_radio_setcolor(gui_handle_p h, gui_radio_color_t index, gui_color_t color) {
  * \sa              gui_radio_getgroup
  */
 uint8_t
-gui_radio_setgroup(gui_handle_p h, uint8_t groupId) {
+gui_radio_setgroup(gui_handle_p h, uint8_t groupId, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
     if (__GR(h)->group_id != groupId) {
         gui_handle_p handle;
         
@@ -247,8 +249,8 @@ gui_radio_setgroup(gui_handle_p h, uint8_t groupId) {
         __GR(h)->group_id = groupId;                /* Set new group id */
         guii_widget_invalidate(h);                  /* Invalidate widget */
     }
-    
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return 1;
 }
 
@@ -259,14 +261,14 @@ gui_radio_setgroup(gui_handle_p h, uint8_t groupId) {
  * \sa              gui_radio_setgroup
  */
 uint8_t
-gui_radio_getgroup(gui_handle_p h) {
+gui_radio_getgroup(gui_handle_p h, const uint8_t protect) {
     uint8_t group = 0;
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
     group = __GR(h)->group_id;
-    
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return group;
 }
 
@@ -278,18 +280,18 @@ gui_radio_getgroup(gui_handle_p h) {
  * \sa              gui_radio_getvalue
  */
 uint8_t
-gui_radio_setvalue(gui_handle_p h, uint32_t value) {
+gui_radio_setvalue(gui_handle_p h, uint32_t value, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
     if (__GR(h)->value != value) {
         __GR(h)->value = value;                     /* Set new value */
         if (__GR(h)->flags & GUI_FLAG_RADIO_CHECKED) {
             set_active(h);                          /* Check active radio widgets */
         }
     }
-    
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return 1;
 }
 
@@ -300,15 +302,15 @@ gui_radio_setvalue(gui_handle_p h, uint32_t value) {
  * \sa              gui_radio_setvalue
  */
 uint32_t
-gui_radio_getvalue(gui_handle_p h) {
+gui_radio_getvalue(gui_handle_p h, const uint8_t protect) {
     uint32_t val;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
     val = __GR(h)->value;
-    
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return val;
 }
 
@@ -317,15 +319,15 @@ gui_radio_getvalue(gui_handle_p h) {
  * \param[in,out]   h: Widget handle
  * \return          `1` on success, `0` otherwise
  */
-uint8_t gui_radio_setselected(gui_handle_p h) {
+uint8_t gui_radio_setselected(gui_handle_p h, const uint8_t protect) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
     ret = set_active(h);                            /* Set radio active */
-    
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return ret;
 }
 
@@ -336,15 +338,15 @@ uint8_t gui_radio_setselected(gui_handle_p h) {
  * \return          Widget selected value
  */
 uint32_t
-gui_radio_getselectedvalue(gui_handle_p h) {
+gui_radio_getselectedvalue(gui_handle_p h, const uint8_t protect) {
     uint32_t val;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
     val = __GR(h)->selected_value;
-    
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return val;
 }
 
@@ -355,15 +357,15 @@ gui_radio_getselectedvalue(gui_handle_p h) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_radio_setdisabled(gui_handle_p h, uint8_t disabled) {
+gui_radio_setdisabled(gui_handle_p h, uint8_t disabled, const uint8_t protect) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
 
+    __GUI_ENTER(protect);                           /* Enter GUI */
     ret = set_disabled(h, disabled);                /* Set checked status */
-    
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return ret;
 }
 
@@ -373,14 +375,14 @@ gui_radio_setdisabled(gui_handle_p h, uint8_t disabled) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_radio_isdisabled(gui_handle_p h) {
+gui_radio_isdisabled(gui_handle_p h, const uint8_t protect) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
 
+    __GUI_ENTER(protect);                           /* Enter GUI */
     ret = !!(__GR(h)->flags & GUI_FLAG_RADIO_DISABLED);
-    
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return ret;
 }

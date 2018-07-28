@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #ifndef __GUI_DEFS_H
@@ -1112,7 +1114,7 @@ typedef struct gui_handle {
 /**
  * \brief           Widget create function footprint for structures as callbacks
  */
-typedef gui_handle_p (*gui_widget_createfunc_t)(gui_id_t, float, float, float, float, gui_handle_p, gui_widget_callback_t, uint16_t);
+typedef gui_handle_p (*gui_widget_createfunc_t)(gui_id_t, float, float, float, float, gui_handle_p, gui_widget_callback_t, uint16_t, uint8_t);
 
 /**
  * \}

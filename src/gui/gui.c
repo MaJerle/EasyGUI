@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
@@ -69,8 +71,8 @@ check_disp_clipping(gui_handle_p h) {
     /* Set widget itself first */
     x = guii_widget_getabsolutex(h);
     y = guii_widget_getabsolutey(h);
-    wi = guii_widget_getwidth(h);
-    hi = guii_widget_getheight(h);
+    wi = gui_widget_getwidth(h, 0);
+    hi = gui_widget_getheight(h, 0);
     
     /* Step 1: Set active clipping area only for current widget */
     if (GUI.display_temp.x1 == GUI_DIM(0x7FFF) || GUI.display_temp.x1 < x) {
@@ -144,7 +146,7 @@ redraw_widgets(gui_handle_p parent, uint8_t force_redraw) {
                     gui_dim_t height = GUI.display_temp.y2 - GUI.display_temp.y1;
                     
                     /* Try to allocate memory for new virtual layer for temporary usage */
-                    GUI.lcd.drawing_layer = GUI_MEMALLOC(sizeof(*GUI.lcd.drawing_layer) + (size_t)width * (size_t)height * (size_t)GUI.lcd.pixel_size);
+                    GUI.lcd.drawing_layer = GUI_MEMALLOC(sizeof(*GUI.lcd.drawing_layer) + (size_t)width * (size_t)height * (size_t)GUI.lcd.pixel_size, 0);
                     
                     if (GUI.lcd.drawing_layer != NULL) {/* Check if allocation was successful */
                         GUI.lcd.drawing_layer->width = width;
@@ -181,7 +183,7 @@ redraw_widgets(gui_handle_p parent, uint8_t force_redraw) {
                             (void *)(((uint8_t *)layerPrev->start_address) +
                                 GUI.lcd.pixel_size * (layerPrev->width * (GUI.lcd.drawing_layer->y_pos - layerPrev->y_pos) + (GUI.lcd.drawing_layer->x_pos - layerPrev->x_pos))),
                             (void *)GUI.lcd.drawing_layer->start_address,
-                            guii_widget_getalpha(h), 0xFF,
+                            gui_widget_getalpha(h, 0), 0xFF,
                             GUI.lcd.drawing_layer->width, GUI.lcd.drawing_layer->height,
                             layerPrev->width - GUI.lcd.drawing_layer->width, 0
                         );
@@ -195,7 +197,7 @@ redraw_widgets(gui_handle_p parent, uint8_t force_redraw) {
                         dxo = GUI.lcd.drawing_layer->x_pos - layerPrev->x_pos;
                         dyo = GUI.lcd.drawing_layer->y_pos - layerPrev->y_pos;;
 
-                        a = GUI_FLOAT(guii_widget_getalpha(h)) / GUI_FLOAT(0xFF);
+                        a = GUI_FLOAT(gui_widget_getalpha(h, 0)) / GUI_FLOAT(0xFF);
                         for (y = 0; y < GUI.lcd.drawing_layer->height; y++) {
                             for (x = 0; x < GUI.lcd.drawing_layer->width; x++) {
                                 fg = GUI.ll.GetPixel(&GUI.lcd, GUI.lcd.drawing_layer, x, y);
@@ -212,7 +214,7 @@ redraw_widgets(gui_handle_p parent, uint8_t force_redraw) {
                         }                        
                     }
                     
-                    GUI_MEMFREE(GUI.lcd.drawing_layer); /* Free memory for virtual layer */
+                    GUI_MEMFREE(GUI.lcd.drawing_layer, 0);  /* Free memory for virtual layer */
                     GUI.lcd.drawing_layer = layerPrev;  /* Reset layer pointer */
                 }
 #endif /* GUI_CFG_USE_ALPHA */
@@ -439,7 +441,7 @@ process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
         }
         
         /* Check for keyboard mode */
-        if (guii_widget_getid(h) == GUI_ID_KEYBOARD_BASE) {
+        if (h->id == GUI_ID_KEYBOARD_BASE) {
             isKeyboard = 1;                         /* Set keyboard mode as 1 */
         }
         
@@ -464,7 +466,7 @@ process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
                 touch->ts.y[0] >= GUI.display_temp.y1 && touch->ts.y[0] <= GUI.display_temp.y2) {
                 set_relative_coordinate(touch,      /* Set relative coordinate */
                     guii_widget_getabsolutex(h), guii_widget_getabsolutey(h), 
-                    guii_widget_getwidth(h), guii_widget_getheight(h)
+                    gui_widget_getwidth(h, 0), gui_widget_getheight(h, 0)
                 ); 
             
                 /* Call touch start callback to see if widget accepts touches */
@@ -512,7 +514,7 @@ process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
         }
         
         /* Check for keyboard mode */
-        if (guii_widget_getid(h) == GUI_ID_KEYBOARD_BASE) {
+        if (gui_widget_getid(h, 0) == GUI_ID_KEYBOARD_BASE) {
             isKeyboard = 0;                         /* Set keyboard mode as 1 */
         }
         
@@ -551,7 +553,7 @@ gui_process_touch(void) {
             if (GUI.active_widget != NULL && GUI.touch.ts.status) { /* Check active widget for touch and pressed status */
                 set_relative_coordinate(&GUI.touch, /* Set relative touch (for widget) from current touch */
                     guii_widget_getabsolutex(GUI.active_widget), guii_widget_getabsolutey(GUI.active_widget),
-                    guii_widget_getwidth(GUI.active_widget), guii_widget_getheight(GUI.active_widget)
+                    gui_widget_getwidth(GUI.active_widget, 0), gui_widget_getheight(GUI.active_widget, 0)
                 );
             }
             
@@ -585,7 +587,7 @@ gui_process_touch(void) {
                             if (aw != NULL) {
                                 set_relative_coordinate(&GUI.touch, /* Set relative touch (for widget) from current touch */
                                     guii_widget_getabsolutex(aw), guii_widget_getabsolutey(aw), 
-                                    guii_widget_getwidth(aw), guii_widget_getheight(aw)
+                                    gui_widget_getwidth(aw, 0), gui_widget_getheight(aw, 0)
                                 );
                                 /* Reset relative coordinates here! */
                                 memcpy(GUI.touch.x_rel_old, GUI.touch.x_rel, sizeof(GUI.touch.x_rel_old));
@@ -880,5 +882,17 @@ gui_seteventcallback(gui_eventcallback_t cb) {
     } else {
         GUI.evt_cb = default_event_cb;              /* Set default callback */
     }
+    return 1;
+}
+
+uint8_t
+gui_protect(const uint8_t protect) {
+    __GUI_ENTER(protect);
+    return 1;
+}
+
+uint8_t
+gui_unprotect(const uint8_t protect) {
+    __GUI_LEAVE(protect);
     return 1;
 }

@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #ifndef __GUI_MEM_H
@@ -49,24 +51,24 @@ extern "C" {
  * \brief           Single memory region descriptor
  */
 typedef struct mem_region_t {
-    void* StartAddress;                 /*!< Start address of region */
-    size_t Size;                        /*!< Size in units of bytes of region */
+    void* start_address;                /*!< Start address of region */
+    size_t size;                        /*!< Size in units of bytes of region */
 } mem_region_t;
 
 /**
  * \brief           Wrapper for memory region for GUI
  */
-typedef mem_region_t GUI_MEM_Region_t;
+typedef mem_region_t gui_mem_region_t;
 
-void* gui_mem_alloc(uint32_t size);
-void* gui_mem_realloc(void* ptr, size_t size);
-void* gui_mem_calloc(size_t num, size_t size);
-void gui_mem_free(void* ptr);
+void* gui_mem_alloc(uint32_t size, const uint8_t protect);
+void* gui_mem_realloc(void* ptr, size_t size, const uint8_t protect);
+void* gui_mem_calloc(size_t num, size_t size, const uint8_t protect);
+void gui_mem_free(void* ptr, const uint8_t protect);
 size_t gui_mem_getfree(void);
 size_t gui_mem_getfull(void);
 size_t gui_mem_getminfree(void);
 
-uint8_t gui_mem_assignmemory(const GUI_MEM_Region_t* regions, size_t size);
+uint8_t gui_mem_assignmemory(const gui_mem_region_t* regions, size_t size);
     
 /**
  * \}

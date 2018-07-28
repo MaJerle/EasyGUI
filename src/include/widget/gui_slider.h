@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #ifndef __GUI_SLIDER_H
@@ -85,15 +87,15 @@ typedef struct {
 } gui_slider_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p    gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
-uint8_t         gui_slider_setcolor(gui_handle_p h, gui_slider_color_t index, gui_color_t color);
-uint8_t         gui_slider_setmode(gui_handle_p h, gui_slider_mode_t mode);
-uint8_t         gui_slider_setmin(gui_handle_p h, int32_t val);
-uint8_t         gui_slider_setmax(gui_handle_p h, int32_t val);
-uint8_t         gui_slider_setvalue(gui_handle_p h, int32_t val);
-int32_t         gui_slider_getmin(gui_handle_p h);
-int32_t         gui_slider_getmax(gui_handle_p h);
-int32_t         gui_slider_getvalue(gui_handle_p h);
+gui_handle_p    gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect);
+uint8_t         gui_slider_setcolor(gui_handle_p h, gui_slider_color_t index, gui_color_t color, const uint8_t protect);
+uint8_t         gui_slider_setmode(gui_handle_p h, gui_slider_mode_t mode, const uint8_t protect);
+uint8_t         gui_slider_setmin(gui_handle_p h, int32_t val, const uint8_t protect);
+uint8_t         gui_slider_setmax(gui_handle_p h, int32_t val, const uint8_t protect);
+uint8_t         gui_slider_setvalue(gui_handle_p h, int32_t val, const uint8_t protect);
+int32_t         gui_slider_getmin(gui_handle_p h, const uint8_t protect);
+int32_t         gui_slider_getmax(gui_handle_p h, const uint8_t protect);
+int32_t         gui_slider_getvalue(gui_handle_p h, const uint8_t protect);
 
 /**
  * \}

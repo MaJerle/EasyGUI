@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
@@ -40,11 +42,6 @@ typedef struct {
     const gui_font_t* font;                 /*!< Pointer to font structure */
 } gui_widget_default_t;
 gui_widget_default_t widget_default;
-
-#if GUI_CFG_OS
-static gui_mbox_msg_t msg_widget_remove = { GUI_SYS_MBOX_TYPE_REMOVE };
-static gui_mbox_msg_t msg_widget_invalidate = { GUI_SYS_MBOX_TYPE_INVALIDATE };
-#endif /* GUI_CFG_OS */
 
 /* Widget absolute cache setup */
 #if GUI_CFG_USE_POS_SIZE_CACHE
@@ -121,7 +118,7 @@ calculate_widget_absolute_x(gui_handle_p h) {
     /* Process all parent widgets to get real absolute screen value */
     for (w = guii_widget_getparent(h); w != NULL;
         w = guii_widget_getparent(w)) {             /* Go through all parent windows */
-        out += guii_widget_getrelativex(w) + guii_widget_getpaddingleft(w);   /* Add X offset from parent and left padding of parent */
+        out += guii_widget_getrelativex(w) + gui_widget_getpaddingleft(w, 0);   /* Add X offset from parent and left padding of parent */
         out -= w->x_scroll;                         /* Decrease by scroll value */
     }
     return out;
@@ -146,7 +143,7 @@ calculate_widget_absolute_y(gui_handle_p h) {
     /* Process all parent widgets to get real absolute screen value */
     for (w = guii_widget_getparent(h); w != NULL;
         w = guii_widget_getparent(w)) {             /* Go through all parent windows */
-        out += guii_widget_getrelativey(w) + guii_widget_getpaddingtop(w);  /* Add Y offset from parent and top padding of parent */
+        out += guii_widget_getrelativey(w) + gui_widget_getpaddingtop(w, 0);/* Add Y offset from parent and top padding of parent */
         out -= w->y_scroll;                         /* Decrease by scroll value */
     }
     return out;
@@ -167,8 +164,8 @@ calculate_widget_absolute_visible_position_size(gui_handle_p h, gui_dim_t* x1, g
     
     cx = guii_widget_getabsolutex(h);               /* Get absolute X position */
     cy = guii_widget_getabsolutey(h);               /* Get absolute Y position */
-    cw = guii_widget_getwidth(h);                   /* Get absolute width */
-    ch = guii_widget_getheight(h);                  /* Get absolute height */
+    cw = gui_widget_getwidth(h, 0);                 /* Get absolute width */
+    ch = gui_widget_getheight(h, 0);                /* Get absolute height */
     
     /* Set widget visible positions with X and Y coordinates */
     *x1 = cx;
@@ -273,16 +270,16 @@ remove_widget(gui_handle_p h) {
      * - Free widget memory
      */
     guii_widget_invalidatewithparent(h);            /* Invalidate object and its parent */
-    guii_widget_freetextmemory(h);                  /* Free text memory */
+    gui_widget_freetextmemory(h, 0);                /* Free text memory */
     if (h->timer != NULL) {                         /* Check timer memory */
         guii_timer_remove(&h->timer);               /* Free timer memory */
     }
     if (h->colors != NULL) {                        /* Check colors memory */
-        GUI_MEMFREE(h->colors);                     /* Free colors memory */
+        GUI_MEMFREE(h->colors, 0);                  /* Free colors memory */
         h->colors = NULL;
     }
     gui_linkedlist_widgetremove(h);                 /* Remove entry from linked list of parent widget */
-    GUI_MEMFREE(h);                                 /* Free memory for widget */
+    GUI_MEMFREE(h, 0);                              /* Free memory for widget */
     
     return 1;                                       /* Widget deleted */
 }
@@ -347,7 +344,7 @@ remove_widgets(gui_handle_p parent) {
     
 #if GUI_CFG_OS
     if (lvl == 0) {                                 /* Notify about remove execution */
-        gui_sys_mbox_putnow(&GUI.OS.mbox, &msg_widget_remove);
+        gui_sys_mbox_putnow(&GUI.OS.mbox, NULL);
     }
 #endif /* GUI_CFG_OS */
 }
@@ -424,9 +421,6 @@ invalidate_widget(gui_handle_p h, uint8_t setclipping) {
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
                                                     /* Get widget handle */
-    if (guii_widget_getflag(h, GUI_FLAG_IGNORE_INVALIDATE)) {   /* Check ignore flag */
-        return 0;                                   /* Ignore invalidate process */
-    }
 
     /*
      * First check if any of parent widgets are hidden = ignore redraw
@@ -534,7 +528,7 @@ get_widget_by_id(gui_handle_p parent, gui_id_t id, uint8_t deep) {
     
     /* List all widgets of parent*/
     GUI_LINKEDLIST_WIDGETSLISTNEXT(parent, h) {
-        if (guii_widget_getid(h) == id) {           /* Compare ID values */
+        if (gui_widget_getid(h, 0) == id) {         /* Compare ID values */
             return h;
         } else if (deep && guii_widget_allowchildren(h)) {  /* Check children if possible */
             gui_handle_p tmp = get_widget_by_id(h, id, deep);
@@ -579,12 +573,11 @@ get_common_parentwidget(gui_handle_p h1, gui_handle_p h2) {
  * \return          `1` on success, `0` otherwise
  */
 static uint8_t
-set_widget_size(gui_handle_p h, float wi, float hi, uint8_t wp, uint8_t hp) {
+set_widget_size(gui_handle_p h, float wi, float hi, uint8_t wp, uint8_t hp, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    /* Check any differences */
-    if (
-        wi != h->width || hi != h->height ||        /* Any value changed? */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    if ( wi != h->width || hi != h->height ||       /* Check any differences */
         (wp && !guii_widget_getflag(h, GUI_FLAG_WIDTH_PERCENT)) ||  /* New width is in percent, old is not */
         (!wp && guii_widget_getflag(h, GUI_FLAG_WIDTH_PERCENT)) ||  /* New width is not in percent, old is */
         (hp && !guii_widget_getflag(h, GUI_FLAG_HEIGHT_PERCENT)) || /* New height is in percent, old is not */
@@ -592,13 +585,13 @@ set_widget_size(gui_handle_p h, float wi, float hi, uint8_t wp, uint8_t hp) {
     ) {
         gui_dim_t wc, hc;
         
-        if (!guii_widget_isexpanded(h)) {           /* First invalidate current position if not expanded before change of size */
+        if (!gui_widget_isexpanded(h, 0)) {         /* First invalidate current position if not expanded before change of size */
             guii_widget_invalidatewithparent(h);    /* Set old clipping region first */
         }
         
         /* Get current values */
-        wc = guii_widget_getwidth(h);               /* Get current width */
-        hc = guii_widget_getheight(h);              /* Get current height */
+        wc = gui_widget_getwidth(h, 0);             /* Get current width */
+        hc = gui_widget_getheight(h, 0);            /* Get current height */
         
         /* Check percent flag */
         if (wp) {
@@ -618,11 +611,13 @@ set_widget_size(gui_handle_p h, float wi, float hi, uint8_t wp, uint8_t hp) {
         SET_WIDGET_ABS_VALUES(h);                   /* Set widget absolute values */
         
         /* Check if any of dimensions are bigger than before */
-        if (!guii_widget_isexpanded(h) &&
-            (guii_widget_getwidth(h) > wc || guii_widget_getheight(h) > hc)) {
+        if (!gui_widget_isexpanded(h, 0) &&
+            (gui_widget_getwidth(h, 0) > wc || gui_widget_getheight(h, 0) > hc)) {
             guii_widget_invalidate(h);              /* Invalidate widget */
         }
     }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return 1;
 }
 
@@ -636,16 +631,17 @@ set_widget_size(gui_handle_p h, float wi, float hi, uint8_t wp, uint8_t hp) {
  * \return          `1` on success, `0` otherwise
  */
 static uint8_t
-set_widget_position(gui_handle_p h, float x, float y, uint8_t xp, uint8_t yp) {
+set_widget_position(gui_handle_p h, float x, float y, uint8_t xp, uint8_t yp, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
     if (h->x != x || h->y != y ||                   /* Check any differences */
         (xp && !guii_widget_getflag(h, GUI_FLAG_XPOS_PERCENT)) ||   /* New X position is in percent, old is not */
         (!xp && guii_widget_getflag(h, GUI_FLAG_XPOS_PERCENT)) ||   /* New X position is not in percent, old is */
         (yp && !guii_widget_getflag(h, GUI_FLAG_YPOS_PERCENT)) ||   /* New Y position is in percent, old is not */
         (!yp && guii_widget_getflag(h, GUI_FLAG_YPOS_PERCENT))      /* New Y position is not in percent, old is */
     ) {                   
-        if (!guii_widget_isexpanded(h)) {
+        if (!gui_widget_isexpanded(h, 0)) {
             guii_widget_invalidatewithparent(h);    /* Set old clipping region first */
         }
         
@@ -666,10 +662,12 @@ set_widget_position(gui_handle_p h, float x, float y, uint8_t xp, uint8_t yp) {
         h->y = y;                                   /* Set parameter */
         SET_WIDGET_ABS_VALUES(h);                   /* Set widget absolute values */
         
-        if (!guii_widget_isexpanded(h)) {
+        if (!gui_widget_isexpanded(h, 0)) {
             guii_widget_invalidatewithparent(h);    /* Set new clipping region */
         }
     }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return 1;
 }
 
@@ -768,7 +766,7 @@ guii_widget_isinsideclippingregion(gui_handle_p h, uint8_t check_sib_cover) {
  */
 void
 guii_widget_init(void) {
-    gui_window_createdesktop(GUI_ID_WINDOW_BASE, NULL); /* Create base window object */
+    gui_window_createdesktop(GUI_ID_WINDOW_BASE, NULL, 0);  /* Create base window object */
 }
 
 /**
@@ -914,28 +912,6 @@ guii_widget_active_set(gui_handle_p h) {
 }
 
 /**
- * \brief           Get total width of widget in units of pixels
- *                     Function returns width of widget according to current widget setup (expanded, fill, percent, etc.)
- * \note            This function is private and may be called only when OS protection is active
- *
- * \note            Even if percentage width is used, function will always return value in pixels
- * \param[in]       h: Widget handle
- * \return          Total width in units of pixels
- * \sa              guii_widget_getinnerwidth
- */
-gui_dim_t
-guii_widget_getwidth(gui_handle_p h) {
-    if (!(guii_widget_iswidget(h)) || !(GUI.initialized)) {
-        return 0;
-    }
-#if GUI_CFG_USE_POS_SIZE_CACHE
-    return h->abs_width;                            /* Cached value */
-#else /* GUI_CFG_USE_POS_SIZE_CACHE */
-    return calculate_widget_width(h);               /* Calculate value */
-#endif /* GUI_CFG_USE_POS_SIZE_CACHE */
-}
-
-/**
  * \brief           Get total height of widget
  *                     Function returns height of widget according to current widget setup (expanded, fill, percent, etc.)
  * \note            This function is private and may be called only when OS protection is active
@@ -1010,7 +986,7 @@ guii_widget_getparentabsolutex(gui_handle_p h) {
     
     h = guii_widget_getparent(h);                   /* Get parent of widget */
     if (h != NULL) {                                /* Save left padding */
-        out = guii_widget_getpaddingleft(h);        /* Get left padding from parent widget */
+        out = gui_widget_getpaddingleft(h, 0);      /* Get left padding from parent widget */
     }
     out += guii_widget_getabsolutex(h);             /* Add absolute X of parent and to current padding */
     return out;
@@ -1033,7 +1009,7 @@ guii_widget_getparentabsolutey(gui_handle_p h) {
     
     h = guii_widget_getparent(h);                   /* Get parent of widget */
     if (h != NULL) {                                /* Save left padding */
-        out = guii_widget_getpaddingtop(h);         /* Get top padding from parent widget */
+        out = gui_widget_getpaddingtop(h, 0);       /* Get top padding from parent widget */
     }
     out += guii_widget_getabsolutey(h);             /* Add absolute Y of parent and to current padding */
     return out;
@@ -1051,7 +1027,12 @@ guii_widget_invalidate(gui_handle_p h) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
+
+    /* Check ignore flag */
+    if (guii_widget_getflag(h, GUI_FLAG_IGNORE_INVALIDATE)) {   
+        return 0;                                   /* Ignore invalidate process */
+    }
+
     ret = invalidate_widget(h, 1);                  /* Invalidate widget with clipping */
     
     if (guii_widget_hasparent(h) && (
@@ -1062,8 +1043,9 @@ guii_widget_invalidate(gui_handle_p h) {
         invalidate_widget(guii_widget_getparent(h), 0); /* Invalidate parent object too but without clipping */
     }
 #if GUI_CFG_OS
-    gui_sys_mbox_putnow(&GUI.OS.mbox, &msg_widget_invalidate);
+    gui_sys_mbox_putnow(&GUI.OS.mbox, NULL);
 #endif /* GUI_CFG_OS */
+
     return ret;
 }
 
@@ -1105,34 +1087,13 @@ guii_widget_setinvalidatewithparent(gui_handle_p h, uint8_t value) {
     return 1;
 }
 
-/**
- * \brief           Set 3D mode on widget
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \param[in]       enable: Value to enable, either 1 or 0
- * \return          `1` on success, `0` otherwise
- */
-uint8_t
-guii_widget_set3dstyle(gui_handle_p h, uint8_t enable) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    if (enable && !guii_widget_getflag(h, GUI_FLAG_3D)) {  /* Enable style */
-        guii_widget_setflag(h, GUI_FLAG_3D);        /* Enable 3D style */
-        guii_widget_invalidate(h);                  /* Invalidate object */
-    } else if (!enable && guii_widget_getflag(h, GUI_FLAG_3D)) {/* Disable style */
-        guii_widget_clrflag(h, GUI_FLAG_3D);        /* Disable 3D style */
-        guii_widget_invalidate(h);                  /* Invalidate object */
-    }
-    return 1;
-}
-
 /*******************************************/
 /**  Widget create and remove management  **/
 /*******************************************/
 
 /**
  * \brief           Create new widget and add it to linked list to parent object
- * \note            This function is private and may be called only when OS protection is active
+ * \note            This function may only be called from widget create function, such as \ref gui_button_create or similar
  * \param[in]       widget: Pointer to \ref gui_widget_t structure with widget description
  * \param[in]       id: Widget unique ID to use for identity for callback processing
  * \param[in]       x: Widget `X` position relative to parent widget
@@ -1142,11 +1103,10 @@ guii_widget_set3dstyle(gui_handle_p h, uint8_t enable) {
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Widget callback function. Set to NULL to use default widget specific callback
  * \param[in]       flags: flags for create procedure
- * \return          Created widget handle on success, NULL otherwise
- * \sa              __gui_widget_remove
+ * \return          Widget handle on success, `NULL` otherwise
  */
 void *
-guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
+guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
     gui_handle_p h;
     
     __GUI_ASSERTPARAMS(widget != NULL && widget->callback != NULL); /* Check input parameters */
@@ -1160,16 +1120,13 @@ guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, fl
     if (widget->size < sizeof(gui_handle)) { 
         return 0;
     }
-    
-    h = GUI_MEMALLOC(widget->size);                 /* Allocate memory for widget */
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    h = GUI_MEMALLOC(widget->size, 0);              /* Allocate memory for widget */
     if (h != NULL) {
         gui_widget_param_t param = {0};
         gui_widget_result_t result = {0};
-    
-        memset(h, 0x00, widget->size);              /* Set memory to 0 */
-        
-        __GUI_LEAVE(1);                             /* Enter GUI */
-        
+
         h->id = id;                                 /* Save ID */
         h->widget = widget;                         /* Widget object structure */
         h->footprint = GUI_WIDGET_FOOTPRINT;        /* Set widget footprint */
@@ -1202,243 +1159,46 @@ guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, fl
         guii_widget_callback(h, GUI_WC_PreInit, NULL, &result);    /* Notify internal widget library about init successful */
         
         if (!GUI_WIDGET_RESULTTYPE_U8(&result)) {   /* Check result */
-            __GUI_LEAVE(1);                         /* Leave GUI */
-            GUI_MEMFREE(h);                         /* Clear widget memory */
+            GUI_MEMFREE(h, 0);                      /* Clear widget memory */
             h = NULL;                               /* Reset handle */
-            return h;                               /* Stop execution at this point */
         }
         
-        /* Set widget default values */
-        h->font = widget_default.font;              /* Set default font */
-        
-        /* Do not invalidate widget while setting first size and position */
-        guii_widget_setflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Ignore invalidation process */
-        guii_widget_setsize(h, GUI_DIM(width), GUI_DIM(height));/* Set widget size */
-        guii_widget_setposition(h, GUI_DIM(x), GUI_DIM(y)); /* Set widget position */
-        guii_widget_clrflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Include invalidation process */
-        guii_widget_setflag(h, GUI_FLAG_FIRST_INVALIDATE);  /* Include invalidation process */
-        guii_widget_invalidate(h);                  /* Invalidate properly now when everything is set correctly = set for valid clipping region part */
+        if (h != NULL) {
+            /* Set widget default values */
+            h->font = widget_default.font;          /* Set default font */
 
-        /* Add widget to linked list of parent widget */
-        GUI_WIDGET_RESULTTYPE_U8(&result) = 0;
-        guii_widget_callback(h, GUI_WC_ExcludeLinkedList, NULL, &result);
-        if (!GUI_WIDGET_RESULTTYPE_U8(&result)) {   /* Check if widget should be added to linked list */
-            gui_linkedlist_widgetadd(h->parent, h); /* Add entry to linkedlist of parent widget */
-        }
-        guii_widget_callback(h, GUI_WC_Init, NULL, NULL);  /* Notify user about init successful */
-        guii_widget_invalidate(h);                  /* Invalidate object */
-        
-        /* Notify parent widget if exists */
-        if (guii_widget_hasparent(h)) {             /* If widget has parent */
-            GUI_WIDGET_PARAMTYPE_HANDLE(&param) = h;/* Set widget pointer */
-            guii_widget_callback(guii_widget_getparent(h), GUI_WC_ChildWidgetCreated, &param, NULL);/* Notify parent about new child widget */
-        }
-        
-        __GUI_LEAVE(1);                             /* Leave GUI */
+            /* Do not invalidate widget while setting first size and position */
+            guii_widget_setflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Ignore invalidation process */
+            gui_widget_setsize(h, GUI_DIM(width), GUI_DIM(height), 0);/* Set widget size */
+            gui_widget_setposition(h, GUI_DIM(x), GUI_DIM(y), 0);   /* Set widget position */
+            guii_widget_clrflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Include invalidation process */
+            guii_widget_setflag(h, GUI_FLAG_FIRST_INVALIDATE);  /* Include invalidation process */
+            gui_widget_invalidate(h, 0);            /* Invalidate properly now when everything is set correctly = set for valid clipping region part */
 
-#if GUI_CFG_OS
-        gui_sys_mbox_putnow(&GUI.OS.mbox, NULL);    /* Post message queue */
-#endif /* GUI_CFG_OS */
+            /* Add widget to linked list of parent widget */
+            GUI_WIDGET_RESULTTYPE_U8(&result) = 0;
+            guii_widget_callback(h, GUI_WC_ExcludeLinkedList, NULL, &result);
+            if (!GUI_WIDGET_RESULTTYPE_U8(&result)) {   /* Check if widget should be added to linked list */
+                gui_linkedlist_widgetadd(h->parent, h); /* Add entry to linkedlist of parent widget */
+            }
+            guii_widget_callback(h, GUI_WC_Init, NULL, NULL);  /* Notify user about init successful */
+            gui_widget_invalidate(h, 0);            /* Invalidate object */
+
+            /* Notify parent widget if exists */
+            if (guii_widget_hasparent(h)) {         /* If widget has parent */
+                GUI_WIDGET_PARAMTYPE_HANDLE(&param) = h;/* Set widget pointer */
+                guii_widget_callback(guii_widget_getparent(h), GUI_WC_ChildWidgetCreated, &param, NULL);/* Notify parent about new child widget */
+            }
+        }
     }
-    
+    __GUI_LEAVE(protect);                       /* Leave GUI */
+
     return (void *)h;
-}
-
-/**
- * \brief           Remove widget and all of its children widgets
- *  
- *                  Function checks widget and all its children if they can be deleted. 
- *                  If so, flag for delete will be set and procedure will be executed later when all other processing is done
- *
- * \note            This function is private and may be called only when OS protection is active
- * \param           *h: Widget handle to remove
- * \return          `1` on success, `0` otherwise
- * \sa              __gui_widget_create, gui_widget_remove
- */
-uint8_t
-guii_widget_remove(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    if (can_remove_widget(h)) {                     /* Check if we can delete widget */
-        guii_widget_setflag(h, GUI_FLAG_REMOVE);    /* Set flag for widget delete */
-        GUI.flags |= GUI_FLAG_REMOVE;               /* Set flag for to remove at least one widget from tree */
-        if (guii_widget_isfocused(h)) {             /* In case current widget is in focus */
-            guii_widget_focus_set(guii_widget_getparent(h)); /* Set parent as focused */
-        }
-#if GUI_CFG_OS
-        gui_sys_mbox_putnow(&GUI.OS.mbox, &msg_widget_remove);  /* Put message to queue */
-#endif /* GUI_CFG_OS */
-        return 1;                                   /* Widget will be deleted */
-    }
-    return 0;
-}
-
-/**
- * \brief           Remove children widgets of current widget
- * \note            This function is private and may be called only when OS protection is active
- * \param           h: Widget handle
- * \return          `1` on success, `0` otherwise
- */
-uint8_t
-guii_widget_empty(gui_handle_p h) {
-    gui_handle_p child;
-    uint8_t ret = 1;
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));/* Check valid parameter */
-
-    /* Process all children widgets */
-    for (child = gui_linkedlist_widgetgetnext(h, NULL); child != NULL;
-        child = gui_linkedlist_widgetgetnext(NULL, child)) {
-        if (!can_remove_widget(child)) {            /* Stop execution if cannot be deleted */
-            ret = 0;
-            break;
-        }
-        guii_widget_setflag(h, GUI_FLAG_REMOVE);    /* Set remove flag */
-    }
-
-    return ret;
 }
 
 /*******************************************/
 /**                  .....                **/
 /*******************************************/
-/**
- * \brief           Show widget from visible area
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \return          `1` on success, `0` otherwise
- * \sa              guii_widget_hide
- */
-uint8_t
-guii_widget_show(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    if (guii_widget_getflag(h, GUI_FLAG_HIDDEN)) {  /* If hidden, show it */
-        guii_widget_clrflag(h, GUI_FLAG_HIDDEN);
-        guii_widget_invalidatewithparent(h);        /* Invalidate it for redraw with parent */
-    }
-    return 1;
-}
-
-/**
- * \brief           Hide widget from visible area
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \return          `1` on success, `0` otherwise
- * \sa              guii_widget_show
- */
-uint8_t
-guii_widget_hide(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-
-    if (!guii_widget_getflag(h, GUI_FLAG_HIDDEN)) { /* If visible, hide it */
-        /* TODO: Check if active/focused widget is maybe children of this widget */
-        if (GUI.focused_widget != NULL && (GUI.focused_widget == h || guii_widget_ischildof(GUI.focused_widget, h))) {    /* Clear focus */
-            guii_widget_focus_set(guii_widget_getparent(GUI.focused_widget)); /* Set parent widget as focused now */
-        }
-        if (GUI.active_widget != NULL && (GUI.active_widget == h || guii_widget_ischildof(GUI.active_widget, h))) {   /* Clear active */
-            guii_widget_active_clear();
-        }
-
-        guii_widget_invalidatewithparent(h);        /* Invalidate it for redraw with parent */
-        guii_widget_setflag(h, GUI_FLAG_HIDDEN);    /* Hide widget */
-    }
-    return 1;
-}
-
-/**
- * \brief           Hide direct children widgets of current widget
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \return          `1` on success, `0` otherwise
- */
-uint8_t
-guii_widget_hidechildren(gui_handle_p h) {
-    gui_handle_p t;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
-    
-    /* Scan all widgets of current widget and hide them */
-    GUI_LINKEDLIST_WIDGETSLISTNEXT(h, t) {
-        guii_widget_hide(t);                        /* Hide widget */
-    }
-    
-    return 1;
-}
-
-/**
- * \brief           Check if widget `h` is children of `parent`
- * \note            This function is private and may be called only when OS protection is active
- * \param[in]       h: Widget handle to test
- * \param[in]       parent: Parent widget handle to test if is parent
- * \return          `1` on success, `0` otherwise
- */
-uint8_t
-guii_widget_ischildof(gui_handle_p h, gui_handle_p parent) {
-    if (!(guii_widget_iswidget(h) && guii_widget_iswidget(parent)) || !(GUI.initialized)) {
-        return 0;
-    }
-    
-    /* Process all parents of h */
-    for (h = guii_widget_getparent(h); h != NULL;
-        h = guii_widget_getparent(h)) {             /* Check widget parent objects */
-        if (parent == h) {                          /* If they matches */
-            return 1;
-        }
-    }
-    return 0;
-}
-
-/**
- * \brief           Set z-Index for widgets on the same level. This feature applies on widgets which are not dialogs
- * \note            Larger z-index value means greater position on screen. In case of multiple widgets on same z-index level, they are automatically modified for correct display
- *
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \param[in]       zindex: Z-Index value for widget. Any value can be used
- * \return          `1` on success, `0` otherwise
- */
-uint8_t
-guii_widget_setzindex(gui_handle_p h, int32_t zindex) {
-    uint8_t ret = 1;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    if (h->zindex != zindex) {                      /* There was a change in z-index value */
-        int32_t current = h->zindex;
-        h->zindex = zindex;                         /* Set new index */
-        if (zindex < current) {                     /* New index value is less important than before = move widget to top */
-            gui_linkedlist_widgetmovetotop(h);      /* Move widget to top on linked list = less important and less visible */
-        } else {
-            gui_linkedlist_widgetmovetobottom(h);   /* Move widget to bottom on linked list = most important and most visible */
-        }
-    }
-    return ret;
-}
-
-/**
- * \brief           Set widget alpha
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \param[in]       alpha: Alpha level, where `0x00` means hidden and `0xFF` means totally visible widget
- * \return          `1` on success, `0` otherwise
- * \sa              guii_widget_setalpha
- */
-uint8_t
-guii_widget_setalpha(gui_handle_p h, uint8_t alpha) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-#if GUI_CFG_USE_ALPHA || __DOXYGEN__
-    if (h->alpha != alpha) {                        /* Check transparency match */
-        h->alpha = alpha;                           /* Set new transparency level */
-        SET_WIDGET_ABS_VALUES(h);                   /* Set widget absolute values */
-        guii_widget_invalidate(h);                  /* Invalidate widget */
-    }
-    
-    return 1;
-#else /* GUI_CFG_USE_ALPHA */
-    return 0;
-#endif /* !GUI_CFG_USE_ALPHA */
-}
 
 /**
  * \brief           Set color to widget specific index
@@ -1450,7 +1210,7 @@ guii_widget_setalpha(gui_handle_p h, uint8_t alpha) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-guii_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color, uint8_t protect) {
+guii_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color, const uint8_t protect) {
     uint8_t ret = 1;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
@@ -1458,7 +1218,7 @@ guii_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color, uint8_t p
     __GUI_ENTER(protect);                           /* Enter GUI context */
     if (h->colors == NULL) {                        /* Do we need to allocate color memory? */
         if (h->widget->color_count) {               /* Check if at least some colors should be used */
-            h->colors = GUI_MEMALLOC(sizeof(*h->colors) * h->widget->color_count);
+            h->colors = GUI_MEMALLOC(sizeof(*h->colors) * h->widget->color_count, 0);
             if (h->colors != NULL) {                /* Copy all colors to new memory first */
                 memcpy(h->colors, h->widget->colors, sizeof(*h->colors) * h->widget->color_count);
             } else {
@@ -1481,68 +1241,6 @@ guii_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color, uint8_t p
 }
 
 /**
- * \brief           Get first widget handle by ID
- * \note            If multiple widgets have the same ID, first found will be used
- *
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   id: Widget ID to search for
- * \return          > 0: Widget handle when widget found, `NULL` if no widget
- */
-gui_handle_p
-guii_widget_getbyid(gui_id_t id) {
-    return get_widget_by_id(NULL, id, 1);           /* Find widget by ID */
-}
-
-/**
- * \brief           Get first widget handle by ID on specific parent widget
- * \note            If multiple widgets have the same ID, first found will be used
- *
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   id: Widget ID to search for
- * \param[in]       parent: Parent widget handle to use as base search. Set to `NULL` to scan all widgets
- * \param[in]       deep: Set to `1` to search recursive on tree or `0` to search only first level
- * \return          > 0: Widget handle when widget found
- */
-gui_handle_p
-guii_widget_getbyid_ex(gui_id_t id, gui_handle_p parent, uint8_t deep) {
-    return get_widget_by_id(parent, id, deep);      /* Find widget by ID on parent */
-}
-
-/**
- * \brief           Set custom user data to widget
- * \note            This function is private and may be called only when OS protection is active
- *
- * \note            Specially useful in callback processing if required
- * \param[in,out]   h: Widget handle
- * \param[in]       data: Pointer to custom user data
- * \return          `1` on success, `0` otherwise
- * \sa              guii_widget_getuserdata
- */
-uint8_t
-guii_widget_setuserdata(gui_handle_p h, void* data) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-
-    h->arg = data;                                  /* Set user data */
-    return 1;
-}
-
-/**
- * \brief           Get custom user data from widget previously set with \ref gui_widget_setuserdata
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \return          Pointer to user data
- */
-void*
-guii_widget_getuserdata(gui_handle_p h) {
-    void* data;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    data = h->arg;                                  /* Get user data */
-    
-    return data;
-}
-
-/**
  * \brief           Set widget parameter in OS secure way
  * \param[in,out]   h: Widget handle
  * \param[in]       cfg: Configuration to use, passed later to callback function
@@ -1553,18 +1251,18 @@ guii_widget_getuserdata(gui_handle_p h) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-guii_widget_setparam(gui_handle_p h, uint16_t cfg, const void* data, uint8_t invalidate, uint8_t invalidateparent, uint8_t protect) {
+guii_widget_setparam(gui_handle_p h, uint16_t cfg, const void* data, uint8_t invalidate, uint8_t invalidateparent, const uint8_t protect) {
     gui_widget_param p;
     gui_widget_param_t param = {0};
     gui_widget_result_t result = {0};
+
+    __GUI_ASSERTPARAMS(h != NULL && guii_widget_iswidget(h));   /* Check valid parameter */
     
     GUI_WIDGET_PARAMTYPE_WIDGETPARAM(&param) = &p;
     GUI_WIDGET_RESULTTYPE_U8(&result) = 1;
     
     p.type = cfg;
     p.data = (void *)data;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
     __GUI_ENTER(protect);                           /* Enter GUI */
     guii_widget_callback(h, GUI_WC_SetParam, &param, &result); /* Process callback function */
@@ -1578,44 +1276,60 @@ guii_widget_setparam(gui_handle_p h, uint16_t cfg, const void* data, uint8_t inv
     return 1;
 }
 
-/******************************************************************************/
-/******************************************************************************/
-/***                  Thread safe version of public API                      **/
-/******************************************************************************/
-/******************************************************************************/
-
 /**
  * \brief           Remove widget from memory
  * \note            If widget has child widgets, they will be removed too
- * \param[in,out]   *h: Pointer to widget handle. If removed, pointer will be invalidated and set to NULL
+ * \param[in,out]   *h: Pointer to widget handle. If removed, pointer will be invalidated and set to `NULL`
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_remove(gui_handle_p* h) {
+gui_widget_remove(gui_handle_p* h, const uint8_t protect) {
+    uint8_t ret = 0;
     __GUI_ASSERTPARAMS(h != NULL && guii_widget_iswidget(*h));  /* Check valid parameter */
 
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    guii_widget_remove(*h);                         /* Remove widget */
-    *h = NULL;
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    if (can_remove_widget(*h)) {                    /* Check if we can delete widget */
+        guii_widget_setflag(*h, GUI_FLAG_REMOVE);   /* Set flag for widget delete */
+        GUI.flags |= GUI_FLAG_REMOVE;               /* Set flag for to remove at least one widget from tree */
+        if (guii_widget_isfocused(h)) {             /* In case current widget is in focus */
+            guii_widget_focus_set(guii_widget_getparent(*h));   /* Set parent as focused */
+        }
+        ret = 1;
+        *h = NULL;
+#if GUI_CFG_OS
+        gui_sys_mbox_putnow(&GUI.OS.mbox, NULL);    /* Put message to queue */
+#endif /* GUI_CFG_OS */
+    }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
 
-    return 1;                                       /* Removev successfully */
+    return ret;                                       /* Removev successfully */
 }
 
 /**
  * \brief           Remove children widgets of current widget
- * \param[in,out]   *h: Pointer to widget handle
+ * \param[in,out]   h: Widget handle
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_empty(gui_handle_p h) {
+gui_widget_empty(gui_handle_p h, const uint8_t protect) {
+    gui_handle_p child;
+    uint8_t ret = 1;
+
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    guii_widget_empty(h);                           /* Empty children widgets */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    /* Process all children widgets */
+    for (child = gui_linkedlist_widgetgetnext(h, NULL); child != NULL;
+        child = gui_linkedlist_widgetgetnext(NULL, child)) {
+        if (!can_remove_widget(child)) {            /* Stop execution if cannot be deleted */
+            ret = 0;
+            break;
+        }
+        guii_widget_setflag(h, GUI_FLAG_REMOVE);    /* Set remove flag */
+    }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
-    return 1;                                       /* Removev successfully */
+    return ret;
 }
 
 /***************************************************************/
@@ -1623,120 +1337,6 @@ gui_widget_empty(gui_handle_p h) {
 /**                Widget font & text management              **/
 /***************************************************************/
 /***************************************************************/
-/**
- * \brief           Set font used for widget drawing
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \param[in]       font: Pointer to \ref gui_font_t structure with font information
- * \return          `1` on success, `0` otherwise
- */
-uint8_t
-guii_widget_setfont(gui_handle_p h, const gui_font_t* font) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    if (h->font != font) {                          /* Any parameter changed */
-        h->font = font;                             /* Set parameter */
-        guii_widget_invalidatewithparent(h);        /* Invalidate object */
-    }
-    return 1;
-}
-
-/**
- * \brief           Set text for widget
- * \note            This function is private and may be called only when OS protection is active
- *
- * \note            When memory for text is dynamically allocated, text will be copied to allocated memory,
- *                     otherwise it will just set the pointer to new text.
- *                     Any changes on this text after function call will affect on later results
- *
- * \param[in,out]   h: Widget handle
- * \param[in]       text: Pointer to text to set
- * \return          `1` on success, `0` otherwise
- */
-uint8_t
-guii_widget_settext(gui_handle_p h, const gui_char* text) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    if (guii_widget_getflag(h, GUI_FLAG_DYNAMICTEXTALLOC)) {   /* Memory for text is dynamically allocated */
-        if (h->textmemsize) {
-            if (gui_string_lengthtotal(text) > (h->textmemsize - 1)) {  /* Check string length */
-                gui_string_copyn(h->text, text, h->textmemsize - 1);    /* Do not copy all bytes because of memory overflow */
-            } else {
-                gui_string_copy(h->text, text);     /* Copy entire string */
-            }
-            guii_widget_invalidate(h);              /* Redraw object */
-            guii_widget_callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
-        }
-    } else {                                        /* Memory allocated by user */
-        if (h->text != NULL && h->text == text) {   /* In case the same pointer is passed to WIDGET */
-            guii_widget_invalidate(h);              /* Redraw object */
-            guii_widget_callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
-        }
-        
-        if (h->text != text) {                      /* Check if pointer do not match */
-            h->text = (gui_char *)text;             /* Set parameter */
-            guii_widget_invalidate(h);              /* Redraw object */
-            guii_widget_callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
-        }
-    }
-    h->textcursor = gui_string_lengthtotal(h->text);/* Set cursor to the end of string */
-    return 1;
-}
-
-/**
- * \brief           Allocate text memory for widget
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \param[in]       size: Number of bytes to allocate
- * \return          `1` on success, `0` otherwise
- * \sa              guii_widget_freetextmemory, gui_widget_alloctextmemory, gui_widget_freetextmemory
- * \hideinitializer
- */
-uint8_t
-guii_widget_alloctextmemory(gui_handle_p h, uint32_t size) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    if (guii_widget_getflag(h, GUI_FLAG_DYNAMICTEXTALLOC) && h->text) {  /* Check if already allocated */
-        GUI_MEMFREE(h->text);                       /* Free memory first */
-        h->textmemsize = 0;                         /* Reset memory size */
-    }
-    h->text = NULL;                                 /* Reset pointer */
-    
-    h->textmemsize = sizeof(gui_char) * size;       /* Allocate text memory */
-    h->text = GUI_MEMALLOC(__GH(h)->textmemsize);   /* Allocate memory for text */
-    if (h->text != NULL) {                          /* Check if allocated */
-        guii_widget_setflag(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Dynamically allocated */
-    } else {
-        h->textmemsize = 0;                         /* No dynamic bytes available */
-        guii_widget_clrflag(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Not allocated */
-    }
-    guii_widget_invalidate(h);                      /* Redraw object */
-    guii_widget_callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
-    return 1;
-}
-
-/**
- * \brief           Free text memory for widget
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \return          `1` on success, `0` otherwise
- * \sa              __gui_widget_alloctextmemory, gui_widget_alloctextmemory, gui_widget_freetextmemory
- * \hideinitializer
- */
-uint8_t
-guii_widget_freetextmemory(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    if (guii_widget_getflag(h, GUI_FLAG_DYNAMICTEXTALLOC) && h->text != NULL) { /* Check if dynamically alocated */
-        GUI_MEMFREE(h->text);                       /* Free memory first */
-        h->text = NULL;                             /* Reset memory */
-        h->textmemsize = 0;                         /* Reset memory size */
-        guii_widget_clrflag(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Not allocated */
-        guii_widget_invalidate(h);                  /* Redraw object */
-        guii_widget_callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
-    }
-    return 1;
-}
-
 /**
  * \brief           Check if widget has set font and text
  * \note            This function is private and may be called only when OS protection is active
@@ -1815,38 +1415,6 @@ guii_widget_processtextkey(gui_handle_p h, guii_keyboard_data_t* kb) {
 }
 
 /**
- * \brief           Get text from widget
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \return          Pointer to text from widget
- */
-const gui_char *
-guii_widget_gettext(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    /* Prepare for transpate support */
-#if GUI_CFG_USE_TRANSLATE
-    /* For static texts only */
-    if (!guii_widget_getflag(h, GUI_FLAG_DYNAMICTEXTALLOC) && h->text != NULL) {
-        return gui_translate_get(h->text);          /* Get translation entry */
-    }
-#endif /* GUI_CFG_USE_TRANSLATE */
-    return h->text;                                 /* Return text for widget */
-}
-
-/**
- * \brief           Get font from widget
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \return          Pointer to font used for widget
- */
-const gui_font_t *
-guii_widget_getfont(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    return h->font;                                 /* Return font for widget */
-}
-
-/**
  * \brief           Allocate memory for text operations if text will be dynamic
  * \note            When unicode feature is enabled, memory should be 4x required characters because unicode can store up to 4 bytes for single character
  * \param[in,out]   h: Widget handle
@@ -1855,12 +1423,27 @@ guii_widget_getfont(gui_handle_p h) {
  * \sa              gui_widget_freetextmemory
  */
 uint32_t
-gui_widget_alloctextmemory(gui_handle_p h, uint32_t size) {
+gui_widget_alloctextmemory(gui_handle_p h, uint32_t size, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && size > 1);   /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    guii_widget_alloctextmemory(h, size);           /* Allocate memory for text */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    if (guii_widget_getflag(h, GUI_FLAG_DYNAMICTEXTALLOC) && h->text != NULL) { /* Check if already allocated */
+        GUI_MEMFREE(h->text, 0);                    /* Free memory first */
+        h->textmemsize = 0;                         /* Reset memory size */
+    }
+    h->text = NULL;                                 /* Reset pointer */
+
+    h->textmemsize = sizeof(gui_char) * size;       /* Allocate text memory */
+    h->text = GUI_MEMALLOC(__GH(h)->textmemsize, 0);/* Allocate memory for text */
+    if (h->text != NULL) {                          /* Check if allocated */
+        guii_widget_setflag(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Dynamically allocated */
+    } else {
+        h->textmemsize = 0;                         /* No dynamic bytes available */
+        guii_widget_clrflag(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Not allocated */
+    }
+    guii_widget_invalidate(h);                      /* Redraw object */
+    guii_widget_callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return h->textmemsize;                          /* Return number of bytes allocated */
 }
@@ -1872,14 +1455,22 @@ gui_widget_alloctextmemory(gui_handle_p h, uint32_t size) {
  * \sa              gui_widget_alloctextmemory
  */
 uint8_t
-gui_widget_freetextmemory(gui_handle_p h) {
-    uint8_t res;
+gui_widget_freetextmemory(gui_handle_p h, const uint8_t protect) {
+    uint8_t res = 0;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_freetextmemory(h);            /* Free memory for text */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    if (guii_widget_getflag(h, GUI_FLAG_DYNAMICTEXTALLOC) && h->text != NULL) { /* Check if dynamically alocated */
+        GUI_MEMFREE(h->text, 0);                    /* Free memory first */
+        h->text = NULL;                             /* Reset memory */
+        h->textmemsize = 0;                         /* Reset memory size */
+        guii_widget_clrflag(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Not allocated */
+        guii_widget_invalidate(h);                  /* Redraw object */
+        guii_widget_callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+        res = 1;
+    }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return res;
 }
@@ -1895,16 +1486,36 @@ gui_widget_freetextmemory(gui_handle_p h) {
  * \sa              gui_widget_alloctextmemory, gui_widget_freetextmemory, guii_widget_setfont, gui_widget_gettext, gui_widget_gettextcopy
  */
 uint8_t
-gui_widget_settext(gui_handle_p h, const gui_char* text) {
-    uint8_t res;
-    
+gui_widget_settext(gui_handle_p h, const gui_char* text, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_settext(h, text);             /* Set text for widget */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    if (guii_widget_getflag(h, GUI_FLAG_DYNAMICTEXTALLOC)) {   /* Memory for text is dynamically allocated */
+        if (h->textmemsize) {
+            if (gui_string_lengthtotal(text) > (h->textmemsize - 1)) {  /* Check string length */
+                gui_string_copyn(h->text, text, h->textmemsize - 1);    /* Do not copy all bytes because of memory overflow */
+            } else {
+                gui_string_copy(h->text, text);     /* Copy entire string */
+            }
+            guii_widget_invalidate(h);              /* Redraw object */
+            guii_widget_callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+        }
+    } else {                                        /* Memory allocated by user */
+        if (h->text != NULL && h->text == text) {   /* In case the same pointer is passed to WIDGET */
+            guii_widget_invalidate(h);              /* Redraw object */
+            guii_widget_callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+        }
+        
+        if (h->text != text) {                      /* Check if pointer do not match */
+            h->text = (gui_char *)text;             /* Set parameter */
+            guii_widget_invalidate(h);              /* Redraw object */
+            guii_widget_callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+        }
+    }
+    h->textcursor = gui_string_lengthtotal(h->text);/* Set cursor to the end of string */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
-    return res;
+    return 1;
 }
 
 /**
@@ -1915,14 +1526,22 @@ gui_widget_settext(gui_handle_p h, const gui_char* text) {
  * \sa              gui_widget_settext, gui_widget_gettextcopy
  */
 const gui_char *
-gui_widget_gettext(gui_handle_p h) {
+gui_widget_gettext(gui_handle_p h, const uint8_t protect) {
     const gui_char* t;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    t = guii_widget_gettext(h);                     /* Return text */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+#if GUI_CFG_USE_TRANSLATE
+    /* For static texts only */
+    if (!guii_widget_getflag(h, GUI_FLAG_DYNAMICTEXTALLOC) && h->text != NULL) {
+        t = gui_translate_get(h->text);             /* Get translation entry */
+    } else 
+#endif /* GUI_CFG_USE_TRANSLATE */
+    { 
+        t = h->text;                                /* Get text for widget */
+    }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return t;
 }
@@ -1937,16 +1556,16 @@ gui_widget_gettext(gui_handle_p h) {
  * \sa              gui_widget_settext, gui_widget_gettext
  */
 const gui_char*
-gui_widget_gettextcopy(gui_handle_p h, gui_char* dst, uint32_t len) {
+gui_widget_gettextcopy(gui_handle_p h, gui_char* dst, uint32_t len, const uint8_t protect) {
     const gui_char* t;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    t = guii_widget_gettext(h);                     /* Return text */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    t = gui_widget_gettext(h, 0);                   /* Return text */
     gui_string_copyn(dst, t, len);                  /* Copy text after */
     dst[len] = 0;                                   /* Set trailling zero */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return t;  
 }
@@ -1959,16 +1578,17 @@ gui_widget_gettextcopy(gui_handle_p h, gui_char* dst, uint32_t len) {
  * \sa              gui_widget_settext, gui_widget_gettext
  */
 uint8_t
-gui_widget_setfont(gui_handle_p h, const gui_font_t* font) {
-    uint8_t res;
-    
+gui_widget_setfont(gui_handle_p h, const gui_font_t* font, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_setfont(h, font);             /* Set widget font */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    if (h->font != font) {                          /* Any parameter changed */
+        h->font = font;                             /* Set parameter */
+        guii_widget_invalidatewithparent(h);        /* Invalidate object */
+    }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
-    return res;
+    return 1;
 }
 
 /**
@@ -1978,14 +1598,14 @@ gui_widget_setfont(gui_handle_p h, const gui_font_t* font) {
  * \return          Pointer to font used for widget
  */
 const gui_font_t *
-gui_widget_getfont(gui_handle_p h) {
+gui_widget_getfont(gui_handle_p h, const uint8_t protect) {
     const gui_font_t* font;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    font = guii_widget_getfont(h);                  /* Get widget font */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    font = h->font;                                 /* Get widget font */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return font;
 }
@@ -1998,106 +1618,96 @@ gui_widget_getfont(gui_handle_p h) {
 
 /**
  * \brief           Set width of widget in units of pixels
- * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       width: Width in units of pixels
  * \return          `1` on success, `0` otherwise
  * \sa              gui_widget_setheight, gui_widget_setwidthpercent, gui_widget_setheightpercent
  */
 uint8_t
-guii_widget_setwidth(gui_handle_p h, gui_dim_t width) {
+gui_widget_setwidth(gui_handle_p h, gui_dim_t width, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
 
     /* Set new width */
     return set_widget_size(h, GUI_FLOAT(width), h->height,
         0,
-        guii_widget_getflag(h, GUI_FLAG_HEIGHT_PERCENT) == GUI_FLAG_HEIGHT_PERCENT
+        guii_widget_getflag(h, GUI_FLAG_HEIGHT_PERCENT) == GUI_FLAG_HEIGHT_PERCENT,
+        protect
     );    
 }
 
 /**
  * \brief           Set height of widget in units of pixels
- * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       height: height in units of pixels
  * \return          `1` on success, `0` otherwise
  * \sa              gui_widget_setwidth, gui_widget_setwidthpercent, gui_widget_setheightpercent
  */
 uint8_t
-guii_widget_setheight(gui_handle_p h, gui_dim_t height) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-
+gui_widget_setheight(gui_handle_p h, gui_dim_t height, const uint8_t protect) {
     /* Set new height */
     return set_widget_size(h, h->width, GUI_FLOAT(height),
         guii_widget_getflag(h, GUI_FLAG_WIDTH_PERCENT) == GUI_FLAG_WIDTH_PERCENT,
-        0
+        0,
+        protect
     );
 }
 
 /**
  * \brief           Set width of widget in percentage relative to parent widget
- * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       width: Width in percentage
  * \return          `1` on success, `0` otherwise
  * \sa              gui_widget_setwidth, gui_widget_setheight, gui_widget_setheightpercent
  */
 uint8_t
-guii_widget_setwidthpercent(gui_handle_p h, float width) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-
+gui_widget_setwidthpercent(gui_handle_p h, float width, const uint8_t protect) {
     /* Set new height in percent */
     return set_widget_size(h, width, h->height,
         1,
-        guii_widget_getflag(h, GUI_FLAG_HEIGHT_PERCENT) == GUI_FLAG_HEIGHT_PERCENT
+        guii_widget_getflag(h, GUI_FLAG_HEIGHT_PERCENT) == GUI_FLAG_HEIGHT_PERCENT,
+        protect
     );
 }
 
 /**
  * \brief           Set height of widget in percentage relative to parent widget
- * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       height: height in percentage
  * \return          `1` on success, `0` otherwise
  * \sa              gui_widget_setwidth, gui_widget_setheight, gui_widget_setwidthpercent
  */
 uint8_t
-guii_widget_setheightpercent(gui_handle_p h, float height) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-
+gui_widget_setheightpercent(gui_handle_p h, float height, const uint8_t protect) {
     /* Set new height in percent */
     return set_widget_size(h, h->width, height,
         guii_widget_getflag(h, GUI_FLAG_WIDTH_PERCENT) == GUI_FLAG_WIDTH_PERCENT,
-        1
+        1,
+        protect
     );
 }
 
 /**
  * \brief           Set widget size in units of pixels
- * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       wi: Widget width
  * \param[in]       hi: Widget height
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-guii_widget_setsize(gui_handle_p h, gui_dim_t wi, gui_dim_t hi) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    return set_widget_size(h, GUI_FLOAT(wi), GUI_FLOAT(hi), 0, 0);  /* Set new size */
+gui_widget_setsize(gui_handle_p h, gui_dim_t wi, gui_dim_t hi, const uint8_t protect) {
+    return set_widget_size(h, GUI_FLOAT(wi), GUI_FLOAT(hi), 0, 0, protect); /* Set new size */
 }
 
 /**
  * \brief           Set widget size in units of percent
- * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
  * \param[in]       wi: Widget width
  * \param[in]       hi: Widget height
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-guii_widget_setsizepercent(gui_handle_p h, float wi, float hi) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    return set_widget_size(h, wi, hi, 1, 1);        /* Set new size */
+gui_widget_setsizepercent(gui_handle_p h, float wi, float hi, const uint8_t protect) {
+    return set_widget_size(h, wi, hi, 1, 1, protect);   /* Set new size */
 }
 
 /**
@@ -2107,153 +1717,16 @@ guii_widget_setsizepercent(gui_handle_p h, float wi, float hi) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-guii_widget_toggleexpanded(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    return guii_widget_setexpanded(h, !guii_widget_isexpanded(h));  /* Invert expanded mode */
-}
+gui_widget_toggleexpanded(gui_handle_p h, const uint8_t protect) {
+    uint8_t ret;
 
-/**
- * \brief           Set expandend mode on widget. When enabled, widget will be at X,Y = 0,0 relative to parent and will have width,height = 100%,100%
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \param[in]       state: State for expanded mode
- * \return          `1` on success, `0` otherwise
- */
-uint8_t
-guii_widget_setexpanded(gui_handle_p h, uint8_t state) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    if (!state && guii_widget_isexpanded(h)) {      /* Check current status */
-        guii_widget_invalidatewithparent(h);        /* Invalidate with parent first for clipping region */
-        guii_widget_clrflag(h, GUI_FLAG_EXPANDED);  /* Clear expanded after invalidation */
-        SET_WIDGET_ABS_VALUES(h);                   /* Set widget absolute values */
-    } else if (state && !guii_widget_isexpanded(h)) {
-        guii_widget_setflag(h, GUI_FLAG_EXPANDED);  /* Expand widget */
-        SET_WIDGET_ABS_VALUES(h);                   /* Set widget absolute values */
-        guii_widget_invalidate(h);                  /* Redraw only selected widget as it is over all window */
-    }
-    return 1;
-}
 
-/**
- * \brief           Set widget size in units of pixels
- * \param[in,out]   h: Widget handle
- * \param[in]       width: Width value
- * \param[in]       height: height value
- * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setsizepercent
- */
-uint8_t
-gui_widget_setsize(gui_handle_p h, gui_dim_t width, gui_dim_t height) {
-    uint8_t res;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_setsize(h, width, height);   /* Set actual size to object */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
-    
-    return res;
-}
+    __GUI_ENTER(protect);
+    ret = gui_widget_setexpanded(h, !gui_widget_isexpanded(h, 0), 0);
+    __GUI_LEAVE(protect);
 
-/**
- * \brief           Set widget size in units of percent
- * \param[in,out]   h: Widget handle
- * \param[in]       width: Width value
- * \param[in]       height: height value
- * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setsize
- */
-uint8_t
-gui_widget_setsizepercent(gui_handle_p h, float width, float height) {
-    uint8_t res;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_setsizepercent(h, width, height);    /* Set actual size to object in percent */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
-    
-    return res;
-}
-
-/**
- * \brief           Set width of widget in units of pixels
- * \param[in,out]   h: Widget handle
- * \param[in]       width: Width in units of pixels
- * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setheight, gui_widget_setwidthpercent, gui_widget_setheightpercent
- */
-uint8_t
-gui_widget_setwidth(gui_handle_p h, gui_dim_t width) {
-    uint8_t res;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_setwidth(h, width);           /* Set object width */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
-    
-    return res;
-}
-
-/**
- * \brief           Set height of widget in units of pixels
- * \param[in,out]   h: Widget handle
- * \param[in]       height: height in units of pixels
- * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setwidth, gui_widget_setwidthpercent, gui_widget_setheightpercent
- */
-uint8_t
-gui_widget_setheight(gui_handle_p h, gui_dim_t height) {
-    uint8_t res;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_setheight(h, height);         /* Set object height */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
-    
-    return res;
-}
-
-/**
- * \brief           Set width of widget in percentage relative to parent widget
- * \param[in,out]   h: Widget handle
- * \param[in]       width: Width in percentage
- * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setwidth, gui_widget_setheight, gui_widget_setheightpercent
- */
-uint8_t
-gui_widget_setwidthpercent(gui_handle_p h, float width) {
-    uint8_t res;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_setwidthpercent(h, width);    /* Set object width */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
-    
-    return res;
-}
-
-/**
- * \brief           Set height of widget in percentage relative to parent widget
- * \param[in,out]   h: Widget handle
- * \param[in]       height: height in percentage
- * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setwidth, gui_widget_setheight, gui_widget_setwidthpercent
- */
-uint8_t
-gui_widget_setheightpercent(gui_handle_p h, float height) {
-    uint8_t res;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_setheightpercent(h, height);  /* Set object height */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
-    
-    return res;
+    return ret;                                     /* Invert expanded mode */
 }
 
 /**
@@ -2266,14 +1739,18 @@ gui_widget_setheightpercent(gui_handle_p h, float height) {
  * \sa              gui_widget_getheight, gui_widget_setwidth
  */
 gui_dim_t
-gui_widget_getwidth(gui_handle_p h) {
+gui_widget_getwidth(gui_handle_p h, const uint8_t protect) {
     gui_dim_t res;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && GUI.initialized); /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_getwidth(h);                  /* Get widget width */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+#if GUI_CFG_USE_POS_SIZE_CACHE
+    res = h->abs_width;                             /* Cached value */
+#else /* GUI_CFG_USE_POS_SIZE_CACHE */
+    res = calculate_widget_width(h);                /* Calculate value */
+#endif /* GUI_CFG_USE_POS_SIZE_CACHE */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return res;
 }
@@ -2290,15 +1767,19 @@ gui_widget_getwidth(gui_handle_p h) {
  * \hideinitializer
  */
 gui_dim_t
-gui_widget_getheight(gui_handle_p h) {
+gui_widget_getheight(gui_handle_p h, const uint8_t protect) {
     gui_dim_t res;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_getheight(h);                 /* Get widget height */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
-    
+
+    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && GUI.initialized); /* Check valid parameter */
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+#if GUI_CFG_USE_POS_SIZE_CACHE
+    res = h->abs_height;                            /* Cached value */
+#else /* GUI_CFG_USE_POS_SIZE_CACHE */
+    res = calculate_widget_height(h);               /* Calculate value */
+#endif /* GUI_CFG_USE_POS_SIZE_CACHE */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return res;
 }
 
@@ -2312,16 +1793,24 @@ gui_widget_getheight(gui_handle_p h) {
  * \sa              gui_widget_isexpanded
  */
 uint8_t
-gui_widget_setexpanded(gui_handle_p h, uint8_t state) {
-    uint8_t ret;
-    
+gui_widget_setexpanded(gui_handle_p h, uint8_t state, const uint8_t protect) {
+    uint8_t is_expanded;
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    ret = guii_widget_setexpanded(h, state);        /* Set expanded mode */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    is_expanded = gui_widget_isexpanded(h, 0);
+    if (!state && is_expanded) {                    /* Check current status */
+        guii_widget_invalidatewithparent(h);        /* Invalidate with parent first for clipping region */
+        guii_widget_clrflag(h, GUI_FLAG_EXPANDED);  /* Clear expanded after invalidation */
+        SET_WIDGET_ABS_VALUES(h);                   /* Set widget absolute values */
+    } else if (state && !is_expanded) {
+        guii_widget_setflag(h, GUI_FLAG_EXPANDED);  /* Expand widget */
+        SET_WIDGET_ABS_VALUES(h);                   /* Set widget absolute values */
+        guii_widget_invalidate(h);                  /* Redraw only selected widget as it is over all window */
+    }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
-    return ret;
+    return 1;
 }
 
 /**
@@ -2331,14 +1820,14 @@ gui_widget_setexpanded(gui_handle_p h, uint8_t state) {
  * \sa              gui_widget_setexpanded
  */
 uint8_t
-gui_widget_isexpanded(gui_handle_p h) {
+gui_widget_isexpanded(gui_handle_p h, const uint8_t protect) {
     uint8_t ret;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    ret = guii_widget_isexpanded(h);                /* Check expanded mode */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    ret = (!!guii_widget_getflag(h, GUI_FLAG_EXPANDED));
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return ret;
 }
@@ -2350,110 +1839,6 @@ gui_widget_isexpanded(gui_handle_p h) {
 /***************************************************************/
 /**
  * \brief           Set widget position relative to parent object in units of pixels
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \param[in]       x: X position relative to parent object
- * \param[in]       y: Y position relative to parent object
- * \return          `1` on success, `0` otherwise
- */
-uint8_t
-guii_widget_setposition(gui_handle_p h, gui_dim_t x, gui_dim_t y) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    return set_widget_position(h, GUI_FLOAT(x), GUI_FLOAT(y), 0, 0);/* Set widget position */
-}
- 
-/**
- * \brief           Set widget position relative to parent object in units of percent
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \param[in]       x: X position relative to parent object
- * \param[in]       y: Y position relative to parent object
- * \return          `1` on success, `0` otherwise
- */
-uint8_t
-guii_widget_setpositionpercent(gui_handle_p h, float x, float y) {  
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */   
-    return set_widget_position(h, x, y, 1, 1);      /* Set widget position */
-}
-
-/**
- * \brief           Set widget X position relative to parent object in units of pixels
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \param[in]       x: X position relative to parent object
- * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setxpositionpercent
- */
-uint8_t
-guii_widget_setxposition(gui_handle_p h, gui_dim_t x) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-
-    /* Set widget x position */
-    return set_widget_position(h, GUI_FLOAT(x), h->y,
-        0,
-        guii_widget_getflag(h, GUI_FLAG_YPOS_PERCENT) == GUI_FLAG_YPOS_PERCENT
-    );
-}
- 
-/**
- * \brief           Set widget X position relative to parent object in units of percent
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \param[in]       x: X position relative to parent object
- * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setxposition
- */
-uint8_t
-guii_widget_setxpositionpercent(gui_handle_p h, float x) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    /* Set widget x position in percent */
-    return set_widget_position(h, x, h->y,
-        1,
-        guii_widget_getflag(h, GUI_FLAG_YPOS_PERCENT) == GUI_FLAG_YPOS_PERCENT
-    );
-}
- 
-/**
- * \brief           Set widget Y position relative to parent object in units of pixels
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \param[in]       y: Y position relative to parent object
- * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setypositionpercent
- */
-uint8_t
-guii_widget_setyposition(gui_handle_p h, gui_dim_t y) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-
-    /* Set widget y position */
-    return set_widget_position(h, h->x, GUI_FLOAT(y),
-        guii_widget_getflag(h, GUI_FLAG_XPOS_PERCENT) == GUI_FLAG_XPOS_PERCENT,
-        0
-    );
-}
- 
-/**
- * \brief           Set widget Y position relative to parent object in units of percent
- * \note            This function is private and may be called only when OS protection is active
- * \param[in,out]   h: Widget handle
- * \param[in]       y: Y position relative to parent object
- * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setyposition
- */
-uint8_t
-guii_widget_setypositionpercent(gui_handle_p h, float y) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    /* Set widget y position in percent */
-    return set_widget_position(h, h->x, y,
-        guii_widget_getflag(h, GUI_FLAG_XPOS_PERCENT) == GUI_FLAG_XPOS_PERCENT,
-        1
-    );
-}
-
-/**
- * \brief           Set widget position relative to parent object in units of pixels
  * \param[in,out]   h: Widget handle
  * \param[in]       x: X position relative to parent object
  * \param[in]       y: Y position relative to parent object
@@ -2461,16 +1846,8 @@ guii_widget_setypositionpercent(gui_handle_p h, float y) {
  * \sa              gui_widget_setpositionpercent
  */
 uint8_t
-gui_widget_setposition(gui_handle_p h, gui_dim_t x, gui_dim_t y) {
-    uint8_t res;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_setposition(h, x, y);         /* Set X and Y position */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
-    
-    return res;
+gui_widget_setposition(gui_handle_p h, gui_dim_t x, gui_dim_t y, const uint8_t protect) {
+    return set_widget_position(h, GUI_FLOAT(x), GUI_FLOAT(y), 0, 0, protect);   /* Set widget position */
 }
 
 /**
@@ -2482,16 +1859,8 @@ gui_widget_setposition(gui_handle_p h, gui_dim_t x, gui_dim_t y) {
  * \sa              gui_widget_setposition
  */
 uint8_t
-gui_widget_setpositionpercent(gui_handle_p h, float x, float y) {
-    uint8_t res;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_setpositionpercent(h, x, y);  /* Set X and Y position in percent */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
-    
-    return res;
+gui_widget_setpositionpercent(gui_handle_p h, float x, float y, const uint8_t protect) {
+    return set_widget_position(h, x, y, 1, 1, protect); /* Set widget position in percent */
 }
 
 /**
@@ -2502,16 +1871,13 @@ gui_widget_setpositionpercent(gui_handle_p h, float x, float y) {
  * \sa              gui_widget_setxpositionpercent
  */
 uint8_t
-gui_widget_setxposition(gui_handle_p h, gui_dim_t x) {
-    uint8_t res;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_setxposition(h, x);           /* Set X position */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
-    
-    return res;
+gui_widget_setxposition(gui_handle_p h, gui_dim_t x, const uint8_t protect) {
+    /* Set widget x position */
+    return set_widget_position(h, GUI_FLOAT(x), h->y,
+        0,
+        guii_widget_getflag(h, GUI_FLAG_YPOS_PERCENT) == GUI_FLAG_YPOS_PERCENT,
+        protect
+    );
 }
 
 /**
@@ -2522,16 +1888,13 @@ gui_widget_setxposition(gui_handle_p h, gui_dim_t x) {
  * \sa              gui_widget_setxposition
  */
 uint8_t
-gui_widget_setxpositionpercent(gui_handle_p h, float x) {
-    uint8_t res;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_setxpositionpercent(h, x);    /* Set X position in percent */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
-    
-    return res;
+gui_widget_setxpositionpercent(gui_handle_p h, float x, const uint8_t protect) {
+    /* Set widget x position in percent */
+    return set_widget_position(h, x, h->y,
+        1,
+        guii_widget_getflag(h, GUI_FLAG_YPOS_PERCENT) == GUI_FLAG_YPOS_PERCENT,
+        protect
+    );
 }
 
 /**
@@ -2542,16 +1905,13 @@ gui_widget_setxpositionpercent(gui_handle_p h, float x) {
  * \sa              gui_widget_setypositionpercent
  */
 uint8_t
-gui_widget_setyposition(gui_handle_p h, gui_dim_t y) {
-    uint8_t res;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_setyposition(h, y);           /* Set Y position */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
-    
-    return res;
+gui_widget_setyposition(gui_handle_p h, gui_dim_t y, const uint8_t protect) {
+    /* Set widget y position */
+    return set_widget_position(h, h->x, GUI_FLOAT(y),
+        guii_widget_getflag(h, GUI_FLAG_XPOS_PERCENT) == GUI_FLAG_XPOS_PERCENT,
+        0,
+        protect
+    );
 }
 
 /**
@@ -2562,16 +1922,13 @@ gui_widget_setyposition(gui_handle_p h, gui_dim_t y) {
  * \sa              gui_widget_setyposition
  */
 uint8_t
-gui_widget_setypositionpercent(gui_handle_p h, float y) {
-    uint8_t res;
-    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_setypositionpercent(h, y);    /* Set Y position in percent */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
-    
-    return res;
+gui_widget_setypositionpercent(gui_handle_p h, float y, const uint8_t protect) {
+    /* Set widget y position in percent */
+    return set_widget_position(h, h->x, y,
+        guii_widget_getflag(h, GUI_FLAG_XPOS_PERCENT) == GUI_FLAG_XPOS_PERCENT,
+        1,
+        protect
+    );
 }
 
 /**
@@ -2580,15 +1937,49 @@ gui_widget_setypositionpercent(gui_handle_p h, float y) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_invalidate(gui_handle_p h) {
+gui_widget_invalidate(gui_handle_p h, const uint8_t protect) {
     uint8_t res;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */ 
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
     res = guii_widget_invalidate(h);                /* Invalidate widget */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
+    return res;
+}
+
+/**
+ * \brief           Set ignore widget option
+ *                  
+ *                  When setting multiple settings for a widget,
+ *                  it is good to prevent auto-invalidate where each separate
+ *                  setting invalidates widget and may slow-down execution
+ *
+ * \param[in]       h: Widget handle
+ * \param[in]       en: Set to `1` to ignore invalidation, `0` to disable
+ * \param[in]       invalidate: Set to `1` to invalidate before setting flag `en = 1` or after clearing it `en = 0`
+ * \return          `1` on success, `0` otherwise
+ */
+uint8_t
+gui_widget_setignoreinvalidate(gui_handle_p h, uint8_t en, uint8_t invalidate, const uint8_t protect) {
+    uint8_t res = 0;
+
+    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    if (invalidate) {                               /* Check if we need to invalidate before setting ignore */
+        guii_widget_clrflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* First clear flag if set already */
+        res = guii_widget_invalidate(h);            /* Invalidate widget now */
+    }
+
+    if (en) {                                       /* Check enabling ignore */
+        guii_widget_setflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Set ignore invalidate flag */
+    } else {
+        guii_widget_clrflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Clear ignore invalidate flag */
+    }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
     return res;
 }
 
@@ -2599,16 +1990,17 @@ gui_widget_invalidate(gui_handle_p h) {
  * \sa              gui_widget_hide
  */
 uint8_t
-gui_widget_show(gui_handle_p h) {
-    uint8_t res;
-    
+gui_widget_show(gui_handle_p h, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_show(h);                      /* Show widget */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    if (guii_widget_getflag(h, GUI_FLAG_HIDDEN)) {  /* If hidden, show it */
+        guii_widget_clrflag(h, GUI_FLAG_HIDDEN);
+        guii_widget_invalidatewithparent(h);        /* Invalidate it for redraw with parent */
+    }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
-    return res;
+    return 1;
 }
 
 /**
@@ -2619,15 +2011,15 @@ gui_widget_show(gui_handle_p h) {
  * \sa              gui_widget_hide
  */
 uint8_t
-gui_widget_putonfront(gui_handle_p h, uint8_t focus) {
+gui_widget_putonfront(gui_handle_p h, uint8_t focus, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
     guii_widget_movedowntree(h);                    /* Put widget on front */
     if (focus) {
         guii_widget_focus_set(h);                   /* Set widget to focused state */
     }
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return 1;
 }
@@ -2639,16 +2031,24 @@ gui_widget_putonfront(gui_handle_p h, uint8_t focus) {
  * \sa              gui_widget_show, gui_widget_putonfront
  */
 uint8_t
-gui_widget_hide(gui_handle_p h) {
-    uint8_t res;
-    
+gui_widget_hide(gui_handle_p h, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    res = guii_widget_hide(h);                      /* Hide widget */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    if (!guii_widget_getflag(h, GUI_FLAG_HIDDEN)) { /* If visible, hide it */
+        /* TODO: Check if active/focused widget is maybe children of this widget */
+        if (GUI.focused_widget != NULL && (GUI.focused_widget == h || gui_widget_ischildof(GUI.focused_widget, h, 0))) {/* Clear focus */
+            guii_widget_focus_set(guii_widget_getparent(GUI.focused_widget)); /* Set parent widget as focused now */
+        }
+        if (GUI.active_widget != NULL && (GUI.active_widget == h || gui_widget_ischildof(GUI.active_widget, h, 0))) {   /* Clear active */
+            guii_widget_active_clear();
+        }
+        guii_widget_invalidatewithparent(h);        /* Invalidate it for redraw with parent */
+        guii_widget_setflag(h, GUI_FLAG_HIDDEN);    /* Hide widget */
+    }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
-    return res;
+    return 1;
 }
 
 /**
@@ -2658,15 +2058,19 @@ gui_widget_hide(gui_handle_p h) {
  * \sa              gui_widget_show, gui_widget_putonfront
  */
 uint8_t
-gui_widget_hidechildren(gui_handle_p h) {
-    uint8_t res;
+gui_widget_hidechildren(gui_handle_p h, const uint8_t protect) {
+    gui_handle_p t;
+
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    
-    res = guii_widget_hidechildren(h);              /* Hide children widget */
-    
-    __GUI_LEAVE(1);                                 /* Leave GUI */
-    return res;
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    /* Scan all widgets of current widget and hide them */
+    GUI_LINKEDLIST_WIDGETSLISTNEXT(h, t) {
+        gui_widget_hide(t, 0);                      /* Hide widget */
+    }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
+    return 1;
 }
 
 /**
@@ -2675,16 +2079,34 @@ gui_widget_hidechildren(gui_handle_p h) {
  * \return          Widget ID
  */
 gui_id_t
-gui_widget_getid(gui_handle_p h) {
+gui_widget_getid(gui_handle_p h, const uint8_t protect) {
     gui_id_t id;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    id = guii_widget_getid(h);                      /* Return status */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    id = h->id;
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return id;
+}
+
+/**
+ * \brief           Get parent widget of current
+ * \param[in]       h: Widget handle
+ * \return          Parent widget handle
+ */
+gui_handle_p
+gui_widget_getparent(gui_handle_p h, const uint8_t protect) {
+    gui_handle_p parent;
+
+    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    parent = h->parent;
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+
+    return parent;
 }
 
 /**
@@ -2695,14 +2117,14 @@ gui_widget_getid(gui_handle_p h) {
  * \return          `1` on success, `0` otherwise
  */
 gui_handle_p
-gui_widget_getbyid(gui_id_t id) {
+gui_widget_getbyid(gui_id_t id, const uint8_t protect) {
     gui_handle_p h;
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
     h = get_widget_by_id(NULL, id, 1);              /* Find widget by ID */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
-    return h; 
+    return h;
 }
 
 /**
@@ -2716,12 +2138,12 @@ gui_widget_getbyid(gui_id_t id) {
  * \return          > 0: Widget handle when widget found
  */
 gui_handle_p
-gui_widget_getbyid_ex(gui_id_t id, gui_handle_p parent, uint8_t deep) {
+gui_widget_getbyid_ex(gui_id_t id, gui_handle_p parent, uint8_t deep, const uint8_t protect) {
     gui_handle_p h;
 
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    h = guii_widget_getbyid_ex(id, parent, deep);   /* Search widget */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    h = get_widget_by_id(parent, id, deep);         /* Search widget */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
 
     return h;
 }
@@ -2733,14 +2155,24 @@ gui_widget_getbyid_ex(gui_id_t id, gui_handle_p parent, uint8_t deep) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_ischildof(gui_handle_p h, gui_handle_p parent) {
-    uint8_t ret;
+gui_widget_ischildof(gui_handle_p h, gui_handle_p parent, const uint8_t protect) {
+    uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_iswidget(parent));  /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    ret = guii_widget_ischildof(h, parent);         /* Return status */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    if (!(guii_widget_iswidget(h) && guii_widget_iswidget(parent)) || !(GUI.initialized)) {
+        ret = 0;
+    } else {
+        for (h = guii_widget_getparent(h); h != NULL;
+            h = guii_widget_getparent(h)) {         /* Check widget parent objects */
+            if (parent == h) {                      /* If they matches */
+                ret = 1;
+                break;
+            }
+        }
+    }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return ret;
 }
@@ -2754,12 +2186,12 @@ gui_widget_ischildof(gui_handle_p h, gui_handle_p parent) {
  * \sa              gui_widget_getuserdata
  */
 uint8_t
-gui_widget_setuserdata(gui_handle_p h, void* data) {
+gui_widget_setuserdata(gui_handle_p h, void* data, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    guii_widget_setuserdata(h, data);               /* Set user data */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    h->arg = data;                                  /* Set user argument */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return 1;
 }
@@ -2771,14 +2203,14 @@ gui_widget_setuserdata(gui_handle_p h, void* data) {
  * \sa              gui_widget_setuserdata
  */
 void*
-gui_widget_getuserdata(gui_handle_p h) {
+gui_widget_getuserdata(gui_handle_p h, const uint8_t protect) {
     void* data;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    data = guii_widget_getuserdata(h);              /* Get user data */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    data = h->arg;                                  /* Get user argument */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return data;
 }
@@ -2801,9 +2233,7 @@ gui_widget_processdefaultcallback(gui_handle_p h, gui_wc_t ctrl, gui_widget_para
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
     ret = h->widget->callback(h, ctrl, param, result);  /* Call callback function */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
     
     return ret;
 }
@@ -2816,12 +2246,12 @@ gui_widget_processdefaultcallback(gui_handle_p h, gui_wc_t ctrl, gui_widget_para
  * \sa              gui_widget_processdefaultcallback, gui_widget_callback
  */
 uint8_t
-gui_widget_setcallback(gui_handle_p h, gui_widget_callback_t callback) {
+gui_widget_setcallback(gui_handle_p h, gui_widget_callback_t callback, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
     h->callback = callback;                         /* Set callback function */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return 1;
 }
@@ -2845,7 +2275,7 @@ gui_widget_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
+    __GUI_ENTER(1);                                 /* Enter GUI */
     ret = guii_widget_callback(h, ctrl, param, result);/* Call callback function */
     __GUI_LEAVE(1);                                 /* Leave GUI */
     
@@ -2861,19 +2291,19 @@ gui_widget_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
  * \sa              gui_widget_setscrolly
  */
 uint8_t
-gui_widget_setscrollx(gui_handle_p h, gui_dim_t scroll) {
+gui_widget_setscrollx(gui_handle_p h, gui_dim_t scroll, const uint8_t protect) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
     if (h->x_scroll != scroll) {
         h->x_scroll = scroll;
         SET_WIDGET_ABS_VALUES(h);                   /* Set new absolute values */
         guii_widget_invalidate(h);                  /* Invalidate widget */
         ret = 1;
     }
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return ret;
 }
@@ -2887,19 +2317,19 @@ gui_widget_setscrollx(gui_handle_p h, gui_dim_t scroll) {
  * \sa              gui_widget_setscrollx
  */
 uint8_t
-gui_widget_setscrolly(gui_handle_p h, gui_dim_t scroll) {
+gui_widget_setscrolly(gui_handle_p h, gui_dim_t scroll, const uint8_t protect) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
     if (h->y_scroll != scroll) {
         h->y_scroll = scroll;
         SET_WIDGET_ABS_VALUES(h);                   /* Set new absolute values */
         guii_widget_invalidate(h);                  /* Invalidate widget */
         ret = 1;
     }
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return ret;
 }
@@ -2913,19 +2343,19 @@ gui_widget_setscrolly(gui_handle_p h, gui_dim_t scroll) {
  * \sa              gui_widget_incscrolly
  */
 uint8_t
-gui_widget_incscrollx(gui_handle_p h, gui_dim_t scroll) {
+gui_widget_incscrollx(gui_handle_p h, gui_dim_t scroll, const uint8_t protect) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
     if (scroll) {
         h->x_scroll += scroll;
         SET_WIDGET_ABS_VALUES(h);                   /* Set new absolute values */
         guii_widget_invalidate(h);                  /* Invalidate widget */
         ret = 1;
     }
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return ret;
 }
@@ -2939,19 +2369,19 @@ gui_widget_incscrollx(gui_handle_p h, gui_dim_t scroll) {
  * \sa              gui_widget_incscrollx
  */
 uint8_t
-gui_widget_incscrolly(gui_handle_p h, gui_dim_t scroll) {
+gui_widget_incscrolly(gui_handle_p h, gui_dim_t scroll, const uint8_t protect) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
     if (scroll) {
         h->y_scroll += scroll;
         SET_WIDGET_ABS_VALUES(h);                   /* Set new absolute values */
         guii_widget_invalidate(h);
         ret = 1;
     }
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return ret;
 }
@@ -2963,14 +2393,14 @@ gui_widget_incscrolly(gui_handle_p h, gui_dim_t scroll) {
  * \sa              gui_widget_getscrolly
  */
 gui_dim_t
-gui_widget_getscrollx(gui_handle_p h) {
+gui_widget_getscrollx(gui_handle_p h, const uint8_t protect) {
     gui_dim_t value;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
     value = h->x_scroll;                            /* Get X scroll */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return value;
 }
@@ -2982,14 +2412,14 @@ gui_widget_getscrollx(gui_handle_p h) {
  * \sa              gui_widget_getscrollx
  */
 gui_dim_t
-gui_widget_getscrolly(gui_handle_p h) {
+gui_widget_getscrolly(gui_handle_p h, const uint8_t protect) {
     gui_dim_t value;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    value = h->y_scroll;                            /* Get Y scroll */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    value = h->y_scroll;                            /* Get X scroll */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return value;
 }
@@ -3000,14 +2430,14 @@ gui_widget_getscrolly(gui_handle_p h) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_setfocus(gui_handle_p h) {
+gui_widget_setfocus(gui_handle_p h, const uint8_t protect) {
     uint8_t ret = 1;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
     guii_widget_focus_set(h);                       /* Put widget in focus */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return ret;
 }
@@ -3018,12 +2448,12 @@ gui_widget_setfocus(gui_handle_p h) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_setfontdefault(const gui_font_t* font) {
+gui_widget_setfontdefault(const gui_font_t* font, const uint8_t protect) {
     __GUI_ASSERTPARAMS(font != NULL);               /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
     widget_default.font = font;                     /* Set default font */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return 1;
 }
@@ -3036,18 +2466,18 @@ gui_widget_setfontdefault(const gui_font_t* font) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_incselection(gui_handle_p h, int16_t dir) {
+gui_widget_incselection(gui_handle_p h, int16_t dir, const uint8_t protect) {
     uint8_t ret = 0;
     gui_widget_param_t param = {0};
     gui_widget_result_t result = {0};
+
+    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
     GUI_WIDGET_PARAMTYPE_I16(&param) = dir;         /* Set parameter */
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
     ret = guii_widget_callback(h, GUI_WC_IncSelection, &param, &result);   /* Increase selection for specific amount */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return ret;
 }
@@ -3061,16 +2491,22 @@ gui_widget_incselection(gui_handle_p h, int16_t dir) {
  * \sa              gui_widget_getzindex
  */
 uint8_t
-gui_widget_setzindex(gui_handle_p h, int32_t zindex) {
-    uint8_t ret;
-    
+gui_widget_setzindex(gui_handle_p h, int32_t zindex, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    ret = guii_widget_setzindex(h, zindex);         /* Set z-index value */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    if (h->zindex != zindex) {                      /* There was a change in z-index value */
+        int32_t current = h->zindex;
+        h->zindex = zindex;                         /* Set new index */
+        if (zindex < current) {                     /* New index value is less important than before = move widget to top */
+            gui_linkedlist_widgetmovetotop(h);      /* Move widget to top on linked list = less important and less visible */
+        } else {
+            gui_linkedlist_widgetmovetobottom(h);   /* Move widget to bottom on linked list = most important and most visible */
+        }
+    }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
-    return ret;
+    return 1;
 }
 
 /**
@@ -3080,14 +2516,14 @@ gui_widget_setzindex(gui_handle_p h, int32_t zindex) {
  * \sa              gui_widget_setzindex
  */
 int32_t
-gui_widget_getzindex(gui_handle_p h) {
+gui_widget_getzindex(gui_handle_p h, const uint8_t protect) {
     int32_t ret;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    ret = guii_widget_getzindex(h);                 /* Set z-index value */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    ret = h->zindex;                                /* Get z-index value */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return ret;
 }
@@ -3100,14 +2536,19 @@ gui_widget_getzindex(gui_handle_p h) {
  * \sa              gui_widget_getalpha
  */
 uint8_t
-gui_widget_setalpha(gui_handle_p h, uint8_t trans) {
+gui_widget_setalpha(gui_handle_p h, uint8_t alpha, const uint8_t protect) {
     uint8_t ret = 0;
     
 #if GUI_CFG_USE_ALPHA
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    ret = guii_widget_setalpha(h, trans);           /* Set widget transparency */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    if (h->alpha != alpha) {                        /* Check transparency match */
+        h->alpha = alpha;                           /* Set new transparency level */
+        SET_WIDGET_ABS_VALUES(h);                   /* Set widget absolute values */
+        guii_widget_invalidate(h);                  /* Invalidate widget */
+        ret = 1;
+    }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
 #endif /* GUI_CFG_USE_ALPHA */
     
     return ret;
@@ -3124,14 +2565,18 @@ gui_widget_setalpha(gui_handle_p h, uint8_t trans) {
  * \sa              gui_widget_setalpha
  */
 uint8_t
-gui_widget_getalpha(gui_handle_p h) {
+gui_widget_getalpha(gui_handle_p h, const uint8_t protect) {
     uint8_t a;
     
+#if GUI_CFG_USE_ALPHA
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    a = guii_widget_getalpha(h);                    /* Get widget transparency */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    a = GUI_U8(h->alpha);
+    __GUI_LEAVE(protect);                           /* Leave GUI */
+#else
+    a = 0xFF;
+#endif
     
     return a;
 }
@@ -3143,16 +2588,20 @@ gui_widget_getalpha(gui_handle_p h) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_set3dstyle(gui_handle_p h, uint8_t enable) {
-    uint8_t ret;
-    
+gui_widget_set3dstyle(gui_handle_p h, uint8_t enable, const uint8_t protect) {    
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    ret = guii_widget_set3dstyle(h, enable);        /* Set 3D mode */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    if (enable && !guii_widget_getflag(h, GUI_FLAG_3D)) {  /* Enable style */
+        guii_widget_setflag(h, GUI_FLAG_3D);        /* Enable 3D style */
+        guii_widget_invalidate(h);                  /* Invalidate object */
+    } else if (!enable && guii_widget_getflag(h, GUI_FLAG_3D)) {/* Disable style */
+        guii_widget_clrflag(h, GUI_FLAG_3D);        /* Disable 3D style */
+        guii_widget_invalidate(h);                  /* Invalidate object */
+    }
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
-    return ret;
+    return 1;
 }
 
 /**
@@ -3162,12 +2611,13 @@ gui_widget_set3dstyle(gui_handle_p h, uint8_t enable) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_setpaddingtop(gui_handle_p h, gui_dim_t x) {    
+gui_widget_setpaddingtop(gui_handle_p h, gui_dim_t x, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    guii_widget_setpaddingtop(h, x);                /* Set padding */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    h->padding = (uint32_t)((h->padding & 0x00FFFFFFUL) | (uint32_t)((uint8_t)x) << 24);/* Padding top */
+    SET_WIDGET_ABS_VALUES(h);
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return 1;
 }
@@ -3179,12 +2629,13 @@ gui_widget_setpaddingtop(gui_handle_p h, gui_dim_t x) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_setpaddingright(gui_handle_p h, gui_dim_t x) {    
+gui_widget_setpaddingright(gui_handle_p h, gui_dim_t x, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    guii_widget_setpaddingright(h, x);              /* Set padding */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    h->padding = (uint32_t)((h->padding & 0xFF00FFFFUL) | (uint32_t)((uint8_t)x) << 16);/* Padding right */
+    SET_WIDGET_ABS_VALUES(h);
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return 1;
 }
@@ -3196,12 +2647,13 @@ gui_widget_setpaddingright(gui_handle_p h, gui_dim_t x) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_setpaddingbottom(gui_handle_p h, gui_dim_t x) {    
+gui_widget_setpaddingbottom(gui_handle_p h, gui_dim_t x, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    guii_widget_setpaddingbottom(h, x);             /* Set padding */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    h->padding = (uint32_t)((h->padding & 0xFFFF00FFUL) | (uint32_t)((uint8_t)x) << 8); /* Padding bottom */
+    SET_WIDGET_ABS_VALUES(h);
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return 1;
 }
@@ -3213,12 +2665,13 @@ gui_widget_setpaddingbottom(gui_handle_p h, gui_dim_t x) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_setpaddingleft(gui_handle_p h, gui_dim_t x) {    
+gui_widget_setpaddingleft(gui_handle_p h, gui_dim_t x, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    guii_widget_setpaddingleft(h, x);               /* Set padding */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    h->padding = (uint32_t)((h->padding & 0xFFFFFF00UL) | (uint32_t)((uint8_t)x) << 0); /* Padding left */
+    SET_WIDGET_ABS_VALUES(h);
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return 1;
 }
@@ -3230,12 +2683,14 @@ gui_widget_setpaddingleft(gui_handle_p h, gui_dim_t x) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_setpaddingtopbottom(gui_handle_p h, gui_dim_t x) {    
+gui_widget_setpaddingtopbottom(gui_handle_p h, gui_dim_t x, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    guii_widget_setpaddingtopbottom(h, x);          /* Set padding */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    h->padding = (uint32_t)((h->padding & 0x00FFFFFFUL) | (uint32_t)((uint8_t)x) << 24);/* Padding top */
+    h->padding = (uint32_t)((h->padding & 0xFFFF00FFUL) | (uint32_t)((uint8_t)x) << 8); /* Padding bottom */
+    SET_WIDGET_ABS_VALUES(h);
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return 1;
 }
@@ -3247,12 +2702,14 @@ gui_widget_setpaddingtopbottom(gui_handle_p h, gui_dim_t x) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_setpaddingleftright(gui_handle_p h, gui_dim_t x) {    
+gui_widget_setpaddingleftright(gui_handle_p h, gui_dim_t x, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    guii_widget_setpaddingleftright(h, x);          /* Set padding */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    h->padding = (uint32_t)((h->padding & 0xFF00FFFFUL) | (uint32_t)((uint8_t)x) << 16);/* Padding right */
+    h->padding = (uint32_t)((h->padding & 0xFFFFFF00UL) | (uint32_t)((uint8_t)x) << 0); /* Padding left */
+    SET_WIDGET_ABS_VALUES(h);
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return 1;
 }
@@ -3264,12 +2721,16 @@ gui_widget_setpaddingleftright(gui_handle_p h, gui_dim_t x) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_setpadding(gui_handle_p h, gui_dim_t x) {    
+gui_widget_setpadding(gui_handle_p h, gui_dim_t x, const uint8_t protect) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    guii_widget_setpadding(h, x);                   /* Set padding */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    h->padding = (uint32_t)((h->padding & 0x00FFFFFFUL) | (uint32_t)((uint8_t)x) << 24);/* Padding top */
+    h->padding = (uint32_t)((h->padding & 0xFF00FFFFUL) | (uint32_t)((uint8_t)x) << 16);/* Padding right */
+    h->padding = (uint32_t)((h->padding & 0xFFFF00FFUL) | (uint32_t)((uint8_t)x) << 8); /* Padding bottom */
+    h->padding = (uint32_t)((h->padding & 0xFFFFFF00UL) | (uint32_t)((uint8_t)x) << 0); /* Padding left */
+    SET_WIDGET_ABS_VALUES(h);
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return 1;
 }
@@ -3280,14 +2741,14 @@ gui_widget_setpadding(gui_handle_p h, gui_dim_t x) {
  * \return          Left padding in units of pixels
  */
 gui_dim_t
-gui_widget_getpaddingtop(gui_handle_p h) {
+gui_widget_getpaddingtop(gui_handle_p h, const uint8_t protect) {
     gui_dim_t padding;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    padding = guii_widget_getpaddingtop(h);         /* Get padding */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    padding = GUI_DIM((h->padding >> 24) & 0xFF);
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return padding;
 }
@@ -3298,14 +2759,14 @@ gui_widget_getpaddingtop(gui_handle_p h) {
  * \return          Left padding in units of pixels
  */
 gui_dim_t
-gui_widget_getpaddingright(gui_handle_p h) {
+gui_widget_getpaddingright(gui_handle_p h, const uint8_t protect) {
     gui_dim_t padding;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    padding = guii_widget_getpaddingright(h);       /* Get padding */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    padding = GUI_DIM((h->padding >> 16) & 0xFF);
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return padding;
 }
@@ -3316,14 +2777,14 @@ gui_widget_getpaddingright(gui_handle_p h) {
  * \return          Left padding in units of pixels
  */
 gui_dim_t
-ui_widget_getpaddingbottom(gui_handle_p h) {
+gui_widget_getpaddingbottom(gui_handle_p h, const uint8_t protect) {
     gui_dim_t padding;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    padding = guii_widget_getpaddingbottom(h);      /* Get padding */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    padding = GUI_DIM((h->padding >> 8) & 0xFF);
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return padding;
 }
@@ -3334,14 +2795,14 @@ ui_widget_getpaddingbottom(gui_handle_p h) {
  * \return          Left padding in units of pixels
  */
 gui_dim_t
-gui_widget_getpaddingleft(gui_handle_p h) {
+gui_widget_getpaddingleft(gui_handle_p h, const uint8_t protect) {
     gui_dim_t padding;
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    padding = guii_widget_getpaddingleft(h);        /* Get padding */
-    __GUI_LEAVE(1);                                 /* Leave GUI */
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
+    padding = GUI_DIM((h->padding >> 0) & 0xFF);
+    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return padding;
 }

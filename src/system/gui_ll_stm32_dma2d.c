@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
@@ -313,7 +315,7 @@ uint8_t gui_ll_control(gui_lcd_t* LCD, GUI_LL_Command_t cmd, void* param, void* 
 #else
                 static uint8_t SDRAMMemory[SDRAM_HEAP_SIZE] __attribute__((at(SDRAM_START_ADR + SDRAM_MEMORY_SIZE - SDRAM_HEAP_SIZE))); /* SDRAM heap memory */
 #endif
-                static GUI_MEM_Region_t const regions[] = {
+                static gui_mem_region_t const regions[] = {
                     {DTCMMemory1, sizeof(DTCMMemory1)},
                     {SDRAMMemory, sizeof(SDRAMMemory)},
                 };

@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #ifndef __GUI_IMAGE_H
@@ -56,8 +58,8 @@ typedef struct {
 } GUI_IMAGE_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
     
-gui_handle_p    gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
-uint8_t         gui_image_setsource(gui_handle_p h, const gui_image_desc_t* img);
+gui_handle_p    gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect);
+uint8_t         gui_image_setsource(gui_handle_p h, const gui_image_desc_t* img, const uint8_t protect);
 
 /**
  * \}

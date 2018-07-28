@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #ifndef __GUI_H
@@ -72,20 +74,16 @@ extern "C" {
  */
 
 #if GUI_CFG_OS
-
-#define __GUI_SYS_PROTECT(p)        gui_sys_protect()
-#define __GUI_SYS_UNPROTECT(p)      gui_sys_unprotect()
-#define __GUI_ENTER(p)              __GUI_SYS_PROTECT(p)
-#define __GUI_LEAVE(p)              do { __GUI_SYS_UNPROTECT(p); gui_sys_mbox_putnow(&GUI.OS.mbox, 0x00); } while (0)
-
-#else
-
-#define __GUI_ENTER(p)
-#define __GUI_LEAVE(p)
-#define __GUI_SYS_PROTECT(p)
-#define __GUI_SYS_UNPROTECT(p)
-
-#endif /* GUI_CFG_OS */
+#define __GUI_SYS_PROTECT(p)        if (p) gui_sys_protect()
+#define __GUI_SYS_UNPROTECT(p)      if (p) gui_sys_unprotect()
+#define __GUI_ENTER(p)              if (p) gui_sys_protect()
+#define __GUI_LEAVE(p)              if (p) { gui_sys_unprotect(); gui_sys_mbox_putnow(&GUI.OS.mbox, 0x00); }
+#else /* GUI_CFG_OS */
+#define __GUI_ENTER(p)              GUI_UNUSED(p)
+#define __GUI_LEAVE(p)              GUI_UNUSED(p)
+#define __GUI_SYS_PROTECT(p)        GUI_UNUSED(p)
+#define __GUI_SYS_UNPROTECT(p)      GUI_UNUSED(p)
+#endif /* !GUI_CFG_OS */
 
 /**
  * \brief           Debugging macro for inside GUI
@@ -101,20 +99,20 @@ extern "C" {
  * \note            This function must take care of reseting memory to zero
  * \hideinitializer
  */
-#define GUI_MEMALLOC(size)          gui_mem_calloc(size, 1)
+#define GUI_MEMALLOC(size, protect)         gui_mem_calloc(1, size, protect)
 
 /**
  * \brief           Reallocate memory with specific size in bytes
  * \hideinitializer
  */
-#define GUI_MEMREALLOC(ptr, size)   gui_mem_realloc(ptr, size)
+#define GUI_MEMREALLOC(ptr, size, protect)  gui_mem_realloc(ptr, size, protect)
 
 /**
  * \brief           Free memory from specific address previously allocated with \ref GUI_MEMALLOC or \ref GUI_MEMREALLOC
  * \hideinitializer
  */
-#define GUI_MEMFREE(p)              do {            \
-    gui_mem_free(p);                                \
+#define GUI_MEMFREE(p, protect)     do {            \
+    gui_mem_free(p, protect);                       \
     (p) = NULL;                                     \
 } while (0)
 
@@ -195,9 +193,12 @@ extern "C" {
 #include "widget/gui_widget.h"
 #include "gui/gui_input.h"
 
-guir_t  gui_init(void);
-int32_t gui_process(void);
-uint8_t gui_seteventcallback(gui_eventcallback_t cb);
+guir_t      gui_init(void);
+int32_t     gui_process(void);
+uint8_t     gui_seteventcallback(gui_eventcallback_t cb);
+
+uint8_t     gui_protect(const uint8_t protect);
+uint8_t     gui_unprotect(const uint8_t protect);
  
 /**
  * \}
@@ -208,4 +209,4 @@ uint8_t gui_seteventcallback(gui_eventcallback_t cb);
 }
 #endif
 
-#endif
+#endif /* __GUI_H */

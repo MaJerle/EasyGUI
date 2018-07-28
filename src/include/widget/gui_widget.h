@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #ifndef __GUI_WIDGET_H
@@ -116,7 +118,7 @@ extern "C" {
  * \retval          Relative X according to parent widget
  * \hideinitializer
  */
-#define guii_widget_getrelativex(h)                 GUI_DIM((guii_widget_isexpanded(h) ? 0 : \
+#define guii_widget_getrelativex(h)                 GUI_DIM((gui_widget_isexpanded(h, 0) ? 0 : \
                                                         (guii_widget_getflag(h, GUI_FLAG_XPOS_PERCENT) ? (gui_dim_t)((float)GUI_ROUND((h)->x * guii_widget_getparentinnerwidth(h)) / 100.0f) : (h)->x) \
                                                     ))
 
@@ -127,161 +129,9 @@ extern "C" {
  * \retval          Relative Y according to parent widget
  * \hideinitializer
  */
-#define guii_widget_getrelativey(h)                 GUI_DIM(guii_widget_isexpanded(h) ? 0 : \
+#define guii_widget_getrelativey(h)                 GUI_DIM(gui_widget_isexpanded(h, 0) ? 0 : \
                                                         (guii_widget_getflag(h, GUI_FLAG_YPOS_PERCENT) ? (gui_dim_t)((float)GUI_ROUND((h)->y * guii_widget_getparentinnerheight(h)) / 100.0f) : (h)->y) \
                                                     )
-
-/**
- * \brief           Get widget top padding as 8-bit value
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       h: Widget handle
- * \retval          Padding in units of pixels
- * \hideinitializer
- */
-#define guii_widget_getpaddingtop(h)                GUI_DIM((uint8_t)(((h)->padding >> 24) & 0xFFUL))
-
-/**
- * \brief           Get widget right padding as 8-bit value
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       h: Widget handle
- * \retval          Padding in units of pixels
- * \hideinitializer
- */
-#define guii_widget_getpaddingright(h)              GUI_DIM((uint8_t)(((h)->padding >> 16) & 0xFFUL))
-
-/**
- * \brief           Get widget bottom padding as 8-bit value
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       h: Widget handle
- * \retval          Padding in units of pixels
- * \hideinitializer
- */
-#define guii_widget_getpaddingbottom(h)             GUI_DIM((uint8_t)(((h)->padding >>  8) & 0xFFUL))
-
-/**
- * \brief           Get widget left padding as 8-bit value
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       h: Widget handle
- * \retval          Padding in units of pixels
- * \hideinitializer
- */
-#define guii_widget_getpaddingleft(h)               GUI_DIM((uint8_t)(((h)->padding >>  0) & 0xFFUL))
-
-/**
- * \brief           Set top padding on widget
- * \note            Padding is used mainly for internal purpose only to set value for children widgets
- *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
- *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
- * \param[in]       x: Padding in byte format
- * \hideinitializer
- */
-#define guii_widget_setpaddingtop(h, x)              do {\
-    (h)->padding = (uint32_t)(((h)->padding & 0x00FFFFFFUL) | (uint32_t)((uint8_t)(x)) << 24);  /* Padding top */       \
-    SET_WIDGET_ABS_VALUES(h);   \
-} while (0)
-
-/**
- * \brief           Set right padding on widget
- * \note            Padding is used mainly for internal purpose only to set value for children widgets
- *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
- *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
- * \param[in]       x: Padding in byte format
- * \hideinitializer
- */
-#define guii_widget_setpaddingright(h, x)            do {\
-    (h)->padding = (uint32_t)(((h)->padding & 0xFF00FFFFUL) | (uint32_t)((uint8_t)(x)) << 16);  /* Padding right */     \
-    SET_WIDGET_ABS_VALUES(h);   \
-} while (0)
-
-/**
- * \brief           Set bottom padding on widget
- * \note            Padding is used mainly for internal purpose only to set value for children widgets
- *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
- *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
- * \param[in]       x: Padding in byte format
- * \hideinitializer
- */
-#define guii_widget_setpaddingbottom(h, x)           do {\
-    (h)->padding = (uint32_t)(((h)->padding & 0xFFFF00FFUL) | (uint32_t)((uint8_t)(x)) <<  8);  /* Padding bottom */    \
-    SET_WIDGET_ABS_VALUES(h);   \
-} while (0)
-
-/**
- * \brief           Set left padding on widget
- * \note            Padding is used mainly for internal purpose only to set value for children widgets
- *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
- *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
- * \param[in]       x: Padding in byte format
- * \hideinitializer
- */
-#define guii_widget_setpaddingleft(h, x)             do {\
-    (h)->padding = (uint32_t)(((h)->padding & 0xFFFFFF00UL) | (uint32_t)((uint8_t)(x)) <<  0);  /* Padding left */      \
-    SET_WIDGET_ABS_VALUES(h);   \
-} while (0)
-
-/**
- * \brief           Set top and bottom paddings on widget
- * \note            Padding is used mainly for internal purpose only to set value for children widgets
- *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
- *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
- * \param[in]       x: Padding in byte format
- * \hideinitializer
- */
-#define guii_widget_setpaddingtopbottom(h, x)       do {\
-    (h)->padding = (uint32_t)(((h)->padding & 0x00FFFFFFUL) | (uint32_t)((uint8_t)(x)) <<  24); /* Padding top */       \
-    (h)->padding = (uint32_t)(((h)->padding & 0xFFFF00FFUL) | (uint32_t)((uint8_t)(x)) <<  8);  /* Padding bottom */    \
-    SET_WIDGET_ABS_VALUES(h);   \
-} while (0)
-
-/**
- * \brief           Set left and right paddings on widget
- * \note            Padding is used mainly for internal purpose only to set value for children widgets
- *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
- *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
- * \param[in]       x: Padding in byte format
- * \hideinitializer
- */
-#define guii_widget_setpaddingleftright(h, x)      do {\
-    (h)->padding = (uint32_t)(((h)->padding & 0xFF00FFFFUL) | (uint32_t)((uint8_t)(x)) <<  16); /* Padding right */     \
-    (h)->padding = (uint32_t)(((h)->padding & 0xFFFFFF00UL) | (uint32_t)((uint8_t)(x)) <<  0);  /* Padding left */      \
-    SET_WIDGET_ABS_VALUES(h);   \
-} while (0)
-
-/**
- * \brief           Set all paddings on widget
- * \note            Padding is used mainly for internal purpose only to set value for children widgets
- *                  where X or Y position is inside parent widget (ex. Window has padding to set top line with text and buttons)
- *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
- * \param[in]       x: Padding in byte format
- * \hideinitializer
- */
-#define guii_widget_setpadding(h, x)                do {\
-    (h)->padding = GUI_U8(x) << 24 | GUI_U8(x) << 16 | GUI_U8(x) << 8 | GUI_U8(x) << 0;         /* Padding */           \
-    SET_WIDGET_ABS_VALUES(h);   \
-} while (0)
-
-/**
- * \brief           Get widget ID
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
- * \retval          Widget ID
- * \hideinitializer
- */
-#define guii_widget_getid(h)                        ((gui_id_t)((h)->id))
 
 /**
  * \brief           Get widget flag(s)
@@ -320,15 +170,6 @@ extern "C" {
  * \hideinitializer
  */
 #define guii_widget_clrflag(h, flag)                ((h)->flags &= ~(flag))
-
-/**
- * \brief           Checks if widget is expanded to maximum relative to parent widget
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
- * \return          `1` on success, `0` otherwise
- * \hideinitializer
- */
-#define guii_widget_isexpanded(h)                   (!!guii_widget_getflag(h, GUI_FLAG_EXPANDED))
 
 /**
  * \brief           Checks if widget has enabled 3D mode
@@ -387,7 +228,7 @@ extern "C" {
  * \retval          height in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getinnerwidth(h)                GUI_DIM((guii_widget_getwidth(h) - (guii_widget_getpaddingleft(h) + guii_widget_getpaddingright(h))))
+#define guii_widget_getinnerwidth(h)                GUI_DIM((gui_widget_getwidth(h, 0) - (gui_widget_getpaddingleft(h, 0) + gui_widget_getpaddingright(h, 0))))
 
 /**
  * \brief           Get inner height (total height - padding top - padding bottom)
@@ -396,7 +237,7 @@ extern "C" {
  * \retval          Inner height in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getinnerheight(h)               GUI_DIM((guii_widget_getheight(h) - (guii_widget_getpaddingtop(h) + guii_widget_getpaddingbottom(h))))
+#define guii_widget_getinnerheight(h)               GUI_DIM((gui_widget_getheight(h, 0) - (gui_widget_getpaddingtop(h, 0) + gui_widget_getpaddingbottom(h, 0))))
 
 /**
  * \brief           Returns width of parent element. If parent does not exists, it returns LCD width
@@ -405,7 +246,7 @@ extern "C" {
  * \retval          Parent width in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getparentwidth(h)               GUI_DIM((guii_widget_hasparent(h) ? guii_widget_getwidth(guii_widget_getparent(h)) : GUI.lcd.width))
+#define guii_widget_getparentwidth(h)               GUI_DIM((guii_widget_hasparent(h) ? gui_widget_getwidth(guii_widget_getparent(h), 0) : GUI.lcd.width))
 
 /**
  * \brief           Returns height of parent element. If parent does not exists, it returns LCD height
@@ -414,7 +255,7 @@ extern "C" {
  * \retval          Parent height in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getparentheight(h)              GUI_DIM((guii_widget_hasparent(h) ? guii_widget_getheight(guii_widget_getparent(h)) : GUI.lcd.height))
+#define guii_widget_getparentheight(h)              GUI_DIM((guii_widget_hasparent(h) ? guii_widget_getheight(guii_widget_getparent(h), 0) : GUI.lcd.height))
 
 /**
  * \brief           Returns inner width of parent element. If parent does not exists, it returns LCD width
@@ -504,25 +345,7 @@ extern "C" {
  * \param[in,out]   h: Widget handle
  * \return          `1` on success, `0` otherwise
  */
-#define guii_widget_hasalpha(h)                     (guii_widget_isvisible(h) && guii_widget_getalpha(h) < 0xFF)
-
-/**
- * \brief           Get widget alpha value
- * \note            Value between 0 and 0xFF is used:
- *                      - 0x00: Widget is hidden
- *                      - 0xFF: Widget is fully visible
- *                      - between: Widget has alpha value
- *
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
- * \retval          Trasparency value
- * \hideinitializer
- */
-#if GUI_CFG_USE_ALPHA || __DOXYGEN__
-#define guii_widget_getalpha(h)                     GUI_U8((h)->alpha)
-#else /* GUI_CFG_USE_ALPHA || __DOXYGEN__ */
-#define guii_widget_getalpha(h)                     GUI_U8(0xFF)
-#endif /* GUI_CFG_USE_ALPHA || __DOXYGEN__ */
+#define guii_widget_hasalpha(h)                     (guii_widget_isvisible(h) && gui_widget_getalpha(h, 0) < 0xFF)
 
 /**
  * \brief           Get z-index value from widget
@@ -540,51 +363,17 @@ gui_dim_t       guii_widget_getparentabsolutey(gui_handle_p h);
 uint8_t         guii_widget_invalidate(gui_handle_p h);
 uint8_t         guii_widget_invalidatewithparent(gui_handle_p h);
 uint8_t         guii_widget_setinvalidatewithparent(gui_handle_p h, uint8_t value);
-uint8_t         guii_widget_setposition(gui_handle_p h, gui_dim_t x, gui_dim_t y);
-uint8_t         guii_widget_setpositionpercent(gui_handle_p h, float x, float y);
-uint8_t         guii_widget_setxposition(gui_handle_p h, gui_dim_t x);
-uint8_t         guii_widget_setxpositionpercent(gui_handle_p h, float x);
-uint8_t         guii_widget_setyposition(gui_handle_p h, gui_dim_t y);
-uint8_t         guii_widget_setypositionpercent(gui_handle_p h, float y);
-uint8_t         guii_widget_setsize(gui_handle_p h, gui_dim_t wi, gui_dim_t hi);
-uint8_t         guii_widget_setsizepercent(gui_handle_p h, float wi, float hi);
-uint8_t         guii_widget_setwidth(gui_handle_p h, gui_dim_t width);
-uint8_t         guii_widget_setheight(gui_handle_p h, gui_dim_t height);
-uint8_t         guii_widget_setwidthpercent(gui_handle_p h, float width);
-uint8_t         guii_widget_setheightpercent(gui_handle_p h, float height);
-uint8_t         guii_widget_set3dstyle(gui_handle_p h, uint8_t enable);
-uint8_t         guii_widget_setfont(gui_handle_p h, const gui_font_t* font);
-uint8_t         guii_widget_settext(gui_handle_p h, const gui_char* text);
-const gui_char *    guii_widget_gettext(gui_handle_p h);
-const gui_font_t *  guii_widget_getfont(gui_handle_p h);
 
-uint8_t         guii_widget_alloctextmemory(gui_handle_p h, uint32_t size);
-uint8_t         guii_widget_freetextmemory(gui_handle_p h);
-void*           guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
-uint8_t         guii_widget_remove(gui_handle_p h);
-uint8_t         guii_widget_show(gui_handle_p h);
-uint8_t         guii_widget_hide(gui_handle_p h);
-uint8_t         guii_widget_hidechildren(gui_handle_p h);
-uint8_t         guii_widget_toggleexpanded(gui_handle_p h);
-uint8_t         guii_widget_setexpanded(gui_handle_p h, uint8_t state);
-uint8_t         guii_widget_ischildof(gui_handle_p h, gui_handle_p parent);
+uint8_t         guii_widget_set3dstyle(gui_handle_p h, uint8_t enable);
+
+void*           guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect);
+
 uint8_t         guii_widget_isfontandtextset(gui_handle_p h);
 
 uint8_t         guii_widget_processtextkey(gui_handle_p h, guii_keyboard_data_t* key);
-uint8_t         guii_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color, uint8_t protect);
-gui_handle_p    guii_widget_getbyid(gui_id_t id);
-gui_handle_p    guii_widget_getbyid_ex(gui_id_t id, gui_handle_p parent, uint8_t deep);
+uint8_t         guii_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color, const uint8_t protect);
 
-uint8_t         guii_widget_setalpha(gui_handle_p h, uint8_t trans);
-uint8_t         guii_widget_setzindex(gui_handle_p h, int32_t zindex);
-
-gui_dim_t       guii_widget_getwidth(gui_handle_p h);
-gui_dim_t       guii_widget_getheight(gui_handle_p h);
-
-uint8_t         guii_widget_setuserdata(gui_handle_p h, void* data);
-void *          guii_widget_getuserdata(gui_handle_p h);
-
-uint8_t         guii_widget_setparam(gui_handle_p h, uint16_t cfg, const void* data, uint8_t invalidate, uint8_t invalidateparent, uint8_t protect);
+uint8_t         guii_widget_setparam(gui_handle_p h, uint16_t cfg, const void* data, uint8_t invalidate, uint8_t invalidateparent, const uint8_t protect);
 uint8_t         guii_widget_getparam(gui_handle_p h, uint16_t cfg, void* data);
 
 /**
@@ -597,14 +386,14 @@ uint8_t         guii_widget_getparam(gui_handle_p h, uint16_t cfg, void* data);
  * \{
  */
 
-uint32_t        gui_widget_alloctextmemory(gui_handle_p h, uint32_t size);
-uint8_t         gui_widget_freetextmemory(gui_handle_p h);
-uint8_t         gui_widget_settext(gui_handle_p h, const gui_char* text);
-const gui_char *    gui_widget_gettext(gui_handle_p h);
-const gui_char *    gui_widget_gettextcopy(gui_handle_p h, gui_char* dst, uint32_t len);
-uint8_t         gui_widget_setfont(gui_handle_p h, const gui_font_t* font);
-const gui_font_t *  gui_widget_getfont(gui_handle_p h);
-uint8_t         gui_widget_setfontdefault(const gui_font_t* font);
+uint32_t        gui_widget_alloctextmemory(gui_handle_p h, uint32_t size, const uint8_t protect);
+uint8_t         gui_widget_freetextmemory(gui_handle_p h, const uint8_t protect);
+uint8_t         gui_widget_settext(gui_handle_p h, const gui_char* text, const uint8_t protect);
+const gui_char *    gui_widget_gettext(gui_handle_p h, const uint8_t protect);
+const gui_char *    gui_widget_gettextcopy(gui_handle_p h, gui_char* dst, uint32_t len, const uint8_t protect);
+uint8_t         gui_widget_setfont(gui_handle_p h, const gui_font_t* font, const uint8_t protect);
+const gui_font_t *  gui_widget_getfont(gui_handle_p h, const uint8_t protect);
+uint8_t         gui_widget_setfontdefault(const gui_font_t* font, const uint8_t protect);
 
 /**
  * \}
@@ -616,16 +405,18 @@ uint8_t         gui_widget_setfontdefault(const gui_font_t* font);
  * \{
  */
 
-uint8_t         gui_widget_setsize(gui_handle_p h, gui_dim_t width, gui_dim_t height);
-uint8_t         gui_widget_setsizepercent(gui_handle_p h, float width, float height);
-uint8_t         gui_widget_setwidth(gui_handle_p h, gui_dim_t width);
-uint8_t         gui_widget_setheight(gui_handle_p h, gui_dim_t height);
-uint8_t         gui_widget_setwidthpercent(gui_handle_p h, float width);
-uint8_t         gui_widget_setheightpercent(gui_handle_p h, float height);
-gui_dim_t       gui_widget_getwidth(gui_handle_p h);
-gui_dim_t       gui_widget_getheight(gui_handle_p h);
-uint8_t         gui_widget_setexpanded(gui_handle_p h, uint8_t state);
-uint8_t         gui_widget_isexpanded(gui_handle_p h);
+uint8_t         gui_widget_setsize(gui_handle_p h, gui_dim_t width, gui_dim_t height, const uint8_t protect);
+uint8_t         gui_widget_setsizepercent(gui_handle_p h, float width, float height, const uint8_t protect);
+uint8_t         gui_widget_setwidth(gui_handle_p h, gui_dim_t width, const uint8_t protect);
+uint8_t         gui_widget_setheight(gui_handle_p h, gui_dim_t height, const uint8_t protect);
+uint8_t         gui_widget_setwidthpercent(gui_handle_p h, float width, const uint8_t protect);
+uint8_t         gui_widget_setheightpercent(gui_handle_p h, float height, const uint8_t protect);
+gui_dim_t       gui_widget_getwidth(gui_handle_p h, const uint8_t protect);
+gui_dim_t       gui_widget_getheight(gui_handle_p h, const uint8_t protect);
+
+uint8_t         gui_widget_setexpanded(gui_handle_p h, uint8_t state, const uint8_t protect);
+uint8_t         gui_widget_toggleexpanded(gui_handle_p h, const uint8_t protect);
+uint8_t         gui_widget_isexpanded(gui_handle_p h, const uint8_t protect);
 
 /**
  * \}
@@ -637,18 +428,18 @@ uint8_t         gui_widget_isexpanded(gui_handle_p h);
  * \{
  */
  
-uint8_t         gui_widget_setposition(gui_handle_p h, gui_dim_t x, gui_dim_t y);
-uint8_t         gui_widget_setpositionpercent(gui_handle_p h, float x, float y);
-uint8_t         gui_widget_setxposition(gui_handle_p h, gui_dim_t x);
-uint8_t         gui_widget_setxpositionpercent(gui_handle_p h, float x);
-uint8_t         gui_widget_setyposition(gui_handle_p h, gui_dim_t y);
-uint8_t         gui_widget_setypositionpercent(gui_handle_p h, float y);
-uint8_t         gui_widget_setscrollx(gui_handle_p h, gui_dim_t scroll);
-uint8_t         gui_widget_setscrolly(gui_handle_p h, gui_dim_t scroll);
-uint8_t         gui_widget_incscrollx(gui_handle_p h, gui_dim_t scroll);
-uint8_t         gui_widget_incscrolly(gui_handle_p h, gui_dim_t scroll);
-gui_dim_t       gui_widget_getscrollx(gui_handle_p h);
-gui_dim_t       gui_widget_getscrolly(gui_handle_p h);
+uint8_t         gui_widget_setposition(gui_handle_p h, gui_dim_t x, gui_dim_t y, const uint8_t protect);
+uint8_t         gui_widget_setpositionpercent(gui_handle_p h, float x, float y, const uint8_t protect);
+uint8_t         gui_widget_setxposition(gui_handle_p h, gui_dim_t x, const uint8_t protect);
+uint8_t         gui_widget_setxpositionpercent(gui_handle_p h, float x, const uint8_t protect);
+uint8_t         gui_widget_setyposition(gui_handle_p h, gui_dim_t y, const uint8_t protect);
+uint8_t         gui_widget_setypositionpercent(gui_handle_p h, float y, const uint8_t protect);
+uint8_t         gui_widget_setscrollx(gui_handle_p h, gui_dim_t scroll, const uint8_t protect);
+uint8_t         gui_widget_setscrolly(gui_handle_p h, gui_dim_t scroll, const uint8_t protect);
+uint8_t         gui_widget_incscrollx(gui_handle_p h, gui_dim_t scroll, const uint8_t protect);
+uint8_t         gui_widget_incscrolly(gui_handle_p h, gui_dim_t scroll, const uint8_t protect);
+gui_dim_t       gui_widget_getscrollx(gui_handle_p h, const uint8_t protect);
+gui_dim_t       gui_widget_getscrolly(gui_handle_p h, const uint8_t protect);
 
 /**
  * \}
@@ -660,12 +451,12 @@ gui_dim_t       gui_widget_getscrolly(gui_handle_p h);
  * \{
  */
 
-uint8_t         gui_widget_show(gui_handle_p h);
-uint8_t         gui_widget_hide(gui_handle_p h);
-uint8_t         gui_widget_hidechildren(gui_handle_p h);
-uint8_t         gui_widget_putonfront(gui_handle_p h, uint8_t focus);
-uint8_t         gui_widget_getalpha(gui_handle_p h);
-uint8_t         gui_widget_setalpha(gui_handle_p h, uint8_t alpha);
+uint8_t         gui_widget_show(gui_handle_p h, const uint8_t protect);
+uint8_t         gui_widget_hide(gui_handle_p h, const uint8_t protect);
+uint8_t         gui_widget_hidechildren(gui_handle_p h, const uint8_t protect);
+uint8_t         gui_widget_putonfront(gui_handle_p h, uint8_t focus, const uint8_t protect);
+uint8_t         gui_widget_getalpha(gui_handle_p h, const uint8_t protect);
+uint8_t         gui_widget_setalpha(gui_handle_p h, uint8_t alpha, const uint8_t protect);
  
 /**
  * \}
@@ -677,19 +468,21 @@ uint8_t         gui_widget_setalpha(gui_handle_p h, uint8_t alpha);
  * \{
  */
 
-uint8_t         gui_widget_invalidate(gui_handle_p h);
-uint8_t         gui_widget_setuserdata(gui_handle_p h, void* data);
-void *          gui_widget_getuserdata(gui_handle_p h);
-uint8_t         gui_widget_ischildof(gui_handle_p h, gui_handle_p parent);
-uint8_t         gui_widget_incselection(gui_handle_p h, int16_t dir);
-uint8_t         gui_widget_setfocus(gui_handle_p h);
-uint8_t         gui_widget_setzindex(gui_handle_p h, int32_t zindex);
-int32_t         gui_widget_getzindex(gui_handle_p h);
-uint8_t         gui_widget_set3dstyle(gui_handle_p h, uint8_t enable);
-gui_id_t        gui_widget_getid(gui_handle_p h);
-gui_handle_p    gui_widget_getbyid(gui_id_t id);
-gui_handle_p    gui_widget_getbyid_ex(gui_id_t id, gui_handle_p parent, uint8_t deep);
-uint8_t         gui_widget_remove(gui_handle_p* h);
+uint8_t         gui_widget_invalidate(gui_handle_p h, const uint8_t protect);
+uint8_t         gui_widget_setignoreinvalidate(gui_handle_p h, uint8_t en, uint8_t invalidate, const uint8_t protect);
+uint8_t         gui_widget_setuserdata(gui_handle_p h, void* data, const uint8_t protect);
+void *          gui_widget_getuserdata(gui_handle_p h, const uint8_t protect);
+uint8_t         gui_widget_ischildof(gui_handle_p h, gui_handle_p parent, const uint8_t protect);
+uint8_t         gui_widget_incselection(gui_handle_p h, int16_t dir, const uint8_t protect);
+uint8_t         gui_widget_setfocus(gui_handle_p h, const uint8_t protect);
+uint8_t         gui_widget_setzindex(gui_handle_p h, int32_t zindex, const uint8_t protect);
+int32_t         gui_widget_getzindex(gui_handle_p h, const uint8_t protect);
+uint8_t         gui_widget_set3dstyle(gui_handle_p h, uint8_t enable, const uint8_t protect);
+gui_handle_p    gui_widget_getparent(gui_handle_p h, const uint8_t protect);
+gui_id_t        gui_widget_getid(gui_handle_p h, const uint8_t protect);
+gui_handle_p    gui_widget_getbyid(gui_id_t id, const uint8_t protect);
+gui_handle_p    gui_widget_getbyid_ex(gui_id_t id, gui_handle_p parent, uint8_t deep, const uint8_t protect);
+uint8_t         gui_widget_remove(gui_handle_p* h, const uint8_t protect);
 
 /**
  * \}
@@ -701,18 +494,18 @@ uint8_t         gui_widget_remove(gui_handle_p* h);
  * \{
  */
  
-uint8_t         gui_widget_setpaddingtop(gui_handle_p h, gui_dim_t x);
-uint8_t         gui_widget_setpaddingright(gui_handle_p h, gui_dim_t x);
-uint8_t         gui_widget_setpaddingbottom(gui_handle_p h, gui_dim_t x);
-uint8_t         gui_widget_setpaddingleft(gui_handle_p h, gui_dim_t x);
-uint8_t         gui_widget_setpaddingtopbottom(gui_handle_p h, gui_dim_t x);      
-uint8_t         gui_widget_setpaddingleftright(gui_handle_p h, gui_dim_t x);
-uint8_t         gui_widget_setpadding(gui_handle_p h, gui_dim_t x);
+uint8_t         gui_widget_setpaddingtop(gui_handle_p h, gui_dim_t x, const uint8_t protect);
+uint8_t         gui_widget_setpaddingright(gui_handle_p h, gui_dim_t x, const uint8_t protect);
+uint8_t         gui_widget_setpaddingbottom(gui_handle_p h, gui_dim_t x, const uint8_t protect);
+uint8_t         gui_widget_setpaddingleft(gui_handle_p h, gui_dim_t x, const uint8_t protect);
+uint8_t         gui_widget_setpaddingtopbottom(gui_handle_p h, gui_dim_t x, const uint8_t protect);
+uint8_t         gui_widget_setpaddingleftright(gui_handle_p h, gui_dim_t x, const uint8_t protect);
+uint8_t         gui_widget_setpadding(gui_handle_p h, gui_dim_t x, const uint8_t protect);
 
-gui_dim_t       gui_widget_getpaddingtop(gui_handle_p h);
-gui_dim_t       gui_widget_getpaddingright(gui_handle_p h);
-gui_dim_t       gui_widget_getpaddingbottom(gui_handle_p h);
-gui_dim_t       gui_widget_getpaddingleft(gui_handle_p h);
+gui_dim_t       gui_widget_getpaddingtop(gui_handle_p h, const uint8_t protect);
+gui_dim_t       gui_widget_getpaddingright(gui_handle_p h, const uint8_t protect);
+gui_dim_t       gui_widget_getpaddingbottom(gui_handle_p h, const uint8_t protect);
+gui_dim_t       gui_widget_getpaddingleft(gui_handle_p h, const uint8_t protect);
 
 /**
  * \}
@@ -725,7 +518,7 @@ gui_dim_t       gui_widget_getpaddingleft(gui_handle_p h);
  */
 
 uint8_t         gui_widget_processdefaultcallback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
-uint8_t         gui_widget_setcallback(gui_handle_p h, gui_widget_callback_t callback);
+uint8_t         gui_widget_setcallback(gui_handle_p h, gui_widget_callback_t callback, const uint8_t protect);
 uint8_t         gui_widget_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
 /**

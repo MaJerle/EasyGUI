@@ -26,7 +26,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
- * Author:          Tilen MAJERLE <tilen@majerle.eu>
+ * This file is part of EasyGUI library.
+ *
+ * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #include "system/gui_ll.h"
 #include "gui/gui_mem.h"
@@ -240,7 +242,7 @@ gui_ll_control(gui_lcd_t* LCD, GUI_LL_Command_t cmd, void* param, void* result) 
             uint8_t i = 0;
             gui_ll_t* LL = (gui_ll_t *)param;
             static big_array[0x100000];
-            static GUI_MEM_Region_t regions[] = {
+            static gui_mem_region_t regions[] = {
                 {big_array, sizeof(big_array)}
             };
             

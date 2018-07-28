@@ -26,7 +26,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
- * Author:          Tilen MAJERLE <tilen@majerle.eu>
+ * This file is part of EasyGUI library.
+ *
+ * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #include "system/gui_sys.h"
 #include "string.h"

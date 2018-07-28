@@ -26,10 +26,12 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
-#include "gui/gui_buffer.h"
+#include "gui/gui_buff.h"
 
 /**
  * \brief  Initializes buffer structure for work
@@ -52,7 +54,7 @@ gui_buffer_init(gui_buff_t* buff, uint32_t size, void* buff_ptr) {
     buff->buff = buff_ptr;
     
     if (buff->buff == NULL) {                   /* Check if malloc should be used */
-        buff->buff = GUI_MEMALLOC(size * sizeof(uint8_t));  /* Try to allocate memory for buffer */
+        buff->buff = GUI_MEMALLOC(size * sizeof(uint8_t), 0);   /* Try to allocate memory for buffer */
         if (buff->buff == NULL) {               /* Check if allocated */    
             buff->size = 0;                     /* Reset size */
             return 1;                           /* Return error */
@@ -77,7 +79,7 @@ gui_buffer_free(gui_buff_t* buff) {
         return;
     }
     if (buff->flags & GUI_BUFFER_MALLOC) {      /* If malloc was used for allocation */
-        GUI_MEMFREE(buff->buff);                /* Free memory */
+        GUI_MEMFREE(buff->buff, 0);             /* Free memory */
     }
     buff->buff = NULL;
     buff->flags = 0;

@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
@@ -92,8 +94,8 @@ gui_image_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags);  /* Allocate memory for basic widget */
+gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
+    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
 }
 
 /**
@@ -103,16 +105,16 @@ gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_h
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_image_setsource(gui_handle_p h, const gui_image_desc_t* img) {
+gui_image_setsource(gui_handle_p h, const gui_image_desc_t* img, const uint8_t protect) {
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && img != NULL);   /* Check input parameters */
-    __GUI_LEAVE(1);                                 /* Enter GUI */
-    
+
+    __GUI_ENTER(protect);                           /* Enter GUI */
     __GI(h)->image = img;                           /* Set image */
     guii_widget_setinvalidatewithparent(h, img != NULL && img->bpp == 32);  /* Set how invalidation functon hebaves */
-    guii_widget_invalidatewithparent(h);           /* Invalidate widget */
+    guii_widget_invalidatewithparent(h);            /* Invalidate widget */
+    __GUI_LEAVE(protect);                           /* Leave GUI */
 
-    __GUI_LEAVE(1);                                 /* Leave GUI */
     return ret;
 }

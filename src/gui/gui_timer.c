@@ -26,6 +26,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
+ * This file is part of EasyGUI library.
+ *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #define GUI_INTERNAL
@@ -39,10 +41,6 @@
 
 #define guii_timer_isperiodic(t)        ((t)->flags & GUI_FLAG_TIMER_PERIODIC)
 
-#if GUI_CFG_OS
-static gui_mbox_msg_t timer_msg = {GUI_SYS_MBOX_TYPE_TIMER};
-#endif /* GUI_CFG_OS */
-
 /**
  * \brief           Create new software timer
  * \note            This function is private and may be called only when OS protection is active
@@ -55,7 +53,7 @@ gui_timer_t *
 guii_timer_create(uint16_t period, void (*callback)(gui_timer_t *), void* params) {
     gui_timer_t* ptr;
     
-    ptr = GUI_MEMALLOC(sizeof(*ptr));               /* Allocate memory for timer */
+    ptr = GUI_MEMALLOC(sizeof(*ptr), 0);            /* Allocate memory for timer */
     if (ptr != NULL) {
         memset(ptr, 0x00, sizeof(gui_timer_t));     /* Reset memory */
         
@@ -66,8 +64,9 @@ guii_timer_create(uint16_t period, void (*callback)(gui_timer_t *), void* params
         ptr->flags = 0;                             /* Timer flags management */
         
         gui_linkedlist_add_gen(&GUI.timers.list, (gui_linkedlist_t *)ptr);  /* Add timer to linked list */
+
 #if GUI_CFG_OS
-        gui_sys_mbox_putnow(&GUI.OS.mbox, &timer_msg);  /* Add new message to queue */
+        gui_sys_mbox_putnow(&GUI.OS.mbox, NULL);    /* Add new message to queue */
 #endif /* GUI_CFG_OS */
     }
     return ptr;
@@ -84,7 +83,7 @@ uint8_t
 guii_timer_remove(gui_timer_t** t) {  
     __GUI_ASSERTPARAMS(t != NULL && *t != NULL);    /* Check input parameters */  
     gui_linkedlist_remove_gen(&GUI.timers.list, (gui_linkedlist_t *)(*t));  /* Remove timer from linked list */
-    GUI_MEMFREE(*t);                                /* Free memory for timer */
+    GUI_MEMFREE(*t, 0);                             /* Free memory for timer */
     *t = NULL;                                      /* Clear pointer */
     
     return 1;
@@ -102,8 +101,9 @@ guii_timer_start(gui_timer_t* t) {
     t->counter = t->period;                         /* Reset counter to top value */
     t->flags &= ~GUI_FLAG_TIMER_PERIODIC;           /* Clear periodic flag */
     t->flags |= GUI_FLAG_TIMER_ACTIVE;              /* Set active flag */
+
 #if GUI_CFG_OS
-    gui_sys_mbox_putnow(&GUI.OS.mbox, &timer_msg);  /* Add new message to queue */
+    gui_sys_mbox_putnow(&GUI.OS.mbox, NULL);        /* Add new message to queue */
 #endif /* GUI_CFG_OS */
     
     return 1;
