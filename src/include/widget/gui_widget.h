@@ -78,8 +78,9 @@ extern "C" {
  * 
  * \{
  */
-#define GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP       0x01 /*!< Indicates parent object of widget should be desktop window */
-#define GUI_FLAG_WIDGET_CREATE_NO_PARENT            0x02 /*!< No parent widget */
+#define GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP       0x01    /*!< Indicates parent object of widget should be desktop window */
+#define GUI_FLAG_WIDGET_CREATE_NO_PARENT            0x02    /*!< No parent widget */
+#define GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE    0x04    /*!< Ignore invalidate on widget creation */
 
 /**
  * \}

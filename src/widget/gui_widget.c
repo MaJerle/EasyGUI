@@ -1173,7 +1173,9 @@ guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, fl
             guii_widget_setflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Ignore invalidation process */
             gui_widget_setsize(h, GUI_DIM(width), GUI_DIM(height), 0);/* Set widget size */
             gui_widget_setposition(h, GUI_DIM(x), GUI_DIM(y), 0);   /* Set widget position */
-            guii_widget_clrflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Include invalidation process */
+            if (!(flags & GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE)) {
+                guii_widget_clrflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Include invalidation process */
+            }
             guii_widget_setflag(h, GUI_FLAG_FIRST_INVALIDATE);  /* Include invalidation process */
             gui_widget_invalidate(h, 0);            /* Invalidate properly now when everything is set correctly = set for valid clipping region part */
 
