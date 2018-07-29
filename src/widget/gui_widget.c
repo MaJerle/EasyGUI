@@ -589,8 +589,14 @@ set_widget_size(gui_handle_p h, float wi, float hi, uint8_t wp, uint8_t hp, cons
         (!hp && guii_widget_getflag(h, GUI_FLAG_HEIGHT_PERCENT))    /* New height is not in percent, old is */
     ) {
         gui_dim_t wc, hc;
+        uint8_t is_flag;
         
-        if (!gui_widget_isexpanded(h, 0)) {         /* First invalidate current position if not expanded before change of size */
+        /* Changing position or size must force invalidation */
+        is_flag = !!guii_widget_getflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Get ignore invalidate flag */
+        guii_widget_clrflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Clear flag */
+        
+        /* First invalidate current position if not expanded before change of size */
+        if (!gui_widget_isexpanded(h, 0) && !guii_widget_getflag(h, GUI_FLAG_FIRST_INVALIDATE)) {
             gui_widget_invalidatewithparent(h, 0);  /* Set old clipping region first */
         }
         
@@ -616,9 +622,12 @@ set_widget_size(gui_handle_p h, float wi, float hi, uint8_t wp, uint8_t hp, cons
         SET_WIDGET_ABS_VALUES(h);                   /* Set widget absolute values */
         
         /* Check if any of dimensions are bigger than before */
-        if (!gui_widget_isexpanded(h, 0) &&
+        if (!gui_widget_isexpanded(h, 0) && !guii_widget_getflag(h, GUI_FLAG_FIRST_INVALIDATE) &&
             (gui_widget_getwidth(h, 0) > wc || gui_widget_getheight(h, 0) > hc)) {
             gui_widget_invalidate(h, 0);            /* Invalidate widget */
+        }
+        if (is_flag) {
+            guii_widget_setflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Set flag back */
         }
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
@@ -646,8 +655,14 @@ set_widget_position(gui_handle_p h, float x, float y, uint8_t xp, uint8_t yp, co
         (!xp && guii_widget_getflag(h, GUI_FLAG_XPOS_PERCENT)) ||   /* New X position is not in percent, old is */
         (yp && !guii_widget_getflag(h, GUI_FLAG_YPOS_PERCENT)) ||   /* New Y position is in percent, old is not */
         (!yp && guii_widget_getflag(h, GUI_FLAG_YPOS_PERCENT))      /* New Y position is not in percent, old is */
-    ) {                   
-        if (!gui_widget_isexpanded(h, 0)) {
+    ) {
+        uint8_t is_flag;
+
+        /* Changing position or size must force invalidation */
+        is_flag = !!guii_widget_getflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Get ignore invalidate flag */
+        guii_widget_clrflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Clear flag */
+
+        if (!gui_widget_isexpanded(h, 0) && !guii_widget_getflag(h, GUI_FLAG_FIRST_INVALIDATE)) {
             gui_widget_invalidatewithparent(h, 0);  /* Set old clipping region first */
         }
         
@@ -668,8 +683,11 @@ set_widget_position(gui_handle_p h, float x, float y, uint8_t xp, uint8_t yp, co
         h->y = y;                                   /* Set parameter */
         SET_WIDGET_ABS_VALUES(h);                   /* Set widget absolute values */
         
-        if (!gui_widget_isexpanded(h, 0)) {
+        if (!gui_widget_isexpanded(h, 0) && !guii_widget_getflag(h, GUI_FLAG_FIRST_INVALIDATE)) {
             gui_widget_invalidatewithparent(h, 0);  /* Set new clipping region */
+        }
+        if (is_flag) {
+            guii_widget_setflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Set flag back */
         }
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
@@ -1029,11 +1047,13 @@ guii_widget_getparentabsolutey(gui_handle_p h) {
 uint8_t
 gui_widget_invalidatewithparent(gui_handle_p h, const uint8_t protect) {
     uint8_t res;
+    
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
     __GUI_ENTER(protect);                           /* Enter GUI */
     res = invalidate_widget(h, 1);                  /* Invalidate object with clipping */
-    if (res && guii_widget_hasparent(h)) {          /* If parent exists, invalid only parent */
+    GUI_UNUSED(res);
+    if (guii_widget_hasparent(h)) {                 /* If parent exists, invalid only parent */
         invalidate_widget(guii_widget_getparent(h), 0); /* Invalidate parent object without clipping */
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
@@ -1120,12 +1140,7 @@ gui_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, flo
     
     __GUI_ASSERTPARAMS(widget != NULL && widget->callback != NULL); /* Check input parameters */
     
-    /*
-     * Allocation size check:
-     * 
-     * - Size must be at least for widget size
-     * - If widget supports children widgets, size must be for at least parent handle structure
-     */
+    /* Allocation size check */
     if (widget->size < sizeof(gui_handle)) { 
         return 0;
     }
@@ -1177,17 +1192,17 @@ gui_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, flo
             h->font = widget_default.font;          /* Set default font */
 
             /* Do not invalidate widget while setting first size and position */
-            guii_widget_setflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Ignore invalidation process */
-            gui_widget_setsize(h, GUI_DIM(width), GUI_DIM(height), 0);/* Set widget size */
+            guii_widget_setflag(h, GUI_FLAG_FIRST_INVALIDATE);  /* Ignore invalidation process for size and position */
+            gui_widget_setsize(h, GUI_DIM(width), GUI_DIM(height), 0);  /* Set widget size */
             gui_widget_setposition(h, GUI_DIM(x), GUI_DIM(y), 0);   /* Set widget position */
+            gui_widget_invalidate(h, 0);            /* Force invalidation once we set size and position first time */
             
 #if GUI_CFG_WIDGET_CREATE_IGNORE_INVALIDATE
             flags |= GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE;  /* Add ignore invalidate flag */
 #endif /* GUI_CFG_WIDGET_CREATE_IGNORE_INVALIDATE */
+            guii_widget_setflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Ignore invalidation process */
             if (!(flags & GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE)) {
                 guii_widget_clrflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* Include invalidation process */
-                guii_widget_setflag(h, GUI_FLAG_FIRST_INVALIDATE);  /* Include invalidation process */
-                gui_widget_invalidate(h, 0);        /* Invalidate properly now when everything is set correctly = set for valid clipping region part */
             }
 
             /* Add widget to linked list of parent widget */
