@@ -110,7 +110,7 @@ gui_container_create(gui_id_t id, float x, float y, float width, float height, g
 
 /**
  * \brief           Set color to specific part of widget
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise

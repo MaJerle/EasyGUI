@@ -231,7 +231,7 @@ remove_rows(gui_handle_p h) {
  * \param[in]       ctr: Callback type
  * \param[in]       param: Input parameters for callback type
  * \param[out]      result: Result for callback type
- * \return          1 if command processed, 0 otherwise
+ * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
 gui_listview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
@@ -517,7 +517,7 @@ gui_listview_create(gui_id_t id, float x, float y, float width, float height, gu
 
 /**
  * \brief           Set color to list view widget
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
@@ -695,9 +695,9 @@ gui_listview_setitemstring(gui_handle_p h, gui_listview_row_p row, uint16_t col,
 
 /**
  * \brief           Set auto mode for slider
- * \note            When it is enabled, slider will only appear if needed to show more entries on list
- * \param[in,out]   h: Widget handle
- * \param[in]       autoMode: Auto mode status. Set to `1` for auto mode or `0` for manual mode
+ * \note            When auto mode enabled, slider will show only if there are more entries than widget can display
+ * \param[in]       h: Widget handle
+ * \param[in]       autoMode: Set to `1` for auto mode or `0` for manual mode
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
@@ -721,7 +721,7 @@ gui_listview_setsliderauto(gui_handle_p h, uint8_t autoMode, const uint8_t prote
 /**
  * \brief           Set manual visibility for slider
  * \note            Slider must be in manual mode in order to get this to work
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       visible: Slider visible status, `1` or `0`
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
@@ -751,7 +751,7 @@ gui_listview_setslidervisibility(gui_handle_p h, uint8_t visible, const uint8_t 
 
 /**
  * \brief           Scroll list if possible
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       step: Step to scroll. Positive step will scroll up, negative will scroll down
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
@@ -779,7 +779,7 @@ gui_listview_scroll(gui_handle_p h, int16_t step, const uint8_t protect) {
 
 /**
  * \brief           Set selected row number
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       selection: Set to `-1` to invalidate selection or `0 - count-1` for specific selection 
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
@@ -799,7 +799,7 @@ gui_listview_setselection(gui_handle_p h, int16_t selection, const uint8_t prote
 
 /**
  * \brief           Get selected row number
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Selection number on success, -1 otherwise
  */
@@ -818,7 +818,7 @@ gui_listview_getselection(gui_handle_p h, const uint8_t protect) {
 
 /**
  * \brief           Get item text value from row index and column index
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       rindex: Row index
  * \param[in]       cindex: Column index
  * \param[in]       dst: Pointer to \ref gui_char variable to save text to it

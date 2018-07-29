@@ -109,7 +109,7 @@ calculate_limits(gui_handle_p h) {
  * \param[in]       ctr: Callback type
  * \param[in]       param: Input parameters for callback type
  * \param[out]      result: Result for callback type
- * \return          1 if command processed, 0 otherwise
+ * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
 gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
@@ -209,7 +209,7 @@ gui_listcontainer_create(gui_id_t id, float x, float y, float width, float heigh
 
 /**
  * \brief           Set color to specific part of widget
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise

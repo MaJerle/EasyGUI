@@ -42,7 +42,7 @@ extern "C" {
 
 /**
  * \ingroup         GUI_WIDGETS
- * \defgroup        GUI_DEBUGBOX Listbox
+ * \defgroup        GUI_DEBUGBOX Debug box
  * \brief           Debug box widget
  * \{
  */

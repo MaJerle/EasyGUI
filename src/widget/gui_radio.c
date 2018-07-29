@@ -116,7 +116,7 @@ set_disabled(gui_handle_p h, uint8_t state) {
  * \param[in]       ctr: Callback type
  * \param[in]       param: Input parameters for callback type
  * \param[out]      result: Result for callback type
- * \return          1 if command processed, 0 otherwise
+ * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
 gui_radio_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
@@ -206,7 +206,7 @@ gui_radio_create(gui_id_t id, float x, float y, float width, float height, gui_h
 
 /**
  * \brief           Set color to specific part of widget
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
@@ -221,7 +221,7 @@ gui_radio_setcolor(gui_handle_p h, gui_radio_color_t index, gui_color_t color, c
 /**
  * \brief           Set radio group for widget
  * \note            Radio widgets with the same group must be on the same parent widget
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       groupId: Group ID for widget
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
@@ -258,7 +258,7 @@ gui_radio_setgroup(gui_handle_p h, uint8_t groupId, const uint8_t protect) {
 
 /**
  * \brief           Get radio group for widget
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget group
  */
@@ -276,7 +276,7 @@ gui_radio_getgroup(gui_handle_p h, const uint8_t protect) {
 
 /**
  * \brief           Set value for widget when pressed
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       value: Value of widget group when specific widget is selected
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
@@ -299,7 +299,7 @@ gui_radio_setvalue(gui_handle_p h, uint32_t value, const uint8_t protect) {
 
 /**
  * \brief           Get value for specific widget
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget value
  */
@@ -318,7 +318,7 @@ gui_radio_getvalue(gui_handle_p h, const uint8_t protect) {
 
 /**
  * \brief           Set radio widget selected in radio group
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
@@ -337,7 +337,7 @@ uint8_t gui_radio_setselected(gui_handle_p h, const uint8_t protect) {
 /**
  * \brief           Get value of selected widget from widget group
  * \note            If `3` widgets share the same group ID, no matter which widget is used in this function, result will be always the same
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget selected value
  */
@@ -356,7 +356,7 @@ gui_radio_getselectedvalue(gui_handle_p h, const uint8_t protect) {
 
 /**
  * \brief           Disable widget to prevent state change
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \param[in]       disabled: Set to `1` to disable, `0` otherwise
  * \return          `1` on success, `0` otherwise
@@ -376,7 +376,7 @@ gui_radio_setdisabled(gui_handle_p h, uint8_t disabled, const uint8_t protect) {
 
 /**
  * \brief           Check if Radio is disabled
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */

@@ -71,7 +71,7 @@ gui_widget_t widget = {
  * \param[in]       ctr: Callback type
  * \param[in]       param: Input parameters for callback type
  * \param[out]      result: Result for callback type
- * \return          1 if command processed, 0 otherwise
+ * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
 gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
@@ -180,7 +180,7 @@ gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_
 
 /**
  * \brief           Set color to specific part of widget
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
@@ -194,7 +194,7 @@ gui_button_setcolor(gui_handle_p h, gui_button_color_t index, gui_color_t color,
 
 /**
  * \brief           Set border radius size
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       size: Border radius size
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise

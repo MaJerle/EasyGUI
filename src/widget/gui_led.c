@@ -74,7 +74,7 @@ gui_widget_t widget = {
  * \param[in]       ctr: Callback type
  * \param[in]       param: Input parameters for callback type
  * \param[out]      result: Result for callback type
- * \return          1 if command processed, 0 otherwise
+ * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
 gui_led_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
@@ -156,7 +156,7 @@ gui_led_create(gui_id_t id, float x, float y, float width, float height, gui_han
 
 /**
  * \brief           Set color to specific part of widget
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
@@ -170,7 +170,7 @@ gui_led_setcolor(gui_handle_p h, gui_led_color_t index, gui_color_t color, const
 
 /**
  * \brief           Set led type
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       type: New type for LED
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
@@ -183,7 +183,7 @@ gui_led_settype(gui_handle_p h, gui_led_type_t type, const uint8_t protect) {
 
 /**
  * \brief           Toggle LED state
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
@@ -195,7 +195,7 @@ gui_led_toggle(gui_handle_p h, const uint8_t protect) {
 
 /**
  * \brief           Set LED value either on (turn on) or off (turn off)
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       state: LED state, either `1` or `0` according to selected state
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
@@ -208,7 +208,7 @@ gui_led_set(gui_handle_p h, uint8_t state, const uint8_t protect) {
 
 /**
  * \brief           Check if led is ON
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */

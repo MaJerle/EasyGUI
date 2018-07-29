@@ -114,7 +114,7 @@ extern "C" {
 /**
  * \brief           Get widget relative X position according to parent widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \retval          Relative X according to parent widget
  * \hideinitializer
  */
@@ -125,7 +125,7 @@ extern "C" {
 /**
  * \brief           Get widget relative Y position according to parent widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \retval          Relative Y according to parent widget
  * \hideinitializer
  */
@@ -136,7 +136,7 @@ extern "C" {
 /**
  * \brief           Get widget flag(s)
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       flag: Flag(s) to check
  * \return          0 on failure, non-zero otherwise
  * \hideinitializer
@@ -146,7 +146,7 @@ extern "C" {
 /**
  * \brief           Get widget core flag(s)
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       flag: Flag(s) to check
  * \return          0 on failure, non-zero otherwise (flags)
  * \hideinitializer
@@ -156,7 +156,7 @@ extern "C" {
 /**
  * \brief           Set widget flag(s)
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       flag: Flag(s) to set
  * \hideinitializer
  */
@@ -165,7 +165,7 @@ extern "C" {
 /**
  * \brief           Clear widget flag(s)
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       flag: Flag(s) to clear
  * \hideinitializer
  */
@@ -174,7 +174,7 @@ extern "C" {
 /**
  * \brief           Checks if widget has enabled 3D mode
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
@@ -183,7 +183,7 @@ extern "C" {
 /**
  * \brief           Get pointer to parent widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \retval          Pointer to parent widget
  * \hideinitializer
  */
@@ -192,7 +192,7 @@ extern "C" {
 /**
  * \brief           Check if widget has parent widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
@@ -201,7 +201,7 @@ extern "C" {
 /**
  * \brief           Process widget callback with command, parameters and result pointers
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       cmd: Callback command. This parameter can be a value of \ref gui_wc_t enumeration
  * \param[in]       param: Pointer to parameters if any for this command
  * \param[out]      result: Pointer to result pointer where calback can store result
@@ -214,7 +214,7 @@ extern "C" {
  * \brief           Get widget colors from list of colors
  *                  It takes colors from allocated memory if exists or from default widget setup for default
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \param[in]       index: Color index from color array for specific widget
  * \retval          Color index
  * \hideinitializer
@@ -251,7 +251,7 @@ extern "C" {
 /**
  * \brief           Returns height of parent element. If parent does not exists, it returns LCD height
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \retval          Parent height in units of pixels
  * \hideinitializer
  */
@@ -273,7 +273,7 @@ extern "C" {
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  *
  * \note            It returns inner height = total height - padding top - padding bottom
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \retval          Parent height in units of pixels
  * \hideinitializer
  */
@@ -282,7 +282,7 @@ extern "C" {
 /**
  * \brief           Check if widget is visible in any way, either with transparency or hidden flag
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
@@ -295,7 +295,7 @@ extern "C" {
 /**
  * \brief           Check if widget is hidden
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
@@ -304,7 +304,7 @@ extern "C" {
 /**
  * \brief           Check if widget allows children widgets
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
@@ -313,7 +313,7 @@ extern "C" {
 /**
  * \brief           Check if widget is base for dialog
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
@@ -322,7 +322,7 @@ extern "C" {
 /**
  * \brief           Checks if widget handle is currently in focus
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \retval          Status whether widget is in focus or not
  * \hideinitializer
  */
@@ -331,7 +331,7 @@ extern "C" {
 /**
  * \brief           Checks if widget handle is currently active
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \retval          Status whether widget is active or not
  * \hideinitializer
  */
@@ -342,7 +342,7 @@ extern "C" {
  * \note            Check if widget is visible and alpha is not set to 1 (full view)
  *
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \return          `1` on success, `0` otherwise
  */
 #define guii_widget_hasalpha(h)                     (guii_widget_isvisible(h) && gui_widget_getalpha(h, 0) < 0xFF)
@@ -350,7 +350,7 @@ extern "C" {
 /**
  * \brief           Get z-index value from widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in,out]   h: Widget handle
+ * \param[in]       h: Widget handle
  * \retval          z-index value
  * \hideinitializer
  */
