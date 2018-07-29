@@ -135,6 +135,7 @@ gui_dialog_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
  * \param[in]       func: Widget create function used as dialog base. In most cases \ref gui_container_create will be used to create empty container
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
@@ -208,6 +209,7 @@ gui_dialog_createblocking(gui_id_t id, gui_dim_t x, gui_dim_t y, gui_dim_t width
  * \brief           Dismiss (close) dialog with status
  * \param[in]       h: Widget handle
  * \param[in]       status: Dismiss status. Do not use value -1 as it is reserved for error detection
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t

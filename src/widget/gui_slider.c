@@ -319,6 +319,7 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for create procedure
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
@@ -331,6 +332,7 @@ gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -343,6 +345,7 @@ gui_slider_setcolor(gui_handle_p h, gui_slider_color_t index, gui_color_t color,
  * \brief           Set slider mode (orientation)
  * \param[in]       h: Widget handle
  * \param[in]       mode: Slider mode
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -355,8 +358,8 @@ gui_slider_setmode(gui_handle_p h, gui_slider_mode_t mode, const uint8_t protect
  * \brief           Set slider current value
  * \param[in,out]   h: Widget handle
  * \param[in]       val: New current value
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_slider_setmin, gui_slider_setmax, gui_slider_getvalue, gui_slider_getmin, gui_slider_getmax  
  */
 uint8_t
 gui_slider_setvalue(gui_handle_p h, int32_t val, const uint8_t protect) {
@@ -368,8 +371,8 @@ gui_slider_setvalue(gui_handle_p h, int32_t val, const uint8_t protect) {
  * \brief           Set slider minimal value
  * \param[in,out]   h: Widget handle
  * \param[in]       val: New minimal value
- * \return          `1` on success, `0` otherwise
- * \sa              gui_slider_setvalue, gui_slider_setmax, gui_slider_getvalue, gui_slider_getmin, gui_slider_getmax         
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
+ * \return          `1` on success, `0` otherwise        
  */
 uint8_t
 gui_slider_setmin(gui_handle_p h, int32_t val, const uint8_t protect) {
@@ -381,8 +384,8 @@ gui_slider_setmin(gui_handle_p h, int32_t val, const uint8_t protect) {
  * \brief           Set slider maximal value
  * \param[in,out]   h: Widget handle
  * \param[in]       val: New maximal value
- * \return          `1` on success, `0` otherwise
- * \sa              gui_slider_setmin, gui_slider_setvalue, gui_slider_getvalue, gui_slider_getmin, gui_slider_getmax  
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
+ * \return          `1` on success, `0` otherwise 
  */
 uint8_t
 gui_slider_setmax(gui_handle_p h, int32_t val, const uint8_t protect) {
@@ -393,8 +396,8 @@ gui_slider_setmax(gui_handle_p h, int32_t val, const uint8_t protect) {
 /**
  * \brief           Get slider minimal value
  * \param[in,out]   h: Widget handle
- * \return          Minimal value
- * \sa              gui_slider_setmin, gui_slider_setvalue, gui_slider_setmax, gui_slider_getvalue, gui_slider_getmax  
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
+ * \return          Minimal value 
  */
 int32_t
 gui_slider_getmin(gui_handle_p h, const uint8_t protect) {
@@ -412,8 +415,8 @@ gui_slider_getmin(gui_handle_p h, const uint8_t protect) {
 /**
  * \brief           Get slider maximal value
  * \param[in,out]   h: Widget handle
- * \return          Maximal value
- * \sa              gui_slider_setmin, gui_slider_setvalue, gui_slider_setmax, gui_slider_getvalue, gui_slider_getmin  
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
+ * \return          Maximal value  
  */
 int32_t
 gui_slider_getmax(gui_handle_p h, const uint8_t protect) {
@@ -430,8 +433,8 @@ gui_slider_getmax(gui_handle_p h, const uint8_t protect) {
 /**
  * \brief           Get slider current value
  * \param[in,out]   h: Widget handle
- * \return          Current value
- * \sa              gui_slider_setmin, gui_slider_setvalue, gui_slider_setmax, gui_slider_getmin, gui_slider_getmax  
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
+ * \return          Current value 
  */
 int32_t
 gui_slider_getvalue(gui_handle_p h, const uint8_t protect) {

@@ -242,6 +242,7 @@ gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for create procedure
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
@@ -254,6 +255,7 @@ gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -266,8 +268,8 @@ gui_progbar_setcolor(gui_handle_p h, gui_progbar_color_t index, gui_color_t colo
  * \brief           Set progress bar current value
  * \param[in,out]   h: Widget handle
  * \param[in]       val: New current value
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_progbar_setmin, gui_progbar_setmax, gui_progbar_getvalue, gui_progbar_getmin, gui_progbar_getmax  
  */
 uint8_t
 gui_progbar_setvalue(gui_handle_p h, int32_t val, const uint8_t protect) {
@@ -279,8 +281,8 @@ gui_progbar_setvalue(gui_handle_p h, int32_t val, const uint8_t protect) {
  * \brief           Set progress bar minimal value
  * \param[in,out]   h: Widget handle
  * \param[in]       val: New minimal value
- * \return          `1` on success, `0` otherwise
- * \sa              gui_progbar_setvalue, gui_progbar_setmax, gui_progbar_getvalue, gui_progbar_getmin, gui_progbar_getmax         
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
+ * \return          `1` on success, `0` otherwise 
  */
 uint8_t
 gui_progbar_setmin(gui_handle_p h, int32_t val, const uint8_t protect) {
@@ -292,8 +294,8 @@ gui_progbar_setmin(gui_handle_p h, int32_t val, const uint8_t protect) {
  * \brief           Set progress bar maximal value
  * \param[in,out]   h: Widget handle
  * \param[in]       val: New maximal value
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_progbar_setmin, gui_progbar_setvalue, gui_progbar_getvalue, gui_progbar_getmin, gui_progbar_getmax  
  */
 uint8_t
 gui_progbar_setmax(gui_handle_p h, int32_t val, const uint8_t protect) {
@@ -305,6 +307,7 @@ gui_progbar_setmax(gui_handle_p h, int32_t val, const uint8_t protect) {
  * \brief           Sets percent mode. When in this mode, widget text is in percent according to current value between minimum and maximum
  * \param[in,out]   h: Widget handle
  * \param[in]       enable: Value either to enable or disable mode
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -316,7 +319,8 @@ gui_progbar_setpercentmode(gui_handle_p h, uint8_t enable, const uint8_t protect
 /**
  * \brief           Set progress bar to animation mode
  * \param[in,out]   h: Widget handle
- * \param[in]       anim: New animation value either 1 (enable) or 0 (disable)
+ * \param[in]       anim: New animation value either `1` (enable) or `0` (disable)
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -328,8 +332,8 @@ gui_progbar_setanimation(gui_handle_p h, uint8_t anim, const uint8_t protect) {
 /**
  * \brief           Get progress bar minimal value
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Minimal value
- * \sa              gui_progbar_setmin, gui_progbar_setvalue, gui_progbar_setmax, gui_progbar_getvalue, gui_progbar_getmax  
  */
 int32_t
 gui_progbar_getmin(gui_handle_p h, const uint8_t protect) {
@@ -347,8 +351,8 @@ gui_progbar_getmin(gui_handle_p h, const uint8_t protect) {
 /**
  * \brief           Get progress bar maximal value
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Maximal value
- * \sa              gui_progbar_setmin, gui_progbar_setvalue, gui_progbar_setmax, gui_progbar_getvalue, gui_progbar_getmin  
  */
 int32_t
 gui_progbar_getmax(gui_handle_p h, const uint8_t protect) {
@@ -366,8 +370,8 @@ gui_progbar_getmax(gui_handle_p h, const uint8_t protect) {
 /**
  * \brief           Get progress bar current value
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Current value
- * \sa              gui_progbar_setmin, gui_progbar_setvalue, gui_progbar_setmax, gui_progbar_getmin, gui_progbar_getmax  
  */
 int32_t
 gui_progbar_getvalue(gui_handle_p h, const uint8_t protect) {

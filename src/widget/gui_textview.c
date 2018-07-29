@@ -151,6 +151,7 @@ gui_textview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
@@ -163,6 +164,7 @@ gui_textview_create(gui_id_t id, float x, float y, float width, float height, gu
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -183,7 +185,8 @@ gui_textview_setcolor(gui_handle_p h, gui_textview_color_t index, gui_color_t co
 /**
  * \brief           Set vertical align for text inside text box
  * \param[in,out]   h: Widget handle
- * \param[in]       align: Vertical align. This parameter can be a value of \ref gui_textalign_valign_t enumeration
+ * \param[in]       align: Vertical align
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -195,7 +198,8 @@ gui_textview_setvalign(gui_handle_p h, gui_textalign_valign_t align, const uint8
 /**
  * \brief           Set horizontal align for text inside text box
  * \param[in,out]   h: Widget handle
- * \param[in]       align: Vertical align. This parameter can be a value of \ref gui_textalign_halign_t enumeration
+ * \param[in]       align: Horizontal align
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t

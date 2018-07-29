@@ -1,5 +1,5 @@
 /**	
- * \file            gui_buffer.h
+ * \file            gui_buff.h
  * \brief           Ring buffer manager
  */
  

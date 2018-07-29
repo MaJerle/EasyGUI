@@ -396,6 +396,7 @@ gui_listbox_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
@@ -406,8 +407,9 @@ gui_listbox_create(gui_id_t id, float x, float y, float width, float height, gui
 /**
  * \brief           Set color to listbox
  * \param[in,out]   h: Widget handle
- * \param[in]       index: Index in array of colors. This parameter can be a value of \ref gui_listbox_color_t enumeration
- * \param[in]       color: Actual color code to set
+ * \param[in]       index: Color index
+ * \param[in]       color: Color value
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -420,6 +422,7 @@ gui_listbox_setcolor(gui_handle_p h, gui_listbox_color_t index, gui_color_t colo
  * \brief           Add a new string to list box
  * \param[in,out]   h: Widget handle
  * \param[in]       text: Pointer to text to add to list. Only pointer is saved to memory!
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -451,6 +454,7 @@ gui_listbox_addstring(gui_handle_p h, const gui_char* text, const uint8_t protec
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Index (position) on list to set/change text
  * \param[in]       text: Pointer to text to add to list. Only pointer is saved to memory!
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -473,8 +477,8 @@ gui_listbox_setstring(gui_handle_p h, uint16_t index, const gui_char* text, cons
 /**
  * \brief           Delete first string from list
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_listbox_deletestring, gui_listbox_deletelaststring
  */
 uint8_t
 gui_listbox_deletefirststring(gui_handle_p h, const uint8_t protect) {
@@ -492,8 +496,8 @@ gui_listbox_deletefirststring(gui_handle_p h, const uint8_t protect) {
 /**
  * \brief           Delete last string from list
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_listbox_deletestring, gui_listbox_deletefirststring
  */
 uint8_t
 gui_listbox_deletelaststring(gui_handle_p h, const uint8_t protect) {
@@ -512,8 +516,8 @@ gui_listbox_deletelaststring(gui_handle_p h, const uint8_t protect) {
  * \brief           Delete specific entry from list
  * \param[in,out]   h: Widget handle
  * \param[in]       index: List index (position) to delete
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_listbox_deletefirststring, gui_listbox_deletelaststring
  */
 uint8_t
 gui_listbox_deletestring(gui_handle_p h, uint16_t index, const uint8_t protect) {
@@ -532,9 +536,9 @@ gui_listbox_deletestring(gui_handle_p h, uint16_t index, const uint8_t protect) 
  * \brief           Set auto mode for slider
  * \note            When it is enabled, slider will only appear if needed to show more entries on list
  * \param[in,out]   h: Widget handle
- * \param[in]       autoMode: Auto mode status. Set to 1 for auto mode or 0 for manual mode
+ * \param[in]       autoMode: Auto mode status. Set to `1` for auto mode or `0` for manual mode
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_listbox_setslidervisibility
  */
 uint8_t
 gui_listbox_setsliderauto(gui_handle_p h, uint8_t autoMode, const uint8_t protect) {
@@ -557,9 +561,9 @@ gui_listbox_setsliderauto(gui_handle_p h, uint8_t autoMode, const uint8_t protec
  * \brief           Set manual visibility for slider
  * \note            Slider must be in manual mode in order to get this to work
  * \param[in,out]   h: Widget handle
- * \param[in]       visible: Slider visible status, 1 or 0
+ * \param[in]       visible: Slider visible status, `1` or `0`
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_listbox_setsliderauto
  */
 uint8_t
 gui_listbox_setslidervisibility(gui_handle_p h, uint8_t visible, const uint8_t protect) {
@@ -588,6 +592,7 @@ gui_listbox_setslidervisibility(gui_handle_p h, uint8_t visible, const uint8_t p
  * \brief           Scroll list if possible
  * \param[in,out]   h: Widget handle
  * \param[in]       step: Step to scroll. Positive step will scroll up, negative will scroll down
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -614,9 +619,9 @@ gui_listbox_scroll(gui_handle_p h, int16_t step, const uint8_t protect) {
 /**
  * \brief           Set selected value
  * \param[in,out]   h: Widget handle
- * \param[in]       selection: Set to -1 to invalidate selection or 0 - count-1 for specific selection 
+ * \param[in]       selection: Set to `-1` to invalidate selection or `0 - count-1` for specific selection 
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_listbox_getselection
  */
 uint8_t
 gui_listbox_setselection(gui_handle_p h, int16_t selection, const uint8_t protect) {
@@ -634,8 +639,8 @@ gui_listbox_setselection(gui_handle_p h, int16_t selection, const uint8_t protec
 /**
  * \brief           Get selected value
  * \param[in,out]   h: Widget handle
- * \return          Selection on success, -1 otherwise
- * \sa              gui_listbox_setselection
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
+ * \return          Selection on success, `-1` otherwise
  */
 int16_t
 gui_listbox_getselection(gui_handle_p h, const uint8_t protect) {

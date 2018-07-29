@@ -397,6 +397,7 @@ gui_graph_create(gui_id_t id, float x, float y, float width, float height, gui_h
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -410,7 +411,7 @@ gui_graph_setcolor(gui_handle_p h, gui_graph_color_t index, gui_color_t color, c
  * \param[in,out]   h: Widget handle
  * \param[in]       v: New minimal X value
  * \return          `1` on success, `0` otherwise
- * \sa              gui_graph_setmaxx, gui_graph_setminy, gui_graph_setmaxy
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  */
 uint8_t
 gui_graph_setminx(gui_handle_p h, float v, const uint8_t protect) {
@@ -422,8 +423,8 @@ gui_graph_setminx(gui_handle_p h, float v, const uint8_t protect) {
  * \brief           Set maximal X value of plot
  * \param[in,out]   h: Widget handle
  * \param[in]       v: New maximal X value
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_graph_setminx, gui_graph_setminy, gui_graph_setmaxy
  */
 uint8_t
 gui_graph_setmaxx(gui_handle_p h, float v, const uint8_t protect) {
@@ -435,8 +436,8 @@ gui_graph_setmaxx(gui_handle_p h, float v, const uint8_t protect) {
  * \brief           Set minimal Y value of plot
  * \param[in,out]   h: Widget handle
  * \param[in]       v: New minimal Y value
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_graph_setminx, gui_graph_setmaxx, gui_graph_setmaxy
  */
 uint8_t
 gui_graph_setminy(gui_handle_p h, float v, const uint8_t protect) {
@@ -448,8 +449,8 @@ gui_graph_setminy(gui_handle_p h, float v, const uint8_t protect) {
  * \brief           Set maximal Y value of plot
  * \param[in,out]   h: Widget handle
  * \param[in]       v: New maximal Y value
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_graph_setminx, gui_graph_setmaxx, gui_graph_setminy
  */
 uint8_t
 gui_graph_setmaxy(gui_handle_p h, float v, const uint8_t protect) {
@@ -460,9 +461,9 @@ gui_graph_setmaxy(gui_handle_p h, float v, const uint8_t protect) {
 /**
  * \brief           Set all axes
  * \param[in,out]   h: Widget handle
- * \param[in]       v: New minimal X value
+ * \param[in]       min_x, max_x, min_y, max_y: New coordinate maximum values
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_graph_setmaxx, gui_graph_setminy, gui_graph_setmaxy
  */
 uint8_t
 gui_graph_setaxes(gui_handle_p h, float min_x, float max_x, float min_y, float max_y, const uint8_t protect) {
@@ -481,6 +482,7 @@ gui_graph_setaxes(gui_handle_p h, float min_x, float max_x, float min_y, float m
 /**
  * \brief           Reset zoom of widget
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -492,9 +494,12 @@ gui_graph_zoomreset(gui_handle_p h, const uint8_t protect) {
 /**
  * \brief           Zoom widget display data
  * \param[in,out]   h: Widget handle
- * \param[in]       zoom: Zoom coeficient. Use 2.0f to double zoom, use 0.5f to unzoom 2 times, etc.
- * \param[in]       x: X coordinate on plot where zoom focus will apply. Valid value between 0 and 1 relative to width area. Use 0.5f to zoom into center area
- * \param[in]       y: Y coordinate on plot where zoom focus will apply. Valid value between 0 and 1 relative to height area. Use 0.5f to zoom into center area
+ * \param[in]       zoom: Zoom coeficient. Use `2.0f` to double zoom, use `0.5f` to unzoom `2` times, etc.
+ * \param[in]       x: X coordinate on plot where zoom focus will apply.
+ *                     Valid value between `0` and `1` relative to width area. Use `0.5f` to zoom into center area
+ * \param[in]       y: Y coordinate on plot where zoom focus will apply.
+ *                     Valid value between `0` and `1` relative to height area. Use `0.5f` to zoom into center area
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -512,8 +517,8 @@ gui_graph_zoom(gui_handle_p h, float zoom, float x, float y, const uint8_t prote
  * \brief           Attach new data object to graph widget
  * \param[in,out]   h: Graph widget handle
  * \param[in]       data: Data object handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_graph_detachdata
  */
 uint8_t
 gui_graph_attachdata(gui_handle_p h, gui_graph_data_p data, const uint8_t protect) {
@@ -540,8 +545,8 @@ gui_graph_attachdata(gui_handle_p h, gui_graph_data_p data, const uint8_t protec
  * \brief           Detach existing data object from graph widget
  * \param[in,out]   h: Graph widget handle
  * \param[in]       data: Data object handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_graph_attachdata
  */
 uint8_t
 gui_graph_detachdata(gui_handle_p h, gui_graph_data_p data, const uint8_t protect) {
@@ -574,7 +579,8 @@ gui_graph_detachdata(gui_handle_p h, gui_graph_data_p data, const uint8_t protec
  * \param[in]       id: Graph data ID
  * \param[in]       type: Type of data. According to selected type different allocation size will occur
  * \param[in]       length: Number of points on plot.
- * \return          Graph data handle on success, NULL otherwise
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
+ * \return          Graph data handle on success, `NULL` otherwise
  */
 gui_graph_data_p
 gui_graph_data_create(gui_id_t id, gui_graph_type_t type, size_t length, const uint8_t protect) {
@@ -606,6 +612,7 @@ gui_graph_data_create(gui_id_t id, gui_graph_type_t type, size_t length, const u
  * \param[in]       data: Data object handle
  * \param[in]       x: X position for point. Used only in case data type is \ref GUI_GRAPH_TYPE_XY, otherwise it is ignored
  * \param[in]       y: Y position for point. Always used no matter of data type
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -633,8 +640,9 @@ gui_graph_data_addvalue(gui_graph_data_p data, int16_t x, int16_t y, const uint8
 
 /**
  * \brief           Set color for graph data
- * \param[in,out]   data: Pointer to \ref gui_graph_data_p structure with valid data
+ * \param[in,out]   data: Graph data handle
  * \param[in]       color: New color for data
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -657,6 +665,7 @@ gui_graph_data_setcolor(gui_graph_data_p data, gui_color_t color, const uint8_t 
  * \brief           Get data collection with specific ID from graph
  * \param[in]       graph_h: Graph widget handle
  * \param[in]       id: Data collection ID
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Data collection handle
  */
 gui_graph_data_p
@@ -676,5 +685,6 @@ gui_graph_data_get_by_id(gui_handle_p graph_h, gui_id_t id, const uint8_t protec
         }
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
+    
     return link != NULL ? data : NULL;
 }

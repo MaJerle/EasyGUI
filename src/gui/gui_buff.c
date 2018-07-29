@@ -1,5 +1,5 @@
 /**    
- * \file            gui_buffer.c
+ * \file            gui_buff.c
  * \brief           Ring buffer manager
  */
  

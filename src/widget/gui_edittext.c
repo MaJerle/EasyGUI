@@ -193,6 +193,7 @@ gui_edittext_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
@@ -205,12 +206,13 @@ gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gu
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_edittext_setcolor(gui_handle_p h, gui_edittext_color_t index, gui_color_t color) {
+gui_edittext_setcolor(gui_handle_p h, gui_edittext_color_t index, gui_color_t color, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, protect); /* Set color */
 }
 
 /**
@@ -218,34 +220,37 @@ gui_edittext_setcolor(gui_handle_p h, gui_edittext_color_t index, gui_color_t co
  * \note            When multiline is enabled, vertical text alignment is always top positioned
  * \param[in,out]   h: Widget handle
  * \param[in]       multiline: Set to `1` to enable multiline or `0` to disable
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_edittext_setmultiline(gui_handle_p h, uint8_t multiline) {
+gui_edittext_setmultiline(gui_handle_p h, uint8_t multiline, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MULTILINE, &multiline, 1, 0, 1); /* Set parameter */
+    return guii_widget_setparam(h, CFG_MULTILINE, &multiline, 1, 0, protect);   /* Set parameter */
 }
 
 /**
  * \brief           Set vertical align for text inside text box
  * \param[in,out]   h: Widget handle
  * \param[in]       align: Vertical align
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_edittext_setvalign(gui_handle_p h, gui_edittext_valign_t align) {
+gui_edittext_setvalign(gui_handle_p h, gui_edittext_valign_t align, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_VALIGN, &align, 1, 1, 1);/* Set parameter */
+    return guii_widget_setparam(h, CFG_VALIGN, &align, 1, 1, protect);  /* Set parameter */
 }
 
 /**
  * \brief           Set horizontal align for text inside text box
  * \param[in,out]   h: Widget handle
- * \param[in]       align: Vertical align
+ * \param[in]       align: Horizontal align
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_edittext_sethalign(gui_handle_p h, gui_edittext_halign_t align) {
+gui_edittext_sethalign(gui_handle_p h, gui_edittext_halign_t align, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_HALIGN, &align, 1, 1, 1);/* Set parameter */
+    return guii_widget_setparam(h, CFG_HALIGN, &align, 1, 1, protect);  /* Set parameter */
 }

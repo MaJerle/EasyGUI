@@ -570,6 +570,7 @@ get_common_parentwidget(gui_handle_p h1, gui_handle_p h2) {
  * \param[in]       y: height in units of pixels or percents
  * \param[in]       wp: Set to `1` if width unit is in percent
  * \param[in]       hp: Set to `1` if height unit is in percent
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 static uint8_t
@@ -628,6 +629,7 @@ set_widget_size(gui_handle_p h, float wi, float hi, uint8_t wp, uint8_t hp, cons
  * \param[in]       y: Y position in units of pixels or percents
  * \param[in]       xp: Set to `1` if X position is in percent
  * \param[in]       yp: Set to `1` if Y position is in percent
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 static uint8_t
@@ -919,7 +921,6 @@ guii_widget_active_set(gui_handle_p h) {
  * \note            Even if percentage height is used, function will always return value in pixels
  * \param[in]       h: Widget handle
  * \return          Total height in units of pixels
- * \sa              guii_widget_getinnerheight
  */
 gui_dim_t
 guii_widget_getheight(gui_handle_p h) {
@@ -1101,8 +1102,9 @@ guii_widget_setinvalidatewithparent(gui_handle_p h, uint8_t value) {
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in uints of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
- * \param[in]       cb: Widget callback function. Set to NULL to use default widget specific callback
+ * \param[in]       cb: Widget callback function. Set to `NULL` to use default widget specific callback
  * \param[in]       flags: flags for create procedure
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 void *
@@ -1206,7 +1208,7 @@ guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, fl
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Index in array of colors
  * \param[in]       color: Actual color code to set
- * \param[in]       protect: Set to `1` to protect core or `0` if already protected
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -1247,7 +1249,7 @@ guii_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color, const uin
  * \param[in]       data: Custom data to pass later to configuration callback
  * \param[in]       invalidate: Flag if widget should be invalidated after parameter change
  * \param[in]       invalidateparent: change if parent widget should be invalidated after parameter change
- * \param[in]       protect: Set to `1` to protect core or `0` if already protected
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -1279,7 +1281,8 @@ guii_widget_setparam(gui_handle_p h, uint16_t cfg, const void* data, uint8_t inv
 /**
  * \brief           Remove widget from memory
  * \note            If widget has child widgets, they will be removed too
- * \param[in,out]   *h: Pointer to widget handle. If removed, pointer will be invalidated and set to `NULL`
+ * \param[in,out]   h: Pointer to widget handle. If removed, pointer will be invalidated and set to `NULL`
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -1308,6 +1311,7 @@ gui_widget_remove(gui_handle_p* h, const uint8_t protect) {
 /**
  * \brief           Remove children widgets of current widget
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -1419,8 +1423,8 @@ guii_widget_processtextkey(gui_handle_p h, guii_keyboard_data_t* kb) {
  * \note            When unicode feature is enabled, memory should be 4x required characters because unicode can store up to 4 bytes for single character
  * \param[in,out]   h: Widget handle
  * \param[in]       size: Number of bytes to allocate
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Number of bytes allocated
- * \sa              gui_widget_freetextmemory
  */
 uint32_t
 gui_widget_alloctextmemory(gui_handle_p h, uint32_t size, const uint8_t protect) {
@@ -1449,10 +1453,10 @@ gui_widget_alloctextmemory(gui_handle_p h, uint32_t size, const uint8_t protect)
 }
 
 /**
- * \brief           Frees memory previously allocated for text
- * \param[in,out]   h: Widget handle to free memory on
+ * \brief           Frees widget memory previously allocated for text
+ * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_alloctextmemory
  */
 uint8_t
 gui_widget_freetextmemory(gui_handle_p h, const uint8_t protect) {
@@ -1482,8 +1486,8 @@ gui_widget_freetextmemory(gui_handle_p h, const uint8_t protect) {
  *                     and each further change of input pointer text will affect to output
  * \param[in,out]   h: Widget handle
  * \param[in]       text: Pointer to text to set to widget
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_alloctextmemory, gui_widget_freetextmemory, guii_widget_setfont, gui_widget_gettext, gui_widget_gettextcopy
  */
 uint8_t
 gui_widget_settext(gui_handle_p h, const gui_char* text, const uint8_t protect) {
@@ -1522,8 +1526,8 @@ gui_widget_settext(gui_handle_p h, const gui_char* text, const uint8_t protect) 
  * \brief           Get text from widget
  * \note            It will return pointer to text which cannot be modified directly.
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Pointer to text from widget
- * \sa              gui_widget_settext, gui_widget_gettextcopy
  */
 const gui_char *
 gui_widget_gettext(gui_handle_p h, const uint8_t protect) {
@@ -1552,8 +1556,8 @@ gui_widget_gettext(gui_handle_p h, const uint8_t protect) {
  * \param[in,out]   h: Widget handle
  * \param[out]      dst: Destination pointer
  * \param[in]       len: Size of output buffer in units of \ref gui_char
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Pointer to text from widget
- * \sa              gui_widget_settext, gui_widget_gettext
  */
 const gui_char*
 gui_widget_gettextcopy(gui_handle_p h, gui_char* dst, uint32_t len, const uint8_t protect) {
@@ -1574,8 +1578,8 @@ gui_widget_gettextcopy(gui_handle_p h, gui_char* dst, uint32_t len, const uint8_
  * \brief           Set widget font for drawing operations
  * \param[in,out]   h: Widget handle
  * \param[in]       font: Pointer to \ref gui_font_t object for font
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_settext, gui_widget_gettext
  */
 uint8_t
 gui_widget_setfont(gui_handle_p h, const gui_font_t* font, const uint8_t protect) {
@@ -1595,6 +1599,7 @@ gui_widget_setfont(gui_handle_p h, const gui_font_t* font, const uint8_t protect
  * \brief           Get font from widget
  * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Pointer to font used for widget
  */
 const gui_font_t *
@@ -1620,8 +1625,8 @@ gui_widget_getfont(gui_handle_p h, const uint8_t protect) {
  * \brief           Set width of widget in units of pixels
  * \param[in,out]   h: Widget handle
  * \param[in]       width: Width in units of pixels
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setheight, gui_widget_setwidthpercent, gui_widget_setheightpercent
  */
 uint8_t
 gui_widget_setwidth(gui_handle_p h, gui_dim_t width, const uint8_t protect) {
@@ -1639,8 +1644,8 @@ gui_widget_setwidth(gui_handle_p h, gui_dim_t width, const uint8_t protect) {
  * \brief           Set height of widget in units of pixels
  * \param[in,out]   h: Widget handle
  * \param[in]       height: height in units of pixels
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setwidth, gui_widget_setwidthpercent, gui_widget_setheightpercent
  */
 uint8_t
 gui_widget_setheight(gui_handle_p h, gui_dim_t height, const uint8_t protect) {
@@ -1656,8 +1661,8 @@ gui_widget_setheight(gui_handle_p h, gui_dim_t height, const uint8_t protect) {
  * \brief           Set width of widget in percentage relative to parent widget
  * \param[in,out]   h: Widget handle
  * \param[in]       width: Width in percentage
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setwidth, gui_widget_setheight, gui_widget_setheightpercent
  */
 uint8_t
 gui_widget_setwidthpercent(gui_handle_p h, float width, const uint8_t protect) {
@@ -1673,8 +1678,8 @@ gui_widget_setwidthpercent(gui_handle_p h, float width, const uint8_t protect) {
  * \brief           Set height of widget in percentage relative to parent widget
  * \param[in,out]   h: Widget handle
  * \param[in]       height: height in percentage
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setwidth, gui_widget_setheight, gui_widget_setwidthpercent
  */
 uint8_t
 gui_widget_setheightpercent(gui_handle_p h, float height, const uint8_t protect) {
@@ -1691,6 +1696,7 @@ gui_widget_setheightpercent(gui_handle_p h, float height, const uint8_t protect)
  * \param[in,out]   h: Widget handle
  * \param[in]       wi: Widget width
  * \param[in]       hi: Widget height
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -1703,6 +1709,7 @@ gui_widget_setsize(gui_handle_p h, gui_dim_t wi, gui_dim_t hi, const uint8_t pro
  * \param[in,out]   h: Widget handle
  * \param[in]       wi: Widget width
  * \param[in]       hi: Widget height
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -1714,6 +1721,7 @@ gui_widget_setsizepercent(gui_handle_p h, float wi, float hi, const uint8_t prot
  * \brief           Toggle expandend (maximized) mode of widget (mostly of windows)
  * \note            This function is private and may be called only when OS protection is active
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -1735,8 +1743,8 @@ gui_widget_toggleexpanded(gui_handle_p h, const uint8_t protect) {
  *                  Function returns width of widget according to current widget setup (expanded, fill, percent, etc.)
  * \note            Even if percentage width is used, function will always return value in pixels
  * \param[in]       h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Total width in units of pixels
- * \sa              gui_widget_getheight, gui_widget_setwidth
  */
 gui_dim_t
 gui_widget_getwidth(gui_handle_p h, const uint8_t protect) {
@@ -1762,9 +1770,8 @@ gui_widget_getwidth(gui_handle_p h, const uint8_t protect) {
  *
  * \note            Even if percentage height is used, function will always return value in pixels
  * \param[in]       h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Total height in units of pixels
- * \sa              gui_widget_getwidth, gui_widget_setheight
- * \hideinitializer
  */
 gui_dim_t
 gui_widget_getheight(gui_handle_p h, const uint8_t protect) {
@@ -1789,8 +1796,8 @@ gui_widget_getheight(gui_handle_p h, const uint8_t protect) {
  *                  When enabled, widget will be at X,Y = 0,0 relative to parent and will have width,height = 100%,100%
  * \param[in,out]   h: Widget handle
  * \param[in]       state: State for expanded mode
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_isexpanded
  */
 uint8_t
 gui_widget_setexpanded(gui_handle_p h, uint8_t state, const uint8_t protect) {
@@ -1816,8 +1823,8 @@ gui_widget_setexpanded(gui_handle_p h, uint8_t state, const uint8_t protect) {
 /**
  * \brief           Get widget expanded status
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setexpanded
  */
 uint8_t
 gui_widget_isexpanded(gui_handle_p h, const uint8_t protect) {
@@ -1842,8 +1849,8 @@ gui_widget_isexpanded(gui_handle_p h, const uint8_t protect) {
  * \param[in,out]   h: Widget handle
  * \param[in]       x: X position relative to parent object
  * \param[in]       y: Y position relative to parent object
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setpositionpercent
  */
 uint8_t
 gui_widget_setposition(gui_handle_p h, gui_dim_t x, gui_dim_t y, const uint8_t protect) {
@@ -1855,8 +1862,8 @@ gui_widget_setposition(gui_handle_p h, gui_dim_t x, gui_dim_t y, const uint8_t p
  * \param[in,out]   h: Widget handle
  * \param[in]       x: X position relative to parent object
  * \param[in]       y: Y position relative to parent object
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setposition
  */
 uint8_t
 gui_widget_setpositionpercent(gui_handle_p h, float x, float y, const uint8_t protect) {
@@ -1867,8 +1874,8 @@ gui_widget_setpositionpercent(gui_handle_p h, float x, float y, const uint8_t pr
  * \brief           Set widget X position relative to parent object in units of pixels
  * \param[in,out]   h: Widget handle
  * \param[in]       x: X position relative to parent object
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setxpositionpercent
  */
 uint8_t
 gui_widget_setxposition(gui_handle_p h, gui_dim_t x, const uint8_t protect) {
@@ -1884,8 +1891,8 @@ gui_widget_setxposition(gui_handle_p h, gui_dim_t x, const uint8_t protect) {
  * \brief           Set widget X position relative to parent object in units of percent
  * \param[in,out]   h: Widget handle
  * \param[in]       x: X position relative to parent object
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setxposition
  */
 uint8_t
 gui_widget_setxpositionpercent(gui_handle_p h, float x, const uint8_t protect) {
@@ -1901,8 +1908,8 @@ gui_widget_setxpositionpercent(gui_handle_p h, float x, const uint8_t protect) {
  * \brief           Set widget Y position relative to parent object in units of pixels
  * \param[in,out]   h: Widget handle
  * \param[in]       y: Y position relative to parent object
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setypositionpercent
  */
 uint8_t
 gui_widget_setyposition(gui_handle_p h, gui_dim_t y, const uint8_t protect) {
@@ -1918,8 +1925,8 @@ gui_widget_setyposition(gui_handle_p h, gui_dim_t y, const uint8_t protect) {
  * \brief           Set widget Y position relative to parent object in units of percent
  * \param[in,out]   h: Widget handle
  * \param[in]       y: Y position relative to parent object
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setyposition
  */
 uint8_t
 gui_widget_setypositionpercent(gui_handle_p h, float y, const uint8_t protect) {
@@ -1934,6 +1941,7 @@ gui_widget_setypositionpercent(gui_handle_p h, float y, const uint8_t protect) {
 /**
  * \brief           Invalidate widget object and prepare to new redraw
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -1959,6 +1967,7 @@ gui_widget_invalidate(gui_handle_p h, const uint8_t protect) {
  * \param[in]       h: Widget handle
  * \param[in]       en: Set to `1` to ignore invalidation, `0` to disable
  * \param[in]       invalidate: Set to `1` to invalidate before setting flag `en = 1` or after clearing it `en = 0`
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -1986,8 +1995,8 @@ gui_widget_setignoreinvalidate(gui_handle_p h, uint8_t en, uint8_t invalidate, c
 /**
  * \brief           Show widget from visible area
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_hide
  */
 uint8_t
 gui_widget_show(gui_handle_p h, const uint8_t protect) {
@@ -2007,8 +2016,8 @@ gui_widget_show(gui_handle_p h, const uint8_t protect) {
  * \brief           Put widget to front view and put it to focused state
  * \param[in,out]   h: Widget handle
  * \param[in]       focus: Set to `1` to put widget to focused state
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_hide
  */
 uint8_t
 gui_widget_putonfront(gui_handle_p h, uint8_t focus, const uint8_t protect) {
@@ -2027,8 +2036,8 @@ gui_widget_putonfront(gui_handle_p h, uint8_t focus, const uint8_t protect) {
 /**
  * \brief           Hide widget from visible area
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_show, gui_widget_putonfront
  */
 uint8_t
 gui_widget_hide(gui_handle_p h, const uint8_t protect) {
@@ -2054,8 +2063,8 @@ gui_widget_hide(gui_handle_p h, const uint8_t protect) {
 /**
  * \brief           Hide children widgets
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_show, gui_widget_putonfront
  */
 uint8_t
 gui_widget_hidechildren(gui_handle_p h, const uint8_t protect) {
@@ -2076,6 +2085,7 @@ gui_widget_hidechildren(gui_handle_p h, const uint8_t protect) {
 /**
  * \brief           Get widget ID
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget ID
  */
 gui_id_t
@@ -2094,6 +2104,7 @@ gui_widget_getid(gui_handle_p h, const uint8_t protect) {
 /**
  * \brief           Get parent widget of current
  * \param[in]       h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Parent widget handle
  */
 gui_handle_p
@@ -2113,8 +2124,8 @@ gui_widget_getparent(gui_handle_p h, const uint8_t protect) {
  * \brief           Get first widget handle by ID
  * \note            If multiple widgets have the same ID, first found will be used
  * \param[in,out]   id: Widget ID to search for
- * \return          > 0: Widget handle when widget found
- * \return          `1` on success, `0` otherwise
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
+ * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
 gui_widget_getbyid(gui_id_t id, const uint8_t protect) {
@@ -2135,7 +2146,8 @@ gui_widget_getbyid(gui_id_t id, const uint8_t protect) {
  * \param[in,out]   id: Widget ID to search for
  * \param[in]       parent: Parent widget handle to use as base search. Set to `NULL` to scan all widgets
  * \param[in]       deep: Set to `1` to search recursive on tree or `0` to search only first level
- * \return          > 0: Widget handle when widget found
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
+ * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
 gui_widget_getbyid_ex(gui_id_t id, gui_handle_p parent, uint8_t deep, const uint8_t protect) {
@@ -2149,9 +2161,10 @@ gui_widget_getbyid_ex(gui_id_t id, gui_handle_p parent, uint8_t deep, const uint
 }
 
 /**
- * \brief           Check if widget is children of parent
- * \param[in]       h: Widget handle to test
- * \param[in]       parent: Parent widget handle to test if is parent
+ * \brief           Check if widget handle is child of parent handle
+ * \param[in]       h: Widget handle
+ * \param[in]       parent: Parent widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -2182,8 +2195,8 @@ gui_widget_ischildof(gui_handle_p h, gui_handle_p parent, const uint8_t protect)
  * \note            Specially useful in callback processing if required
  * \param[in,out]   h: Widget handle
  * \param[in]       data: Pointer to custom user data
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_getuserdata
  */
 uint8_t
 gui_widget_setuserdata(gui_handle_p h, void* data, const uint8_t protect) {
@@ -2199,8 +2212,8 @@ gui_widget_setuserdata(gui_handle_p h, void* data, const uint8_t protect) {
 /**
  * \brief           Get custom user data from widget previously set with \ref gui_widget_setuserdata
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Pointer to user data
- * \sa              gui_widget_setuserdata
  */
 void*
 gui_widget_getuserdata(gui_handle_p h, const uint8_t protect) {
@@ -2242,8 +2255,8 @@ gui_widget_processdefaultcallback(gui_handle_p h, gui_wc_t ctrl, gui_widget_para
  * \brief           Set callback function to widget
  * \param[in,out]   h: Widget handle object
  * \param[in]       callback: Callback function for widget
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_processdefaultcallback, gui_widget_callback
  */
 uint8_t
 gui_widget_setcallback(gui_handle_p h, gui_widget_callback_t callback, const uint8_t protect) {
@@ -2287,8 +2300,8 @@ gui_widget_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
  * \note            This is possible on widgets with children support (windows) to have scroll on X and Y
  * \param[in,out]   h: Widget handle
  * \param[in]       scroll: Scroll value for X direction
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setscrolly
  */
 uint8_t
 gui_widget_setscrollx(gui_handle_p h, gui_dim_t scroll, const uint8_t protect) {
@@ -2313,8 +2326,8 @@ gui_widget_setscrollx(gui_handle_p h, gui_dim_t scroll, const uint8_t protect) {
  * \note            This is possible on widgets with children support (windows) to have scroll on X and Y
  * \param[in,out]   h: Widget handle
  * \param[in]       scroll: Scroll value for Y direction
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_setscrollx
  */
 uint8_t
 gui_widget_setscrolly(gui_handle_p h, gui_dim_t scroll, const uint8_t protect) {
@@ -2339,8 +2352,8 @@ gui_widget_setscrolly(gui_handle_p h, gui_dim_t scroll, const uint8_t protect) {
  * \note            This is possible on widgets with children support (windows) to have scroll on X and Y
  * \param[in,out]   h: Widget handle
  * \param[in]       scroll: Scroll increase in units of pixels. Use negative value to decrease scroll
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_incscrolly
  */
 uint8_t
 gui_widget_incscrollx(gui_handle_p h, gui_dim_t scroll, const uint8_t protect) {
@@ -2365,8 +2378,8 @@ gui_widget_incscrollx(gui_handle_p h, gui_dim_t scroll, const uint8_t protect) {
  * \note            This is possible on widgets with children support (windows) to have scroll on X and Y
  * \param[in,out]   h: Widget handle
  * \param[in]       scroll: Scroll increase in units of pixels. Use negative value to decrease scroll
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_incscrollx
  */
 uint8_t
 gui_widget_incscrolly(gui_handle_p h, gui_dim_t scroll, const uint8_t protect) {
@@ -2389,8 +2402,8 @@ gui_widget_incscrolly(gui_handle_p h, gui_dim_t scroll, const uint8_t protect) {
 /**
  * \brief           Get widget scroll on X axis
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget scroll in units of pixels
- * \sa              gui_widget_getscrolly
  */
 gui_dim_t
 gui_widget_getscrollx(gui_handle_p h, const uint8_t protect) {
@@ -2408,8 +2421,8 @@ gui_widget_getscrollx(gui_handle_p h, const uint8_t protect) {
 /**
  * \brief           Get widget scroll on Y axis
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget scroll in units of pixels
- * \sa              gui_widget_getscrollx
  */
 gui_dim_t
 gui_widget_getscrolly(gui_handle_p h, const uint8_t protect) {
@@ -2427,6 +2440,7 @@ gui_widget_getscrolly(gui_handle_p h, const uint8_t protect) {
 /**
  * \brief           Manually set widget in focus
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -2445,6 +2459,7 @@ gui_widget_setfocus(gui_handle_p h, const uint8_t protect) {
 /**
  * \brief           Set default font for widgets used on widget creation
  * \param[in]       font: Pointer to \ref gui_font_t with font
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -2463,6 +2478,7 @@ gui_widget_setfontdefault(const gui_font_t* font, const uint8_t protect) {
  * \note            Widget must implement \ref GUI_WC_IncSelection command in callback function and process it
  * \param[in,out]   h: Widget handle
  * \param[in]       dir: Increase direction. Positive number means number of increases, negative is number of decreases
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -2487,8 +2503,8 @@ gui_widget_incselection(gui_handle_p h, int16_t dir, const uint8_t protect) {
  * \note            Larger z-index value means greater position on screen. In case of multiple widgets on same z-index level, they are automatically modified for correct display
  * \param[in,out]   h: Widget handle
  * \param[in]       zindex: Z-Index value for widget. Any value can be used
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_getzindex
  */
 uint8_t
 gui_widget_setzindex(gui_handle_p h, int32_t zindex, const uint8_t protect) {
@@ -2512,8 +2528,8 @@ gui_widget_setzindex(gui_handle_p h, int32_t zindex, const uint8_t protect) {
 /**
  * \brief           Get z-index value from widget
  * \param[in,out]   h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          z-index value
- * \sa              gui_widget_setzindex
  */
 int32_t
 gui_widget_getzindex(gui_handle_p h, const uint8_t protect) {
@@ -2529,11 +2545,11 @@ gui_widget_getzindex(gui_handle_p h, const uint8_t protect) {
 }
 
 /**
- * \brief           Set transparency level to widget
+ * \brief           Set widget alpha level to widget
  * \param[in,out]   h: Widget handle
- * \param[in]       trans: Transparency level, where 0x00 means hidden and 0xFF means totally visible widget
+ * \param[in]       alpha: Alpha level, where `0x00` means hidden and `0xFF` means totally visible widget
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
- * \sa              gui_widget_getalpha
  */
 uint8_t
 gui_widget_setalpha(gui_handle_p h, uint8_t alpha, const uint8_t protect) {
@@ -2557,12 +2573,12 @@ gui_widget_setalpha(gui_handle_p h, uint8_t alpha, const uint8_t protect) {
 /**
  * \brief           Get widget transparency value
  * \note            Value between 0 and 0xFF is used:
- *                      - 0x00: Widget is hidden
- *                      - 0xFF: Widget is fully visible
- *                      - between: Widget has transparency value
+ *                      - `0x00`: Widget is hidden
+ *                      - `0xFF`: Widget is fully opaque
+ *                      - `0x01 - 0xFE`: Widget has alpha value
  * \param[in,out]   h: Widget handle
- * \return          Trasparency value
- * \sa              gui_widget_setalpha
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
+ * \return          Alpha value
  */
 uint8_t
 gui_widget_getalpha(gui_handle_p h, const uint8_t protect) {
@@ -2584,7 +2600,8 @@ gui_widget_getalpha(gui_handle_p h, const uint8_t protect) {
 /**
  * \brief           Set 3D mode on widget
  * \param[in,out]   h: Widget handle
- * \param[in]       enable: Value to enable, either 1 or 0
+ * \param[in]       enable: Set to `1` to enable 3D mode, `0` otherwise
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -2608,6 +2625,7 @@ gui_widget_set3dstyle(gui_handle_p h, uint8_t enable, const uint8_t protect) {
  * \brief           Set widget top padding
  * \param[in]       h: Widget handle
  * \param[in]       x: Padding in units of pixels
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -2626,6 +2644,7 @@ gui_widget_setpaddingtop(gui_handle_p h, gui_dim_t x, const uint8_t protect) {
  * \brief           Set widget right padding
  * \param[in]       h: Widget handle
  * \param[in]       x: Padding in units of pixels
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -2644,6 +2663,7 @@ gui_widget_setpaddingright(gui_handle_p h, gui_dim_t x, const uint8_t protect) {
  * \brief           Set widget bottom padding
  * \param[in]       h: Widget handle
  * \param[in]       x: Padding in units of pixels
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -2662,6 +2682,7 @@ gui_widget_setpaddingbottom(gui_handle_p h, gui_dim_t x, const uint8_t protect) 
  * \brief           Set widget left padding
  * \param[in]       h: Widget handle
  * \param[in]       x: Padding in units of pixels
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -2680,6 +2701,7 @@ gui_widget_setpaddingleft(gui_handle_p h, gui_dim_t x, const uint8_t protect) {
  * \brief           Set widget top and bottom paddings
  * \param[in]       h: Widget handle
  * \param[in]       x: Padding in units of pixels
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -2699,6 +2721,7 @@ gui_widget_setpaddingtopbottom(gui_handle_p h, gui_dim_t x, const uint8_t protec
  * \brief           Set widget left and right paddings
  * \param[in]       h: Widget handle
  * \param[in]       x: Padding in units of pixels
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -2718,6 +2741,7 @@ gui_widget_setpaddingleftright(gui_handle_p h, gui_dim_t x, const uint8_t protec
  * \brief           Set widget all paddings
  * \param[in]       h: Widget handle
  * \param[in]       x: Padding in units of pixels
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -2738,7 +2762,8 @@ gui_widget_setpadding(gui_handle_p h, gui_dim_t x, const uint8_t protect) {
 /**
  * \brief           Get widget top padding in units of pixels
  * \param[in]       h: Widget handle
- * \return          Left padding in units of pixels
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
+ * \return          Top padding in units of pixels
  */
 gui_dim_t
 gui_widget_getpaddingtop(gui_handle_p h, const uint8_t protect) {
@@ -2756,7 +2781,8 @@ gui_widget_getpaddingtop(gui_handle_p h, const uint8_t protect) {
 /**
  * \brief           Get widget right padding in units of pixels
  * \param[in]       h: Widget handle
- * \return          Left padding in units of pixels
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
+ * \return          Right padding in units of pixels
  */
 gui_dim_t
 gui_widget_getpaddingright(gui_handle_p h, const uint8_t protect) {
@@ -2774,7 +2800,8 @@ gui_widget_getpaddingright(gui_handle_p h, const uint8_t protect) {
 /**
  * \brief           Get widget bottom padding in units of pixels
  * \param[in]       h: Widget handle
- * \return          Left padding in units of pixels
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
+ * \return          Bottom padding in units of pixels
  */
 gui_dim_t
 gui_widget_getpaddingbottom(gui_handle_p h, const uint8_t protect) {
@@ -2792,6 +2819,7 @@ gui_widget_getpaddingbottom(gui_handle_p h, const uint8_t protect) {
 /**
  * \brief           Get widget left padding in units of pixels
  * \param[in]       h: Widget handle
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Left padding in units of pixels
  */
 gui_dim_t

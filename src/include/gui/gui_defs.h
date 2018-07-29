@@ -354,7 +354,7 @@ typedef enum {
      * \brief       Initialize low-level part of GUI
      *
      * \param[in]   *param: Pointer to \ref gui_ll_t structure to fill data to
-     * \param[out]  *result: Pointer to \ref uint8_t variable to save result: 0 = OK otherwise ERROR
+     * \param[out]  *result: Pointer to `uint8_t` variable to save result: 0 = OK otherwise ERROR
      */
     GUI_LL_Command_Init = 0x00,             /*!< Set new layer as active layer */
     
@@ -362,7 +362,7 @@ typedef enum {
      * \brief       Initialize low-level part of GUI
      *
      * \param[in]   *param: Pointer to \ref gui_ll_t structure to fill data to
-     * \param[out]  *result: Pointer to \ref uint8_t variable to save result: 0 = OK otherwise ERROR
+     * \param[out]  *result: Pointer to `uint8_t` variable to save result: 0 = OK otherwise ERROR
      */
     GUI_LL_Command_SetActiveLayer,          /*!< Set new layer as active layer */
 } GUI_LL_Command_t;
@@ -736,32 +736,32 @@ typedef enum {
      *
      * \note        This field is only visible inside GUI library and can't be used in custom widget callback
      *
-     * \param[in]   *param: None
-     * \param[out]  *result: Pointer to uint8_t variable with result. If set to 0 by user, widget will be deleted
+     * \param[in]   param: None
+     * \param[out]  result: Pointer to `uint8_t` variable with result. If set to 0 by user, widget will be deleted
      */
     GUI_WC_PreInit = 0x01,
     
     /**
      * \brief       Check if widget should not be added to linked list after creation
      *
-     * \param[in]   *param: None
-     * \param[out]  *result: Pointer to uint8_t variable type to store result to [1 = exclude, 0 = do not exclude]
+     * \param[in]   param: None
+     * \param[out]  result: Pointer to `uint8_t` variable type to store result to `1 = exclude, 0 = do not exclude`
      */
     GUI_WC_ExcludeLinkedList = 0x02,
     
     /**
      * \brief       Set user parameter for widget
      *
-     * \param[in]   *param: Pointer to \ref gui_widget_param_t structure with custom user parameter for widget
-     * \param[out]  *result: None
+     * \param[in]   param: Pointer to \ref gui_widget_param_t structure with custom user parameter for widget
+     * \param[out]  result: None
      */
     GUI_WC_SetParam = 0x03,
     
     /**
      * \brief       Get parameter for widget
      *
-     * \param[in]   *param: Pointer to \ref gui_widget_param_t structure with identification and memory where to save parameter value
-     * \param[out]  *result: None
+     * \param[in]   param: Pointer to \ref gui_widget_param_t structure with identification and memory where to save parameter value
+     * \param[out]  result: None
      */
     GUI_WC_GetParam = 0x04,
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
@@ -772,32 +772,32 @@ typedef enum {
      * \note        Default values for widget can be set here.
      *              Example: Checkbox check can be made and default checkbox value should be set if required
      *
-     * \param[in]   *param: None
-     * \param[out]  *result: None
+     * \param[in]   param: None
+     * \param[out]  result: None
      */
     GUI_WC_Init = 0x05,
     
     /**
      * \brief       A new child widget has been added to parent's linked list. It is called on parent widget
      *
-     * \param[in]   *param: Child widget handle
-     * \param[out]  *result: None
+     * \param[in]   param: Child widget handle
+     * \param[out]  result: None
      */
     GUI_WC_ChildWidgetCreated,
     
     /**
      * \brief       Draw widget on screen
      *
-     * \param[in]   *param: Pointer to \ref gui_display_t structure
-     * \param[out]  *result: None
+     * \param[in]   param: Pointer to \ref gui_display_t structure
+     * \param[out]  result: None
      */
     GUI_WC_Draw,
     
     /**
      * \brief       Check if widget can be removed. User can perform check if for example widget needs save or similar operation
      *
-     * \param[in]   *param: None
-     * \param[out]  *result: Pointer to uint8_t variable type to store result to [1 = remove, 0 = do not remove]
+     * \param[in]   param: None
+     * \param[out]  result: Pointer to `uint8_t` variable type to store result to `1 = remove, 0 = do not remove`
      * \sa          GUI_WC_Remove
      */
     GUI_WC_CanRemove,
@@ -806,8 +806,8 @@ typedef enum {
      * \brief       Notification before widget delete will actually happen.
      *              In case of specific user allocations in memory, they can be restored here
      * 
-     * \param[in]   *param: None
-     * \param[out]  *result: None
+     * \param[in]   param: None
+     * \param[out]  result: None
      * \sa          GUI_WC_CanRemove
      */
     GUI_WC_Remove,
@@ -815,8 +815,8 @@ typedef enum {
     /**
      * \brief       Notification called when widget becomes focused
      *
-     * \param[in]   *param: None
-     * \param[out]  *result: None
+     * \param[in]   param: None
+     * \param[out]  result: None
      * \sa          GUI_WC_FocusOut
      */
     GUI_WC_FocusIn,
@@ -824,8 +824,8 @@ typedef enum {
     /**
      * \brief       Notification called when widget clears widget state
      *
-     * \param[in]   *param: None
-     * \param[out]  *result: None
+     * \param[in]   param: None
+     * \param[out]  result: None
      * \sa          GUI_WC_FocusIn
      */
     GUI_WC_FocusOut,
@@ -835,8 +835,8 @@ typedef enum {
      *
      * \note        Called when widget just become active
      *
-     * \param[in]   *param: None
-     * \param[out]  *result: None
+     * \param[in]   param: None
+     * \param[out]  result: None
      * \sa          GUI_WC_ActiveOut
      */
     GUI_WC_ActiveIn,
@@ -846,8 +846,8 @@ typedef enum {
      *
      * \note        Called when widget just clears active
      *
-     * \param[in]   *param: None
-     * \param[out]  *result: None
+     * \param[in]   param: None
+     * \param[out]  result: None
      * \sa          GUI_WC_ActiveIn
      */
     GUI_WC_ActiveOut,
@@ -855,8 +855,8 @@ typedef enum {
     /**
      * \brief       Notification when touch down event occurs on widget
      *
-     * \param[in]   *param: Pointer to \ref guii_touch_data_t structure
-     * \param[out]  *result: Value of \ref guii_touch_status_t enumeration
+     * \param[in]   param: Pointer to \ref guii_touch_data_t structure
+     * \param[out]  result: Value of \ref guii_touch_status_t enumeration
      * \sa          GUI_WC_TouchMove, GUI_WC_TouchEnd
      */
     GUI_WC_TouchStart,
@@ -867,8 +867,8 @@ typedef enum {
      * \note        If return value from function on this parameter is 1, then \ref GUI_WC_Click event won't be called after released status
      *              to prevent collisions between widget events (sliding on widget and click at the same time can cause unknown behaviour on user)
      *
-     * \param[in]   *param: Pointer to \ref guii_touch_data_t structure
-     * \param[out]  *result: Value of \ref guii_touch_status_t enumeration
+     * \param[in]   param: Pointer to \ref guii_touch_data_t structure
+     * \param[out]  result: Value of \ref guii_touch_status_t enumeration
      * \sa          GUI_WC_TouchStart, GUI_WC_TouchEnd
      */
     GUI_WC_TouchMove,
@@ -876,8 +876,8 @@ typedef enum {
     /**
      * \brief       Notification when touch up event occurs on widget
      *
-     * \param[in]   *param: Pointer to \ref guii_touch_data_t structure
-     * \param[out]  *result: Value of \ref guii_touch_status_t enumeration
+     * \param[in]   param: Pointer to \ref guii_touch_data_t structure
+     * \param[out]  result: Value of \ref guii_touch_status_t enumeration
      * \sa          GUI_WC_TouchStart, GUI_WC_TouchMove
      */
     GUI_WC_TouchEnd,
@@ -885,32 +885,32 @@ typedef enum {
     /**
      * \brief       Notification when click event has been detected
      *
-     * \param[in]   *param: Pointer to \ref guii_touch_data_t structure with valid touch press location
-     * \param[out]  *result: None
+     * \param[in]   param: Pointer to \ref guii_touch_data_t structure with valid touch press location
+     * \param[out]  result: None
      */
     GUI_WC_Click,
     
     /**
      * \brief       Notification when long press has been detected
      *
-     * \param[in]   *param: Pointer to \ref guii_touch_data_t structure with valid touch press location
-     * \param[out]  *result: None
+     * \param[in]   param: Pointer to \ref guii_touch_data_t structure with valid touch press location
+     * \param[out]  result: None
      */
     GUI_WC_LongClick,
     
     /**
      * \brief       Notification when double click has been detected
      *
-     * \param[in]   *param: Pointer to \ref guii_touch_data_t structure with valid touch press location
-     * \param[out]  *result: None
+     * \param[in]   param: Pointer to \ref guii_touch_data_t structure with valid touch press location
+     * \param[out]  result: None
      */
     GUI_WC_DblClick,
     
     /**
      * \brief       Notification when key has been pushed to this widget
      *
-     * \param[in]   *param: Pointer to \ref guii_keyboard_data_t structure
-     * \param[out]  *result: Value of \ref guii_keyboard_status_t enumeration
+     * \param[in]   param: Pointer to \ref guii_keyboard_data_t structure
+     * \param[out]  result: Value of \ref guii_keyboard_status_t enumeration
      */
     GUI_WC_KeyPress,
     
@@ -921,8 +921,8 @@ typedef enum {
      *
      * \note        Used by widgets where selection can be changed (listbox, selectbox, radio, etc)
      *
-     * \param[in]   *param: None
-     * \param[out]  *result: None
+     * \param[in]   param: None
+     * \param[out]  result: None
      * \sa          GUI_WC_ValueChanged
      */
     GUI_WC_SelectionChanged,
@@ -934,8 +934,8 @@ typedef enum {
      *
      * \note        Used by widgets where value or status can change (checkbox)
      *
-     * \param[in]   *param: None
-     * \param[out]  *result: None
+     * \param[in]   param: None
+     * \param[out]  result: None
      * \sa          GUI_WC_SelectionChanged
      */
     GUI_WC_ValueChanged,
@@ -945,8 +945,8 @@ typedef enum {
      *
      * \note        Called from widget by user when necessary. Not all widget reports this value by itself
      *
-     * \param[in]   *param: None
-     * \param[out]  *result: None
+     * \param[in]   param: None
+     * \param[out]  result: None
      */
     GUI_WC_TextChanged,
     
@@ -956,8 +956,8 @@ typedef enum {
      * \note        Called from \ref gui_widget_incselection function to increase/decrease selection for widgets
      *                 such as listbox or dropdown, where active selection can be changed
      *
-     * \param[in]   *param: Pointer to \ref int16_t variable for amount of increase/decrease value
-     * \param[out]  *result: Pointer to output \ref uint8_t variable to save status of increase/decrease operation
+     * \param[in]   param: Pointer to `int16_t` variable for amount of increase/decrease value
+     * \param[out]  result: Pointer to output `uint8_t` variable to save status of increase/decrease operation
      */
     GUI_WC_IncSelection,
     
@@ -967,8 +967,8 @@ typedef enum {
      * \note        Callback is activated when dismiss function is called on dialog widget.
      *              Notification can be used to proceed with function call
      *
-     * \param[in]   *param: Pointer to int variable passed to dismiss function
-     * \param[out]  *result: None
+     * \param[in]   param: Pointer to `int` variable passed to dismiss function
+     * \param[out]  result: None
      */
     GUI_WC_OnDismiss,
 } gui_wc_t;

@@ -286,6 +286,7 @@ gui_debugbox_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
@@ -298,6 +299,7 @@ gui_debugbox_create(gui_id_t id, float x, float y, float width, float height, gu
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -309,7 +311,8 @@ gui_debugbox_setcolor(gui_handle_p h, gui_debugbox_color_t index, gui_color_t co
 /**
  * \brief           Add a new string to list box
  * \param[in,out]   h: Widget handle
- * \param[in]       text: Pointer to text to add to list. Only pointer is saved to memory!
+ * \param[in]       text: Pointer to text to add to list
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -361,6 +364,7 @@ gui_debugbox_addstring(gui_handle_p h, const gui_char* text, const uint8_t prote
  * \note            When it is enabled, slider will only appear if needed to show more entries on list
  * \param[in,out]   h: Widget handle
  * \param[in]       autoMode: Auto mode status. Set to 1 for auto mode or 0 for manual mode
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  * \sa              gui_debugbox_setslidervisibility
  */
@@ -386,6 +390,7 @@ gui_debugbox_setsliderauto(gui_handle_p h, uint8_t autoMode, const uint8_t prote
  * \note            Slider must be in manual mode in order to get this to work
  * \param[in,out]   h: Widget handle
  * \param[in]       visible: Slider visible status, 1 or 0
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  * \sa              gui_debugbox_setsliderauto
  */
@@ -416,6 +421,7 @@ gui_debugbox_setslidervisibility(gui_handle_p h, uint8_t visible, const uint8_t 
  * \brief           Scroll list if possible
  * \param[in,out]   h: Widget handle
  * \param[in]       step: Step to scroll. Positive step will scroll up, negative will scroll down
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -443,6 +449,7 @@ gui_debugbox_scroll(gui_handle_p h, int16_t step, const uint8_t protect) {
  * \brief           Set maximal number of items for debugbox
  * \param[in,out]   h: Widget handle
  * \param[in]       max_items: Maximal number of items
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t

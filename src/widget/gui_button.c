@@ -170,6 +170,7 @@ gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          \ref widget handle on success, `NULL` otherwise
  */
 gui_handle_p
@@ -182,22 +183,24 @@ gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_
  * \param[in,out]   h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_button_setcolor(gui_handle_p h, gui_button_color_t index, gui_color_t color) {
+gui_button_setcolor(gui_handle_p h, gui_button_color_t index, gui_color_t color, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color, 1);   /* Set color */
+    return guii_widget_setcolor(h, (uint8_t)index, color, protect);   /* Set color */
 }
 
 /**
  * \brief           Set border radius size
  * \param[in,out]   h: Widget handle
  * \param[in]       size: Border radius size
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_button_setborderradius(gui_handle_p h, gui_dim_t size) {
+gui_button_setborderradius(gui_handle_p h, gui_dim_t size, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_BORDER_RADIUS, &size, 1, 1, 1);  /* Set parameter */
+    return guii_widget_setparam(h, CFG_BORDER_RADIUS, &size, 1, 1, protect);  /* Set parameter */
 }

@@ -91,6 +91,7 @@ gui_image_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
@@ -101,7 +102,8 @@ gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_h
 /**
  * \brief           Set image source to draw
  * \param[in]       h: Widget handle
- * \param[in]       img: Pointer to \ref gui_image_desc_t image object. Use NULL to clear image
+ * \param[in]       img: Image object. Set to `NULL` to clear image
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -112,7 +114,7 @@ gui_image_setsource(gui_handle_p h, const gui_image_desc_t* img, const uint8_t p
 
     __GUI_ENTER(protect);                           /* Enter GUI */
     __GI(h)->image = img;                           /* Set image */
-    guii_widget_setinvalidatewithparent(h, img != NULL && img->bpp == 32);  /* Set how invalidation functon hebaves */
+    guii_widget_setinvalidatewithparent(h, img != NULL && img->bpp == 32);  /* Set how invalidation function behaves */
     guii_widget_invalidatewithparent(h);            /* Invalidate widget */
     __GUI_LEAVE(protect);                           /* Leave GUI */
 

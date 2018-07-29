@@ -570,7 +570,7 @@ keyboard_base_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, 
 
 /**
  * \brief           Creates virtual keyboard for user interaction.
- * \note            This function must be called by user after \ref gui_init is called to use virtual keyboard
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Keyboard handle on success, NULL otherwise
  */
 gui_handle_p
@@ -588,6 +588,7 @@ gui_keyboard_create(const uint8_t protect) {
 /**
  * \brief           Hide opened virtual keyboard
  * \return          `1` on success, `0` otherwise
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \sa              gui_keyboard_show
  */
 uint8_t
@@ -608,6 +609,7 @@ gui_keyboard_hide(const uint8_t protect) {
 /**
  * \brief           Show hidden virtual keyboard
  * \param[in]       h: Widget handle for which keyboard will be opened
+ * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  * \sa              gui_keyboard_hide
  */
