@@ -148,6 +148,7 @@
     <ClCompile Include="..\..\..\examples_demo\demo_edit_text.c" />
     <ClCompile Include="..\..\..\examples_demo\demo_graph.c" />
     <ClCompile Include="..\..\..\examples_demo\demo_init.c" />
+    <ClCompile Include="..\..\..\examples_demo\demo_led.c" />
     <ClCompile Include="..\..\..\examples_demo\demo_list_container.c" />
     <ClCompile Include="..\..\..\examples_demo\demo_progbar.c" />
     <ClCompile Include="..\..\..\examples_demo\demo_window.c" />
@@ -158,7 +159,7 @@
     <ClCompile Include="..\..\..\src\fonts\Comic_Sans_MS_Regular.c" />
     <ClCompile Include="..\..\..\src\fonts\FontAwesome_Regular.c" />
     <ClCompile Include="..\..\..\src\gui\gui.c" />
-    <ClCompile Include="..\..\..\src\gui\gui_buffer.c" />
+    <ClCompile Include="..\..\..\src\gui\gui_buff.c" />
     <ClCompile Include="..\..\..\src\gui\gui_draw.c" />
     <ClCompile Include="..\..\..\src\gui\gui_input.c" />
     <ClCompile Include="..\..\..\src\gui\gui_keyboard.c" />

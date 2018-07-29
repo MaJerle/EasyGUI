@@ -27,9 +27,6 @@
     <ClCompile Include="..\..\..\src\gui\gui.c">
       <Filter>GUI\CORE</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\gui\gui_buffer.c">
-      <Filter>GUI\CORE</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\gui\gui_draw.c">
       <Filter>GUI\CORE</Filter>
     </ClCompile>
@@ -168,6 +165,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\widget\gui_widget_api.c">
       <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_buff.c">
+      <Filter>GUI\CORE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\examples_demo\demo_led.c">
+      <Filter>DEMO</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

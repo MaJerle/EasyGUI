@@ -924,9 +924,9 @@
           <GroupName>GUI UTILS</GroupName>
           <Files>
             <File>
-              <FileName>gui_buffer.c</FileName>
+              <FileName>gui_buff.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\src\gui\gui_buffer.c</FilePath>
+              <FilePath>..\..\src\gui\gui_buff.c</FilePath>
             </File>
             <File>
               <FileName>gui_linkedlist.c</FileName>
@@ -1097,14 +1097,14 @@
               <FilePath>..\..\examples_demo\demo_progbar.c</FilePath>
             </File>
             <File>
-              <FileName>demo_template.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\examples_demo\demo_template.c</FilePath>
-            </File>
-            <File>
               <FileName>demo_window.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\examples_demo\demo_window.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_led.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2034,9 +2034,9 @@
           <GroupName>GUI UTILS</GroupName>
           <Files>
             <File>
-              <FileName>gui_buffer.c</FileName>
+              <FileName>gui_buff.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\src\gui\gui_buffer.c</FilePath>
+              <FilePath>..\..\src\gui\gui_buff.c</FilePath>
             </File>
             <File>
               <FileName>gui_linkedlist.c</FileName>
@@ -2139,14 +2139,14 @@
               <FilePath>..\..\examples_demo\demo_progbar.c</FilePath>
             </File>
             <File>
-              <FileName>demo_template.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\examples_demo\demo_template.c</FilePath>
-            </File>
-            <File>
               <FileName>demo_window.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\examples_demo\demo_window.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_led.c</FilePath>
             </File>
           </Files>
         </Group>
