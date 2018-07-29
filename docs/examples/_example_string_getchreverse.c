@@ -1,7 +1,7 @@
 /* Todo: Update code to working example! */
 
-GUI_Char myStr[] = "EasyGUI\xDF\x8F\xDF\x8F";   /* Source string to check */
-GUI_STRING_t s;                                 /* Create string variable */
+gui_char myStr[] = "EasyGUI\xDF\x8F\xDF\x8F";   /* Source string to check */
+gui_string_t s;                                 /* Create string variable */
 uint32_t ch;                                    /* Output character */
 uint8_t i;                                      /* Number of bytes required for character generation */
 

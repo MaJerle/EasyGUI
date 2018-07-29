@@ -16,19 +16,19 @@ GUI_Char* listboxtexts[] = {
 size_t i;
     
 /* Create left listbox */
-handle = gui_listbox_create(1, 10, 10, 190, 195, h, 0, 0);
+handle = gui_listbox_create(1, 10, 10, 190, 195, h, 0, 0, 0);
 for (i = 0; i < COUNT_OF(listboxtexts); i++) {
-    gui_listbox_addstring(handle, listboxtexts[i]);
+    gui_listbox_addstring(handle, listboxtexts[i], 0);
 }
 
 /* Force visible slider */
-gui_listbox_setsliderauto(handle, 0);
-gui_listbox_setslidervisibility(handle, 1);
+gui_listbox_setsliderauto(handle, 0, 0);
+gui_listbox_setslidervisibility(handle, 1, 0);
 
 /* Create right list box */
-handle = gui_listbox_create(1, 210, 10, 200, 195, h, 0, 0);
+handle = gui_listbox_create(1, 210, 10, 200, 195, h, 0, 0, 0);
 for (i = 0; i < COUNT_OF(listboxtexts); i++) {
-    gui_listbox_addstring(handle, listboxtexts[i]);
+    gui_listbox_addstring(handle, listboxtexts[i], 0);
 }
-gui_listbox_setsliderauto(handle, 0);
-gui_listbox_setslidervisibility(handle, 0);
+gui_listbox_setsliderauto(handle, 0, 0);
+gui_listbox_setslidervisibility(handle, 0, 0);

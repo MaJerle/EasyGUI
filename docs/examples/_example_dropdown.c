@@ -16,17 +16,17 @@ GUI_Char* listboxtexts[] = {
 };
 
 /* Create left dropdown */
-handle = gui_dropdown_create(0, 10, 10, 200, 40, h, 0, 0);
+handle = gui_dropdown_create(0, 10, 10, 200, 40, h, 0, 0, 0);
 for (i = 0; i < COUNT_OF(listboxtexts); i++) {
     gui_dropdown_addstring(handle, listboxtexts[i]);
 }
 /* Force slider to be always visible */
-gui_dropdown_setsliderauto(handle, 0);
-gui_dropdown_setslidervisibility(handle, 1);
+gui_dropdown_setsliderauto(handle, 0, 0);
+gui_dropdown_setslidervisibility(handle, 1, 0);
 
 /* Create right widget */
-handle = gui_dropdown_create(0, 220, 180, 200, 40, h, 0, 0);
-gui_dropdown_setopendirection(handle, GUI_DROPDOWN_OPENDIR_UP);
+handle = gui_dropdown_create(0, 220, 180, 200, 40, h, 0, 0, 0);
+gui_dropdown_setopendirection(handle, GUI_DROPDOWN_OPENDIR_UP, 0);
 for (i = 0; i < COUNT_OF(listboxtexts); i++) {
-    gui_dropdown_addstring(handle, listboxtexts[i]);
+    gui_dropdown_addstring(handle, listboxtexts[i], 0);
 }
