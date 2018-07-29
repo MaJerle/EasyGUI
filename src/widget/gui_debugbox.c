@@ -95,14 +95,14 @@ slide(gui_handle_p h, int16_t dir) {
         } else {
             o->visiblestartindex += dir;
         }
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     } else if (dir > 0) {
         if ((o->visiblestartindex + dir) > (o->count - mPP - 1)) {  /* Slide elements down */
             o->visiblestartindex = o->count - mPP;
         } else {
             o->visiblestartindex += dir;
         }
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
 }
 
@@ -291,7 +291,7 @@ gui_debugbox_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
  */
 gui_handle_p
 gui_debugbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
 }
 
 /**
@@ -305,7 +305,7 @@ gui_debugbox_create(gui_id_t id, float x, float y, float width, float height, gu
 uint8_t
 gui_debugbox_setcolor(gui_handle_p h, gui_debugbox_color_t index, gui_color_t color, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color, protect); /* Set color */
+    return gui_widget_setcolor(h, (uint8_t)index, color, protect);  /* Set color */
 }
 
 /**
@@ -350,7 +350,7 @@ gui_debugbox_addstring(gui_handle_p h, const gui_char* text, const uint8_t prote
         
         __GL(h)->visiblestartindex = __GL(h)->count;/* Invalidate visible start index */
         check_values(h);                            /* Check values */
-        guii_widget_invalidate(h);                  /* Invalidate widget */
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
         
         ret = 1;
     }
@@ -374,10 +374,10 @@ gui_debugbox_setsliderauto(gui_handle_p h, uint8_t autoMode, const uint8_t prote
     __GUI_ENTER(protect);                           /* Enter GUI */
     if (autoMode && !(__GL(h)->flags & GUI_FLAG_DEBUGBOX_SLIDER_AUTO)) {
         __GL(h)->flags |= GUI_FLAG_DEBUGBOX_SLIDER_AUTO;
-        guii_widget_invalidate(h);                  /* Invalidate widget */
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     } else if (!autoMode && (__GL(h)->flags & GUI_FLAG_DEBUGBOX_SLIDER_AUTO)) {
         __GL(h)->flags &= ~GUI_FLAG_DEBUGBOX_SLIDER_AUTO;
-        guii_widget_invalidate(h);                  /* Invalidate widget */
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
 
@@ -402,11 +402,11 @@ gui_debugbox_setslidervisibility(gui_handle_p h, uint8_t visible, const uint8_t 
     if (!(__GL(h)->flags & GUI_FLAG_DEBUGBOX_SLIDER_AUTO)) {
         if (visible && !(__GL(h)->flags & GUI_FLAG_DEBUGBOX_SLIDER_ON)) {
             __GL(h)->flags |= GUI_FLAG_DEBUGBOX_SLIDER_ON;
-            guii_widget_invalidate(h);              /* Invalidate widget */
+            gui_widget_invalidate(h, 0);            /* Invalidate widget */
             ret = 1;
         } else if (!visible && (__GL(h)->flags & GUI_FLAG_DEBUGBOX_SLIDER_ON)) {
             __GL(h)->flags &= ~GUI_FLAG_DEBUGBOX_SLIDER_ON;
-            guii_widget_invalidate(h);              /* Invalidate widget */
+            gui_widget_invalidate(h, 0);            /* Invalidate widget */
             ret = 1;
         }
     }
@@ -436,7 +436,7 @@ gui_debugbox_scroll(gui_handle_p h, int16_t step, const uint8_t protect) {
     start = start != __GL(h)->visiblestartindex;    /* Check if there was valid change */
     
     if (start) {
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
 

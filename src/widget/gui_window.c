@@ -284,7 +284,7 @@ gui_window_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
  */
 gui_handle_p
 gui_window_createdesktop(gui_id_t id, gui_widget_callback_t cb, const uint8_t protect) {
-    return (gui_handle_p)guii_widget_create(&widget, id, 0, 0, gui_lcd_getwidth(), gui_lcd_getheight(), 0, cb, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP, protect);   /* Allocate memory for basic widget */
+    return (gui_handle_p)gui_widget_create(&widget, id, 0, 0, gui_lcd_getwidth(), gui_lcd_getheight(), 0, cb, GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP, protect);  /* Allocate memory for basic widget */
 }
 
 /**
@@ -305,7 +305,7 @@ gui_window_create(gui_id_t id, float x, float y, float width, float height, gui_
     gui_window_t* ptr;
 
     __GUI_ENTER(protect);                           /* Enter GUI */
-    ptr = guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, 0);   /* Allocate memory for basic widget */
+    ptr = gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, 0);/* Allocate memory for basic widget */
     if (ptr != NULL) {
         guii_widget_setflag(__GH(ptr), GUI_FLAG_CHILD); /* This window is child window */
         gui_widget_setpaddingtop(__GH(ptr), 30, 0);
@@ -328,7 +328,7 @@ gui_window_create(gui_id_t id, float x, float y, float width, float height, gui_
 uint8_t
 gui_window_setcolor(gui_handle_p h, gui_window_color_t index, gui_color_t color, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color, protect); /* Set color */
+    return gui_widget_setcolor(h, (uint8_t)index, color, protect);  /* Set color */
 }
  
 /**

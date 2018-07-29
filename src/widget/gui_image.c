@@ -96,7 +96,7 @@ gui_image_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
  */
 gui_handle_p
 gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
 }
 
 /**
@@ -114,8 +114,8 @@ gui_image_setsource(gui_handle_p h, const gui_image_desc_t* img, const uint8_t p
 
     __GUI_ENTER(protect);                           /* Enter GUI */
     __GI(h)->image = img;                           /* Set image */
-    guii_widget_setinvalidatewithparent(h, img != NULL && img->bpp == 32);  /* Set how invalidation function behaves */
-    guii_widget_invalidatewithparent(h);            /* Invalidate widget */
+    gui_widget_setinvalidatewithparent(h, img != NULL && img->bpp == 32, 0);/* Set how invalidation function behaves */
+    gui_widget_invalidatewithparent(h, 0);          /* Invalidate widget */
     __GUI_LEAVE(protect);                           /* Leave GUI */
 
     return ret;

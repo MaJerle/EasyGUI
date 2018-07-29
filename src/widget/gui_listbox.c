@@ -119,14 +119,14 @@ slide(gui_handle_p h, int16_t dir) {
         } else {
             o->visiblestartindex += dir;
         }
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     } else if (dir > 0) {
         if ((o->visiblestartindex + dir) > (o->count - mPP - 1)) {  /* Slide elements down */
             o->visiblestartindex = o->count - mPP;
         } else {
             o->visiblestartindex += dir;
         }
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
 }
 
@@ -148,14 +148,14 @@ inc_selection(gui_handle_p h, int16_t dir) {
         } else {
             set_selection(h, o->selected + dir);
         }
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     } else if (dir > 0) {
         if ((o->selected + dir) > (o->count - 1)) { /* Slide elements down */
             set_selection(h, o->count - 1);
         } else {
             set_selection(h, o->selected + dir);
         }
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
 }
 
@@ -194,7 +194,7 @@ delete_item(gui_handle_p h, uint16_t index) {
     gui_listbox_item_t* item;
     
     item = get_item(h, index);                      /* Get list item from handle */
-    if (item) {
+    if (item != NULL) {
         gui_linkedlist_remove_gen(&__GL(h)->root, &item->list);
         __GL(h)->count--;                           /* Decrease count */
         
@@ -203,7 +203,7 @@ delete_item(gui_handle_p h, uint16_t index) {
         }
         
         check_values(h);                           /* Check widget values */
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
         return 1;
     }
     return 0;
@@ -358,7 +358,7 @@ gui_listbox_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
                 tmpselected = ts->y_rel[0] / height; /* Get temporary selected index */
                 if ((o->visiblestartindex + tmpselected) <= o->count) {
                     set_selection(h, o->visiblestartindex + tmpselected);
-                    guii_widget_invalidate(h);     /* Choose new selection */
+                    gui_widget_invalidate(h, 0);   /* Choose new selection */
                 }
             }
             return 1;
@@ -401,7 +401,7 @@ gui_listbox_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
  */
 gui_handle_p
 gui_listbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
 }
 
 /**
@@ -415,7 +415,7 @@ gui_listbox_create(gui_id_t id, float x, float y, float width, float height, gui
 uint8_t
 gui_listbox_setcolor(gui_handle_p h, gui_listbox_color_t index, gui_color_t color, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color, protect); /* Set color */
+    return gui_widget_setcolor(h, (uint8_t)index, color, protect);  /* Set color */
 }
 
 /**
@@ -440,7 +440,7 @@ gui_listbox_addstring(gui_handle_p h, const gui_char* text, const uint8_t protec
         __GL(h)->count++;                           /* Increase number of strings */
         
         check_values(h);                            /* Check values */
-        guii_widget_invalidate(h);                  /* Invalidate widget */
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
         
         ret = 1;
     }
@@ -467,7 +467,7 @@ gui_listbox_setstring(gui_handle_p h, uint16_t index, const gui_char* text, cons
     item = get_item(h, index);                      /* Get list item from handle */
     if (item != NULL) {
         item->text = (gui_char *)text;              /* Set new text */
-        guii_widget_invalidate(h);                  /* Invalidate widget */
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
 
@@ -547,10 +547,10 @@ gui_listbox_setsliderauto(gui_handle_p h, uint8_t autoMode, const uint8_t protec
     __GUI_ENTER(protect);                           /* Enter GUI */
     if (autoMode && !(__GL(h)->flags & GUI_FLAG_LISTBOX_SLIDER_AUTO)) {
         __GL(h)->flags |= GUI_FLAG_LISTBOX_SLIDER_AUTO;
-        guii_widget_invalidate(h);                  /* Invalidate widget */
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     } else if (!autoMode && (__GL(h)->flags & GUI_FLAG_LISTBOX_SLIDER_AUTO)) {
         __GL(h)->flags &= ~GUI_FLAG_LISTBOX_SLIDER_AUTO;
-        guii_widget_invalidate(h);                  /* Invalidate widget */
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
 
@@ -575,11 +575,11 @@ gui_listbox_setslidervisibility(gui_handle_p h, uint8_t visible, const uint8_t p
     if (!(__GL(h)->flags & GUI_FLAG_LISTBOX_SLIDER_AUTO)) {
         if (visible && !(__GL(h)->flags & GUI_FLAG_LISTBOX_SLIDER_ON)) {
             __GL(h)->flags |= GUI_FLAG_LISTBOX_SLIDER_ON;
-            guii_widget_invalidate(h);              /* Invalidate widget */
+            gui_widget_invalidate(h, 0);            /* Invalidate widget */
             ret = 1;
         } else if (!visible && (__GL(h)->flags & GUI_FLAG_LISTBOX_SLIDER_ON)) {
             __GL(h)->flags &= ~GUI_FLAG_LISTBOX_SLIDER_ON;
-            guii_widget_invalidate(h);              /* Invalidate widget */
+            gui_widget_invalidate(h, 0);            /* Invalidate widget */
             ret = 1;
         }
     }
@@ -609,7 +609,7 @@ gui_listbox_scroll(gui_handle_p h, int16_t step, const uint8_t protect) {
     start = start != __GL(h)->visiblestartindex;    /* Check if there was valid change */
     
     if (start) {
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
 
@@ -630,7 +630,7 @@ gui_listbox_setselection(gui_handle_p h, int16_t selection, const uint8_t protec
     __GUI_ENTER(protect);                           /* Enter GUI */
     set_selection(h, selection);                    /* Set selection */
     check_values(h);                                /* Check values */
-    guii_widget_invalidate(h);                      /* Invalidate widget */
+    gui_widget_invalidate(h, 0);                    /* Invalidate widget */
     __GUI_LEAVE(protect);                           /* Leave GUI */
 
     return 1;

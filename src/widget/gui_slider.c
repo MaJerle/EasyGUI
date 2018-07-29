@@ -137,7 +137,7 @@ touch_handle(gui_handle_p h, guii_touch_data_t* ts) {
         value = (int32_t)(((float)(o->max - o->min)) * (float)pos / (float)height) + o->min;
     }
     
-    guii_widget_invalidate(h);                      /* Redraw widget */
+    gui_widget_invalidate(h, 0);                    /* Redraw widget */
     return set_value(h, value);                     /* Set new value */
 }
 
@@ -148,12 +148,12 @@ timer_callback(gui_timer_t* timer) {
     if (guii_widget_isactive(h)) {                  /* Timer is in focus */
         if (__GS(h)->current_size < __GS(h)->max_size) {
             __GS(h)->current_size++;                /* Increase size */
-            guii_widget_invalidate(h);              /* Invalidate widget */
+            gui_widget_invalidate(h, 0);            /* Invalidate widget */
         }
     } else {
         if (__GS(h)->current_size > 0) {
             __GS(h)->current_size--;
-            guii_widget_invalidate(h);              /* Invalidate widget */
+            gui_widget_invalidate(h, 0);            /* Invalidate widget */
         } else {
             guii_timer_stop(timer);                 /* Stop timer execution */
         }
@@ -299,7 +299,7 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
             return 1;
         }
         case GUI_WC_ActiveOut: {
-            guii_widget_invalidate(h);              /* Invalidate widget */
+            gui_widget_invalidate(h, 0);            /* Invalidate widget */
             return 1;
         }
         default:                                    /* Handle default option */
@@ -324,7 +324,7 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
  */
 gui_handle_p
 gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
 }
 
 /**
@@ -338,7 +338,7 @@ gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_
 uint8_t
 gui_slider_setcolor(gui_handle_p h, gui_slider_color_t index, gui_color_t color, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color, protect); /* Set color */
+    return gui_widget_setcolor(h, (uint8_t)index, color, protect);  /* Set color */
 }
 
 /**

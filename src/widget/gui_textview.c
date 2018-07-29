@@ -156,7 +156,7 @@ gui_textview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
  */
 gui_handle_p
 gui_textview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
 }
 
 /**
@@ -173,9 +173,9 @@ gui_textview_setcolor(gui_handle_p h, gui_textview_color_t index, gui_color_t co
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
 
     __GUI_ENTER(protect);                           /* Enter GUI */
-    ret = guii_widget_setcolor(h, (uint8_t)index, color, 1);/* Set color */
+    ret = gui_widget_setcolor(h, (uint8_t)index, color, 1); /* Set color */
     if (ret && index == GUI_TEXTVIEW_COLOR_BG) {    /* Check success */
-        guii_widget_setinvalidatewithparent(h, color == GUI_COLOR_TRANS);   /* When widget is invalidated, invalidate parent too */
+        gui_widget_setinvalidatewithparent(h, color == GUI_COLOR_TRANS, 0); /* When widget is invalidated, invalidate parent too */
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
 

@@ -125,10 +125,10 @@ open_close(gui_handle_p h, uint8_t state) {
             o->C.y = o->C.y - (HEIGHT_CONST(h) - 1) * o->C.height; /* Go up for 3 height values */
         }
         o->C.height = HEIGHT_CONST(h) * o->C.height;
-        guii_widget_invalidate(h);                  /* Invalidate widget */
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
         return 1;
     } else if (!state && (o->flags & GUI_FLAG_DROPDOWN_OPENED)) {
-        guii_widget_invalidatewithparent(h);        /* Invalidate widget */
+        gui_widget_invalidatewithparent(h, 0);      /* Invalidate widget */
         o->flags &= ~GUI_FLAG_DROPDOWN_OPENED;      /* Clear flag */
         o->C.height = o->oldheight;                 /* Restore height value */
         o->C.y = o->oldy;                           /* Restore position */
@@ -159,14 +159,14 @@ slide(gui_handle_p h, int16_t dir) {
         } else {
             o->visiblestartindex += dir;
         }
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     } else if (dir > 0) {
         if ((o->visiblestartindex + dir) > (o->count - mPP - 1)) {  /* Slide elements down */
             o->visiblestartindex = o->count - mPP;
         } else {
             o->visiblestartindex += dir;
         }
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
 }
 
@@ -246,14 +246,14 @@ inc_selection(gui_handle_p h, int16_t dir) {
         } else {
             set_selection(h, o->selected + dir);
         }
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     } else if (dir > 0) {
         if ((o->selected + dir) > (o->count - 1)) { /* Slide elements down */
             set_selection(h, o->count - 1);
         } else {
             set_selection(h, o->selected + dir);
         }
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
 }
 
@@ -263,7 +263,7 @@ delete_item(gui_handle_p h, uint16_t index) {
     gui_dropdown_item_t* item;
     
     item = get_item(h, index);                      /* Get list item from handle */
-    if (item) {
+    if (item != NULL) {
         gui_linkedlist_remove_gen(&__GD(h)->root, &item->list);
         __GD(h)->count--;                           /* Decrease count */
         
@@ -272,7 +272,7 @@ delete_item(gui_handle_p h, uint16_t index) {
         }
         
         check_values(h);                            /* Check widget values */
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
         return 1;
     }
     return 0;
@@ -305,7 +305,7 @@ process_click(gui_handle_p h, guii_touch_data_t* ts) {
         }
         if ((o->visiblestartindex + tmpselected) < o->count) {
             set_selection(h, o->visiblestartindex + tmpselected);
-            guii_widget_invalidate(h);             /* Choose new selection */
+            gui_widget_invalidate(h, 0);           /* Choose new selection */
         }
         check_values(h);                            /* Check values */
     }
@@ -526,7 +526,7 @@ gui_dropdown_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
  */
 gui_handle_p
 gui_dropdown_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
 }
 
 /**
@@ -540,7 +540,7 @@ gui_dropdown_create(gui_id_t id, float x, float y, float width, float height, gu
 uint8_t
 gui_dropdown_setcolor(gui_handle_p h, gui_dropdown_color_t index, gui_color_t color, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color, protect); /* Set color */
+    return gui_widget_setcolor(h, (uint8_t)index, color, protect);  /* Set color */
 }
 
 /**
@@ -565,7 +565,7 @@ gui_dropdown_addstring(gui_handle_p h, const gui_char* text, const uint8_t prote
         __GD(h)->count++;                           /* Increase number of strings */
         
         check_values(h);                            /* Check values */
-        guii_widget_invalidate(h);                  /* Invalidate widget */
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
          
         ret = 1;
     }
@@ -621,7 +621,7 @@ gui_dropdown_setstring(gui_handle_p h, uint16_t index, const gui_char* text, con
     item = get_item(h, index);                      /* Get list item from handle */
     if (item != NULL) {
         item->text = (gui_char *)text;              /* Set new text */
-        guii_widget_invalidate(h);                  /* Invalidate widget */
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
 
@@ -701,10 +701,10 @@ gui_dropdown_setsliderauto(gui_handle_p h, uint8_t autoMode, const uint8_t prote
     __GUI_ENTER(protect);                           /* Enter GUI */
     if (autoMode && !(__GD(h)->flags & GUI_FLAG_DROPDOWN_SLIDER_AUTO)) {
         __GD(h)->flags |= GUI_FLAG_DROPDOWN_SLIDER_AUTO;
-        guii_widget_invalidate(h);                  /* Invalidate widget */
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     } else if (!autoMode && (__GD(h)->flags & GUI_FLAG_DROPDOWN_SLIDER_AUTO)) {
         __GD(h)->flags &= ~GUI_FLAG_DROPDOWN_SLIDER_AUTO;
-        guii_widget_invalidate(h);                  /* Invalidate widget */
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
 
@@ -729,11 +729,11 @@ gui_dropdown_setslidervisibility(gui_handle_p h, uint8_t visible, const uint8_t 
     if (!(__GD(h)->flags & GUI_FLAG_DROPDOWN_SLIDER_AUTO)) {
         if (visible && !(__GD(h)->flags & GUI_FLAG_DROPDOWN_SLIDER_ON)) {
             __GD(h)->flags |= GUI_FLAG_DROPDOWN_SLIDER_ON;
-            guii_widget_invalidate(h);              /* Invalidate widget */
+            gui_widget_invalidate(h, 0);            /* Invalidate widget */
             ret = 1;
         } else if (!visible && (__GD(h)->flags & GUI_FLAG_DROPDOWN_SLIDER_ON)) {
             __GD(h)->flags &= ~GUI_FLAG_DROPDOWN_SLIDER_ON;
-            guii_widget_invalidate(h);              /* Invalidate widget */
+            gui_widget_invalidate(h, 0);            /* Invalidate widget */
             ret = 1;
         }
     }
@@ -763,7 +763,7 @@ gui_dropdown_scroll(gui_handle_p h, int16_t step, const uint8_t protect) {
     start = start != __GD(h)->visiblestartindex;    /* Check if there was valid change */
     
     if (start) {
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
 
@@ -784,7 +784,7 @@ gui_dropdown_setselection(gui_handle_p h, int16_t selection, const uint8_t prote
     __GUI_ENTER(protect);                           /* Enter GUI */
     set_selection(h, selection);                    /* Set selection */
     check_values(h);                                /* Check values */
-    guii_widget_invalidate(h);                      /* Invalidate widget */
+    gui_widget_invalidate(h, 0);                    /* Invalidate widget */
     __GUI_LEAVE(protect);                           /* Leave GUI */
 
     return 1;

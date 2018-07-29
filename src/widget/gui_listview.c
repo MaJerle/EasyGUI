@@ -126,14 +126,14 @@ slide(gui_handle_p h, int16_t dir) {
         } else {
             o->visiblestartindex += dir;
         }
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     } else if (dir > 0) {
         if ((o->visiblestartindex + dir) > (o->count - mPP - 1)) {  /* Slide elements down */
             o->visiblestartindex = o->count - mPP;
         } else {
             o->visiblestartindex += dir;
         }
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
 }
 
@@ -155,14 +155,14 @@ inc_selection(gui_handle_p h, int16_t dir) {
         } else {
             set_selection(h, o->selected + dir);
         }
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     } else if (dir > 0) {
         if ((o->selected + dir) > (o->count - 1)) { /* Slide elements down */
             set_selection(h, o->count - 1);
         } else {
             set_selection(h, o->selected + dir);
         }
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
 }
 
@@ -417,7 +417,7 @@ gui_listview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                             o->cols[i]->width -= diff;  /* Set new width for difference */
                         }
                         tx = ts->x_rel[0];          /* Set new start X position for relative calculation */
-                        guii_widget_invalidate(h);  /* Invalidate widget */
+                        gui_widget_invalidate(h, 0);/* Invalidate widget */
                     }
                 }
             }
@@ -449,7 +449,7 @@ gui_listview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                     tmpselected = (ts->y_rel[0] - itemheight) / itemheight;  /* Get temporary selected index */
                     if ((o->visiblestartindex + tmpselected) < o->count) {
                         set_selection(h, o->visiblestartindex + tmpselected);
-                        guii_widget_invalidate(h);  /* Choose new selection */
+                        gui_widget_invalidate(h, 0);/* Choose new selection */
                     }
                     handled = 1;
                 }
@@ -512,7 +512,7 @@ gui_listview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
  */
 gui_handle_p
 gui_listview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
 }
 
 /**
@@ -526,7 +526,7 @@ gui_listview_create(gui_id_t id, float x, float y, float width, float height, gu
 uint8_t
 gui_listview_setcolor(gui_handle_p h, gui_listview_color_t index, gui_color_t color, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color, protect); /* Set color */
+    return gui_widget_setcolor(h, (uint8_t)index, color, protect);  /* Set color */
 }
 
 /**
@@ -581,7 +581,7 @@ gui_listview_setcolumnwidth(gui_handle_p h, uint16_t index, gui_dim_t width, con
     __GUI_ENTER(protect);                           /* Enter GUI */
     if (index < __GL(h)->col_count) {
         __GL(h)->cols[index]->width = width > 4 ? width : 4;    /* Set new width */
-        guii_widget_invalidate(h);                  /* Invalidate widget */
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
         ret = 1;
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
@@ -708,10 +708,10 @@ gui_listview_setsliderauto(gui_handle_p h, uint8_t autoMode, const uint8_t prote
     __GUI_ENTER(protect);                           /* Enter GUI */
     if (autoMode && !(__GL(h)->flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO)) {
         __GL(h)->flags |= GUI_FLAG_LISTVIEW_SLIDER_AUTO;
-        guii_widget_invalidate(h);                  /* Invalidate widget */
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     } else if (!autoMode && (__GL(h)->flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO)) {
         __GL(h)->flags &= ~GUI_FLAG_LISTVIEW_SLIDER_AUTO;
-        guii_widget_invalidate(h);                  /* Invalidate widget */
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
 
@@ -736,11 +736,11 @@ gui_listview_setslidervisibility(gui_handle_p h, uint8_t visible, const uint8_t 
     if (!(__GL(h)->flags & GUI_FLAG_LISTVIEW_SLIDER_AUTO)) {
         if (visible && !(__GL(h)->flags & GUI_FLAG_LISTVIEW_SLIDER_ON)) {
             __GL(h)->flags |= GUI_FLAG_LISTVIEW_SLIDER_ON;
-            guii_widget_invalidate(h);              /* Invalidate widget */
+            gui_widget_invalidate(h, 0);            /* Invalidate widget */
             ret = 1;
         } else if (!visible && (__GL(h)->flags & GUI_FLAG_LISTVIEW_SLIDER_ON)) {
             __GL(h)->flags &= ~GUI_FLAG_LISTVIEW_SLIDER_ON;
-            guii_widget_invalidate(h);              /* Invalidate widget */
+            gui_widget_invalidate(h, 0);            /* Invalidate widget */
             ret = 1;
         }
     }
@@ -770,7 +770,7 @@ gui_listview_scroll(gui_handle_p h, int16_t step, const uint8_t protect) {
     start = start != __GL(h)->visiblestartindex;    /* Check if there was valid change */
 
     if (start) {
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
 
@@ -791,7 +791,7 @@ gui_listview_setselection(gui_handle_p h, int16_t selection, const uint8_t prote
     __GUI_ENTER(protect);                           /* Enter GUI */
     set_selection(h, selection);                    /* Set selection */
     check_values(h);                                /* Check values */
-    guii_widget_invalidate(h);                      /* Invalidate widget */
+    gui_widget_invalidate(h, 0);                    /* Invalidate widget */
     __GUI_LEAVE(protect);                           /* Leave GUI */
 
     return 1;

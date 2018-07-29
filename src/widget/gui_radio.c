@@ -80,13 +80,13 @@ set_active(gui_handle_p h) {
             __GR(handle)->selected_value = __GR(h)->value;  /* Set selected value for widget */
             if (__GR(handle)->flags & GUI_FLAG_RADIO_CHECKED) { /* Check if widget active */
                 __GR(handle)->flags &= ~GUI_FLAG_RADIO_CHECKED; /* Clear flag */
-                guii_widget_invalidate(handle);     /* Invalidate widget */
+                gui_widget_invalidate(handle, 0);   /* Invalidate widget */
             }
         }
     }
     
     if (!(__GR(h)->flags & GUI_FLAG_RADIO_CHECKED)) {   /* Invalidate only if not checked already */
-        guii_widget_invalidate(h);                  /* Invalidate widget */
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
     __GR(h)->flags |= GUI_FLAG_RADIO_CHECKED;       /* Set active flag */
     __GR(h)->selected_value = __GR(h)->value;       /* Set selected value of this radio */
@@ -100,11 +100,11 @@ static uint8_t
 set_disabled(gui_handle_p h, uint8_t state) {
     if (state && !(__GR(h)->flags & GUI_FLAG_RADIO_DISABLED)) {
         __GR(h)->flags |= GUI_FLAG_RADIO_DISABLED;  /* Set flag */
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
         return 1;
     } else if (!state && (__GR(h)->flags & GUI_FLAG_RADIO_DISABLED)) {
         __GR(h)->flags &= ~GUI_FLAG_RADIO_DISABLED; /* Clear flag */
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
         return 1;
     }
     return 0;
@@ -174,7 +174,7 @@ gui_radio_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
         case GUI_WC_Click: {
             if (!(__GR(h)->flags & GUI_FLAG_RADIO_DISABLED)) {
                 set_active(h);                      /* Set widget as active */
-                guii_widget_invalidate(h);         /* Invalidate widget */
+                gui_widget_invalidate(h, 0);       /* Invalidate widget */
             }
             return 1;
         }
@@ -201,7 +201,7 @@ gui_radio_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
  */
 gui_handle_p
 gui_radio_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
 }
 
 /**
@@ -215,7 +215,7 @@ gui_radio_create(gui_id_t id, float x, float y, float width, float height, gui_h
 uint8_t
 gui_radio_setcolor(gui_handle_p h, gui_radio_color_t index, gui_color_t color, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color, protect); /* Set color */
+    return gui_widget_setcolor(h, (uint8_t)index, color, protect);  /* Set color */
 }
 
 /**
@@ -249,7 +249,7 @@ gui_radio_setgroup(gui_handle_p h, uint8_t groupId, const uint8_t protect) {
         }
         
         __GR(h)->group_id = groupId;                /* Set new group id */
-        guii_widget_invalidate(h);                  /* Invalidate widget */
+        gui_widget_invalidate(h, 0);                /* Invalidate widget */
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
 

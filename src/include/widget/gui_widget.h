@@ -361,21 +361,28 @@ gui_dim_t       guii_widget_getabsolutex(gui_handle_p h);
 gui_dim_t       guii_widget_getabsolutey(gui_handle_p h);
 gui_dim_t       guii_widget_getparentabsolutex(gui_handle_p h);
 gui_dim_t       guii_widget_getparentabsolutey(gui_handle_p h);
-uint8_t         guii_widget_invalidate(gui_handle_p h);
-uint8_t         guii_widget_invalidatewithparent(gui_handle_p h);
-uint8_t         guii_widget_setinvalidatewithparent(gui_handle_p h, uint8_t value);
 
 uint8_t         guii_widget_set3dstyle(gui_handle_p h, uint8_t enable);
-
-void*           guii_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect);
 
 uint8_t         guii_widget_isfontandtextset(gui_handle_p h);
 
 uint8_t         guii_widget_processtextkey(gui_handle_p h, guii_keyboard_data_t* key);
-uint8_t         guii_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color, const uint8_t protect);
 
 uint8_t         guii_widget_setparam(gui_handle_p h, uint16_t cfg, const void* data, uint8_t invalidate, uint8_t invalidateparent, const uint8_t protect);
 uint8_t         guii_widget_getparam(gui_handle_p h, uint16_t cfg, void* data);
+
+/**
+ * \}
+ */
+
+/**
+ * \defgroup        GUI_WIDGET_SHARED Shared functions
+ * \brief           Shared public function which should not be directly accessed by user in API
+ * \{
+ */
+
+void*           gui_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect);
+uint8_t         gui_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color, const uint8_t protect);
 
 /**
  * \}
@@ -470,7 +477,9 @@ uint8_t         gui_widget_setalpha(gui_handle_p h, uint8_t alpha, const uint8_t
  */
 
 uint8_t         gui_widget_invalidate(gui_handle_p h, const uint8_t protect);
+uint8_t         gui_widget_invalidatewithparent(gui_handle_p h, const uint8_t protect);
 uint8_t         gui_widget_setignoreinvalidate(gui_handle_p h, uint8_t en, uint8_t invalidate, const uint8_t protect);
+uint8_t         gui_widget_setinvalidatewithparent(gui_handle_p h, uint8_t value, const uint8_t protect);
 uint8_t         gui_widget_setuserdata(gui_handle_p h, void* data, const uint8_t protect);
 void *          gui_widget_getuserdata(gui_handle_p h, const uint8_t protect);
 uint8_t         gui_widget_ischildof(gui_handle_p h, gui_handle_p parent, const uint8_t protect);

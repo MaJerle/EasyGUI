@@ -179,6 +179,40 @@
 #define GUI_CFG_USE_POS_SIZE_CACHE              0
 #endif
 
+/**
+ * \brief           Enables `1` or disables `0` widget invalidate ignore after create event
+ *
+ *                  When every widget is created, minimum position and size must be set thus,
+ *                  some invalidation must apply. To make algorithm effective for drawing,
+ *                  invalidation may take some time when applying different settings.
+ *
+ *                  By setting this value to `1`, widget will not be invalidated after creation
+ *                  and every attempt to invalidate will have no effect.
+ *
+ *                  Disable invalidate ignore for a widget after it is created,
+ *                  by calling \ref gui_widget_setignoreinvalidate
+ *
+ *                  When feature is applied, user must do the following
+ * \code{c}
+gui_handle_p h;
+
+//Create widget with flag to prevent invalidation
+h = gui_somewidget_create(....);
+
+//If any of these functions try to invalidate widget, 
+//it will have no effect thus code might work faster
+gui_somewidget_setparam1(h, ...);
+gui_somewidget_setparam2(h, ...);
+gui_somewidget_setparam3(h, ...);
+
+//Disable ignore invalidate and force invalidation
+gui_widget_setignoreinvalidate(h, 0, 1, 0);
+\endcode
+ */
+#ifndef GUI_CFG_WIDGET_CREATE_IGNORE_INVALIDATE
+#define GUI_CFG_WIDGET_CREATE_IGNORE_INVALIDATE 0
+#endif
+
 #ifndef GUI_CFG_SYS_PORT
 #define GUI_CFG_SYS_PORT                        GUI_SYS_PORT_CMSIS_OS
 #endif

@@ -499,7 +499,7 @@ process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
                      * Invalidate actual handle object
                      * Already invalidated in __GUI_ACTIVE_SET function
                      */
-                    //guii_widget_invalidate(h);
+                    //gui_widget_invalidate(h, 0);
                 } else {                            /* Touch handled with no focus */
                     /*
                      * When touch was handled without focus,

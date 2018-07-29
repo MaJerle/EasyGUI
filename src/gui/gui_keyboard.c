@@ -287,19 +287,19 @@ keyboard = {
 
 #define SHIFT_DISABLE()     if (keyboard.is_shift) {        \
     keyboard.is_shift = 0;                                  \
-    guii_widget_invalidate(keyboard.main_layout_handle);    \
+    gui_widget_invalidate(keyboard.main_layout_handle, 0);  \
 }
 
 #define SHIFT_ENABLE(mode)  do {                            \
     if (!keyboard.is_shift && (mode)) {                     \
-        guii_widget_invalidate(keyboard.main_layout_handle);\
+        gui_widget_invalidate(keyboard.main_layout_handle, 0);  \
     }                                                       \
     keyboard.is_shift = (mode);                             \
 } while (0)
 
 #define SHIFT_TOGGLE()      do {                            \
     keyboard.is_shift = !keyboard.is_shift;                 \
-    guii_widget_invalidate(keyboard.main_layout_handle);    \
+    gui_widget_invalidate(keyboard.main_layout_handle, 0);  \
 } while (0)
 
 #endif /* !__DOXYGEN__ */

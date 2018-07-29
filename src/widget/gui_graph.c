@@ -320,7 +320,7 @@ gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
                 ty[i] = ts->y_rel[i];               /* Relative Y position on widget */
             }
             
-            guii_widget_invalidate(h);
+            gui_widget_invalidate(h, 0);            /* Invalidate widget */
             return 1;
         }
         case GUI_WC_TouchEnd:
@@ -328,7 +328,7 @@ gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
 #endif /* GUI_CFG_USE_TOUCH */
         case GUI_WC_DblClick:
             graph_reset(h);                         /* Reset zoom */
-            guii_widget_invalidate(h);              /* Invalidate widget */
+            gui_widget_invalidate(h, 0);            /* Invalidate widget */
             return 1;
         
 #if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
@@ -369,7 +369,7 @@ graph_invalidate(gui_graph_data_p data) {
         h = (gui_handle_p)gui_linkedlist_multi_getdata(link); /* Get data from linked list object */
         
         /* Invalidate each object attached to this data graph */
-        guii_widget_invalidate(h);
+        gui_widget_invalidate(h, 0);
     }
 }
 #endif /* GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
@@ -389,7 +389,7 @@ graph_invalidate(gui_graph_data_p data) {
  */
 gui_handle_p
 gui_graph_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)guii_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);  /* Allocate memory for basic widget */
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
 }
 
 /**
@@ -403,7 +403,7 @@ gui_graph_create(gui_id_t id, float x, float y, float width, float height, gui_h
 uint8_t
 gui_graph_setcolor(gui_handle_p h, gui_graph_color_t index, gui_color_t color, const uint8_t protect) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setcolor(h, (uint8_t)index, color, protect); /* Set color */
+    return gui_widget_setcolor(h, (uint8_t)index, color, protect);    /* Set color */
 }
 
 /**
