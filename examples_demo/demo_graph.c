@@ -16,8 +16,7 @@ demo_create_feature_graph(gui_handle_p parent, uint8_t protect) {
     gui_protect(protect);
 
     /* Create graph */
-    h = gui_graph_create(ID_GRAPH, 10, 10, 400, 300, parent, graph_callback, 0, 0);
-    gui_widget_setignoreinvalidate(h, 1, 0, 0);
+    h = gui_graph_create(ID_GRAPH, 10, 10, 400, 300, parent, graph_callback, GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE, 0);
     gui_widget_setpositionpercent(h, 1, 1, 0);
     gui_widget_setsizepercent(h, 98, 98, 0);
     gui_widget_setzindex(h, 0, 0);
@@ -44,8 +43,7 @@ demo_create_feature_graph(gui_handle_p parent, uint8_t protect) {
     gui_widget_setignoreinvalidate(h, 0, 1, 0);
 
     /* Create checkbox for maximize function */
-    h = gui_checkbox_create(0, 10, 10, 300, 30, parent, checkbox_callback, 0, 0);
-    gui_widget_setignoreinvalidate(h, 1, 0, 0);
+    h = gui_checkbox_create(0, 10, 10, 300, 30, parent, checkbox_callback, GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE, 0);
     gui_widget_settext(h, _GT("Expand graph"), 0);
     gui_widget_setzindex(h, 1, 0);
     gui_checkbox_setcolor(h, GUI_CHECKBOX_COLOR_TEXT, GUI_COLOR_LIGHTRED, 0);

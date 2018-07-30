@@ -13,8 +13,7 @@ demo_create_feature_edit_text(gui_handle_p parent, uint8_t protect) {
     gui_protect(protect);
 
     /* Create edit text */
-    h = gui_edittext_create(0, 10, 10, 300, 50, parent, edit_text_callback, 0, 0);
-    gui_widget_setignoreinvalidate(h, 1, 0, 0);
+    h = gui_edittext_create(0, 10, 10, 300, 50, parent, edit_text_callback, GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE, 0);
     gui_widget_alloctextmemory(h, 255, 0);
     gui_widget_setignoreinvalidate(h, 0, 1, 0);
 
