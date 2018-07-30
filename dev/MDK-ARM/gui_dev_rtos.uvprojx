@@ -1106,6 +1106,41 @@
               <FileType>1</FileType>
               <FilePath>..\..\examples_demo\demo_led.c</FilePath>
             </File>
+            <File>
+              <FileName>demo_listbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_listbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_listview.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_listview.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_slider.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_slider.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_text_view.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_text_view.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_dropdown.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_dropdown.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_radio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_radio.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_checkbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_checkbox.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2147,6 +2182,41 @@
               <FileName>demo_led.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\examples_demo\demo_led.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_listbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_listbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_listview.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_listview.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_slider.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_slider.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_text_view.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_text_view.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_dropdown.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_dropdown.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_radio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_radio.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_checkbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_checkbox.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -39,5 +39,13 @@ demo_create_feature_button(gui_handle_p parent, uint8_t protect) {
  */
 static uint8_t
 button_callback(gui_handle_p h, gui_wc_t wc, gui_widget_param_t* param, gui_widget_result_t* result) {
-    return gui_widget_processdefaultcallback(h, wc, param, result);
+    uint8_t ret = gui_widget_processdefaultcallback(h, wc, param, result);
+    switch (wc) {
+        case GUI_WC_Click: {
+            gui_dialog_create(0, 250, 100, 300, 200, gui_container_create, NULL, 0, 0);
+            break;
+        }
+        default: break;
+    }
+    return ret;
 }

@@ -27,6 +27,13 @@ typedef struct {
 #define ID_BTN_MAINWIN_LED                  (ID_BTN_BASIC + 0x005)
 #define ID_BTN_MAINWIN_LIST_CONTAINER       (ID_BTN_BASIC + 0x006)
 #define ID_BTN_MAINWIN_WINDOW               (ID_BTN_BASIC + 0x007)
+#define ID_BTN_MAINWIN_TEXTVIEW             (ID_BTN_BASIC + 0x008)
+#define ID_BTN_MAINWIN_LISTBOX              (ID_BTN_BASIC + 0x009)
+#define ID_BTN_MAINWIN_LISTVIEW             (ID_BTN_BASIC + 0x00A)
+#define ID_BTN_MAINWIN_SLIDER               (ID_BTN_BASIC + 0x00B)
+#define ID_BTN_MAINWIN_DROPDOWN             (ID_BTN_BASIC + 0x00C)
+#define ID_BTN_MAINWIN_RADIO                (ID_BTN_BASIC + 0x00D)
+#define ID_BTN_MAINWIN_CHECKBOX             (ID_BTN_BASIC + 0x00E)
 
 /* List of windows IDs */
 #define ID_WIN_BASIC                        (GUI_ID_USER + 0x200)
@@ -37,6 +44,13 @@ typedef struct {
 #define ID_WIN_LED				            (ID_WIN_BASIC + 0x005)
 #define ID_WIN_LIST_CONTAINER			    (ID_WIN_BASIC + 0x006)
 #define ID_WIN_WINDOW                       (ID_WIN_BASIC + 0x007)
+#define ID_WIN_TEXTVIEW                     (ID_WIN_BASIC + 0x008)
+#define ID_WIN_LISTBOX                      (ID_WIN_BASIC + 0x009)
+#define ID_WIN_LISTVIEW                     (ID_WIN_BASIC + 0x00A)
+#define ID_WIN_SLIDER                       (ID_WIN_BASIC + 0x00B)
+#define ID_WIN_DROPDOWN                     (ID_WIN_BASIC + 0x00C)
+#define ID_WIN_RADIO                        (ID_WIN_BASIC + 0x00D)
+#define ID_WIN_CHECKBOX                     (ID_WIN_BASIC + 0x00E)
 
 /* Graph ID */
 #define ID_WIDGET_BASIC                     (GUI_ID_USER + 0x300)
@@ -62,7 +76,7 @@ void    demo_create_feature_listview(gui_handle_p parent, uint8_t protect);
 void    demo_create_feature_listbox(gui_handle_p parent, uint8_t protect);
 void    demo_create_feature_radio(gui_handle_p parent, uint8_t protect);
 void    demo_create_feature_slider(gui_handle_p parent, uint8_t protect);
-void    demo_create_feature_textview(gui_handle_p parent, uint8_t protect);
+void    demo_create_feature_text_view(gui_handle_p parent, uint8_t protect);
 void    demo_create_feature_led(gui_handle_p parent, uint8_t protect);
 void    demo_create_feature_checkbox(gui_handle_p parent, uint8_t protect);
 void    demo_create_feature_dropdown(gui_handle_p parent, uint8_t protect);
