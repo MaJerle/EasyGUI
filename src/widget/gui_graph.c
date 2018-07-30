@@ -402,7 +402,6 @@ gui_graph_create(gui_id_t id, float x, float y, float width, float height, gui_h
  */
 uint8_t
 gui_graph_setcolor(gui_handle_p h, gui_graph_color_t index, gui_color_t color, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return gui_widget_setcolor(h, (uint8_t)index, color, protect);    /* Set color */
 }
 

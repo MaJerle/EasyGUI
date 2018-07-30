@@ -314,6 +314,7 @@ gui_window_create(gui_id_t id, float x, float y, float width, float height, gui_
         gui_widget_setpaddingleft(__GH(ptr), 2, 0);
     }
     __GUI_LEAVE(protect);                           /* Leave GUI */
+    
     return (gui_handle_p)ptr;
 }
 
@@ -327,7 +328,6 @@ gui_window_create(gui_id_t id, float x, float y, float width, float height, gui_
  */
 uint8_t
 gui_window_setcolor(gui_handle_p h, gui_window_color_t index, gui_color_t color, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return gui_widget_setcolor(h, (uint8_t)index, color, protect);  /* Set color */
 }
  

@@ -219,8 +219,6 @@ uint8_t
 gui_listcontainer_setcolor(gui_handle_p h, gui_listcontainer_color_t index, gui_color_t color, const uint8_t protect) {
     uint8_t ret;
 
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
     __GUI_ENTER(protect);                           /* Enter GUI */
     ret = gui_widget_setcolor(h, (uint8_t)index, color, 0); /* Set color */
     if (ret && index == GUI_LISTCONTAINER_COLOR_BG) {   /* Check background color */

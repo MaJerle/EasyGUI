@@ -188,7 +188,6 @@ gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_
  */
 uint8_t
 gui_button_setcolor(gui_handle_p h, gui_button_color_t index, gui_color_t color, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
     return gui_widget_setcolor(h, (uint8_t)index, color, protect);    /* Set color */
 }
 

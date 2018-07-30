@@ -170,7 +170,6 @@ gui_textview_create(gui_id_t id, float x, float y, float width, float height, gu
 uint8_t
 gui_textview_setcolor(gui_handle_p h, gui_textview_color_t index, gui_color_t color, const uint8_t protect) {
     uint8_t ret;
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
 
     __GUI_ENTER(protect);                           /* Enter GUI */
     ret = gui_widget_setcolor(h, (uint8_t)index, color, 1); /* Set color */
