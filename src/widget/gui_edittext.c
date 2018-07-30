@@ -85,7 +85,7 @@ gui_widget_t widget = {
  */
 static uint8_t
 gui_edittext_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
             __GE(h)->valign = GUI_EDITTEXT_VALIGN_CENTER;
@@ -117,10 +117,10 @@ gui_edittext_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
             gui_dim_t x, y, width, height;
             gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
     
-            x = guii_widget_getabsolutex(h);        /* Get absolute X coordinate */
-            y = guii_widget_getabsolutey(h);        /* Get absolute Y coordinate */
-            width = gui_widget_getwidth(h, 0);      /* Get widget width */
-            height = gui_widget_getheight(h, 0);    /* Get widget height */
+            x = gui_widget_getabsolutex(h);         /* Get absolute X coordinate */
+            y = gui_widget_getabsolutey(h);         /* Get absolute Y coordinate */
+            width = gui_widget_getwidth(h);         /* Get widget width */
+            height = gui_widget_getheight(h);       /* Get widget height */
             
             gui_draw_rectangle3d(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
             gui_draw_filledrectangle(disp, x + 2, y + 2, width - 4, height - 4, guii_widget_getcolor(h, GUI_EDITTEXT_COLOR_BG));
@@ -129,7 +129,7 @@ gui_edittext_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                 gui_draw_rectangle(disp, x + 3, y + 3, width - 6, height - 6, guii_widget_getcolor(h, GUI_EDITTEXT_COLOR_BORDER));
             }
             
-            if (guii_widget_isfontandtextset(h)) {  /* Ready to write string */
+            if (gui_widget_isfontandtextset(h)) {  /* Ready to write string */
                 gui_draw_font_t f;
                 gui_draw_font_init(&f);             /* Init font drawing */
                 
@@ -146,27 +146,17 @@ gui_edittext_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                     f.flags |= GUI_FLAG_FONT_MULTILINE; /* Set multiline flag for widget */
                 }
                 
-                gui_draw_writetext(disp, gui_widget_getfont(h, 0), gui_widget_gettext(h, 0), &f);
+                gui_draw_writetext(disp, gui_widget_getfont(h), gui_widget_gettext(h), &f);
             }
             return 1;
         }
-        case GUI_WC_FocusIn:
 #if GUI_CFG_USE_KEYBOARD
-            gui_keyboard_show(h, 0);                /* Show keyboard */
-#endif /* GUI_CFG_USE_KEYBOARD */
+        case GUI_WC_FocusIn:
+            gui_keyboard_show(h);
             return 1;
         case GUI_WC_FocusOut:
-#if GUI_CFG_USE_KEYBOARD
-            gui_keyboard_hide( 0);                  /* Hide keyboard */
-#endif /* GUI_CFG_USE_KEYBOARD */
+            gui_keyboard_hide();
             return 1;
-#if GUI_CFG_USE_TOUCH
-        case GUI_WC_TouchStart: {
-            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
-            return 1;
-        }
-#endif /* GUI_CFG_USE_TOUCH */
-#if GUI_CFG_USE_KEYBOARD
         case GUI_WC_KeyPress: {
             guii_keyboard_data_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (guii_widget_processtextkey(h, kb)) {
@@ -175,6 +165,12 @@ gui_edittext_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
             return 1;
         }
 #endif /* GUI_CFG_USE_KEYBOARD */
+#if GUI_CFG_USE_TOUCH
+        case GUI_WC_TouchStart: {
+            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
+            return 1;
+        }
+#endif /* GUI_CFG_USE_TOUCH */
         default:                                    /* Handle default option */
             GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
@@ -189,16 +185,15 @@ gui_edittext_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
  * \param[in]       x: Widget `X` position relative to parent widget
  * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
- * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
+gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
 }
 
 /**
@@ -206,12 +201,11 @@ gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gu
  * \param[in]       h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_edittext_setcolor(gui_handle_p h, gui_edittext_color_t index, gui_color_t color, const uint8_t protect) {
-    return gui_widget_setcolor(h, (uint8_t)index, color, protect);  /* Set color */
+gui_edittext_setcolor(gui_handle_p h, gui_edittext_color_t index, gui_color_t color) {
+    return gui_widget_setcolor(h, (uint8_t)index, color);
 }
 
 /**
@@ -219,37 +213,34 @@ gui_edittext_setcolor(gui_handle_p h, gui_edittext_color_t index, gui_color_t co
  * \note            When multiline is enabled, vertical text alignment is always top positioned
  * \param[in]       h: Widget handle
  * \param[in]       multiline: Set to `1` to enable multiline or `0` to disable
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_edittext_setmultiline(gui_handle_p h, uint8_t multiline, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MULTILINE, &multiline, 1, 0, protect);   /* Set parameter */
+gui_edittext_setmultiline(gui_handle_p h, uint8_t multiline) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_MULTILINE, &multiline, 1, 0);
 }
 
 /**
  * \brief           Set vertical align for text inside text box
  * \param[in]       h: Widget handle
  * \param[in]       align: Vertical align
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_edittext_setvalign(gui_handle_p h, gui_edittext_valign_t align, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_VALIGN, &align, 1, 1, protect);  /* Set parameter */
+gui_edittext_setvalign(gui_handle_p h, gui_edittext_valign_t align) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_VALIGN, &align, 1, 1);
 }
 
 /**
  * \brief           Set horizontal align for text inside text box
  * \param[in]       h: Widget handle
  * \param[in]       align: Horizontal align
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_edittext_sethalign(gui_handle_p h, gui_edittext_halign_t align, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_HALIGN, &align, 1, 1, protect);  /* Set parameter */
+gui_edittext_sethalign(gui_handle_p h, gui_edittext_halign_t align) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_HALIGN, &align, 1, 1);
 }

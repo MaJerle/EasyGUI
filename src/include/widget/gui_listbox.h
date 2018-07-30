@@ -92,18 +92,18 @@ typedef struct {
 } gui_listbox_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p    gui_listbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect);
-uint8_t         gui_listbox_setcolor(gui_handle_p h, gui_listbox_color_t index, gui_color_t color, const uint8_t protect);
-uint8_t         gui_listbox_addstring(gui_handle_p h, const gui_char* text, const uint8_t protect);
-uint8_t         gui_listbox_deletefirststring(gui_handle_p h, const uint8_t protect);
-uint8_t         gui_listbox_deletelaststring(gui_handle_p h, const uint8_t protect);
-uint8_t         gui_listbox_deletestring(gui_handle_p h, uint16_t index, const uint8_t protect);
-uint8_t         gui_listbox_setstring(gui_handle_p h, uint16_t index, const gui_char* text, const uint8_t protect);
-uint8_t         gui_listbox_setselection(gui_handle_p h, int16_t selection, const uint8_t protect);
-int16_t         gui_listbox_getselection(gui_handle_p h, const uint8_t protect);
-uint8_t         gui_listbox_setsliderauto(gui_handle_p h, uint8_t autoMode, const uint8_t protect);
-uint8_t         gui_listbox_setslidervisibility(gui_handle_p h, uint8_t visible, const uint8_t protect);
-uint8_t         gui_listbox_scroll(gui_handle_p h, int16_t step, const uint8_t protect);
+gui_handle_p    gui_listbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+uint8_t         gui_listbox_setcolor(gui_handle_p h, gui_listbox_color_t index, gui_color_t color);
+uint8_t         gui_listbox_addstring(gui_handle_p h, const gui_char* text);
+uint8_t         gui_listbox_deletefirststring(gui_handle_p h);
+uint8_t         gui_listbox_deletelaststring(gui_handle_p h);
+uint8_t         gui_listbox_deletestring(gui_handle_p h, uint16_t index);
+uint8_t         gui_listbox_setstring(gui_handle_p h, uint16_t index, const gui_char* text);
+uint8_t         gui_listbox_setselection(gui_handle_p h, int16_t selection);
+int16_t         gui_listbox_getselection(gui_handle_p h);
+uint8_t         gui_listbox_setsliderauto(gui_handle_p h, uint8_t autoMode);
+uint8_t         gui_listbox_setslidervisibility(gui_handle_p h, uint8_t visible);
+uint8_t         gui_listbox_scroll(gui_handle_p h, int16_t step);
 
 /**
  * \}

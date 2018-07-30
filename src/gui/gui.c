@@ -69,10 +69,10 @@ check_disp_clipping(gui_handle_p h) {
 #else /* GUI_CFG_USE_POS_SIZE_CACHE */
 
     /* Set widget itself first */
-    x = guii_widget_getabsolutex(h);
-    y = guii_widget_getabsolutey(h);
-    wi = gui_widget_getwidth(h, 0);
-    hi = gui_widget_getheight(h, 0);
+    x = gui_widget_getabsolutex(h); 
+    y = gui_widget_getabsolutey(h); 
+    wi = gui_widget_getwidth(h);   
+    hi = gui_widget_getheight(h);   
     
     /* Step 1: Set active clipping area only for current widget */
     if (GUI.display_temp.x1 == GUI_DIM(0x7FFF) || GUI.display_temp.x1 < x) {
@@ -146,7 +146,7 @@ redraw_widgets(gui_handle_p parent, uint8_t force_redraw) {
                     gui_dim_t height = GUI.display_temp.y2 - GUI.display_temp.y1;
                     
                     /* Try to allocate memory for new virtual layer for temporary usage */
-                    GUI.lcd.drawing_layer = GUI_MEMALLOC(sizeof(*GUI.lcd.drawing_layer) + (size_t)width * (size_t)height * (size_t)GUI.lcd.pixel_size, 0);
+                    GUI.lcd.drawing_layer = GUI_MEMALLOC(sizeof(*GUI.lcd.drawing_layer) + (size_t)width * (size_t)height * (size_t)GUI.lcd.pixel_size);
                     
                     if (GUI.lcd.drawing_layer != NULL) {/* Check if allocation was successful */
                         GUI.lcd.drawing_layer->width = width;
@@ -183,7 +183,7 @@ redraw_widgets(gui_handle_p parent, uint8_t force_redraw) {
                             (void *)(((uint8_t *)layerPrev->start_address) +
                                 GUI.lcd.pixel_size * (layerPrev->width * (GUI.lcd.drawing_layer->y_pos - layerPrev->y_pos) + (GUI.lcd.drawing_layer->x_pos - layerPrev->x_pos))),
                             (void *)GUI.lcd.drawing_layer->start_address,
-                            gui_widget_getalpha(h, 0), 0xFF,
+                            gui_widget_getalpha(h), 0xFF,
                             GUI.lcd.drawing_layer->width, GUI.lcd.drawing_layer->height,
                             layerPrev->width - GUI.lcd.drawing_layer->width, 0
                         );
@@ -197,7 +197,7 @@ redraw_widgets(gui_handle_p parent, uint8_t force_redraw) {
                         dxo = GUI.lcd.drawing_layer->x_pos - layerPrev->x_pos;
                         dyo = GUI.lcd.drawing_layer->y_pos - layerPrev->y_pos;;
 
-                        a = GUI_FLOAT(gui_widget_getalpha(h, 0)) / GUI_FLOAT(0xFF);
+                        a = GUI_FLOAT(gui_widget_getalpha(h)) / GUI_FLOAT(0xFF);
                         for (y = 0; y < GUI.lcd.drawing_layer->height; y++) {
                             for (x = 0; x < GUI.lcd.drawing_layer->width; x++) {
                                 fg = GUI.ll.GetPixel(&GUI.lcd, GUI.lcd.drawing_layer, x, y);
@@ -214,7 +214,7 @@ redraw_widgets(gui_handle_p parent, uint8_t force_redraw) {
                         }                        
                     }
                     
-                    GUI_MEMFREE(GUI.lcd.drawing_layer, 0);  /* Free memory for virtual layer */
+                    GUI_MEMFREE(GUI.lcd.drawing_layer); /* Free memory for virtual layer */
                     GUI.lcd.drawing_layer = layerPrev;  /* Reset layer pointer */
                 }
 #endif /* GUI_CFG_USE_ALPHA */
@@ -399,7 +399,6 @@ set_relative_coordinate(guii_touch_data_t* ts, gui_dim_t x, gui_dim_t y, gui_dim
  *                  
  *                  Scan all widgets from top to bottom which will be first on valid 
  *                  position for touch and call callback function to this widget
- *
  * \param[in]       touch: Touch data info
  * \param[in]       parent: Parent widget where to check for touch
  * \return          Member of \ref guii_touch_status_t enumeration about success
@@ -465,8 +464,8 @@ process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
             if (touch->ts.x[0] >= GUI.display_temp.x1 && touch->ts.x[0] <= GUI.display_temp.x2 && 
                 touch->ts.y[0] >= GUI.display_temp.y1 && touch->ts.y[0] <= GUI.display_temp.y2) {
                 set_relative_coordinate(touch,      /* Set relative coordinate */
-                    guii_widget_getabsolutex(h), guii_widget_getabsolutey(h), 
-                    gui_widget_getwidth(h, 0), gui_widget_getheight(h, 0)
+                    gui_widget_getabsolutex(h), gui_widget_getabsolutey(h), 
+                    gui_widget_getwidth(h), gui_widget_getheight(h)
                 ); 
             
                 /* Call touch start callback to see if widget accepts touches */
@@ -499,7 +498,7 @@ process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
                      * Invalidate actual handle object
                      * Already invalidated in __GUI_ACTIVE_SET function
                      */
-                    //gui_widget_invalidate(h, 0);
+                    //gui_widget_invalidate(h);   
                 } else {                            /* Touch handled with no focus */
                     /*
                      * When touch was handled without focus,
@@ -514,7 +513,7 @@ process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
         }
         
         /* Check for keyboard mode */
-        if (gui_widget_getid(h, 0) == GUI_ID_KEYBOARD_BASE) {
+        if (gui_widget_getid(h) == GUI_ID_KEYBOARD_BASE) {
             isKeyboard = 0;                         /* Set keyboard mode as 1 */
         }
         
@@ -552,8 +551,8 @@ gui_process_touch(void) {
         while (guii_input_touchread(&GUI.touch.ts)) {   /* Process all touch events possible */
             if (GUI.active_widget != NULL && GUI.touch.ts.status) { /* Check active widget for touch and pressed status */
                 set_relative_coordinate(&GUI.touch, /* Set relative touch (for widget) from current touch */
-                    guii_widget_getabsolutex(GUI.active_widget), guii_widget_getabsolutey(GUI.active_widget),
-                    gui_widget_getwidth(GUI.active_widget, 0), gui_widget_getheight(GUI.active_widget, 0)
+                    gui_widget_getabsolutex(GUI.active_widget), gui_widget_getabsolutey(GUI.active_widget),
+                    gui_widget_getwidth(GUI.active_widget), gui_widget_getheight(GUI.active_widget)
                 );
             }
             
@@ -586,8 +585,8 @@ gui_process_touch(void) {
                             aw = guii_widget_getparent(aw);    /* Get parent widget */
                             if (aw != NULL) {
                                 set_relative_coordinate(&GUI.touch, /* Set relative touch (for widget) from current touch */
-                                    guii_widget_getabsolutex(aw), guii_widget_getabsolutey(aw), 
-                                    gui_widget_getwidth(aw, 0), gui_widget_getheight(aw, 0)
+                                    gui_widget_getabsolutex(aw), gui_widget_getabsolutey(aw), 
+                                    gui_widget_getwidth(aw), gui_widget_getheight(aw)
                                 );
                                 /* Reset relative coordinates here! */
                                 memcpy(GUI.touch.x_rel_old, GUI.touch.x_rel, sizeof(GUI.touch.x_rel_old));
@@ -621,9 +620,7 @@ gui_process_touch(void) {
                 }
             }
             
-            /*
-             * Periodical check for events on active widget
-             */
+            /* Periodical check for events on active widget */
             if (GUI.active_widget != NULL) {
                 __TouchEvents_Thread(&GUI.touch, &GUI.touch_old, 1, &rresult);   /* Call thread for touch process */
                 __ProcessAfterTouchEventsThread();  /* Process after event macro */
@@ -839,7 +836,8 @@ gui_init(void) {
 
 /**
  * \brief           Processes all drawing operations for GUI
- * \note            When GUI_CFG_OS is set to 0, then user has to call this function in main loop, otherwise it is processed in separated thread by GUI (GUI_CFG_OS != 0)
+ * \note            When `GUI_CFG_OS = 0`, user has to call this function in main loop,
+ *                     otherwise it is processed in separated thread by GUI `GUI_CFG_OS != 0`
  * \return          Number of jobs done in current call
  */
 int32_t
@@ -873,7 +871,7 @@ gui_process(void) {
 /**
  * \brief           Set callback for global events from GUI
  * \param[in]       cb: Callback function
- * \return          0 on failure, non-zero otherwise
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_seteventcallback(gui_eventcallback_t cb) {
@@ -885,14 +883,23 @@ gui_seteventcallback(gui_eventcallback_t cb) {
     return 1;
 }
 
+#if GUI_CFG_OS || __DOXYGEN__
+
 uint8_t
 gui_protect(const uint8_t protect) {
-    __GUI_ENTER(protect);
+    if (protect) {
+        __GUI_SYS_PROTECT(1);
+    }
     return 1;
 }
 
 uint8_t
-gui_unprotect(const uint8_t protect) {
-    __GUI_LEAVE(protect);
+gui_unprotect(const uint8_t unprotect) {
+    if (unprotect) {
+        __GUI_SYS_UNPROTECT(1);
+        gui_sys_mbox_putnow(&GUI.OS.mbox, 0x00);    /* Wakeup processing thread */
+    }
     return 1;
 }
+
+#endif /* GUI_CFG_OS || __DOXYGEN__ */

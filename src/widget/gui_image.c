@@ -62,14 +62,14 @@ gui_widget_t widget = {
  */
 static uint8_t
 gui_image_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
             gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
             gui_dim_t x, y;
 
-            x = guii_widget_getabsolutex(h);        /* Get absolute X coordinate */
-            y = guii_widget_getabsolutey(h);        /* Get absolute Y coordinate */
+            x = gui_widget_getabsolutex(h);         /* Get absolute X coordinate */
+            y = gui_widget_getabsolutey(h);         /* Get absolute Y coordinate */
             
             gui_draw_image(disp, x, y, o->image);   /* Draw actual image on screen */
             return 1;
@@ -87,36 +87,30 @@ gui_image_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
  * \param[in]       x: Widget `X` position relative to parent widget
  * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
- * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
+gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
 }
 
 /**
  * \brief           Set image source to draw
  * \param[in]       h: Widget handle
  * \param[in]       img: Image object. Set to `NULL` to clear image
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_image_setsource(gui_handle_p h, const gui_image_desc_t* img, const uint8_t protect) {
-    uint8_t ret = 0;
-    
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && img != NULL);   /* Check input parameters */
+gui_image_setsource(gui_handle_p h, const gui_image_desc_t* img) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && img != NULL);
 
-    __GUI_ENTER(protect);                           /* Enter GUI */
     __GI(h)->image = img;                           /* Set image */
-    gui_widget_setinvalidatewithparent(h, img != NULL && img->bpp == 32, 0);/* Set how invalidation function behaves */
-    gui_widget_invalidatewithparent(h, 0);          /* Invalidate widget */
-    __GUI_LEAVE(protect);                           /* Leave GUI */
+    gui_widget_setinvalidatewithparent(h, img != NULL && img->bpp == 32);
+    gui_widget_invalidatewithparent(h);             /* Invalidate widget */
 
-    return ret;
+    return 1;
 }

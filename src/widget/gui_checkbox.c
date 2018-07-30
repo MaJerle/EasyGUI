@@ -74,12 +74,12 @@ set_checked(gui_handle_p h, uint8_t state) {
     if (state && !(c->flags & GUI_FLAG_CHECKBOX_CHECKED)) {
         c->flags |= GUI_FLAG_CHECKBOX_CHECKED;      /* Set flag */
         guii_widget_callback(h, GUI_WC_ValueChanged, NULL, NULL);  /* Process callback */
-        gui_widget_invalidate(h, 0);
+        gui_widget_invalidate(h);   
         return 1;
     } else if (!state && (c->flags & GUI_FLAG_CHECKBOX_CHECKED)) {
         c->flags &= ~GUI_FLAG_CHECKBOX_CHECKED;     /* Clear flag */
         guii_widget_callback(h, GUI_WC_ValueChanged, NULL, NULL);  /* Process callback */
-        gui_widget_invalidate(h, 0);
+        gui_widget_invalidate(h);   
         return 1;
     }
     return 0;
@@ -128,10 +128,10 @@ gui_checkbox_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
             gui_color_t c1;
             gui_dim_t x, y, width, height, size, sx, sy;
             
-            x = guii_widget_getabsolutex(h);        /* Get absolute X coordinate */
-            y = guii_widget_getabsolutey(h);        /* Get absolute Y coordinate */
-            width = gui_widget_getwidth(h, 0);      /* Get widget width */
-            height = gui_widget_getheight(h, 0);    /* Get widget height */
+            x = gui_widget_getabsolutex(h);         /* Get absolute X coordinate */
+            y = gui_widget_getabsolutey(h);         /* Get absolute Y coordinate */
+            width = gui_widget_getwidth(h);         /* Get widget width */
+            height = gui_widget_getheight(h);       /* Get widget height */
             
             size = 20;
             
@@ -162,7 +162,7 @@ gui_checkbox_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
             }
             
             /* Draw text if possible */
-            if (guii_widget_isfontandtextset(h)) {
+            if (gui_widget_isfontandtextset(h)) {
                 gui_draw_font_t f;
                 gui_draw_font_init(&f);             /* Init structure */
                 
@@ -173,7 +173,7 @@ gui_checkbox_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                 f.align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.color1width = f.width;
                 f.color1 = guii_widget_getcolor(h, GUI_CHECKBOX_COLOR_TEXT);
-                gui_draw_writetext(disp, gui_widget_getfont(h, 0), gui_widget_gettext(h, 0), &f);
+                gui_draw_writetext(disp, gui_widget_getfont(h), gui_widget_gettext(h), &f);
             }
             
             return 1;
@@ -198,16 +198,15 @@ gui_checkbox_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
  * \param[in]       x: Widget `X` position relative to parent widget
  * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
- * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_checkbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
+gui_checkbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
 }
 
 /**
@@ -215,74 +214,55 @@ gui_checkbox_create(gui_id_t id, float x, float y, float width, float height, gu
  * \param[in]       h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_checkbox_setcolor(gui_handle_p h, gui_checkbox_color_t index, gui_color_t color, const uint8_t protect) {
-    return gui_widget_setcolor(h, (uint8_t)index, color, protect);  /* Set color */
+gui_checkbox_setcolor(gui_handle_p h, gui_checkbox_color_t index, gui_color_t color) {
+    return gui_widget_setcolor(h, (uint8_t)index, color);
 }
 
 /**
  * \brief           Set checked status to widget
  * \param[in]       h: Widget handle
  * \param[in]       checked: Checked status
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_checkbox_setchecked(gui_handle_p h, uint8_t checked, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_CHECK, &checked, 0, 0, protect); /* Set parameter */
+gui_checkbox_setchecked(gui_handle_p h, uint8_t checked) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_CHECK, &checked, 0, 0);  /* Set parameter */
 }
 
 /**
  * \brief           Set disabled status to widget
  * \param[in]       h: Widget handle
  * \param[in]       disabled: Disabled status
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_checkbox_setdisabled(gui_handle_p h, uint8_t disabled, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_DISABLE, &disabled, 0, 0, protect);  /* Set parameter */
+gui_checkbox_setdisabled(gui_handle_p h, uint8_t disabled) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_DISABLE, &disabled, 0, 0);   /* Set parameter */
 }
 
 /**
  * \brief           Check if checkbox is checked
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_checkbox_ischecked(gui_handle_p h, const uint8_t protect) {
-    uint8_t ret;
-    
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    ret = !!(__GC(h)->flags & GUI_FLAG_CHECKBOX_CHECKED);
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return ret;
+gui_checkbox_ischecked(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return !!(__GC(h)->flags & GUI_FLAG_CHECKBOX_CHECKED);
 }
 
 /**
  * \brief           Check if checkbox is disabled
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_checkbox_isdisabled(gui_handle_p h, const uint8_t protect) {
-    uint8_t ret;
-    
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    ret = !!(__GC(h)->flags & GUI_FLAG_CHECKBOX_DISABLED);
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return ret;
+gui_checkbox_isdisabled(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return !!(__GC(h)->flags & GUI_FLAG_CHECKBOX_DISABLED);
 }

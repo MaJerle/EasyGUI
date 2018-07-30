@@ -73,12 +73,12 @@ typedef struct {
 } gui_checkbox_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p    gui_checkbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect);
-uint8_t         gui_checkbox_setcolor(gui_handle_p h, gui_checkbox_color_t index, gui_color_t color, const uint8_t protect);
-uint8_t         gui_checkbox_setchecked(gui_handle_p h, uint8_t checked, const uint8_t protect);
-uint8_t         gui_checkbox_ischecked(gui_handle_p h, const uint8_t protect);
-uint8_t         gui_checkbox_setdisabled(gui_handle_p h, uint8_t disabled, const uint8_t protect);
-uint8_t         gui_checkbox_isdisabled(gui_handle_p h, const uint8_t protect);
+gui_handle_p    gui_checkbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+uint8_t         gui_checkbox_setcolor(gui_handle_p h, gui_checkbox_color_t index, gui_color_t color);
+uint8_t         gui_checkbox_setchecked(gui_handle_p h, uint8_t checked);
+uint8_t         gui_checkbox_ischecked(gui_handle_p h);
+uint8_t         gui_checkbox_setdisabled(gui_handle_p h, uint8_t disabled);
+uint8_t         gui_checkbox_isdisabled(gui_handle_p h);
 
 /**
  * \}

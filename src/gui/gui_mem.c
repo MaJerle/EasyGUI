@@ -209,7 +209,7 @@ mem_alloc(size_t size) {
     }
     
     /* TODO: Check alignment maybe? */    
-    if (!size || size >= MemAllocBit) {             /* Check input parameters */
+    if (!size || size >= MemAllocBit) {
         return 0;
     }
 
@@ -361,19 +361,14 @@ mem_getminfree(void) {
 /**
  * \brief           Allocate memory of specific size
  * \note            This function is private and may be called only when OS protection is active
- * \param[in]       size: Number of bytes to allocate
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
- * \return          `1` on success, `0` otherwise
- * \return          >0: Pointer to allocated memory
+ * \param[in]       size: Number of bytes to allocate * \return          Allocated memory on success, `NULL` otherwise
  */
 void*
-gui_mem_alloc(uint32_t size, const uint8_t protect) {
+gui_mem_alloc(uint32_t size) {
     void* ptr;
 
 #if GUI_CFG_USE_MEM
-    __GUI_SYS_PROTECT(protect);                     /* Lock system protection */
-    ptr = mem_alloc(size);                          /* Allocate memory and return pointer */ 
-    __GUI_SYS_UNPROTECT(protect);                   /* Unlock protection */
+    ptr = mem_alloc(size);                          /* Allocate memory and return pointer */
 #else /* GUI_CFG_USE_MEM */
     ptr = malloc(size);
 #endif /* !GUI_CFG_USE_MEM */
@@ -385,16 +380,12 @@ gui_mem_alloc(uint32_t size, const uint8_t protect) {
  * \brief           Allocate memory of specific size
  * \note            After new memory is allocated, content of old one is copied to new memory
  * \param[in]       ptr: Pointer to current allocated memory to resize, returned using \ref gui_mem_alloc, \ref gui_mem_calloc or \ref gui_mem_realloc functions
- * \param[in]       size: Number of bytes to allocate on new memory
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
- * \return          Allocated memory on success, NULL otherwise
+ * \param[in]       size: Number of bytes to allocate on new memory * \return          Allocated memory on success, `NULL` otherwise
  */
 void*
-gui_mem_realloc(void* ptr, size_t size, const uint8_t protect) {
+gui_mem_realloc(void* ptr, size_t size) {
 #if GUI_CFG_USE_MEM
-    __GUI_SYS_PROTECT(protect);                     /* Lock system protection */
     ptr = mem_realloc(ptr, size);                   /* Reallocate and return pointer */
-    __GUI_SYS_UNPROTECT(protect);                   /* Unlock protection */
 #else /* GUI_CFG_USE_MEM */
     ptr = realloc(ptr, size);
 #endif /* GUI_CFG_USE_MEM */
@@ -404,18 +395,15 @@ gui_mem_realloc(void* ptr, size_t size, const uint8_t protect) {
 /**
  * \brief           Allocate memory of specific size and set memory to zero
  * \param[in]       num: Number of elements to allocate
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \param[in]       size: Size of each element
- * \return          Allocated memory on success, NULL otherwise
+ * \return          Allocated memory on success, `NULL` otherwise
  */
 void*
-gui_mem_calloc(size_t num, size_t size, const uint8_t protect) {
+gui_mem_calloc(size_t num, size_t size) {
     void* ptr;
 
 #if GUI_CFG_USE_MEM
-    __GUI_SYS_PROTECT(protect);                     /* Lock system protection */
     ptr = mem_calloc(num, size);                    /* Allocate memory and clear it to 0. Then return pointer */
-    __GUI_SYS_UNPROTECT(protect);                   /* Unlock protection */
 #else /* GUI_CFG_USE_MEM */
     ptr = calloc(num, size);
 #endif /* !GUI_CFG_USE_MEM */
@@ -425,14 +413,11 @@ gui_mem_calloc(size_t num, size_t size, const uint8_t protect) {
 /**
  * \brief           Free memory
  * \param[in]       ptr: Pointer to memory previously returned using \ref gui_mem_alloc, \ref gui_mem_calloc or \ref gui_mem_realloc functions
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  */
 void
-gui_mem_free(void* ptr, const uint8_t protect) {
+gui_mem_free(void* ptr) {
 #if GUI_CFG_USE_MEM
-    __GUI_SYS_PROTECT(protect);                     /* Lock system protection */
     mem_free(ptr);                                  /* Free already allocated memory */
-    __GUI_SYS_UNPROTECT(protect);                   /* Unlock protection */
 #else /* GUI_CFG_USE_MEM */
     free(ptr);
 #endif /* !GUI_CFG_USE_MEM */
@@ -479,9 +464,7 @@ uint8_t
 gui_mem_assignmemory(const gui_mem_region_t* regions, size_t len) {
     uint8_t ret;
     
-    __GUI_SYS_PROTECT(1);                           /* Enter GUI */
     ret = mem_assignmem(regions, len);              /* Assign memory */
-    __GUI_SYS_UNPROTECT(1);                         /* Leave GUI */
 
     return ret;                                     
 }

@@ -173,7 +173,7 @@ gui_string_lengthtotal(const gui_char* src) {
  * \return          Pointer to destination memory
  * \sa              gui_string_copyn
  */
-gui_char*
+gui_char *
 gui_string_copy(gui_char* dst, const gui_char* src) {
     return (gui_char *)strcpy((char *)dst, (const char *)src);  /* Copy source string to destination */
 }
@@ -186,7 +186,7 @@ gui_string_copy(gui_char* dst, const gui_char* src) {
  * \return          Pointer to destination memory
  * \sa              gui_string_copy
  */
-gui_char*
+gui_char *
 gui_string_copyn(gui_char* dst, const gui_char* src, size_t len) {
     return (gui_char *)strncpy((char *)dst, (const char *)src, len);    /* Copy source string to destination */
 }
@@ -204,8 +204,8 @@ gui_string_compare(const gui_char* s1, const gui_char* s2) {
 
 /**
  * \brief           Prepare string before it can be used with \ref gui_string_getch or \ref gui_string_getchreverse functions
- * \param[in,out]   *s: Pointer to \ref gui_string_t as base string object
- * \param[in]       str: Pointer to \ref gui_char with string used for manupulation
+ * \param[in,out]   s: Pointer to \ref gui_string_t as base string object
+ * \param[in]       str: Pointer to \ref gui_char with string used for manipulation
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -223,7 +223,7 @@ gui_string_prepare(gui_string_t* s, const gui_char* str) {
  * \include         _example_string_getch.c
  * 
  * \note            When \ref GUI_CFG_USE_UNICODE is set to 1, multiple bytes may be used for single character
- * \param[in,out]   *s: Pointer to \ref gui_string_t structure with input string. 
+ * \param[in,out]   s: Pointer to \ref gui_string_t structure with input string. 
                         Function will internally change pointer of actual string where it points to to next character
  * \param[out]      out: Pointer to output memory where output character will be saved
  * \param[out]      len: Pointer to output memory where number of bytes for string will be saved
@@ -331,7 +331,7 @@ gui_string_getchreverse(gui_string_t* str, uint32_t* out, uint8_t* len) {
 /**
  *
  * \brief           Set character pointer to the last character in sequence
- * \param[in,out]   *str: Pointer to \ref gui_string_t structure with string informations
+ * \param[in,out]   str: Pointer to \ref gui_string_t structure with string informations
  * \return          `1` on success, `0` otherwise
  * \sa              gui_string_getchreverse
  */

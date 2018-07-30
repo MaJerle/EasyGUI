@@ -68,8 +68,8 @@ typedef struct {
 
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p    gui_container_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect);
-uint8_t         gui_container_setcolor(gui_handle_p h, gui_container_color_t index, gui_color_t color, const uint8_t protect);
+gui_handle_p    gui_container_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+uint8_t         gui_container_setcolor(gui_handle_p h, gui_container_color_t index, gui_color_t color);
 
 /**
  * \}

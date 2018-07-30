@@ -282,7 +282,7 @@ gui_linkedlist_moveup_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element)
  * \note            Index value is the number of item in list order
  * \param[in]       root: Pointer to \ref gui_linkedlistroot_t structure as base element
  * \param[in]       index: Number in list to get item
- * \return          Item handle on success, NULL otherwise
+ * \return          Item handle on success, `NULL` otherwise
  */
 gui_linkedlist_t *
 gui_linkedlist_getnext_byindex_gen(gui_linkedlistroot_t* root, uint16_t index) {
@@ -307,7 +307,7 @@ gui_linkedlistmulti_t *
 gui_linkedlist_multi_add_gen(gui_linkedlistroot_t* root, void* element) {
     gui_linkedlistmulti_t* ptr;
     
-    ptr = GUI_MEMALLOC(sizeof(gui_linkedlistmulti_t), 0);   /* Create memory for linked list */
+    ptr = GUI_MEMALLOC(sizeof(gui_linkedlistmulti_t));  /* Create memory for linked list */
     if (ptr != NULL) {
         ptr->element = element;                     /* Save pointer to our element */
         gui_linkedlist_add_gen(root, &ptr->list);   /* Add element to linked list */
@@ -330,7 +330,7 @@ gui_linkedlist_multi_remove_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_
         return 0;
     }
     gui_linkedlist_remove_gen(root, (gui_linkedlist_t *)element); /* Remove element from linked list */
-    GUI_MEMFREE(element, 0);                        /* Free memory */
+    GUI_MEMFREE(element);                           /* Free memory */
     return 1;
 }
 
@@ -402,7 +402,7 @@ gui_linkedlist_multi_getprev_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti
  */
 uint8_t
 gui_linkedlist_multi_movedown_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_t* element) {
-    return gui_linkedlist_movedown_gen(root, &element->list); /* Move down elemenet */
+    return gui_linkedlist_movedown_gen(root, &element->list); /* Move down element */
 }
 
 /**
@@ -415,7 +415,7 @@ gui_linkedlist_multi_movedown_gen(gui_linkedlistroot_t* root, gui_linkedlistmult
  */
 uint8_t
 gui_linkedlist_multi_moveup_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_t* element) {
-    return gui_linkedlist_moveup_gen(root, &element->list);   /* Move down elemenet */
+    return gui_linkedlist_moveup_gen(root, &element->list);   /* Move down element */
 }
     
 /**
@@ -433,7 +433,7 @@ gui_linkedlist_multi_find_remove(gui_linkedlistroot_t* root, void* element) {
     gui_linkedlistmulti_t* link;
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(root);                       /* Check input parameters */
+    __GUI_ASSERTPARAMS(root);
     
     for (link = gui_linkedlist_multi_getnext_gen(root, NULL); link != NULL;
         link = gui_linkedlist_multi_getnext_gen(NULL, link)) {
@@ -681,7 +681,7 @@ gui_linkedlist_widgetmovetotop(gui_handle_p h) {
 }
 
 /**
- * \brief           Prints widget structure from root tre 
+ * \brief           Prints widget structure from root tree
  */
 void
 gui_linkedlist_printlist(void) {

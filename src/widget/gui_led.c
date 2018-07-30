@@ -78,7 +78,7 @@ gui_widget_t widget = {
  */
 static uint8_t
 gui_led_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
             gui_widget_param* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
@@ -106,10 +106,10 @@ gui_led_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_w
             gui_color_t c1, c2;
             gui_dim_t x, y, width, height;
             
-            x = guii_widget_getabsolutex(h);        /* Get absolute position on screen */
-            y = guii_widget_getabsolutey(h);        /* Get absolute position on screen */
-            width = gui_widget_getwidth(h, 0);      /* Get widget width */
-            height = gui_widget_getheight(h, 0);    /* Get widget height */
+            x = gui_widget_getabsolutex(h);         /* Get absolute position on screen */
+            y = gui_widget_getabsolutey(h);         /* Get absolute position on screen */
+            width = gui_widget_getwidth(h);         /* Get widget width */
+            height = gui_widget_getheight(h);       /* Get widget height */
             
             /* Get drawing colors */
             if (l->flags & GUI_LED_FLAG_ON) {       /* If LED is on */
@@ -142,16 +142,15 @@ gui_led_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_w
  * \param[in]       x: Widget `X` position relative to parent widget
  * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
- * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_led_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
+gui_led_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
 }
 
 /**
@@ -159,67 +158,55 @@ gui_led_create(gui_id_t id, float x, float y, float width, float height, gui_han
  * \param[in]       h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_led_setcolor(gui_handle_p h, gui_led_color_t index, gui_color_t color, const uint8_t protect) {
-    return gui_widget_setcolor(h, (uint8_t)index, color, protect);  /* Set color */
+gui_led_setcolor(gui_handle_p h, gui_led_color_t index, gui_color_t color) {
+    return gui_widget_setcolor(h, (uint8_t)index, color);
 }
 
 /**
  * \brief           Set led type
  * \param[in]       h: Widget handle
  * \param[in]       type: New type for LED
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_led_settype(gui_handle_p h, gui_led_type_t type, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_TYPE, &type, 1, 1, protect); /* Set parameter */
+gui_led_settype(gui_handle_p h, gui_led_type_t type) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_TYPE, &type, 1, 1);
 }
 
 /**
  * \brief           Toggle LED state
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_led_toggle(gui_handle_p h, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_TOGGLE, NULL, 1, 0, protect);/* Set parameter */
+gui_led_toggle(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_TOGGLE, NULL, 1, 0);
 }
 
 /**
  * \brief           Set LED value either on (turn on) or off (turn off)
  * \param[in]       h: Widget handle
  * \param[in]       state: LED state, either `1` or `0` according to selected state
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_led_set(gui_handle_p h, uint8_t state, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_SET, &state, 1, 0, protect); /* Set parameter */
+gui_led_set(gui_handle_p h, uint8_t state) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_SET, &state, 1, 0);
 }
 
 /**
  * \brief           Check if led is ON
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_led_ison(gui_handle_p h, const uint8_t protect) {
-    uint8_t ret;
-    
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    ret = !!(__GL(h)->flags & GUI_LED_FLAG_ON);
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return ret;
+gui_led_ison(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return !!(__GL(h)->flags & GUI_LED_FLAG_ON);
 }

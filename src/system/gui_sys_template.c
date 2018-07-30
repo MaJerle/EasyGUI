@@ -160,7 +160,7 @@ gui_sys_sem_delete(gui_sys_sem_t* p) {
  * \brief           Wait for semaphore to be available
  * \note            This function is required with OS
  * \param[in]       p: Pointer to semaphore structure
- * \param[in]       timeout: Timeout to wait in milliseconds. When 0 is applied, wait forever
+ * \param[in]       timeout: Timeout to wait in milliseconds. When `0` is applied, wait forever
  * \return          Number of milliseconds waited for semaphore to become available
  */
 uint32_t
@@ -208,7 +208,7 @@ gui_sys_sem_invalid(gui_sys_sem_t* p) {
 }
     
 /**
- * \brief           Create a new message queue with entry type of "void *"
+ * \brief           Create a new message queue with entry type of `void *`
  * \note            This function is required with OS
  * \param[out]      b: Pointer to message queue structure
  * \param[in]       size: Number of entries for message queue to hold
@@ -252,7 +252,7 @@ gui_sys_mbox_put(gui_sys_mbox_t* b, void* m) {
  * \note            This function is required with OS
  * \param[in]       b: Pointer to message queue structure
  * \param[in]       m: Pointer to pointer to result to save value from message queue to
- * \param[in]       timeout: Maximal timeout to wait for new message. When 0 is applied, wait for unlimited time
+ * \param[in]       timeout: Maximal timeout to wait for new message. When `0` is applied, wait for unlimited time
  * \return          Time in units of milliseconds needed to put a message to queue
  */
 uint32_t
@@ -329,8 +329,8 @@ gui_sys_mbox_invalid(gui_sys_mbox_t* b) {
  * \param[in]       name: Name of a new thread
  * \param[in]       thread_func: Thread function to use as thread body
  * \param[in]       arg: Thread function argument
- * \param[in]       stack_size: Size of thread stack in uints of bytes. If set to 0, reserve default stack size
- * \param[in]       prio: Thread priority 
+ * \param[in]       stack_size: Size of thread stack in uints of bytes. If set to `0`, reserve default stack size
+ * \param[in]       prio: Thread priority
  * \return          `1` on success, `0` otherwise
  */
 uint8_t

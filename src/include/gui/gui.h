@@ -76,11 +76,7 @@ extern "C" {
 #if GUI_CFG_OS
 #define __GUI_SYS_PROTECT(p)        if (p) gui_sys_protect()
 #define __GUI_SYS_UNPROTECT(p)      if (p) gui_sys_unprotect()
-#define __GUI_ENTER(p)              if (p) gui_sys_protect()
-#define __GUI_LEAVE(p)              if (p) { gui_sys_unprotect(); gui_sys_mbox_putnow(&GUI.OS.mbox, 0x00); }
 #else /* GUI_CFG_OS */
-#define __GUI_ENTER(p)              GUI_UNUSED(p)
-#define __GUI_LEAVE(p)              GUI_UNUSED(p)
 #define __GUI_SYS_PROTECT(p)        GUI_UNUSED(p)
 #define __GUI_SYS_UNPROTECT(p)      GUI_UNUSED(p)
 #endif /* !GUI_CFG_OS */
@@ -99,20 +95,20 @@ extern "C" {
  * \note            This function must take care of reseting memory to zero
  * \hideinitializer
  */
-#define GUI_MEMALLOC(size, protect)         gui_mem_calloc(1, size, protect)
+#define GUI_MEMALLOC(size)         gui_mem_calloc(1, size)
 
 /**
  * \brief           Reallocate memory with specific size in bytes
  * \hideinitializer
  */
-#define GUI_MEMREALLOC(ptr, size, protect)  gui_mem_realloc(ptr, size, protect)
+#define GUI_MEMREALLOC(ptr, size)  gui_mem_realloc(ptr, size)
 
 /**
  * \brief           Free memory from specific address previously allocated with \ref GUI_MEMALLOC or \ref GUI_MEMREALLOC
  * \hideinitializer
  */
-#define GUI_MEMFREE(p, protect)     do {            \
-    gui_mem_free(p, protect);                       \
+#define GUI_MEMFREE(p)     do {                     \
+    gui_mem_free(p);                                \
     (p) = NULL;                                     \
 } while (0)
 
@@ -197,8 +193,14 @@ guir_t      gui_init(void);
 int32_t     gui_process(void);
 uint8_t     gui_seteventcallback(gui_eventcallback_t cb);
 
+#if GUI_CFG_OS || __DOXYGEN__
 uint8_t     gui_protect(const uint8_t protect);
-uint8_t     gui_unprotect(const uint8_t protect);
+uint8_t     gui_unprotect(const uint8_t unprotect);
+#else /* GUI_CFG_OS || __DOXYGEN__ */
+/* Empty macros */
+#define     gui_protect(protect)
+#define     gui_unprotect(unprotect)
+#endif /* !(GUI_CFG_OS || __DOXYGEN__) */
  
 /**
  * \}

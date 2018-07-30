@@ -137,7 +137,7 @@ touch_handle(gui_handle_p h, guii_touch_data_t* ts) {
         value = (int32_t)(((float)(o->max - o->min)) * (float)pos / (float)height) + o->min;
     }
     
-    gui_widget_invalidate(h, 0);                    /* Redraw widget */
+    gui_widget_invalidate(h);                       /* Redraw widget */
     return set_value(h, value);                     /* Set new value */
 }
 
@@ -148,12 +148,12 @@ timer_callback(gui_timer_t* timer) {
     if (guii_widget_isactive(h)) {                  /* Timer is in focus */
         if (__GS(h)->current_size < __GS(h)->max_size) {
             __GS(h)->current_size++;                /* Increase size */
-            gui_widget_invalidate(h, 0);            /* Invalidate widget */
+            gui_widget_invalidate(h);               /* Invalidate widget */
         }
     } else {
         if (__GS(h)->current_size > 0) {
             __GS(h)->current_size--;
-            gui_widget_invalidate(h, 0);            /* Invalidate widget */
+            gui_widget_invalidate(h);               /* Invalidate widget */
         } else {
             guii_timer_stop(timer);                 /* Stop timer execution */
         }
@@ -170,7 +170,7 @@ timer_callback(gui_timer_t* timer) {
  */
 static uint8_t
 gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) { 
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
             o->min = 0;                             /* Set default minimal value */
@@ -224,10 +224,10 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
             gui_color_t c1, c2;
             gui_dim_t circleSize;
 
-            x = guii_widget_getabsolutex(h);        /* Get absolute X coordinate */
-            y = guii_widget_getabsolutey(h);        /* Get absolute Y coordinate */
-            width = gui_widget_getwidth(h, 0);      /* Get widget width */
-            height = gui_widget_getheight(h, 0);    /* Get widget height */
+            x = gui_widget_getabsolutex(h);         /* Get absolute X coordinate */
+            y = gui_widget_getabsolutey(h);         /* Get absolute Y coordinate */
+            width = gui_widget_getwidth(h);         /* Get widget width */
+            height = gui_widget_getheight(h);       /* Get widget height */
             
             delta = get_delta(h, width, height);    /* Get delta value */
             deltaH = delta >> 1;                    /* Half of delta */
@@ -299,7 +299,7 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
             return 1;
         }
         case GUI_WC_ActiveOut: {
-            gui_widget_invalidate(h, 0);            /* Invalidate widget */
+            gui_widget_invalidate(h);               /* Invalidate widget */
             return 1;
         }
         default:                                    /* Handle default option */
@@ -315,16 +315,15 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
  * \param[in]       x: Widget `X` position relative to parent widget
  * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
- * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for create procedure
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
+gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
 }
 
 /**
@@ -332,119 +331,90 @@ gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_
  * \param[in]       h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_slider_setcolor(gui_handle_p h, gui_slider_color_t index, gui_color_t color, const uint8_t protect) {
-    return gui_widget_setcolor(h, (uint8_t)index, color, protect);  /* Set color */
+gui_slider_setcolor(gui_handle_p h, gui_slider_color_t index, gui_color_t color) {
+    return gui_widget_setcolor(h, (uint8_t)index, color);
 }
 
 /**
  * \brief           Set slider mode (orientation)
  * \param[in]       h: Widget handle
  * \param[in]       mode: Slider mode
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_slider_setmode(gui_handle_p h, gui_slider_mode_t mode, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MODE, &mode, 1, 0, protect); /* Set parameter */
+gui_slider_setmode(gui_handle_p h, gui_slider_mode_t mode) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_MODE, &mode, 1, 0);
 }
 
 /**
  * \brief           Set slider current value
  * \param[in]       h: Widget handle
  * \param[in]       val: New current value
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_slider_setvalue(gui_handle_p h, int32_t val, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_VALUE, &val, 1, 0, protect); /* Set parameter */
+gui_slider_setvalue(gui_handle_p h, int32_t val) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_VALUE, &val, 1, 0);
 }
 
 /**
  * \brief           Set slider minimal value
  * \param[in]       h: Widget handle
  * \param[in]       val: New minimal value
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise        
  */
 uint8_t
-gui_slider_setmin(gui_handle_p h, int32_t val, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MIN, &val, 1, 0, protect);   /* Set parameter */
+gui_slider_setmin(gui_handle_p h, int32_t val) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_MIN, &val, 1, 0);
 }
 
 /**
  * \brief           Set slider maximal value
  * \param[in]       h: Widget handle
  * \param[in]       val: New maximal value
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise 
  */
 uint8_t
-gui_slider_setmax(gui_handle_p h, int32_t val, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MAX, &val, 1, 0, protect);   /* Set parameter */
+gui_slider_setmax(gui_handle_p h, int32_t val) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_MAX, &val, 1, 0);
 }
 
 /**
  * \brief           Get slider minimal value
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Minimal value 
  */
 int32_t
-gui_slider_getmin(gui_handle_p h, const uint8_t protect) {
-    int32_t val;
-
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    val = __GS(h)->min;                             /* Get minimal value */
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return val;
+gui_slider_getmin(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return __GS(h)->min;
 }
 
 /**
  * \brief           Get slider maximal value
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Maximal value  
  */
 int32_t
-gui_slider_getmax(gui_handle_p h, const uint8_t protect) {
-    int32_t val;
-
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    val = __GS(h)->max;                             /* Get maximal value */
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return val;
+gui_slider_getmax(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return __GS(h)->max;
 }
 
 /**
  * \brief           Get slider current value
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Current value 
  */
 int32_t
-gui_slider_getvalue(gui_handle_p h, const uint8_t protect) {
-    int32_t val;
-
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    val = __GS(h)->value;                           /* Get current value */
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return val;
+gui_slider_getvalue(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return __GS(h)->value;
 }

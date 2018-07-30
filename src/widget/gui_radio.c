@@ -80,13 +80,13 @@ set_active(gui_handle_p h) {
             __GR(handle)->selected_value = __GR(h)->value;  /* Set selected value for widget */
             if (__GR(handle)->flags & GUI_FLAG_RADIO_CHECKED) { /* Check if widget active */
                 __GR(handle)->flags &= ~GUI_FLAG_RADIO_CHECKED; /* Clear flag */
-                gui_widget_invalidate(handle, 0);   /* Invalidate widget */
+                gui_widget_invalidate(handle);      /* Invalidate widget */
             }
         }
     }
     
     if (!(__GR(h)->flags & GUI_FLAG_RADIO_CHECKED)) {   /* Invalidate only if not checked already */
-        gui_widget_invalidate(h, 0);                /* Invalidate widget */
+        gui_widget_invalidate(h);                   /* Invalidate widget */
     }
     __GR(h)->flags |= GUI_FLAG_RADIO_CHECKED;       /* Set active flag */
     __GR(h)->selected_value = __GR(h)->value;       /* Set selected value of this radio */
@@ -100,11 +100,11 @@ static uint8_t
 set_disabled(gui_handle_p h, uint8_t state) {
     if (state && !(__GR(h)->flags & GUI_FLAG_RADIO_DISABLED)) {
         __GR(h)->flags |= GUI_FLAG_RADIO_DISABLED;  /* Set flag */
-        gui_widget_invalidate(h, 0);                /* Invalidate widget */
+        gui_widget_invalidate(h);                   /* Invalidate widget */
         return 1;
     } else if (!state && (__GR(h)->flags & GUI_FLAG_RADIO_DISABLED)) {
         __GR(h)->flags &= ~GUI_FLAG_RADIO_DISABLED; /* Clear flag */
-        gui_widget_invalidate(h, 0);                /* Invalidate widget */
+        gui_widget_invalidate(h);                   /* Invalidate widget */
         return 1;
     }
     return 0;
@@ -120,17 +120,17 @@ set_disabled(gui_handle_p h, uint8_t state) {
  */
 static uint8_t
 gui_radio_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_Draw: {
             gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
             gui_color_t c1;
             gui_dim_t x, y, width, height, size, sx, sy;
             
-            x = guii_widget_getabsolutex(h);        /* Get absolute X coordinate */
-            y = guii_widget_getabsolutey(h);        /* Get absolute Y coordinate */
-            width = gui_widget_getwidth(h, 0);      /* Get widget width */
-            height = gui_widget_getheight(h, 0);    /* Get widget height */
+            x = gui_widget_getabsolutex(h);         /* Get absolute X coordinate */
+            y = gui_widget_getabsolutey(h);         /* Get absolute Y coordinate */
+            width = gui_widget_getwidth(h);         /* Get widget width */
+            height = gui_widget_getheight(h);       /* Get widget height */
             
             size = 20;                              /* Circle size in pixels */
             
@@ -155,7 +155,7 @@ gui_radio_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
             }
             
             /* Draw text if possible */
-            if (guii_widget_isfontandtextset(h)) {
+            if (gui_widget_isfontandtextset(h)) {
                 gui_draw_font_t f;
                 gui_draw_font_init(&f);             /* Init structure */
                 
@@ -166,7 +166,7 @@ gui_radio_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
                 f.align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.color1width = f.width;
                 f.color1 = guii_widget_getcolor(h, GUI_RADIO_COLOR_FG);
-                gui_draw_writetext(disp, gui_widget_getfont(h, 0), gui_widget_gettext(h, 0), &f);
+                gui_draw_writetext(disp, gui_widget_getfont(h), gui_widget_gettext(h), &f);
             }
             
             return 1;
@@ -174,7 +174,7 @@ gui_radio_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
         case GUI_WC_Click: {
             if (!(__GR(h)->flags & GUI_FLAG_RADIO_DISABLED)) {
                 set_active(h);                      /* Set widget as active */
-                gui_widget_invalidate(h, 0);       /* Invalidate widget */
+                gui_widget_invalidate(h);          /* Invalidate widget */
             }
             return 1;
         }
@@ -192,16 +192,15 @@ gui_radio_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
  * \param[in]       x: Widget `X` position relative to parent widget
  * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
- * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_radio_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
+gui_radio_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
 }
 
 /**
@@ -209,12 +208,11 @@ gui_radio_create(gui_id_t id, float x, float y, float width, float height, gui_h
  * \param[in]       h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_radio_setcolor(gui_handle_p h, gui_radio_color_t index, gui_color_t color, const uint8_t protect) {
-    return gui_widget_setcolor(h, (uint8_t)index, color, protect);  /* Set color */
+gui_radio_setcolor(gui_handle_p h, gui_radio_color_t index, gui_color_t color) {
+    return gui_widget_setcolor(h, (uint8_t)index, color);
 }
 
 /**
@@ -222,14 +220,12 @@ gui_radio_setcolor(gui_handle_p h, gui_radio_color_t index, gui_color_t color, c
  * \note            Radio widgets with the same group must be on the same parent widget
  * \param[in]       h: Widget handle
  * \param[in]       groupId: Group ID for widget
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_radio_setgroup(gui_handle_p h, uint8_t groupId, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+gui_radio_setgroup(gui_handle_p h, uint8_t groupId) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
-    __GUI_ENTER(protect);                           /* Enter GUI */
     if (__GR(h)->group_id != groupId) {
         gui_handle_p handle;
         
@@ -248,9 +244,8 @@ gui_radio_setgroup(gui_handle_p h, uint8_t groupId, const uint8_t protect) {
         }
         
         __GR(h)->group_id = groupId;                /* Set new group id */
-        gui_widget_invalidate(h, 0);                /* Invalidate widget */
+        gui_widget_invalidate(h);                   /* Invalidate widget */
     }
-    __GUI_LEAVE(protect);                           /* Leave GUI */
 
     return 1;
 }
@@ -258,40 +253,30 @@ gui_radio_setgroup(gui_handle_p h, uint8_t groupId, const uint8_t protect) {
 /**
  * \brief           Get radio group for widget
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget group
  */
 uint8_t
-gui_radio_getgroup(gui_handle_p h, const uint8_t protect) {
-    uint8_t group = 0;
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    group = __GR(h)->group_id;
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return group;
+gui_radio_getgroup(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return __GR(h)->group_id;
 }
 
 /**
  * \brief           Set value for widget when pressed
  * \param[in]       h: Widget handle
  * \param[in]       value: Value of widget group when specific widget is selected
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_radio_setvalue(gui_handle_p h, uint32_t value, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+gui_radio_setvalue(gui_handle_p h, uint32_t value) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
-    __GUI_ENTER(protect);                           /* Enter GUI */
     if (__GR(h)->value != value) {
         __GR(h)->value = value;                     /* Set new value */
         if (__GR(h)->flags & GUI_FLAG_RADIO_CHECKED) {
             set_active(h);                          /* Check active radio widgets */
         }
     }
-    __GUI_LEAVE(protect);                           /* Leave GUI */
 
     return 1;
 }
@@ -299,95 +284,55 @@ gui_radio_setvalue(gui_handle_p h, uint32_t value, const uint8_t protect) {
 /**
  * \brief           Get value for specific widget
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget value
  */
 uint32_t
-gui_radio_getvalue(gui_handle_p h, const uint8_t protect) {
-    uint32_t val;
-    
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    val = __GR(h)->value;
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return val;
+gui_radio_getvalue(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return __GR(h)->value;
 }
 
 /**
  * \brief           Set radio widget selected in radio group
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
-uint8_t gui_radio_setselected(gui_handle_p h, const uint8_t protect) {
-    uint8_t ret;
-    
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    ret = set_active(h);                            /* Set radio active */
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return ret;
+uint8_t gui_radio_setselected(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return set_active(h);                           /* Set radio active */
 }
 
 /**
  * \brief           Get value of selected widget from widget group
  * \note            If `3` widgets share the same group ID, no matter which widget is used in this function, result will be always the same
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget selected value
  */
 uint32_t
-gui_radio_getselectedvalue(gui_handle_p h, const uint8_t protect) {
-    uint32_t val;
-    
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    val = __GR(h)->selected_value;
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return val;
+gui_radio_getselectedvalue(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return __GR(h)->selected_value;
 }
 
 /**
  * \brief           Disable widget to prevent state change
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \param[in]       disabled: Set to `1` to disable, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_radio_setdisabled(gui_handle_p h, uint8_t disabled, const uint8_t protect) {
-    uint8_t ret;
-    
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    ret = set_disabled(h, disabled);                /* Set checked status */
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return ret;
+gui_radio_setdisabled(gui_handle_p h, uint8_t disabled) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return set_disabled(h, disabled);               /* Set checked status */
 }
 
 /**
- * \brief           Check if Radio is disabled
+ * \brief           Check if radio is disabled
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_radio_isdisabled(gui_handle_p h, const uint8_t protect) {
-    uint8_t ret;
-    
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    ret = !!(__GR(h)->flags & GUI_FLAG_RADIO_DISABLED);
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return ret;
+gui_radio_isdisabled(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return !!(__GR(h)->flags & GUI_FLAG_RADIO_DISABLED);
 }

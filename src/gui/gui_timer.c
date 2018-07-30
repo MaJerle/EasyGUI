@@ -53,7 +53,7 @@ gui_timer_t *
 guii_timer_create(uint16_t period, void (*callback)(gui_timer_t *), void* params) {
     gui_timer_t* ptr;
     
-    ptr = GUI_MEMALLOC(sizeof(*ptr), 0);            /* Allocate memory for timer */
+    ptr = GUI_MEMALLOC(sizeof(*ptr));               /* Allocate memory for timer */
     if (ptr != NULL) {
         memset(ptr, 0x00, sizeof(gui_timer_t));     /* Reset memory */
         
@@ -75,15 +75,15 @@ guii_timer_create(uint16_t period, void (*callback)(gui_timer_t *), void* params
 /**
  * \brief           Remove timer
  * \note            This function is private and may be called only when OS protection is active
- * \param[in]       *t: Pointer to pointer to \ref gui_timer_t structure.
+ * \param[in]       t: Pointer to pointer to \ref gui_timer_t structure.
  *                      After timer remove, pointer value where it points to will be changed
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
 guii_timer_remove(gui_timer_t** t) {  
-    __GUI_ASSERTPARAMS(t != NULL && *t != NULL);    /* Check input parameters */  
+    __GUI_ASSERTPARAMS(t != NULL && *t != NULL);  
     gui_linkedlist_remove_gen(&GUI.timers.list, (gui_linkedlist_t *)(*t));  /* Remove timer from linked list */
-    GUI_MEMFREE(*t, 0);                             /* Free memory for timer */
+    GUI_MEMFREE(*t);                                /* Free memory for timer */
     *t = NULL;                                      /* Clear pointer */
     
     return 1;
@@ -97,7 +97,7 @@ guii_timer_remove(gui_timer_t** t) {
  */
 uint8_t
 guii_timer_start(gui_timer_t* t) {
-    __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
+    __GUI_ASSERTPARAMS(t);
     t->counter = t->period;                         /* Reset counter to top value */
     t->flags &= ~GUI_FLAG_TIMER_PERIODIC;           /* Clear periodic flag */
     t->flags |= GUI_FLAG_TIMER_ACTIVE;              /* Set active flag */
@@ -117,7 +117,7 @@ guii_timer_start(gui_timer_t* t) {
  */
 uint8_t
 guii_timer_startperiodic(gui_timer_t* t) {
-    __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
+    __GUI_ASSERTPARAMS(t);
     t->counter = t->period;                         /* Reset counter to top value */
     t->flags |= GUI_FLAG_TIMER_ACTIVE | GUI_FLAG_TIMER_PERIODIC;    /* Set active flag */
     
@@ -132,7 +132,7 @@ guii_timer_startperiodic(gui_timer_t* t) {
  */
 uint8_t
 guii_timer_stop(gui_timer_t* t) {
-    __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
+    __GUI_ASSERTPARAMS(t);
     t->counter = t->period;                         /* Reset counter to top value */
     t->flags &= ~GUI_FLAG_TIMER_ACTIVE;             /* Clear active flag */
     
@@ -147,7 +147,7 @@ guii_timer_stop(gui_timer_t* t) {
  */
 uint8_t
 guii_timer_reset(gui_timer_t* t) {
-    __GUI_ASSERTPARAMS(t);                          /* Check input parameters */
+    __GUI_ASSERTPARAMS(t);
     t->counter = t->period;                         /* Clear and reset timer */
     
     return 1;

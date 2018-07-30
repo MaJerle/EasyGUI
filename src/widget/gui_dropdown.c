@@ -103,7 +103,7 @@ static int16_t
 nr_entries_pp(gui_handle_p h) {
     int16_t res = 0;
     if (h->font != NULL) {                          /* Font is responsible for this setup */
-        gui_dim_t height = gui_widget_getheight(h, 0); /* Get item height */
+        gui_dim_t height = gui_widget_getheight(h);    /* Get item height */
         if (!is_opened(h)) {
             height *= HEIGHT_CONST(h) - 1;          /* Get height of opened area part */
         } else {
@@ -125,10 +125,10 @@ open_close(gui_handle_p h, uint8_t state) {
             o->C.y = o->C.y - (HEIGHT_CONST(h) - 1) * o->C.height; /* Go up for 3 height values */
         }
         o->C.height = HEIGHT_CONST(h) * o->C.height;
-        gui_widget_invalidate(h, 0);                /* Invalidate widget */
+        gui_widget_invalidate(h);                   /* Invalidate widget */
         return 1;
     } else if (!state && (o->flags & GUI_FLAG_DROPDOWN_OPENED)) {
-        gui_widget_invalidatewithparent(h, 0);      /* Invalidate widget */
+        gui_widget_invalidatewithparent(h);         /* Invalidate widget */
         o->flags &= ~GUI_FLAG_DROPDOWN_OPENED;      /* Clear flag */
         o->C.height = o->oldheight;                 /* Restore height value */
         o->C.y = o->oldy;                           /* Restore position */
@@ -159,14 +159,14 @@ slide(gui_handle_p h, int16_t dir) {
         } else {
             o->visiblestartindex += dir;
         }
-        gui_widget_invalidate(h, 0);                /* Invalidate widget */
+        gui_widget_invalidate(h);                   /* Invalidate widget */
     } else if (dir > 0) {
         if ((o->visiblestartindex + dir) > (o->count - mPP - 1)) {  /* Slide elements down */
             o->visiblestartindex = o->count - mPP;
         } else {
             o->visiblestartindex += dir;
         }
-        gui_widget_invalidate(h, 0);                /* Invalidate widget */
+        gui_widget_invalidate(h);                   /* Invalidate widget */
     }
 }
 
@@ -246,14 +246,14 @@ inc_selection(gui_handle_p h, int16_t dir) {
         } else {
             set_selection(h, o->selected + dir);
         }
-        gui_widget_invalidate(h, 0);                /* Invalidate widget */
+        gui_widget_invalidate(h);                   /* Invalidate widget */
     } else if (dir > 0) {
         if ((o->selected + dir) > (o->count - 1)) { /* Slide elements down */
             set_selection(h, o->count - 1);
         } else {
             set_selection(h, o->selected + dir);
         }
-        gui_widget_invalidate(h, 0);                /* Invalidate widget */
+        gui_widget_invalidate(h);                   /* Invalidate widget */
     }
 }
 
@@ -272,7 +272,7 @@ delete_item(gui_handle_p h, uint16_t index) {
         }
         
         check_values(h);                            /* Check widget values */
-        gui_widget_invalidate(h, 0);                /* Invalidate widget */
+        gui_widget_invalidate(h);                   /* Invalidate widget */
         return 1;
     }
     return 0;
@@ -289,7 +289,7 @@ process_click(gui_handle_p h, guii_touch_data_t* ts) {
     }
     
     y = 0;                                          /* Relative Y position for touch events */
-    height = gui_widget_getheight(h, 0);            /* Get widget height */
+    height = gui_widget_getheight(h);               /* Get widget height */
     get_opened_positions(h, &y, &height, &y1, &height1);    /* Calculate values */
     
     /* Check if press was on normal area when widget is closed */
@@ -305,7 +305,7 @@ process_click(gui_handle_p h, guii_touch_data_t* ts) {
         }
         if ((o->visiblestartindex + tmpselected) < o->count) {
             set_selection(h, o->visiblestartindex + tmpselected);
-            gui_widget_invalidate(h, 0);           /* Choose new selection */
+            gui_widget_invalidate(h);              /* Choose new selection */
         }
         check_values(h);                            /* Check values */
     }
@@ -338,10 +338,10 @@ gui_dropdown_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
             gui_dim_t x, y, width, height;
             gui_dim_t y1, height1;                  /* Position of main widget part, when widget is opened */
             
-            x = guii_widget_getabsolutex(h);        /* Get absolute X coordinate */
-            y = guii_widget_getabsolutey(h);        /* Get absolute Y coordinate */
-            width = gui_widget_getwidth(h, 0);      /* Get widget width */
-            height = gui_widget_getheight(h, 0);    /* Get widget height */
+            x = gui_widget_getabsolutex(h);         /* Get absolute X coordinate */
+            y = gui_widget_getabsolutey(h);         /* Get absolute Y coordinate */
+            width = gui_widget_getwidth(h);         /* Get widget width */
+            height = gui_widget_getheight(h);       /* Get widget height */
             
             if (is_opened(h)) {
                 get_opened_positions(h, &y, &height, &y1, &height1);
@@ -377,7 +377,7 @@ gui_dropdown_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                 f.align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.color1width = f.width;
                 f.color1 = guii_widget_getcolor(h, GUI_DROPDOWN_COLOR_TEXT);
-                gui_draw_writetext(disp, gui_widget_getfont(h, 0), item->text, &f);
+                gui_draw_writetext(disp, gui_widget_getfont(h), item->text, &f);
             }
             
             if (is_opened(h) && __GD(h)->flags & GUI_FLAG_DROPDOWN_SLIDER_ON) {
@@ -437,7 +437,7 @@ gui_dropdown_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                     } else {
                         f.color1 = guii_widget_getcolor(h, GUI_DROPDOWN_COLOR_TEXT);
                     }
-                    gui_draw_writetext(disp, gui_widget_getfont(h, 0), item->text, &f);
+                    gui_draw_writetext(disp, gui_widget_getfont(h), item->text, &f);
                     f.y += itemheight;
                 }
                 disp->y2 = tmp;                     /* Set temporary value back */
@@ -447,7 +447,7 @@ gui_dropdown_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
         case GUI_WC_Remove: {
             gui_dropdown_item_t* item;
             while ((item = (gui_dropdown_item_t *)gui_linkedlist_remove_gen(&o->root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&o->root, NULL))) != NULL) {
-                GUI_MEMFREE(item, 0);               /* Free memory */
+                GUI_MEMFREE(item);
             }
             return 1;
         }
@@ -517,16 +517,15 @@ gui_dropdown_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
  * \param[in]       x: Widget `X` position relative to parent widget
  * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
- * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_dropdown_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
+gui_dropdown_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
 }
 
 /**
@@ -534,41 +533,37 @@ gui_dropdown_create(gui_id_t id, float x, float y, float width, float height, gu
  * \param[in]       h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_dropdown_setcolor(gui_handle_p h, gui_dropdown_color_t index, gui_color_t color, const uint8_t protect) {
-    return gui_widget_setcolor(h, (uint8_t)index, color, protect);  /* Set color */
+gui_dropdown_setcolor(gui_handle_p h, gui_dropdown_color_t index, gui_color_t color) {
+    return gui_widget_setcolor(h, (uint8_t)index, color);
 }
 
 /**
  * \brief           Add a new string to list box
  * \param[in]       h: Widget handle
  * \param[in]       text: Pointer to text to add to list. Only pointer is saved to memory!
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_dropdown_addstring(gui_handle_p h, const gui_char* text, const uint8_t protect) {
+gui_dropdown_addstring(gui_handle_p h, const gui_char* text) {
     gui_dropdown_item_t* item;
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    item = GUI_MEMALLOC(sizeof(*item), 0);          /* Allocate memory for entry */
+    item = GUI_MEMALLOC(sizeof(*item));             /* Allocate memory for entry */
     if (item != NULL) {
         item->text = (gui_char *)text;              /* Add text to entry */
         gui_linkedlist_add_gen(&__GD(h)->root, &item->list);/* Add to linked list */
         __GD(h)->count++;                           /* Increase number of strings */
         
         check_values(h);                            /* Check values */
-        gui_widget_invalidate(h, 0);                /* Invalidate widget */
+        gui_widget_invalidate(h);                   /* Invalidate widget */
          
         ret = 1;
     }
-    __GUI_LEAVE(protect);                           /* Leave GUI */
     
     return ret;
 }
@@ -577,16 +572,14 @@ gui_dropdown_addstring(gui_handle_p h, const gui_char* text, const uint8_t prote
  * \brief           Set opening direction for dropdown list
  * \param[in]       h: Widget handle
  * \param[in]       dir: Opening direction
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_dropdown_setopendirection(gui_handle_p h, gui_dropdown_opendir_t dir, const uint8_t protect) {
+gui_dropdown_setopendirection(gui_handle_p h, gui_dropdown_opendir_t dir) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    
     if (!is_opened(h)) {                            /* Must be closed */
         if ((__GD(h)->flags & GUI_FLAG_DROPDOWN_OPEN_UP) && dir == GUI_DROPDOWN_OPENDIR_DOWN) {
             __GD(h)->flags &= GUI_FLAG_DROPDOWN_OPEN_UP;
@@ -596,7 +589,6 @@ gui_dropdown_setopendirection(gui_handle_p h, gui_dropdown_opendir_t dir, const 
             ret = 1;
         }
     }
-    __GUI_LEAVE(protect);                           /* Leave GUI */
 
     return ret;
 }
@@ -606,23 +598,20 @@ gui_dropdown_setopendirection(gui_handle_p h, gui_dropdown_opendir_t dir, const 
  * \param[in]       h: Widget handle
  * \param[in]       index: Index (position) on list to set/change text
  * \param[in]       text: Pointer to text to add to list. Only pointer is saved to memory!
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_dropdown_setstring(gui_handle_p h, uint16_t index, const gui_char* text, const uint8_t protect) {
+gui_dropdown_setstring(gui_handle_p h, uint16_t index, const gui_char* text) {
     gui_dropdown_item_t* item;
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
-    __GUI_ENTER(protect);                           /* Enter GUI */
     item = get_item(h, index);                      /* Get list item from handle */
     if (item != NULL) {
         item->text = (gui_char *)text;              /* Set new text */
-        gui_widget_invalidate(h, 0);                /* Invalidate widget */
+        gui_widget_invalidate(h);                   /* Invalidate widget */
     }
-    __GUI_LEAVE(protect);                           /* Leave GUI */
 
     return ret;
 }
@@ -630,59 +619,35 @@ gui_dropdown_setstring(gui_handle_p h, uint16_t index, const gui_char* text, con
 /**
  * \brief           Delete first string from list
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_dropdown_deletefirststring(gui_handle_p h, const uint8_t protect) {
-    uint8_t ret;
-    
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    ret = delete_item(h, 0);                        /* Delete first item */
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return ret;
+gui_dropdown_deletefirststring(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return delete_item(h, 0);                        /* Delete first item */
 }
 
 /**
  * \brief           Delete last string from list
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_dropdown_deletelaststring(gui_handle_p h, const uint8_t protect) {
-    uint8_t ret;
-    
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    ret = delete_item(h, __GD(h)->count - 1);       /* Delete last item */
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return ret;
+gui_dropdown_deletelaststring(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return delete_item(h, __GD(h)->count - 1);      /* Delete last item */
 }
 
 /**
  * \brief           Delete specific entry from list
  * \param[in]       h: Widget handle
  * \param[in]       index: List index (position) to delete
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_dropdown_deletestring(gui_handle_p h, uint16_t index, const uint8_t protect) {
-    uint8_t ret;
-    
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    ret = delete_item(h, index);                    /* Delete item */
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return ret;
+gui_dropdown_deletestring(gui_handle_p h, uint16_t index) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return delete_item(h, index);                   /* Delete item */
 }
 
 /**
@@ -690,22 +655,19 @@ gui_dropdown_deletestring(gui_handle_p h, uint16_t index, const uint8_t protect)
  * \note            When auto mode enabled, slider will show only if there are more entries than widget can display
  * \param[in]       h: Widget handle
  * \param[in]       autoMode: Set to `1` for auto mode or `0` for manual mode
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_dropdown_setsliderauto(gui_handle_p h, uint8_t autoMode, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+gui_dropdown_setsliderauto(gui_handle_p h, uint8_t autoMode) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
-    __GUI_ENTER(protect);                           /* Enter GUI */
     if (autoMode && !(__GD(h)->flags & GUI_FLAG_DROPDOWN_SLIDER_AUTO)) {
         __GD(h)->flags |= GUI_FLAG_DROPDOWN_SLIDER_AUTO;
-        gui_widget_invalidate(h, 0);                /* Invalidate widget */
+        gui_widget_invalidate(h);
     } else if (!autoMode && (__GD(h)->flags & GUI_FLAG_DROPDOWN_SLIDER_AUTO)) {
         __GD(h)->flags &= ~GUI_FLAG_DROPDOWN_SLIDER_AUTO;
-        gui_widget_invalidate(h, 0);                /* Invalidate widget */
+        gui_widget_invalidate(h);
     }
-    __GUI_LEAVE(protect);                           /* Leave GUI */
 
     return 1;
 }
@@ -715,28 +677,25 @@ gui_dropdown_setsliderauto(gui_handle_p h, uint8_t autoMode, const uint8_t prote
  * \note            Slider must be in manual mode in order to get this to work
  * \param[in]       h: Widget handle
  * \param[in]       visible: Slider visible status, 1 or 0
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_dropdown_setslidervisibility(gui_handle_p h, uint8_t visible, const uint8_t protect) {
+gui_dropdown_setslidervisibility(gui_handle_p h, uint8_t visible) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
-    __GUI_ENTER(protect);                           /* Enter GUI */
     if (!(__GD(h)->flags & GUI_FLAG_DROPDOWN_SLIDER_AUTO)) {
         if (visible && !(__GD(h)->flags & GUI_FLAG_DROPDOWN_SLIDER_ON)) {
             __GD(h)->flags |= GUI_FLAG_DROPDOWN_SLIDER_ON;
-            gui_widget_invalidate(h, 0);            /* Invalidate widget */
+            gui_widget_invalidate(h);
             ret = 1;
         } else if (!visible && (__GD(h)->flags & GUI_FLAG_DROPDOWN_SLIDER_ON)) {
             __GD(h)->flags &= ~GUI_FLAG_DROPDOWN_SLIDER_ON;
-            gui_widget_invalidate(h, 0);            /* Invalidate widget */
+            gui_widget_invalidate(h);
             ret = 1;
         }
     }
-    __GUI_LEAVE(protect);                           /* Leave GUI */
 
     return ret;
 }
@@ -745,16 +704,14 @@ gui_dropdown_setslidervisibility(gui_handle_p h, uint8_t visible, const uint8_t 
  * \brief           Scroll list if possible
  * \param[in]       h: Widget handle
  * \param[in]       step: Step to scroll. Positive step will scroll up, negative will scroll down
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_dropdown_scroll(gui_handle_p h, int16_t step, const uint8_t protect) {
+gui_dropdown_scroll(gui_handle_p h, int16_t step) {
     volatile int16_t start;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
-    __GUI_ENTER(protect);                           /* Enter GUI */
     start = __GD(h)->visiblestartindex;
     __GD(h)->visiblestartindex += step;
         
@@ -762,9 +719,8 @@ gui_dropdown_scroll(gui_handle_p h, int16_t step, const uint8_t protect) {
     start = start != __GD(h)->visiblestartindex;    /* Check if there was valid change */
     
     if (start) {
-        gui_widget_invalidate(h, 0);                /* Invalidate widget */
+        gui_widget_invalidate(h);
     }
-    __GUI_LEAVE(protect);                           /* Leave GUI */
 
     return GUI_U8(start);
 }
@@ -773,18 +729,15 @@ gui_dropdown_scroll(gui_handle_p h, int16_t step, const uint8_t protect) {
  * \brief           Set selected value
  * \param[in]       h: Widget handle
  * \param[in]       selection: Set to `-1` to invalidate selection or `0 - count-1` for specific selection 
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_dropdown_setselection(gui_handle_p h, int16_t selection, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+gui_dropdown_setselection(gui_handle_p h, int16_t selection) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
-    __GUI_ENTER(protect);                           /* Enter GUI */
     set_selection(h, selection);                    /* Set selection */
     check_values(h);                                /* Check values */
-    gui_widget_invalidate(h, 0);                    /* Invalidate widget */
-    __GUI_LEAVE(protect);                           /* Leave GUI */
+    gui_widget_invalidate(h);                       /* Invalidate widget */
 
     return 1;
 }
@@ -792,18 +745,10 @@ gui_dropdown_setselection(gui_handle_p h, int16_t selection, const uint8_t prote
 /**
  * \brief           Get selected value
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Selection number or -1 if no selection
  */
 int16_t
-gui_dropdown_getselection(gui_handle_p h, const uint8_t protect) {
-    int16_t selection;
-    
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    selection = __GD(h)->selected;                  /* Read selection */
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return selection;
+gui_dropdown_getselection(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return __GD(h)->selected;                       /* Read selection */
 }

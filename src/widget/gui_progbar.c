@@ -88,7 +88,7 @@ set_value(gui_handle_p h, int32_t val) {
         } else {
             p->currentvalue = p->desiredvalue;      /* Set values to the same */
         }
-        gui_widget_invalidate(h, 0);                /* Redraw widget */
+        gui_widget_invalidate(h);                   /* Redraw widget */
         guii_widget_callback(h, GUI_WC_ValueChanged, NULL, NULL);  /* Process callback */
         return 1;
     }
@@ -106,7 +106,7 @@ timer_callback(gui_timer_t* t) {
             } else {
                 p->currentvalue++;
             }
-            gui_widget_invalidate(h, 0);            /* Invalidate widget */
+            gui_widget_invalidate(h);               /* Invalidate widget */
             guii_timer_start(t);                    /* Start timer */
         }
     }
@@ -122,7 +122,7 @@ timer_callback(gui_timer_t* t) {
  */
 static uint8_t
 gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
             __GP(h)->min = __GP(h)->currentvalue = 0;
@@ -187,10 +187,10 @@ gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
             gui_dim_t x, y, w, width, height;
             gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
     
-            x = guii_widget_getabsolutex(h);        /* Get absolute position on screen */
-            y = guii_widget_getabsolutey(h);        /* Get absolute position on screen */
-            width = gui_widget_getwidth(h, 0);      /* Get widget width */
-            height = gui_widget_getheight(h, 0);    /* Get widget height */
+            x = gui_widget_getabsolutex(h);         /* Get absolute position on screen */
+            y = gui_widget_getabsolutey(h);         /* Get absolute position on screen */
+            width = gui_widget_getwidth(h);         /* Get widget width */
+            height = gui_widget_getheight(h);       /* Get widget height */
            
             w = ((width - 4) * (p->currentvalue - p->min)) / (p->max - p->min); /* Get width for active part */
             
@@ -206,8 +206,8 @@ gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
                 if (p->flags & GUI_PROGBAR_FLAG_PERCENT) {
                     sprintf((char *)buff, "%lu%%", (unsigned long)(((p->currentvalue - p->min) * 100) / (p->max - p->min)));
                     text = buff;
-                } else if (guii_widget_isfontandtextset(h)) {
-                    text = gui_widget_gettext(h, 0);
+                } else if (gui_widget_isfontandtextset(h)) {
+                    text = gui_widget_gettext(h);
                 }
                 
                 if (text != NULL) {                 /* If text is valid, print it */
@@ -222,7 +222,7 @@ gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
                     f.color1width = w ? w - 1 : 0;
                     f.color1 = guii_widget_getcolor(h, GUI_PROGBAR_COLOR_BG);
                     f.color2 = guii_widget_getcolor(h, GUI_PROGBAR_COLOR_FG);
-                    gui_draw_writetext(disp, gui_widget_getfont(h, 0), text, &f);
+                    gui_draw_writetext(disp, gui_widget_getfont(h), text, &f);
                 }
             }
         }
@@ -238,16 +238,15 @@ gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
  * \param[in]       x: Widget `X` position relative to parent widget
  * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
- * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for create procedure
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
+gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
 }
 
 /**
@@ -255,132 +254,102 @@ gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui
  * \param[in]       h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_progbar_setcolor(gui_handle_p h, gui_progbar_color_t index, gui_color_t color, const uint8_t protect) {
-    return gui_widget_setcolor(h, (uint8_t)index, color, protect);  /* Set color */
+gui_progbar_setcolor(gui_handle_p h, gui_progbar_color_t index, gui_color_t color) {
+    return gui_widget_setcolor(h, (uint8_t)index, color);
 }
 
 /**
  * \brief           Set progress bar current value
  * \param[in]       h: Widget handle
  * \param[in]       val: New current value
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_progbar_setvalue(gui_handle_p h, int32_t val, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_VALUE, &val, 1, 0, protect); /* Set parameter */
+gui_progbar_setvalue(gui_handle_p h, int32_t val) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_VALUE, &val, 1, 0);
 }
 
 /**
  * \brief           Set progress bar minimal value
  * \param[in]       h: Widget handle
  * \param[in]       val: New minimal value
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise 
  */
 uint8_t
-gui_progbar_setmin(gui_handle_p h, int32_t val, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MIN, &val, 1, 0, protect);   /* Set parameter */
+gui_progbar_setmin(gui_handle_p h, int32_t val) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_MIN, &val, 1, 0);
 }
 
 /**
  * \brief           Set progress bar maximal value
  * \param[in]       h: Widget handle
  * \param[in]       val: New maximal value
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_progbar_setmax(gui_handle_p h, int32_t val, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_MAX, &val, 1, 0, protect);   /* Set parameter */
+gui_progbar_setmax(gui_handle_p h, int32_t val) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_MAX, &val, 1, 0);
 }
 
 /**
  * \brief           Sets percent mode. When in this mode, widget text is in percent according to current value between minimum and maximum
  * \param[in]       h: Widget handle
  * \param[in]       enable: Value either to enable or disable mode
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_progbar_setpercentmode(gui_handle_p h, uint8_t enable, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_PERCENT, &enable, 1, 0, protect);/* Set parameter */
+gui_progbar_setpercentmode(gui_handle_p h, uint8_t enable) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_PERCENT, &enable, 1, 0);
 }
 
 /**
  * \brief           Set progress bar to animation mode
  * \param[in]       h: Widget handle
  * \param[in]       anim: New animation value either `1` (enable) or `0` (disable)
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_progbar_setanimation(gui_handle_p h, uint8_t anim, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_ANIM, &anim, 1, 0, protect); /* Set parameter */
+gui_progbar_setanimation(gui_handle_p h, uint8_t anim) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_ANIM, &anim, 1, 0);
 }
 
 /**
  * \brief           Get progress bar minimal value
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Minimal value
  */
 int32_t
-gui_progbar_getmin(gui_handle_p h, const uint8_t protect) {
-    int32_t val;
-
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    val = __GP(h)->min;                             /* Get minimal value */
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return val;
+gui_progbar_getmin(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return __GP(h)->min;
 }
 
 /**
  * \brief           Get progress bar maximal value
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Maximal value
  */
 int32_t
-gui_progbar_getmax(gui_handle_p h, const uint8_t protect) {
-    int32_t val;
-
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    val = __GP(h)->max;                             /* Get maximal value */
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return val;
+gui_progbar_getmax(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return __GP(h)->max;
 }
 
 /**
  * \brief           Get progress bar current value
  * \param[in]       h: Widget handle
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Current value
  */
 int32_t
-gui_progbar_getvalue(gui_handle_p h, const uint8_t protect) {
-    int32_t val;
-
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    val = __GP(h)->desiredvalue;                    /* Get current value */
-    __GUI_LEAVE(protect);                           /* Leave GUI */
-
-    return val;
+gui_progbar_getvalue(gui_handle_p h) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return __GP(h)->desiredvalue;
 }

@@ -358,7 +358,7 @@ create_char_entry_from_font(const gui_font_t* font, const gui_font_char_t* c) {
     memDataSize = c->x_size * c->y_size;
     
     memsize += GUI_MEM_ALIGN(memDataSize);          /* align memory before increase */
-    entry = GUI_MEMALLOC(memsize, 0);               /* Allocate memory for entry */
+    entry = GUI_MEMALLOC(memsize);                  /* Allocate memory for entry */
     if (entry != NULL) {                            /* Allocation was successful */
         uint16_t i, x;
         uint8_t b, k, t;
@@ -485,9 +485,7 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_font
             offlineSrc = c->x_size - width;         /* Set offline source */
             offlineDst = GUI.lcd.drawing_layer->width - width;   /* Set offline destination */
             
-            /*
-             * Check if character must be drawn with 2 colors, on the middle of color switch
-             */
+            /* Check if character must be drawn with 2 colors, on the middle of color switch */
             if (tmpx < (draw->x + draw->color1width) && (tmpx + width) > (draw->x + draw->color1width)) {
                 gui_dim_t firstWidth = (draw->x + draw->color1width) - tmpx;
                 

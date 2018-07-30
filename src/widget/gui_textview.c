@@ -94,13 +94,13 @@ gui_textview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
             gui_dim_t x, y, wi, hi;
             gui_color_t bg;
             
-            if (guii_widget_isfontandtextset(h)) {  /* Check if font is prepared for drawing */
+            if (gui_widget_isfontandtextset(h)) {
                 gui_draw_font_t f;
                 
-                x = guii_widget_getabsolutex(h);    /* Get absolute X coordinate */
-                y = guii_widget_getabsolutey(h);    /* Get absolute Y coordinate */
-                wi = gui_widget_getwidth(h, 0);     /* Get widget width */
-                hi = gui_widget_getheight(h, 0);    /* Get widget height */
+                x = gui_widget_getabsolutex(h);     /* Get absolute X coordinate */
+                y = gui_widget_getabsolutey(h);     /* Get absolute Y coordinate */
+                wi = gui_widget_getwidth(h);        /* Get widget width */
+                hi = gui_widget_getheight(h);       /* Get widget height */
                 
                 /* Draw background if necessary */
                 bg = guii_widget_getcolor(h, GUI_TEXTVIEW_COLOR_BG);
@@ -118,7 +118,7 @@ gui_textview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                 f.flags |= GUI_FLAG_FONT_MULTILINE; /* Enable multiline */
                 f.color1width = f.width;
                 f.color1 = guii_widget_getcolor(h, GUI_TEXTVIEW_COLOR_TEXT);
-                gui_draw_writetext(disp, gui_widget_getfont(h, 0), gui_widget_gettext(h, 0), &f);
+                gui_draw_writetext(disp, gui_widget_getfont(h), gui_widget_gettext(h), &f);
             }
             return 1;
         }
@@ -147,16 +147,15 @@ gui_textview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
  * \param[in]       x: Widget `X` position relative to parent widget
  * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
- * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_textview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
+gui_textview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
 }
 
 /**
@@ -164,19 +163,16 @@ gui_textview_create(gui_id_t id, float x, float y, float width, float height, gu
  * \param[in]       h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_textview_setcolor(gui_handle_p h, gui_textview_color_t index, gui_color_t color, const uint8_t protect) {
+gui_textview_setcolor(gui_handle_p h, gui_textview_color_t index, gui_color_t color) {
     uint8_t ret;
 
-    __GUI_ENTER(protect);                           /* Enter GUI */
-    ret = gui_widget_setcolor(h, (uint8_t)index, color, 1); /* Set color */
+    ret = gui_widget_setcolor(h, (uint8_t)index, color);
     if (ret && index == GUI_TEXTVIEW_COLOR_BG) {    /* Check success */
-        gui_widget_setinvalidatewithparent(h, color == GUI_COLOR_TRANS, 0); /* When widget is invalidated, invalidate parent too */
+        gui_widget_setinvalidatewithparent(h, color == GUI_COLOR_TRANS);/* When widget is invalidated, invalidate parent too */
     }
-    __GUI_LEAVE(protect);                           /* Leave GUI */
 
     return ret;
 }
@@ -185,24 +181,22 @@ gui_textview_setcolor(gui_handle_p h, gui_textview_color_t index, gui_color_t co
  * \brief           Set vertical align for text inside text box
  * \param[in]       h: Widget handle
  * \param[in]       align: Vertical align
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_textview_setvalign(gui_handle_p h, gui_textalign_valign_t align, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_VALIGN, &align, 1, 1, protect);  /* Set parameter */
+gui_textview_setvalign(gui_handle_p h, gui_textalign_valign_t align) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_VALIGN, &align, 1, 1);   /* Set parameter */
 }
 
 /**
  * \brief           Set horizontal align for text inside text box
  * \param[in]       h: Widget handle
  * \param[in]       align: Horizontal align
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_textview_sethalign(gui_handle_p h, gui_textalign_halign_t align, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_HALIGN, &align, 1, 1, protect);  /* Set parameter */
+gui_textview_sethalign(gui_handle_p h, gui_textalign_halign_t align) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_HALIGN, &align, 1, 1);   /* Set parameter */
 }

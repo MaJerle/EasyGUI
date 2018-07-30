@@ -48,9 +48,9 @@ extern "C" {
  * \{
  */
     
-gui_handle_p    gui_keyboard_create(const uint8_t protect);
-uint8_t         gui_keyboard_hide(const uint8_t protect);
-uint8_t         gui_keyboard_show(gui_handle_p h, const uint8_t protect);
+gui_handle_p    gui_keyboard_create(void);
+uint8_t         gui_keyboard_hide(void);
+uint8_t         gui_keyboard_show(gui_handle_p h);
     
 /**
  * \}

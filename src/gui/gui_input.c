@@ -56,7 +56,7 @@ static uint8_t buff_kb_data[sizeof(gui_keyboard_data_t) * GUI_CFG_KEYBOARD_BUFFE
 uint8_t
 gui_input_touchadd(gui_touch_data_t* ts) {
     uint8_t ret;
-    __GUI_ASSERTPARAMS(ts);                         /* Check input parameters */
+    __GUI_ASSERTPARAMS(ts);
     
     ts->time = gui_sys_now();                       /* Set event time */
     ret = gui_buffer_write(&buff_ts, ts, sizeof(*ts)) ? 1 : 0;  /* Write data to buffer */
@@ -102,7 +102,7 @@ guii_input_touchavailable(void) {
 uint8_t
 guii_input_keyadd(gui_keyboard_data_t* kb) {
     uint8_t ret;
-    __GUI_ASSERTPARAMS(kb);                         /* Check input parameters */
+    __GUI_ASSERTPARAMS(kb);
     kb->time = gui_sys_now();                       /* Set event time */
     ret = gui_buffer_write(&buff_kb, kb, sizeof(*kb)) ? 1 : 0; /* Write data to buffer */
     

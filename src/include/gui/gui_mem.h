@@ -60,10 +60,10 @@ typedef struct mem_region_t {
  */
 typedef mem_region_t gui_mem_region_t;
 
-void* gui_mem_alloc(uint32_t size, const uint8_t protect);
-void* gui_mem_realloc(void* ptr, size_t size, const uint8_t protect);
-void* gui_mem_calloc(size_t num, size_t size, const uint8_t protect);
-void gui_mem_free(void* ptr, const uint8_t protect);
+void* gui_mem_alloc(uint32_t size);
+void* gui_mem_realloc(void* ptr, size_t size);
+void* gui_mem_calloc(size_t num, size_t size);
+void gui_mem_free(void* ptr);
 size_t gui_mem_getfree(void);
 size_t gui_mem_getfull(void);
 size_t gui_mem_getminfree(void);

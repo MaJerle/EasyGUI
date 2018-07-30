@@ -75,10 +75,10 @@ gui_widget_t widget = {
  */
 static uint8_t
 gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
-            gui_widget_set3dstyle(h, 1, 0);         /* By default set 3D */
+            gui_widget_set3dstyle(h, 1);            /* By default set 3D */
             return 1;
         }
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
@@ -95,10 +95,10 @@ gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
             gui_color_t c1, c2;
             gui_dim_t x, y, width, height;
             
-            x = guii_widget_getabsolutex(h);        /* Get absolute X coordinate */
-            y = guii_widget_getabsolutey(h);        /* Get absolute Y coordinate */
-            width = gui_widget_getwidth(h, 0);      /* Get widget width */
-            height = gui_widget_getheight(h, 0);    /* Get widget height */
+            x = gui_widget_getabsolutex(h);         /* Get absolute X coordinate */
+            y = gui_widget_getabsolutey(h);         /* Get absolute Y coordinate */
+            width = gui_widget_getwidth(h);         /* Get widget width */
+            height = gui_widget_getheight(h);       /* Get widget height */
             
             if (guii_widget_getflag(h, GUI_FLAG_3D)) {
                 c1 = guii_widget_getcolor(h, GUI_BUTTON_COLOR_BG);
@@ -123,7 +123,7 @@ gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
             }
             
             /* Draw text if possible */
-            if (guii_widget_isfontandtextset(h)) {
+            if (gui_widget_isfontandtextset(h)) {
                 gui_draw_font_t f;
                 gui_draw_font_init(&f);             /* Init structure */
                 
@@ -134,7 +134,7 @@ gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
                 f.align = GUI_HALIGN_CENTER | GUI_VALIGN_CENTER;
                 f.color1width = f.width;
                 f.color1 = c2;
-                gui_draw_writetext(disp, gui_widget_getfont(h, 0), gui_widget_gettext(h, 0), &f);
+                gui_draw_writetext(disp, gui_widget_getfont(h), gui_widget_gettext(h), &f);
             }
             return 1;
         }
@@ -150,7 +150,7 @@ gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
 #endif /* GUI_CFG_USE_KEYBOARD */
         case GUI_WC_ActiveIn:
         case GUI_WC_ActiveOut: {
-            gui_widget_invalidate(h, 0);            /* Invalidate widget */
+            gui_widget_invalidate(h);               /* Invalidate widget */
             return 1;
         }
         default:                                    /* Handle default option */
@@ -166,16 +166,15 @@ gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
  * \param[in]       x: Widget `X` position relative to parent widget
  * \param[in]       y: Widget `Y` position relative to parent widget
  * \param[in]       width: Widget width in units of pixels
- * \param[in]       height: Widget height in uints of pixels
+ * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
  * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
- * \return          \ref widget handle on success, `NULL` otherwise
+ * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags, protect);   /* Allocate memory for basic widget */
+gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
 }
 
 /**
@@ -183,23 +182,21 @@ gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_
  * \param[in]       h: Widget handle
  * \param[in]       index: Color index
  * \param[in]       color: Color value
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_button_setcolor(gui_handle_p h, gui_button_color_t index, gui_color_t color, const uint8_t protect) {
-    return gui_widget_setcolor(h, (uint8_t)index, color, protect);    /* Set color */
+gui_button_setcolor(gui_handle_p h, gui_button_color_t index, gui_color_t color) {
+    return gui_widget_setcolor(h, (uint8_t)index, color);
 }
 
 /**
  * \brief           Set border radius size
  * \param[in]       h: Widget handle
  * \param[in]       size: Border radius size
- * \param[in]       protect: Set to `1` to protect core, `0` otherwise
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_button_setborderradius(gui_handle_p h, gui_dim_t size, const uint8_t protect) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);  /* Check input parameters */
-    return guii_widget_setparam(h, CFG_BORDER_RADIUS, &size, 1, 1, protect);  /* Set parameter */
+gui_button_setborderradius(gui_handle_p h, gui_dim_t size) {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    return guii_widget_setparam(h, CFG_BORDER_RADIUS, &size, 1, 1); /* Set parameter */
 }

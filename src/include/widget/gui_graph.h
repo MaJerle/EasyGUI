@@ -118,22 +118,22 @@ typedef struct {
 } gui_graph_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p    gui_graph_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect);
-uint8_t         gui_graph_setcolor(gui_handle_p h, gui_graph_color_t index, gui_color_t color, const uint8_t protect);
-uint8_t         gui_graph_setminx(gui_handle_p h, float v, const uint8_t protect);
-uint8_t         gui_graph_setmaxx(gui_handle_p h, float v, const uint8_t protect);
-uint8_t         gui_graph_setminy(gui_handle_p h, float v, const uint8_t protect);
-uint8_t         gui_graph_setmaxy(gui_handle_p h, float v, const uint8_t protect);
-uint8_t         gui_graph_setaxes(gui_handle_p h, float min_x, float max_x, float min_y, float max_y, const uint8_t protect);
-uint8_t         gui_graph_zoomreset(gui_handle_p h, const uint8_t protect);
-uint8_t         gui_graph_zoom(gui_handle_p h, float zoom, float x, float y, const uint8_t protect);
-uint8_t         gui_graph_attachdata(gui_handle_p h, gui_graph_data_p data, const uint8_t protect);
-uint8_t         gui_graph_detachdata(gui_handle_p h, gui_graph_data_p data, const uint8_t protect);
+gui_handle_p    gui_graph_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+uint8_t         gui_graph_setcolor(gui_handle_p h, gui_graph_color_t index, gui_color_t color);
+uint8_t         gui_graph_setminx(gui_handle_p h, float v);
+uint8_t         gui_graph_setmaxx(gui_handle_p h, float v);
+uint8_t         gui_graph_setminy(gui_handle_p h, float v);
+uint8_t         gui_graph_setmaxy(gui_handle_p h, float v);
+uint8_t         gui_graph_setaxes(gui_handle_p h, float min_x, float max_x, float min_y, float max_y);
+uint8_t         gui_graph_zoomreset(gui_handle_p h);
+uint8_t         gui_graph_zoom(gui_handle_p h, float zoom, float x, float y);
+uint8_t         gui_graph_attachdata(gui_handle_p h, gui_graph_data_p data);
+uint8_t         gui_graph_detachdata(gui_handle_p h, gui_graph_data_p data);
 
-gui_graph_data_p    gui_graph_data_create(gui_id_t id, gui_graph_type_t type, size_t length, const uint8_t protect);
-uint8_t             gui_graph_data_addvalue(gui_graph_data_p data, int16_t x, int16_t y, const uint8_t protect);
-uint8_t             gui_graph_data_setcolor(gui_graph_data_p data, gui_color_t color, const uint8_t protect);
-gui_graph_data_p    gui_graph_data_get_by_id(gui_handle_p graph_h, gui_id_t id, const uint8_t protect);
+gui_graph_data_p    gui_graph_data_create(gui_id_t id, gui_graph_type_t type, size_t length);
+uint8_t             gui_graph_data_addvalue(gui_graph_data_p data, int16_t x, int16_t y);
+uint8_t             gui_graph_data_setcolor(gui_graph_data_p data, gui_color_t color);
+gui_graph_data_p    gui_graph_data_get_by_id(gui_handle_p graph_h, gui_id_t id);
 
  
 /**

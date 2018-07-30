@@ -130,23 +130,23 @@ typedef struct {
  */
 typedef void* gui_listview_row_p;
    
-gui_handle_p    gui_listview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags, const uint8_t protect);
-uint8_t         gui_listview_setcolor(gui_handle_p h, gui_listview_color_t index, gui_color_t color, const uint8_t protect);
+gui_handle_p    gui_listview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+uint8_t         gui_listview_setcolor(gui_handle_p h, gui_listview_color_t index, gui_color_t color);
 
-uint8_t         gui_listview_addcolumn(gui_handle_p h, const gui_char* text, gui_dim_t width, const uint8_t protect);
-uint8_t         gui_listview_setcolumnwidth(gui_handle_p h, uint16_t index, gui_dim_t width, const uint8_t protect);
+uint8_t         gui_listview_addcolumn(gui_handle_p h, const gui_char* text, gui_dim_t width);
+uint8_t         gui_listview_setcolumnwidth(gui_handle_p h, uint16_t index, gui_dim_t width);
 
-gui_listview_row_p gui_listview_addrow(gui_handle_p h, const uint8_t protect);
-uint8_t         gui_listview_removerow(gui_handle_p h, gui_listview_row_p row, const uint8_t protect);
-uint8_t         gui_listview_removerows(gui_handle_p h, const uint8_t protect);
+gui_listview_row_p gui_listview_addrow(gui_handle_p h);
+uint8_t         gui_listview_removerow(gui_handle_p h, gui_listview_row_p row);
+uint8_t         gui_listview_removerows(gui_handle_p h);
 
-uint8_t         gui_listview_setitemstring(gui_handle_p h, gui_listview_row_p row, uint16_t col, const gui_char* text, const uint8_t protect);
-uint8_t         gui_listview_setselection(gui_handle_p h, int16_t selection, const uint8_t protect);
-int16_t         gui_listview_getselection(gui_handle_p h, const uint8_t protect);
-uint8_t         gui_listview_setsliderauto(gui_handle_p h, uint8_t autoMode, const uint8_t protect);
-uint8_t         gui_listview_setslidervisibility(gui_handle_p h, uint8_t visible, const uint8_t protect);
-uint8_t         gui_listview_scroll(gui_handle_p h, int16_t step, const uint8_t protect);
-uint8_t         gui_listview_getitemvalue(gui_handle_p h, uint16_t rindex, uint16_t cindex, gui_char* dst, size_t length, const uint8_t protect);
+uint8_t         gui_listview_setitemstring(gui_handle_p h, gui_listview_row_p row, uint16_t col, const gui_char* text);
+uint8_t         gui_listview_setselection(gui_handle_p h, int16_t selection);
+int16_t         gui_listview_getselection(gui_handle_p h);
+uint8_t         gui_listview_setsliderauto(gui_handle_p h, uint8_t autoMode);
+uint8_t         gui_listview_setslidervisibility(gui_handle_p h, uint8_t visible);
+uint8_t         gui_listview_scroll(gui_handle_p h, int16_t step);
+uint8_t         gui_listview_getitemvalue(gui_handle_p h, uint16_t rindex, uint16_t cindex, gui_char* dst, size_t length);
 
 /**
  * \}

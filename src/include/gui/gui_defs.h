@@ -1114,7 +1114,7 @@ typedef struct gui_handle {
 /**
  * \brief           Widget create function footprint for structures as callbacks
  */
-typedef gui_handle_p (*gui_widget_createfunc_t)(gui_id_t, float, float, float, float, gui_handle_p, gui_widget_callback_t, uint16_t, uint8_t);
+typedef gui_handle_p (*gui_widget_createfunc_t)(gui_id_t, float, float, float, float, gui_handle_p, gui_widget_callback_t, uint16_t);
 
 /**
  * \}

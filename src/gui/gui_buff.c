@@ -34,14 +34,14 @@
 #include "gui/gui_buff.h"
 
 /**
- * \brief  Initializes buffer structure for work
- * \param  buff: Pointer to \ref gui_buff_t structure to initialize
- * \param  size: Size of buffer in units of bytes
- * \param  buff_ptr: Pointer to array for buffer storage. Its length should be equal to \param Size parameter.
- *           If NULL is passed as parameter, internal memory management will be used to allocate memory
- * \return buff initialization status:
- *            - 0: buff initialized OK
- *            - > 0: buff initialization error. Malloc has failed with allocation
+ * \brief          Initializes buffer structure for work
+ * \param          buff: Pointer to \ref gui_buff_t structure to initialize
+ * \param          size: Size of buffer in units of bytes
+ * \param          buff_ptr: Pointer to array for buffer storage. Its length should be equal to \param Size parameter.
+ *                    If NULL is passed as parameter, internal memory management will be used to allocate memory
+ * \return         buff initialization status:
+ *                    - 0: buff initialized OK
+ *                    - > 0: buff initialization error. Malloc has failed with allocation
  */
 uint8_t
 gui_buffer_init(gui_buff_t* buff, uint32_t size, void* buff_ptr) {
@@ -54,7 +54,7 @@ gui_buffer_init(gui_buff_t* buff, uint32_t size, void* buff_ptr) {
     buff->buff = buff_ptr;
     
     if (buff->buff == NULL) {                   /* Check if malloc should be used */
-        buff->buff = GUI_MEMALLOC(size * sizeof(uint8_t), 0);   /* Try to allocate memory for buffer */
+        buff->buff = GUI_MEMALLOC(size * sizeof(uint8_t));  /* Try to allocate memory for buffer */
         if (buff->buff == NULL) {               /* Check if allocated */    
             buff->size = 0;                     /* Reset size */
             return 1;                           /* Return error */
@@ -71,7 +71,6 @@ gui_buffer_init(gui_buff_t* buff, uint32_t size, void* buff_ptr) {
  * \brief  Free memory for buffer allocated using dynamic memory allocation
  * \note   This function has sense only if dynamic allocation was used for memory buffer
  * \param  buff: Pointer to \ref gui_buff_t structure
- * \return None
  */
 void 
 gui_buffer_free(gui_buff_t* buff) {
@@ -79,7 +78,7 @@ gui_buffer_free(gui_buff_t* buff) {
         return;
     }
     if (buff->flags & GUI_BUFFER_MALLOC) {      /* If malloc was used for allocation */
-        GUI_MEMFREE(buff->buff, 0);             /* Free memory */
+        GUI_MEMFREE(buff->buff);                /* Free memory */
     }
     buff->buff = NULL;
     buff->flags = 0;
@@ -225,7 +224,6 @@ gui_buffer_getfull(gui_buff_t* buff) {
 /**
  * \brief  Resets (clears) buffer pointers
  * \param  buff: Pointer to \ref gui_buff_t structure
- * \return None
  */
 void
 gui_buffer_reset(gui_buff_t* buff) {
