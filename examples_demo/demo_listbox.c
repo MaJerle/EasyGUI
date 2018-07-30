@@ -25,16 +25,16 @@ demo_create_feature_listbox(gui_handle_p parent, uint8_t protect) {
     gui_protect(protect);
     
     /* Create listbox */
-    h = gui_listbox_create(0, 0, 0, 200, 300, parent, listbox_callback, GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE, 0);
-    gui_widget_setpositionpercent(h, 10, 10, 0);
-    gui_widget_setsizepercent(h, 80, 80, 0);
+    h = gui_listbox_create(0, 0, 0, 200, 300, parent, listbox_callback, GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE);
+    gui_widget_setpositionpercent(h, 10, 10);
+    gui_widget_setsizepercent(h, 80, 80);
     
     /* Add strings to listbox */
     for (i = 0; i < GUI_ARRAYSIZE(strings); i++) {
-        gui_listbox_addstring(h, strings[i], 0);
+        gui_listbox_addstring(h, strings[i]);
     }
     
-    gui_widget_setignoreinvalidate(h, 0, 1, 0);
+    gui_widget_setignoreinvalidate(h, 0, 1);
     
     gui_unprotect(protect);
 }

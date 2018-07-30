@@ -31,36 +31,36 @@ demo_create_feature_text_view(gui_handle_p parent, uint8_t protect) {
     
     /* Create strings */
     for (i = 0; i < GUI_ARRAYSIZE(strings); i++) {
-        h = gui_textview_create(0, 0, 0, 1, 1, parent, text_view_callback, GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE, 0);
-        gui_widget_setsizepercent(h, 30, 30, 0);
-        gui_widget_setpositionpercent(h, 2.5f + 32.5f * (i % 3), 2.5f + (i / 3) * 32.5f, 0);
-        gui_widget_settext(h, strings[i], 0);
-        gui_textview_setcolor(h, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_LIGHTBLUE, 0);
+        h = gui_textview_create(0, 0, 0, 1, 1, parent, text_view_callback, GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE);
+        gui_widget_setsizepercent(h, 30, 30);
+        gui_widget_setpositionpercent(h, 2.5f + 32.5f * (i % 3), 2.5f + (i / 3) * 32.5f);
+        gui_widget_settext(h, strings[i]);
+        gui_textview_setcolor(h, GUI_TEXTVIEW_COLOR_BG, GUI_COLOR_LIGHTBLUE);
         switch (i % 3) {
             case 0:
-                gui_textview_sethalign(h, GUI_TEXTVIEW_HALIGN_LEFT, 0);
+                gui_textview_sethalign(h, GUI_TEXTVIEW_HALIGN_LEFT);
                 break;
             case 1:
-                gui_textview_sethalign(h, GUI_TEXTVIEW_HALIGN_CENTER, 0);
+                gui_textview_sethalign(h, GUI_TEXTVIEW_HALIGN_CENTER);
                 break;
             case 2:
             default:
-                gui_textview_sethalign(h, GUI_TEXTVIEW_HALIGN_RIGHT, 0);
+                gui_textview_sethalign(h, GUI_TEXTVIEW_HALIGN_RIGHT);
                 break;
         }
         switch (i / 3) {
             case 0:
-                gui_textview_setvalign(h, GUI_TEXTVIEW_VALIGN_TOP, 0);
+                gui_textview_setvalign(h, GUI_TEXTVIEW_VALIGN_TOP);
                 break;
             case 1:
-                gui_textview_setvalign(h, GUI_TEXTVIEW_VALIGN_CENTER, 0);
+                gui_textview_setvalign(h, GUI_TEXTVIEW_VALIGN_CENTER);
                 break;
             case 2:
             default:
-                gui_textview_setvalign(h, GUI_TEXTVIEW_VALIGN_BOTTOM, 0);
+                gui_textview_setvalign(h, GUI_TEXTVIEW_VALIGN_BOTTOM);
                 break;
         }
-        gui_widget_setignoreinvalidate(h, 0, 1, 0);
+        gui_widget_setignoreinvalidate(h, 0, 1);
     }
     
     gui_unprotect(protect);
