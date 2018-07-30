@@ -352,3 +352,4 @@ template/
 project.ioc
 mx.scratch
 *.tilen majerle
+/dev/MDK-ARM/Targets/STM32F769_DISCOVERY/project.hex

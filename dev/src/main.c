@@ -82,7 +82,7 @@ vApplicationStackOverflowHook( TaskHandle_t xTask, char *pcTaskName ) {
 
 /* 1ms handler */
 void
-TM_DELAY_1msHandler() {
+TM_DELAY_1msHandler(void) {
     osSystickHandler();
 }
 
