@@ -100,7 +100,7 @@ guii_input_touchavailable(void) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-guii_input_keyadd(gui_keyboard_data_t* kb) {
+gui_input_keyadd(gui_keyboard_data_t* kb) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(kb);
     kb->time = gui_sys_now();                       /* Set event time */

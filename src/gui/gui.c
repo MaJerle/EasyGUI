@@ -288,9 +288,10 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
     memset(x, 0x00, sizeof(x));                     /* Reset X values */
     memset(y, 0x00, sizeof(y));                     /* Reset Y values */
     for (i = 0; i < 2;) {                           /* Allow up to 2 touch presses */
+
         /* Wait for valid input with pressed state */
         PT_WAIT_UNTIL(&ts->pt, v && ts->ts.status && !old->ts.status && ts->ts.count == 1);
-        
+
         time = ts->ts.time;                         /* Get start time of this touch */
         x[i] = ts->x_rel[0];                        /* Save X value */
         y[i] = ts->y_rel[0];                        /* Save Y value */
@@ -326,10 +327,11 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
         /* Check what was the reason for thread to continue */
         if (v) {                                    /* New touch event occurred */
             if (!ts->ts.status) {                   /* We received released state */
-                if (i) {                            /* Try to get second click, check difference for double click */
-                    if (GUI_ABS(x[0] - x[1]) > 30 || GUI_ABS(y[0] - y[1]) > 30) {
-                        i = 0;                      /* Difference was too big, reset and act like normal click */
-                    }
+
+                /* Try to get second click, check difference for double click */
+                /* Difference was too big, reset and act like normal click */
+                if (i && (GUI_ABS(x[0] - x[1]) > 30 || GUI_ABS(y[0] - y[1]) > 30)) {
+                    i = 0;
                 }
                 if (
                     x[0] < 0 || x[0] > ts->widget_width ||
@@ -853,7 +855,7 @@ gui_process(void) {
     uint32_t time;
     uint32_t tmr_cnt = guii_timer_getactivecount(); /* Get number of active timers in system */
     
-    time = gui_sys_mbox_get(&GUI.OS.mbox, (void **)&msg, tmr_cnt ? 1 : 0); /* Get value from message queue */
+    time = gui_sys_mbox_get(&GUI.OS.mbox, (void **)&msg, tmr_cnt ? 1 : 20); /* Get value from message queue */
     
     GUI_UNUSED(time);                               /* Unused variable */
     GUI_UNUSED(msg);                                /* Unused variable */
@@ -891,6 +893,11 @@ gui_seteventcallback(gui_eventcallback_t cb) {
 
 #if GUI_CFG_OS || __DOXYGEN__
 
+/**
+ * \brief           Protect core from multiple thread access
+ * \param[in]       protect: Set to `1` to protect, `0` otherwise
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_protect(const uint8_t protect) {
     if (protect) {
@@ -899,6 +906,11 @@ gui_protect(const uint8_t protect) {
     return 1;
 }
 
+/**
+ * \brief           Unprotect core from multiple thread access
+ * \param[in]       unprotect: Set to `1` to unprotect, `0` otherwise
+ * \return          `1` on success, `0` otherwise
+ */
 uint8_t
 gui_unprotect(const uint8_t unprotect) {
     if (unprotect) {
