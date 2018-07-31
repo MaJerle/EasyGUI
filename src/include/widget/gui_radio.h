@@ -55,6 +55,7 @@ typedef enum {
     GUI_RADIO_COLOR_FG,                     /*!< Foreground color index */
     GUI_RADIO_COLOR_BORDER,                 /*!< Border color index */
     GUI_RADIO_COLOR_DISABLED_BG,            /*!< Background color index when disabled */
+    GUI_RADIO_COLOR_TEXT,                   /*!< Text color index */
 } gui_radio_color_t;
     
 #if defined(GUI_INTERNAL) || __DOXYGEN__

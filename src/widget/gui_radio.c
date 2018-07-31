@@ -44,9 +44,10 @@ static uint8_t gui_radio_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_para
 static const
 gui_color_t colors[] = {
     GUI_COLOR_WHITE,                                /*!< Default background color */
-    GUI_COLOR_DARKGRAY,                             /*!< Default freground color */
+    GUI_COLOR_DARKGRAY,                             /*!< Default foreground color */
     GUI_COLOR_BLACK,                                /*!< Default border color */
     GUI_COLOR_GRAY,                                 /*!< Default background color when disabled */
+    GUI_COLOR_BLACK,                                /*!< Text color index */
 };
 
 /**
@@ -165,7 +166,7 @@ gui_radio_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
                 f.height = height - 2;
                 f.align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
                 f.color1width = f.width;
-                f.color1 = guii_widget_getcolor(h, GUI_RADIO_COLOR_FG);
+                f.color1 = guii_widget_getcolor(h, GUI_RADIO_COLOR_TEXT);
                 gui_draw_writetext(disp, gui_widget_getfont(h), gui_widget_gettext(h), &f);
             }
             
