@@ -30,6 +30,7 @@ btns[] = {
 };
 
 static uint8_t  main_win_btn_callback(gui_handle_p h, gui_wc_t wc, gui_widget_param_t* param, gui_widget_result_t* result);
+static void     touch_demo_thread(void * const arg);
 
 /**
  * \brief           Initialize demonstration
@@ -71,6 +72,8 @@ demo_init(void) {
     }
 
     gui_unprotect(1);
+    
+    gui_sys_thread_create(NULL, "touch_demo", touch_demo_thread, NULL, GUI_SYS_THREAD_SS, GUI_SYS_THREAD_PRIO);
 }
 
 /**
@@ -87,4 +90,91 @@ main_win_btn_callback(gui_handle_p h, gui_wc_t wc, gui_widget_param_t* param, gu
         default: break;
     }
     return ret;
+}
+
+typedef struct {
+    gui_dim_t x1;
+    gui_dim_t y1;
+    gui_dim_t x2;
+    gui_dim_t y2;
+    uint8_t state;
+    uint32_t delay_after;
+} ts_data_t;
+
+#define TS_ENTRY(state, x1, y1, x2, y2, delay_after) {x1, y1, x2, y2, state, delay_after},
+
+static ts_data_t
+ts_data[] = {
+    /* Click and scroll on left side of screen */
+    TS_ENTRY(1, 100, 400, -1, -1, 100)
+    TS_ENTRY(1, 100, 375, -1, -1, 100)
+    TS_ENTRY(1, 100, 350, -1, -1, 100)
+    TS_ENTRY(1, 100, 325, -1, -1, 100)
+    TS_ENTRY(1, 100, 300, -1, -1, 100)
+    TS_ENTRY(1, 100, 275, -1, -1, 100)
+    TS_ENTRY(1, 100, 250, -1, -1, 100)
+    TS_ENTRY(1, 100, 225, -1, -1, 100)
+    TS_ENTRY(1, 100, 200, -1, -1, 100)
+    TS_ENTRY(1, 100, 175, -1, -1, 100)
+    TS_ENTRY(1, 100, 150, -1, -1, 100)
+    TS_ENTRY(1, 100, 125, -1, -1, 100)
+    TS_ENTRY(1, 100, 100, -1, -1, 100)
+    TS_ENTRY(1, 100,  75, -1, -1, 100)
+    TS_ENTRY(1, 100,  50, -1, -1, 100)
+    TS_ENTRY(1, 100,  25, -1, -1, 100)
+    TS_ENTRY(1, 100,   0, -1, -1, 100)
+    TS_ENTRY(0, 0, 0, 0, 0, 1000)
+    
+    /* Now click radio button */
+    TS_ENTRY(1, 100, 450, -1, -1, 100)
+    TS_ENTRY(0, -1, -1, -1, -1, 1000)
+    
+    /* Now click checkbox button */
+    TS_ENTRY(1, 100, 400, -1, -1, 100)
+    TS_ENTRY(0, -1, -1, -1, -1, 1000)
+    
+    /* Now click checkbox widget */
+    TS_ENTRY(1, 400, 40, -1, -1, 100)
+    TS_ENTRY(0, -1, -1, -1, -1, 500)
+    TS_ENTRY(1, 400, 40, -1, -1, 100)
+    TS_ENTRY(0, -1, -1, -1, -1, 500)
+    TS_ENTRY(1, 400, 40, -1, -1, 100)
+    TS_ENTRY(0, -1, -1, -1, -1, 500)
+    TS_ENTRY(1, 400, 40, -1, -1, 100)
+    TS_ENTRY(0, -1, -1, -1, -1, 500)
+};
+
+/**
+ * \brief           Fake input data
+ */
+static void
+touch_demo_thread(void * const arg) {
+    size_t i;
+    gui_touch_data_t data;
+    ts_data_t* entry;
+    
+    /* Initial delay */
+    osDelay(2000);
+    
+    /* Process events */
+    for (i = 0, entry = &ts_data[i]; i < GUI_ARRAYSIZE(ts_data); i++, entry = &ts_data[i]) {
+        data.time = osKernelSysTick();      /* Get current time */
+        data.status = entry->state ? GUI_TOUCH_STATE_PRESSED : GUI_TOUCH_STATE_RELEASED;
+        if (entry->state) {
+            data.count = 1;                 /* At least one is valid */
+            data.count += (entry->x2 >= 0 && entry->y2 >= 0);   /* Check if second is valid too */
+            
+            data.x[0] = entry->x1;
+            data.x[1] = entry->x2;
+            data.y[0] = entry->y1;
+            data.y[1] = entry->y2;
+        }
+        gui_input_touchadd(&data);          /* Send input */
+        
+        osDelay(entry->delay_after);        /* Delay after */
+    }
+    
+    while (1) {
+        osDelay(1000);
+    }
 }
