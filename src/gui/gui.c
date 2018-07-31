@@ -298,9 +298,13 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
         /* Either wait for released status or timeout */
         do {
             PT_YIELD(&ts->pt);                      /* Stop thread for now and wait next call */
+            
+            /* Wait for new data */
             PT_WAIT_UNTIL(&ts->pt, v || (gui_sys_now() - time) > 2000); /* Wait touch with released state or timeout */
             
-            if (v) {                                /* New valid touch entry received, either released or pressed again */
+            /* We have new touch entry, but we do
+               not yet if it is "pressed" or "released" */
+            if (v) {
                 /*
                  * If touch is still pressed (touch move) and we have active widget and touch move event was not processed
                  * then we can use click events also after touch move (for example, button is that widget) where in
@@ -578,6 +582,7 @@ gui_process_touch(void) {
                             if (GUI_WIDGET_RESULTTYPE_TOUCH(&result) != touchCONTINUE) {
                                 break;
                             }
+                            
                             /*
                              * If widget does not detect touch start, then forward touch start to parent widget.
                              * With this approach, you can achieve slider on parent widget
@@ -593,6 +598,7 @@ gui_process_touch(void) {
                                 memcpy(GUI.touch.y_rel_old, GUI.touch.y_rel, sizeof(GUI.touch.y_rel_old));
                             }
                         } while (aw != NULL);
+                        
                         /*
                          * In case touch move widget was detected on another widget,
                          * set this new widget to active from now on

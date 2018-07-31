@@ -210,9 +210,9 @@ gui_window_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
                     gui_widget_setexpanded(h, 0);   /* Clear expanded mode */
                 }
                 GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED; /* Set handled status */
+                return 1;
             }
-            
-            return 1;
+            return 0;
         }
         case GUI_WC_TouchEnd: {
             Mode = 0;
