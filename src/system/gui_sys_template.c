@@ -21,7 +21,7 @@ gui_sys_init(void) {
 #if GUI_CFG_OS
     sys_mutex = osMutexCreate(osMutex(sys_mutex));  /* Create main system mutex for protection */
 #endif /* GUI_CFG_OS */
-    return 0;
+    return 1;
 }
 
 /**
@@ -42,7 +42,7 @@ gui_sys_now(void) {
  */
 uint8_t
 gui_sys_protect(void) {
-    return osMutexWait(sys_mutex, osWaitForever) != osOK;   /* Wait forever for mutex */
+    return osMutexWait(sys_mutex, osWaitForever) == osOK;   /* Wait forever for mutex */
 }
 
 /**
@@ -52,7 +52,7 @@ gui_sys_protect(void) {
  */
 uint8_t
 gui_sys_unprotect(void) {
-    return osMutexRelease(sys_mutex) != osOK;   /* Release the mutex */
+    return osMutexRelease(sys_mutex) == osOK;   /* Release the mutex */
 }
 
 /**
@@ -65,7 +65,7 @@ gui_sys_unprotect(void) {
 uint8_t
 gui_sys_mutex_create(gui_sys_mutex_t* p) {
     osMutexDef(MUT);                            /* Define a mutex */
-    return (*p = osMutexCreate(osMutex(MUT))) == 0; /* Create mutex from init */
+    return (*p = osMutexCreate(osMutex(MUT))) != NULL;  /* Create mutex from init */
 }
 
 /**
@@ -76,7 +76,7 @@ gui_sys_mutex_create(gui_sys_mutex_t* p) {
  */
 uint8_t
 gui_sys_mutex_delete(gui_sys_mutex_t* p) {
-    return osMutexDelete(*p) != osOK;           /* Delete mutex */
+    return osMutexDelete(*p) == osOK;           /* Delete mutex */
 }
   
 /**
@@ -87,7 +87,7 @@ gui_sys_mutex_delete(gui_sys_mutex_t* p) {
  */
 uint8_t
 gui_sys_mutex_lock(gui_sys_mutex_t* p) {
-    return osMutexWait(*p, osWaitForever) != osOK;  /* Wait forever for mutex */
+    return osMutexWait(*p, osWaitForever) == osOK;  /* Wait forever for mutex */
 }
   
 /**
@@ -98,7 +98,7 @@ gui_sys_mutex_lock(gui_sys_mutex_t* p) {
  */
 uint8_t
 gui_sys_mutex_unlock(gui_sys_mutex_t* p) {
-    return osMutexRelease(*p) != osOK;          /* Release mutex */
+    return osMutexRelease(*p) == osOK;          /* Release mutex */
 }
 
 /**
@@ -109,7 +109,7 @@ gui_sys_mutex_unlock(gui_sys_mutex_t* p) {
  */
 uint8_t
 gui_sys_mutex_isvalid(gui_sys_mutex_t* p) {
-    return !*p;                                 /* Check if mutex is valid */
+    return *p != NULL;                          /* Check if mutex is valid */
 }
 
 /**
@@ -121,7 +121,7 @@ gui_sys_mutex_isvalid(gui_sys_mutex_t* p) {
 uint8_t
 gui_sys_mutex_invalid(gui_sys_mutex_t* p) {
     *p = VAL_MUTEX_INVALID;                     /* Set mutex as invalid */
-    return 0;
+    return 1;
 }
 
 /**
@@ -130,8 +130,8 @@ gui_sys_mutex_invalid(gui_sys_mutex_t* p) {
  * \note            This function is required with OS
  * \param[out]      p: Pointer to semaphore structure to fill with result
  * \param[in]       cnt: Count indicating default semaphore state:
- *                     0: Lock it immediteally
- *                     1: Leave it unlocked
+ *                     `0`: Lock it immediteally
+ *                     `1`: Leave it unlocked
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -139,10 +139,10 @@ gui_sys_sem_create(gui_sys_sem_t* p, uint8_t cnt) {
     osSemaphoreDef(SEM);                        /* Define semaphore info */
     *p = osSemaphoreCreate(osSemaphore(SEM), 1);    /* Create semaphore with one token */
     
-    if (*p && !cnt) {                           /* We have valid entry */
+    if (*p != NULL && !cnt) {                   /* We have valid entry */
         osSemaphoreWait(*p, 0);                 /* Lock semaphore immediatelly */
     }
-    return !*p;
+    return *p != NULL;
 }
 
 /**
@@ -153,7 +153,7 @@ gui_sys_sem_create(gui_sys_sem_t* p, uint8_t cnt) {
  */
 uint8_t
 gui_sys_sem_delete(gui_sys_sem_t* p) {
-    return osSemaphoreDelete(*p) != osOK;       /* Delete semaphore */
+    return osSemaphoreDelete(*p) == osOK;       /* Delete semaphore */
 }
 
 /**
@@ -217,7 +217,7 @@ gui_sys_sem_invalid(gui_sys_sem_t* p) {
 uint8_t
 gui_sys_mbox_create(gui_sys_mbox_t* b, size_t size) {
     osMessageQDef(MBOX, size, void *);          /* Define new macro */
-    return (*b = osMessageCreate(osMessageQ(MBOx), NULL)) == 0; /* Create message box */
+    return (*b = osMessageCreate(osMessageQ(MBOx), NULL)) != NULL;  /* Create message box */
 }
 
 /**
@@ -277,7 +277,7 @@ gui_sys_mbox_get(gui_sys_mbox_t* b, void** m, uint32_t timeout) {
  */
 uint8_t
 gui_sys_mbox_putnow(gui_sys_mbox_t* b, void* m) {
-    return osMessagePut(*b, (uint32_t)m, 0) != osOK;   /* Put new message without timeout */
+    return osMessagePut(*b, (uint32_t)m, 0) == osOK;/* Put new message without timeout */
 }
 
 /**
@@ -319,7 +319,7 @@ gui_sys_mbox_isvalid(gui_sys_mbox_t* b) {
 uint8_t
 gui_sys_mbox_invalid(gui_sys_mbox_t* b) {
     *b = VAL_MBOX_INVALID;                      /* Invalidate message box */
-    return 0;
+    return 1;
 }
 
 /**
@@ -335,9 +335,13 @@ gui_sys_mbox_invalid(gui_sys_mbox_t* b) {
  */
 uint8_t
 gui_sys_thread_create(gui_sys_thread_t* t, const char* name, void (*thread_func)(void *), void* const arg, size_t stack_size, gui_sys_thread_prio_t prio) {
+    gui_sys_thread_t tmp;
     const osThreadDef_t thread_def = {(char *)name, (os_pthread)thread_func, (osPriority)prio, 0, stack_size};  /* Create thread description */
-    *t = osThreadCreate(&thread_def, arg);      /* Create thread */
-    return !!*t;
+    tmp = osThreadCreate(&thread_def, arg);     /* Create thread */
+    if (t != NULL) {
+        *t = tmp;
+    }
+    return tmp != NULL;
 }
 
 #endif /* GUI_CFG_OS || __DOXYGEN__ */

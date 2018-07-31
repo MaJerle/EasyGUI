@@ -85,14 +85,6 @@ uint32_t    gui_sys_now(void);
 uint8_t     gui_sys_protect(void);
 uint8_t     gui_sys_unprotect(void);
 
-/**
- * \defgroup        GUI_SYS_MUTEX Mutexes
- * \brief           Port functions for mutexes
- * \{
- *
- * Mutexes must support recursive lock.
- */
-
 uint8_t     gui_sys_mutex_create(gui_sys_mutex_t* p);
 uint8_t     gui_sys_mutex_delete(gui_sys_mutex_t* p);
 uint8_t     gui_sys_mutex_lock(gui_sys_mutex_t* p);
@@ -100,36 +92,12 @@ uint8_t     gui_sys_mutex_unlock(gui_sys_mutex_t* p);
 uint8_t     gui_sys_mutex_isvalid(gui_sys_mutex_t* p);
 uint8_t     gui_sys_mutex_invalid(gui_sys_mutex_t* p);
 
-/**
- * \}
- */
-    
-/**
- * \defgroup        GUI_SYS_SEM Semaphores
- * \brief           Port functions for semaphores
- * \{
- *
- * Semaphores must be binary (single token) only
- */
-
 uint8_t     gui_sys_sem_create(gui_sys_sem_t* p, uint8_t cnt);
 uint8_t     gui_sys_sem_delete(gui_sys_sem_t* p);
 uint32_t    gui_sys_sem_wait(gui_sys_sem_t* p, uint32_t timeout);
 uint8_t     gui_sys_sem_release(gui_sys_sem_t* p);
 uint8_t     gui_sys_sem_isvalid(gui_sys_sem_t* p);
 uint8_t     gui_sys_sem_invalid(gui_sys_sem_t* p);
-
-/**
- * \}
- */
-
-/**
- * \defgroup        GUI_SYS_MESSAGE Messages
- * \brief           Port functions for messages
- * \{
- *
- * Messages are used for communication between different threads
- */
 
 uint8_t     gui_sys_mbox_create(gui_sys_mbox_t* b, size_t size);
 uint8_t     gui_sys_mbox_delete(gui_sys_mbox_t* b);
@@ -140,21 +108,9 @@ uint8_t     gui_sys_mbox_getnow(gui_sys_mbox_t* b, void** m);
 uint8_t     gui_sys_mbox_isvalid(gui_sys_mbox_t* b);
 uint8_t     gui_sys_mbox_invalid(gui_sys_mbox_t* b);
 
-/**
- * \}
- */
-
-/**
- * \defgroup        SYS_THREAD Threads
- * \brief           Port functions for threads
- * \{
- */
-
 uint8_t     gui_sys_thread_create(gui_sys_thread_t* t, const char* name, gui_sys_thread_fn thread_fn, void* const arg, size_t stack_size, gui_sys_thread_prio_t prio);
-
-/**
- * \}
- */
+uint8_t		gui_sys_thread_terminate(gui_sys_thread_t* t);
+uint8_t 	gui_sys_thread_yield(void);
 
 #endif /* GUI_CFG_OS || __DOXYGEN__ */
 

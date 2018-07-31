@@ -88,33 +88,33 @@ gui_sys_init(void) {
 	QueryPerformanceFrequency(&freq);
 	QueryPerformanceCounter(&sys_start_time);   /* Get start time */
 
-    gui_sys_mutex_create(&sys_mutex);           /* Create system mutex */
+    gui_sys_mutex_create(&sys_mutex);
     return 1;
 }
 
 uint32_t
 gui_sys_now(void) {
-    return osKernelSysTick();                   /* Get current tick in units of milliseconds */
+    return osKernelSysTick();
 }
 
 #if GUI_CFG_OS
 
 uint8_t
 gui_sys_protect(void) {
-    gui_sys_mutex_lock(&sys_mutex);             /* Lock system and protect it */
+    gui_sys_mutex_lock(&sys_mutex);
     return 1;
 }
 
 uint8_t
 gui_sys_unprotect(void) {
-    gui_sys_mutex_unlock(&sys_mutex);           /* Release lock */
+    gui_sys_mutex_unlock(&sys_mutex);
     return 1;
 }
 
 uint8_t
 gui_sys_mutex_create(gui_sys_mutex_t* p) {
 	*p = CreateMutex(NULL, FALSE, NULL);
-	return !!*p;
+	return *p != NULL;
 }
 
 uint8_t
@@ -139,12 +139,12 @@ gui_sys_mutex_unlock(gui_sys_mutex_t* p) {
 
 uint8_t
 gui_sys_mutex_isvalid(gui_sys_mutex_t* p) {
-    return !!*p;                                /* Check if mutex is valid */
+    return *p != NULL;
 }
 
 uint8_t
 gui_sys_mutex_invalid(gui_sys_mutex_t* p) {
-    *p = GUI_SYS_MUTEX_NULL;                    /* Set mutex as invalid */
+    *p = GUI_SYS_MUTEX_NULL;
     return 1;
 }
 
@@ -153,7 +153,7 @@ gui_sys_sem_create(gui_sys_sem_t* p, uint8_t cnt) {
 	HANDLE h;
 	h = CreateSemaphore(NULL, !!cnt, 1, NULL);
 	*p = h;
-	return !!*p;
+	return *p != NULL;
 }
 
 uint8_t
@@ -186,12 +186,12 @@ gui_sys_sem_release(gui_sys_sem_t* p) {
 
 uint8_t
 gui_sys_sem_isvalid(gui_sys_sem_t* p) {
-    return !!*p;                                /* Check if valid */
+    return *p != NULL;
 }
 
 uint8_t
 gui_sys_sem_invalid(gui_sys_sem_t* p) {
-    *p = GUI_SYS_SEM_NULL;                      /* Invaldiate semaphore */
+    *p = GUI_SYS_SEM_NULL;
     return 1;
 }
 
@@ -204,13 +204,13 @@ gui_sys_mbox_create(gui_sys_mbox_t* b, size_t size) {
     mbox = malloc(sizeof(*mbox) + size * sizeof(void *));
     if (mbox != NULL) {
         memset(mbox, 0x00, sizeof(*mbox));
-        mbox->size = size + 1;                  /* Set it to 1 more as cyclic buffer has only one less than size */
+        mbox->size = size + 1;
         gui_sys_sem_create(&mbox->sem, 1);
         gui_sys_sem_create(&mbox->sem_not_empty, 0);
         gui_sys_sem_create(&mbox->sem_not_full, 0);
         *b = mbox;
     }
-    return !!*b;
+    return *b != NULL;
 }
 
 uint8_t
@@ -226,7 +226,7 @@ gui_sys_mbox_delete(gui_sys_mbox_t* b) {
 uint32_t
 gui_sys_mbox_put(gui_sys_mbox_t* b, void* m) {
     win32_mbox_t* mbox = *b;
-    uint32_t time = osKernelSysTick();          /* Get start time */
+    uint32_t time = osKernelSysTick();
   
     gui_sys_sem_wait(&mbox->sem, 0);            /* Wait for access */
     
@@ -257,16 +257,12 @@ gui_sys_mbox_get(gui_sys_mbox_t* b, void** m, uint32_t timeout) {
     uint32_t time = osKernelSysTick();          /* Get current time */
     uint32_t spent_time;
     
-    /*
-     * Get exclusive access to message queue
-     */
+    /* Get exclusive access to message queue */
     if ((spent_time = gui_sys_sem_wait(&mbox->sem, timeout)) == GUI_SYS_TIMEOUT) {
         return spent_time;
     }
     
-    /*
-     * Make sure we have something to read from queue.
-     */
+    /* Make sure we have something to read from queue. */
     while (mbox_is_empty(mbox)) {
         gui_sys_sem_release(&mbox->sem);        /* Release semaphore and allow other threads to write something */
         /*
@@ -343,12 +339,12 @@ gui_sys_mbox_getnow(gui_sys_mbox_t* b, void** m) {
 
 uint8_t
 gui_sys_mbox_isvalid(gui_sys_mbox_t* b) {
-    return !!*b;                                /* Return status if message box is valid */
+    return *b != NULL;
 }
 
 uint8_t
 gui_sys_mbox_invalid(gui_sys_mbox_t* b) {
-    *b = GUI_SYS_MBOX_NULL;                     /* Invalidate message box */
+    *b = GUI_SYS_MBOX_NULL;
     return 1;
 }
 

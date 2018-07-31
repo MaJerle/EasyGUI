@@ -37,16 +37,16 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include "gui/gui.h"
+#include "gui/gui_lcd.h"
 	
 /**
  * \ingroup         GUI_PORT
  * \defgroup        GUI_LL Low-level layer
- * \brief       
+ * \brief           Low-level layer for LCD support
  * \{
  */
-
-#include "gui/gui.h"
-#include "gui/gui_lcd.h"
 
 uint8_t gui_ll_init(gui_lcd_t* LCD, gui_ll_t* LL);
 uint8_t gui_ll_control(gui_lcd_t* LCD, GUI_LL_Command_t cmd, void* param, void* result);
