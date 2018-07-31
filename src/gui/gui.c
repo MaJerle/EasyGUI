@@ -908,4 +908,22 @@ gui_unprotect(const uint8_t unprotect) {
     return 1;
 }
 
+/**
+ * \brief           Delay GUI in units of milliseconds
+ * \note            Available only when \ref GUI_CFG_OS is enabled
+ * \param[in]       time: Time to delay in units of milliseconds
+ * \return          `1` on success, `0` otherwise
+ */
+uint8_t
+gui_delay(const uint32_t time) {
+    gui_sys_sem_t sem;
+    if (gui_sys_sem_create(&sem, 0)) {
+        gui_sys_sem_wait(&sem, time);
+        gui_sys_sem_release(&sem);
+        gui_sys_sem_delete(&sem);
+        return 1;
+    }
+    return 0;
+}
+
 #endif /* GUI_CFG_OS || __DOXYGEN__ */
