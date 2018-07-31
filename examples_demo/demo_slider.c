@@ -12,6 +12,12 @@ demo_create_feature_slider(gui_handle_p parent, uint8_t protect) {
 
     gui_protect(protect);
     
+    h = gui_slider_create(0, 10, 10, 300, 30, parent, slider_callback, GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE);
+    gui_slider_setmin(h, 0);
+    gui_slider_setmax(h, 100);
+    gui_slider_setvalue(h, 25);
+    gui_widget_setignoreinvalidate(h, 0, 1);
+
     gui_unprotect(protect);
 }
 

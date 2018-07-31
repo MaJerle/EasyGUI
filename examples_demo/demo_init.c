@@ -73,7 +73,7 @@ demo_init(void) {
 
     gui_unprotect(1);
     
-    gui_sys_thread_create(NULL, "touch_demo", touch_demo_thread, NULL, GUI_SYS_THREAD_SS, GUI_SYS_THREAD_PRIO);
+    //gui_sys_thread_create(NULL, "touch_demo", touch_demo_thread, NULL, GUI_SYS_THREAD_SS, GUI_SYS_THREAD_PRIO);
 }
 
 /**
@@ -91,6 +91,11 @@ main_win_btn_callback(gui_handle_p h, gui_wc_t wc, gui_widget_param_t* param, gu
     }
     return ret;
 }
+
+
+/**
+ * \brief           This part is for test only :)
+ */
 
 typedef struct {
     gui_dim_t x1;
@@ -154,11 +159,11 @@ touch_demo_thread(void * const arg) {
     ts_data_t* entry;
     
     /* Initial delay */
-    osDelay(2000);
+    gui_delay(2000);
     
     /* Process events */
     for (i = 0, entry = &ts_data[i]; i < GUI_ARRAYSIZE(ts_data); i++, entry = &ts_data[i]) {
-        data.time = osKernelSysTick();      /* Get current time */
+        data.time = gui_sys_now();          /* Get current time */
         data.status = entry->state ? GUI_TOUCH_STATE_PRESSED : GUI_TOUCH_STATE_RELEASED;
         if (entry->state) {
             data.count = 1;                 /* At least one is valid */
@@ -170,11 +175,10 @@ touch_demo_thread(void * const arg) {
             data.y[1] = entry->y2;
         }
         gui_input_touchadd(&data);          /* Send input */
-        
-        osDelay(entry->delay_after);        /* Delay after */
+        gui_delay(entry->delay_after);      /* Delay after */
     }
     
     while (1) {
-        osDelay(1000);
+        gui_delay(1000);
     }
 }
