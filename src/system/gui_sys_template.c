@@ -181,7 +181,7 @@ gui_sys_sem_wait(gui_sys_sem_t* p, uint32_t timeout) {
  */
 uint8_t
 gui_sys_sem_release(gui_sys_sem_t* p) {
-    return osSemaphoreRelease(*p) == osOK;      /* Release semaphore */
+    return osSemaphoreRelease(*p) == osOK;
 }
 
 /**
@@ -192,7 +192,7 @@ gui_sys_sem_release(gui_sys_sem_t* p) {
  */
 uint8_t
 gui_sys_sem_isvalid(gui_sys_sem_t* p) {
-    return !*p;                                 /* Check if valid */
+    return *p != NULL;
 }
 
 /**
@@ -203,8 +203,8 @@ gui_sys_sem_isvalid(gui_sys_sem_t* p) {
  */
 uint8_t
 gui_sys_sem_invalid(gui_sys_sem_t* p) {
-    *p = VAL_SEM_INVALID;                       /* Invaldiate semaphore */
-    return 0;
+    *p = VAL_SEM_INVALID;
+    return 1;
 }
     
 /**
@@ -228,10 +228,10 @@ gui_sys_mbox_create(gui_sys_mbox_t* b, size_t size) {
  */
 uint8_t
 gui_sys_mbox_delete(gui_sys_mbox_t* b) {
-    if (osMessageWaiting(*b)) {                 /* We still have messages in queue, should not delete queue */
-        return 1;                               /* Return error */
+    if (osMessageWaiting(*b)) {
+        return 0;
     }
-    return osMessageDelete(*b) != osOK;         /* Delete message queue */
+    return osMessageDelete(*b) == osOK;
 }
 
 /**
@@ -291,12 +291,12 @@ uint8_t
 gui_sys_mbox_getnow(gui_sys_mbox_t* b, void** m) {
     osEvent evt;
     
-    evt = osMessageGet(*b, 0);                  /* Get message event */
-    if (evt.status == osEventMessage) {         /* Did we get a message? */
-        *m = evt.value.p;                       /* Set value */
-        return 0;
+    evt = osMessageGet(*b, 0);
+    if (evt.status == osEventMessage) {
+        *m = evt.value.p;
+        return 1;
     }
-    return 1;
+    return 0;
 }
 
 /**
@@ -307,7 +307,7 @@ gui_sys_mbox_getnow(gui_sys_mbox_t* b, void** m) {
  */
 uint8_t
 gui_sys_mbox_isvalid(gui_sys_mbox_t* b) {
-    return !*b;                                 /* Return status if message box is valid */
+    return *b != NULL;
 }
 
 /**
