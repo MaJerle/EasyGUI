@@ -196,7 +196,7 @@ uint8_t     gui_seteventcallback(gui_eventcallback_t cb);
 #if GUI_CFG_OS || __DOXYGEN__
 uint8_t     gui_protect(const uint8_t protect);
 uint8_t     gui_unprotect(const uint8_t unprotect);
-uint8_t     gui_delay(const uint32_t time);
+uint8_t     gui_delay(const uint32_t ms);
 #else /* GUI_CFG_OS || __DOXYGEN__ */
 /* Empty macros */
 #define     gui_protect(protect)
