@@ -301,7 +301,7 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
             PT_YIELD(&ts->pt);                      /* Stop thread for now and wait next call */
             
             /* Wait for new data */
-            PT_WAIT_UNTIL(&ts->pt, v || (gui_sys_now() - time) > 2000); /* Wait touch with released state or timeout */
+            PT_WAIT_UNTIL(&ts->pt, v || (gui_sys_now() - time) > GUI_CFG_LONG_CLICK_TIMEOUT);   /* Wait touch with released state or timeout */
             
             /* We have new touch entry, but we do
                not yet if it is "pressed" or "released" */

@@ -213,6 +213,16 @@ gui_widget_setignoreinvalidate(h, 0, 1, 0);
 #define GUI_CFG_WIDGET_CREATE_IGNORE_INVALIDATE 0
 #endif
 
+/**
+ * \brief           Long click timeout in units of milliseconds
+ *
+ *                  Value indicates number of milliseconds of pressed state before
+ *                  long click event is detected
+ */
+#ifndef GUI_CFG_LONG_CLICK_TIMEOUT
+#define GUI_CFG_LONG_CLICK_TIMEOUT              1500
+#endif
+
 #ifndef GUI_CFG_SYS_PORT
 #define GUI_CFG_SYS_PORT                        GUI_SYS_PORT_CMSIS_OS
 #endif
