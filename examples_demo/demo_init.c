@@ -73,7 +73,7 @@ demo_init(void) {
 
     gui_unprotect(1);
     
-    //gui_sys_thread_create(NULL, "touch_demo", touch_demo_thread, NULL, GUI_SYS_THREAD_SS, GUI_SYS_THREAD_PRIO);
+    gui_sys_thread_create(NULL, "touch_demo", touch_demo_thread, NULL, GUI_SYS_THREAD_SS, GUI_SYS_THREAD_PRIO);
 }
 
 /**
@@ -110,6 +110,49 @@ typedef struct {
 
 static ts_data_t
 ts_data[] = {
+    /* Click graph widget */
+    TS_ENTRY(1, 100, 150, -1, -1, 100)
+    TS_ENTRY(0, 100, 150, -1, -1, 1000)
+
+    /* Move 2 fingers on graph */
+    TS_ENTRY(1, 400, 200, -1, -1, 100)
+    TS_ENTRY(1, 410, 200, -1, -1, 100)
+    TS_ENTRY(1, 420, 200, -1, -1, 100)
+    TS_ENTRY(1, 430, 200, -1, -1, 100)
+    TS_ENTRY(1, 440, 200, -1, -1, 100)
+    TS_ENTRY(1, 450, 200, -1, -1, 100)
+    TS_ENTRY(1, 460, 200, -1, -1, 100)
+    TS_ENTRY(1, 470, 200, -1, -1, 100)
+    TS_ENTRY(1, 480, 200, -1, -1, 100)
+    TS_ENTRY(1, 490, 200, -1, -1, 100)
+    TS_ENTRY(1, 500, 200, -1, -1, 100)
+
+    /* Just add second finger and zoom-in */
+    TS_ENTRY(1, 500, 200, 700, 200, 100)
+    TS_ENTRY(1, 480, 200, 720, 200, 100)
+    TS_ENTRY(1, 460, 200, 740, 200, 100)
+    TS_ENTRY(1, 440, 200, 760, 200, 100)
+    TS_ENTRY(1, 420, 200, 780, 200, 100)
+    TS_ENTRY(0, 400, 200, 800, 200, 1000)
+
+    /* Zoom second finger and zoom-in */
+    TS_ENTRY(1, 500, 100, 500, 400, 100)
+    TS_ENTRY(1, 500, 110, 500, 390, 100)
+    TS_ENTRY(1, 500, 120, 500, 380, 100)
+    TS_ENTRY(1, 500, 130, 500, 370, 100)
+    TS_ENTRY(1, 500, 140, 500, 360, 100)
+    TS_ENTRY(1, 500, 150, 500, 350, 100)
+    TS_ENTRY(1, 500, 160, 500, 340, 100)
+    TS_ENTRY(1, 500, 170, 500, 330, 100)
+    TS_ENTRY(1, 500, 180, 500, 320, 100)
+    TS_ENTRY(1, 500, 190, 500, 310, 100)
+    TS_ENTRY(1, 500, 200, 500, 300, 100)
+    TS_ENTRY(1, 500, 210, 500, 290, 100)
+    TS_ENTRY(1, 500, 220, 500, 280, 100)
+    TS_ENTRY(1, 500, 230, 500, 270, 100)
+    TS_ENTRY(1, 500, 240, 500, 260, 100)
+    TS_ENTRY(0, 500, 240, 500, 260, 100)
+
     /* Click and scroll on left side of screen */
     TS_ENTRY(1, 100, 400, -1, -1, 100)
     TS_ENTRY(1, 100, 375, -1, -1, 100)
@@ -159,7 +202,7 @@ touch_demo_thread(void * const arg) {
     ts_data_t* entry;
     
     /* Initial delay */
-    gui_delay(2000);
+    gui_delay(1000);
     
     /* Process events */
     for (i = 0, entry = &ts_data[i]; i < GUI_ARRAYSIZE(ts_data); i++, entry = &ts_data[i]) {

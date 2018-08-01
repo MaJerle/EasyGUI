@@ -145,12 +145,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\examples_demo\demo_button.c" />
+    <ClCompile Include="..\..\..\examples_demo\demo_checkbox.c" />
+    <ClCompile Include="..\..\..\examples_demo\demo_dropdown.c" />
     <ClCompile Include="..\..\..\examples_demo\demo_edit_text.c" />
     <ClCompile Include="..\..\..\examples_demo\demo_graph.c" />
     <ClCompile Include="..\..\..\examples_demo\demo_init.c" />
     <ClCompile Include="..\..\..\examples_demo\demo_led.c" />
+    <ClCompile Include="..\..\..\examples_demo\demo_listbox.c" />
+    <ClCompile Include="..\..\..\examples_demo\demo_listview.c" />
     <ClCompile Include="..\..\..\examples_demo\demo_list_container.c" />
     <ClCompile Include="..\..\..\examples_demo\demo_progbar.c" />
+    <ClCompile Include="..\..\..\examples_demo\demo_radio.c" />
+    <ClCompile Include="..\..\..\examples_demo\demo_slider.c" />
+    <ClCompile Include="..\..\..\examples_demo\demo_template.c" />
+    <ClCompile Include="..\..\..\examples_demo\demo_text_view.c" />
     <ClCompile Include="..\..\..\examples_demo\demo_window.c" />
     <ClCompile Include="..\..\..\src\fonts\Arial_Bold_AA.c" />
     <ClCompile Include="..\..\..\src\fonts\Arial_Narrow_Italic.c" />

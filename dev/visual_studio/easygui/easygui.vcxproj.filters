@@ -172,5 +172,29 @@
     <ClCompile Include="..\..\..\examples_demo\demo_led.c">
       <Filter>DEMO</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\examples_demo\demo_checkbox.c">
+      <Filter>DEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\examples_demo\demo_dropdown.c">
+      <Filter>DEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\examples_demo\demo_listbox.c">
+      <Filter>DEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\examples_demo\demo_listview.c">
+      <Filter>DEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\examples_demo\demo_radio.c">
+      <Filter>DEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\examples_demo\demo_slider.c">
+      <Filter>DEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\examples_demo\demo_template.c">
+      <Filter>DEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\examples_demo\demo_text_view.c">
+      <Filter>DEMO</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
