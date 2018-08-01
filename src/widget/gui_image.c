@@ -34,7 +34,7 @@
 #include "gui/gui_private.h"
 #include "widget/gui_image.h"
 
-#define __GI(x)             ((GUI_IMAGE_t *)(x))
+#define __GI(x)             ((gui_image_t *)(x))
 
 static uint8_t gui_image_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
 
@@ -44,13 +44,13 @@ static uint8_t gui_image_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_para
 static const
 gui_widget_t widget = {
     .name = _GT("IMAGE"),                           /*!< Widget name */
-    .size = sizeof(GUI_IMAGE_t),                    /*!< Size of widget for memory allocation */
+    .size = sizeof(gui_image_t),                    /*!< Size of widget for memory allocation */
     .flags = 0,                                     /*!< List of widget flags */
     .callback = gui_image_callback,                 /*!< Callback function */
     .colors = 0,                                    /*!< List of default colors */
     .color_count = 0,                               /*!< Define number of colors */
 };
-#define o       ((GUI_IMAGE_t *)(h))
+#define o       ((gui_image_t *)(h))
 
 /**
  * \brief           Default widget callback function

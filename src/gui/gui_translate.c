@@ -38,7 +38,7 @@
 
 /**
  * \brief           Get translated entry from input string
- * \param[in]       src: Pointer to \ref gui_char string to translate
+ * \param[in]       src: String to translate
  * \return          Pointer to translated string or source string if translate not found
  */
 const gui_char*
@@ -50,9 +50,7 @@ gui_translate_get(const gui_char* src) {
         return src;                                 /* Just return original string */
     }
     
-    /*
-     * Scan all entries and return appropriate string
-     */
+    /* Scan all entries and return appropriate string */
     for (i = 0; i < GUI.translate.source->count; i++) {
         if (gui_string_compare(src, GUI.translate.source->entries[i]) == 0) {
             if (i < GUI.translate.active->count) {  /* Check if in valid range */
@@ -67,7 +65,7 @@ gui_translate_get(const gui_char* src) {
 /**
  * \brief           Set currently active language for translated entries
  * \note            These entries are returned when index matches the source string from source language
- * \param[in]       lang: Pointer to \ref GUI_TRANSLATE_Language_t structure with translation entries
+ * \param[in]       lang: Language with translation entries
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -79,7 +77,7 @@ gui_translate_setactivelanguage(const gui_translate_language_t* lang) {
 /**
  * \brief           Set source language for translated entries
  * \note            These entries are compared with input string to get index for translated value
- * \param[in]       lang: Pointer to \ref GUI_TRANSLATE_Language_t structure with translation entries
+ * \param[in]       lang: Language with translation entries
  * \return          `1` on success, `0` otherwise
  */
 uint8_t

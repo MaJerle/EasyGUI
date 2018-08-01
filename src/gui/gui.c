@@ -166,7 +166,7 @@ redraw_widgets(gui_handle_p parent, uint8_t force_redraw) {
                 guii_widget_callback(h, GUI_WC_Draw, &GUI.widget_param, &GUI.widget_result);    /* Draw widget */
                 
                 /* Check if there are children widgets in this widget */
-                if (guii_widget_allowchildren(h)) {                            
+                if (guii_widget_haschildren(h)) {   /* Check if widget has children */
                     /* ...now call function for actual redrawing process */
                     /* Force children redraw operation, even if no redraw flag set */
                     level++;
@@ -221,7 +221,7 @@ redraw_widgets(gui_handle_p parent, uint8_t force_redraw) {
 
                 cnt++;
             /* Check if any child widget needs drawing */
-            } else if (guii_widget_allowchildren(h)) {
+            } else if (guii_widget_haschildren(h)) {
                 cnt += redraw_widgets(h, 0);        /* Redraw children widgets */
             }
         }
@@ -432,10 +432,10 @@ process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
         /*
          * Dialogs are placed as children of main window
          * If level 1 is current and dialog is detected,
-         * stop process of other widgets except if widget is inside dialog
+         * stop processsing other widgets except if widget is inside dialog
          */
         if (deep == 1) {                            /* On base elements list = children of base window element */
-            if (guii_widget_isdialogbase(h)) {     /* We found dialog element */
+            if (guii_widget_isdialogbase(h)) {      /* We found dialog element */
                 dialogOnly = 1;                     /* Check only widgets which are dialog based */
             }
         }
@@ -454,7 +454,7 @@ process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
          * Before we check if touch position matches widget coordinates
          * we have to check if this widget has any direct children
          */
-        if (guii_widget_allowchildren(h)) {        /* If children widgets are allowed */
+        if (guii_widget_haschildren(h)) {           /* Check if widget has children */
             deep++;                                 /* Go deeper in level */
             tStat = process_touch(touch, h);        /* Process touch on widget elements first */
             deep--;                                 /* Go back to normal level */

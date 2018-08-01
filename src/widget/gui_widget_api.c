@@ -1,5 +1,5 @@
 /**	
- * \file            gui_widget_helpers.c
+ * \file            gui_widget_api.c
  * \brief           Helper functions shared between widgets
  */
  
