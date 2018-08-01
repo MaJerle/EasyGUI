@@ -98,98 +98,94 @@ main_win_btn_callback(gui_handle_p h, gui_wc_t wc, gui_widget_param_t* param, gu
  */
 
 typedef struct {
-    gui_dim_t x1;
-    gui_dim_t y1;
-    gui_dim_t x2;
-    gui_dim_t y2;
+    gui_dim_t x1_s;
+    gui_dim_t x1_e;
+    gui_dim_t y1_s;
+    gui_dim_t y1_e;
+    gui_dim_t x2_s;
+    gui_dim_t x2_e;
+    gui_dim_t y2_s;
+    gui_dim_t y2_e;
+    
+    uint32_t anim_time;
     uint8_t state;
     uint32_t delay_after;
 } ts_data_t;
 
-#define TS_ENTRY(state, x1, y1, x2, y2, delay_after) {x1, y1, x2, y2, state, delay_after},
+#define TS_ENTRY(state_, x1, y1, x2, y2, delay_after_) {\
+    .x1_s = x1,                                         \
+    .x1_e = x1,                                         \
+    .y1_s = y1,                                         \
+    .y1_e = y1,                                         \
+    .x2_s = x2,                                         \
+    .x2_e = x2,                                         \
+    .y2_s = y2,                                         \
+    .y2_e = y2,                                         \
+    .state = state_,                                    \
+    .anim_time = 0,                                     \
+    .delay_after = delay_after_                         \
+},
+
+#define TS_ENTRY_ANIM(state_, x1_s_, x1_e_, y1_s_, y1_e_, anim_time_, delay_after_)     \
+TS_ENTRY_ANIM2(state_, x1_s_, x1_e_, y1_s_, y1_e_, -1, -1, -1, -1, anim_time_, delay_after_)
+
+#define TS_ENTRY_ANIM2(state_, x1_s_, x1_e_, y1_s_, y1_e_, x2_s_, x2_e_, y2_s_, y2_e_, anim_time_, delay_after_) {\
+    .x1_s = x1_s_,                                      \
+    .x1_e = x1_e_,                                      \
+    .y1_s = y1_s_,                                      \
+    .y1_e = y1_e_,                                      \
+    .x2_s = x2_s_,                                      \
+    .x2_e = x2_e_,                                      \
+    .y2_s = y2_s_,                                      \
+    .y2_e = y2_e_,                                      \
+    .state = state_,                                    \
+    .anim_time = anim_time_,                            \
+    .delay_after = delay_after_                         \
+},
+
+#define TS_CLICK(x1, y1, delay_after_)                  \
+TS_ENTRY(1, x1, y1, -1, -1, 200)                        \
+TS_ENTRY(0, x1, y1, -1, -1, delay_after_)               \
+
+#define TS_DBLCLICK(x1, y1, delay_after_)               \
+TS_CLICK(x1, y1, 100)                                   \
+TS_CLICK(x1, y1, delay_after_)                          \
 
 static ts_data_t
 ts_data[] = {
     /* Click graph widget */
-    TS_ENTRY(1, 100, 150, -1, -1, 100)
-    TS_ENTRY(0, 100, 150, -1, -1, 1000)
+    TS_CLICK(100, 150, 1000)
 
     /* Move 2 fingers on graph */
-    TS_ENTRY(1, 400, 200, -1, -1, 100)
-    TS_ENTRY(1, 410, 200, -1, -1, 100)
-    TS_ENTRY(1, 420, 200, -1, -1, 100)
-    TS_ENTRY(1, 430, 200, -1, -1, 100)
-    TS_ENTRY(1, 440, 200, -1, -1, 100)
-    TS_ENTRY(1, 450, 200, -1, -1, 100)
-    TS_ENTRY(1, 460, 200, -1, -1, 100)
-    TS_ENTRY(1, 470, 200, -1, -1, 100)
-    TS_ENTRY(1, 480, 200, -1, -1, 100)
-    TS_ENTRY(1, 490, 200, -1, -1, 100)
-    TS_ENTRY(1, 500, 200, -1, -1, 100)
+    TS_ENTRY_ANIM(1, 400, 500, 200, 200, 2000, 0)
+    TS_ENTRY(0, -1, -1, -1, -1, 1000)
 
     /* Just add second finger and zoom-in */
-    TS_ENTRY(1, 500, 200, 700, 200, 100)
-    TS_ENTRY(1, 480, 200, 720, 200, 100)
-    TS_ENTRY(1, 460, 200, 740, 200, 100)
-    TS_ENTRY(1, 440, 200, 760, 200, 100)
-    TS_ENTRY(1, 420, 200, 780, 200, 100)
-    TS_ENTRY(0, 400, 200, 800, 200, 1000)
+    TS_ENTRY_ANIM2(1, 500, 400, 200, 200, 700, 800, 200, 200, 1000, 0)
+    TS_ENTRY(0, -1, -1, -1, -1, 1000)
 
-    /* Zoom second finger and zoom-in */
-    TS_ENTRY(1, 500, 100, 500, 400, 100)
-    TS_ENTRY(1, 500, 110, 500, 390, 100)
-    TS_ENTRY(1, 500, 120, 500, 380, 100)
-    TS_ENTRY(1, 500, 130, 500, 370, 100)
-    TS_ENTRY(1, 500, 140, 500, 360, 100)
-    TS_ENTRY(1, 500, 150, 500, 350, 100)
-    TS_ENTRY(1, 500, 160, 500, 340, 100)
-    TS_ENTRY(1, 500, 170, 500, 330, 100)
-    TS_ENTRY(1, 500, 180, 500, 320, 100)
-    TS_ENTRY(1, 500, 190, 500, 310, 100)
-    TS_ENTRY(1, 500, 200, 500, 300, 100)
-    TS_ENTRY(1, 500, 210, 500, 290, 100)
-    TS_ENTRY(1, 500, 220, 500, 280, 100)
-    TS_ENTRY(1, 500, 230, 500, 270, 100)
-    TS_ENTRY(1, 500, 240, 500, 260, 100)
-    TS_ENTRY(0, 500, 240, 500, 260, 100)
+    /* Zoom second finger and zoom-out */
+    TS_ENTRY_ANIM2(1, 500, 500, 100, 240, 500, 500, 500, 260, 1000, 0)
+    TS_ENTRY(0, -1, -1, -1, -1, 1000)
+
+    /* Reset graph zoom */
+    TS_DBLCLICK(400, 200, 500)
 
     /* Click and scroll on left side of screen */
-    TS_ENTRY(1, 100, 400, -1, -1, 100)
-    TS_ENTRY(1, 100, 375, -1, -1, 100)
-    TS_ENTRY(1, 100, 350, -1, -1, 100)
-    TS_ENTRY(1, 100, 325, -1, -1, 100)
-    TS_ENTRY(1, 100, 300, -1, -1, 100)
-    TS_ENTRY(1, 100, 275, -1, -1, 100)
-    TS_ENTRY(1, 100, 250, -1, -1, 100)
-    TS_ENTRY(1, 100, 225, -1, -1, 100)
-    TS_ENTRY(1, 100, 200, -1, -1, 100)
-    TS_ENTRY(1, 100, 175, -1, -1, 100)
-    TS_ENTRY(1, 100, 150, -1, -1, 100)
-    TS_ENTRY(1, 100, 125, -1, -1, 100)
-    TS_ENTRY(1, 100, 100, -1, -1, 100)
-    TS_ENTRY(1, 100,  75, -1, -1, 100)
-    TS_ENTRY(1, 100,  50, -1, -1, 100)
-    TS_ENTRY(1, 100,  25, -1, -1, 100)
-    TS_ENTRY(1, 100,   0, -1, -1, 100)
-    TS_ENTRY(0, 0, 0, 0, 0, 1000)
+    TS_ENTRY_ANIM(1, 100, 100, 400, 0, 500, 0)
+    TS_ENTRY(0, -1, -1, -1, -1, 500)
     
     /* Now click radio button */
-    TS_ENTRY(1, 100, 450, -1, -1, 100)
-    TS_ENTRY(0, -1, -1, -1, -1, 1000)
+    TS_CLICK(100, 150, 500)
     
     /* Now click checkbox button */
-    TS_ENTRY(1, 100, 400, -1, -1, 100)
-    TS_ENTRY(0, -1, -1, -1, -1, 1000)
+    TS_CLICK(100, 400, 500)
     
-    /* Now click checkbox widget */
-    TS_ENTRY(1, 400, 40, -1, -1, 100)
-    TS_ENTRY(0, -1, -1, -1, -1, 500)
-    TS_ENTRY(1, 400, 40, -1, -1, 100)
-    TS_ENTRY(0, -1, -1, -1, -1, 500)
-    TS_ENTRY(1, 400, 40, -1, -1, 100)
-    TS_ENTRY(0, -1, -1, -1, -1, 500)
-    TS_ENTRY(1, 400, 40, -1, -1, 100)
-    TS_ENTRY(0, -1, -1, -1, -1, 500)
+    /* Now click checkbox widget 4 times */
+    TS_CLICK(400, 40, 500)
+    TS_CLICK(400, 40, 500)
+    TS_CLICK(400, 40, 500)
+    TS_CLICK(400, 40, 500)
 };
 
 /**
@@ -205,20 +201,60 @@ touch_demo_thread(void * const arg) {
     gui_delay(1000);
     
     /* Process events */
-    for (i = 0, entry = &ts_data[i]; i < GUI_ARRAYSIZE(ts_data); i++, entry = &ts_data[i]) {
-        data.time = gui_sys_now();          /* Get current time */
-        data.status = entry->state ? GUI_TOUCH_STATE_PRESSED : GUI_TOUCH_STATE_RELEASED;
-        if (entry->state) {
-            data.count = 1;                 /* At least one is valid */
-            data.count += (entry->x2 >= 0 && entry->y2 >= 0);   /* Check if second is valid too */
+    for (i = 0, entry = &ts_data[i]; i < GUI_ARRAYSIZE(ts_data); i++, entry = &ts_data[i]) {        
+        /* Process animations */
+        if (entry->anim_time) {
+            float x1_d, y1_d, x2_d, y2_d;
+            size_t steps, i;
+            uint32_t start_time;
+            uint32_t step_time = 30;
             
-            data.x[0] = entry->x1;
-            data.x[1] = entry->x2;
-            data.y[0] = entry->y1;
-            data.y[1] = entry->y2;
+            /* Get number of loops to execute */
+            steps = entry->anim_time / (size_t)step_time;
+            
+            /* Calculate difference and divide by steps */
+            x1_d = (float)(entry->x1_e - entry->x1_s) / (float)steps;
+            y1_d = (float)(entry->y1_e - entry->y1_s) / (float)steps;
+            x2_d = (float)(entry->x2_e - entry->x2_s) / (float)steps;
+            y2_d = (float)(entry->y2_e - entry->y2_s) / (float)steps;
+            
+            data.status = GUI_TOUCH_STATE_PRESSED;  /* In animation, status is always pressed */
+            
+            /* Send events to GUI */
+            for (i = 0; i < steps; i++) {
+                data.count = 1;             /* We have at least first touch */
+                data.count += (entry->x2_s >= 0 && entry->y2_s >= 0 && entry->x2_e >= 0 && entry->y2_e >= 0);   /* Check if we have second */
+                
+                /* Set coordinates */
+                data.x[0] = entry->x1_s + (gui_dim_t)(x1_d * (float)i);
+                data.y[0] = entry->y1_s + (gui_dim_t)(y1_d * (float)i);
+                data.x[1] = entry->x2_s + (gui_dim_t)(x2_d * (float)i);
+                data.y[1] = entry->y2_s + (gui_dim_t)(y2_d * (float)i);
+                
+                gui_input_touchadd(&data);  /* Send input */
+                gui_delay(step_time);       /* Delay for step time */
+            }
+            
+            /* Delay rest of the time */
+            gui_delay(entry->anim_time - steps * step_time);
+        } else {
+            data.time = gui_sys_now();      /* Get current time */
+            data.status = entry->state ? GUI_TOUCH_STATE_PRESSED : GUI_TOUCH_STATE_RELEASED;/* Find state of touch here */
+            
+            if (data.status == GUI_TOUCH_STATE_PRESSED) {
+                data.count = 1;             /* We have at least first touch */
+                data.count += (entry->x2_s >= 0 && entry->y2_s >= 0);   /* Check if we have second */
+                
+                data.x[0] = entry->x1_s;
+                data.y[0] = entry->y1_s;
+                data.x[1] = entry->x2_s;
+                data.y[1] = entry->y2_s;
+            }
+            gui_input_touchadd(&data);      /* Send input */
         }
-        gui_input_touchadd(&data);          /* Send input */
-        gui_delay(entry->delay_after);      /* Delay after */
+        if (entry->delay_after) {
+            gui_delay(entry->delay_after);  /* Delay after */
+        }
     }
     
     while (1) {
