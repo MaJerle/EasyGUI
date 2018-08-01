@@ -95,9 +95,6 @@ typedef struct {
 typedef struct {
     gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
-    gui_dim_t oldy;                         /*!< Y coordinate register before widget opened */
-    gui_dim_t oldheight;                    /*!< height value register before widget opened */
-    
     int16_t count;                          /*!< Current number of strings attached to this widget */
     int16_t selected;                       /*!< selected text index */
     int16_t visiblestartindex;              /*!< Index in array of string on top of visible area of widget */

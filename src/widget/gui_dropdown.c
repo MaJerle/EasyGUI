@@ -119,19 +119,41 @@ static uint8_t
 open_close(gui_handle_p h, uint8_t state) {
     if (state && !is_opened(h)) {
         o->flags |= GUI_FLAG_DROPDOWN_OPENED;
-        o->oldheight = o->C.height;                 /* Save height for restore */
-        o->oldy = o->C.y;                           /* Save Y position for restore */
-        if (is_dir_up(h)) {                         /* On up direction */
-            o->C.y = o->C.y - (HEIGHT_CONST(h) - 1) * o->C.height; /* Go up for 3 height values */
+        if (is_dir_up(h)) {                         /* Width is opening to up */
+            uint8_t is_percent;
+            float_t y_pos;
+
+            /* In this case, we have to move Y position up */
+            y_pos = gui_widget_getypositionoriginal(h, &is_percent);
+            gui_widget_setypositionoriginal(h,
+                y_pos - (HEIGHT_CONST(h) - 1) * (is_percent ? gui_widget_getheightpercent(h) : gui_widget_getheight(h))
+            );
         }
-        o->C.height = HEIGHT_CONST(h) * o->C.height;
-        gui_widget_invalidate(h);                   /* Invalidate widget */
+
+        /* Set new height */
+        gui_widget_setheightoriginal(h,
+            HEIGHT_CONST(h) * gui_widget_getheightoriginal(h, NULL)
+        );
         return 1;
-    } else if (!state && (o->flags & GUI_FLAG_DROPDOWN_OPENED)) {
-        gui_widget_invalidatewithparent(h);         /* Invalidate widget */
-        o->flags &= ~GUI_FLAG_DROPDOWN_OPENED;      /* Clear flag */
-        o->C.height = o->oldheight;                 /* Restore height value */
-        o->C.y = o->oldy;                           /* Restore position */
+    } else if (!state && is_opened(h)) {
+        o->flags &= ~GUI_FLAG_DROPDOWN_OPENED;
+
+        /* Set height back to "normal" */
+        gui_widget_setheightoriginal(h,
+            gui_widget_getheightoriginal(h, NULL) / HEIGHT_CONST(h)
+        );
+
+        if (is_dir_up(h)) {                         /* When open up */
+            uint8_t is_percent;
+            float_t y_pos;
+
+            /* In this case, we have to move Y position down */
+            y_pos = gui_widget_getypositionoriginal(h, &is_percent);
+            gui_widget_setypositionoriginal(h,
+                y_pos + (HEIGHT_CONST(h) - 1) * (is_percent ? gui_widget_getheightpercent(h) : gui_widget_getheight(h))
+            );
+        }
+
         if (o->selected == -1) {                    /* Go to top selection */
             o->visiblestartindex = 0;               /* Start from top again */
         } else {                                    /* We have one selection */
@@ -467,7 +489,7 @@ gui_dropdown_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                 
                 if (GUI_ABS(diff) > height) {
                     slide(h, diff > 0 ? 1 : -1);    /* Slide widget */
-                    ty = ts->y_rel[0];               /* Save pointer */
+                    ty = ts->y_rel[0];              /* Save pointer */
                 }
             }
             return 1;

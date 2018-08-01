@@ -61,12 +61,6 @@ calculate_widget_width(gui_handle_p h) {
     gui_dim_t width = 0;
     if (guii_widget_getflag(h, GUI_FLAG_EXPANDED)) {/* Maximize window over parent */
         width = guii_widget_getparentinnerwidth(h); /* Return parent inner width */
-    } else if (guii_widget_getflag(h, GUI_FLAG_WIDTH_FILL)) {  /* "fill_parent" mode for width */
-        gui_dim_t parent = guii_widget_getparentinnerwidth(h);
-        gui_dim_t rel_x = guii_widget_getrelativex(h);
-        if (parent > rel_x) {
-            width = parent - rel_x;                 /* Return widget width */
-        }
     } else if (guii_widget_getflag(h, GUI_FLAG_WIDTH_PERCENT)) {   /* Percentage width */
         width = GUI_DIM(GUI_ROUND((h->width * guii_widget_getparentinnerwidth(h)) / 100.0f));   /* Calculate percent width */
     } else {                                        /* Normal width */
@@ -85,12 +79,6 @@ calculate_widget_height(gui_handle_p h) {
     gui_dim_t height = 0;
     if (guii_widget_getflag(h, GUI_FLAG_EXPANDED)) {/* Maximize window over parent */
         height = guii_widget_getparentinnerheight(h);   /* Return parent inner height */
-    } else if (guii_widget_getflag(h, GUI_FLAG_HEIGHT_FILL)) {  /* "fill_parent" mode for height */
-        gui_dim_t parent = guii_widget_getparentinnerheight(h);
-        gui_dim_t rel_y = guii_widget_getrelativey(h);
-        if (parent > rel_y) {
-            height = parent - rel_y;                /* Return widget height */
-        }
     } else if (guii_widget_getflag(h, GUI_FLAG_HEIGHT_PERCENT)) {   /* Percentage width */
         height = GUI_DIM(GUI_ROUND((h->height * guii_widget_getparentinnerheight(h)) / 100.0f));  /* Calculate percent height */
     } else {                                        /* Normal height */
@@ -208,7 +196,7 @@ set_widget_abs_values(gui_handle_p h) {
         &h->abs_visible_x2, &h->abs_visible_y2);
     
     /* Update children widgets */
-    if (guii_widget_allowchildren(h)) {
+    if (guii_widget_haschildren(h)) {
         gui_handle_p child;
         
         /* Scan all children widgets */
@@ -311,7 +299,7 @@ remove_widgets(gui_handle_p parent) {
              * - Step 2: Perform mass erase of children widgets 
              *      This step is recursive operation.
              */
-            if (guii_widget_allowchildren(h)) {     /* Children widgets are supported */
+            if (guii_widget_haschildren(h)) {       /* Children widgets are supported */
                 gui_handle_p tmp;
                 
                 /* Step 1 */
@@ -334,7 +322,7 @@ remove_widgets(gui_handle_p parent) {
             /* Move widget pointer to next widget of already deleted and continue checking */
             h = next;                               /* Set current pointer to next one */
             continue;                               /* Continue to prevent further execution */
-        } else if (guii_widget_allowchildren(h)) {  /* Children widgets are supported */
+        } else if (guii_widget_haschildren(h)) {    /* Children widgets are supported */
             remove_widgets(h);                      /* Check children widgets if anything to remove */
         }
         h = gui_linkedlist_widgetgetnext(NULL, h);  /* Get next widget of current */
@@ -532,7 +520,7 @@ get_widget_by_id(gui_handle_p parent, gui_id_t id, uint8_t deep) {
     GUI_LINKEDLIST_WIDGETSLISTNEXT(parent, h) {
         if (gui_widget_getid(h) == id) {
             return h;
-        } else if (deep && guii_widget_allowchildren(h)) {  /* Check children if possible */
+        } else if (deep && guii_widget_haschildren(h)) {    /* Check children if possible */
             gui_handle_p tmp = get_widget_by_id(h, id, deep);
             if (tmp != NULL) {
                 return tmp;
@@ -710,7 +698,7 @@ can_remove_widget(gui_handle_p h) {
     }
     
     /* Check children widgets recursively */
-    if (GUI_WIDGET_RESULTTYPE_U8(&result) && guii_widget_allowchildren(h)) {   /* Check if we can delete all children widgets */
+    if (GUI_WIDGET_RESULTTYPE_U8(&result) && guii_widget_haschildren(h)) {
         gui_handle_p h1;
         GUI_LINKEDLIST_WIDGETSLISTNEXT(h, h1) {
             if (!can_remove_widget(h1)) {           /* If we should not delete it */
@@ -974,10 +962,9 @@ guii_widget_getparentabsolutey(gui_handle_p h) {
 }
 
 /**
- * \brief           Get absolute X position on LCD for specific widget
- * \note            This function is private and may be called only when OS protection is active
+ * \brief           Get absolute `X` position on LCD for specific widget
  * \param[in]       h: Widget handle
- * \return          X position on LCD
+ * \return          `X` position on LCD in units of pixels
  */
 gui_dim_t
 gui_widget_getabsolutex(gui_handle_p h) {   
@@ -992,10 +979,9 @@ gui_widget_getabsolutex(gui_handle_p h) {
 }
 
 /**
- * \brief           Get absolute Y position on LCD for specific widget
- * \note            This function is private and may be called only when OS protection is active
+ * \brief           Get absolute `Y` position on LCD for specific widget
  * \param[in]       h: Widget handle 
- * \return          Y position on LCD
+ * \return          `Y` position on LCD in units of pixels
  */
 gui_dim_t
 gui_widget_getabsolutey(gui_handle_p h) {
@@ -1263,7 +1249,7 @@ gui_widget_empty(gui_handle_p h) {
     gui_handle_p child;
     uint8_t ret = 1;
 
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));    /* Check valid parameter */
+    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
     
     /* Process all children widgets */
     for (child = gui_linkedlist_widgetgetnext(h, NULL); child != NULL;
@@ -1536,6 +1522,45 @@ gui_widget_getfont(gui_handle_p h) {
 /**                   Widget size management                  **/
 /***************************************************************/
 /***************************************************************/
+/**
+ * \brief           Set widget size in units of pixels
+ * \param[in]       h: Widget handle
+ * \param[in]       width: Widget width
+ * \param[in]       height: Widget height
+ * \return          `1` on success, `0` otherwise
+ */
+uint8_t
+gui_widget_setsize(gui_handle_p h, gui_dim_t width, gui_dim_t height) {
+    return set_widget_size(h, GUI_FLOAT(width), GUI_FLOAT(height), 0, 0);
+}
+
+/**
+ * \brief           Set widget size in units of percent
+ * \param[in]       h: Widget handle
+ * \param[in]       width: Widget width
+ * \param[in]       height: Widget height
+ * \return          `1` on success, `0` otherwise
+ */
+uint8_t
+gui_widget_setsizepercent(gui_handle_p h, float width, float height) {
+    return set_widget_size(h, width, height, 1, 1);
+}
+
+/**
+ * \brief           Set widget size in original units
+ * \note            If current position is in percents, new value will also be in percent, and so on
+ * \param[in]       h: Widget handle
+ * \param[in]       width: Widget width
+ * \param[in]       height: Widget height
+ * \return          `1` on success, `0` otherwise
+ */
+uint8_t
+gui_widget_setsizeoriginal(gui_handle_p h, float width, float height) {
+    return set_widget_size(h, width, height,
+        guii_widget_getflag(h, GUI_FLAG_WIDTH_PERCENT) == GUI_FLAG_WIDTH_PERCENT,
+        guii_widget_getflag(h, GUI_FLAG_HEIGHT_PERCENT) == GUI_FLAG_HEIGHT_PERCENT
+    );
+}
 
 /**
  * \brief           Set width of widget in units of pixels
@@ -1545,27 +1570,9 @@ gui_widget_getfont(gui_handle_p h) {
  */
 uint8_t
 gui_widget_setwidth(gui_handle_p h, gui_dim_t width) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-
-    /* Set new width */
     return set_widget_size(h, GUI_FLOAT(width), h->height,
         0,
         guii_widget_getflag(h, GUI_FLAG_HEIGHT_PERCENT) == GUI_FLAG_HEIGHT_PERCENT
-    );    
-}
-
-/**
- * \brief           Set height of widget in units of pixels
- * \param[in]       h: Widget handle
- * \param[in]       height: height in units of pixels
- * \return          `1` on success, `0` otherwise
- */
-uint8_t
-gui_widget_setheight(gui_handle_p h, gui_dim_t height) {
-    /* Set new height */
-    return set_widget_size(h, h->width, GUI_FLOAT(height),
-        guii_widget_getflag(h, GUI_FLAG_WIDTH_PERCENT) == GUI_FLAG_WIDTH_PERCENT,
-        0
     );
 }
 
@@ -1577,7 +1584,6 @@ gui_widget_setheight(gui_handle_p h, gui_dim_t height) {
  */
 uint8_t
 gui_widget_setwidthpercent(gui_handle_p h, float width) {
-    /* Set new height in percent */
     return set_widget_size(h, width, h->height,
         1,
         guii_widget_getflag(h, GUI_FLAG_HEIGHT_PERCENT) == GUI_FLAG_HEIGHT_PERCENT
@@ -1585,14 +1591,42 @@ gui_widget_setwidthpercent(gui_handle_p h, float width) {
 }
 
 /**
+ * \brief           Set width of widget in original units
+ * \note            If current position is in percents, new value will also be in percent, and so on
+ * \param[in]       h: Widget handle
+ * \param[in]       width: Widget width
+ * \return          `1` on success, `0` otherwise
+ */
+uint8_t
+gui_widget_setwidthoriginal(gui_handle_p h, float width) {
+    return set_widget_size(h, width, h->height,
+        guii_widget_getflag(h, GUI_FLAG_WIDTH_PERCENT) == GUI_FLAG_WIDTH_PERCENT,
+        guii_widget_getflag(h, GUI_FLAG_HEIGHT_PERCENT) == GUI_FLAG_HEIGHT_PERCENT
+    );
+}
+
+/**
+ * \brief           Set height of widget in units of pixels
+ * \param[in]       h: Widget handle
+ * \param[in]       height: Height in units of pixels
+ * \return          `1` on success, `0` otherwise
+ */
+uint8_t
+gui_widget_setheight(gui_handle_p h, gui_dim_t height) {
+    return set_widget_size(h, h->width, GUI_FLOAT(height),
+        guii_widget_getflag(h, GUI_FLAG_WIDTH_PERCENT) == GUI_FLAG_WIDTH_PERCENT,
+        0
+    );
+}
+
+/**
  * \brief           Set height of widget in percentage relative to parent widget
  * \param[in]       h: Widget handle
- * \param[in]       height: height in percentage
+ * \param[in]       height: Height in percentage
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_widget_setheightpercent(gui_handle_p h, float height) {
-    /* Set new height in percent */
     return set_widget_size(h, h->width, height,
         guii_widget_getflag(h, GUI_FLAG_WIDTH_PERCENT) == GUI_FLAG_WIDTH_PERCENT,
         1
@@ -1600,27 +1634,18 @@ gui_widget_setheightpercent(gui_handle_p h, float height) {
 }
 
 /**
- * \brief           Set widget size in units of pixels
+ * \brief           Set height of widget in original units
+ * \note            If current position is in percents, new value will also be in percent, and so on
  * \param[in]       h: Widget handle
- * \param[in]       wi: Widget width
- * \param[in]       hi: Widget height
+ * \param[in]       height: Widget height
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_setsize(gui_handle_p h, gui_dim_t wi, gui_dim_t hi) {
-    return set_widget_size(h, GUI_FLOAT(wi), GUI_FLOAT(hi), 0, 0);
-}
-
-/**
- * \brief           Set widget size in units of percent
- * \param[in]       h: Widget handle
- * \param[in]       wi: Widget width
- * \param[in]       hi: Widget height
- * \return          `1` on success, `0` otherwise
- */
-uint8_t
-gui_widget_setsizepercent(gui_handle_p h, float wi, float hi) {
-    return set_widget_size(h, wi, hi, 1, 1);
+gui_widget_setheightoriginal(gui_handle_p h, float height) {
+    return set_widget_size(h, h->width, height,
+        guii_widget_getflag(h, GUI_FLAG_WIDTH_PERCENT) == GUI_FLAG_WIDTH_PERCENT,
+        guii_widget_getflag(h, GUI_FLAG_HEIGHT_PERCENT) == GUI_FLAG_HEIGHT_PERCENT
+    );
 }
 
 /**
@@ -1638,7 +1663,7 @@ gui_widget_toggleexpanded(gui_handle_p h) {
 /**
  * \brief           Get total width of widget effective on screen in units of pixels
  *                  
- *                  Function returns width of widget according to current widget setup (expanded, fill, percent, etc.)
+ *                  Function returns width of widget according to current widget setup (expanded, percent, etc.)
  * \note            Even if percentage width is used, function will always return value in pixels
  * \param[in]       h: Widget handle
  * \return          Total width in units of pixels
@@ -1683,9 +1708,71 @@ gui_widget_getheight(gui_handle_p h) {
 }
 
 /**
+ * \brief           Get widget width relative to parent width in percent
+ * \param[in]       h: Widget handle
+ * \return          Widget width in units of percent
+ */
+float
+gui_widget_getwidthpercent(gui_handle_p h) {
+    float x, y;
+
+    x = (float)gui_widget_getwidth(h);
+    y = (float)guii_widget_getparentwidth(h);
+
+    return x * 100.0f / y;
+}
+
+/**
+ * \brief           Get widget height relative to parent height in percent
+ * \param[in]       h: Widget handle
+ * \return          Widget width in units of percent
+ */
+float
+gui_widget_getheightpercent(gui_handle_p h) {
+    float x, y;
+
+    x = (float)gui_widget_getheight(h);
+    y = (float)guii_widget_getparentheight(h);
+
+    return x * 100.0f / y;
+}
+
+/**
+ * \brief           Get widget width in original units
+ * \note            If current width is in percents, returned value will be in percent units
+ * \param[in]       h: Widget handle
+ * \param[out]      is_percent: Optional parameter to set if widget height is in units of percent.
+ *                     Set to `NULL` if not required
+ * \return          Widget width in original units
+ */
+float
+gui_widget_getwidthoriginal(gui_handle_p h, uint8_t* is_percent) {
+    if (is_percent != NULL) {
+        *is_percent = guii_widget_getflag(h, GUI_FLAG_WIDTH_PERCENT) == GUI_FLAG_WIDTH_PERCENT;
+    }
+    return h->width;
+}
+
+/**
+ * \brief           Get widget height in original units
+ * \note            If current height is in percents, returned value will be in percent units
+ * \param[in]       h: Widget handle
+ * \param[out]      is_percent: Optional parameter to set if widget height is in units of percent.
+ *                     Set to `NULL` if not required
+ * \return          Widget height in original units
+ */
+float
+gui_widget_getheightoriginal(gui_handle_p h, uint8_t* is_percent) {
+    if (is_percent != NULL) {
+        *is_percent = guii_widget_getflag(h, GUI_FLAG_HEIGHT_PERCENT) == GUI_FLAG_HEIGHT_PERCENT;
+    }
+    return h->height;
+}
+
+/**
  * \brief           Set expandend mode on widget
  *                  
- *                  When enabled, widget will be at X,Y = 0,0 relative to parent and will have width,height = 100%,100%
+ *                  When enabled, widget will be at `X,Y = 0,0` relative to parent and will have `width,height = 100%,100%`
  * \param[in]       h: Widget handle
  * \param[in]       state: State for expanded mode
  * \return          `1` on success, `0` otherwise
@@ -1697,6 +1784,7 @@ gui_widget_setexpanded(gui_handle_p h, uint8_t state) {
     
     is_expanded = gui_widget_isexpanded(h);
     if (!state && is_expanded) {                    /* Check current status */
+        /* TODO: Force invalidation even if ignored */
         gui_widget_invalidatewithparent(h);         /* Invalidate with parent first for clipping region */
         guii_widget_clrflag(h, GUI_FLAG_EXPANDED);  /* Clear expanded after invalidation */
         SET_WIDGET_ABS_VALUES(h);                   /* Set widget absolute values */
@@ -1717,7 +1805,7 @@ gui_widget_setexpanded(gui_handle_p h, uint8_t state) {
 uint8_t
 gui_widget_isexpanded(gui_handle_p h) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    return !!guii_widget_getflag(h, GUI_FLAG_EXPANDED);
+    return guii_widget_getflag(h, GUI_FLAG_EXPANDED) == GUI_FLAG_EXPANDED;
 }
 
 /***************************************************************/
@@ -1750,14 +1838,29 @@ gui_widget_setpositionpercent(gui_handle_p h, float x, float y) {
 }
 
 /**
- * \brief           Set widget X position relative to parent object in units of pixels
+ * \brief           Set widget position relative to parent object in original units
+ * \note            If current position is in percents, new value will also be in percent, and so on
+ * \param[in]       h: Widget handle
+ * \param[in]       x: X position relative to parent object
+ * \param[in]       y: Y position relative to parent object
+ * \return          `1` on success, `0` otherwise
+ */
+uint8_t
+gui_widget_setpositionoriginal(gui_handle_p h, float x, float y) {
+    return set_widget_position(h, x, y,
+        guii_widget_getflag(h, GUI_FLAG_XPOS_PERCENT) == GUI_FLAG_XPOS_PERCENT,
+        guii_widget_getflag(h, GUI_FLAG_YPOS_PERCENT) == GUI_FLAG_YPOS_PERCENT
+    );
+}
+
+/**
+ * \brief           Set widget `X` position relative to parent object in units of pixels
  * \param[in]       h: Widget handle
  * \param[in]       x: X position relative to parent object
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_widget_setxposition(gui_handle_p h, gui_dim_t x) {
-    /* Set widget x position */
     return set_widget_position(h, GUI_FLOAT(x), h->y,
         0,
         guii_widget_getflag(h, GUI_FLAG_YPOS_PERCENT) == GUI_FLAG_YPOS_PERCENT
@@ -1765,14 +1868,13 @@ gui_widget_setxposition(gui_handle_p h, gui_dim_t x) {
 }
 
 /**
- * \brief           Set widget X position relative to parent object in units of percent
+ * \brief           Set widget `X` position relative to parent object in units of percent
  * \param[in]       h: Widget handle
  * \param[in]       x: X position relative to parent object
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_widget_setxpositionpercent(gui_handle_p h, float x) {
-    /* Set widget x position in percent */
     return set_widget_position(h, x, h->y,
         1,
         guii_widget_getflag(h, GUI_FLAG_YPOS_PERCENT) == GUI_FLAG_YPOS_PERCENT
@@ -1780,14 +1882,27 @@ gui_widget_setxpositionpercent(gui_handle_p h, float x) {
 }
 
 /**
- * \brief           Set widget Y position relative to parent object in units of pixels
+ * \brief           Set widget `X` position relative to parent object in current units
+ * \note            If current position is in percents, new value will also be in percent, and so on
+ * \param[in]       h: Widget handle
+ * \param[in]       x: X position relative to parent object in original units
+ * \return          `1` on success, `0` otherwise
+ */uint8_t
+gui_widget_setxpositionoriginal(gui_handle_p h, float x) {
+    return set_widget_position(h, x, h->y,
+        guii_widget_getflag(h, GUI_FLAG_XPOS_PERCENT) == GUI_FLAG_XPOS_PERCENT,
+        guii_widget_getflag(h, GUI_FLAG_YPOS_PERCENT) == GUI_FLAG_YPOS_PERCENT
+    );
+}
+
+/**
+ * \brief           Set widget `Y` position relative to parent object in units of pixels
  * \param[in]       h: Widget handle
  * \param[in]       y: Y position relative to parent object
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_widget_setyposition(gui_handle_p h, gui_dim_t y) {
-    /* Set widget y position */
     return set_widget_position(h, h->x, GUI_FLOAT(y),
         guii_widget_getflag(h, GUI_FLAG_XPOS_PERCENT) == GUI_FLAG_XPOS_PERCENT,
         0
@@ -1795,18 +1910,64 @@ gui_widget_setyposition(gui_handle_p h, gui_dim_t y) {
 }
 
 /**
- * \brief           Set widget Y position relative to parent object in units of percent
+ * \brief           Set widget `Y` position relative to parent object in units of percent
  * \param[in]       h: Widget handle
  * \param[in]       y: Y position relative to parent object
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_widget_setypositionpercent(gui_handle_p h, float y) {
-    /* Set widget y position in percent */
     return set_widget_position(h, h->x, y,
         guii_widget_getflag(h, GUI_FLAG_XPOS_PERCENT) == GUI_FLAG_XPOS_PERCENT,
         1
     );
+}
+
+/**
+ * \brief           Set widget `Y` position relative to parent object in current units
+ * \note            If current position is in percents, new value will also be in percent, and so on
+ * \param[in]       h: Widget handle
+ * \param[in]       y: Y position relative to parent object in original units
+ * \return          `1` on success, `0` otherwise
+ */
+uint8_t
+gui_widget_setypositionoriginal(gui_handle_p h, float y) {
+    return set_widget_position(h, h->x, y,
+        guii_widget_getflag(h, GUI_FLAG_XPOS_PERCENT) == GUI_FLAG_XPOS_PERCENT,
+        guii_widget_getflag(h, GUI_FLAG_YPOS_PERCENT) == GUI_FLAG_YPOS_PERCENT
+    );
+}
+
+/**
+ * \brief           Get `X` position relative to parent in original units
+ * \note            If current position is in percents, returned value will be in percent units
+ * \param[in]       h: Widget handle
+ * \param[out]      is_percent: Optional parameter to set if widget position is in units of percent.
+ *                     Set to `NULL` if not required
+ * \return          Widget position in original units
+ */
+float
+gui_widget_getxpositionoriginal(gui_handle_p h, uint8_t* is_percent) {
+    if (is_percent != NULL) {
+        *is_percent = guii_widget_getflag(h, GUI_FLAG_XPOS_PERCENT) == GUI_FLAG_XPOS_PERCENT;
+    }
+    return h->x;
+}
+
+/**
+ * \brief           Get `Y` position relative to parent in original units
+ * \note            If current position is in percents, returned value will be in percent units
+ * \param[in]       h: Widget handle
+ * \param[out]      is_percent: Optional parameter to set if widget position is in units of percent.
+ *                     Set to `NULL` if not required
+ * \return          Widget position in original units
+ */
+float
+gui_widget_getypositionoriginal(gui_handle_p h, uint8_t* is_percent) {
+    if (is_percent != NULL) {
+        *is_percent = guii_widget_getflag(h, GUI_FLAG_YPOS_PERCENT) == GUI_FLAG_YPOS_PERCENT;
+    }
+    return h->y;
 }
 
 /**
@@ -1832,6 +1993,12 @@ gui_widget_invalidate(gui_handle_p h) {
     }
     
     return res;
+}
+
+uint8_t
+gui_widget_force_invalidate(gui_handle_p h) {
+    /* TODO: Clear ignore invalidate flag, invalidate, set it back (if it was set before clearing it) */
+    return gui_widget_invalidate(h);
 }
 
 /**
@@ -1936,7 +2103,7 @@ uint8_t
 gui_widget_hidechildren(gui_handle_p h) {
     gui_handle_p t;
 
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
+    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
 
     /* Scan all widgets of current widget and hide them */
     GUI_LINKEDLIST_WIDGETSLISTNEXT(h, t) {
@@ -2095,8 +2262,8 @@ gui_widget_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
 }
 
 /**
- * \brief           Set widget scroll on X axis
- * \note            This is possible on widgets with children support (windows) to have scroll on X and Y
+ * \brief           Set widget scroll on `X` axis
+ * \note            This is possible on widgets with children support (windows) to have scroll on `X` and `Y`
  * \param[in]       h: Widget handle
  * \param[in]       scroll: Scroll value for X direction
  * \return          `1` on success, `0` otherwise
@@ -2105,7 +2272,7 @@ uint8_t
 gui_widget_setscrollx(gui_handle_p h, gui_dim_t scroll) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
+    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
     
     if (h->x_scroll != scroll) {
         h->x_scroll = scroll;
@@ -2117,8 +2284,8 @@ gui_widget_setscrollx(gui_handle_p h, gui_dim_t scroll) {
 }
 
 /**
- * \brief           Set widget scroll on Y axis
- * \note            This is possible on widgets with children support (windows) to have scroll on X and Y
+ * \brief           Set widget scroll on `Y` axis
+ * \note            This is possible on widgets with children support (windows) to have scroll on `X` and `Y`
  * \param[in]       h: Widget handle
  * \param[in]       scroll: Scroll value for Y direction
  * \return          `1` on success, `0` otherwise
@@ -2127,7 +2294,7 @@ uint8_t
 gui_widget_setscrolly(gui_handle_p h, gui_dim_t scroll) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
+    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
     
     if (h->y_scroll != scroll) {
         h->y_scroll = scroll;
@@ -2140,8 +2307,8 @@ gui_widget_setscrolly(gui_handle_p h, gui_dim_t scroll) {
 }
 
 /**
- * \brief           Increase widget scroll on X axis
- * \note            This is possible on widgets with children support (windows) to have scroll on X and Y
+ * \brief           Increase widget scroll on `X` axis
+ * \note            This is possible on widgets with children support (windows) to have scroll on `X` and `Y`
  * \param[in]       h: Widget handle
  * \param[in]       scroll: Scroll increase in units of pixels. Use negative value to decrease scroll
  * \return          `1` on success, `0` otherwise
@@ -2150,7 +2317,7 @@ uint8_t
 gui_widget_incscrollx(gui_handle_p h, gui_dim_t scroll) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
+    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
     
     if (scroll) {
         h->x_scroll += scroll;
@@ -2163,8 +2330,8 @@ gui_widget_incscrollx(gui_handle_p h, gui_dim_t scroll) {
 }
 
 /**
- * \brief           Increase widget scroll on Y axis
- * \note            This is possible on widgets with children support (windows) to have scroll on X and Y
+ * \brief           Increase widget scroll on `Y` axis
+ * \note            This is possible on widgets with children support (windows) to have scroll on `X` and `Y`
  * \param[in]       h: Widget handle
  * \param[in]       scroll: Scroll increase in units of pixels. Use negative value to decrease scroll
  * \return          `1` on success, `0` otherwise
@@ -2173,7 +2340,7 @@ uint8_t
 gui_widget_incscrolly(gui_handle_p h, gui_dim_t scroll) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
+    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
     
     if (scroll) {
         h->y_scroll += scroll;
@@ -2186,24 +2353,24 @@ gui_widget_incscrolly(gui_handle_p h, gui_dim_t scroll) {
 }
 
 /**
- * \brief           Get widget scroll on X axis
+ * \brief           Get widget scroll on `X` axis
  * \param[in]       h: Widget handle
  * \return          Widget scroll in units of pixels
  */
 gui_dim_t
 gui_widget_getscrollx(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
+    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
     return h->x_scroll;                             /* Get X scroll */
 }
 
 /**
- * \brief           Get widget scroll on Y axis
+ * \brief           Get widget scroll on `Y` axis
  * \param[in]       h: Widget handle
  * \return          Widget scroll in units of pixels
  */
 gui_dim_t
 gui_widget_getscrolly(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));  /* Check valid parameter */
+    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
     return h->y_scroll;                             /* Get Y scroll */
 }
 

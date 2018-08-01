@@ -71,10 +71,10 @@ extern "C" {
  */
  
 /**
- * \defgroup        GUI_WIDGET_CREATE_FLAGS flags for widget create
+ * \defgroup        GUI_WIDGET_CREATE_FLAGS Widget create flags
  * \brief           A list of flags supported for widget creation
  *
- * List of flags used on \ref guii_widget_create function when creating new widget
+ * List of flags used on \ref gui_widget_create function when creating new widget
  * 
  * \{
  */
@@ -311,6 +311,15 @@ extern "C" {
 #define guii_widget_allowchildren(h)                (!!guii_widget_getcoreflag(h, GUI_FLAG_WIDGET_ALLOW_CHILDREN))
 
 /**
+ * \brief           Check if widget has any children widgets
+ * \note            The function is private and can be called only when GUI protection against multiple access is activated
+ * \param[in]       h: Widget handle
+ * \return          `1` on success, `0` otherwise
+ * \hideinitializer
+ */
+#define guii_widget_haschildren(h)                  (guii_widget_allowchildren(h) && gui_linkedlist_hasentries(&h->root_list))
+
+/**
  * \brief           Check if widget is base for dialog
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle
@@ -399,12 +408,20 @@ uint8_t             gui_widget_isfontandtextset(gui_handle_p h);
 
 uint8_t         gui_widget_setsize(gui_handle_p h, gui_dim_t width, gui_dim_t height);
 uint8_t         gui_widget_setsizepercent(gui_handle_p h, float width, float height);
+uint8_t         gui_widget_setsizeoriginal(gui_handle_p h, float width, float height);
 uint8_t         gui_widget_setwidth(gui_handle_p h, gui_dim_t width);
-uint8_t         gui_widget_setheight(gui_handle_p h, gui_dim_t height);
 uint8_t         gui_widget_setwidthpercent(gui_handle_p h, float width);
+uint8_t         gui_widget_setwidthoriginal(gui_handle_p h, float width);
+uint8_t         gui_widget_setheight(gui_handle_p h, gui_dim_t height);
 uint8_t         gui_widget_setheightpercent(gui_handle_p h, float height);
+uint8_t         gui_widget_setheightoriginal(gui_handle_p h, float height);
+
 gui_dim_t       gui_widget_getwidth(gui_handle_p h);
 gui_dim_t       gui_widget_getheight(gui_handle_p h);
+float           gui_widget_getwidthpercent(gui_handle_p h);
+float           gui_widget_getheightpercent(gui_handle_p h);
+float           gui_widget_getwidthoriginal(gui_handle_p h, uint8_t* is_percent);
+float           gui_widget_getheightoriginal(gui_handle_p h, uint8_t* is_percent);
 
 uint8_t         gui_widget_setexpanded(gui_handle_p h, uint8_t state);
 uint8_t         gui_widget_toggleexpanded(gui_handle_p h);
@@ -423,12 +440,19 @@ uint8_t         gui_widget_isexpanded(gui_handle_p h);
 gui_dim_t       gui_widget_getabsolutex(gui_handle_p h);
 gui_dim_t       gui_widget_getabsolutey(gui_handle_p h);
 
+float           gui_widget_getxpositionoriginal(gui_handle_p h, uint8_t* is_percent);
+float           gui_widget_getypositionoriginal(gui_handle_p h, uint8_t* is_percent);
+
 uint8_t         gui_widget_setposition(gui_handle_p h, gui_dim_t x, gui_dim_t y);
 uint8_t         gui_widget_setpositionpercent(gui_handle_p h, float x, float y);
+uint8_t         gui_widget_setpositionoriginal(gui_handle_p h, float x, float y);
 uint8_t         gui_widget_setxposition(gui_handle_p h, gui_dim_t x);
 uint8_t         gui_widget_setxpositionpercent(gui_handle_p h, float x);
+uint8_t         gui_widget_setxpositionoriginal(gui_handle_p h, float x);
 uint8_t         gui_widget_setyposition(gui_handle_p h, gui_dim_t y);
 uint8_t         gui_widget_setypositionpercent(gui_handle_p h, float y);
+uint8_t         gui_widget_setypositionoriginal(gui_handle_p h, float y);
+
 uint8_t         gui_widget_setscrollx(gui_handle_p h, gui_dim_t scroll);
 uint8_t         gui_widget_setscrolly(gui_handle_p h, gui_dim_t scroll);
 uint8_t         gui_widget_incscrollx(gui_handle_p h, gui_dim_t scroll);
@@ -464,6 +488,7 @@ uint8_t         gui_widget_setalpha(gui_handle_p h, uint8_t alpha);
  */
 
 uint8_t         gui_widget_invalidate(gui_handle_p h);
+uint8_t         gui_widget_force_invalidate(gui_handle_p h);
 uint8_t         gui_widget_invalidatewithparent(gui_handle_p h);
 uint8_t         gui_widget_setignoreinvalidate(gui_handle_p h, uint8_t en, uint8_t invalidate);
 uint8_t         gui_widget_setinvalidatewithparent(gui_handle_p h, uint8_t value);

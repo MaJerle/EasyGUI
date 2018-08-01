@@ -68,15 +68,13 @@ extern "C" {
 #define GUI_FLAG_3D                         ((uint32_t)0x00000080)  /*!< Indicates widget has enabled 3D style */
 #define GUI_FLAG_WIDTH_PERCENT              ((uint32_t)0x00000100)  /*!< Indicates widget width is in units of percentage according to parent widget width */
 #define GUI_FLAG_HEIGHT_PERCENT             ((uint32_t)0x00000200)  /*!< Indicates widget height is in units of percentage according to parent widget height */
-#define GUI_FLAG_WIDTH_FILL                 ((uint32_t)0x00000400)  /*!< Indicates widget width fills to the end of widget */
-#define GUI_FLAG_HEIGHT_FILL                ((uint32_t)0x00000800)  /*!< Indicates widget height fills to the end of widget */
+#define GUI_FLAG_XPOS_PERCENT               ((uint32_t)0x00000400)  /*!< Indicates widget X position is in percent relative to parent width */
+#define GUI_FLAG_YPOS_PERCENT               ((uint32_t)0x00000800)  /*!< Indicates widget Y position is in percent relative to parent height */
 #define GUI_FLAG_EXPANDED                   ((uint32_t)0x00001000)  /*!< Indicates children widget is set to (temporary) XY = 0,0 and width/height = parent width / parent height (maximize windows function) */
 #define GUI_FLAG_REMOVE                     ((uint32_t)0x00002000)  /*!< Indicates widget should be deleted */
 #define GUI_FLAG_IGNORE_INVALIDATE          ((uint32_t)0x00004000)  /*!< Indicates widget invalidation is ignored completely when invalidating it directly */
 #define GUI_FLAG_FIRST_INVALIDATE           ((uint32_t)0x00008000)  /*!< Indicates widget is invalidated for "first" time, thus ignore check if parent is hidden or not */
 #define GUI_FLAG_TOUCH_MOVE                 ((uint32_t)0x00010000)  /*!< Indicates widget callback has processed touch move event. This parameter works in conjunction with \ref GUI_FLAG_ACTIVE flag */
-#define GUI_FLAG_XPOS_PERCENT               ((uint32_t)0x00020000)  /*!< Indicates widget X position is in percent relative to parent width */
-#define GUI_FLAG_YPOS_PERCENT               ((uint32_t)0x00040000)  /*!< Indicates widget Y position is in percent relative to parent height */
 
 /**
  * \defgroup        GUI_WIDGETS_CORE_FLAGS Widget type flags

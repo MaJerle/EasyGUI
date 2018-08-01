@@ -60,7 +60,7 @@ print_list(gui_handle_p root) {
             (unsigned long)!!(h->flags & GUI_FLAG_REDRAW),
             (unsigned long)!!(h->flags & GUI_FLAG_REMOVE)
         );
-        if (guii_widget_allowchildren(h)) {
+        if (guii_widget_haschildren(h)) {
             print_list(h);
         }
     }
