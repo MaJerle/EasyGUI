@@ -73,7 +73,7 @@ demo_init(void) {
 
     gui_unprotect(1);
     
-    gui_sys_thread_create(NULL, "touch_demo", touch_demo_thread, NULL, GUI_SYS_THREAD_SS, GUI_SYS_THREAD_PRIO);
+    //gui_sys_thread_create(NULL, "touch_demo", touch_demo_thread, NULL, GUI_SYS_THREAD_SS, GUI_SYS_THREAD_PRIO);
 }
 
 /**

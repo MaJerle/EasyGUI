@@ -36,15 +36,12 @@ demo_create_feature_button(gui_handle_p parent, uint8_t protect) {
 }
 
 /**
- * \brief           Window event callback
+ * \brief           Button event callback
  */
 static uint8_t
 button_callback(gui_handle_p h, gui_wc_t wc, gui_widget_param_t* param, gui_widget_result_t* result) {
     uint8_t ret = gui_widget_processdefaultcallback(h, wc, param, result);
     switch (wc) {
-        case GUI_WC_Click: {
-            break;
-        }
         default: break;
     }
     return ret;
