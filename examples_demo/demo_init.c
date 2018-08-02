@@ -73,7 +73,7 @@ demo_init(void) {
 
     gui_unprotect(1);
     
-    //gui_sys_thread_create(NULL, "touch_demo", touch_demo_thread, NULL, GUI_SYS_THREAD_SS, GUI_SYS_THREAD_PRIO);
+    gui_sys_thread_create(NULL, "touch_demo", touch_demo_thread, NULL, GUI_SYS_THREAD_SS, GUI_SYS_THREAD_PRIO);
 }
 
 /**
@@ -153,39 +153,56 @@ TS_CLICK(x1, y1, delay_after_)                          \
 
 static ts_data_t
 ts_data[] = {
-    /* Click graph widget */
-    TS_CLICK(100, 150, 1000)
-
-    /* Move 2 fingers on graph */
-    TS_ENTRY_ANIM(1, 400, 500, 200, 200, 2000, 0)
-    TS_ENTRY(0, -1, -1, -1, -1, 1000)
-
-    /* Just add second finger and zoom-in */
-    TS_ENTRY_ANIM2(1, 500, 400, 200, 200, 700, 800, 200, 200, 1000, 0)
-    TS_ENTRY(0, -1, -1, -1, -1, 1000)
-
-    /* Zoom second finger and zoom-out */
-    TS_ENTRY_ANIM2(1, 500, 500, 100, 240, 500, 500, 500, 260, 1000, 0)
-    TS_ENTRY(0, -1, -1, -1, -1, 1000)
-
-    /* Reset graph zoom */
-    TS_DBLCLICK(400, 200, 500)
-
-    /* Click and scroll on left side of screen */
-    TS_ENTRY_ANIM(1, 100, 100, 400, 0, 500, 0)
+    /* Scroll left part to top */
+    TS_ENTRY_ANIM(1, 10, 10, 10, 300, 500, 0)
     TS_ENTRY(0, -1, -1, -1, -1, 500)
+
+    /* Click on list container */
+    TS_CLICK(30, 300, 500)
+
+    /* Animate right container*/
+    TS_ENTRY_ANIM(1, 785, 785, 300, 10, 1000, 0)
+    TS_ENTRY(0, -1, -1, -1, -1, 100)
+
+    /* Animate right container*/
+    TS_ENTRY_ANIM(1, 785, 785, 10, 400, 2000, 0)
+    TS_ENTRY(0, -1, -1, -1, -1, 100)
+    TS_ENTRY_ANIM(1, 785, 785, 10, 400, 2000, 0)
+    TS_ENTRY(0, -1, -1, -1, -1, 100)
     
-    /* Now click radio button */
-    TS_CLICK(100, 150, 500)
-    
-    /* Now click checkbox button */
-    TS_CLICK(100, 400, 500)
-    
-    /* Now click checkbox widget 4 times */
-    TS_CLICK(400, 40, 500)
-    TS_CLICK(400, 40, 500)
-    TS_CLICK(400, 40, 500)
-    TS_CLICK(400, 40, 500)
+    ///* Click graph widget */
+    //TS_CLICK(100, 150, 1000)
+
+    ///* Move 2 fingers on graph */
+    //TS_ENTRY_ANIM(1, 400, 500, 200, 200, 2000, 0)
+    //TS_ENTRY(0, -1, -1, -1, -1, 1000)
+
+    ///* Just add second finger and zoom-in */
+    //TS_ENTRY_ANIM2(1, 500, 400, 200, 200, 700, 800, 200, 200, 1000, 0)
+    //TS_ENTRY(0, -1, -1, -1, -1, 1000)
+
+    ///* Zoom second finger and zoom-out */
+    //TS_ENTRY_ANIM2(1, 500, 500, 100, 240, 500, 500, 500, 260, 1000, 0)
+    //TS_ENTRY(0, -1, -1, -1, -1, 1000)
+
+    ///* Reset graph zoom */
+    //TS_DBLCLICK(400, 200, 500)
+
+    ///* Click and scroll on left side of screen */
+    //TS_ENTRY_ANIM(1, 100, 100, 400, 0, 500, 0)
+    //TS_ENTRY(0, -1, -1, -1, -1, 500)
+    //
+    ///* Now click radio button */
+    //TS_CLICK(100, 150, 500)
+    //
+    ///* Now click checkbox button */
+    //TS_CLICK(100, 400, 500)
+    //
+    ///* Now click checkbox widget 4 times */
+    //TS_CLICK(400, 40, 500)
+    //TS_CLICK(400, 40, 500)
+    //TS_CLICK(400, 40, 500)
+    //TS_CLICK(400, 40, 500)
 };
 
 /**
@@ -206,7 +223,6 @@ touch_demo_thread(void * const arg) {
         if (entry->anim_time) {
             float x1_d, y1_d, x2_d, y2_d;
             size_t steps, i;
-            uint32_t start_time;
             uint32_t step_time = 30;
             
             /* Get number of loops to execute */

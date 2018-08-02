@@ -23,10 +23,11 @@ demo_create_feature_list_container(gui_handle_p parent, uint8_t protect) {
 
     gui_protect(protect);
 
-    /* Create list container */
+    /* Create left list container */
     h = gui_listcontainer_create(0, 10, 10, 300, 50, parent, list_container_callback, GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE);
-    gui_widget_setpositionpercent(h, 5, 5);
-    gui_widget_setsizepercent(h, 90, 90);
+    gui_widget_setpositionpercent(h, 1, 1);
+    gui_widget_setsizepercent(h, 48, 98);
+    gui_listcontainer_setcolor(h, GUI_LISTCONTAINER_COLOR_BG, GUI_COLOR_LIGHTBLUE);
     gui_widget_setignoreinvalidate(h, 0, 1);
 
     /* Create buttons and put them to container */
@@ -35,7 +36,30 @@ demo_create_feature_list_container(gui_handle_p parent, uint8_t protect) {
         gui_widget_setpositionpercent(btn, 5.0f, 5.0f + i * 20.0f);
         gui_widget_setsizepercent(btn, 90, 17);
         gui_widget_settext(btn, _GT(buttons[i]));
-        gui_widget_setignoreinvalidate(h, 0, 1);
+        gui_widget_setignoreinvalidate(btn, 0, 1);
+    }
+
+    /* Create right list container */
+    h = gui_listcontainer_create(0, 10, 10, 300, 50, parent, list_container_callback, GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE);
+    gui_widget_setpositionpercent(h, 51, 1);
+    gui_widget_setsizepercent(h, 48, 98);
+    gui_listcontainer_setcolor(h, GUI_LISTCONTAINER_COLOR_BG, GUI_COLOR_ORANGE);
+    gui_widget_setignoreinvalidate(h, 0, 1);
+    
+    /* Create container inside */
+    h = gui_listcontainer_create(0, 10, 10, 300, 50, h, list_container_callback, GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE);
+    gui_widget_setpositionpercent(h, 0, 0);
+    gui_widget_setsizepercent(h, 100, 200);
+    gui_listcontainer_setcolor(h, GUI_LISTCONTAINER_COLOR_BG, GUI_COLOR_LIGHTGREEN);
+    gui_widget_setignoreinvalidate(h, 0, 1);
+
+    /* Create buttons and put them to container */
+    for (i = 0; i < GUI_ARRAYSIZE(buttons); i++) {
+        btn = gui_button_create(0, 10, 10, 10, 10, h, NULL, GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE);
+        gui_widget_setpositionpercent(btn, 5.0f, i * 20.0f);
+        gui_widget_setsizepercent(btn, 90, 17);
+        gui_widget_settext(btn, _GT(buttons[i]));
+        gui_widget_setignoreinvalidate(btn, 0, 1);
     }
     gui_unprotect(protect);
 }
