@@ -276,7 +276,7 @@ redraw_widgets(gui_handle_p parent, uint8_t force_redraw) {
  * \return          PT thread result
  */
 static
-PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, uint8_t v, gui_wc_t* result)) {
+PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, gui_touch_data_t* old, uint8_t v, gui_wc_t* result)) {
     static volatile uint32_t time;
     static uint8_t i = 0;
     static gui_dim_t x[2], y[2];
@@ -290,7 +290,7 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
     for (i = 0; i < 2;) {                           /* Allow up to 2 touch presses */
 
         /* Wait for valid input with pressed state */
-        PT_WAIT_UNTIL(&ts->pt, v && ts->ts.status && !old->ts.status && ts->ts.count == 1);
+        PT_WAIT_UNTIL(&ts->pt, v && ts->ts.status && !old->status && ts->ts.count == 1);
 
         time = ts->ts.time;                         /* Get start time of this touch */
         x[i] = ts->x_rel[0];                        /* Save X value */
@@ -299,10 +299,10 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
         /* Either wait for released status or timeout */
         do {
             PT_YIELD(&ts->pt);                      /* Stop thread for now and wait next call */
-            
+
             /* Wait for new data */
             PT_WAIT_UNTIL(&ts->pt, v || (gui_sys_now() - time) > GUI_CFG_LONG_CLICK_TIMEOUT);   /* Wait touch with released state or timeout */
-            
+
             /* We have new touch entry, but we do
                not yet if it is "pressed" or "released" */
             if (v) {
@@ -319,11 +319,12 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
                 } else {                            /* Released status received */
                     break;                          /* Stop execution, continue later */
                 }
-            } else {
+            }
+            else {
                 break;                              /* Stop while loop execution */
             }
         } while (1);
-        
+
         /* Check what was the reason for thread to continue */
         if (v) {                                    /* New touch event occurred */
             if (!ts->ts.status) {                   /* We received released state */
@@ -338,26 +339,28 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
                     y[0] < 0 || y[0] > ts->widget_height ||
                     x[1] < 0 || x[1] > ts->widget_width ||
                     y[1] < 0 || y[1] > ts->widget_height
-                ) {
+                    ) {
                     PT_EXIT(&ts->pt);               /* Exit thread, invalid coordinate for touch click or double click */
                 }
                 if (!i) {                           /* On first call, this is click event */
                     *result = GUI_WC_Click;         /* Click event occurred */
-                    
+
                     time = ts->ts.time;             /* Save last time */
                     PT_YIELD(&ts->pt);              /* Stop thread for now and wait next call with new touch event */
-                    
+
                     /* Wait for valid input with pressed state */
                     PT_WAIT_UNTIL(&ts->pt, (v && ts->ts.status) || (gui_sys_now() - time) > 300);
                     if ((gui_sys_now() - time) > 300) { /* Check timeout for new pressed state */
                         PT_EXIT(&ts->pt);           /* Exit protothread */
                     }
-                } else {
+                }
+                else {
                     *result = GUI_WC_DblClick;      /* Double click event */
                     PT_EXIT(&ts->pt);               /* Reset protothread */
                 }
             }
-        } else {
+        }
+        else {
             if (!i) {                               /* Timeout occurred with no touch data, long click */
                 *result = GUI_WC_LongClick;         /* Click event occurred */
             }
@@ -370,27 +373,36 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, guii_touch_data_t* old, ui
 
 /**
  * \brief           Set relative coordinate of touch on widget
- * 					
+ *
  *					Relative coordinates are calculated based on widget position on screen
  *					and actual absolute X and Y values from touch event
  * \param[in,out]   ts: Raw touch data with X and Y position
- * \param[in]       x: Absolute X position of widget
- * \param[in]       y: Absolute Y position of widget
- * \param[in]       width: Width of widget
- * \param[in]       height: height of widget
+ * \param[in]       h: Widget handle
  */
 static void
-set_relative_coordinate(guii_touch_data_t* ts, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height) {
+set_relative_coordinate(guii_touch_data_t* ts, gui_touch_data_t* old, gui_handle_p h, uint8_t add_diff) {
     uint8_t i = 0;
+
+    /* Get absolute position */
+    ts->widget_width = gui_widget_getwidth(h);
+    ts->widget_height = gui_widget_getheight(h);
+    ts->widget_x = gui_widget_getabsolutex(h);
+    ts->widget_y = gui_widget_getabsolutey(h);
+
+    /* Calculate values */
     for (i = 0; i < ts->ts.count; i++) {
-        ts->x_rel_old[i] = ts->x_rel[i];            /* Save old on X value */
-        ts->y_rel_old[i] = ts->y_rel[i];            /* Save old on Y value */
-        ts->x_rel[i] = ts->ts.x[i] - x;             /* Get relative coordinate on widget */
-        ts->y_rel[i] = ts->ts.y[i] - y;             /* Get relative coordinate on widget */
+        /* Get previous values  */
+        ts->x_old[i] = old->x[i];
+        ts->y_old[i] = old->y[i];
+
+        /* Calculate difference new value versus old */
+        ts->x_diff[i] = ts->ts.x[i] - ts->x_old[i];
+        ts->y_diff[i] = ts->ts.y[i] - ts->y_old[i];
+
+        /* Calculate widget relative coordinate */
+        ts->x_rel[i] = ts->ts.x[i] - ts->widget_x;
+        ts->y_rel[i] = ts->ts.y[i] - ts->widget_y;
     }
-    
-    ts->widget_width = width;                       /* Set widget width */
-    ts->widget_height = height;                     /* Set widget height */
 
 #if GUI_CFG_TOUCH_MAX_PRESSES > 1
     if (ts->ts.count == 2) {                        /* 2 points detected */
@@ -410,7 +422,7 @@ set_relative_coordinate(guii_touch_data_t* ts, gui_dim_t x, gui_dim_t y, gui_dim
  * \return          Member of \ref guii_touch_status_t enumeration about success
  */
 static guii_touch_status_t
-process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
+process_touch(guii_touch_data_t* touch, gui_touch_data_t* touch_old, gui_handle_p parent) {
     gui_handle_p h;
     static uint8_t deep = 0;
     static uint8_t isKeyboard = 0;
@@ -456,23 +468,18 @@ process_touch(guii_touch_data_t* touch, gui_handle_p parent) {
          */
         if (guii_widget_haschildren(h)) {           /* Check if widget has children */
             deep++;                                 /* Go deeper in level */
-            tStat = process_touch(touch, h);        /* Process touch on widget elements first */
+            tStat = process_touch(touch, touch_old, h); /* Process touch on widget elements first */
             deep--;                                 /* Go back to normal level */
         }
         
-        /*
-         * Children widgets were not detected
-         */
+        /* hildren widgets were not detected */
         if (tStat == touchCONTINUE) {               /* Do we still have to check this widget? */
             check_disp_clipping(h);                 /* Check display region where widget is placed */
         
             /* Check if widget is in touch area */
             if (touch->ts.x[0] >= GUI.display_temp.x1 && touch->ts.x[0] <= GUI.display_temp.x2 && 
                 touch->ts.y[0] >= GUI.display_temp.y1 && touch->ts.y[0] <= GUI.display_temp.y2) {
-                set_relative_coordinate(touch,      /* Set relative coordinate */
-                    gui_widget_getabsolutex(h), gui_widget_getabsolutey(h), 
-                    gui_widget_getwidth(h), gui_widget_getheight(h)
-                ); 
+                set_relative_coordinate(touch, touch_old, h, 0);
             
                 /* Call touch start callback to see if widget accepts touches */
                 GUI_WIDGET_PARAMTYPE_TOUCH(&GUI.widget_param) = touch;
@@ -556,10 +563,7 @@ gui_process_touch(void) {
     if (guii_input_touchavailable()) {              /* Check if any touch available */
         while (guii_input_touchread(&GUI.touch.ts)) {   /* Process all touch events possible */
             if (GUI.active_widget != NULL && GUI.touch.ts.status) { /* Check active widget for touch and pressed status */
-                set_relative_coordinate(&GUI.touch, /* Set relative touch (for widget) from current touch */
-                    gui_widget_getabsolutex(GUI.active_widget), gui_widget_getabsolutey(GUI.active_widget),
-                    gui_widget_getwidth(GUI.active_widget), gui_widget_getheight(GUI.active_widget)
-                );
+                set_relative_coordinate(&GUI.touch, &GUI.touch_old, GUI.active_widget, 0);  /* Set relative coordinates */
             }
             
             /*
@@ -567,14 +571,18 @@ gui_process_touch(void) {
              * New status: pressed
              * Action: Touch move on active element
              */
-            if (GUI.touch.ts.status && GUI.touch_old.ts.status) {
+            if (GUI.touch.ts.status && GUI.touch_old.status) {
                 if (GUI.active_widget != NULL) {    /* If active widget exists */
-                    if (GUI.touch.ts.count == GUI.touch_old.ts.count) {
+                    if (GUI.touch.ts.count == GUI.touch_old.count) {
                         gui_handle_p aw = GUI.active_widget;/* Temporary set active widget */
                         do {
                             uint8_t r;
                             GUI_WIDGET_PARAMTYPE_TOUCH(&param) = &GUI.touch;
                             GUI_WIDGET_RESULTTYPE_TOUCH(&result) = touchCONTINUE;
+                            if (aw != GUI.active_widget) {
+                                r = guii_widget_callback(aw, GUI_WC_TouchStart, &param, &result);   /* The same amount of touch events currently */
+                                GUI_WIDGET_RESULTTYPE_TOUCH(&result) = touchCONTINUE;
+                            }
                             r = guii_widget_callback(aw, GUI_WC_TouchMove, &param, &result);   /* The same amount of touch events currently */
                             if (r) {                /* Check if touch move processed */
                                 guii_widget_setflag(aw, GUI_FLAG_TOUCH_MOVE);   /* Touch move has been processed */
@@ -586,18 +594,14 @@ gui_process_touch(void) {
                             }
                             
                             /*
+                             * TODO: Handle relative coordinates on new object
+                             *
                              * If widget does not detect touch start, then forward touch start to parent widget.
                              * With this approach, you can achieve slider on parent widget
                              */
                             aw = guii_widget_getparent(aw);    /* Get parent widget */
                             if (aw != NULL) {
-                                set_relative_coordinate(&GUI.touch, /* Set relative touch (for widget) from current touch */
-                                    gui_widget_getabsolutex(aw), gui_widget_getabsolutey(aw), 
-                                    gui_widget_getwidth(aw), gui_widget_getheight(aw)
-                                );
-                                /* Reset relative coordinates here! */
-                                memcpy(GUI.touch.x_rel_old, GUI.touch.x_rel, sizeof(GUI.touch.x_rel_old));
-                                memcpy(GUI.touch.y_rel_old, GUI.touch.y_rel, sizeof(GUI.touch.y_rel_old));
+                                set_relative_coordinate(&GUI.touch, &GUI.touch_old, aw, 0);
                             }
                         } while (aw != NULL);
                         
@@ -605,8 +609,10 @@ gui_process_touch(void) {
                          * In case touch move widget was detected on another widget,
                          * set this new widget to active from now on
                          */
-                        if (aw != NULL && aw != GUI.active_widget) {
-                            guii_widget_active_set(aw);  /* Set new active widget */
+                        if (aw != NULL) {
+                            if (aw != GUI.active_widget) {
+                                guii_widget_active_set(aw);  /* Set new active widget */
+                            }
                         }
                     } else {
                         GUI_WIDGET_PARAMTYPE_TOUCH(&param) = &GUI.touch;
@@ -621,8 +627,8 @@ gui_process_touch(void) {
              * New status: pressed
              * Action: Touch down on element, find element
              */
-            if (GUI.touch.ts.status && !GUI.touch_old.ts.status) {
-                process_touch(&GUI.touch, NULL);
+            if (GUI.touch.ts.status && !GUI.touch_old.status) {
+                process_touch(&GUI.touch, &GUI.touch_old, NULL);
                 if (GUI.active_widget != GUI.active_widget_prev) {  /* If new active widget is not the same as previous */
                     PT_INIT(&GUI.touch.pt)          /* Reset thread, otherwise process with double click event */
                 }
@@ -639,7 +645,7 @@ gui_process_touch(void) {
              * New status: released
              * Action: Touch up on active element
              */
-            if (!GUI.touch.ts.status && GUI.touch_old.ts.status) {
+            if (!GUI.touch.ts.status && GUI.touch_old.status) {
                 if (GUI.active_widget != NULL) {    /* Check if active widget */
                     GUI_WIDGET_PARAMTYPE_TOUCH(&param) = &GUI.touch;
                     GUI_WIDGET_RESULTTYPE_TOUCH(&result) = touchCONTINUE;
@@ -648,7 +654,7 @@ gui_process_touch(void) {
                 }
             }
             
-            memcpy((void *)&GUI.touch_old, (void *)&GUI.touch, sizeof(GUI.touch));   /* Copy current touch to last touch status */
+            memcpy((void *)&GUI.touch_old, (void *)&GUI.touch.ts, sizeof(GUI.touch));   /* Copy current touch to last touch status */
         }
     } else {                                        /* No new touch events, periodically call touch event thread */
         __TouchEvents_Thread(&GUI.touch, &GUI.touch_old, 0, &rresult);   /* Call thread for touch process periodically, handle long presses or timeouts */

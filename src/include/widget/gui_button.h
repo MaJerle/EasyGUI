@@ -75,6 +75,7 @@ typedef struct {
 gui_handle_p    gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
 uint8_t         gui_button_setcolor(gui_handle_p h, gui_button_color_t index, gui_color_t color);
 uint8_t         gui_button_setborderradius(gui_handle_p h, gui_dim_t size);
+uint8_t         gui_button_set3dstyle(gui_handle_p h, uint8_t enable);
     
 /**
  * \}

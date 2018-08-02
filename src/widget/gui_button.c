@@ -78,7 +78,7 @@ gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
-            gui_widget_set3dstyle(h, 1);            /* By default set 3D */
+            guii_widget_setflag(h, GUI_FLAG_3D);    /* By default set 3D */
             return 1;
         }
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
@@ -199,4 +199,25 @@ uint8_t
 gui_button_setborderradius(gui_handle_p h, gui_dim_t size) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_BORDER_RADIUS, &size, 1, 1); /* Set parameter */
+}
+
+/**
+ * \brief           Set 3D mode on widget
+ * \param[in]       h: Widget handle
+ * \param[in]       enable: Set to `1` to enable 3D mode, `0` otherwise
+ * \return          `1` on success, `0` otherwise
+ */
+uint8_t
+gui_button_set3dstyle(gui_handle_p h, uint8_t enable) {    
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    
+    if (enable && !guii_widget_getflag(h, GUI_FLAG_3D)) {  /* Enable style */
+        guii_widget_setflag(h, GUI_FLAG_3D);        /* Enable 3D style */
+        gui_widget_invalidate(h);                   /* Invalidate object */
+    } else if (!enable && guii_widget_getflag(h, GUI_FLAG_3D)) {/* Disable style */
+        guii_widget_clrflag(h, GUI_FLAG_3D);        /* Disable 3D style */
+        gui_widget_invalidate(h);                   /* Invalidate object */
+    }
+    
+    return 1;
 }

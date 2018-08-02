@@ -528,10 +528,10 @@ keyboard_base_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, 
                         btn = &row->btns[z];
                         
                         handle = gui_button_create(0, 0, 0, 1, 1, handleLayout, keyboard_btn_callback, GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE);   /* Create button object */
+                        gui_button_set3dstyle(handle, 0);
                         gui_widget_setuserdata(handle, (void *)btn);
                         gui_widget_setsizepercent(handle, btn->w, 23);
                         gui_widget_setpositionpercent(handle, btn->x, GUI_DIM(1 + (100.0f / layout->rows_count) * k));
-                        gui_widget_set3dstyle(handle, 0);
                         gui_widget_setzindex(handle, z);
                         gui_widget_setignoreinvalidate(handle, 0, 1);
                     }
@@ -560,7 +560,8 @@ gui_keyboard_create(void) {
 }
 
 /**
- * \brief           Hide virtual keyboard * \return          `1` on success, `0` otherwise
+ * \brief           Hide virtual keyboard
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_keyboard_hide(void) {
@@ -577,7 +578,8 @@ gui_keyboard_hide(void) {
 
 /**
  * \brief           Show virtual keyboard
- * \param[in]       h: Widget handle for which keyboard will be opened * \return          `1` on success, `0` otherwise
+ * \param[in]       h: Widget handle for which keyboard will be opened
+ * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_keyboard_show(gui_handle_p h) {

@@ -58,7 +58,7 @@ gui_widget_default_t widget_default;
  */
 static gui_dim_t
 calculate_widget_width(gui_handle_p h) {
-    gui_dim_t width = 0;
+    gui_dim_t width;
     if (guii_widget_getflag(h, GUI_FLAG_EXPANDED)) {/* Maximize window over parent */
         width = guii_widget_getparentinnerwidth(h); /* Return parent inner width */
     } else if (guii_widget_getflag(h, GUI_FLAG_WIDTH_PERCENT)) {   /* Percentage width */
@@ -76,7 +76,7 @@ calculate_widget_width(gui_handle_p h) {
  */
 static gui_dim_t
 calculate_widget_height(gui_handle_p h) {
-    gui_dim_t height = 0;
+    gui_dim_t height;
     if (guii_widget_getflag(h, GUI_FLAG_EXPANDED)) {/* Maximize window over parent */
         height = guii_widget_getparentinnerheight(h);   /* Return parent inner height */
     } else if (guii_widget_getflag(h, GUI_FLAG_HEIGHT_PERCENT)) {   /* Percentage width */
@@ -194,7 +194,7 @@ set_widget_abs_values(gui_handle_p h) {
     calculate_widget_absolute_visible_position_size(h,
         &h->abs_visible_x1, &h->abs_visible_y1,
         &h->abs_visible_x2, &h->abs_visible_y2);
-    
+
     /* Update children widgets */
     if (guii_widget_haschildren(h)) {
         gui_handle_p child;
@@ -964,7 +964,7 @@ guii_widget_getparentabsolutey(gui_handle_p h) {
 /**
  * \brief           Get absolute `X` position on LCD for specific widget
  * \param[in]       h: Widget handle
- * \return          `X` position on LCD in units of pixels
+ * \return          `X` position on screen in units of pixels
  */
 gui_dim_t
 gui_widget_getabsolutex(gui_handle_p h) {   
@@ -981,7 +981,7 @@ gui_widget_getabsolutex(gui_handle_p h) {
 /**
  * \brief           Get absolute `Y` position on LCD for specific widget
  * \param[in]       h: Widget handle 
- * \return          `Y` position on LCD in units of pixels
+ * \return          `Y` position on screen in units of pixels
  */
 gui_dim_t
 gui_widget_getabsolutey(gui_handle_p h) {
@@ -2497,27 +2497,6 @@ gui_widget_getalpha(gui_handle_p h) {
 #endif
     
     return a;
-}
-
-/**
- * \brief           Set 3D mode on widget
- * \param[in]       h: Widget handle
- * \param[in]       enable: Set to `1` to enable 3D mode, `0` otherwise
- * \return          `1` on success, `0` otherwise
- */
-uint8_t
-gui_widget_set3dstyle(gui_handle_p h, uint8_t enable) {    
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    
-    if (enable && !guii_widget_getflag(h, GUI_FLAG_3D)) {  /* Enable style */
-        guii_widget_setflag(h, GUI_FLAG_3D);        /* Enable 3D style */
-        gui_widget_invalidate(h);                   /* Invalidate object */
-    } else if (!enable && guii_widget_getflag(h, GUI_FLAG_3D)) {/* Disable style */
-        guii_widget_clrflag(h, GUI_FLAG_3D);        /* Disable 3D style */
-        gui_widget_invalidate(h);                   /* Invalidate object */
-    }
-    
-    return 1;
 }
 
 /**

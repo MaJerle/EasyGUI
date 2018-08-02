@@ -102,8 +102,8 @@ item_height(gui_handle_p h, uint16_t* offset) {
 static int16_t
 nr_entries_pp(gui_handle_p h) {
     int16_t res = 0;
-    if (h->font != NULL) {                          /* Font is responsible for this setup */
-        gui_dim_t height = gui_widget_getheight(h);    /* Get item height */
+    if (h->font != NULL) {
+        gui_dim_t height = gui_widget_getheight(h);
         if (!is_opened(h)) {
             height *= HEIGHT_CONST(h) - 1;          /* Get height of opened area part */
         } else {
@@ -121,36 +121,28 @@ open_close(gui_handle_p h, uint8_t state) {
         o->flags |= GUI_FLAG_DROPDOWN_OPENED;
         if (is_dir_up(h)) {                         /* Width is opening to up */
             uint8_t is_percent;
-            float_t y_pos;
 
             /* In this case, we have to move Y position up */
-            y_pos = gui_widget_getypositionoriginal(h, &is_percent);
             gui_widget_setypositionoriginal(h,
-                y_pos - (HEIGHT_CONST(h) - 1) * (is_percent ? gui_widget_getheightpercent(h) : gui_widget_getheight(h))
+                gui_widget_getypositionoriginal(h, &is_percent) - (HEIGHT_CONST(h) - 1) * gui_widget_getheightex(h, is_percent)
             );
         }
 
         /* Set new height */
-        gui_widget_setheightoriginal(h,
-            HEIGHT_CONST(h) * gui_widget_getheightoriginal(h, NULL)
-        );
+        gui_widget_setheightoriginal(h, HEIGHT_CONST(h) * gui_widget_getheightoriginal(h, NULL));
         return 1;
     } else if (!state && is_opened(h)) {
         o->flags &= ~GUI_FLAG_DROPDOWN_OPENED;
 
         /* Set height back to "normal" */
-        gui_widget_setheightoriginal(h,
-            gui_widget_getheightoriginal(h, NULL) / HEIGHT_CONST(h)
-        );
+        gui_widget_setheightoriginal(h, gui_widget_getheightoriginal(h, NULL) / HEIGHT_CONST(h));
 
         if (is_dir_up(h)) {                         /* When open up */
             uint8_t is_percent;
-            float_t y_pos;
 
             /* In this case, we have to move Y position down */
-            y_pos = gui_widget_getypositionoriginal(h, &is_percent);
             gui_widget_setypositionoriginal(h,
-                y_pos + (HEIGHT_CONST(h) - 1) * (is_percent ? gui_widget_getheightpercent(h) : gui_widget_getheight(h))
+                gui_widget_getypositionoriginal(h, &is_percent) + (HEIGHT_CONST(h) - 1) * gui_widget_getheightex(h, is_percent)
             );
         }
 

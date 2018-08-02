@@ -53,7 +53,7 @@ extern "C" {
  */
 
 /**
- * \addtogroup      GUI_flags flags
+ * \addtogroup      GUI_FLAGS Flags
  * \brief           List of all flags in GUI library
  * \{
  */
@@ -138,7 +138,7 @@ typedef enum guir_t {
 
 /**
  * \brief           Linked list structure
- * \note            When used with widgets, this structure must be first element in \ref gui_handle structure
+ * \note            When used with widgets, it must be first element in \ref gui_handle structure
  * \sa              gui_linkedlistroot_t
  */
 typedef struct gui_linkedlist_t {
@@ -207,6 +207,16 @@ typedef uint8_t     gui_char;               /*!< GUI char data type for all stri
 #define GUI_DIM(x)                          ((gui_dim_t)(x))
 
 /**
+ * \brief           Basic widget structure
+ */
+struct gui_handle;
+
+/**
+ * \brief           Handle object for GUI widget
+ */
+typedef struct gui_handle* gui_handle_p;
+
+/**
  * \brief           Global event callback function declaration
  */
 typedef void (*gui_eventcallback_t)(void);
@@ -252,10 +262,16 @@ typedef struct gui_touch_data_t {
  */
 typedef struct {
     gui_touch_data_t ts;                    /*!< Touch structure from outside */
+
+    gui_dim_t x_old[GUI_CFG_TOUCH_MAX_PRESSES];
+    gui_dim_t y_old[GUI_CFG_TOUCH_MAX_PRESSES];
     gui_dim_t x_rel[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Relative X position to current widget */
     gui_dim_t y_rel[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Relative Y position to current widget */
-    gui_dim_t x_rel_old[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Relative X position to current widget */
-    gui_dim_t y_rel_old[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Relative Y position to current widget */
+    gui_dim_t x_diff[GUI_CFG_TOUCH_MAX_PRESSES];/*!< X difference between old and new touch position */
+    gui_dim_t y_diff[GUI_CFG_TOUCH_MAX_PRESSES];/*!< Y difference between old and new touch position */
+
+    gui_dim_t widget_x;                     /*!< Widget X position */
+    gui_dim_t widget_y;                     /*!< Widget Y position */
     gui_dim_t widget_width;                 /*!< Save widget width value */
     gui_dim_t widget_height;                /*!< Save widget height value */
 #if GUI_CFG_TOUCH_MAX_PRESSES > 1 || __DOXYGEN__
@@ -272,7 +288,7 @@ typedef struct {
 #if GUI_CFG_USE_UNICODE || __DOXYGEN__
     gui_char keys[4];                       /*!< Key pressed, plain unicode bytes, up to 4 bytes */
 #else
-    gui_char Keys[1];                       /*!< Key pressed, no unicode support */
+    gui_char keys[1];                       /*!< Key pressed, no unicode support */
 #endif
     uint8_t flags;                          /*!< flags for special keys */
     uint32_t time;                          /*!< Event time */
@@ -972,14 +988,16 @@ typedef enum {
 } gui_wc_t;
 
 /**
- * \brief           Basic widget structure
+ * \brief           Style information
  */
-struct gui_handle;
+typedef struct {
+    void* arg;
+} gui_style_t;
 
 /**
- * \brief           Handle object for GUI widget
+ * \brief           Style handle object
  */
-typedef struct gui_handle* gui_handle_p;    /*!< Handle object for GUI widget */
+typedef gui_style_t* gui_style_p;
 
 /**
  * \brief           Structure used in setting and getting parameter values from widgets using callbacks

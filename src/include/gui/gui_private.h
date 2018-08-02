@@ -97,7 +97,7 @@ typedef struct {
     gui_widget_result_t widget_result;
     
 #if GUI_CFG_USE_TOUCH || __DOXYGEN__
-    guii_touch_data_t touch_old;            /*!< Old touch data, used for event management */
+    gui_touch_data_t touch_old;             /*!< Old touch data, used for event management */
     guii_touch_data_t touch;                /*!< Current touch data and processing tool */
     gui_handle_p active_widget;             /*!< Pointer to widget currently active by touch */
     gui_handle_p active_widget_prev;        /*!< Previously active widget */

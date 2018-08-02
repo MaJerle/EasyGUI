@@ -252,7 +252,6 @@ gui_listview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
             uint16_t i;
             gui_listview_row_t* row;
             gui_listview_item_t* item;
-            uint8_t is3D = guii_widget_is3d(h);     /* Is 3D mode enabled */
 
             x = gui_widget_getabsolutex(h);         /* Get absolute X coordinate */
             y = gui_widget_getabsolutey(h);         /* Get absolute Y coordinate */
@@ -261,13 +260,8 @@ gui_listview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
             
             check_values(h);                        /* Check values if size changed */
             
-            if (is3D) {
-                gui_draw_rectangle3d(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
-                gui_draw_filledrectangle(disp, x + 2, y + 2, width - 4, height - 4, guii_widget_getcolor(h, GUI_LISTVIEW_COLOR_BG));
-            } else {
-                gui_draw_rectangle(disp, x, y, width, height, guii_widget_getcolor(h, GUI_LISTVIEW_COLOR_BORDER));
-                gui_draw_filledrectangle(disp, x + 1, y + 1, width - 2, height - 2, guii_widget_getcolor(h, GUI_LISTVIEW_COLOR_BG));
-            }
+            gui_draw_rectangle(disp, x, y, width, height, guii_widget_getcolor(h, GUI_LISTVIEW_COLOR_BORDER));
+            gui_draw_filledrectangle(disp, x + 1, y + 1, width - 2, height - 2, guii_widget_getcolor(h, GUI_LISTVIEW_COLOR_BG));
 
             /* Draw side scrollbar */
             if (o->flags & GUI_FLAG_LISTVIEW_SLIDER_ON) {
@@ -310,15 +304,9 @@ gui_listview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                 /* Draw header row with columns */
                 f.y = y + 2;
                 for (i = 0; i < o->col_count; i++) {
-                    if (is3D) {
-                        gui_draw_rectangle3d(disp, xTmp, f.y, o->cols[i]->width, itemheight, GUI_DRAW_3D_State_Raised);
-                        f.width = o->cols[i]->width - 4;    /* Set width */
-                        f.x = xTmp + 2;             /* Set offset */
-                    } else {
-                        gui_draw_rectangle(disp, xTmp, f.y, o->cols[i]->width, itemheight, GUI_COLOR_WIN_DARKGRAY);
-                        f.width = o->cols[i]->width - 6;    /* Set width */
-                        f.x = xTmp + 3;             /* Set offset */
-                    }
+                    gui_draw_rectangle(disp, xTmp, f.y, o->cols[i]->width, itemheight, GUI_COLOR_WIN_DARKGRAY);
+                    f.width = o->cols[i]->width - 6;/* Set width */
+                    f.x = xTmp + 3;                 /* Set offset */
                     gui_draw_writetext(disp, gui_widget_getfont(h), o->cols[i]->text, &f);
                     xTmp += o->cols[i]->width;      /* Increase X value */
                 }
@@ -690,7 +678,7 @@ gui_listview_setsliderauto(gui_handle_p h, uint8_t autoMode) {
         __GL(h)->flags &= ~GUI_FLAG_LISTVIEW_SLIDER_AUTO;
         gui_widget_invalidate(h);                   /* Invalidate widget */
     }
-
+    
     return 1;
 }
 

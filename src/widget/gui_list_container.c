@@ -75,12 +75,8 @@ calculate_limits(gui_handle_p h) {
         width = gui_widget_getwidth(w);
         height = gui_widget_getheight(w);
 
-        if (x + width > cmx) {
-            cmx = x + width;
-        }
-        if (y + height > cmy) {
-            cmy = y + height;
-        }
+        cmx = GUI_MAX(cmx, x + width);
+        cmy = GUI_MAX(cmy, y + height);
     }
 
     width = guii_widget_getinnerwidth(h);           /* Get widget width */
@@ -116,7 +112,6 @@ gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* pa
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (ctrl) {                                 /* Handle control function if required */
         case GUI_WC_PreInit: {
-            gui_widget_setpadding(h, 3);
             return 1;
         }
         case GUI_WC_SetParam: {                     /* Set parameter for widget */
@@ -153,7 +148,12 @@ gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* pa
             return 1;
         }
         case GUI_WC_TouchMove: {
+            gui_dim_t sx, sy, new_diff;
             guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
+
+            /* Get current scroll values */
+            sx = gui_widget_getscrollx(h);
+            sy = gui_widget_getscrolly(h);
 
             /*
              * TODO:
@@ -164,20 +164,34 @@ gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* pa
              *
              * In case of nested list container widgets, this feature is required
              */
-            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
             if (l->mode == GUI_LISTCONTAINER_MODE_VERTICAL || l->mode == GUI_LISTCONTAINER_MODE_VERTICAL_HORIZONTAL) {
-                gui_widget_incscrolly(h, ts->y_rel_old[0] - ts->y_rel[0]);
-                if (gui_widget_getscrolly(h) < 0) {
+                new_diff = -ts->y_diff[0];
+                if ((new_diff + sy) <= 0) {
                     gui_widget_setscrolly(h, 0);
+                } else if ((new_diff + sy) >= l->maxscrolly) {
+                    gui_widget_setscrolly(h, l->maxscrolly);
+                } else {
+                    gui_widget_setscrolly(h, sy + new_diff);
                 }
             }
             if (l->mode == GUI_LISTCONTAINER_MODE_HORIZONTAL || l->mode == GUI_LISTCONTAINER_MODE_VERTICAL_HORIZONTAL) {
-                gui_widget_incscrollx(h, ts->x_rel_old[0] - ts->x_rel[0]);
-                if (gui_widget_getscrollx(h) < 0) {
+                new_diff = -ts->x_diff[0];
+                if ((new_diff + sx) <= 0) {
                     gui_widget_setscrollx(h, 0);
+                } else if ((new_diff + sx) >= l->maxscrollx) {
+                    gui_widget_setscrollx(h, l->maxscrollx);
+                } else {
+                    gui_widget_setscrollx(h, sx + new_diff);
                 }
             }
-            calculate_limits(h);
+            calculate_limits(h);                    /* Calculate scroll limits */
+            
+            /* Check if scroll was successful */
+            /* Handle touch, otherwise send it to parent widget */
+            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchCONTINUE;
+            if (gui_widget_getscrollx(h) != sx || gui_widget_getscrolly(h) != sy) {
+                GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
+            }
 
             return 1;
         }

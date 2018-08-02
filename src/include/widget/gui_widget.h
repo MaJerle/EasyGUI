@@ -172,15 +172,6 @@ extern "C" {
 #define guii_widget_clrflag(h, flag)                ((h)->flags &= ~(flag))
 
 /**
- * \brief           Checks if widget has enabled 3D mode
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       h: Widget handle
- * \return          `1` on success, `0` otherwise
- * \hideinitializer
- */
-#define guii_widget_is3d(h)                         (!!guii_widget_getflag(h, GUI_FLAG_3D))
-
-/**
  * \brief           Get pointer to parent widget
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle
@@ -375,6 +366,7 @@ gui_dim_t       guii_widget_getparentabsolutey(gui_handle_p h);
 
 void*           gui_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
 uint8_t         gui_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color);
+uint8_t         gui_widget_setstyle(gui_handle_p h, const gui_style_p style);
 
 /**
  * \}
@@ -422,6 +414,16 @@ float           gui_widget_getwidthpercent(gui_handle_p h);
 float           gui_widget_getheightpercent(gui_handle_p h);
 float           gui_widget_getwidthoriginal(gui_handle_p h, uint8_t* is_percent);
 float           gui_widget_getheightoriginal(gui_handle_p h, uint8_t* is_percent);
+
+static inline float
+gui_widget_getwidthex(gui_handle_p h, uint8_t in_percent) {
+    return GUI_FLOAT(in_percent ? gui_widget_getwidthpercent(h) : gui_widget_getwidth(h));
+}
+
+static inline float
+gui_widget_getheightex(gui_handle_p h, uint8_t in_percent) {
+    return GUI_FLOAT(in_percent ? gui_widget_getheightpercent(h) : gui_widget_getheight(h));
+}
 
 uint8_t         gui_widget_setexpanded(gui_handle_p h, uint8_t state);
 uint8_t         gui_widget_toggleexpanded(gui_handle_p h);
@@ -499,7 +501,6 @@ uint8_t         gui_widget_incselection(gui_handle_p h, int16_t dir);
 uint8_t         gui_widget_setfocus(gui_handle_p h);
 uint8_t         gui_widget_setzindex(gui_handle_p h, int32_t zindex);
 int32_t         gui_widget_getzindex(gui_handle_p h);
-uint8_t         gui_widget_set3dstyle(gui_handle_p h, uint8_t enable);
 gui_handle_p    gui_widget_getparent(gui_handle_p h);
 gui_id_t        gui_widget_getid(gui_handle_p h);
 gui_handle_p    gui_widget_getbyid(gui_id_t id);
