@@ -87,7 +87,7 @@ typedef struct {
 } gui_textview_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p    gui_textview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+gui_handle_p    gui_textview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags);
 uint8_t         gui_textview_setcolor(gui_handle_p h, gui_textview_color_t index, gui_color_t color);
 uint8_t         gui_textview_setvalign(gui_handle_p h, gui_textalign_valign_t align);
 uint8_t         gui_textview_sethalign(gui_handle_p h, gui_textalign_halign_t align);

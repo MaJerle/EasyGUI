@@ -308,9 +308,9 @@ keyboard = {
  * \brief           Keyboard button callback function
  */
 static uint8_t
-keyboard_btn_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, gui_widget_result_t* result) {
+keyboard_btn_callback(gui_handle_p h, gui_we_t cmd, gui_evt_param_t* param, gui_evt_result_t* result) {
     switch (cmd) {                                  /* Process commands */
-        case GUI_WC_Draw: {                         /* Draw button */
+        case GUI_EVT_DRAW: {                         /* Draw button */
             gui_char str[10] = {0};
             const key_btn_t* kbtn;
             
@@ -357,7 +357,7 @@ keyboard_btn_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, g
             gui_widget_processdefaultcallback(h, cmd, param, result);   /* Process default callback with drawing */
             return 1;
         }
-        case GUI_WC_Click: {                        /* Handle pressed button */
+        case GUI_EVT_CLICK: {                        /* Handle pressed button */
             gui_handle_p tmp1, tmp2, tmp3;
             const key_btn_t* kbtn;
             uint32_t ch = 0;
@@ -423,26 +423,26 @@ keyboard_btn_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, g
                 /* Send character to focused widget */
                 /************************************/
                 if (keyboard.target != NULL) {
-                    gui_widget_param_t param;
-                    gui_widget_result_t result;
+                    gui_evt_param_t param;
+                    gui_evt_result_t result;
                     guii_keyboard_data_t key;
 
                     gui_string_unicode_encode(ch, key.kb.keys);/* Decode key */
-                    GUI_WIDGET_PARAMTYPE_KEYBOARD(&param) = &key;
-                    GUI_WIDGET_RESULTTYPE_KEYBOARD(&result) = keyCONTINUE;
-                    guii_widget_callback(keyboard.target, GUI_WC_KeyPress, &param, &result);
+                    GUI_EVT_PARAMTYPE_KEYBOARD(&param) = &key;
+                    GUI_EVT_RESULTTYPE_KEYBOARD(&result) = keyCONTINUE;
+                    guii_widget_callback(keyboard.target, GUI_EVT_KEYPRESS, &param, &result);
 
                     key.kb.keys[0] = 0;             /* Set key to 0 */
-                    GUI_WIDGET_PARAMTYPE_KEYBOARD(&param) = &key;
-                    GUI_WIDGET_RESULTTYPE_KEYBOARD(&result) = keyCONTINUE;
-                    guii_widget_callback(keyboard.target, GUI_WC_KeyPress, &param, &result);
+                    GUI_EVT_PARAMTYPE_KEYBOARD(&param) = &key;
+                    GUI_EVT_RESULTTYPE_KEYBOARD(&result) = keyCONTINUE;
+                    guii_widget_callback(keyboard.target, GUI_EVT_KEYPRESS, &param, &result);
                 }
                 //kbd.keys[0] = 0;                    /* Set key to 0 */
                 //gui_input_keyadd(&kbd);             /* Add end key */
             }
             return 1;
         }
-        case GUI_WC_DblClick: {
+        case GUI_EVT_DBLCLICK: {
             const key_btn_t* kbtn;
             
             kbtn = gui_widget_getuserdata(h);
@@ -462,9 +462,9 @@ keyboard_btn_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, g
 
 /* Callback for keyboard base widget */
 static uint8_t
-keyboard_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, gui_widget_result_t* result) {
+keyboard_callback(gui_handle_p h, gui_we_t cmd, gui_evt_param_t* param, gui_evt_result_t* result) {
     switch (cmd) {
-        case GUI_WC_Init: {
+        case GUI_EVT_INIT: {
             return 1;
         }
         default:                                    /* Handle default option */
@@ -475,12 +475,12 @@ keyboard_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, gui_w
 
 /* Callback function for base element of keyboard */
 static uint8_t
-keyboard_base_callback(gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, gui_widget_result_t* result) {
+keyboard_base_callback(gui_handle_p h, gui_we_t cmd, gui_evt_param_t* param, gui_evt_result_t* result) {
     switch (cmd) {
-        case GUI_WC_PreInit: {
+        case GUI_WC_PRE_INIT: {
             return 1;
         }
-        case GUI_WC_Init: {                         /* When base element is initialized */
+        case GUI_EVT_INIT: {                         /* When base element is initialized */
             gui_handle_p handle, handleLayout;
             size_t i, k, z;
             const key_layout_t* layout;

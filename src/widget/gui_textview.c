@@ -34,12 +34,10 @@
 #include "gui/gui_private.h"
 #include "widget/gui_textview.h"
 
-#define __GT(x)             ((gui_textview_t *)(x))
-
 #define CFG_VALIGN          0x01
 #define CFG_HALIGN          0x02
 
-static uint8_t gui_textview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+static uint8_t gui_textview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -73,10 +71,10 @@ gui_widget_t widget = {
  * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
-gui_textview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
-    switch (ctrl) {                                 /* Handle control function if required */
-        case GUI_WC_SetParam: {                     /* Set parameter for widget */
-            gui_widget_param* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
+gui_textview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
+    switch (ctrl) {
+        case GUI_EVT_SETPARAM: {                     /* Set parameter for widget */
+            gui_widget_param* p = GUI_EVT_PARAMTYPE_WIDGETPARAM(param);
             switch (p->type) {
                 case CFG_HALIGN: 
                     o->halign = *(gui_textalign_halign_t *)p->data;
@@ -86,11 +84,11 @@ gui_textview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                     break;
                 default: break;
             }
-            GUI_WIDGET_RESULTTYPE_U8(result) = 1;   /* Save result */
+            GUI_EVT_RESULTTYPE_U8(result) = 1;   /* Save result */
             return 1;
         }
-        case GUI_WC_Draw: {
-            gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
+        case GUI_EVT_DRAW: {
+            gui_display_t* disp = GUI_EVT_PARAMTYPE_DISP(param);
             gui_dim_t x, y, wi, hi;
             gui_color_t bg;
             
@@ -100,7 +98,7 @@ gui_textview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                 x = gui_widget_getabsolutex(h);     /* Get absolute X coordinate */
                 y = gui_widget_getabsolutey(h);     /* Get absolute Y coordinate */
                 wi = gui_widget_getwidth(h);        /* Get widget width */
-                hi = gui_widget_getheight(h);       /* Get widget height */
+                hi = gui_widget_getheight(h);
                 
                 /* Draw background if necessary */
                 bg = guii_widget_getcolor(h, GUI_TEXTVIEW_COLOR_BG);
@@ -123,15 +121,15 @@ gui_textview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
             return 1;
         }
 #if GUI_CFG_USE_KEYBOARD
-        case GUI_WC_KeyPress: {
-            guii_keyboard_data_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
+        case GUI_EVT_KEYPRESS: {
+            guii_keyboard_data_t* kb = GUI_EVT_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (guii_widget_processtextkey(h, kb)) {
-                GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
+                GUI_EVT_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }
             return 1;
         }
 #endif /* GUI_CFG_USE_KEYBOARD */
-        case GUI_WC_Click: {
+        case GUI_EVT_CLICK: {
             return 1;
         }
         default:                                    /* Handle default option */
@@ -149,13 +147,13 @@ gui_textview_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
- * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
+ * \param[in]       evt_fn: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_textview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
+gui_textview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, evt_fn, flags);
 }
 
 /**

@@ -34,13 +34,11 @@
 #include "gui/gui_private.h"
 #include "widget/gui_led.h"
 
-#define __GL(x)             ((GUI_LED_t *)(x))
-
 #define CFG_TOGGLE          0x01
 #define CFG_SET             0x02
 #define CFG_TYPE            0x03
 
-static uint8_t gui_led_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+static uint8_t gui_led_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -59,14 +57,12 @@ gui_color_t colors[] = {
 static const
 gui_widget_t widget = {
     .name = _GT("LED"),                             /*!< Widget name */ 
-    .size = sizeof(GUI_LED_t),                      /*!< Size of widget for memory allocation */
+    .size = sizeof(gui_led_t),                      /*!< Size of widget for memory allocation */
     .flags = 0,                                     /*!< List of widget flags */
     .callback = gui_led_callback,                   /*!< Control function */
     .colors = colors,                               /*!< List of default colors */
     .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
-
-#define l           ((GUI_LED_t *)(h))
 
 /**
  * \brief           Default widget callback function
@@ -77,42 +73,43 @@ gui_widget_t widget = {
  * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
-gui_led_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_led_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
+    gui_led_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    switch (ctrl) {                                 /* Handle control function if required */
-        case GUI_WC_SetParam: {                     /* Set parameter for widget */
-            gui_widget_param* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
+    switch (ctrl) {
+        case GUI_EVT_SETPARAM: {                     /* Set parameter for widget */
+            gui_widget_param* p = GUI_EVT_PARAMTYPE_WIDGETPARAM(param);
             switch (p->type) {
                 case CFG_SET:
                     if (*(uint8_t *)p->data) {
-                        l->flags |= GUI_LED_FLAG_ON;
+                        o->flags |= GUI_LED_FLAG_ON;
                     } else {
-                        l->flags &= ~GUI_LED_FLAG_ON;
+                        o->flags &= ~GUI_LED_FLAG_ON;
                     }
                     break;
                 case CFG_TOGGLE: 
-                    l->flags ^= GUI_LED_FLAG_ON;    /* Toggle flag */
+                    o->flags ^= GUI_LED_FLAG_ON;    /* Toggle flag */
                     break;
                 case CFG_TYPE: 
-                    l->type = *(gui_led_type_t *)p->data;   /* Set type */
+                    o->type = *(gui_led_type_t *)p->data;   /* Set type */
                     break;
                 default: break;
             }
-            GUI_WIDGET_RESULTTYPE_U8(result) = 1;   /* Save result */
+            GUI_EVT_RESULTTYPE_U8(result) = 1;   /* Save result */
             return 1;
         }
-        case GUI_WC_Draw: {
-            gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
+        case GUI_EVT_DRAW: {
+            gui_display_t* disp = GUI_EVT_PARAMTYPE_DISP(param);
             gui_color_t c1, c2;
             gui_dim_t x, y, width, height;
             
             x = gui_widget_getabsolutex(h);         /* Get absolute position on screen */
             y = gui_widget_getabsolutey(h);         /* Get absolute position on screen */
-            width = gui_widget_getwidth(h);         /* Get widget width */
-            height = gui_widget_getheight(h);       /* Get widget height */
+            width = gui_widget_getwidth(h);
+            height = gui_widget_getheight(h);
             
             /* Get drawing colors */
-            if (l->flags & GUI_LED_FLAG_ON) {       /* If LED is on */
+            if (o->flags & GUI_LED_FLAG_ON) {       /* If LED is on */
                 c1 = guii_widget_getcolor(h, GUI_LED_COLOR_ON);
                 c2 = guii_widget_getcolor(h, GUI_LED_COLOR_ON_BORDER);
             } else {
@@ -120,7 +117,7 @@ gui_led_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_w
                 c2 = guii_widget_getcolor(h, GUI_LED_COLOR_OFF_BORDER);
             }
             
-            if (l->type == GUI_LED_TYPE_RECT) {     /* When led has rectangle shape */
+            if (o->type == GUI_LED_TYPE_RECT) {     /* When led has rectangle shape */
                 gui_draw_filledrectangle(disp, x + 1, y + 1, width - 2, height - 2, c1);
                 gui_draw_rectangle(disp, x, y, width, height, c2);
             } else {
@@ -144,13 +141,13 @@ gui_led_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_w
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
- * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
+ * \param[in]       evt_fn: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_led_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
+gui_led_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, evt_fn, flags);
 }
 
 /**
@@ -207,6 +204,7 @@ gui_led_set(gui_handle_p h, uint8_t state) {
  */
 uint8_t
 gui_led_ison(gui_handle_p h) {
+    gui_led_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    return !!(__GL(h)->flags & GUI_LED_FLAG_ON);
+    return (o->flags & GUI_LED_FLAG_ON) == GUI_LED_FLAG_ON;
 }

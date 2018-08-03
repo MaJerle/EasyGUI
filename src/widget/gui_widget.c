@@ -682,7 +682,7 @@ set_widget_position(gui_handle_p h, float x, float y, uint8_t xp, uint8_t yp) {
  */
 static uint8_t
 can_remove_widget(gui_handle_p h) {
-    gui_widget_result_t result = {0};
+    gui_evt_result_t result = {0};
     
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
@@ -692,13 +692,13 @@ can_remove_widget(gui_handle_p h) {
     }
     
     /* Check widget status itself */
-    GUI_WIDGET_RESULTTYPE_U8(&result) = 1;
-    if (!guii_widget_callback(h, GUI_WC_Remove, NULL, &result) || GUI_WIDGET_RESULTTYPE_U8(&result)) { /* If command was not processed, allow delete */
-        GUI_WIDGET_RESULTTYPE_U8(&result) = 1;      /* Manually allow delete */
+    GUI_EVT_RESULTTYPE_U8(&result) = 1;
+    if (!guii_widget_callback(h, GUI_EVT_REMOVE, NULL, &result) || GUI_EVT_RESULTTYPE_U8(&result)) { /* If command was not processed, allow delete */
+        GUI_EVT_RESULTTYPE_U8(&result) = 1;      /* Manually allow delete */
     }
     
     /* Check children widgets recursively */
-    if (GUI_WIDGET_RESULTTYPE_U8(&result) && guii_widget_haschildren(h)) {
+    if (GUI_EVT_RESULTTYPE_U8(&result) && guii_widget_haschildren(h)) {
         gui_handle_p h1;
         GUI_LINKEDLIST_WIDGETSLISTNEXT(h, h1) {
             if (!can_remove_widget(h1)) {           /* If we should not delete it */
@@ -707,7 +707,7 @@ can_remove_widget(gui_handle_p h) {
         }
     }
     
-    return GUI_WIDGET_RESULTTYPE_U8(&result);
+    return GUI_EVT_RESULTTYPE_U8(&result);
 }
 
 /**
@@ -827,7 +827,7 @@ guii_widget_focus_clear(void) {
     if (GUI.focused_widget != NULL && GUI.focused_widget != GUI.root.first) { /* First widget is always in focus */
         GUI.focused_widget_prev = GUI.focused_widget;   /* Clear everything */
         do {
-            guii_widget_callback(GUI.focused_widget, GUI_WC_FocusOut, NULL, NULL);
+            guii_widget_callback(GUI.focused_widget, GUI_EVT_FOCUSOUT, NULL, NULL);
             guii_widget_clrflag(GUI.focused_widget, GUI_FLAG_FOCUS);
             gui_widget_invalidate(GUI.focused_widget);
             GUI.focused_widget = guii_widget_getparent(GUI.focused_widget);
@@ -865,7 +865,7 @@ guii_widget_focus_set(gui_handle_p h) {
                 GUI.focused_widget != NULL && common != NULL && GUI.focused_widget != common;
                 GUI.focused_widget = guii_widget_getparent(GUI.focused_widget)) {
                 guii_widget_clrflag(GUI.focused_widget, GUI_FLAG_FOCUS);    /* Clear focused flag */
-                guii_widget_callback(GUI.focused_widget, GUI_WC_FocusOut, NULL, NULL);  /* Notify with callback */
+                guii_widget_callback(GUI.focused_widget, GUI_EVT_FOCUSOUT, NULL, NULL);  /* Notify with callback */
                 gui_widget_invalidate(GUI.focused_widget);  /* Invalidate widget */
             }
         }
@@ -882,7 +882,7 @@ guii_widget_focus_set(gui_handle_p h) {
     GUI.focused_widget = h;                         /* Set new focused widget */
     while (h != NULL && common != NULL && h != common) {
         guii_widget_setflag(h, GUI_FLAG_FOCUS);     /* Set focused flag */
-        guii_widget_callback(h, GUI_WC_FocusIn, NULL, NULL);   /* Notify with callback */
+        guii_widget_callback(h, GUI_EVT_FOCUSIN, NULL, NULL);   /* Notify with callback */
         gui_widget_invalidate(h);                   /* Invalidate widget */
         h = guii_widget_getparent(h);               /* Get parent widget */
     }
@@ -894,7 +894,7 @@ guii_widget_focus_set(gui_handle_p h) {
 void
 guii_widget_active_clear(void) {
     if (GUI.active_widget != NULL) {
-        guii_widget_callback(GUI.active_widget, GUI_WC_ActiveOut, NULL, NULL);  /* Notify user about change */
+        guii_widget_callback(GUI.active_widget, GUI_EVT_ACTIVEOUT, NULL, NULL);  /* Notify user about change */
         guii_widget_clrflag(GUI.active_widget, GUI_FLAG_ACTIVE | GUI_FLAG_TOUCH_MOVE);  /* Clear all widget based flags */
         GUI.active_widget_prev = GUI.active_widget; /* Save as previous active */
         GUI.active_widget = NULL;                   /* Clear active widget handle */
@@ -911,7 +911,7 @@ guii_widget_active_set(gui_handle_p h) {
     GUI.active_widget = h;                          /* Set new active widget */
     if (h != NULL) {
         guii_widget_setflag(GUI.active_widget, GUI_FLAG_ACTIVE);    /* Set active widget flag */
-        guii_widget_callback(GUI.active_widget, GUI_WC_ActiveIn, NULL, NULL);
+        guii_widget_callback(GUI.active_widget, GUI_EVT_ACTIVEIN, NULL, NULL);
     }
 }
 
@@ -996,6 +996,26 @@ gui_widget_getabsolutey(gui_handle_p h) {
 }
 
 /**
+ * \brief           Get widget `X` position relative to parent in units of pixels
+ * \param[in]       h: Widget handle
+ * \return          Widget `X` position relative to parent
+ */
+gui_dim_t
+gui_widget_getxposition(gui_handle_p h) {
+    return gui_widget_getabsolutex(h) - guii_widget_getparentabsolutex(h);
+}
+
+/**
+ * \brief           Get widget `Y` position relative to parent in units of pixels
+ * \param[in]       h: Widget handle
+ * \return          Widget `Y` position relative to parent
+ */
+gui_dim_t
+gui_widget_getyposition(gui_handle_p h) {
+    return gui_widget_getabsolutey(h) - guii_widget_getparentabsolutey(h);
+}
+
+/**
  * \brief           Invalidate widget and parent widget for redraw 
  * \param[in]       h: Widget handle
  * \return          `1` on success, `0` otherwise
@@ -1047,18 +1067,18 @@ gui_widget_setinvalidatewithparent(gui_handle_p h, uint8_t value) {
 uint8_t
 guii_widget_setparam(gui_handle_p h, uint16_t cfg, const void* data, uint8_t invalidate, uint8_t invalidateparent) {
     gui_widget_param p;
-    gui_widget_param_t param = {0};
-    gui_widget_result_t result = {0};
+    gui_evt_param_t param = {0};
+    gui_evt_result_t result = {0};
 
     __GUI_ASSERTPARAMS(h != NULL && guii_widget_iswidget(h));   /* Check valid parameter */
     
-    GUI_WIDGET_PARAMTYPE_WIDGETPARAM(&param) = &p;
-    GUI_WIDGET_RESULTTYPE_U8(&result) = 1;
+    GUI_EVT_PARAMTYPE_WIDGETPARAM(&param) = &p;
+    GUI_EVT_RESULTTYPE_U8(&result) = 1;
     
     p.type = cfg;
     p.data = (void *)data;
     
-    guii_widget_callback(h, GUI_WC_SetParam, &param, &result); /* Process callback function */
+    guii_widget_callback(h, GUI_EVT_SETPARAM, &param, &result); /* Process callback function */
     if (invalidateparent) {
         gui_widget_invalidatewithparent(h);         /* Invalidate widget and parent */
     } else if (invalidate) {
@@ -1078,12 +1098,12 @@ guii_widget_setparam(gui_handle_p h, uint16_t cfg, const void* data, uint8_t inv
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
- * \param[in]       cb: Widget callback function. Set to `NULL` to use default widget specific callback
+ * \param[in]       evt_fn: Widget callback function. Set to `NULL` to use default widget specific callback
  * \param[in]       flags: flags for create procedure
  * \return          Widget handle on success, `NULL` otherwise
  */
 void *
-gui_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
+gui_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags) {
     gui_handle_p h;
     
     __GUI_ASSERTPARAMS(widget != NULL && widget->callback != NULL);
@@ -1095,13 +1115,13 @@ gui_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, flo
 
     h = GUI_MEMALLOC(widget->size);                 /* Allocate memory for widget */
     if (h != NULL) {
-        gui_widget_param_t param = {0};
-        gui_widget_result_t result = {0};
+        gui_evt_param_t param = {0};
+        gui_evt_result_t result = {0};
 
         h->id = id;                                 /* Save ID */
         h->widget = widget;                         /* Widget object structure */
         h->footprint = GUI_WIDGET_FOOTPRINT;        /* Set widget footprint */
-        h->callback = cb;                           /* Set widget callback */
+        h->callback = evt_fn;                       /* Set widget callback */
 #if GUI_CFG_USE_ALPHA
         h->alpha = 0xFF;                            /* Set full transparency by default */
 #endif /* GUI_CFG_USE_ALPHA */
@@ -1126,10 +1146,10 @@ gui_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, flo
         }
         
         /* Call pre-init function to set default widget parameters */
-        GUI_WIDGET_RESULTTYPE_U8(&result) = 1;
-        guii_widget_callback(h, GUI_WC_PreInit, NULL, &result);    /* Notify internal widget library about init successful */
+        GUI_EVT_RESULTTYPE_U8(&result) = 1;
+        guii_widget_callback(h, GUI_WC_PRE_INIT, NULL, &result);    /* Notify internal widget library about init successful */
         
-        if (!GUI_WIDGET_RESULTTYPE_U8(&result)) {
+        if (!GUI_EVT_RESULTTYPE_U8(&result)) {
             GUI_MEMFREE(h);
             h = NULL;
         }
@@ -1153,18 +1173,18 @@ gui_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, flo
             }
 
             /* Add widget to linked list of parent widget */
-            GUI_WIDGET_RESULTTYPE_U8(&result) = 0;
-            guii_widget_callback(h, GUI_WC_ExcludeLinkedList, NULL, &result);
-            if (!GUI_WIDGET_RESULTTYPE_U8(&result)) {   /* Check if widget should be added to linked list */
+            GUI_EVT_RESULTTYPE_U8(&result) = 0;
+            guii_widget_callback(h, GUI_EVT_EXCLUDELINKEDLIST, NULL, &result);
+            if (!GUI_EVT_RESULTTYPE_U8(&result)) {   /* Check if widget should be added to linked list */
                 gui_linkedlist_widgetadd(h->parent, h); /* Add entry to linkedlist of parent widget */
             }
-            guii_widget_callback(h, GUI_WC_Init, NULL, NULL);  /* Notify user about init successful */
+            guii_widget_callback(h, GUI_EVT_INIT, NULL, NULL);  /* Notify user about init successful */
             gui_widget_invalidate(h);               /* Invalidate object */
 
             /* Notify parent widget if exists */
             if (guii_widget_hasparent(h)) {         /* If widget has parent */
-                GUI_WIDGET_PARAMTYPE_HANDLE(&param) = h;/* Set widget pointer */
-                guii_widget_callback(guii_widget_getparent(h), GUI_WC_ChildWidgetCreated, &param, NULL);/* Notify parent about new child widget */
+                GUI_EVT_PARAMTYPE_HANDLE(&param) = h;   /* Set widget pointer */
+                guii_widget_callback(guii_widget_getparent(h), GUI_EVT_CHILDWIDGETCREATED, &param, NULL);/* Notify parent about new child widget */
             }
         }
     }
@@ -1320,7 +1340,7 @@ guii_widget_processtextkey(gui_handle_p h, guii_keyboard_data_t* kb) {
             h->text[tlen + l] = 0;                  /* Add 0 to the end */
             
             gui_widget_invalidate(h);               /* Invalidate widget */
-            guii_widget_callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+            guii_widget_callback(h, GUI_EVT_TEXTCHANGED, NULL, NULL);   /* Process callback */
             return 1;
         }
     } else if (ch == 8 || ch == 127) {              /* Backspace character */
@@ -1339,7 +1359,7 @@ guii_widget_processtextkey(gui_handle_p h, guii_keyboard_data_t* kb) {
             h->text[tlen - l] = 0;                  /* Set 0 to the end of string */
             
             gui_widget_invalidate(h);               /* Invalidate widget */
-            guii_widget_callback(h, GUI_WC_TextChanged, NULL, NULL);/* Process callback */
+            guii_widget_callback(h, GUI_EVT_TEXTCHANGED, NULL, NULL);/* Process callback */
             return 1;
         }
     }
@@ -1372,7 +1392,7 @@ gui_widget_alloctextmemory(gui_handle_p h, uint32_t size) {
         guii_widget_clrflag(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Not allocated */
     }
     gui_widget_invalidate(h);                       /* Redraw object */
-    guii_widget_callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+    guii_widget_callback(h, GUI_EVT_TEXTCHANGED, NULL, NULL);   /* Process callback */
     
     return h->textmemsize;                          /* Return number of bytes allocated */
 }
@@ -1394,7 +1414,7 @@ gui_widget_freetextmemory(gui_handle_p h) {
         h->textmemsize = 0;                         /* Reset memory size */
         guii_widget_clrflag(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Not allocated */
         gui_widget_invalidate(h);                   /* Redraw object */
-        guii_widget_callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+        guii_widget_callback(h, GUI_EVT_TEXTCHANGED, NULL, NULL);   /* Process callback */
         res = 1;
     }
     
@@ -1422,18 +1442,18 @@ gui_widget_settext(gui_handle_p h, const gui_char* text) {
                 gui_string_copy(h->text, text);     /* Copy entire string */
             }
             gui_widget_invalidate(h);               /* Redraw object */
-            guii_widget_callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+            guii_widget_callback(h, GUI_EVT_TEXTCHANGED, NULL, NULL);   /* Process callback */
         }
     } else {                                        /* Memory allocated by user */
         if (h->text != NULL && h->text == text) {   /* In case the same pointer is passed to WIDGET */
             gui_widget_invalidate(h);               /* Redraw object */
-            guii_widget_callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+            guii_widget_callback(h, GUI_EVT_TEXTCHANGED, NULL, NULL);   /* Process callback */
         }
         
         if (h->text != text) {                      /* Check if pointer do not match */
             h->text = (gui_char *)text;             /* Set parameter */
             gui_widget_invalidate(h);               /* Redraw object */
-            guii_widget_callback(h, GUI_WC_TextChanged, NULL, NULL);   /* Process callback */
+            guii_widget_callback(h, GUI_EVT_TEXTCHANGED, NULL, NULL);   /* Process callback */
         }
     }
     h->textcursor = gui_string_lengthtotal(h->text);/* Set cursor to the end of string */
@@ -2219,13 +2239,13 @@ gui_widget_getuserdata(gui_handle_p h) {
  * \note            Call this function inside custom callback widget function for unhandled events
  *                     It will automatically call required function according to input widget
  * \param[in]       h: Widget handle where callback occurred
- * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref gui_wc_t enumeration
- * \param[in]       param: Pointer to optional input data for command. Check \ref gui_wc_t enumeration for more informations
- * \param[out]      result: Pointer to optional result value. Check \ref gui_wc_t enumeration for more informations
+ * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref gui_we_t enumeration
+ * \param[in]       param: Pointer to optional input data for command. Check \ref gui_we_t enumeration for more informations
+ * \param[out]      result: Pointer to optional result value. Check \ref gui_we_t enumeration for more informations
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_processdefaultcallback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_widget_processdefaultcallback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
     return h->widget->callback(h, ctrl, param, result); /* Call default callback function */
 }
 
@@ -2236,7 +2256,7 @@ gui_widget_processdefaultcallback(gui_handle_p h, gui_wc_t ctrl, gui_widget_para
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_setcallback(gui_handle_p h, gui_widget_callback_t callback) {
+gui_widget_setcallback(gui_handle_p h, gui_widget_evt_fn callback) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     h->callback = callback;                         /* Set callback function */
     return 1;
@@ -2249,14 +2269,14 @@ gui_widget_setcallback(gui_handle_p h, gui_widget_callback_t callback) {
  *                      If called from inside widget callback, it may result in recursive calls.
  *
  * \param[in]       h: Widget handle where callback occurred
- * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref gui_wc_t enumeration
- * \param[in]       param: Pointer to optional input data for command. Check \ref gui_wc_t enumeration for more informations
- * \param[out]      result: Pointer to optional result value. Check \ref gui_wc_t enumeration for more informations
+ * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref gui_we_t enumeration
+ * \param[in]       param: Pointer to optional input data for command. Check \ref gui_we_t enumeration for more informations
+ * \param[out]      result: Pointer to optional result value. Check \ref gui_we_t enumeration for more informations
  * \return          `1` on success, `0` otherwise
  * \sa              gui_widget_setcallback
  */
 uint8_t
-gui_widget_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_widget_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     return guii_widget_callback(h, ctrl, param, result);/* Call callback function */
 }
@@ -2400,22 +2420,22 @@ gui_widget_setfontdefault(const gui_font_t* font) {
 
 /**
  * \brief           Increase selection for widget
- * \note            Widget must implement \ref GUI_WC_IncSelection command in callback function and process it
+ * \note            Widget must implement \ref GUI_EVT_INCSELECTION command in callback function and process it
  * \param[in]       h: Widget handle
  * \param[in]       dir: Increase direction. Positive number means number of increases, negative is number of decreases
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_widget_incselection(gui_handle_p h, int16_t dir) {
-    gui_widget_param_t param = {0};
-    gui_widget_result_t result = {0};
+    gui_evt_param_t param = {0};
+    gui_evt_result_t result = {0};
     
     GUI_UNUSED2(result, param);
 
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     
-    GUI_WIDGET_PARAMTYPE_I16(&param) = dir;         /* Set parameter */
-    return guii_widget_callback(h, GUI_WC_IncSelection, &param, &result);   /* Increase selection for specific amount */
+    GUI_EVT_PARAMTYPE_I16(&param) = dir;         /* Set parameter */
+    return guii_widget_callback(h, GUI_EVT_INCSELECTION, &param, &result);   /* Increase selection for specific amount */
 }
 
 /**

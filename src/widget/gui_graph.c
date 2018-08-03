@@ -35,15 +35,13 @@
 #include "widget/gui_graph.h"
 #include "math.h"
 
-#define __GG(x)             ((gui_graph_t *)(x))
-
 #define CFG_MIN_X           0x01
 #define CFG_MAX_X           0x02
 #define CFG_MIN_Y           0x03
 #define CFG_MAX_Y           0x04
 #define CFG_ZOOM_RESET      0x05
 
-static uint8_t gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+static uint8_t gui_graph_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -112,14 +110,11 @@ graph_zoom(gui_handle_p h, float zoom, float xpos, float ypos) {
  * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
-gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_graph_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
     gui_graph_t* g = (gui_graph_t *)h;
-#if GUI_CFG_USE_TOUCH
-    static gui_dim_t tx[GUI_CFG_TOUCH_MAX_PRESSES], ty[GUI_CFG_TOUCH_MAX_PRESSES];
-#endif /* GUI_CFG_USE_TOUCH */
-
-    switch (ctrl) {                                 /* Handle control function if required */
-        case GUI_WC_PreInit: {
+    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    switch (ctrl) {
+        case GUI_WC_PRE_INIT: {
             g->border[GUI_GRAPH_BORDER_TOP] = 5;    /* Set borders */
             g->border[GUI_GRAPH_BORDER_RIGHT] = 5;
             g->border[GUI_GRAPH_BORDER_BOTTOM] = 5;
@@ -135,8 +130,8 @@ gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
             g->columns = 10;                        /* Number of columns */
             return 1;
         }
-        case GUI_WC_SetParam: {                     /* Set parameter from widget */
-            gui_widget_param* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
+        case GUI_EVT_SETPARAM: {                     /* Set parameter from widget */
+            gui_widget_param* p = GUI_EVT_PARAMTYPE_WIDGETPARAM(param);
             switch (p->type) {
                 case CFG_MIN_X: g->min_x = *(float *)p->data; break;/* Set min X value to widget */
                 case CFG_MAX_X: g->max_x = *(float *)p->data; break;/* Set max X value to widget */
@@ -145,15 +140,15 @@ gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
                 case CFG_ZOOM_RESET: graph_reset(h); break; /* Reset zoom */
                 default: break;
             }
-            GUI_WIDGET_RESULTTYPE_U8(result) = 1;   /* Save result */
+            GUI_EVT_RESULTTYPE_U8(result) = 1;   /* Save result */
             return 1;
         }
-        case GUI_WC_Draw: {                         /* Draw widget */
+        case GUI_EVT_DRAW: {                         /* Draw widget */
             gui_graph_data_p data;
             gui_linkedlistmulti_t* link;
             gui_dim_t bt, br, bb, bl, x, y, width, height;
             uint8_t i;
-            gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);   /* Get display pointer */
+            gui_display_t* disp = GUI_EVT_PARAMTYPE_DISP(param);   /* Get display pointer */
             
             bt = g->border[GUI_GRAPH_BORDER_TOP];
             br = g->border[GUI_GRAPH_BORDER_RIGHT];
@@ -162,8 +157,8 @@ gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
             
             x = gui_widget_getabsolutex(h);         /* Get absolute X position */
             y = gui_widget_getabsolutey(h);         /* Get absolute Y position */
-            width = gui_widget_getwidth(h);         /* Get widget width */
-            height = gui_widget_getheight(h);       /* Get widget height */
+            width = gui_widget_getwidth(h);
+            height = gui_widget_getheight(h);
             
             gui_draw_filledrectangle(disp, x, y, bl, height, guii_widget_getcolor(h, GUI_GRAPH_COLOR_BG));
             gui_draw_filledrectangle(disp, x + bl, y, width - bl - br, bt, guii_widget_getcolor(h, GUI_GRAPH_COLOR_BG));
@@ -275,33 +270,22 @@ gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
             return 1;
         }
 #if GUI_CFG_USE_TOUCH
-        case GUI_WC_TouchStart: {                   /* Touch down event */
-            guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            uint8_t i = 0;
-            for (i = 0; i < ts->ts.count; i++) {
-                tx[i] = ts->x_rel[i];               /* Relative X position on widget */
-                ty[i] = ts->y_rel[i];               /* Relative Y position on widget */
-            }
-            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;  /* Set touch status */
+        case GUI_EVT_TOUCHSTART: {
+            GUI_EVT_RESULTTYPE_TOUCH(result) = touchHANDLED;  /* Set touch status */
             return 1;
         }
-        case GUI_WC_TouchMove: {                    /* Touch move event */
-            guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            uint8_t i;
-            gui_dim_t x, y;
+        case GUI_EVT_TOUCHMOVE: {
+            guii_touch_data_t* ts = GUI_EVT_PARAMTYPE_TOUCH(param);  /* Get touch data */
             float diff, step;
             
-            if (ts->ts.count == 1) {                /* Move graph on single widget */
-                x = ts->x_rel[0];
-                y = ts->y_rel[0];
-                
+            if (ts->ts.count == 1) {                /* Move graph on single widget */                
                 step = (float)(gui_widget_getwidth(h) - g->border[GUI_GRAPH_BORDER_LEFT] - g->border[GUI_GRAPH_BORDER_RIGHT]) / (float)(g->visible_max_x - g->visible_min_x);
-                diff = (float)(x - tx[0]) / step;
+                diff = (float)(ts->x_diff[0]) / step;
                 g->visible_min_x -= diff;
                 g->visible_max_x -= diff;
                 
                 step = (float)(gui_widget_getheight(h) - g->border[GUI_GRAPH_BORDER_TOP] - g->border[GUI_GRAPH_BORDER_BOTTOM]) / (float)(g->visible_max_y - g->visible_min_y);
-                diff = (float)(y - ty[0]) / step;
+                diff = (float)(ts->y_diff[0]) / step;
                 g->visible_min_y += diff;
                 g->visible_max_y += diff;
 #if GUI_CFG_TOUCH_MAX_PRESSES > 1
@@ -314,25 +298,21 @@ gui_graph_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
                 graph_zoom(h, zoom, (float)centerX / (float)gui_widget_getwidth(h), (float)centerY / (float)gui_widget_getheight(h));
 #endif /* GUI_CFG_TOUCH_MAX_PRESSES > 1 */
             }
-            
-            for (i = 0; i < ts->ts.count; i++) {
-                tx[i] = ts->x_rel[i];               /* Relative X position on widget */
-                ty[i] = ts->y_rel[i];               /* Relative Y position on widget */
-            }
-            
             gui_widget_invalidate(h);               /* Invalidate widget */
+            
+            GUI_EVT_RESULTTYPE_TOUCH(result) = touchHANDLED;  /* Set touch status */
             return 1;
         }
-        case GUI_WC_TouchEnd:
+        case GUI_EVT_TOUCHEND:
             return 1;
 #endif /* GUI_CFG_USE_TOUCH */
-        case GUI_WC_DblClick:
+        case GUI_EVT_DBLCLICK:
             graph_reset(h);                         /* Reset zoom */
             gui_widget_invalidate(h);               /* Invalidate widget */
             return 1;
         
 #if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
-        case GUI_WC_Remove: {                       /* When widget is about to be removed */
+        case GUI_EVT_REMOVE: {                       /* When widget is about to be removed */
             gui_graph_data_p data;
             gui_linkedlistmulti_t* link;
             
@@ -382,13 +362,13 @@ graph_invalidate(gui_graph_data_p data) {
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
- * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
+ * \param[in]       evt_fn: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for create procedure
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_graph_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
+gui_graph_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, evt_fn, flags);
 }
 
 /**
@@ -505,10 +485,12 @@ gui_graph_zoom(gui_handle_p h, float zoom, float x, float y) {
  */
 uint8_t
 gui_graph_attachdata(gui_handle_p h, gui_graph_data_p data) {
+    gui_graph_t* g = (gui_graph_t *)h;
+    
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     /* Linked list of data plots for this graph */
-    gui_linkedlist_multi_add_gen(&__GG(h)->root, data);
+    gui_linkedlist_multi_add_gen(&g->root, data);
 
 #if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
     /*
@@ -530,13 +512,15 @@ gui_graph_attachdata(gui_handle_p h, gui_graph_data_p data) {
  */
 uint8_t
 gui_graph_detachdata(gui_handle_p h, gui_graph_data_p data) {
+    gui_graph_t* g = (gui_graph_t *)h;
+    
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && data != NULL);
 
     /*
      * Linked list of data plots for this graph
      * Remove data from graph's linked list
      */
-    gui_linkedlist_multi_find_remove(&__GG(h)->root, data);
+    gui_linkedlist_multi_find_remove(&g->root, data);
 
 #if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE
     /*
@@ -638,13 +622,14 @@ gui_graph_data_setcolor(gui_graph_data_p data, gui_color_t color) {
  */
 gui_graph_data_p
 gui_graph_data_get_by_id(gui_handle_p graph_h, gui_id_t id) {
+    gui_graph_t* g = GUI_VP(graph_h);
     gui_graph_data_p data = NULL;
     gui_linkedlistmulti_t* link;
     
     __GUI_ASSERTPARAMS(graph_h != NULL && graph_h->widget == &widget);
 
     /* Draw all plot attached to graph */
-    for (link = gui_linkedlist_multi_getnext_gen(&__GG(graph_h)->root, NULL); link != NULL; 
+    for (link = gui_linkedlist_multi_getnext_gen(&g->root, NULL); link != NULL; 
             link = gui_linkedlist_multi_getnext_gen(NULL, link)) {
         data = gui_linkedlist_multi_getdata(link);  /* Get data from list */
         if (data != NULL && data->id == id) {

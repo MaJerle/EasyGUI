@@ -109,7 +109,7 @@ extern "C" {
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
-#define guii_widget_iswidget(h)                     ((h) != NULL && (h)->footprint == GUI_WIDGET_FOOTPRINT)
+#define guii_widget_iswidget(h)                     (__GH(h) != NULL && __GH(h)->footprint == GUI_WIDGET_FOOTPRINT)
 
 /**
  * \brief           Get widget relative X position according to parent widget
@@ -119,7 +119,7 @@ extern "C" {
  * \hideinitializer
  */
 #define guii_widget_getrelativex(h)                 GUI_DIM((gui_widget_isexpanded(h) ? 0 : \
-                                                        (guii_widget_getflag(h, GUI_FLAG_XPOS_PERCENT) ? (gui_dim_t)((float)GUI_ROUND((h)->x * guii_widget_getparentinnerwidth(h)) / 100.0f) : (h)->x) \
+                                                        (guii_widget_getflag(__GH(h), GUI_FLAG_XPOS_PERCENT) ? (gui_dim_t)((float)GUI_ROUND(__GH(h)->x * guii_widget_getparentinnerwidth(__GH(h))) / 100.0f) : __GH(h)->x) \
                                                     ))
 
 /**
@@ -129,8 +129,8 @@ extern "C" {
  * \retval          Relative Y according to parent widget
  * \hideinitializer
  */
-#define guii_widget_getrelativey(h)                 GUI_DIM(gui_widget_isexpanded(h) ? 0 : \
-                                                        (guii_widget_getflag(h, GUI_FLAG_YPOS_PERCENT) ? (gui_dim_t)((float)GUI_ROUND((h)->y * guii_widget_getparentinnerheight(h)) / 100.0f) : (h)->y) \
+#define guii_widget_getrelativey(h)                 GUI_DIM(gui_widget_isexpanded(__GH(h)) ? 0 : \
+                                                        (guii_widget_getflag(__GH(h), GUI_FLAG_YPOS_PERCENT) ? (gui_dim_t)((float)GUI_ROUND(__GH(h)->y * guii_widget_getparentinnerheight(__GH(h))) / 100.0f) : __GH(h)->y) \
                                                     )
 
 /**
@@ -160,7 +160,7 @@ extern "C" {
  * \param[in]       flag: Flag(s) to set
  * \hideinitializer
  */
-#define guii_widget_setflag(h, flag)                ((h)->flags |= (flag))
+#define guii_widget_setflag(h, flag)                (__GH(h)->flags |= (flag))
 
 /**
  * \brief           Clear widget flag(s)
@@ -169,7 +169,7 @@ extern "C" {
  * \param[in]       flag: Flag(s) to clear
  * \hideinitializer
  */
-#define guii_widget_clrflag(h, flag)                ((h)->flags &= ~(flag))
+#define guii_widget_clrflag(h, flag)                (__GH(h)->flags &= ~(flag))
 
 /**
  * \brief           Get pointer to parent widget
@@ -178,7 +178,7 @@ extern "C" {
  * \retval          Pointer to parent widget
  * \hideinitializer
  */
-#define guii_widget_getparent(h)                    ((h) != NULL ? (h)->parent : NULL)
+#define guii_widget_getparent(h)                    (__GH(h) != NULL ? __GH(h)->parent : NULL)
 
 /**
  * \brief           Check if widget has parent widget
@@ -187,19 +187,19 @@ extern "C" {
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
-#define guii_widget_hasparent(h)                    ((h) != NULL && (h)->parent != NULL)
+#define guii_widget_hasparent(h)                    (__GH(h) != NULL && __GH(h)->parent != NULL)
 
 /**
  * \brief           Process widget callback with command, parameters and result pointers
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle
- * \param[in]       cmd: Callback command. This parameter can be a value of \ref gui_wc_t enumeration
+ * \param[in]       cmd: Callback command. This parameter can be a value of \ref gui_we_t enumeration
  * \param[in]       param: Pointer to parameters if any for this command
  * \param[out]      result: Pointer to result pointer where calback can store result
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
-#define guii_widget_callback(h, cmd, param, result) ((h)->callback != NULL ? (h)->callback(h, cmd, param, result) : (h)->widget->callback(h, cmd, param, result))
+#define guii_widget_callback(h, cmd, param, result) (__GH(h)->callback != NULL ? __GH(h)->callback(h, cmd, param, result) : __GH(h)->widget->callback(h, cmd, param, result))
 
 /**
  * \brief           Get widget colors from list of colors
@@ -210,7 +210,7 @@ extern "C" {
  * \retval          Color value
  * \hideinitializer
  */
-#define guii_widget_getcolor(h, index)              ((h)->colors != NULL ? (h)->colors[(uint8_t)(index)] : ((h)->widget->colors != NULL ? (h)->widget->colors[(uint8_t)(index)] : GUI_COLOR_BLACK))
+#define guii_widget_getcolor(h, index)              (__GH(h)->colors != NULL ? __GH(h)->colors[(uint8_t)(index)] : (__GH(h)->widget->colors != NULL ? __GH(h)->widget->colors[(uint8_t)(index)] : GUI_COLOR_BLACK))
 
 /**
  * \brief           Get inner width (total width - padding left - padding right)
@@ -278,7 +278,7 @@ extern "C" {
  * \hideinitializer
  */
 #if GUI_CFG_USE_ALPHA
-#define guii_widget_isvisible(h)                    (!guii_widget_getflag(h, GUI_FLAG_HIDDEN) && (h)->alpha)
+#define guii_widget_isvisible(h)                    (!guii_widget_getflag(__GH(h), GUI_FLAG_HIDDEN) && __GH(h)->alpha)
 #else /* GUI_CFG_USE_ALPHA */
 #define guii_widget_isvisible(h)                    (!guii_widget_getflag(h, GUI_FLAG_HIDDEN))
 #endif /* !GUI_CFG_USE_ALPHA */
@@ -290,7 +290,7 @@ extern "C" {
  * \return          `1` on success, `0` otherwise
  * \hideinitializer
  */
-#define guii_widget_ishidden(h)                     (!guii_widget_isvisible(h))
+#define guii_widget_ishidden(h)                     (!guii_widget_isvisible(__GH(h)))
 
 /**
  * \brief           Check if widget allows children widgets
@@ -364,7 +364,7 @@ gui_dim_t       guii_widget_getparentabsolutey(gui_handle_p h);
  * \{
  */
 
-void*           gui_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+void*           gui_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags);
 uint8_t         gui_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color);
 uint8_t         gui_widget_setstyle(gui_handle_p h, const gui_style_p style);
 
@@ -455,6 +455,9 @@ uint8_t         gui_widget_setyposition(gui_handle_p h, gui_dim_t y);
 uint8_t         gui_widget_setypositionpercent(gui_handle_p h, float y);
 uint8_t         gui_widget_setypositionoriginal(gui_handle_p h, float y);
 
+gui_dim_t       gui_widget_getxposition(gui_handle_p h);
+gui_dim_t       gui_widget_getyposition(gui_handle_p h);
+
 uint8_t         gui_widget_setscrollx(gui_handle_p h, gui_dim_t scroll);
 uint8_t         gui_widget_setscrolly(gui_handle_p h, gui_dim_t scroll);
 uint8_t         gui_widget_incscrollx(gui_handle_p h, gui_dim_t scroll);
@@ -540,9 +543,9 @@ gui_dim_t       gui_widget_getpaddingleft(gui_handle_p h);
  * \{
  */
 
-uint8_t         gui_widget_processdefaultcallback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
-uint8_t         gui_widget_setcallback(gui_handle_p h, gui_widget_callback_t callback);
-uint8_t         gui_widget_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+uint8_t         gui_widget_processdefaultcallback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
+uint8_t         gui_widget_setcallback(gui_handle_p h, gui_widget_evt_fn callback);
+uint8_t         gui_widget_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**
  * \}

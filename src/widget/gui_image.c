@@ -34,9 +34,7 @@
 #include "gui/gui_private.h"
 #include "widget/gui_image.h"
 
-#define __GI(x)             ((gui_image_t *)(x))
-
-static uint8_t gui_image_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+static uint8_t gui_image_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**
  * \brief           Widget initialization structure
@@ -50,7 +48,6 @@ gui_widget_t widget = {
     .colors = 0,                                    /*!< List of default colors */
     .color_count = 0,                               /*!< Define number of colors */
 };
-#define o       ((gui_image_t *)(h))
 
 /**
  * \brief           Default widget callback function
@@ -61,15 +58,17 @@ gui_widget_t widget = {
  * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
-gui_image_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_image_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
+    gui_image_t* o = GUI_VP(h);
+    
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    switch (ctrl) {                                 /* Handle control function if required */
-        case GUI_WC_Draw: {
-            gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
+    switch (ctrl) {
+        case GUI_EVT_DRAW: {
+            gui_display_t* disp = GUI_EVT_PARAMTYPE_DISP(param);
             gui_dim_t x, y;
 
-            x = gui_widget_getabsolutex(h);         /* Get absolute X coordinate */
-            y = gui_widget_getabsolutey(h);         /* Get absolute Y coordinate */
+            x = gui_widget_getabsolutex(h);
+            y = gui_widget_getabsolutey(h);
             
             gui_draw_image(disp, x, y, o->image);   /* Draw actual image on screen */
             return 1;
@@ -89,13 +88,13 @@ gui_image_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
- * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
+ * \param[in]       evt_fn: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
+gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, evt_fn, flags);
 }
 
 /**
@@ -106,11 +105,14 @@ gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_h
  */
 uint8_t
 gui_image_setsource(gui_handle_p h, const gui_image_desc_t* img) {
+    gui_image_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && img != NULL);
 
-    __GI(h)->image = img;                           /* Set image */
+    o->image = img;                                 /* Set image */
+    
+    /* When alpha image is applied, invalidate parent */
     gui_widget_setinvalidatewithparent(h, img != NULL && img->bpp == 32);
-    gui_widget_invalidatewithparent(h);             /* Invalidate widget */
+    gui_widget_invalidatewithparent(h);
 
     return 1;
 }

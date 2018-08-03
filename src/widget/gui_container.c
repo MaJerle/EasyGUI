@@ -34,9 +34,7 @@
 #include "gui/gui_private.h"
 #include "widget/gui_container.h"
 
-#define __GW(x)             ((gui_window_t *)(x))
-
-static uint8_t gui_container_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+static uint8_t gui_container_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -68,11 +66,11 @@ gui_widget_t widget = {
  * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
-gui_container_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_container_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    switch (ctrl) {                                 /* Handle control function if required */
-        case GUI_WC_Draw: {
-            gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
+    switch (ctrl) {
+        case GUI_EVT_DRAW: {
+            gui_display_t* disp = GUI_EVT_PARAMTYPE_DISP(param);
             gui_dim_t x, y, wi, hi;
             
             x = gui_widget_getabsolutex(h); 
@@ -98,13 +96,13 @@ gui_container_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param,
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
- * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
+ * \param[in]       evt_fn: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_container_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
+gui_container_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, evt_fn, flags);
 }
 
 /**

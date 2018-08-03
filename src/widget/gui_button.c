@@ -34,11 +34,9 @@
 #include "gui/gui_private.h"
 #include "widget/gui_button.h"
 
-#define __GB(x)             ((gui_button_t *)(x))
-
 #define CFG_BORDER_RADIUS   0x01
 
-static uint8_t gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+static uint8_t gui_button_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -63,8 +61,6 @@ gui_widget_t widget = {
     .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 
-#define b                   ((gui_button_t *)(h))
-
 /**
  * \brief           Default widget callback function
  * \param[in]       h: Widget handle
@@ -74,31 +70,32 @@ gui_widget_t widget = {
  * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
-gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_button_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
+    gui_button_t* b = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    switch (ctrl) {                                 /* Handle control function if required */
-        case GUI_WC_PreInit: {
+    switch (ctrl) {
+        case GUI_WC_PRE_INIT: {
             guii_widget_setflag(h, GUI_FLAG_3D);    /* By default set 3D */
             return 1;
         }
-        case GUI_WC_SetParam: {                     /* Set parameter for widget */
-            gui_widget_param* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
+        case GUI_EVT_SETPARAM: {                    /* Set parameter for widget */
+            gui_widget_param* p = GUI_EVT_PARAMTYPE_WIDGETPARAM(param);
             switch (p->type) {
                 case CFG_BORDER_RADIUS: b->borderradius = *(gui_dim_t *)p->data; break;
                 default: break;
             }
-            GUI_WIDGET_RESULTTYPE_U8(result) = 1;   /* Save result */
+            GUI_EVT_RESULTTYPE_U8(result) = 1;      /* Save result */
             return 1;
         }
-        case GUI_WC_Draw: {
-            gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
+        case GUI_EVT_DRAW: {
+            gui_display_t* disp = GUI_EVT_PARAMTYPE_DISP(param);
             gui_color_t c1, c2;
             gui_dim_t x, y, width, height;
             
-            x = gui_widget_getabsolutex(h);         /* Get absolute X coordinate */
-            y = gui_widget_getabsolutey(h);         /* Get absolute Y coordinate */
-            width = gui_widget_getwidth(h);         /* Get widget width */
-            height = gui_widget_getheight(h);       /* Get widget height */
+            x = gui_widget_getabsolutex(h);
+            y = gui_widget_getabsolutey(h);
+            width = gui_widget_getwidth(h);
+            height = gui_widget_getheight(h);
             
             if (guii_widget_getflag(h, GUI_FLAG_3D)) {
                 c1 = guii_widget_getcolor(h, GUI_BUTTON_COLOR_BG);
@@ -139,17 +136,17 @@ gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
             return 1;
         }
 #if GUI_CFG_USE_KEYBOARD
-        case GUI_WC_KeyPress: {
-            guii_keyboard_data_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
+        case GUI_EVT_KEYPRESS: {
+            guii_keyboard_data_t* kb = GUI_EVT_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (kb->kb.keys[0] == GUI_KEY_CR || kb->kb.keys[0] == GUI_KEY_LF) {
-                guii_widget_callback(h, GUI_WC_Click, NULL, NULL); /* Process click */
-                GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
+                guii_widget_callback(h, GUI_EVT_CLICK, NULL, NULL); /* Process click */
+                GUI_EVT_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }
             return 1;
         }
 #endif /* GUI_CFG_USE_KEYBOARD */
-        case GUI_WC_ActiveIn:
-        case GUI_WC_ActiveOut: {
+        case GUI_EVT_ACTIVEIN:
+        case GUI_EVT_ACTIVEOUT: {
             gui_widget_invalidate(h);               /* Invalidate widget */
             return 1;
         }
@@ -168,13 +165,13 @@ gui_button_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
- * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
+ * \param[in]       evt_fn: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
+gui_button_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, evt_fn, flags);
 }
 
 /**

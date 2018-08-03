@@ -203,6 +203,7 @@ typedef uint8_t     gui_char;               /*!< GUI char data type for all stri
 #define GUI_I16(x)                          ((int16_t)(x))
 #define GUI_U32(x)                          ((uint32_t)(x))
 #define GUI_I32(x)                          ((int32_t)(x))
+#define GUI_VP(x)                           ((void *)(x))
 #define GUI_FLOAT(x)                        ((float)(x))
 #define GUI_DIM(x)                          ((gui_dim_t)(x))
 
@@ -743,7 +744,7 @@ typedef gui_timer_t* gui_timer_p;
  * \note            Must always start with number 1
  */
 typedef enum {
-    GUI_WC_None = 0x00,
+    GUI_EVT_NONE = 0x00,
 #if defined(GUI_INTERNAL) || __DOXYGEN__
     /**
      * \brief       Called just after widget has been created. Used for internal widget purpose only
@@ -753,7 +754,7 @@ typedef enum {
      * \param[in]   param: None
      * \param[out]  result: Pointer to `uint8_t` variable with result. If set to 0 by user, widget will be deleted
      */
-    GUI_WC_PreInit = 0x01,
+    GUI_WC_PRE_INIT = 0x01,
     
     /**
      * \brief       Check if widget should not be added to linked list after creation
@@ -761,23 +762,23 @@ typedef enum {
      * \param[in]   param: None
      * \param[out]  result: Pointer to `uint8_t` variable type to store result to `1 = exclude, 0 = do not exclude`
      */
-    GUI_WC_ExcludeLinkedList = 0x02,
+    GUI_EVT_EXCLUDELINKEDLIST = 0x02,
     
     /**
      * \brief       Set user parameter for widget
      *
-     * \param[in]   param: Pointer to \ref gui_widget_param_t structure with custom user parameter for widget
+     * \param[in]   param: Pointer to \ref gui_evt_param_t structure with custom user parameter for widget
      * \param[out]  result: None
      */
-    GUI_WC_SetParam = 0x03,
+    GUI_EVT_SETPARAM = 0x03,
     
     /**
      * \brief       Get parameter for widget
      *
-     * \param[in]   param: Pointer to \ref gui_widget_param_t structure with identification and memory where to save parameter value
+     * \param[in]   param: Pointer to \ref gui_evt_param_t structure with identification and memory where to save parameter value
      * \param[out]  result: None
      */
-    GUI_WC_GetParam = 0x04,
+    GUI_EVT_GETPARAM = 0x04,
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
     
     /**
@@ -789,7 +790,7 @@ typedef enum {
      * \param[in]   param: None
      * \param[out]  result: None
      */
-    GUI_WC_Init = 0x05,
+    GUI_EVT_INIT = 0x05,
     
     /**
      * \brief       A new child widget has been added to parent's linked list. It is called on parent widget
@@ -797,7 +798,7 @@ typedef enum {
      * \param[in]   param: Child widget handle
      * \param[out]  result: None
      */
-    GUI_WC_ChildWidgetCreated,
+    GUI_EVT_CHILDWIDGETCREATED,
     
     /**
      * \brief       Draw widget on screen
@@ -805,16 +806,24 @@ typedef enum {
      * \param[in]   param: Pointer to \ref gui_display_t structure
      * \param[out]  result: None
      */
-    GUI_WC_Draw,
+    GUI_EVT_DRAW,
+    
+    /**
+     * \brief       Draw widget on screen after its children widgets were drawn
+     *
+     * \param[in]   param: Pointer to \ref gui_display_t structure
+     * \param[out]  result: None
+     */
+    GUI_EVT_DRAWAFTER,
     
     /**
      * \brief       Check if widget can be removed. User can perform check if for example widget needs save or similar operation
      *
      * \param[in]   param: None
      * \param[out]  result: Pointer to `uint8_t` variable type to store result to `1 = remove, 0 = do not remove`
-     * \sa          GUI_WC_Remove
+     * \sa          GUI_EVT_REMOVE
      */
-    GUI_WC_CanRemove,
+    GUI_EVT_CANREMOVE,
     
     /**
      * \brief       Notification before widget delete will actually happen.
@@ -822,27 +831,27 @@ typedef enum {
      * 
      * \param[in]   param: None
      * \param[out]  result: None
-     * \sa          GUI_WC_CanRemove
+     * \sa          GUI_EVT_CANREMOVE
      */
-    GUI_WC_Remove,
+    GUI_EVT_REMOVE,
     
     /**
      * \brief       Notification called when widget becomes focused
      *
      * \param[in]   param: None
      * \param[out]  result: None
-     * \sa          GUI_WC_FocusOut
+     * \sa          GUI_EVT_FOCUSOUT
      */
-    GUI_WC_FocusIn,
+    GUI_EVT_FOCUSIN,
     
     /**
      * \brief       Notification called when widget clears widget state
      *
      * \param[in]   param: None
      * \param[out]  result: None
-     * \sa          GUI_WC_FocusIn
+     * \sa          GUI_EVT_FOCUSIN
      */
-    GUI_WC_FocusOut,
+    GUI_EVT_FOCUSOUT,
     
     /**
      * \brief       Notification for active status on widget
@@ -851,9 +860,9 @@ typedef enum {
      *
      * \param[in]   param: None
      * \param[out]  result: None
-     * \sa          GUI_WC_ActiveOut
+     * \sa          GUI_EVT_ACTIVEOUT
      */
-    GUI_WC_ActiveIn,
+    GUI_EVT_ACTIVEIN,
     
     /**
      * \brief       Notification for cleared active status on widget
@@ -862,39 +871,39 @@ typedef enum {
      *
      * \param[in]   param: None
      * \param[out]  result: None
-     * \sa          GUI_WC_ActiveIn
+     * \sa          GUI_EVT_ACTIVEIN
      */
-    GUI_WC_ActiveOut,
+    GUI_EVT_ACTIVEOUT,
     
     /**
      * \brief       Notification when touch down event occurs on widget
      *
      * \param[in]   param: Pointer to \ref guii_touch_data_t structure
      * \param[out]  result: Value of \ref guii_touch_status_t enumeration
-     * \sa          GUI_WC_TouchMove, GUI_WC_TouchEnd
+     * \sa          GUI_EVT_TOUCHMOVE, GUI_EVT_TOUCHEND
      */
-    GUI_WC_TouchStart,
+    GUI_EVT_TOUCHSTART,
     
     /**
      * \brief       Notification when touch move event occurs on widget
      *
-     * \note        If return value from function on this parameter is 1, then \ref GUI_WC_Click event won't be called after released status
+     * \note        If return value from function on this parameter is 1, then \ref GUI_EVT_CLICK event won't be called after released status
      *              to prevent collisions between widget events (sliding on widget and click at the same time can cause unknown behaviour on user)
      *
      * \param[in]   param: Pointer to \ref guii_touch_data_t structure
      * \param[out]  result: Value of \ref guii_touch_status_t enumeration
-     * \sa          GUI_WC_TouchStart, GUI_WC_TouchEnd
+     * \sa          GUI_EVT_TOUCHSTART, GUI_EVT_TOUCHEND
      */
-    GUI_WC_TouchMove,
+    GUI_EVT_TOUCHMOVE,
     
     /**
      * \brief       Notification when touch up event occurs on widget
      *
      * \param[in]   param: Pointer to \ref guii_touch_data_t structure
      * \param[out]  result: Value of \ref guii_touch_status_t enumeration
-     * \sa          GUI_WC_TouchStart, GUI_WC_TouchMove
+     * \sa          GUI_EVT_TOUCHSTART, GUI_EVT_TOUCHMOVE
      */
-    GUI_WC_TouchEnd,
+    GUI_EVT_TOUCHEND,
     
     /**
      * \brief       Notification when click event has been detected
@@ -902,7 +911,7 @@ typedef enum {
      * \param[in]   param: Pointer to \ref guii_touch_data_t structure with valid touch press location
      * \param[out]  result: None
      */
-    GUI_WC_Click,
+    GUI_EVT_CLICK,
     
     /**
      * \brief       Notification when long press has been detected
@@ -910,7 +919,7 @@ typedef enum {
      * \param[in]   param: Pointer to \ref guii_touch_data_t structure with valid touch press location
      * \param[out]  result: None
      */
-    GUI_WC_LongClick,
+    GUI_EVT_LONGCLICK,
     
     /**
      * \brief       Notification when double click has been detected
@@ -918,7 +927,7 @@ typedef enum {
      * \param[in]   param: Pointer to \ref guii_touch_data_t structure with valid touch press location
      * \param[out]  result: None
      */
-    GUI_WC_DblClick,
+    GUI_EVT_DBLCLICK,
     
     /**
      * \brief       Notification when key has been pushed to this widget
@@ -926,7 +935,7 @@ typedef enum {
      * \param[in]   param: Pointer to \ref guii_keyboard_data_t structure
      * \param[out]  result: Value of \ref guii_keyboard_status_t enumeration
      */
-    GUI_WC_KeyPress,
+    GUI_EVT_KEYPRESS,
     
     /**
      * \brief       Notification when widget selection has changed
@@ -937,9 +946,9 @@ typedef enum {
      *
      * \param[in]   param: None
      * \param[out]  result: None
-     * \sa          GUI_WC_ValueChanged
+     * \sa          GUI_EVT_VALUECHANGED
      */
-    GUI_WC_SelectionChanged,
+    GUI_EVT_SELECTIONCHANGED,
     
     /**
      * \brief       Value of widget has been changed
@@ -950,9 +959,9 @@ typedef enum {
      *
      * \param[in]   param: None
      * \param[out]  result: None
-     * \sa          GUI_WC_SelectionChanged
+     * \sa          GUI_EVT_SELECTIONCHANGED
      */
-    GUI_WC_ValueChanged,
+    GUI_EVT_VALUECHANGED,
     
     /**     
      * \brief       Widget text value has been changed
@@ -962,7 +971,7 @@ typedef enum {
      * \param[in]   param: None
      * \param[out]  result: None
      */
-    GUI_WC_TextChanged,
+    GUI_EVT_TEXTCHANGED,
     
     /**     
      * \brief       Widget should increase/decrease selection
@@ -973,7 +982,7 @@ typedef enum {
      * \param[in]   param: Pointer to `int16_t` variable for amount of increase/decrease value
      * \param[out]  result: Pointer to output `uint8_t` variable to save status of increase/decrease operation
      */
-    GUI_WC_IncSelection,
+    GUI_EVT_INCSELECTION,
     
     /**     
      * \brief       Called when dialog is dismissed
@@ -984,8 +993,8 @@ typedef enum {
      * \param[in]   param: Pointer to `int` variable passed to dismiss function
      * \param[out]  result: None
      */
-    GUI_WC_OnDismiss,
-} gui_wc_t;
+    GUI_EVT_ONDISMISS,
+} gui_we_t;
 
 /**
  * \brief           Style information
@@ -1020,7 +1029,7 @@ typedef struct {
         gui_widget_param* wp;               /*!< Widget parameter */
         gui_handle_p h;                     /*!< Widget handle */
     } u;                                    /*!< Union of possible parameters */
-} gui_widget_param_t;
+} gui_evt_param_t;
 
 /**
  * \brief           Structure of output results for widget callback
@@ -1031,7 +1040,7 @@ typedef struct {
         guii_touch_status_t ts;             /*!< Touch status result */
         guii_keyboard_status_t ks;          /*!< Keyboard status result */
     } u;                                    /*!< Union of possible results */
-} gui_widget_result_t;
+} gui_evt_result_t;
 
 /**
  * \brief           Callback function for widget
@@ -1044,19 +1053,19 @@ typedef struct {
  *                      - Value change, selection change
  *                      - and more
  */
-typedef uint8_t (*gui_widget_callback_t) (gui_handle_p h, gui_wc_t cmd, gui_widget_param_t* param, gui_widget_result_t* result);
+typedef uint8_t (*gui_widget_evt_fn) (gui_handle_p h, gui_we_t cmd, gui_evt_param_t* param, gui_evt_result_t* result);
 
-#define GUI_WIDGET_PARAMTYPE_DISP(x)            (x)->u.disp
-#define GUI_WIDGET_PARAMTYPE_TOUCH(x)           (x)->u.td
-#define GUI_WIDGET_PARAMTYPE_KEYBOARD(x)        (x)->u.kd
-#define GUI_WIDGET_PARAMTYPE_WIDGETPARAM(x)     (x)->u.wp
-#define GUI_WIDGET_PARAMTYPE_I16(x)             (x)->u.i16
-#define GUI_WIDGET_PARAMTYPE_HANDLE(x)          (x)->u.h
-#define GUI_WIDGET_PARAMTYPE_INT(x)             (x)->u.i
+#define GUI_EVT_PARAMTYPE_DISP(x)               (x)->u.disp
+#define GUI_EVT_PARAMTYPE_TOUCH(x)              (x)->u.td
+#define GUI_EVT_PARAMTYPE_KEYBOARD(x)           (x)->u.kd
+#define GUI_EVT_PARAMTYPE_WIDGETPARAM(x)        (x)->u.wp
+#define GUI_EVT_PARAMTYPE_I16(x)                (x)->u.i16
+#define GUI_EVT_PARAMTYPE_HANDLE(x)             (x)->u.h
+#define GUI_EVT_PARAMTYPE_INT(x)                (x)->u.i
 
-#define GUI_WIDGET_RESULTTYPE_TOUCH(x)          (x)->u.ts
-#define GUI_WIDGET_RESULTTYPE_KEYBOARD(x)       (x)->u.ks
-#define GUI_WIDGET_RESULTTYPE_U8(x)             (x)->u.u8
+#define GUI_EVT_RESULTTYPE_TOUCH(x)             (x)->u.ts
+#define GUI_EVT_RESULTTYPE_KEYBOARD(x)          (x)->u.ks
+#define GUI_EVT_RESULTTYPE_U8(x)                (x)->u.u8
 
 /**
  * \brief           Structure for each widget type
@@ -1065,7 +1074,7 @@ typedef struct {
     const gui_char* name;                   /*!< Widget name for display purpose */
     uint16_t size;                          /*!< Bytes required for widget memory allocation */
     uint32_t flags;                         /*!< List of flags for widget setup. This field can use \ref GUI_WIDGETS_CORE_FLAGS flags */
-    gui_widget_callback_t callback;         /*!< Pointer to control function, returns 1 if command handled or 0 if not */
+    gui_widget_evt_fn callback;         /*!< Pointer to control function, returns 1 if command handled or 0 if not */
     const gui_color_t* colors;              /*!< Pointer to list of colors as default values for widget */
     uint8_t color_count;                    /*!< Number of colors used in widget */
 } gui_widget_t;
@@ -1082,7 +1091,7 @@ typedef struct gui_handle {
     gui_id_t id;                            /*!< Widget ID number */
     uint32_t footprint;                     /*!< Footprint indicates widget is valid */
     const gui_widget_t* widget;             /*!< Widget parameters with callback functions */
-    gui_widget_callback_t callback;         /*!< Callback function prototype */
+    gui_widget_evt_fn callback;         /*!< Callback function prototype */
     struct gui_handle* parent;              /*!< Pointer to parent widget */
 
     float x;                                /*!< Object X position relative to parent window in units of pixel/percent */
@@ -1130,7 +1139,7 @@ typedef struct gui_handle {
 /**
  * \brief           Widget create function footprint for structures as callbacks
  */
-typedef gui_handle_p (*gui_widget_createfunc_t)(gui_id_t, float, float, float, float, gui_handle_p, gui_widget_callback_t, uint16_t);
+typedef gui_handle_p (*gui_widget_createfunc_t)(gui_id_t, float, float, float, float, gui_handle_p, gui_widget_evt_fn, uint16_t);
 
 /**
  * \}

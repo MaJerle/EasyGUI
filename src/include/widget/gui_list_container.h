@@ -82,7 +82,7 @@ typedef struct {
 } gui_listcontainer_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p    gui_listcontainer_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+gui_handle_p    gui_listcontainer_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags);
 uint8_t         gui_listcontainer_setcolor(gui_handle_p h, gui_listcontainer_color_t index, gui_color_t color);
 uint8_t         gui_listcontainer_setmode(gui_handle_p h, gui_listcontainer_mode_t mode);
 

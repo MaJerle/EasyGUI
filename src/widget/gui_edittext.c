@@ -38,14 +38,12 @@
 #if GUI_CFG_USE_KEYBOARD
 #include "gui/gui_keyboard.h"
 #endif /* GUI_CFG_USE_KEYBOARD */
-
-#define __GE(x)             ((GUI_EDITTEXT_t *)(x))
     
 #define CFG_MULTILINE       0x01
 #define CFG_VALIGN          0x02
 #define CFG_HALIGN          0x03
     
-static uint8_t gui_edittext_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+static uint8_t gui_edittext_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -63,17 +61,15 @@ gui_color_t colors[] = {
 static const
 gui_widget_t widget = {
     .name = _GT("EDITTEXT"),                        /*!< Widget name */
-    .size = sizeof(GUI_EDITTEXT_t),                 /*!< Size of widget for memory allocation */
+    .size = sizeof(gui_edittext_t),                 /*!< Size of widget for memory allocation */
     .flags = 0,                                     /*!< List of widget flags */
     .callback = gui_edittext_callback,              /*!< Control function */
     .colors = colors,                               /*!< List of default colors */
     .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 
-#define e          ((GUI_EDITTEXT_t *)h)
-
 /* Check if edit text is multiline */
-#define is_multiline(h)            (__GE(h)->flags & GUI_EDITTEXT_FLAG_MULTILINE)
+#define is_multiline(o)            (o->flags & GUI_EDITTEXT_FLAG_MULTILINE)
 
 /**
  * \brief           Default widget callback function
@@ -84,43 +80,44 @@ gui_widget_t widget = {
  * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
-gui_edittext_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_edittext_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
+    gui_edittext_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    switch (ctrl) {                                 /* Handle control function if required */
-        case GUI_WC_PreInit: {
-            __GE(h)->valign = GUI_EDITTEXT_VALIGN_CENTER;
-            __GE(h)->halign = GUI_EDITTEXT_HALIGN_LEFT;
+    switch (ctrl) {
+        case GUI_WC_PRE_INIT: {
+            o->valign = GUI_EDITTEXT_VALIGN_CENTER;
+            o->halign = GUI_EDITTEXT_HALIGN_LEFT;
             return 1;
         }
-        case GUI_WC_SetParam: {                     /* Set parameter for widget */
-            gui_widget_param* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
+        case GUI_EVT_SETPARAM: {                    /* Set parameter for widget */
+            gui_widget_param* p = GUI_EVT_PARAMTYPE_WIDGETPARAM(param);
             switch (p->type) {
                 case CFG_MULTILINE:                 /* Enable/Disable multiline */
                     if (*(uint8_t *)p->data && !is_multiline(h)) {
-                        __GE(h)->flags |= GUI_EDITTEXT_FLAG_MULTILINE;
+                        o->flags |= GUI_EDITTEXT_FLAG_MULTILINE;
                     } else if (!*(uint8_t *)p->data && is_multiline(h)) {
-                        __GE(h)->flags &= ~GUI_EDITTEXT_FLAG_MULTILINE;
+                        o->flags &= ~GUI_EDITTEXT_FLAG_MULTILINE;
                     }
                     break; /* Set max X value to widget */
                 case CFG_HALIGN: 
-                    e->halign = *(gui_edittext_halign_t *)p->data;
+                    o->halign = *(gui_edittext_halign_t *)p->data;
                     break;
                 case CFG_VALIGN: 
-                    e->valign = *(gui_edittext_valign_t *)p->data;
+                    o->valign = *(gui_edittext_valign_t *)p->data;
                     break;
                 default: break;
             }
-            GUI_WIDGET_RESULTTYPE_U8(result) = 1;   /* Save result */
+            GUI_EVT_RESULTTYPE_U8(result) = 1;   /* Save result */
             return 1;
         }
-        case GUI_WC_Draw: {
+        case GUI_EVT_DRAW: {
             gui_dim_t x, y, width, height;
-            gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
+            gui_display_t* disp = GUI_EVT_PARAMTYPE_DISP(param);
     
-            x = gui_widget_getabsolutex(h);         /* Get absolute X coordinate */
-            y = gui_widget_getabsolutey(h);         /* Get absolute Y coordinate */
-            width = gui_widget_getwidth(h);         /* Get widget width */
-            height = gui_widget_getheight(h);       /* Get widget height */
+            x = gui_widget_getabsolutex(h);
+            y = gui_widget_getabsolutey(h);
+            width = gui_widget_getwidth(h);
+            height = gui_widget_getheight(h);
             
             gui_draw_rectangle3d(disp, x, y, width, height, GUI_DRAW_3D_State_Lowered);
             gui_draw_filledrectangle(disp, x + 2, y + 2, width - 4, height - 4, guii_widget_getcolor(h, GUI_EDITTEXT_COLOR_BG));
@@ -137,7 +134,7 @@ gui_edittext_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
                 f.y = y + 5;
                 f.width = width - 10;
                 f.height = height - 10;
-                f.align = (uint8_t)__GE(h)->halign | (uint8_t)__GE(h)->valign;
+                f.align = (uint8_t)o->halign | (uint8_t)o->valign;
                 f.color1width = f.width;
                 f.color1 = guii_widget_getcolor(h, GUI_EDITTEXT_COLOR_FG);
                 f.flags |= GUI_FLAG_FONT_RIGHTALIGN | GUI_FLAG_FONT_EDITMODE;
@@ -151,23 +148,23 @@ gui_edittext_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
             return 1;
         }
 #if GUI_CFG_USE_KEYBOARD
-        case GUI_WC_FocusIn:
+        case GUI_EVT_FOCUSIN:
             gui_keyboard_show(h);
             return 1;
-        case GUI_WC_FocusOut:
+        case GUI_EVT_FOCUSOUT:
             gui_keyboard_hide();
             return 1;
-        case GUI_WC_KeyPress: {
-            guii_keyboard_data_t* kb = GUI_WIDGET_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
+        case GUI_EVT_KEYPRESS: {
+            guii_keyboard_data_t* kb = GUI_EVT_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (guii_widget_processtextkey(h, kb)) {
-                GUI_WIDGET_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
+                GUI_EVT_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }
             return 1;
         }
 #endif /* GUI_CFG_USE_KEYBOARD */
 #if GUI_CFG_USE_TOUCH
-        case GUI_WC_TouchStart: {
-            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
+        case GUI_EVT_TOUCHSTART: {
+            GUI_EVT_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
         }
 #endif /* GUI_CFG_USE_TOUCH */
@@ -187,13 +184,13 @@ gui_edittext_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, 
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
- * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
+ * \param[in]       evt_fn: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
+gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, evt_fn, flags);
 }
 
 /**

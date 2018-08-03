@@ -34,14 +34,12 @@
 #include "gui/gui_private.h"
 #include "widget/gui_slider.h"
 
-#define __GS(x)             ((gui_slider_t *)(x))
-
 #define CFG_MODE            0x01
 #define CFG_VALUE           0x02
 #define CFG_MIN             0x03
 #define CFG_MAX             0x04
 
-static uint8_t gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+static uint8_t gui_slider_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -66,7 +64,6 @@ gui_widget_t widget = {
     .colors = colors,                               /*!< List of default colors */
     .color_count = GUI_COUNT_OF(colors),            /*!< Define number of colors */
 };
-#define o       ((gui_slider_t *)(h))
 
 /* Check if slider is horizontal */
 #define is_horizontal(h)   (o->mode == GUI_SLIDER_MODE_LEFT_RIGHT || o->mode == GUI_SLIDER_MODE_RIGHT_LEFT)
@@ -80,6 +77,7 @@ get_delta(gui_handle_p h, gui_dim_t wi, gui_dim_t he) {
 /* Set slider value */
 static uint8_t 
 set_value(gui_handle_p h, int32_t value) {
+    gui_slider_t* o = GUI_VP(h);
     if (value > o->max) {
         value = o->max;
     } else if (value < o->min) {
@@ -87,7 +85,7 @@ set_value(gui_handle_p h, int32_t value) {
     }
     if (value != o->value) {                        /* Check difference in values */
         o->value = value;                           /* Set new value */
-        guii_widget_callback(h, GUI_WC_ValueChanged, NULL, NULL);  /* Callback process */
+        guii_widget_callback(h, GUI_EVT_VALUECHANGED, NULL, NULL);  /* Callback process */
         return 1;
     }
     return 0;
@@ -96,6 +94,7 @@ set_value(gui_handle_p h, int32_t value) {
 /* Process touch event */
 static uint8_t
 touch_handle(gui_handle_p h, guii_touch_data_t* ts) {
+    gui_slider_t* o = GUI_VP(h);
     gui_dim_t pos, delta, deltaH, width, height;
     int32_t value;
             
@@ -144,18 +143,22 @@ touch_handle(gui_handle_p h, guii_touch_data_t* ts) {
 /* Timer callback function for slider widget */
 static void
 timer_callback(gui_timer_t* timer) {
-    gui_handle_p h = (gui_handle_p)guii_timer_getparams(timer); /* Get user parameters */
-    if (guii_widget_isactive(h)) {                  /* Timer is in focus */
-        if (__GS(h)->current_size < __GS(h)->max_size) {
-            __GS(h)->current_size++;                /* Increase size */
-            gui_widget_invalidate(h);               /* Invalidate widget */
+    gui_slider_t* o;
+    gui_handle_p h = guii_timer_getparams(timer);   /* Get user parameters */
+    
+    o = GUI_VP(h);
+    
+    if (guii_widget_isactive(o)) {                  /* Timer is in focus */
+        if (o->current_size < o->max_size) {
+            o->current_size++;
+            gui_widget_invalidate(h);
         }
     } else {
-        if (__GS(h)->current_size > 0) {
-            __GS(h)->current_size--;
-            gui_widget_invalidate(h);               /* Invalidate widget */
+        if (o->current_size > 0) {
+            o->current_size--;
+            gui_widget_invalidate(h);
         } else {
-            guii_timer_stop(timer);                 /* Stop timer execution */
+            guii_timer_stop(timer);
         }
     }
 }
@@ -169,10 +172,11 @@ timer_callback(gui_timer_t* timer) {
  * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
-gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) { 
+gui_slider_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
+    gui_slider_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    switch (ctrl) {                                 /* Handle control function if required */
-        case GUI_WC_PreInit: {
+    switch (ctrl) {
+        case GUI_WC_PRE_INIT: {
             o->min = 0;                             /* Set default minimal value */
             o->max = 100;                           /* Set default maximal value */
             o->value = 50;                          /* Set default value */
@@ -181,12 +185,12 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
             o->current_size = 0;
             h->timer = guii_timer_create(30, timer_callback, o);    /* Create timer for widget, when widget is deleted, timer will be automatically deleted too */
             if (h->timer == NULL) {                 /* Check if timer created */
-                GUI_WIDGET_RESULTTYPE_U8(result) = 0;   /* Failed, widget will be deleted */
+                GUI_EVT_RESULTTYPE_U8(result) = 0;   /* Failed, widget will be deleted */
             }
             return 1;
         }
-        case GUI_WC_SetParam: {                     /* Set parameter for widget */
-            gui_widget_param* v = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
+        case GUI_EVT_SETPARAM: {                     /* Set parameter for widget */
+            gui_widget_param* v = GUI_EVT_PARAMTYPE_WIDGETPARAM(param);
             int32_t tmp;
             switch (v->type) {
                 case CFG_MODE:                      /* Set current progress value */
@@ -215,19 +219,19 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
                     break;
                 default: break;
             }
-            GUI_WIDGET_RESULTTYPE_U8(result) = 1;   /* Save result */
+            GUI_EVT_RESULTTYPE_U8(result) = 1;   /* Save result */
             return 1;
         }
-        case GUI_WC_Draw: {
-            gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
+        case GUI_EVT_DRAW: {
+            gui_display_t* disp = GUI_EVT_PARAMTYPE_DISP(param);
             gui_dim_t x, y, width, height, delta, deltaH, recParam, offset;
             gui_color_t c1, c2;
             gui_dim_t circleSize;
 
-            x = gui_widget_getabsolutex(h);         /* Get absolute X coordinate */
-            y = gui_widget_getabsolutey(h);         /* Get absolute Y coordinate */
-            width = gui_widget_getwidth(h);         /* Get widget width */
-            height = gui_widget_getheight(h);       /* Get widget height */
+            x = gui_widget_getabsolutex(h);
+            y = gui_widget_getabsolutey(h);
+            width = gui_widget_getwidth(h);
+            height = gui_widget_getheight(h);
             
             delta = get_delta(h, width, height);    /* Get delta value */
             deltaH = delta >> 1;                    /* Half of delta */
@@ -281,24 +285,24 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
             return 1;
         }
 #if GUI_CFG_USE_TOUCH
-        case GUI_WC_TouchStart: {                   /* Touch down event */
-            touch_handle(h, GUI_WIDGET_PARAMTYPE_TOUCH(param));    /* Handle touch */
+        case GUI_EVT_TOUCHSTART: {
+            touch_handle(h, GUI_EVT_PARAMTYPE_TOUCH(param));    /* Handle touch */
             
-            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;  /* Set touch status */
+            GUI_EVT_RESULTTYPE_TOUCH(result) = touchHANDLED;  /* Set touch status */
             return 1;
         }
-        case GUI_WC_TouchMove: {                    /* Touch move event */
-            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touch_handle(h, GUI_WIDGET_PARAMTYPE_TOUCH(param)) ? touchHANDLED : touchCONTINUE;
+        case GUI_EVT_TOUCHMOVE: {
+            GUI_EVT_RESULTTYPE_TOUCH(result) = touch_handle(h, GUI_EVT_PARAMTYPE_TOUCH(param)) ? touchHANDLED : touchCONTINUE;
             return 1;
         }
-        case GUI_WC_TouchEnd:
+        case GUI_EVT_TOUCHEND:
             return 1;
 #endif /* GUI_CFG_USE_TOUCH */
-        case GUI_WC_ActiveIn: {
+        case GUI_EVT_ACTIVEIN: {
             guii_timer_startperiodic(h->timer);     /* Start animation timer */
             return 1;
         }
-        case GUI_WC_ActiveOut: {
+        case GUI_EVT_ACTIVEOUT: {
             gui_widget_invalidate(h);               /* Invalidate widget */
             return 1;
         }
@@ -317,13 +321,13 @@ gui_slider_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
- * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
+ * \param[in]       evt_fn: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for create procedure
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
+gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, evt_fn, flags);
 }
 
 /**
@@ -393,8 +397,9 @@ gui_slider_setmax(gui_handle_p h, int32_t val) {
  */
 int32_t
 gui_slider_getmin(gui_handle_p h) {
+    gui_slider_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    return __GS(h)->min;
+    return o->min;
 }
 
 /**
@@ -404,8 +409,9 @@ gui_slider_getmin(gui_handle_p h) {
  */
 int32_t
 gui_slider_getmax(gui_handle_p h) {
+    gui_slider_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    return __GS(h)->max;
+    return o->max;
 }
 
 /**
@@ -415,6 +421,7 @@ gui_slider_getmax(gui_handle_p h) {
  */
 int32_t
 gui_slider_getvalue(gui_handle_p h) {
+    gui_slider_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    return __GS(h)->value;
+    return o->value;
 }

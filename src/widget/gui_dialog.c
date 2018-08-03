@@ -48,7 +48,7 @@ typedef struct {
 #endif /* GUI_CFG_OS */
 } dissmissed_dialog_list_t;
 
-static uint8_t gui_dialog_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+static uint8_t gui_dialog_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**
  * \brief           List of dismissed dialog elements not yet read
@@ -116,9 +116,9 @@ get_dialog(gui_handle_p h) {
  * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
-gui_dialog_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_dialog_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    switch (ctrl) {                                 /* Handle control function if required */
+    switch (ctrl) {
         default:                                    /* Handle default option */
             GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
@@ -133,18 +133,18 @@ gui_dialog_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gu
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in units of pixels
  * \param[in]       func: Widget create function used as dialog base. In most cases \ref gui_container_create will be used to create empty container
- * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
+ * \param[in]       evt_fn: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_dialog_create(gui_id_t id, float x, float y, float width, float height, gui_widget_createfunc_t func, gui_widget_callback_t cb, uint16_t flags) {
+gui_dialog_create(gui_id_t id, float x, float y, float width, float height, gui_widget_createfunc_t func, gui_widget_evt_fn evt_fn, uint16_t flags) {
     gui_handle_p ptr;
     if (func == NULL) {                             /* Check create function */
         return NULL;
     }
 
-    ptr = func(id, x, y, width, height, NULL, cb, flags | GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);   /* Create desired widget */
+    ptr = func(id, x, y, width, height, NULL, evt_fn, flags | GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);   /* Create desired widget */
     if (ptr != NULL) {
         guii_widget_setflag(ptr, GUI_FLAG_WIDGET_DIALOG_BASE); /* Add dialog base flag to widget */
         gui_linkedlist_widgetmovetobottom(ptr);     /* Move to bottom on linked list make it on top now with flag set as dialog */
@@ -166,17 +166,17 @@ gui_dialog_create(gui_id_t id, float x, float y, float width, float height, gui_
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in units of pixels
  * \param[in]       func: Widget create function used as dialog base. In most cases \ref gui_container_create will be used to create empty container
- * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
+ * \param[in]       evt_fn: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
  * \return          Value passed to \ref gui_dialog_dismiss when dialog is dismissed on success, `-1` otherwise
  */
 int
-gui_dialog_createblocking(gui_id_t id, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_widget_createfunc_t func, gui_widget_callback_t cb, uint16_t flags) {
+gui_dialog_createblocking(gui_id_t id, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_widget_createfunc_t func, gui_widget_evt_fn evt_fn, uint16_t flags) {
     gui_handle_p ptr;
     int resp = -1;                                  /* Dialog not created error */
     
     __GUI_SYS_PROTECT(1);                           /* Disable protection while waiting for semaphore */
-    ptr = gui_dialog_create(id, x, y, width, height, func, cb, flags);  /* Create dialog first */
+    ptr = gui_dialog_create(id, x, y, width, height, func, evt_fn, flags);  /* Create dialog first */
     if (ptr != NULL) {                              /* Widget created */
         dissmissed_dialog_list_t* l;
         
@@ -214,7 +214,7 @@ uint8_t
 gui_dialog_dismiss(gui_handle_p h, int status) {
     dissmissed_dialog_list_t* l;
     uint8_t ret = 0;
-    gui_widget_param_t param = {0};
+    gui_evt_param_t param = {0};
     
     /* Do not check widget type as it is not dialog type but create function widget type */
     __GUI_ASSERTPARAMS(h);                   
@@ -223,8 +223,8 @@ gui_dialog_dismiss(gui_handle_p h, int status) {
     if (l != NULL) {
         l->status = status;                         /* Save status for later */
         
-        GUI_WIDGET_PARAMTYPE_INT(&param) = l->status;
-        guii_widget_callback(h, GUI_WC_OnDismiss, &param, NULL);   /* Process callback */
+        GUI_EVT_PARAMTYPE_INT(&param) = l->status;
+        guii_widget_callback(h, GUI_EVT_ONDISMISS, &param, NULL);   /* Process callback */
 #if GUI_CFG_OS
         if (l->ib && gui_sys_sem_isvalid(&l->sem)) {/* Check if semaphore is valid */
             gui_sys_sem_release(&l->sem);           /* Release locked semaphore */

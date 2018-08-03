@@ -162,8 +162,8 @@ redraw_widgets(gui_handle_p parent, uint8_t force_redraw) {
 #endif /* GUI_CFG_USE_ALPHA */
                 
                 /* Draw widget itself normally, don't care on layer offset and size */
-                GUI_WIDGET_PARAMTYPE_DISP(&GUI.widget_param) = &GUI.display_temp;   /* Set parameter */
-                guii_widget_callback(h, GUI_WC_Draw, &GUI.widget_param, &GUI.widget_result);    /* Draw widget */
+                GUI_EVT_PARAMTYPE_DISP(&GUI.evt_param) = &GUI.display_temp;
+                guii_widget_callback(h, GUI_EVT_DRAW, &GUI.evt_param, &GUI.evt_result);
                 
                 /* Check if there are children widgets in this widget */
                 if (guii_widget_haschildren(h)) {   /* Check if widget has children */
@@ -173,6 +173,14 @@ redraw_widgets(gui_handle_p parent, uint8_t force_redraw) {
                     cnt += redraw_widgets(h, 1);    /* Redraw children widgets */
                     level--;
                 }
+                
+                /* TODO: Copy previous temporary variables instead of calling function again */
+                /* Prepare clipping region for this widget drawing */
+                check_disp_clipping(h);             /* Check coordinates for drawings only particular widget */
+                
+                /* Draw widget itself normally, don't care on layer offset and size */
+                GUI_EVT_PARAMTYPE_DISP(&GUI.evt_param) = &GUI.display_temp;
+                guii_widget_callback(h, GUI_EVT_DRAWAFTER, &GUI.evt_param, &GUI.evt_result);
                 
 #if GUI_CFG_USE_ALPHA
                 /* If transparent mode is used on widget, copy content back */
@@ -230,6 +238,55 @@ redraw_widgets(gui_handle_p parent, uint8_t force_redraw) {
 }
 
 #if GUI_CFG_USE_TOUCH
+
+/**
+ * \brief           Set relative coordinate of touch on widget
+ *
+ *					Relative coordinates are calculated based on widget position on screen
+ *					and actual absolute X and Y values from touch event
+ * \param[in,out]   ts: Raw touch data with X and Y position
+ * \param[in]       h: Widget handle. Set to `NULL` to use default value
+ */
+static void
+set_relative_coordinate(guii_touch_data_t* ts, gui_touch_data_t* old, gui_handle_p h) {
+    uint8_t i = 0;
+
+    /* Get absolute position */
+    if (h != NULL) {
+        ts->widget_x = gui_widget_getabsolutex(h);
+        ts->widget_y = gui_widget_getabsolutey(h);
+        ts->widget_width = gui_widget_getwidth(h);
+        ts->widget_height = gui_widget_getheight(h);
+    } else {
+        ts->widget_x = 0;
+        ts->widget_y = 0;
+        ts->widget_width = gui_lcd_getwidth();
+        ts->widget_height = gui_lcd_getheight();
+    }
+    
+    /* Calculate values */
+    for (i = 0; i < ts->ts.count; i++) {
+        /* Get previous values  */
+        ts->x_old[i] = old->x[i];
+        ts->y_old[i] = old->y[i];
+
+        /* Calculate difference new value versus old */
+        ts->x_diff[i] = ts->ts.x[i] - ts->x_old[i];
+        ts->y_diff[i] = ts->ts.y[i] - ts->y_old[i];
+
+        /* Calculate widget relative coordinate */
+        ts->x_rel[i] = ts->ts.x[i] - ts->widget_x;
+        ts->y_rel[i] = ts->ts.y[i] - ts->widget_y;
+    }
+
+#if GUI_CFG_TOUCH_MAX_PRESSES > 1
+    if (ts->ts.count == 2) {                        /* 2 points detected */
+        ts->distance_old = ts->distance;            /* Save old distance */
+        gui_math_distancebetweenxy(ts->x_rel[0], ts->y_rel[0], ts->x_rel[1], ts->y_rel[1], &ts->distance);  /* Calculate distance between 2 points */
+    }
+#endif /* GUI_CFG_TOUCH_MAX_PRESSES > 1 */
+}
+
 /*
  * How touch events works
  *
@@ -276,12 +333,12 @@ redraw_widgets(gui_handle_p parent, uint8_t force_redraw) {
  * \return          PT thread result
  */
 static
-PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, gui_touch_data_t* old, uint8_t v, gui_wc_t* result)) {
+PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, gui_touch_data_t* old, uint8_t v, gui_we_t* result)) {
     static volatile uint32_t time;
     static uint8_t i = 0;
     static gui_dim_t x[2], y[2];
 
-    *result = (gui_wc_t)0;                          /* Reset widget control variable */          
+    *result = (gui_we_t)0;                          /* Reset widget control variable */          
 
     PT_BEGIN(&ts->pt);                              /* Start thread execution */
 
@@ -342,8 +399,9 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, gui_touch_data_t* old, uin
                     ) {
                     PT_EXIT(&ts->pt);               /* Exit thread, invalid coordinate for touch click or double click */
                 }
+                    
                 if (!i) {                           /* On first call, this is click event */
-                    *result = GUI_WC_Click;         /* Click event occurred */
+                    *result = GUI_EVT_CLICK;        /* Click event occurred */
 
                     time = ts->ts.time;             /* Save last time */
                     PT_YIELD(&ts->pt);              /* Stop thread for now and wait next call with new touch event */
@@ -353,63 +411,20 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, gui_touch_data_t* old, uin
                     if ((gui_sys_now() - time) > 300) { /* Check timeout for new pressed state */
                         PT_EXIT(&ts->pt);           /* Exit protothread */
                     }
-                }
-                else {
-                    *result = GUI_WC_DblClick;      /* Double click event */
+                } else {
+                    *result = GUI_EVT_DBLCLICK;     /* Double click event */
                     PT_EXIT(&ts->pt);               /* Reset protothread */
                 }
             }
-        }
-        else {
+        } else {
             if (!i) {                               /* Timeout occurred with no touch data, long click */
-                *result = GUI_WC_LongClick;         /* Click event occurred */
+                *result = GUI_EVT_LONGCLICK;        /* Click event occurred */
             }
             PT_EXIT(&ts->pt);                       /* Exit protothread here */
         }
         i++;
     }
     PT_END(&ts->pt);                                /* Stop thread execution */
-}
-
-/**
- * \brief           Set relative coordinate of touch on widget
- *
- *					Relative coordinates are calculated based on widget position on screen
- *					and actual absolute X and Y values from touch event
- * \param[in,out]   ts: Raw touch data with X and Y position
- * \param[in]       h: Widget handle
- */
-static void
-set_relative_coordinate(guii_touch_data_t* ts, gui_touch_data_t* old, gui_handle_p h, uint8_t add_diff) {
-    uint8_t i = 0;
-
-    /* Get absolute position */
-    ts->widget_width = gui_widget_getwidth(h);
-    ts->widget_height = gui_widget_getheight(h);
-    ts->widget_x = gui_widget_getabsolutex(h);
-    ts->widget_y = gui_widget_getabsolutey(h);
-
-    /* Calculate values */
-    for (i = 0; i < ts->ts.count; i++) {
-        /* Get previous values  */
-        ts->x_old[i] = old->x[i];
-        ts->y_old[i] = old->y[i];
-
-        /* Calculate difference new value versus old */
-        ts->x_diff[i] = ts->ts.x[i] - ts->x_old[i];
-        ts->y_diff[i] = ts->ts.y[i] - ts->y_old[i];
-
-        /* Calculate widget relative coordinate */
-        ts->x_rel[i] = ts->ts.x[i] - ts->widget_x;
-        ts->y_rel[i] = ts->ts.y[i] - ts->widget_y;
-    }
-
-#if GUI_CFG_TOUCH_MAX_PRESSES > 1
-    if (ts->ts.count == 2) {                        /* 2 points detected */
-        ts->distance_old = ts->distance;            /* Save old distance */
-        gui_math_distancebetweenxy(ts->x_rel[0], ts->y_rel[0], ts->x_rel[1], ts->y_rel[1], &ts->distance);  /* Calculate distance between 2 points */
-    }
-#endif /* GUI_CFG_TOUCH_MAX_PRESSES > 1 */
 }
 
 /**
@@ -479,12 +494,12 @@ process_touch(guii_touch_data_t* touch, gui_touch_data_t* touch_old, gui_handle_
             /* Check if widget is in touch area */
             if (touch->ts.x[0] >= GUI.display_temp.x1 && touch->ts.x[0] <= GUI.display_temp.x2 && 
                 touch->ts.y[0] >= GUI.display_temp.y1 && touch->ts.y[0] <= GUI.display_temp.y2) {
-                set_relative_coordinate(touch, touch_old, h, 0);
-            
+                set_relative_coordinate(touch, touch_old, h);
+                    
                 /* Call touch start callback to see if widget accepts touches */
-                GUI_WIDGET_PARAMTYPE_TOUCH(&GUI.widget_param) = touch;
-                guii_widget_callback(h, GUI_WC_TouchStart, &GUI.widget_param, &GUI.widget_result);
-                tStat = GUI_WIDGET_RESULTTYPE_TOUCH(&GUI.widget_result);
+                GUI_EVT_PARAMTYPE_TOUCH(&GUI.evt_param) = touch;
+                guii_widget_callback(h, GUI_EVT_TOUCHSTART, &GUI.evt_param, &GUI.evt_result);
+                tStat = GUI_EVT_RESULTTYPE_TOUCH(&GUI.evt_result);
                 if (tStat == touchCONTINUE) {       /* Check result status */
                     tStat = touchHANDLED;           /* If command is processed, touchCONTINUE can't work */
                 }
@@ -540,10 +555,10 @@ process_touch(guii_touch_data_t* touch, gui_touch_data_t* touch_old, gui_handle_
 #define __ProcessAfterTouchEventsThread() do {\
     if (rresult != 0) {                             /* Valid event occurred */\
         uint8_t ret;                                \
-        GUI_WIDGET_PARAMTYPE_TOUCH(&param) = &GUI.touch;    \
+        GUI_EVT_PARAMTYPE_TOUCH(&param) = &GUI.touch;    \
         ret = guii_widget_callback(GUI.active_widget, rresult, &param, NULL);\
-        if (rresult == GUI_WC_DblClick && !ret) {   /* If double click was not recorded, proceed with normal click again */\
-            guii_widget_callback(GUI.active_widget, GUI_WC_Click, &param, NULL);/* Check for normal click now */\
+        if (rresult == GUI_EVT_DBLCLICK && !ret) {   /* If double click was not recorded, proceed with normal click again */\
+            guii_widget_callback(GUI.active_widget, GUI_EVT_CLICK, &param, NULL);/* Check for normal click now */\
         }\
     }\
 } while (0)
@@ -556,14 +571,15 @@ process_touch(guii_touch_data_t* touch, gui_touch_data_t* touch_old, gui_handle_
  */
 static void
 gui_process_touch(void) {
-    gui_widget_param_t param = {0};
-    gui_widget_result_t result = {0};
-    gui_wc_t rresult;
+    gui_evt_param_t param = {0};
+    gui_evt_result_t result = {0};
+    gui_we_t rresult;
     
     if (guii_input_touchavailable()) {              /* Check if any touch available */
         while (guii_input_touchread(&GUI.touch.ts)) {   /* Process all touch events possible */
-            if (GUI.active_widget != NULL && GUI.touch.ts.status) { /* Check active widget for touch and pressed status */
-                set_relative_coordinate(&GUI.touch, &GUI.touch_old, GUI.active_widget, 0);  /* Set relative coordinates */
+            /* Set relative coordinates for new widget directly */
+            if (GUI.active_widget != NULL && GUI.touch.ts.status) {
+                set_relative_coordinate(&GUI.touch, &GUI.touch_old, GUI.active_widget);
             }
             
             /*
@@ -577,19 +593,19 @@ gui_process_touch(void) {
                         gui_handle_p aw = GUI.active_widget;/* Temporary set active widget */
                         do {
                             uint8_t r;
-                            GUI_WIDGET_PARAMTYPE_TOUCH(&param) = &GUI.touch;
-                            GUI_WIDGET_RESULTTYPE_TOUCH(&result) = touchCONTINUE;
+                            GUI_EVT_PARAMTYPE_TOUCH(&param) = &GUI.touch;
+                            GUI_EVT_RESULTTYPE_TOUCH(&result) = touchCONTINUE;
                             if (aw != GUI.active_widget) {
-                                r = guii_widget_callback(aw, GUI_WC_TouchStart, &param, &result);   /* The same amount of touch events currently */
-                                GUI_WIDGET_RESULTTYPE_TOUCH(&result) = touchCONTINUE;
+                                r = guii_widget_callback(aw, GUI_EVT_TOUCHSTART, &param, &result);   /* The same amount of touch events currently */
+                                GUI_EVT_RESULTTYPE_TOUCH(&result) = touchCONTINUE;
                             }
-                            r = guii_widget_callback(aw, GUI_WC_TouchMove, &param, &result);   /* The same amount of touch events currently */
+                            r = guii_widget_callback(aw, GUI_EVT_TOUCHMOVE, &param, &result);   /* The same amount of touch events currently */
                             if (r) {                /* Check if touch move processed */
                                 guii_widget_setflag(aw, GUI_FLAG_TOUCH_MOVE);   /* Touch move has been processed */
                             } else {
                                 guii_widget_clrflag(aw, GUI_FLAG_TOUCH_MOVE);   /* Touch move has not been processed */
                             }
-                            if (GUI_WIDGET_RESULTTYPE_TOUCH(&result) != touchCONTINUE) {
+                            if (GUI_EVT_RESULTTYPE_TOUCH(&result) != touchCONTINUE) {
                                 break;
                             }
                             
@@ -601,7 +617,7 @@ gui_process_touch(void) {
                              */
                             aw = guii_widget_getparent(aw);    /* Get parent widget */
                             if (aw != NULL) {
-                                set_relative_coordinate(&GUI.touch, &GUI.touch_old, aw, 0);
+                                set_relative_coordinate(&GUI.touch, &GUI.touch_old, aw);
                             }
                         } while (aw != NULL);
                         
@@ -615,9 +631,9 @@ gui_process_touch(void) {
                             }
                         }
                     } else {
-                        GUI_WIDGET_PARAMTYPE_TOUCH(&param) = &GUI.touch;
-                        GUI_WIDGET_RESULTTYPE_TOUCH(&result) = touchCONTINUE;
-                        guii_widget_callback(GUI.active_widget, GUI_WC_TouchStart, &param, &result);    /* New amount of touch elements happened */
+                        GUI_EVT_PARAMTYPE_TOUCH(&param) = &GUI.touch;
+                        GUI_EVT_RESULTTYPE_TOUCH(&result) = touchCONTINUE;
+                        guii_widget_callback(GUI.active_widget, GUI_EVT_TOUCHSTART, &param, &result);    /* New amount of touch elements happened */
                     }
                 }
             }
@@ -647,20 +663,21 @@ gui_process_touch(void) {
              */
             if (!GUI.touch.ts.status && GUI.touch_old.status) {
                 if (GUI.active_widget != NULL) {    /* Check if active widget */
-                    GUI_WIDGET_PARAMTYPE_TOUCH(&param) = &GUI.touch;
-                    GUI_WIDGET_RESULTTYPE_TOUCH(&result) = touchCONTINUE;
-                    guii_widget_callback(GUI.active_widget, GUI_WC_TouchEnd, &param, &result);  /* Process callback function */
+                    GUI_EVT_PARAMTYPE_TOUCH(&param) = &GUI.touch;
+                    GUI_EVT_RESULTTYPE_TOUCH(&result) = touchCONTINUE;
+                    guii_widget_callback(GUI.active_widget, GUI_EVT_TOUCHEND, &param, &result);  /* Process callback function */
                     guii_widget_active_clear();     /* Clear active widget */
                 }
             }
             
-            memcpy((void *)&GUI.touch_old, (void *)&GUI.touch.ts, sizeof(GUI.touch));   /* Copy current touch to last touch status */
+            memcpy((void *)&GUI.touch_old, (void *)&GUI.touch.ts, sizeof(GUI.touch_old));   /* Copy current touch to last touch status */
         }
     } else {                                        /* No new touch events, periodically call touch event thread */
         __TouchEvents_Thread(&GUI.touch, &GUI.touch_old, 0, &rresult);   /* Call thread for touch process periodically, handle long presses or timeouts */
         __ProcessAfterTouchEventsThread();          /* Process after event macro */
     }
 }
+
 #endif /* GUI_CFG_USE_TOUCH */
 
 #if GUI_CFG_USE_KEYBOARD || __DOXYGEN__
@@ -674,15 +691,15 @@ static void
 process_keyboard(void) {
     guii_keyboard_data_t key;
     
-    gui_widget_param_t param = {0};
-    gui_widget_result_t result = {0};
+    gui_evt_param_t param = {0};
+    gui_evt_result_t result = {0};
     
     while (guii_input_keyread(&key.kb)) {           /* Read all keyboard entires */
         if (GUI.focused_widget != NULL) {           /* Check if any widget is in focus already */
-            GUI_WIDGET_PARAMTYPE_KEYBOARD(&param) = &key;
-            GUI_WIDGET_RESULTTYPE_KEYBOARD(&result) = keyCONTINUE;
-            guii_widget_callback(GUI.focused_widget, GUI_WC_KeyPress, &param, &result);
-            if (GUI_WIDGET_RESULTTYPE_KEYBOARD(&result) != keyHANDLED) {
+            GUI_EVT_PARAMTYPE_KEYBOARD(&param) = &key;
+            GUI_EVT_RESULTTYPE_KEYBOARD(&result) = keyCONTINUE;
+            guii_widget_callback(GUI.focused_widget, GUI_EVT_KEYPRESS, &param, &result);
+            if (GUI_EVT_RESULTTYPE_KEYBOARD(&result) != keyHANDLED) {
                 if (key.kb.keys[0] == GUI_KEY_TAB) {/* Tab key pressed, set next widget as focused */
                     gui_handle_p h = gui_linkedlist_widgetgetnext(NULL, GUI.active_widget); /* Get next widget if possible */
                     if (h != NULL && guii_widget_ishidden(h)) {/* Ignore hidden widget */
@@ -884,7 +901,7 @@ gui_process(void) {
 
 /**
  * \brief           Set callback for global events from GUI
- * \param[in]       cb: Callback function
+ * \param[in]       evt_fn: Callback function
  * \return          `1` on success, `0` otherwise
  */
 uint8_t

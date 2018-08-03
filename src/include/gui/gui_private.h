@@ -93,8 +93,8 @@ typedef struct {
     
     gui_linkedlistroot_t root_fonts;        /*!< Root linked list of font widgets */
     
-    gui_widget_param_t widget_param;
-    gui_widget_result_t widget_result;
+    gui_evt_param_t evt_param;
+    gui_evt_result_t evt_result;
     
 #if GUI_CFG_USE_TOUCH || __DOXYGEN__
     gui_touch_data_t touch_old;             /*!< Old touch data, used for event management */

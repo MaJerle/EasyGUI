@@ -66,13 +66,13 @@ typedef struct {
 } gui_window_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
   
-gui_handle_p    gui_window_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+gui_handle_p    gui_window_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags);
 gui_handle_p    gui_window_getdesktop(void);
 uint8_t         gui_window_setactive(gui_handle_p h);
 uint8_t         gui_window_setcolor(gui_handle_p h, gui_window_color_t index, gui_color_t color);
 
 #if defined(GUI_INTERNAL)
-gui_handle_p    gui_window_createdesktop(gui_id_t id, gui_widget_callback_t cb);
+gui_handle_p    gui_window_createdesktop(gui_id_t id, gui_widget_evt_fn evt_fn);
 #endif /* defined(GUI_INTERNAL) */
  
 /**

@@ -36,7 +36,7 @@
 
 #define CFG_MODE            0x01
 
-static uint8_t gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+static uint8_t gui_listcontainer_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -79,8 +79,8 @@ calculate_limits(gui_handle_p h) {
         cmy = GUI_MAX(cmy, y + height);
     }
 
-    width = guii_widget_getinnerwidth(h);           /* Get widget width */
-    height = guii_widget_getinnerheight(h);         /* Get widget height */
+    width = guii_widget_getinnerwidth(h);  
+    height = guii_widget_getinnerheight(h);  
     
     l->maxscrollx = 0;
     l->maxscrolly = 0;
@@ -108,62 +108,54 @@ calculate_limits(gui_handle_p h) {
  * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
-gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_listcontainer_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    switch (ctrl) {                                 /* Handle control function if required */
-        case GUI_WC_PreInit: {
+    switch (ctrl) {
+        case GUI_WC_PRE_INIT: {
             return 1;
         }
-        case GUI_WC_SetParam: {                     /* Set parameter for widget */
-            gui_widget_param* p = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
+        case GUI_EVT_SETPARAM: {                     /* Set parameter for widget */
+            gui_widget_param* p = GUI_EVT_PARAMTYPE_WIDGETPARAM(param);
             switch (p->type) {
                 case CFG_MODE:
                     l->mode = *(gui_listcontainer_mode_t *)p->data;
                     break;
                 default: break;
             }
-            GUI_WIDGET_RESULTTYPE_U8(result) = 1;   /* Save result */
+            GUI_EVT_RESULTTYPE_U8(result) = 1;   /* Save result */
             return 1;
         }
-        case GUI_WC_ChildWidgetCreated: {           /* Child widget has been created */
+        case GUI_EVT_CHILDWIDGETCREATED: {           /* Child widget has been created */
             return 1;
         }
-        case GUI_WC_Draw: {
-            gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
+        case GUI_EVT_DRAW: {
+            gui_display_t* disp = GUI_EVT_PARAMTYPE_DISP(param);
             gui_dim_t x, y, width, height;
             
             calculate_limits(h);                    /* Calculate new limits for scrolling */
             
             x = gui_widget_getabsolutex(h);         /* Get absolute position on screen */
             y = gui_widget_getabsolutey(h);         /* Get absolute position on screen */
-            width = gui_widget_getwidth(h);         /* Get widget width */
-            height = gui_widget_getheight(h);       /* Get widget height */
+            width = gui_widget_getwidth(h);
+            height = gui_widget_getheight(h);
             
             gui_draw_filledrectangle(disp, x, y, width, height, guii_widget_getcolor(h, GUI_LISTCONTAINER_COLOR_BG));
             return 1;                               /* */
         }
 #if GUI_CFG_USE_TOUCH
-        case GUI_WC_TouchStart: {
-            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
+        case GUI_EVT_TOUCHSTART: {
+            GUI_EVT_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
         }
-        case GUI_WC_TouchMove: {
+        case GUI_EVT_TOUCHMOVE: {
             gui_dim_t sx, sy, new_diff;
-            guii_touch_data_t* ts = GUI_WIDGET_PARAMTYPE_TOUCH(param);  /* Get touch data */
+            guii_touch_data_t* ts = GUI_EVT_PARAMTYPE_TOUCH(param);  /* Get touch data */
 
             /* Get current scroll values */
             sx = gui_widget_getscrollx(h);
             sy = gui_widget_getscrolly(h);
 
-            /*
-             * TODO:
-             * 
-             * If we are on the limits of scroll, 
-             * do not handle touch automatically, but allow
-             * parent widget to do it.
-             *
-             * In case of nested list container widgets, this feature is required
-             */
+            /* Try to scroll widget */
             if (l->mode == GUI_LISTCONTAINER_MODE_VERTICAL || l->mode == GUI_LISTCONTAINER_MODE_VERTICAL_HORIZONTAL) {
                 new_diff = -ts->y_diff[0];
                 if ((new_diff + sy) <= 0) {
@@ -188,9 +180,9 @@ gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* pa
             
             /* Check if scroll was successful */
             /* Handle touch, otherwise send it to parent widget */
-            GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchCONTINUE;
+            GUI_EVT_RESULTTYPE_TOUCH(result) = touchCONTINUE;
             if (gui_widget_getscrollx(h) != sx || gui_widget_getscrolly(h) != sy) {
-                GUI_WIDGET_RESULTTYPE_TOUCH(result) = touchHANDLED;
+                GUI_EVT_RESULTTYPE_TOUCH(result) = touchHANDLED;
             }
 
             return 1;
@@ -211,13 +203,13 @@ gui_listcontainer_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* pa
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
- * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
+ * \param[in]       evt_fn: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for widget creation
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_listcontainer_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
+gui_listcontainer_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, evt_fn, flags);
 }
 
 /**

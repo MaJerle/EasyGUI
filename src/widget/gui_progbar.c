@@ -34,8 +34,6 @@
 #include "gui/gui_private.h"
 #include "widget/gui_progbar.h"
 
-#define __GP(x)             ((gui_progbar_t *)(x))
-
 #define GUI_PROGBAR_FLAG_PERCENT    0x01            /*!< Flag indicating percentages are enabled on view */
 #define GUI_PROGBAR_FLAG_ANIMATE    0x02            /*!< Animation for progress bar changes */
 
@@ -45,7 +43,7 @@
 #define CFG_PERCENT         0x04
 #define CFG_ANIM            0x05
 
-static uint8_t gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result);
+static uint8_t gui_progbar_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -70,26 +68,26 @@ gui_widget_t widget = {
     .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 
-#define p           ((gui_progbar_t *)h)
-#define is_anim(h)  (!!(__GP(h)->flags & GUI_PROGBAR_FLAG_ANIMATE))
+#define is_anim(h)  ((o->flags & GUI_PROGBAR_FLAG_ANIMATE) == GUI_PROGBAR_FLAG_ANIMATE)
 
 /* Set value for widget */
 static uint8_t
 set_value(gui_handle_p h, int32_t val) {
-    if (p->desiredvalue != val && val >= p->min && val <= p->max) { /* Value has changed */
-        p->desiredvalue = val;                      /* Set value */
-        if (p->currentvalue < p->min) {
-            p->currentvalue = p->min;
-        } else if (p->currentvalue > p->max) {
-            p->currentvalue = p->max;
+    gui_progbar_t* o = GUI_VP(h);
+    if (o->desiredvalue != val && val >= o->min && val <= o->max) { /* Value has changed */
+        o->desiredvalue = val;                      /* Set value */
+        if (o->currentvalue < o->min) {
+            o->currentvalue = o->min;
+        } else if (o->currentvalue > o->max) {
+            o->currentvalue = o->max;
         }
         if (is_anim(h) && h->timer != NULL) {       /* In case of animation and timer availability */
             guii_timer_start(h->timer);             /* Start timer */
         } else {
-            p->currentvalue = p->desiredvalue;      /* Set values to the same */
+            o->currentvalue = o->desiredvalue;      /* Set values to the same */
         }
-        gui_widget_invalidate(h);                   /* Redraw widget */
-        guii_widget_callback(h, GUI_WC_ValueChanged, NULL, NULL);  /* Process callback */
+        gui_widget_invalidate(h);
+        guii_widget_callback(h, GUI_EVT_VALUECHANGED, NULL, NULL);  /* Process callback */
         return 1;
     }
     return 0;
@@ -99,15 +97,16 @@ set_value(gui_handle_p h, int32_t val) {
 static void
 timer_callback(gui_timer_t* t) {
     gui_handle_p h = guii_timer_getparams(t);       /* Get timer parameters */
-    if (h) {
-        if (p->currentvalue != p->desiredvalue) {   /* Check difference */
-            if (p->currentvalue > p->desiredvalue) {
-                p->currentvalue--;
+    gui_progbar_t* o = GUI_VP(h);
+    if (h != NULL) {
+        if (o->currentvalue != o->desiredvalue) {   /* Check difference */
+            if (o->currentvalue > o->desiredvalue) {
+                o->currentvalue--;
             } else {
-                p->currentvalue++;
+                o->currentvalue++;
             }
-            gui_widget_invalidate(h);               /* Invalidate widget */
-            guii_timer_start(t);                    /* Start timer */
+            gui_widget_invalidate(h);
+            guii_timer_start(t);
         }
     }
 }
@@ -121,17 +120,18 @@ timer_callback(gui_timer_t* t) {
  * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
-gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, gui_widget_result_t* result) {
+gui_progbar_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
+    gui_progbar_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    switch (ctrl) {                                 /* Handle control function if required */
-        case GUI_WC_PreInit: {
-            __GP(h)->min = __GP(h)->currentvalue = 0;
-            __GP(h)->max = 100;
+    switch (ctrl) {
+        case GUI_WC_PRE_INIT: {
+            o->min = o->currentvalue = 0;
+            o->max = 100;
             set_value(h, 50);
             return 1;
         }
-        case GUI_WC_SetParam: {                     /* Set parameter for widget */
-            gui_widget_param* v = GUI_WIDGET_PARAMTYPE_WIDGETPARAM(param);
+        case GUI_EVT_SETPARAM: {                    /* Set parameter for widget */
+            gui_widget_param* v = GUI_EVT_PARAMTYPE_WIDGETPARAM(param);
             int32_t tmp;
             switch (v->type) {
                 case CFG_VALUE:                     /* Set current progress value */
@@ -139,27 +139,27 @@ gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
                     break;
                 case CFG_MAX:                       /* Set maximal value */
                     tmp = *(int32_t *)v->data;
-                    if (tmp > p->min) {
-                        p->max = tmp;
-                        if (p->desiredvalue > p->max || p->currentvalue > p->max) {
+                    if (tmp > o->min) {
+                        o->max = tmp;
+                        if (o->desiredvalue > o->max || o->currentvalue > o->max) {
                             set_value(h, tmp);
                         }
                     }
                     break;
                 case CFG_MIN:                       /* Set minimal value */
                     tmp = *(int32_t *)v->data;
-                    if (tmp < p->max) {
-                        p->min = tmp;
-                        if (p->desiredvalue < p->min || p->currentvalue < p->min) {
+                    if (tmp < o->max) {
+                        o->min = tmp;
+                        if (o->desiredvalue < o->min || o->currentvalue < o->min) {
                             set_value(h, tmp);
                         }
                     }
                     break;
                 case CFG_PERCENT:                   /* Set percentage mode */
                     if (*(uint8_t *)v->data) {
-                        p->flags |= GUI_PROGBAR_FLAG_PERCENT;
+                        o->flags |= GUI_PROGBAR_FLAG_PERCENT;
                     } else {
-                        p->flags &= ~GUI_PROGBAR_FLAG_PERCENT;
+                        o->flags &= ~GUI_PROGBAR_FLAG_PERCENT;
                     }
                     break;
                 case CFG_ANIM:
@@ -168,31 +168,31 @@ gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
                             h->timer = guii_timer_create(10, timer_callback, h);    /* Create animation timer */
                         }
                         if (h->timer != NULL) { /* Check timer response */
-                            __GP(h)->flags |= GUI_PROGBAR_FLAG_ANIMATE; /* Enable animations */
+                            o->flags |= GUI_PROGBAR_FLAG_ANIMATE; /* Enable animations */
                         }
                     } else {
-                        __GP(h)->flags &= ~GUI_PROGBAR_FLAG_ANIMATE;    /* Disable animation */
+                        o->flags &= ~GUI_PROGBAR_FLAG_ANIMATE;    /* Disable animation */
                         if (h->timer != NULL) {
                             guii_timer_remove(&h->timer);   /* Remove timer */
                         }
-                        set_value(h, p->desiredvalue);  /* Reset value */
+                        set_value(h, o->desiredvalue);  /* Reset value */
                     }
                     break;
                 default: break;
             }
-            GUI_WIDGET_RESULTTYPE_U8(result) = 1;   /* Save result */
+            GUI_EVT_RESULTTYPE_U8(result) = 1;   /* Save result */
             return 1;
         }
-        case GUI_WC_Draw: {
+        case GUI_EVT_DRAW: {
             gui_dim_t x, y, w, width, height;
-            gui_display_t* disp = GUI_WIDGET_PARAMTYPE_DISP(param);
+            gui_display_t* disp = GUI_EVT_PARAMTYPE_DISP(param);
     
             x = gui_widget_getabsolutex(h);         /* Get absolute position on screen */
             y = gui_widget_getabsolutey(h);         /* Get absolute position on screen */
-            width = gui_widget_getwidth(h);         /* Get widget width */
-            height = gui_widget_getheight(h);       /* Get widget height */
+            width = gui_widget_getwidth(h);
+            height = gui_widget_getheight(h);
            
-            w = ((width - 4) * (p->currentvalue - p->min)) / (p->max - p->min); /* Get width for active part */
+            w = ((width - 4) * (o->currentvalue - o->min)) / (o->max - o->min); /* Get width for active part */
             
             gui_draw_filledrectangle(disp, x + w + 2, y + 2, width - w - 4, height - 4, guii_widget_getcolor(h, GUI_PROGBAR_COLOR_BG));
             gui_draw_filledrectangle(disp, x + 2, y + 2, w, height - 4, guii_widget_getcolor(h, GUI_PROGBAR_COLOR_FG));
@@ -203,8 +203,8 @@ gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
                 const gui_char* text = NULL;
                 gui_char buff[5];
                 
-                if (p->flags & GUI_PROGBAR_FLAG_PERCENT) {
-                    sprintf((char *)buff, "%lu%%", (unsigned long)(((p->currentvalue - p->min) * 100) / (p->max - p->min)));
+                if (o->flags & GUI_PROGBAR_FLAG_PERCENT) {
+                    sprintf((char *)buff, "%lu%%", (unsigned long)(((o->currentvalue - o->min) * 100) / (o->max - o->min)));
                     text = buff;
                 } else if (gui_widget_isfontandtextset(h)) {
                     text = gui_widget_gettext(h);
@@ -240,13 +240,13 @@ gui_progbar_callback(gui_handle_p h, gui_wc_t ctrl, gui_widget_param_t* param, g
  * \param[in]       width: Widget width in units of pixels
  * \param[in]       height: Widget height in units of pixels
  * \param[in]       parent: Parent widget handle. Set to `NULL` to use current active parent widget
- * \param[in]       cb: Custom widget callback function. Set to `NULL` to use default callback
+ * \param[in]       evt_fn: Custom widget callback function. Set to `NULL` to use default callback
  * \param[in]       flags: flags for create procedure
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags) {
-    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, cb, flags);
+gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags) {
+    return (gui_handle_p)gui_widget_create(&widget, id, x, y, width, height, parent, evt_fn, flags);
 }
 
 /**
@@ -328,8 +328,9 @@ gui_progbar_setanimation(gui_handle_p h, uint8_t anim) {
  */
 int32_t
 gui_progbar_getmin(gui_handle_p h) {
+    gui_progbar_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    return __GP(h)->min;
+    return o->min;
 }
 
 /**
@@ -339,8 +340,9 @@ gui_progbar_getmin(gui_handle_p h) {
  */
 int32_t
 gui_progbar_getmax(gui_handle_p h) {
+    gui_progbar_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    return __GP(h)->max;
+    return o->max;
 }
 
 /**
@@ -350,6 +352,7 @@ gui_progbar_getmax(gui_handle_p h) {
  */
 int32_t
 gui_progbar_getvalue(gui_handle_p h) {
+    gui_progbar_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    return __GP(h)->desiredvalue;
+    return o->desiredvalue;
 }

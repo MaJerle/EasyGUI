@@ -87,10 +87,10 @@ typedef struct {
     uint8_t flags;                          /*!< List of widget flags */
     gui_edittext_valign_t valign;           /*!< Vertical align setup */
     gui_edittext_halign_t halign;           /*!< Horizontal align setup */
-} GUI_EDITTEXT_t;
+} gui_edittext_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p    gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+gui_handle_p    gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags);
 uint8_t         gui_edittext_setcolor(gui_handle_p h, gui_edittext_color_t index, gui_color_t color);
 uint8_t         gui_edittext_setmultiline(gui_handle_p h, uint8_t multiline);
 uint8_t         gui_edittext_setvalign(gui_handle_p h, gui_edittext_valign_t align);

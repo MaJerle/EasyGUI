@@ -77,12 +77,6 @@ typedef struct {
 } gui_listview_row_t;
 
 /**
- * \brief           Listview row object
- * \hideinitializer
- */
-#define __GLR(x)            ((gui_listview_row_t *)(x))
-
-/**
  * \brief           Listview column item
  */
 typedef struct {
@@ -105,15 +99,11 @@ typedef struct {
 typedef struct {
     gui_handle C;                           /*!< GUI handle object, must always be first on list */
     
-    /*
-     * Use colums as pointer to array for faster data access
-     */
+    /* Use colums as pointer to array for faster data access */
     gui_listview_col_t** cols;              /*!< Pointer to pointers of column elements */
     uint16_t col_count;                     /*!< Number of columns in listview package */
     
-    /*
-     * Use linked list for rows
-     */
+    /* Use linked list for rows */
     gui_linkedlistroot_t root;              /*!< Linked list root entry for \ref gui_listview_row_t for rows */
     
     int16_t count;                          /*!< Current number of strings attached to this widget */
@@ -130,7 +120,7 @@ typedef struct {
  */
 typedef void* gui_listview_row_p;
    
-gui_handle_p    gui_listview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+gui_handle_p    gui_listview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags);
 uint8_t         gui_listview_setcolor(gui_handle_p h, gui_listview_color_t index, gui_color_t color);
 
 uint8_t         gui_listview_addcolumn(gui_handle_p h, const gui_char* text, gui_dim_t width);

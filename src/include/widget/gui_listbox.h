@@ -92,7 +92,7 @@ typedef struct {
 } gui_listbox_t;
 #endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
-gui_handle_p    gui_listbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_callback_t cb, uint16_t flags);
+gui_handle_p    gui_listbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags);
 uint8_t         gui_listbox_setcolor(gui_handle_p h, gui_listbox_color_t index, gui_color_t color);
 uint8_t         gui_listbox_addstring(gui_handle_p h, const gui_char* text);
 uint8_t         gui_listbox_deletefirststring(gui_handle_p h);
