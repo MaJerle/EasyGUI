@@ -1,6 +1,6 @@
 #include "demo.h"
 
-static uint8_t  list_container_callback(gui_handle_p h, gui_wc_t wc, gui_widget_param_t* param, gui_widget_result_t* result);
+static uint8_t  list_container_callback(gui_handle_p h, gui_we_t wc, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**
  * \brief           List of buttons on list-container widget
@@ -68,6 +68,6 @@ demo_create_feature_list_container(gui_handle_p parent, uint8_t protect) {
  * \brief           Window event callback
  */
 static uint8_t
-list_container_callback(gui_handle_p h, gui_wc_t wc, gui_widget_param_t* param, gui_widget_result_t* result) {
+list_container_callback(gui_handle_p h, gui_we_t wc, gui_evt_param_t* param, gui_evt_result_t* result) {
     return gui_widget_processdefaultcallback(h, wc, param, result);
 }
