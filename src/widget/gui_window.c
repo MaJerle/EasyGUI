@@ -74,7 +74,7 @@ gui_widget_t widget = {
 static uint8_t
 gui_window_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
 #if GUI_CFG_USE_TOUCH
-    static gui_dim_t tx, ty, ts_mode = 0;
+    static gui_dim_t ts_mode = 0;
 #endif /* GUI_CFG_USE_TOUCH */
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
@@ -196,8 +196,7 @@ gui_window_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_e
             guii_touch_data_t* ts = GUI_EVT_PARAMTYPE_TOUCH(param);  /* Get touch data */
             
             if (ts_mode == 1 && guii_widget_getflag(h, GUI_FLAG_CHILD)) {
-                gui_dim_t px, py;
-                
+                /* Set new widget position */
                 gui_widget_setposition(h,
                     gui_widget_getxposition(h) + ts->x_diff[0],
                     gui_widget_getyposition(h) + ts->y_diff[0]);

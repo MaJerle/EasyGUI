@@ -64,8 +64,9 @@ gui_widget_t widget = {
 static uint8_t
 set_active(gui_handle_p h) {
     gui_handle_p handle;
-    gui_radio_t* o, *o_handle = GUI_VP(h);
+    gui_radio_t* o, *o_handle;
     
+    o = GUI_VP(h);
     if (o->flags & GUI_FLAG_RADIO_DISABLED) {       /* Check if it can be enabled */
         return 0;
     }

@@ -99,11 +99,11 @@ check_disp_clipping(gui_handle_p h) {
         y = guii_widget_getparentabsolutey(h);     /* Parent absolute Y position for inner widgets */
         wi = guii_widget_getparentinnerwidth(h);   /* Get parent inner width */
         hi = guii_widget_getparentinnerheight(h);  /* Get parent inner height */
-        
-        if (GUI.display_temp.x1 < x)         { GUI.display_temp.x1 = x; }
-        if (GUI.display_temp.x2 > x + wi)    { GUI.display_temp.x2 = x + wi; }
-        if (GUI.display_temp.y1 < y)         { GUI.display_temp.y1 = y; }
-        if (GUI.display_temp.y2 > y + hi)    { GUI.display_temp.y2 = y + hi; }
+
+        GUI.display_temp.x1 = GUI_MAX(GUI.display_temp.x1, x);
+        GUI.display_temp.x2 = GUI_MIN(GUI.display_temp.x2, x + wi);
+        GUI.display_temp.y1 = GUI_MAX(GUI.display_temp.y1, y);
+        GUI.display_temp.y2 = GUI_MIN(GUI.display_temp.y2, y + hi);
     }
 #endif /* !GUI_CFG_USE_POS_SIZE_CACHE */
 }
