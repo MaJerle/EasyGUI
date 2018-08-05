@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\examples_demo\demo_button.c" />
     <ClCompile Include="..\..\..\examples_demo\demo_checkbox.c" />
+    <ClCompile Include="..\..\..\examples_demo\demo_debugbox.c" />
     <ClCompile Include="..\..\..\examples_demo\demo_dropdown.c" />
     <ClCompile Include="..\..\..\examples_demo\demo_edit_text.c" />
     <ClCompile Include="..\..\..\examples_demo\demo_graph.c" />
@@ -177,6 +178,7 @@
     <ClCompile Include="..\..\..\src\gui\gui_mem.c" />
     <ClCompile Include="..\..\..\src\gui\gui_string.c" />
     <ClCompile Include="..\..\..\src\gui\gui_template.c" />
+    <ClCompile Include="..\..\..\src\gui\gui_text.c" />
     <ClCompile Include="..\..\..\src\gui\gui_timer.c" />
     <ClCompile Include="..\..\..\src\gui\gui_translate.c" />
     <ClCompile Include="..\..\..\src\system\gui_ll_sdl_win32.c" />

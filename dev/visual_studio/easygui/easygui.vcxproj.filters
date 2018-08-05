@@ -196,5 +196,11 @@
     <ClCompile Include="..\..\..\examples_demo\demo_text_view.c">
       <Filter>DEMO</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_text.c">
+      <Filter>GUI\CORE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\examples_demo\demo_debugbox.c">
+      <Filter>DEMO</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

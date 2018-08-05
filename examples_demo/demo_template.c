@@ -10,6 +10,8 @@ void
 demo_create_feature_template(gui_handle_p parent, uint8_t protect) {
     gui_handle_p h;
 
+    GUI_UNUSED(h);
+
     gui_protect(protect);
     
     gui_unprotect(protect);

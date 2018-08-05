@@ -14,7 +14,17 @@ demo_create_feature_edit_text(gui_handle_p parent, uint8_t protect) {
 
     /* Create edit text */
     h = gui_edittext_create(0, 10, 10, 300, 50, parent, edit_text_callback, GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE);
+    gui_widget_setpositionpercent(h, 1, 1);
+    gui_widget_setsizepercent(h, 98, 6);
     gui_widget_alloctextmemory(h, 255);
+    gui_widget_setignoreinvalidate(h, 0, 1);
+
+    /* Create edit text */
+    h = gui_edittext_create(0, 10, 10, 300, 50, parent, edit_text_callback, GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE);
+    gui_widget_setpositionpercent(h, 1, 8);
+    gui_widget_setsizepercent(h, 98, 91);
+    gui_widget_alloctextmemory(h, 255);
+    gui_edittext_setmultiline(h, 1);
     gui_widget_setignoreinvalidate(h, 0, 1);
 
     gui_unprotect(protect);

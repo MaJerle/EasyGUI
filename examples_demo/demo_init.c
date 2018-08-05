@@ -24,6 +24,7 @@ btns[] = {
     BTN_ENTRY(ID_BTN_MAINWIN_SLIDER, _GT("Slider"), ID_WIN_SLIDER, demo_create_feature_slider)
     BTN_ENTRY(ID_BTN_MAINWIN_LISTBOX, _GT("Listbox"), ID_WIN_LISTBOX, demo_create_feature_listbox)
     BTN_ENTRY(ID_BTN_MAINWIN_LISTVIEW, _GT("Listview"), ID_WIN_LISTVIEW, demo_create_feature_listview)
+    BTN_ENTRY(ID_BTN_MAINWIN_DEBUGBOX, _GT("Debugbox"), ID_WIN_DEBUGBOX, demo_create_feature_debugbox)
     BTN_ENTRY(ID_BTN_MAINWIN_DROPDOWN, _GT("Dropdown"), ID_WIN_DROPDOWN, demo_create_feature_dropdown)
     BTN_ENTRY(ID_BTN_MAINWIN_CHECKBOX, _GT("Checkbox"), ID_WIN_CHECKBOX, demo_create_feature_checkbox)
     BTN_ENTRY(ID_BTN_MAINWIN_RADIO, _GT("Radiobox"), ID_WIN_RADIO, demo_create_feature_radio)

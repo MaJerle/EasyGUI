@@ -27,7 +27,7 @@ demo_create_feature_progbar(gui_handle_p parent, uint8_t protect) {
     for (i = 0; i < 9; i++) {
         h = gui_progbar_create(0, 0, 0, 0, 0, parent, progbar_callback, GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE);
         gui_widget_setsizepercent(h, 98, 8.5f);
-        gui_widget_setpositionpercent(h, 1, 10 + 10 * i);
+        gui_widget_setpositionpercent(h, 1, GUI_FLOAT(10 + 10 * i));
 
         gui_progbar_setmin(h, 0);
         gui_progbar_setmax(h, 100);
