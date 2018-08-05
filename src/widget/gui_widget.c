@@ -450,7 +450,7 @@ invalidate_widget(gui_handle_p h, uint8_t setclipping) {
      * Get first element of parent linked list for checking
      */
 #if GUI_CFG_USE_ALPHA
-    if (guii_widget_hasalpha(h1)) {
+    if (guii_widget_hasalpha(h1) && guii_widget_hasparent(h1)) {
         invalidate_widget(guii_widget_getparent(h1), 0);    /* Invalidate parent widget */
     }
 #endif /* GUI_CFG_USE_ALPHA */
