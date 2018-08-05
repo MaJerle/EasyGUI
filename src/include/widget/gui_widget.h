@@ -213,24 +213,6 @@ extern "C" {
 #define guii_widget_getcolor(h, index)              (__GH(h)->colors != NULL ? __GH(h)->colors[(uint8_t)(index)] : (__GH(h)->widget->colors != NULL ? __GH(h)->widget->colors[(uint8_t)(index)] : GUI_COLOR_BLACK))
 
 /**
- * \brief           Get inner width (total width - padding left - padding right)
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       h: Widget handle
- * \retval          height in units of pixels
- * \hideinitializer
- */
-#define guii_widget_getinnerwidth(h)                GUI_DIM((gui_widget_getwidth(h) - (gui_widget_getpaddingleft(h) + gui_widget_getpaddingright(h))))
-
-/**
- * \brief           Get inner height (total height - padding top - padding bottom)
- * \note            The function is private and can be called only when GUI protection against multiple access is activated
- * \param[in]       h: Widget handle
- * \retval          Inner height in units of pixels
- * \hideinitializer
- */
-#define guii_widget_getinnerheight(h)               GUI_DIM((gui_widget_getheight(h) - (gui_widget_getpaddingtop(h) + gui_widget_getpaddingbottom(h))))
-
-/**
  * \brief           Returns width of parent element. If parent does not exists, it returns LCD width
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle
@@ -257,7 +239,7 @@ extern "C" {
  * \retval          Parent width in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getparentinnerwidth(h)          GUI_DIM((guii_widget_hasparent(h) ? guii_widget_getinnerwidth(guii_widget_getparent(h)) : GUI.lcd.width))
+#define guii_widget_getparentinnerwidth(h)          GUI_DIM((guii_widget_hasparent(h) ? gui_widget_getinnerwidth(guii_widget_getparent(h)) : GUI.lcd.width))
 
 /**
  * \brief           Returns inner height of parent element. If parent does not exists, it returns LCD height
@@ -268,7 +250,7 @@ extern "C" {
  * \retval          Parent height in units of pixels
  * \hideinitializer
  */
-#define guii_widget_getparentinnerheight(h)         GUI_DIM((guii_widget_hasparent(h) ? guii_widget_getinnerheight(guii_widget_getparent(h)) : GUI.lcd.height))
+#define guii_widget_getparentinnerheight(h)         GUI_DIM((guii_widget_hasparent(h) ? gui_widget_getinnerheight(guii_widget_getparent(h)) : GUI.lcd.height))
 
 /**
  * \brief           Check if widget is visible in any way, either with transparency or hidden flag
@@ -410,6 +392,8 @@ uint8_t         gui_widget_setheightoriginal(gui_handle_p h, float height);
 
 gui_dim_t       gui_widget_getwidth(gui_handle_p h);
 gui_dim_t       gui_widget_getheight(gui_handle_p h);
+gui_dim_t       gui_widget_getinnerwidth(gui_handle_p h);
+gui_dim_t       gui_widget_getinnerheight(gui_handle_p h);
 float           gui_widget_getwidthpercent(gui_handle_p h);
 float           gui_widget_getheightpercent(gui_handle_p h);
 float           gui_widget_getwidthoriginal(gui_handle_p h, uint8_t* is_percent);

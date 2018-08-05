@@ -1728,6 +1728,26 @@ gui_widget_getheight(gui_handle_p h) {
 }
 
 /**
+ * \brief           Get inner width `total width - padding left - padding right`
+ * \param[in]       h: Widget handle
+ * \retval          Inner width in units of pixels
+ */
+gui_dim_t
+gui_widget_getinnerwidth(gui_handle_p h) {
+    return gui_widget_getwidth(h) - gui_widget_getpaddingleft(h) - gui_widget_getpaddingright(h);
+}
+
+/**
+ * \brief           Get inner height `total height - padding top - padding bottom`
+ * \param[in]       h: Widget handle
+ * \retval          Inner height in units of pixels
+ */
+gui_dim_t
+gui_widget_getinnerheight(gui_handle_p h) {
+    return gui_widget_getheight(h) - gui_widget_getpaddingtop(h) - gui_widget_getpaddingbottom(h);
+}
+
+/**
  * \brief           Get widget width relative to parent width in percent
  * \param[in]       h: Widget handle
  * \return          Widget width in units of percent
