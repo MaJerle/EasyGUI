@@ -304,11 +304,11 @@ gui_window_create(gui_id_t id, float x, float y, float width, float height, gui_
 
     ptr = gui_widget_create(&widget, id, x, y, width, height, parent, evt_fn, flags);
     if (ptr != NULL) {
-        guii_widget_setflag(__GH(ptr), GUI_FLAG_CHILD); /* This window is child window */
-        gui_widget_setpaddingtop(__GH(ptr), 30);
-        gui_widget_setpaddingright(__GH(ptr), 2);
-        gui_widget_setpaddingbottom(__GH(ptr), 2);
-        gui_widget_setpaddingleft(__GH(ptr), 2);
+        guii_widget_setflag(GUI_VP(ptr), GUI_FLAG_CHILD);   /* This window is child window */
+        gui_widget_setpaddingtop(GUI_VP(ptr), 30);
+        gui_widget_setpaddingright(GUI_VP(ptr), 2);
+        gui_widget_setpaddingbottom(GUI_VP(ptr), 2);
+        gui_widget_setpaddingleft(GUI_VP(ptr), 2);
     }
     
     return (gui_handle_p)ptr;

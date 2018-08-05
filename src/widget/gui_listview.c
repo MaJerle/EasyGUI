@@ -304,7 +304,7 @@ static uint8_t
 gui_listview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
     gui_listview_t* o = GUI_VP(h);
 #if GUI_CFG_USE_TOUCH
-    static gui_dim_t tx, ty;
+    static gui_dim_t tx;
 #endif /* GUI_CFG_USE_TOUCH */
     
     switch (ctrl) {
@@ -440,7 +440,6 @@ gui_listview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
         case GUI_EVT_TOUCHSTART: {
             guii_touch_data_t* ts = GUI_EVT_PARAMTYPE_TOUCH(param);  /* Get touch data */
             tx = ts->x_rel[0];                      /* Save X position */
-            ty = ts->y_rel[0];                      /* Save Y position */
             
             GUI_EVT_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
@@ -451,17 +450,16 @@ gui_listview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                 gui_dim_t height = item_height(h, NULL);   /* Get element height */
                 gui_dim_t diff;
                 
-                diff = ty - ts->y_rel[0];           /* Check Y difference */
+                diff = -ts->y_diff[0];
                 if (GUI_ABS(diff) > height) {       /* Difference must be greater than 1 height entry */
                     slide(h, diff > 0 ? 1 : -1);    /* Slide widget */
-                    ty = ts->y_rel[0];              /* Save pointer */
                 }
                 
-                if (ty < height) {                  /* Check if we are in top region part */
+                if (ts->y_rel[0] < height) {        /* Check if we are in top region part */
                     uint16_t i;
                     gui_dim_t sum = 0;
                     
-                    diff = tx - ts->x_rel[0];       /* Check X difference too */
+                    diff = -ts->x_diff[0];
                     for (i = 0; i < o->col_count; i++) {/* Check X position for column first */
                         sum += o->cols[i]->width;   /* Check width */
                         if (GUI_ABS(tx - sum) < 10) {
