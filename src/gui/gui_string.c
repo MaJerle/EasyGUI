@@ -98,7 +98,6 @@ gui_string_unicode_decode(gui_string_unicode_t* s, const gui_char c) {
  * \param[in]       c: Character to encode to UNICODE sequence
  * \param[out]      out: Pointer to 4-bytes long array to store UNICODE information to
  * \return          Number of bytes required for character encoding
- * \sa              gui_string_unicode_init, gui_string_unicode_decode
  */
 uint8_t
 gui_string_unicode_encode(const uint32_t c, gui_char* out) {
@@ -124,14 +123,13 @@ gui_string_unicode_encode(const uint32_t c, gui_char* out) {
  *      
  *                  Example input string: EasyGUI\\xDF\\x8F
  *
- *                  1. When \ref GUI_CFG_USE_UNICODE is set to 1, function will try to parse unicode characters
+ *                  1. When \ref GUI_CFG_USE_UNICODE is set to `1`, function will try to parse unicode characters
  *                      and will return `8` on top input string
- *                  2. When \ref GUI_CFG_USE_UNICODE is set to 0, function will count all the bytes until string termination is reached
+ *                  2. When \ref GUI_CFG_USE_UNICODE is set to `0`, function will count all the bytes until string termination is reached
  *                      and will return `9` on top input string
  *
  * \param[in]       src: Pointer to source string to get length
  * \return          Number of visible characters in string
- * \sa              gui_string_lengthtotal
  */
 size_t
 gui_string_length(const gui_char* src) {
@@ -155,11 +153,10 @@ gui_string_length(const gui_char* src) {
 /**
  * \brief           Return total number of bytes required for string
  *      
- * \note            When \ref GUI_CFG_USE_UNICODE is set to 0, this function returns the same as \ref gui_string_length
+ * \note            When \ref GUI_CFG_USE_UNICODE is set to `0`, this function returns the same as \ref gui_string_length
  *
  * \param[in]       src: Pointer to source string to get length
  * \return          Number of visible characters in string
- * \sa              gui_string_length
  */
 size_t
 gui_string_lengthtotal(const gui_char* src) {
@@ -171,7 +168,6 @@ gui_string_lengthtotal(const gui_char* src) {
  * \param[out]      dst: Destination memory address
  * \param[in]       src: Source memory address
  * \return          Pointer to destination memory
- * \sa              gui_string_copyn
  */
 gui_char *
 gui_string_copy(gui_char* dst, const gui_char* src) {
@@ -184,7 +180,6 @@ gui_string_copy(gui_char* dst, const gui_char* src) {
  * \param[in]       src: Source memory address
  * \param[in]       len: Number of bytes to copy
  * \return          Pointer to destination memory
- * \sa              gui_string_copy
  */
 gui_char *
 gui_string_copyn(gui_char* dst, const gui_char* src, size_t len) {
@@ -192,10 +187,10 @@ gui_string_copyn(gui_char* dst, const gui_char* src, size_t len) {
 }
 
 /**
- * \brief           Compare 2 strings
+ * \brief           Compare `2` strings
  * \param[in]       s1: First string address
  * \param[in]       s2: Second string address
- * \return          0 if equal, non-zero otherwise
+ * \return          `0` if equal, non-zero otherwise
  */
 int
 gui_string_compare(const gui_char* s1, const gui_char* s2) {
@@ -222,12 +217,12 @@ gui_string_prepare(gui_string_t* s, const gui_char* str) {
  *
  * \include         _example_string_getch.c
  * 
- * \note            When \ref GUI_CFG_USE_UNICODE is set to 1, multiple bytes may be used for single character
+ * \note            When \ref GUI_CFG_USE_UNICODE is set to `1`, multiple bytes may be used for single character
  * \param[in,out]   s: Pointer to \ref gui_string_t structure with input string. 
                         Function will internally change pointer of actual string where it points to to next character
  * \param[out]      out: Pointer to output memory where output character will be saved
  * \param[out]      len: Pointer to output memory where number of bytes for string will be saved
- * \return          `1` on success, `0` otherwise
+ * \return          `1` on success, `0` otherwis
  * \sa              gui_string_getchreverse
  */
 uint8_t
@@ -256,7 +251,7 @@ gui_string_getch(gui_string_t* s, uint32_t* out, uint8_t* len) {
     if (!*out) {                            /* End of string check */
         return 0;                           /* Invalid character */
     }
-    if (len) {                              /* Save number of bytes in this character */
+    if (len != NULL) {                      /* Save number of bytes in this character */
         *len = 1;                           /* 1-byte only */
     }
     return 1;                               /* Return valid character sign */
@@ -271,13 +266,12 @@ gui_string_getch(gui_string_t* s, uint32_t* out, uint8_t* len) {
  *
  * \include         _example_string_getchreverse.c
  *
- * \note            When \ref GUI_CFG_USE_UNICODE is set to 1, multiple bytes may be used for single character
+ * \note            When \ref GUI_CFG_USE_UNICODE is set to `1`, multiple bytes may be used for single character
  * \param[in,out]   *str: Pointer to \ref gui_string_t structure with input string. 
                         Function will internally change pointer of actual string where it points to to next character
  * \param[out]      out: Pointer to output memory where output character will be saved
  * \param[out]      len: Pointer to output memory where number of bytes for string will be saved
  * \return          `1` on success, `0` otherwise
- * \sa              gui_string_getch, gui_string_gotoend
  */
 uint8_t
 gui_string_getchreverse(gui_string_t* str, uint32_t* out, uint8_t* len) {
@@ -316,7 +310,7 @@ gui_string_getchreverse(gui_string_t* str, uint32_t* out, uint8_t* len) {
     return 1;                               /* Return valid character sign */
 #else
     const gui_char ch = *str->str;          /* Save character pointer */
-    str->Str--;                             /* Decrease input pointer where it points to */
+    str->str--;                             /* Decrease input pointer where it points to */
     *out = (uint32_t)ch;                    /* Save character for output */
     if (!*out) {                            /* Check if valid character */
         return 0;
@@ -333,7 +327,6 @@ gui_string_getchreverse(gui_string_t* str, uint32_t* out, uint8_t* len) {
  * \brief           Set character pointer to the last character in sequence
  * \param[in,out]   str: Pointer to \ref gui_string_t structure with string informations
  * \return          `1` on success, `0` otherwise
- * \sa              gui_string_getchreverse
  */
 uint8_t
 gui_string_gotoend(gui_string_t* str) {
