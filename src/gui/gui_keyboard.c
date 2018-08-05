@@ -477,7 +477,7 @@ keyboard_callback(gui_handle_p h, gui_we_t cmd, gui_evt_param_t* param, gui_evt_
 static uint8_t
 keyboard_base_callback(gui_handle_p h, gui_we_t cmd, gui_evt_param_t* param, gui_evt_result_t* result) {
     switch (cmd) {
-        case GUI_WC_PRE_INIT: {
+        case GUI_EVT_PRE_INIT: {
             return 1;
         }
         case GUI_EVT_INIT: {                         /* When base element is initialized */

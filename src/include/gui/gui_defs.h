@@ -754,7 +754,7 @@ typedef enum {
      * \param[in]   param: None
      * \param[out]  result: Pointer to `uint8_t` variable with result. If set to 0 by user, widget will be deleted
      */
-    GUI_WC_PRE_INIT = 0x01,
+    GUI_EVT_PRE_INIT = 0x01,
     
     /**
      * \brief       Check if widget should not be added to linked list after creation
