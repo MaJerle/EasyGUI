@@ -73,6 +73,10 @@ gui_widget_t widget = {
 static uint8_t
 gui_textview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
     switch (ctrl) {
+        case GUI_EVT_PRE_INIT: {
+            gui_widget_setpadding(h, 3);
+            return 1;
+        }
         case GUI_EVT_SETPARAM: {                     /* Set parameter for widget */
             gui_widget_param* p = GUI_EVT_PARAMTYPE_WIDGETPARAM(param);
             switch (p->type) {
@@ -95,23 +99,23 @@ gui_textview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
             if (gui_widget_isfontandtextset(h)) {
                 gui_draw_font_t f;
                 
-                x = gui_widget_getabsolutex(h);     /* Get absolute X coordinate */
-                y = gui_widget_getabsolutey(h);     /* Get absolute Y coordinate */
-                wi = gui_widget_getwidth(h);        /* Get widget width */
-                hi = gui_widget_getheight(h);
+                x = gui_widget_getabsolutex(h);
+                y = gui_widget_getabsolutey(h);
+                wi = gui_widget_getinnerwidth(h);
+                hi = gui_widget_getinnerheight(h);
                 
                 /* Draw background if necessary */
                 bg = guii_widget_getcolor(h, GUI_TEXTVIEW_COLOR_BG);
                 if (bg != GUI_COLOR_TRANS) {
-                    gui_draw_filledrectangle(disp, x, y, wi, hi, bg);
+                    gui_draw_filledrectangle(disp, x, y, gui_widget_getwidth(h), gui_widget_getheight(h), bg);
                 }
                 
                 gui_draw_font_init(&f);             /* Init structure */
-                
-                f.x = x + 1;
-                f.y = y + 1;
-                f.width = wi - 2;
-                f.height = hi - 2;
+
+                f.x = x + gui_widget_getpaddingleft(h);
+                f.y = y + gui_widget_getpaddingright(h);
+                f.width = wi;
+                f.height = hi;
                 f.align = (uint8_t)o->halign | (uint8_t)o->valign;
                 f.flags |= GUI_FLAG_FONT_MULTILINE; /* Enable multiline */
                 f.color1width = f.width;

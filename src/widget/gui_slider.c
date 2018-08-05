@@ -176,7 +176,7 @@ gui_slider_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_e
     gui_slider_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (ctrl) {
-        case GUI_WC_PRE_INIT: {
+        case GUI_EVT_PRE_INIT: {
             o->min = 0;                             /* Set default minimal value */
             o->max = 100;                           /* Set default maximal value */
             o->value = 50;                          /* Set default value */

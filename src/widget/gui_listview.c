@@ -246,7 +246,7 @@ gui_listview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
 #endif /* GUI_CFG_USE_TOUCH */
     
     switch (ctrl) {
-        case GUI_WC_PRE_INIT: {
+        case GUI_EVT_PRE_INIT: {
             o->selected = -1;                       /* Invalidate selection */
             o->sliderwidth = 30;                    /* Set slider width */
             o->flags |= GUI_FLAG_LISTVIEW_SLIDER_AUTO;    /* Enable auto mode for slider */

@@ -230,7 +230,7 @@ gui_listbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_
 #endif /* GUI_CFG_USE_TOUCH */
     
     switch (ctrl) {
-        case GUI_WC_PRE_INIT: {
+        case GUI_EVT_PRE_INIT: {
             o->selected = -1;                 /* No selection */
             o->sliderwidth = 30;              /* Set slider width */
             o->flags |= GUI_FLAG_LISTBOX_SLIDER_AUTO; /* Set auto mode for slider */

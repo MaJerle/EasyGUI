@@ -84,7 +84,7 @@ gui_edittext_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
     gui_edittext_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (ctrl) {
-        case GUI_WC_PRE_INIT: {
+        case GUI_EVT_PRE_INIT: {
             o->valign = GUI_EDITTEXT_VALIGN_CENTER;
             o->halign = GUI_EDITTEXT_HALIGN_LEFT;
             return 1;
@@ -126,7 +126,7 @@ gui_edittext_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                 gui_draw_rectangle(disp, x + 3, y + 3, width - 6, height - 6, guii_widget_getcolor(h, GUI_EDITTEXT_COLOR_BORDER));
             }
             
-            if (gui_widget_isfontandtextset(h)) {  /* Ready to write string */
+            if (gui_widget_isfontandtextset(h)) {   /* Ready to write string */
                 gui_draw_font_t f;
                 gui_draw_font_init(&f);             /* Init font drawing */
                 

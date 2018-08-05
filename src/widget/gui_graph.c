@@ -114,7 +114,7 @@ gui_graph_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_ev
     gui_graph_t* g = (gui_graph_t *)h;
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (ctrl) {
-        case GUI_WC_PRE_INIT: {
+        case GUI_EVT_PRE_INIT: {
             g->border[GUI_GRAPH_BORDER_TOP] = 5;    /* Set borders */
             g->border[GUI_GRAPH_BORDER_RIGHT] = 5;
             g->border[GUI_GRAPH_BORDER_BOTTOM] = 5;

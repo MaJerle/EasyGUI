@@ -74,7 +74,7 @@ gui_button_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_e
     gui_button_t* b = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (ctrl) {
-        case GUI_WC_PRE_INIT: {
+        case GUI_EVT_PRE_INIT: {
             guii_widget_setflag(h, GUI_FLAG_3D);    /* By default set 3D */
             return 1;
         }

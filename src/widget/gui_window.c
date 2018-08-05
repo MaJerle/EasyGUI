@@ -79,7 +79,7 @@ gui_window_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_e
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (ctrl) {
-        case GUI_WC_PRE_INIT: {                      /* Called immediatelly after widget is created */
+        case GUI_EVT_PRE_INIT: {                      /* Called immediatelly after widget is created */
             gui_window_setactive(h);                /* Set active window */
             return 1;
         }

@@ -1147,7 +1147,7 @@ gui_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, flo
         
         /* Call pre-init function to set default widget parameters */
         GUI_EVT_RESULTTYPE_U8(&result) = 1;
-        guii_widget_callback(h, GUI_WC_PRE_INIT, NULL, &result);    /* Notify internal widget library about init successful */
+        guii_widget_callback(h, GUI_EVT_PRE_INIT, NULL, &result);    /* Notify internal widget library about init successful */
         
         if (!GUI_EVT_RESULTTYPE_U8(&result)) {
             GUI_MEMFREE(h);

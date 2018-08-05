@@ -124,7 +124,7 @@ gui_progbar_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_
     gui_progbar_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (ctrl) {
-        case GUI_WC_PRE_INIT: {
+        case GUI_EVT_PRE_INIT: {
             o->min = o->currentvalue = 0;
             o->max = 100;
             set_value(h, 50);

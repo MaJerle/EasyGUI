@@ -70,8 +70,8 @@ calculate_limits(gui_handle_p h) {
     for (w = gui_linkedlist_widgetgetnext(h, NULL); w != NULL;
             w = gui_linkedlist_widgetgetnext(NULL, w)) {
 
-        x = guii_widget_getrelativex(w);            /* Get absolute position on screen */
-        y = guii_widget_getrelativey(w);            /* Get absolute position on screen */
+        x = guii_widget_getrelativex(w);
+        y = guii_widget_getrelativey(w);
         width = gui_widget_getwidth(w);
         height = gui_widget_getheight(w);
 
@@ -79,8 +79,8 @@ calculate_limits(gui_handle_p h) {
         cmy = GUI_MAX(cmy, y + height);
     }
 
-    width = guii_widget_getinnerwidth(h);  
-    height = guii_widget_getinnerheight(h);  
+    width = gui_widget_getinnerwidth(h);  
+    height = gui_widget_getinnerheight(h);  
     
     l->maxscrollx = 0;
     l->maxscrolly = 0;
@@ -111,7 +111,7 @@ static uint8_t
 gui_listcontainer_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (ctrl) {
-        case GUI_WC_PRE_INIT: {
+        case GUI_EVT_PRE_INIT: {
             return 1;
         }
         case GUI_EVT_SETPARAM: {                     /* Set parameter for widget */
