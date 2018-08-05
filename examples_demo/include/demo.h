@@ -34,6 +34,7 @@ typedef struct {
 #define ID_BTN_MAINWIN_DROPDOWN             (ID_BTN_BASIC + 0x00C)
 #define ID_BTN_MAINWIN_RADIO                (ID_BTN_BASIC + 0x00D)
 #define ID_BTN_MAINWIN_CHECKBOX             (ID_BTN_BASIC + 0x00E)
+#define ID_BTN_MAINWIN_DEBUGBOX             (ID_BTN_BASIC + 0x00F)
 
 /* List of windows IDs */
 #define ID_WIN_BASIC                        (GUI_ID_USER + 0x200)
@@ -51,6 +52,7 @@ typedef struct {
 #define ID_WIN_DROPDOWN                     (ID_WIN_BASIC + 0x00C)
 #define ID_WIN_RADIO                        (ID_WIN_BASIC + 0x00D)
 #define ID_WIN_CHECKBOX                     (ID_WIN_BASIC + 0x00E)
+#define ID_WIN_DEBUGBOX                     (ID_WIN_BASIC + 0x00F)
 
 /* Graph ID */
 #define ID_WIDGET_BASIC                     (GUI_ID_USER + 0x300)
@@ -59,6 +61,7 @@ typedef struct {
 /* List of fonts */
 extern gui_const gui_font_t GUI_Font_Calibri_Bold_8;
 extern gui_const gui_font_t GUI_Font_Arial_Bold_18;
+extern gui_const gui_font_t GUI_Font_Comic_Sans_MS_Regular_22;
 
 /* Functions for export */
 void    demo_init(void);
@@ -73,6 +76,7 @@ void    demo_create_feature_graph(gui_handle_p parent, uint8_t protect);
 void    demo_create_feature_dialog(gui_handle_p parent, uint8_t protect);
 void    demo_create_feature_image(gui_handle_p parent, uint8_t protect);
 void    demo_create_feature_listview(gui_handle_p parent, uint8_t protect);
+void    demo_create_feature_debugbox(gui_handle_p parent, uint8_t protect);
 void    demo_create_feature_listbox(gui_handle_p parent, uint8_t protect);
 void    demo_create_feature_radio(gui_handle_p parent, uint8_t protect);
 void    demo_create_feature_slider(gui_handle_p parent, uint8_t protect);
@@ -80,6 +84,7 @@ void    demo_create_feature_text_view(gui_handle_p parent, uint8_t protect);
 void    demo_create_feature_led(gui_handle_p parent, uint8_t protect);
 void    demo_create_feature_checkbox(gui_handle_p parent, uint8_t protect);
 void    demo_create_feature_dropdown(gui_handle_p parent, uint8_t protect);
+void    demo_create_feature_debugbox(gui_handle_p parent, uint8_t protect);
 
 #ifdef __cplusplus
 };
