@@ -73,22 +73,6 @@ typedef enum {
     GUI_EDITTEXT_HALIGN_CENTER = GUI_HALIGN_CENTER, /*!< Horizontal align center */
     GUI_EDITTEXT_HALIGN_RIGHT = GUI_HALIGN_RIGHT    /*!< Horizontal align right */
 } gui_edittext_halign_t;
-    
-#if defined(GUI_INTERNAL) || __DOXYGEN__
-
-#define GUI_EDITTEXT_FLAG_MULTILINE         ((uint8_t)0x01) /*!< Defines widget as multi-line edit */
-
-/**
- * \brief           GUI EDIT TEXT widget structure
- */
-typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
-    
-    uint8_t flags;                          /*!< List of widget flags */
-    gui_edittext_valign_t valign;           /*!< Vertical align setup */
-    gui_edittext_halign_t halign;           /*!< Horizontal align setup */
-} gui_edittext_t;
-#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 gui_handle_p    gui_edittext_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags);
 uint8_t         gui_edittext_setcolor(gui_handle_p h, gui_edittext_color_t index, gui_color_t color);

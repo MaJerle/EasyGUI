@@ -46,17 +46,6 @@ extern "C" {
  * \brief           Image display widget
  * \{
  */
-
-#if defined(GUI_INTERNAL) || __DOXYGEN__
-/**
- * \brief           Image widget structure
- */
-typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
-    
-    const gui_image_desc_t* image;          /*!< Pointer to image object to draw */
-} gui_image_t;
-#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
     
 gui_handle_p    gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags);
 uint8_t         gui_image_setsource(gui_handle_p h, const gui_image_desc_t* img);

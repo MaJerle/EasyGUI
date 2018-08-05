@@ -63,62 +63,12 @@ typedef enum {
     GUI_LISTVIEW_COLOR_BORDER,              /*!< Border color index for top line when not in 3D mode */
 } gui_listview_color_t;
 
-#if defined(GUI_INTERNAL) || __DOXYGEN__
-    
-#define GUI_FLAG_LISTVIEW_SLIDER_ON     0x01/*!< Slider is currently active */
-#define GUI_FLAG_LISTVIEW_SLIDER_AUTO   0x02/*!< Show right slider automatically when required, otherwise, manual mode is used */
-
-/**
- * \brief           Listview main row item
- */
-typedef struct {
-    gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
-    gui_linkedlistroot_t root;              /*!< Linked list root entry for \ref gui_listview_item_t column data entries */
-} gui_listview_row_t;
-
-/**
- * \brief           Listview column item
- */
-typedef struct {
-    gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
-    gui_dim_t width;                       /*!< Column width in units of pixels */
-    gui_char* text;                         /*!< Header column text size */
-} gui_listview_col_t;
-
-/**
- * \brief           Listview string item object
- */
-typedef struct {
-    gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
-    gui_char* text;                         /*!< Text entry */
-} gui_listview_item_t;
-    
-/**
- * \brief           Listview object structure
- */
-typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
-    
-    /* Use colums as pointer to array for faster data access */
-    gui_listview_col_t** cols;              /*!< Pointer to pointers of column elements */
-    uint16_t col_count;                     /*!< Number of columns in listview package */
-    
-    /* Use linked list for rows */
-    gui_linkedlistroot_t root;              /*!< Linked list root entry for \ref gui_listview_row_t for rows */
-    
-    int16_t count;                          /*!< Current number of strings attached to this widget */
-    int16_t selected;                       /*!< selected text index */
-    int16_t visiblestartindex;              /*!< Index in array of string on top of visible area of widget */
-    
-    gui_dim_t sliderwidth;                  /*!< Slider width in units of pixels */
-    uint8_t flags;                          /*!< Widget flags */
-} gui_listview_t;
-#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
+struct gui_listview_row;
 
 /**
  * \brief           Typedef for row for public usage
  */
-typedef void* gui_listview_row_p;
+typedef struct gui_listview_row* gui_listview_row_p;
    
 gui_handle_p    gui_listview_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags);
 uint8_t         gui_listview_setcolor(gui_handle_p h, gui_listview_color_t index, gui_color_t color);

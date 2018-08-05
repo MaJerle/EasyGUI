@@ -34,6 +34,46 @@
 #include "gui/gui_private.h"
 #include "widget/gui_debugbox.h"
 
+/**
+ * \ingroup         GUI_DEBUGBOX
+ * \name            GUI_DEBUGBOX_FLAGS
+ * \anchor          GUI_DEBUGBOX_FLAGS
+ * \{
+ */
+
+#define GUI_FLAG_DEBUGBOX_SLIDER_ON      0x01/*!< Slider is currently active */
+#define GUI_FLAG_DEBUGBOX_SLIDER_AUTO    0x02/*!< Show right slider automatically when required, otherwise, manual mode is used */
+
+/**
+ * \}
+ */
+
+/**
+ * \ingroup         GUI_DEBUGBOX
+ * \brief           Debugbox string item object structure
+ */
+typedef struct {
+    gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
+    gui_char* text;                         /*!< Text entry */
+} gui_debugbox_item_t;
+    
+/**
+ * \ingroup         GUI_DEBUGBOX
+ * \brief           Debugbox object structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    
+    int16_t count;                          /*!< Current number of strings attached to this widget */
+    int16_t maxcount;                       /*!< Maximal number of lines in debug window */
+    int16_t visiblestartindex;              /*!< Index in array of string on top of visible area of widget */
+    
+    gui_linkedlistroot_t root;              /*!< Root of linked list entries */
+    
+    gui_dim_t sliderwidth;                  /*!< Slider width in units of pixels */
+    uint8_t flags;                          /*!< Widget flags */
+} gui_debugbox_t;
+
 static uint8_t gui_debugbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**
@@ -142,10 +182,6 @@ static uint8_t
 gui_debugbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
     gui_debugbox_t* o = GUI_VP(h);
     
-#if GUI_CFG_USE_TOUCH
-    static gui_dim_t ty;
-#endif /* GUI_CFG_USE_TOUCH */
-    
     switch (ctrl) {
         case GUI_EVT_PRE_INIT: {
             o->sliderwidth = 30;                    /* Set slider width */
@@ -188,7 +224,7 @@ gui_debugbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
             
             /* Draw text if possible */
             if (h->font != NULL && gui_linkedlist_hasentries(&o->root)) {
-                gui_draw_font_t f;
+                gui_draw_text_t f;
                 gui_debugbox_item_t* item;
                 uint16_t itemheight;                /* Get item height */
                 uint16_t index = 0;                 /* Start index */
@@ -196,7 +232,7 @@ gui_debugbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                 
                 itemheight = item_height(h, 0);     /* Get item height and Y offset */
                 
-                gui_draw_font_init(&f);             /* Init structure */
+                gui_draw_text_init(&f);             /* Init structure */
                 
                 f.x = x + 4;
                 f.y = y + 2;
@@ -233,9 +269,6 @@ gui_debugbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
         }
 #if GUI_CFG_USE_TOUCH
         case GUI_EVT_TOUCHSTART: {
-            guii_touch_data_t* ts = GUI_EVT_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            ty = ts->y_rel[0];
-            
             GUI_EVT_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
         }
@@ -243,32 +276,14 @@ gui_debugbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
             guii_touch_data_t* ts = GUI_EVT_PARAMTYPE_TOUCH(param);  /* Get touch data */
             if (h->font != NULL) {
                 gui_dim_t height = item_height(h, NULL);   /* Get element height */
-                gui_dim_t diff = ty - ts->y_rel[0];
                 
-                if (GUI_ABS(diff) > height) {
-                    slide(h, diff > 0 ? 1 : -1);    /* Slide widget */
-                    ty = ts->y_rel[0];              /* Save pointer */
+                if (GUI_ABS(ts->y_diff[0]) > height) {
+                    slide(h, ts->y_diff[0] > 0 ? 1 : -1);   /* Slide widget */
                 }
             }
             return 1;
         }
 #endif /* GUI_CFG_USE_TOUCH */
-        case GUI_EVT_CLICK: {
-            guii_touch_data_t* ts = GUI_EVT_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            gui_dim_t width = gui_widget_getwidth(h);   /* Get widget widget */
-            gui_dim_t height = gui_widget_getheight(h);     /* Get widget height */
-            
-            if (o->flags & GUI_FLAG_DEBUGBOX_SLIDER_ON) {
-                if (ts->x_rel[0] > (width - o->sliderwidth)) {  /* Touch is inside slider */
-                    if (ts->y_rel[0] < o->sliderwidth) {
-                        slide(h, -1);               /* Slide one value up */
-                    } else if (ts->y_rel[0] > (height - o->sliderwidth)) {
-                        slide(h, 1);                /* Slide one value down */
-                    }
-                }
-            }
-            return 1;
-        }
         default:                                    /* Handle default option */
             GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
@@ -319,7 +334,7 @@ gui_debugbox_addstring(gui_handle_p h, const gui_char* text) {
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
-    item = GUI_MEMALLOC(sizeof(*item) + gui_string_lengthtotal(text) + 1);  /* Allocate memory for entry */
+    item = GUI_MEMALLOC(sizeof(*item) + sizeof(*text) * (gui_string_lengthtotal(text) + 1));/* Allocate memory for entry */
     if (item != NULL) {
         item->text = (void *)((char *)item + sizeof(*item));/* Add text to entry */
         gui_string_copy(item->text, text);          /* Copy text */

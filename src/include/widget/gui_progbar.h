@@ -56,21 +56,6 @@ typedef enum {
     GUI_PROGBAR_COLOR_BORDER = 0x02         /*!< Border color index */
 } gui_progbar_color_t;
 
-#if defined(GUI_INTERNAL) || __DOXYGEN__
-/**
- * \brief           Progress bar widget structure
- */
-typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
-    
-    int32_t min;                            /*!< Low value for progress bar */
-    int32_t max;                            /*!< High value for progress bar */
-    int32_t currentvalue;                   /*!< Current value for progress bar */
-    int32_t desiredvalue;                   /*!< Desired value, set by used */
-    uint8_t flags;                          /*!< flags variable */
-} gui_progbar_t;
-#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
-
 gui_handle_p    gui_progbar_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags);
 uint8_t         gui_progbar_setcolor(gui_handle_p h, gui_progbar_color_t index, gui_color_t color);
 uint8_t         gui_progbar_setmin(gui_handle_p h, int32_t val);

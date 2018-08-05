@@ -57,25 +57,6 @@ typedef enum {
     GUI_RADIO_COLOR_DISABLED_BG,            /*!< Background color index when disabled */
     GUI_RADIO_COLOR_TEXT,                   /*!< Text color index */
 } gui_radio_color_t;
-    
-#if defined(GUI_INTERNAL) || __DOXYGEN__
-    
-#define GUI_FLAG_RADIO_CHECKED              0x01    /*!< Indicates radio is currently checked */
-#define GUI_FLAG_RADIO_DISABLED             0x02    /*!< Indicates radio is currently disabled */
-
-/**
- * \brief           Radio object structure
- */
-typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
-    
-    uint8_t group_id;                       /*!< Group ID for radio box */
-    uint32_t value;                         /*!< Single radio value when selected */
-    uint32_t selected_value;                /*!< Currently selected value in radio group. 
-                                                    All Widgets in the same group share the same value in this field all the time */
-    uint8_t flags;                          /*!< flags for checkbox */
-} gui_radio_t;
-#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 gui_handle_p    gui_radio_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags);
 uint8_t         gui_radio_setcolor(gui_handle_p h, gui_radio_color_t index, gui_color_t color);

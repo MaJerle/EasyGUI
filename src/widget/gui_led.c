@@ -34,6 +34,30 @@
 #include "gui/gui_private.h"
 #include "widget/gui_led.h"
 
+/**
+ * \ingroup         GUI_LED
+ * \name            GUI_LED_FLAGS
+ * \anchor          GUI_LED_FLAGS
+ * \{
+ */
+
+#define GUI_LED_FLAG_ON             0x01    /*!< Indicates LED is on */
+
+/**
+ * \}
+ */
+
+/**
+ * \ingroup         GUI_LED
+ * \brief           LED object structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< Global widget object */
+    
+    gui_led_type_t type;                    /*!< Led shape type */
+    uint8_t flags;                          /*!< flags management for LED */
+} gui_led_t;
+
 #define CFG_TOGGLE          0x01
 #define CFG_SET             0x02
 #define CFG_TYPE            0x03

@@ -32,8 +32,15 @@
  */
 #define GUI_INTERNAL
 #include "gui/gui_private.h"
-#include "gui/gui_private.h"
 #include "widget/gui_window.h"
+
+/**
+ * \ingroup         GUI_WINDOW
+ * \brief           Window object structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+} gui_window_t;
 
 static uint8_t gui_window_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
@@ -60,8 +67,6 @@ gui_widget_t widget = {
     .colors = colors,                               /*!< Pointer to colors array */
     .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
-
-#define w          ((gui_window_t *)h)
 
 /**
  * \brief           Default widget callback function
@@ -152,8 +157,8 @@ gui_window_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_e
                 gui_draw_line(disp, tx,     ty + tW - 1, tx + tW - 1, ty,     GUI_COLOR_WHITE);
                 
                 if (gui_widget_isfontandtextset(h)) {
-                    gui_draw_font_t f;
-                    gui_draw_font_init(&f);         /* Init structure */
+                    gui_draw_text_t f;
+                    gui_draw_text_init(&f);         /* Init structure */
                     
                     f.x = x + 3;
                     f.y = y + 3;

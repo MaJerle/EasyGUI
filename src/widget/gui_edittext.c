@@ -38,7 +38,32 @@
 #if GUI_CFG_USE_KEYBOARD
 #include "gui/gui_keyboard.h"
 #endif /* GUI_CFG_USE_KEYBOARD */
+
+/**
+ * \ingroup         GUI_EDITTEXT
+ * \name            GUI_EDITTEXT_FLAGS
+ * \anchor          GUI_EDITTEXT_FLAGS
+ * \{
+ */
+
+#define GUI_EDITTEXT_FLAG_MULTILINE         0x01/*!< Defines widget as multi-line edit */
     
+/**
+ * \}
+ */
+
+/**
+ * \ingroup         GUI_EDITTEXT
+ * \brief           Edittext object structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    
+    uint8_t flags;                          /*!< List of widget flags */
+    gui_edittext_valign_t valign;           /*!< Vertical align setup */
+    gui_edittext_halign_t halign;           /*!< Horizontal align setup */
+} gui_edittext_t;
+
 #define CFG_MULTILINE       0x01
 #define CFG_VALIGN          0x02
 #define CFG_HALIGN          0x03
@@ -92,7 +117,7 @@ gui_edittext_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
         case GUI_EVT_SETPARAM: {                    /* Set parameter for widget */
             gui_widget_param* p = GUI_EVT_PARAMTYPE_WIDGETPARAM(param);
             switch (p->type) {
-                case CFG_MULTILINE:                 /* Enable/Disable multiline */
+                case CFG_MULTILINE:
                     if (*(uint8_t *)p->data && !is_multiline(h)) {
                         o->flags |= GUI_EDITTEXT_FLAG_MULTILINE;
                     } else if (!*(uint8_t *)p->data && is_multiline(h)) {
@@ -107,7 +132,7 @@ gui_edittext_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                     break;
                 default: break;
             }
-            GUI_EVT_RESULTTYPE_U8(result) = 1;   /* Save result */
+            GUI_EVT_RESULTTYPE_U8(result) = 1;
             return 1;
         }
         case GUI_EVT_DRAW: {
@@ -127,8 +152,8 @@ gui_edittext_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
             }
             
             if (gui_widget_isfontandtextset(h)) {   /* Ready to write string */
-                gui_draw_font_t f;
-                gui_draw_font_init(&f);             /* Init font drawing */
+                gui_draw_text_t f;
+                gui_draw_text_init(&f);             /* Init font drawing */
                 
                 f.x = x + 5;
                 f.y = y + 5;
@@ -137,10 +162,10 @@ gui_edittext_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                 f.align = (uint8_t)o->halign | (uint8_t)o->valign;
                 f.color1width = f.width;
                 f.color1 = guii_widget_getcolor(h, GUI_EDITTEXT_COLOR_FG);
-                f.flags |= GUI_FLAG_FONT_RIGHTALIGN | GUI_FLAG_FONT_EDITMODE;
+                f.flags |= GUI_FLAG_TEXT_RIGHTALIGN | GUI_FLAG_TEXT_EDITMODE;
                 
                 if (is_multiline(h)) {
-                    f.flags |= GUI_FLAG_FONT_MULTILINE; /* Set multiline flag for widget */
+                    f.flags |= GUI_FLAG_TEXT_MULTILINE; /* Set multiline flag for widget */
                 }
                 
                 gui_draw_writetext(disp, gui_widget_getfont(h), gui_widget_gettext(h), &f);

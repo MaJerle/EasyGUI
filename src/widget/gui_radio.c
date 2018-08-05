@@ -34,6 +34,34 @@
 #include "gui/gui_private.h"
 #include "widget/gui_radio.h"
 
+/**
+ * \ingroup         GUI_RADIO
+ * \name            GUI_RADIO_FLAGS
+ * \anchor          GUI_RADIO_FLAGS
+ * \{
+ */
+
+#define GUI_FLAG_RADIO_CHECKED              0x01    /*!< Indicates radio is currently checked */
+#define GUI_FLAG_RADIO_DISABLED             0x02    /*!< Indicates radio is currently disabled */
+
+/**
+ * \}
+ */
+
+/**
+ * \ingroup         GUI_RADIO
+ * \brief           Radio object structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    
+    uint8_t group_id;                       /*!< Group ID for radio box */
+    uint32_t value;                         /*!< Single radio value when selected */
+    uint32_t selected_value;                /*!< Currently selected value in radio group. 
+                                                    \note       All widgets in the same group share the same value in this field all the time */
+    uint8_t flags;                          /*!< flags for checkbox */
+} gui_radio_t;
+
 static uint8_t gui_radio_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**
@@ -163,8 +191,8 @@ gui_radio_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_ev
             
             /* Draw text if possible */
             if (gui_widget_isfontandtextset(h)) {
-                gui_draw_font_t f;
-                gui_draw_font_init(&f);             /* Init structure */
+                gui_draw_text_t f;
+                gui_draw_text_init(&f);             /* Init structure */
                 
                 f.x = sx + size + 5;
                 f.y = y + 1;

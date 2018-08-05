@@ -67,26 +67,6 @@ typedef enum {
     GUI_SLIDER_MODE_TOP_BOTTOM,             /*!< Slider is horizontal, min on the top, max on the bottom */
 } gui_slider_mode_t;
 
-#if defined(GUI_INTERNAL) || __DOXYGEN__
-    
-/**
- * \brief           SLIDER object structure
- */
-typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
-    
-    int32_t min;                            /*!< Low value for slider */
-    int32_t max;                            /*!< High value for slider */
-    int32_t value;                          /*!< Current value for slider */
-    gui_slider_mode_t mode;                 /*!< Slider mode */
-    
-    uint8_t max_size;                       /*!< Max size for animation */
-    uint8_t current_size;                   /*!< Current size for animation */
-    
-    uint8_t flags;                          /*!< Widget flags */
-} gui_slider_t;
-#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
-
 gui_handle_p    gui_slider_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags);
 uint8_t         gui_slider_setcolor(gui_handle_p h, gui_slider_color_t index, gui_color_t color);
 uint8_t         gui_slider_setmode(gui_handle_p h, gui_slider_mode_t mode);

@@ -62,36 +62,6 @@ typedef enum {
     GUI_LISTBOX_COLOR_SEL_NOFOC_BG,         /*!< Background color of selected item when widget is not in focus */
 } gui_listbox_color_t;
 
-#if defined(GUI_INTERNAL) || __DOXYGEN__
-    
-#define GUI_FLAG_LISTBOX_SLIDER_ON      0x01/*!< Slider is currently active */
-#define GUI_FLAG_LISTBOX_SLIDER_AUTO    0x02/*!< Show right slider automatically when required, otherwise, manual mode is used */
-
-/**
- * \brief           LISTBOX string item object
- */
-typedef struct {
-    gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
-    gui_char* text;                         /*!< Text entry */
-} gui_listbox_item_t;
-    
-/**
- * \brief           LISTBOX object structure
- */
-typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
-    
-    int16_t count;                          /*!< Current number of strings attached to this widget */
-    int16_t selected;                       /*!< selected text index */
-    int16_t visiblestartindex;              /*!< Index in array of string on top of visible area of widget */
-    
-    gui_linkedlistroot_t root;              /*!< Root of linked list entries */
-    
-    gui_dim_t sliderwidth;                  /*!< Slider width in units of pixels */
-    uint8_t flags;                          /*!< Widget flags */
-} gui_listbox_t;
-#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
-
 gui_handle_p    gui_listbox_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags);
 uint8_t         gui_listbox_setcolor(gui_handle_p h, gui_listbox_color_t index, gui_color_t color);
 uint8_t         gui_listbox_addstring(gui_handle_p h, const gui_char* text);

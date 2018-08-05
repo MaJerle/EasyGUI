@@ -34,6 +34,18 @@
 #include "gui/gui_private.h"
 #include "widget/gui_textview.h"
 
+/**
+ * \ingroup         GUI_TEXTVIEW
+ * \brief           Textview object structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+
+    gui_textalign_valign_t valign;           /*!< Vertical text align */
+    gui_textalign_halign_t halign;           /*!< Horizontal text align */
+    uint8_t flags;                          /*!< Widget flags */
+} gui_textview_t;
+
 #define CFG_VALIGN          0x01
 #define CFG_HALIGN          0x02
 
@@ -97,7 +109,7 @@ gui_textview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
             gui_color_t bg;
             
             if (gui_widget_isfontandtextset(h)) {
-                gui_draw_font_t f;
+                gui_draw_text_t f;
                 
                 x = gui_widget_getabsolutex(h);
                 y = gui_widget_getabsolutey(h);
@@ -110,14 +122,14 @@ gui_textview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                     gui_draw_filledrectangle(disp, x, y, gui_widget_getwidth(h), gui_widget_getheight(h), bg);
                 }
                 
-                gui_draw_font_init(&f);             /* Init structure */
+                gui_draw_text_init(&f);             /* Init structure */
 
                 f.x = x + gui_widget_getpaddingleft(h);
                 f.y = y + gui_widget_getpaddingright(h);
                 f.width = wi;
                 f.height = hi;
                 f.align = (uint8_t)o->halign | (uint8_t)o->valign;
-                f.flags |= GUI_FLAG_FONT_MULTILINE; /* Enable multiline */
+                f.flags |= GUI_FLAG_TEXT_MULTILINE; /* Enable multiline */
                 f.color1width = f.width;
                 f.color1 = guii_widget_getcolor(h, GUI_TEXTVIEW_COLOR_TEXT);
                 gui_draw_writetext(disp, gui_widget_getfont(h), gui_widget_gettext(h), &f);

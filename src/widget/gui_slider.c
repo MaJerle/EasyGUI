@@ -34,6 +34,24 @@
 #include "gui/gui_private.h"
 #include "widget/gui_slider.h"
 
+/**
+ * \ingroup         GUI_SLIDER
+ * \brief           Slider object structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    
+    int32_t min;                            /*!< Low value for slider */
+    int32_t max;                            /*!< High value for slider */
+    int32_t value;                          /*!< Current value for slider */
+    gui_slider_mode_t mode;                 /*!< Slider mode */
+    
+    uint8_t max_size;                       /*!< Max size for animation */
+    uint8_t current_size;                   /*!< Current size for animation */
+    
+    uint8_t flags;                          /*!< Widget flags */
+} gui_slider_t;
+
 #define CFG_MODE            0x01
 #define CFG_VALUE           0x02
 #define CFG_MIN             0x03

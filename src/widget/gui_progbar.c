@@ -34,8 +34,33 @@
 #include "gui/gui_private.h"
 #include "widget/gui_progbar.h"
 
-#define GUI_PROGBAR_FLAG_PERCENT    0x01            /*!< Flag indicating percentages are enabled on view */
-#define GUI_PROGBAR_FLAG_ANIMATE    0x02            /*!< Animation for progress bar changes */
+/**
+ * \ingroup         GUI_PROGBAR
+ * \name            GUI_PROGBAR_FLAGS
+ * \anchor          GUI_PROGBAR_FLAGS
+ * \{
+ */
+
+#define GUI_FLAG_PROGBAR_PERCENT        0x01    /*!< Flag indicating percentages are enabled on view */
+#define GUI_FLAG_PROGBAR_ANIMATE        0x02    /*!< Animation for progress bar changes */
+    
+/**
+ * \}
+ */
+
+/**
+ * \ingroup         GUI_PROGBAR
+ * \brief           Progress bar object structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    
+    int32_t min;                            /*!< Low value for progress bar */
+    int32_t max;                            /*!< High value for progress bar */
+    int32_t currentvalue;                   /*!< Current value for progress bar */
+    int32_t desiredvalue;                   /*!< Desired value, set by used */
+    uint8_t flags;                          /*!< flags variable */
+} gui_progbar_t;
 
 #define CFG_VALUE           0x01
 #define CFG_MIN             0x02
@@ -68,7 +93,7 @@ gui_widget_t widget = {
     .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
 
-#define is_anim(h)  ((o->flags & GUI_PROGBAR_FLAG_ANIMATE) == GUI_PROGBAR_FLAG_ANIMATE)
+#define is_anim(o)  ((((gui_progbar_t *)(o))->flags & GUI_FLAG_PROGBAR_ANIMATE) == GUI_FLAG_PROGBAR_ANIMATE)
 
 /* Set value for widget */
 static uint8_t
@@ -130,14 +155,14 @@ gui_progbar_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_
             set_value(h, 50);
             return 1;
         }
-        case GUI_EVT_SETPARAM: {                    /* Set parameter for widget */
+        case GUI_EVT_SETPARAM: {
             gui_widget_param* v = GUI_EVT_PARAMTYPE_WIDGETPARAM(param);
             int32_t tmp;
             switch (v->type) {
-                case CFG_VALUE:                     /* Set current progress value */
+                case CFG_VALUE:
                     set_value(h, *(int32_t *)v->data);
                     break;
-                case CFG_MAX:                       /* Set maximal value */
+                case CFG_MAX:
                     tmp = *(int32_t *)v->data;
                     if (tmp > o->min) {
                         o->max = tmp;
@@ -146,7 +171,7 @@ gui_progbar_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_
                         }
                     }
                     break;
-                case CFG_MIN:                       /* Set minimal value */
+                case CFG_MIN:
                     tmp = *(int32_t *)v->data;
                     if (tmp < o->max) {
                         o->min = tmp;
@@ -155,11 +180,11 @@ gui_progbar_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_
                         }
                     }
                     break;
-                case CFG_PERCENT:                   /* Set percentage mode */
+                case CFG_PERCENT:
                     if (*(uint8_t *)v->data) {
-                        o->flags |= GUI_PROGBAR_FLAG_PERCENT;
+                        o->flags |= GUI_FLAG_PROGBAR_PERCENT;
                     } else {
-                        o->flags &= ~GUI_PROGBAR_FLAG_PERCENT;
+                        o->flags &= ~GUI_FLAG_PROGBAR_PERCENT;
                     }
                     break;
                 case CFG_ANIM:
@@ -168,10 +193,10 @@ gui_progbar_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_
                             h->timer = guii_timer_create(10, timer_callback, h);    /* Create animation timer */
                         }
                         if (h->timer != NULL) { /* Check timer response */
-                            o->flags |= GUI_PROGBAR_FLAG_ANIMATE; /* Enable animations */
+                            o->flags |= GUI_FLAG_PROGBAR_ANIMATE;   /* Enable animations */
                         }
                     } else {
-                        o->flags &= ~GUI_PROGBAR_FLAG_ANIMATE;    /* Disable animation */
+                        o->flags &= ~GUI_FLAG_PROGBAR_ANIMATE;  /* Disable animation */
                         if (h->timer != NULL) {
                             guii_timer_remove(&h->timer);   /* Remove timer */
                         }
@@ -203,7 +228,7 @@ gui_progbar_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_
                 const gui_char* text = NULL;
                 gui_char buff[5];
                 
-                if (o->flags & GUI_PROGBAR_FLAG_PERCENT) {
+                if (o->flags & GUI_FLAG_PROGBAR_PERCENT) {
                     sprintf((char *)buff, "%lu%%", (unsigned long)(((o->currentvalue - o->min) * 100) / (o->max - o->min)));
                     text = buff;
                 } else if (gui_widget_isfontandtextset(h)) {
@@ -211,8 +236,8 @@ gui_progbar_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_
                 }
                 
                 if (text != NULL) {                 /* If text is valid, print it */
-                    gui_draw_font_t f;
-                    gui_draw_font_init(&f);         /* Init structure */
+                    gui_draw_text_t f;
+                    gui_draw_text_init(&f);         /* Init structure */
                     
                     f.x = x + 2;
                     f.y = y + 2;

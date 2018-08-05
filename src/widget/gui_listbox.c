@@ -34,6 +34,46 @@
 #include "gui/gui_private.h"
 #include "widget/gui_listbox.h"
 
+/**
+ * \ingroup         GUI_LISTBOX
+ * \name            GUI_LISTBOX_FLAGS
+ * \anchor          GUI_LISTBOX_FLAGS
+ * \{
+ */
+
+#define GUI_FLAG_LISTBOX_SLIDER_ON      0x01/*!< Slider is currently active */
+#define GUI_FLAG_LISTBOX_SLIDER_AUTO    0x02/*!< Show right slider automatically when required, otherwise, manual mode is used */
+
+/**
+ * \}
+ */
+
+/**
+ * \ingroup         GUI_LISTBOX
+ * \brief           Listbox string item object
+ */
+typedef struct {
+    gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
+    gui_char* text;                         /*!< Text entry */
+} gui_listbox_item_t;
+    
+/**
+ * \ingroup         GUI_LISTBOX
+ * \brief           Listbox object structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    
+    int16_t count;                          /*!< Current number of strings attached to this widget */
+    int16_t selected;                       /*!< selected text index */
+    int16_t visiblestartindex;              /*!< Index in array of string on top of visible area of widget */
+    
+    gui_linkedlistroot_t root;              /*!< Root of linked list entries */
+    
+    gui_dim_t sliderwidth;                  /*!< Slider width in units of pixels */
+    uint8_t flags;                          /*!< Widget flags \ref GUI_LISTBOX_FLAGS */
+} gui_listbox_t;
+
 static uint8_t gui_listbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**
@@ -201,6 +241,8 @@ delete_item(gui_handle_p h, uint16_t index) {
     item = get_item(h, index);                      /* Get list item from handle */
     if (item != NULL) {
         gui_linkedlist_remove_gen(&o->root, &item->list);
+        GUI_MEMFREE(item);
+        item = NULL;
         o->count--;                           /* Decrease count */
         
         if (o->selected == index) {
@@ -271,15 +313,14 @@ gui_listbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_
             
             /* Draw text if possible */
             if (h->font != NULL && gui_linkedlist_hasentries(&o->root)) {   /* Is first set? */
-                gui_draw_font_t f;
+                gui_draw_text_t f;
                 gui_listbox_item_t* item;
-                uint16_t itemheight;                /* Get item height */
-                uint16_t index = 0;                 /* Start index */
+                uint16_t itemheight, index = 0;
                 gui_dim_t tmp;
                 
                 itemheight = item_height(h, 0);     /* Get item height and Y offset */
                 
-                gui_draw_font_init(&f);             /* Init structure */
+                gui_draw_text_init(&f);             /* Init structure */
                 
                 f.x = x + 4;
                 f.y = y + 2;

@@ -34,6 +34,17 @@
 #include "gui/gui_private.h"
 #include "widget/gui_button.h"
 
+/**
+ * \ingroup         GUI_BUTTON
+ * \brief           Button object structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    
+    gui_dim_t borderwidth;                  /*!< Border width */
+    gui_dim_t borderradius;                 /*!< Border radius */
+} gui_button_t;
+
 #define CFG_BORDER_RADIUS   0x01
 
 static uint8_t gui_button_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
@@ -121,8 +132,8 @@ gui_button_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_e
             
             /* Draw text if possible */
             if (gui_widget_isfontandtextset(h)) {
-                gui_draw_font_t f;
-                gui_draw_font_init(&f);             /* Init structure */
+                gui_draw_text_t f;
+                gui_draw_text_init(&f);             /* Init structure */
                 
                 f.x = x + 1;
                 f.y = y + 1;

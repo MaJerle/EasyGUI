@@ -34,6 +34,18 @@
 #include "gui/gui_private.h"
 #include "widget/gui_list_container.h"
 
+/**
+ * \ingroup         GUI_LISTCONTAINER
+ * \brief           List container object structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    
+    gui_listcontainer_mode_t mode;          /*!< List container type */
+    gui_dim_t maxscrollx;                   /*!< Maximal scroll on X axis */
+    gui_dim_t maxscrolly;                   /*!< Maximal scroll on Y axis */
+} gui_listcontainer_t;
+
 #define CFG_MODE            0x01
 
 static uint8_t gui_listcontainer_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
@@ -58,13 +70,13 @@ gui_widget_t widget = {
     .colors = colors,                               /*!< List of default colors */
     .color_count = GUI_COUNT_OF(colors),            /*!< Number of colors */
 };
-#define l           ((gui_listcontainer_t *)(h))
 
 /* Calculate scroll limits according to children widgets */
 static void
 calculate_limits(gui_handle_p h) {
     gui_handle_p w;
     gui_dim_t x, y, width, height, cmx = 0, cmy = 0;
+    gui_listcontainer_t* o = GUI_VP(h);
     
     /* Scan all children widgets and check for maximal possible scroll */
     for (w = gui_linkedlist_widgetgetnext(h, NULL); w != NULL;
@@ -82,20 +94,20 @@ calculate_limits(gui_handle_p h) {
     width = gui_widget_getinnerwidth(h);  
     height = gui_widget_getinnerheight(h);  
     
-    l->maxscrollx = 0;
-    l->maxscrolly = 0;
+    o->maxscrollx = 0;
+    o->maxscrolly = 0;
     if (width < cmx) {
-        l->maxscrollx = cmx - width;
+        o->maxscrollx = cmx - width;
     }
     if (height < cmy) {
-        l->maxscrolly = cmy - height;
+        o->maxscrolly = cmy - height;
     }
     
-    if (gui_widget_getscrollx(h) > l->maxscrollx) {
-        gui_widget_setscrollx(h, l->maxscrollx);
+    if (gui_widget_getscrollx(h) > o->maxscrollx) {
+        gui_widget_setscrollx(h, o->maxscrollx);
     }
-    if (gui_widget_getscrolly(h) > l->maxscrolly) {
-        gui_widget_setscrolly(h, l->maxscrolly);
+    if (gui_widget_getscrolly(h) > o->maxscrolly) {
+        gui_widget_setscrolly(h, o->maxscrolly);
     }
 }
 
@@ -109,6 +121,7 @@ calculate_limits(gui_handle_p h) {
  */
 static uint8_t
 gui_listcontainer_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
+    gui_listcontainer_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (ctrl) {
         case GUI_EVT_PRE_INIT: {
@@ -118,7 +131,7 @@ gui_listcontainer_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param
             gui_widget_param* p = GUI_EVT_PARAMTYPE_WIDGETPARAM(param);
             switch (p->type) {
                 case CFG_MODE:
-                    l->mode = *(gui_listcontainer_mode_t *)p->data;
+                    o->mode = *(gui_listcontainer_mode_t *)p->data;
                     break;
                 default: break;
             }
@@ -156,22 +169,22 @@ gui_listcontainer_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param
             sy = gui_widget_getscrolly(h);
 
             /* Try to scroll widget */
-            if (l->mode == GUI_LISTCONTAINER_MODE_VERTICAL || l->mode == GUI_LISTCONTAINER_MODE_VERTICAL_HORIZONTAL) {
+            if (o->mode == GUI_LISTCONTAINER_MODE_VERTICAL || o->mode == GUI_LISTCONTAINER_MODE_VERTICAL_HORIZONTAL) {
                 new_diff = -ts->y_diff[0];
                 if ((new_diff + sy) <= 0) {
                     gui_widget_setscrolly(h, 0);
-                } else if ((new_diff + sy) >= l->maxscrolly) {
-                    gui_widget_setscrolly(h, l->maxscrolly);
+                } else if ((new_diff + sy) >= o->maxscrolly) {
+                    gui_widget_setscrolly(h, o->maxscrolly);
                 } else {
                     gui_widget_setscrolly(h, sy + new_diff);
                 }
             }
-            if (l->mode == GUI_LISTCONTAINER_MODE_HORIZONTAL || l->mode == GUI_LISTCONTAINER_MODE_VERTICAL_HORIZONTAL) {
+            if (o->mode == GUI_LISTCONTAINER_MODE_HORIZONTAL || o->mode == GUI_LISTCONTAINER_MODE_VERTICAL_HORIZONTAL) {
                 new_diff = -ts->x_diff[0];
                 if ((new_diff + sx) <= 0) {
                     gui_widget_setscrollx(h, 0);
-                } else if ((new_diff + sx) >= l->maxscrollx) {
-                    gui_widget_setscrollx(h, l->maxscrollx);
+                } else if ((new_diff + sx) >= o->maxscrollx) {
+                    gui_widget_setscrollx(h, o->maxscrollx);
                 } else {
                     gui_widget_setscrollx(h, sx + new_diff);
                 }

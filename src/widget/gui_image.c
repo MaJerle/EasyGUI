@@ -34,6 +34,16 @@
 #include "gui/gui_private.h"
 #include "widget/gui_image.h"
 
+/**
+ * \ingroup         GUI_IMAGE
+ * \brief           Image object structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    
+    const gui_image_desc_t* image;          /*!< Pointer to image object to draw */
+} gui_image_t;
+
 static uint8_t gui_image_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**

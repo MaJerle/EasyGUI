@@ -34,6 +34,30 @@
 #include "gui/gui_private.h"
 #include "widget/gui_checkbox.h"
 
+/**
+ * \ingroup         GUI_CHECKBOX
+ * \name            GUI_CHECKBOX_FLAGS
+ * \anchor          GUI_CHECKBOX_FLAGS
+ * \{
+ */
+
+#define GUI_FLAG_CHECKBOX_CHECKED           0x01    /*!< Indicates checkbox is checked */
+#define GUI_FLAG_CHECKBOX_DISABLED          0x02    /*!< Indicates checkbox is disabled */
+    
+/**
+ * \}
+ */
+
+/**
+ * \ingroup         GUI_CHECKBOX
+ * \brief           Checkbox object structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    
+    uint8_t flags;                          /*!< Checkbox flags \ref GUI_CHECKBOX_FLAGS */
+} gui_checkbox_t;
+
 #define CFG_CHECK           0x01
 #define CFG_DISABLE         0x02
 
@@ -162,8 +186,8 @@ gui_checkbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
             
             /* Draw text if possible */
             if (gui_widget_isfontandtextset(h)) {
-                gui_draw_font_t f;
-                gui_draw_font_init(&f);             /* Init structure */
+                gui_draw_text_t f;
+                gui_draw_text_init(&f);             /* Init structure */
                 
                 f.x = sx + size + 5;
                 f.y = y + 1;

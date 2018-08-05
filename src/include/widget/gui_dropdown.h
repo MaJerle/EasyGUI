@@ -49,15 +49,6 @@ extern "C" {
  * \brief           Dropdown widget
  * \{
  */
-
-#if defined(GUI_INTERNAL) || __DOXYGEN__
-    
-#define GUI_FLAG_DROPDOWN_OPENED        0x01/*!< Dropdown is opened */
-#define GUI_FLAG_DROPDOWN_SLIDER_ON     0x02/*!< Slider is currently active */
-#define GUI_FLAG_DROPDOWN_SLIDER_AUTO   0x04/*!< Show right slider automatically when required, otherwise, manual mode is used */
-#define GUI_FLAG_DROPDOWN_OPEN_UP       0x08/*!< Open dropdown in top direction instead of bottom */
-    
-#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
     
 /**
  * \brief           List of dropdown colors
@@ -78,33 +69,6 @@ typedef enum {
     GUI_DROPDOWN_OPENDIR_DOWN = 0x00,       /*!< Dropdown will open down according to current position */
     GUI_DROPDOWN_OPENDIR_UP = 0x01          /*!< Dropdown will open up according to current position */
 } gui_dropdown_opendir_t;
-
-#if defined(GUI_INTERNAL) || __DOXYGEN__
-
-/**
- * \brief           Dropdown string item object
- */
-typedef struct {
-    gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
-    gui_char* text;                         /*!< Text entry */
-} gui_dropdown_item_t;
-    
-/**
- * \brief           Dropdown object structure
- */
-typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
-    
-    int16_t count;                          /*!< Current number of strings attached to this widget */
-    int16_t selected;                       /*!< selected text index */
-    int16_t visiblestartindex;              /*!< Index in array of string on top of visible area of widget */
-    
-    gui_linkedlistroot_t root;              /*!< Root of linked list entries */
-    
-    gui_dim_t sliderwidth;                  /*!< Slider width in units of pixels */
-    uint8_t flags;                          /*!< Widget flags */
-} gui_dropdown_t;
-#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
 
 gui_handle_p    gui_dropdown_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags);
 uint8_t         gui_dropdown_setcolor(gui_handle_p h, gui_dropdown_color_t index, gui_color_t color);

@@ -34,6 +34,48 @@
 #include "gui/gui_private.h"
 #include "widget/gui_dropdown.h"
 
+/**
+ * \ingroup         GUI_DROPDOWN
+ * \name            GUI_DROPDOWN_FLAGS Flags
+ * \anchor          GUI_DROPDOWN_FLAGS
+ * \{
+ */
+
+#define GUI_FLAG_DROPDOWN_OPENED        0x01/*!< Dropdown is opened */
+#define GUI_FLAG_DROPDOWN_SLIDER_ON     0x02/*!< Slider is currently active */
+#define GUI_FLAG_DROPDOWN_SLIDER_AUTO   0x04/*!< Show right slider automatically when required, otherwise, manual mode is used */
+#define GUI_FLAG_DROPDOWN_OPEN_UP       0x08/*!< Open dropdown in top direction instead of bottom */
+
+/**
+ * \}
+ */
+
+/**
+ * \ingroup         GUI_DROPDOWN
+ * \brief           Dropdown string item object structure
+ */
+typedef struct {
+    gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
+    gui_char* text;                         /*!< Text entry */
+} gui_dropdown_item_t;
+    
+/**
+ * \ingroup         GUI_DROPDOWN
+ * \brief           Dropdown object structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    
+    int16_t count;                          /*!< Current number of strings attached to this widget */
+    int16_t selected;                       /*!< selected text index */
+    int16_t visiblestartindex;              /*!< Index in array of string on top of visible area of widget */
+    
+    gui_linkedlistroot_t root;              /*!< Root of linked list entries */
+    
+    gui_dim_t sliderwidth;                  /*!< Slider width in units of pixels */
+    uint8_t flags;                          /*!< Widget flags \ref GUI_DROPDOWN_FLAGS */
+} gui_dropdown_t;
+
 static uint8_t gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**
@@ -63,10 +105,10 @@ gui_widget_t widget = {
 };
 
 /* Check if status is opened */
-#define is_opened(o)        ((o)->flags & GUI_FLAG_DROPDOWN_OPENED)
+#define is_opened(o)        (((gui_dropdown_t *)(o))->flags & GUI_FLAG_DROPDOWN_OPENED)
 
 /* Check if open direction is up */
-#define is_dir_up(o)        ((o)->flags & GUI_FLAG_DROPDOWN_OPEN_UP)
+#define is_dir_up(o)        (((gui_dropdown_t *)(o))->flags & GUI_FLAG_DROPDOWN_OPEN_UP)
 
 /* height increase when opened */
 #define HEIGHT_CONST(h)     4
@@ -282,6 +324,8 @@ delete_item(gui_handle_p h, uint16_t index) {
     item = get_item(h, index);                      /* Get list item from handle */
     if (item != NULL) {
         gui_linkedlist_remove_gen(&o->root, &item->list);
+        GUI_MEMFREE(item);
+        item = NULL;
         o->count--;
         
         if (o->selected == index) {
@@ -380,9 +424,9 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                 
             if (o->selected >= 0 && h->font != NULL) {
                 int16_t i;
-                gui_draw_font_t f;
+                gui_draw_text_t f;
                 gui_dropdown_item_t* item;
-                gui_draw_font_init(&f);             /* Init structure */
+                gui_draw_text_init(&f);             /* Init structure */
                 
                 item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->root, NULL);
                 for (i = 0; i < o->selected; i++) {
@@ -421,7 +465,7 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
             }
             
             if (is_opened(h) && h->font != NULL && gui_linkedlist_hasentries(&o->root)) {
-                gui_draw_font_t f;
+                gui_draw_text_t f;
                 gui_dropdown_item_t* item;
                 uint16_t yOffset;
                 uint16_t itemheight;                /* Get item height */
@@ -430,7 +474,7 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                 
                 itemheight = item_height(h, &yOffset); /* Get item height and Y offset */
                 
-                gui_draw_font_init(&f);             /* Init structure */
+                gui_draw_text_init(&f);             /* Init structure */
                 
                 f.x = x + 4;
                 f.y = y + 2;

@@ -76,47 +76,9 @@ typedef enum {
     GUI_GRAPH_TYPE_XY = 0x01,               /*!< Data type is Y versus X [Y(x)] */
 } gui_graph_type_t;
 
-/**
- * \brief           Graph data widget structure
- */
-typedef struct {
-#if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE || __DOXYGEN__
-    gui_linkedlistroot_t root;              /*!< Root linked list object of graph widgets */
-#endif /* GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
-    
-    gui_id_t id;                            /*!< Data ID */
-    
-    int16_t* data;                          /*!< Pointer to actual data object */
-    size_t length;                          /*!< Size of data array */
-    size_t ptr;                             /*!< Read/Write start pointer */
-    
-    gui_color_t color;                      /*!< Curve color */
-    gui_graph_type_t type;                  /*!< Plot data type */
-} gui_graph_data_t;
+struct gui_graph_data;
 
-typedef gui_graph_data_t * gui_graph_data_p;/*!< GUI Graph data pointer */
-
-#if defined(GUI_INTERNAL) || __DOXYGEN__
-/**
- * \brief           Graph widget structure
- */
-typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
-    gui_linkedlistroot_t root;              /*!< Linked list root object for data objects. It stores where first in last data exists for this graph */
-    
-    gui_dim_t border[4];                    /*!< Borders for widgets */
-    uint8_t rows;                           /*!< Number of rows in plot represented with lines */
-    uint8_t columns;                        /*!< Number of columns in plot represented with lines */
-    float min_x;                            /*!< Minimal X value for plot */
-    float max_x;                            /*!< Maximal X value for plot */
-    float min_y;                            /*!< Minimal Y value for plot */
-    float max_y;                            /*!< Maximal Y value for plot */
-    float visible_min_x;                    /*!< Visible minimal X value for plot */
-    float visible_max_x;                    /*!< Visible maximal X value for plot */
-    float visible_min_y;                    /*!< Visible minimal Y value for plot */
-    float visible_max_y;                    /*!< Visible maximal Y value for plot */
-} gui_graph_t;
-#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
+typedef struct gui_graph_data * gui_graph_data_p; /*!< Graph data pointer */
 
 gui_handle_p    gui_graph_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags);
 uint8_t         gui_graph_setcolor(gui_handle_p h, gui_graph_color_t index, gui_color_t color);

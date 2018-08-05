@@ -33,8 +33,70 @@
 #define GUI_INTERNAL
 #include "gui/gui_private.h"
 #include "widget/gui_listview.h"
+    
+/**
+ * \ingroup         GUI_LISTVIEW
+ * \name            GUI_LISTVIEW_FLAGS
+ * \anchor          GUI_LISTVIEW_FLAGS
+ * \{
+ */
 
-#define __GLR(x)            ((gui_listview_row_t *)(x))
+#define GUI_FLAG_LISTVIEW_SLIDER_ON     0x01/*!< Slider is currently active */
+#define GUI_FLAG_LISTVIEW_SLIDER_AUTO   0x02/*!< Show right slider automatically when required, otherwise, manual mode is used */
+
+/**
+ * \}
+ */
+
+/**
+ * \ingroup         GUI_LISTVIEW
+ * \brief           Listview main row item
+ */
+typedef struct gui_listview_row {
+    gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
+    gui_linkedlistroot_t root;              /*!< Linked list root entry for \ref gui_listview_item_t column data entries */
+} gui_listview_row_t;
+
+/**
+ * \ingroup         GUI_LISTVIEW
+ * \brief           Listview column item
+ */
+typedef struct gui_listview_col {
+    gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
+    gui_dim_t width;                       /*!< Column width in units of pixels */
+    gui_char* text;                         /*!< Header column text size */
+} gui_listview_col_t;
+
+/**
+ * \ingroup         GUI_LISTVIEW
+ * \brief           Listview string item object
+ */
+typedef struct gui_listview_item {
+    gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
+    gui_char* text;                         /*!< Text entry */
+} gui_listview_item_t;
+    
+/**
+ * \ingroup         GUI_LISTVIEW
+ * \brief           Listview object structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    
+    /* Use colums as pointer to array for faster data access */
+    gui_listview_col_t** cols;              /*!< Pointer to pointers of column elements */
+    uint16_t col_count;                     /*!< Number of columns in listview package */
+    
+    /* Use linked list for rows */
+    gui_linkedlistroot_t root;              /*!< Linked list root entry for \ref gui_listview_row_t for rows */
+    
+    int16_t count;                          /*!< Current number of strings attached to this widget */
+    int16_t selected;                       /*!< selected text index */
+    int16_t visiblestartindex;              /*!< Index in array of string on top of visible area of widget */
+    
+    gui_dim_t sliderwidth;                  /*!< Slider width in units of pixels */
+    uint8_t flags;                          /*!< Widget flags */
+} gui_listview_t;
 
 static uint8_t gui_listview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
@@ -294,9 +356,9 @@ gui_listview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
             gui_draw_filledrectangle(disp, x + 2, y + 2, width - 3, itemheight, GUI_COLOR_WIN_LIGHTGRAY);
             if (o->cols != NULL && o->cols[0] != NULL) {    /* Draw all columns to screen */
                 gui_dim_t tmpX2, xTmp = x + 2;                
-                gui_draw_font_t f;
+                gui_draw_text_t f;
                 
-                gui_draw_font_init(&f);             /* Init structure */
+                gui_draw_text_init(&f);             /* Init structure */
                 
                 f.height = itemheight;
                 f.align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
@@ -638,7 +700,7 @@ gui_listview_removerows(gui_handle_p h) {
  * \brief           Set item string for specific row and column
  * \param[in]       h: Widget handle
  * \param[in]       row: Row object handle, previously returned with \ref gui_listview_addrow function
- * \param[in]       col: Column number to set. First column is on index = 0
+ * \param[in]       col: Column number to set. First column is on `index = 0`
  * \param[in]       text: Text to use for item
  * \return          `1` on success, `0` otherwise
  */
@@ -649,15 +711,15 @@ gui_listview_setitemstring(gui_handle_p h, gui_listview_row_p row, uint16_t col,
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && row != NULL);
 
-    item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(&__GLR(row)->root, NULL);  /* Get first in linked list */
+    item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(&((gui_listview_row_t *)row)->root, NULL); /* Get first in linked list */
     col++;
-    while (col--) {                                 /* Find proper column */
+    while (col--) {                                 /* Find right column */
         if (item == NULL) {
             item = GUI_MEMALLOC(sizeof(*item));     /* Allocate for item */
             if (item == NULL) {
                 break;
             }
-            gui_linkedlist_add_gen(&__GLR(row)->root, (gui_linkedlist_t *)item);/* Add element to linked list */
+            gui_linkedlist_add_gen(&((gui_listview_row_t *)row)->root, (gui_linkedlist_t *)item);   /* Add element to linked list */
         }
         if (col) {
             item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item);   /* Get next in linked list */

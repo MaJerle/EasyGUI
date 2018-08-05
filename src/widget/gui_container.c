@@ -34,6 +34,14 @@
 #include "gui/gui_private.h"
 #include "widget/gui_container.h"
 
+/**
+ * \ingroup         GUI_CONTAINER
+ * \brief           Container object structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+} gui_container_t;
+
 static uint8_t gui_container_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
 
 /**

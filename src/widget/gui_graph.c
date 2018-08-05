@@ -33,7 +33,46 @@
 #define GUI_INTERNAL
 #include "gui/gui_private.h"
 #include "widget/gui_graph.h"
-#include "math.h"
+
+/**
+ * \ingroup         GUI_GRAPH
+ * \brief           Graph data widget structure
+ */
+typedef struct gui_graph_data {
+#if GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE || __DOXYGEN__
+    gui_linkedlistroot_t root;              /*!< Root linked list object of graph widgets */
+#endif /* GUI_CFG_WIDGET_GRAPH_DATA_AUTO_INVALIDATE */
+    
+    gui_id_t id;                            /*!< Data ID */
+    
+    int16_t* data;                          /*!< Pointer to actual data object */
+    size_t length;                          /*!< Size of data array */
+    size_t ptr;                             /*!< Read/Write start pointer */
+    
+    gui_color_t color;                      /*!< Curve color */
+    gui_graph_type_t type;                  /*!< Plot data type */
+} gui_graph_data_t;
+
+/**
+ * \ingroup         GUI_GRAPH
+ * \brief           Graph widget structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    gui_linkedlistroot_t root;              /*!< Linked list root object for data objects. It stores where first in last data exists for this graph */
+    
+    gui_dim_t border[4];                    /*!< Borders for widgets */
+    uint8_t rows;                           /*!< Number of rows in plot represented with lines */
+    uint8_t columns;                        /*!< Number of columns in plot represented with lines */
+    float min_x;                            /*!< Minimal X value for plot */
+    float max_x;                            /*!< Maximal X value for plot */
+    float min_y;                            /*!< Minimal Y value for plot */
+    float max_y;                            /*!< Maximal Y value for plot */
+    float visible_min_x;                    /*!< Visible minimal X value for plot */
+    float visible_max_x;                    /*!< Visible maximal X value for plot */
+    float visible_min_y;                    /*!< Visible minimal Y value for plot */
+    float visible_max_y;                    /*!< Visible maximal Y value for plot */
+} gui_graph_t;
 
 #define CFG_MIN_X           0x01
 #define CFG_MAX_X           0x02
@@ -155,8 +194,8 @@ gui_graph_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_ev
             bb = g->border[GUI_GRAPH_BORDER_BOTTOM];
             bl = g->border[GUI_GRAPH_BORDER_LEFT];
             
-            x = gui_widget_getabsolutex(h);         /* Get absolute X position */
-            y = gui_widget_getabsolutey(h);         /* Get absolute Y position */
+            x = gui_widget_getabsolutex(h);
+            y = gui_widget_getabsolutey(h);
             width = gui_widget_getwidth(h);
             height = gui_widget_getheight(h);
             

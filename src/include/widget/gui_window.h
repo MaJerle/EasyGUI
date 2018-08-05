@@ -56,15 +56,6 @@ typedef enum {
     GUI_WINDOW_COLOR_TOP_BG_FOC,            /*!< Top background color when widget in focus */
     GUI_WINDOW_COLOR_TOP_BG_NOFOC,          /*!< Top background color when widget not in focus */
 } gui_window_color_t;
-
-#if defined(GUI_INTERNAL) || __DOXYGEN__
-/**
- * \brief           Window object structure
- */
-typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
-} gui_window_t;
-#endif /* defined(GUI_INTERNAL) || __DOXYGEN__ */
   
 gui_handle_p    gui_window_create(gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags);
 gui_handle_p    gui_window_getdesktop(void);

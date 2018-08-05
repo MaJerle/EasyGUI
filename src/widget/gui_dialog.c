@@ -35,7 +35,16 @@
 #include "widget/gui_dialog.h"
 
 /**
- * \brief           Structure of dismissed dialogs
+ * \ingroup         GUI_DIALOG
+ * \brief           Dialog object structure
+ */
+typedef struct {
+    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+} gui_dialog_t;
+
+/**
+ * \ingroup         GUI_DIALOG
+ * \brief           Dismissed dialog object structure (private)
  */
 typedef struct {
     gui_linkedlist_t list;                          /*!< Linked list entry element, must always be first on list */
@@ -62,14 +71,18 @@ gui_linkedlistroot_t ddlist;
 static const
 gui_widget_t widget = {
     .name = _GT("DIALOG"),                          /*!< Widget name */
-    .size = sizeof(GUI_DIALOG_t),                   /*!< Size of widget for memory allocation */
+    .size = sizeof(gui_dialog_t),                   /*!< Size of widget for memory allocation */
     .flags = GUI_FLAG_WIDGET_ALLOW_CHILDREN | GUI_FLAG_WIDGET_DIALOG_BASE,  /*!< List of widget flags */
     .callback = gui_dialog_callback,                /*!< Control function */
     .colors = NULL,                                 /*!< Pointer to colors array */
     .color_count = 0,                               /*!< Number of colors */
 };
 
-/* Add widget to active dialogs (not yet dismissed) */
+/**
+ * \brief           Add dialog on a list of dismissed dialogs
+ * \param[in]       h: Widget handle
+ * \return          Dialog dismissed handle
+ */
 static dissmissed_dialog_list_t *
 add_to_active_dialogs(gui_handle_p h) {
     dissmissed_dialog_list_t* l;
@@ -144,7 +157,8 @@ gui_dialog_create(gui_id_t id, float x, float y, float width, float height, gui_
         return NULL;
     }
 
-    ptr = func(id, x, y, width, height, NULL, evt_fn, flags | GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);   /* Create desired widget */
+    /* Create base widget for dialog */
+    ptr = func(id, x, y, width, height, NULL, evt_fn, flags | GUI_FLAG_WIDGET_CREATE_PARENT_DESKTOP);
     if (ptr != NULL) {
         guii_widget_setflag(ptr, GUI_FLAG_WIDGET_DIALOG_BASE); /* Add dialog base flag to widget */
         gui_linkedlist_widgetmovetobottom(ptr);     /* Move to bottom on linked list make it on top now with flag set as dialog */
