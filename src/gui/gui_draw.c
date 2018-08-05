@@ -63,7 +63,6 @@ typedef struct {
     const gui_char* charsptr;                       /*!< Pointer to chars start sequence */
     uint8_t IsLineFeed;                             /*!< Status indicating character is line feed */
     uint8_t Final;                                  /*!< Status indicating we should do line check and finish */
-    uint8_t IsBreak;                                /*!< Status indicating break occurred */
 } gui_stringrectvars_t;
 
 #define CH_CR           GUI_KEY_CR
@@ -72,44 +71,6 @@ typedef struct {
 #define get_char_from_value(ch)      (uint32_t)((CH_CR == (ch) || CH_LF == (ch)) ? CH_WS : (ch))
 
 static gui_stringrectvars_t var;
-
-/**
- * \brief           Get info structure from font for given character
- * \param[in]       font: Font to use for drawing
- * \param[in]       ch: Unicode decoded character for font
- * \return          Char info of specific font and character code
- */
-static const gui_font_char_t *
-string_get_char_ptr(const gui_font_t* font, uint32_t ch) {
-    ch = get_char_from_value(ch);                   /* Get char from char value */
-    if (ch >= font->startchar && ch <= font->endchar) { /* Character is in font structure */
-        return &font->data[(ch) - font->startchar]; /* Return character pointer from font */
-    } else if ('?' >= font->startchar && '?' <= font->endchar) {/* Try to return ? character */
-        return &font->data[(uint32_t)'?' - font->startchar];/* Get pointer of ? character */
-    }
-    return 0;                                       /* No character in font */
-}
-
-/**
- * \brief           Get width and height of specific character
- * \param[in]       font: Font to use for drawing
- * \param[in]       ch: Unicode decoded character for font
- * \param[out]      width: Output width variable
- * \param[out]      width: Output height variable
- */
-static void
-string_get_char_size(const gui_font_t* font, uint32_t ch, gui_dim_t* width, gui_dim_t* height) {
-    const gui_font_char_t* c = 0;
-    
-    c = string_get_char_ptr(font, ch);              /* Get character from font */
-    if (c != NULL) {
-        *width = c->x_size + c->x_margin;
-        *height = c->y_size;
-    } else {
-        *width = 0;
-        *height = 0;
-    }
-}
 
 /* Get string rectangle width and height */
 #define RECT_CONTINUE(incCnt)     if (1) {          \
@@ -134,9 +95,8 @@ process_string_rectangle_before_return(gui_stringrectvars_t* var, gui_stringrect
         if (var->IsLineFeed) {                      /* Line feed forced new line */
             rect->ReadDraw--;                       /* Don't draw this character at all */
         }
-        /*
-         * If there was a word which was too long for single line, put it to next line
-         */
+
+        /* If there was a word which was too long for single line, put it to next line */
         if (var->charsindex > var->spaceindex && !end) {    /* If characters are the last values */
             var->cW -= var->charswidth;             /* Decrease effective width for characters */
             var->cnt -= var->charscount;            /* Decrease number of total count */
@@ -147,9 +107,7 @@ process_string_rectangle_before_return(gui_stringrectvars_t* var, gui_stringrect
     }
     if (end) {                                      /* We received final line (end of string) */
         if (var->spaceindex > var->charsindex) {    /* When spaces are last characters */
-            /*
-             * When last line received, flush only white spaces and ignore other check
-             */
+            /* When last line received, flush only white spaces and ignore other check */
             var->cW -= var->spacewidth;             /* Decrease effective rectangle width */
             rect->ReadDraw -= var->spacecount;      /* Decrease number of drawing characters by removing spaces */
         }
@@ -186,7 +144,6 @@ process_string_rectangle_before_return(gui_stringrectvars_t* var, gui_stringrect
          * or line did not reach end
          */
     }
-    rect->ReadTotal = var->cnt;                     /* Total number of characters to read from string */
 }
 
 /**
@@ -206,8 +163,6 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
     memset(&var, 0x00, sizeof(var));                /* Reset structure */
     memcpy(&var.s, str, sizeof(*str));              /* Copy memory */
     memcpy(&tmpStr, str, sizeof(*str));             /* Copy memory */
-
-    var.IsBreak = onlyToNextLine;                   /* Set for break */
 
     tH = 0;
     if (rect->StringDraw->flags & GUI_FLAG_FONT_MULTILINE) {    /* We want to know exact rectangle for drawing multi line texts including new lines and carriage return */
@@ -237,7 +192,7 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
 
                     if (var.spaceindex == 0) {      /* If we are on beginning of line */
                         if (!rect->IsEditMode) {    /* Do not ignore front spaces when in edit mode = show plain text as is */
-                            if (!var.IsLineFeed) {  /* Do not increase pointer if line feed was detected = force new line*/
+                            if (!var.IsLineFeed) {  /* Do not increase pointer if line feed was detected = force new line */
                                 if (onlyToNextLine) {   /* Increase input pointer only in single line mode */
                                     str->str += 1;  /* Increase input pointer where it points to */
                                 }                   /* Otherwise just ignore character and don't touch input pointer */
@@ -261,7 +216,7 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
                     var.spacecount++;               /* Increase number of spaces on last element */
                 } else {                            /* Try to get character size */
                     /* Try to fit character in current line */
-                    string_get_char_size(rect->Font, var.ch, &w, &h);   /* Get character dimensions */
+                    gui_text_getcharsize(rect->Font, var.ch, &w, &h);   /* Get character dimensions */
                     if ((var.cW + w) < rect->StringDraw->width) {   /* Do we have enough memory available */
                         var.cW += w;                /* Increase total line width */
                         if (CH_WS == var.ch) {      /* Check if character is white space */
@@ -310,7 +265,7 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
     } else {
         var.cW = 0;
         while (gui_string_getch(&var.s, &var.ch, &i)) { /* Get next character from string */
-            string_get_char_size(rect->Font, var.ch, &w, &h);   /* Get character width and height */
+            gui_text_getcharsize(rect->Font, var.ch, &w, &h);   /* Get character width and height */
             if (!(rect->StringDraw->flags & GUI_FLAG_FONT_RIGHTALIGN) && (var.cW + w) > rect->StringDraw->width) {  /* Check if end now */
                 break;
             }
@@ -325,105 +280,6 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
     }
     rect->height = tH;                              /* Save rectangle height value */
     return var.cnt;                                 /* Return number of characters to read in current line */
-}
-
-/**
- * \brief           Get character entry generated in memory for fast drawing
- * \param[in]       font: Font used for character
- * \param[in]       c: Character info handle
- * \return          Character entry or NULL on failure
- */
-static gui_font_charentry_t *
-get_char_entry_from_font(const gui_font_t* font, const gui_font_char_t* c) {
-    gui_font_charentry_t* entry;
-    
-    for (entry = (gui_font_charentry_t *)gui_linkedlist_getnext_gen(&GUI.root_fonts, NULL); entry != NULL;
-        entry = (gui_font_charentry_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)entry)) {
-        if (entry->font == font && entry->ch == c) {
-            return entry;
-        }
-    }
-    return 0;
-}
-
-/* Create char and put it to RAM for fast drawing with memory to memory copy */
-static gui_font_charentry_t *
-create_char_entry_from_font(const gui_font_t* font, const gui_font_char_t* c) {
-    gui_font_charentry_t* entry = NULL;
-    uint16_t columns;
-    uint16_t memsize = GUI_MEM_ALIGN(sizeof(*entry));   /* Get size of entry */
-    uint16_t memDataSize;
-    
-    /* Calculate memory size for data */
-    memDataSize = c->x_size * c->y_size;
-    
-    memsize += GUI_MEM_ALIGN(memDataSize);          /* align memory before increase */
-    entry = GUI_MEMALLOC(memsize);                  /* Allocate memory for entry */
-    if (entry != NULL) {                            /* Allocation was successful */
-        uint16_t i, x;
-        uint8_t b, k, t;
-        uint8_t* ptr = (uint8_t *)entry;            /* Go to memory size */
-        ptr += GUI_MEM_ALIGN(sizeof(*entry));       /* Go to start of data, at the end of aligned structure size */
-        
-        entry->ch = c;                              /* Set pointer to character */
-        entry->font = font;                         /* Set pointer to font structure */
-        
-        if (font->flags & GUI_FLAG_FONT_AA) {       /* Anti-alliased font */
-            columns = c->x_size >> 2;               /* Calculate number of bytes used for single character line */
-            if (c->x_size % 4) {                    /* If only 1 column used */
-                columns++;
-            }
-            x = 0;
-            for (i = 0; i < c->y_size * columns; i++) { /* Inspect all vertical lines */
-                b = c->data[i];                     /* Get byte of data */
-                for (k = 0; k < 4; k++) {           /* Scan each bit in byte */
-                    t = (b >> (6 - 2 * k)) & 0x03;  /* Get temporary bits on bottom */
-                    switch (t) {
-                        case 0:
-                            *ptr |= 0x00;
-                            break;
-                        case 1:
-                            *ptr |= 0x55;
-                            break;
-                        case 2:
-                            *ptr |= 0xAA;
-                            break;
-                        default:
-                            *ptr |= 0xFF;
-                    }
-                    ptr++;
-                    x++;
-                    if (x == c->x_size) {
-                        x = 0;
-                        break;
-                    }
-                }
-            }
-        } else {
-            columns = c->x_size >> 3;               /* Calculate number of bytes used for single character line */
-            if (c->x_size % 8) {                    /* If only 1 column used */
-                columns++;
-            }
-            x = 0;
-            for (i = 0; i < c->y_size * columns; i++) {  /* Inspect all vertical lines */
-                b = c->data[i];                     /* Get byte of data */
-                for (k = 0; k < 8; k++) {           /* Scan each bit in byte */
-                    if ((b >> (7 - k)) & 0x01) {
-                        *ptr++ = 0xFF;
-                    } else {
-                        *ptr++ = 0x00;
-                    }
-                    x++;
-                    if (x == c->x_size) {
-                        x = 0;
-                        break;
-                    }
-                }
-            }
-        }
-        gui_linkedlist_add_gen(&GUI.root_fonts, (gui_linkedlist_t *)entry);  /* Add entry to linked list */
-    }
-    return entry;                                   /* Return new created entry */
 }
 
 /* Draw character to screen */
@@ -447,9 +303,9 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_font
     if (GUI.ll.CopyChar != NULL) {                  /* If copying character function exists in low-level part */
         gui_font_charentry_t* entry = NULL;
         
-        entry = get_char_entry_from_font(font, c);  /* Get char entry from font and character for fast alpha drawing operations */
+        entry = gui_text_getcharentry(font, c);     /* Get char entry from font and character for fast alpha drawing operations */
         if (entry == NULL) {
-            entry = create_char_entry_from_font(font, c);   /* Create new entry */
+            entry = gui_text_createcharentry(font, c);  /* Create new entry */
         }
         if (entry != NULL) {                        /* We have valid data */
             gui_dim_t width, height, offlineSrc, offlineDst, tmpx;
@@ -595,7 +451,7 @@ string_get_pointer_for_width(const gui_font_t* font, gui_string_t* str, gui_draw
         if (!gui_string_getchreverse(str, &ch, &i)) {   /* Get character in reverse order */
             break;
         }
-        string_get_char_size(font, ch, &w, &h);
+        gui_text_getcharsize(font, ch, &w, &h);
         if ((tot + w) < draw->width) {
             tot += w;
         } else {
@@ -1335,7 +1191,7 @@ gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_
     
     rect.Font = font;                               /* Save font structure */
     rect.StringDraw = draw;                         /* Set drawing pointer */
-    rect.IsEditMode = !!(draw->flags & GUI_FLAG_FONT_EDITMODE); /* Check if in edit mode */
+    rect.IsEditMode = (draw->flags & GUI_FLAG_FONT_EDITMODE) == GUI_FLAG_FONT_EDITMODE; /* Check if in edit mode */
       
     gui_string_prepare(&currStr, str);              /* Prepare string */
     string_rectangle(&rect, &currStr, 0);           /* Get string width for this box */
@@ -1362,10 +1218,8 @@ gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_
     }
     y -= draw->scrolly;                             /* Go scroll top */
     
-    /**
-     * Check Y start value in case of edit mode = allow always on bottom
-     */
-    if (draw->flags & GUI_FLAG_FONT_MULTILINE && rect.IsEditMode) { /* In multi-line and edit mode */
+    /* Check Y start value in case of edit mode = allow always on bottom */
+    if ((draw->flags & GUI_FLAG_FONT_MULTILINE) && rect.IsEditMode) {   /* In multi-line and edit mode */
         if (rect.height > draw->height) {           /* If text is greater than visible area in edit mode, set it to bottom align */
             y = draw->y + draw->height - rect.height;
         }
@@ -1375,9 +1229,9 @@ gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_
     while ((cnt = string_rectangle(&rect, &currStr, 1)) > 0) {
         x = draw->x;                                       
         if (draw->align & GUI_HALIGN_CENTER) {      /* Check for horizontal align center */
-            x += (draw->width - rect.width) / 2;    /* align center of drawing area */
+            x += (draw->width - rect.width) / 2;    /* Align center of drawing area */
         } else if (draw->align & GUI_HALIGN_RIGHT) {/* Check for horizontal align right */
-            x += draw->width - rect.width;          /* align right of drawing area */
+            x += draw->width - rect.width;          /* Align right of drawing area */
         }
         while (cnt-- && gui_string_getch(&currStr, &ch, &i)) {  /* Read character by character */
             if (rect.ReadDraw == 0) {               /* Anything to draw? */
@@ -1390,7 +1244,7 @@ gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_
             }
             
             ch = get_char_from_value(ch);           /* Get char from char value */
-            if ((c = string_get_char_ptr(font, ch)) == 0) { /* Get character pointer */
+            if ((c = gui_text_getchardesc(font, ch)) == 0) {/* Get character pointer */
                 continue;                           /* Character is not known */
             }
             draw_char(disp, font, draw, x, y, c);   /* Draw actual char */

@@ -45,6 +45,7 @@ extern "C" {
  */
 
 #include "gui/gui.h"
+#include "gui/gui_text.h"
 
 #if GUI_CFG_OS
 #include "system/gui_sys.h"
