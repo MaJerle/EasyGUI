@@ -958,6 +958,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\src\gui\gui_translate.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_text.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\gui\gui_text.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1140,6 +1145,11 @@
               <FileName>demo_checkbox.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\examples_demo\demo_checkbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_debugbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_debugbox.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2103,6 +2113,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\src\gui\gui_translate.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_text.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\gui\gui_text.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2217,6 +2232,11 @@
               <FileName>demo_checkbox.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\examples_demo\demo_checkbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_debugbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples_demo\demo_debugbox.c</FilePath>
             </File>
           </Files>
         </Group>

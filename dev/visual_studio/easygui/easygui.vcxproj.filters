@@ -22,6 +22,12 @@
     <Filter Include="DEMO">
       <UniqueIdentifier>{a47baea1-a658-4e23-8dd0-a057122b76af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GUI\UTILS">
+      <UniqueIdentifier>{09379c09-a770-4aae-a017-ad14779f3c12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\INPUT">
+      <UniqueIdentifier>{29c98cc6-fa9c-4b19-919c-79e8fa45e49c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\gui\gui.c">
@@ -30,34 +36,10 @@
     <ClCompile Include="..\..\..\src\gui\gui_draw.c">
       <Filter>GUI\CORE</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\gui\gui_input.c">
-      <Filter>GUI\CORE</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\gui\gui_keyboard.c">
-      <Filter>GUI\CORE</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\gui\gui_lcd.c">
       <Filter>GUI\CORE</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\gui\gui_linkedlist.c">
-      <Filter>GUI\CORE</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\gui\gui_math.c">
-      <Filter>GUI\CORE</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\gui\gui_mem.c">
-      <Filter>GUI\CORE</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\gui\gui_string.c">
-      <Filter>GUI\CORE</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\gui\gui_template.c">
-      <Filter>GUI\CORE</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\gui\gui_timer.c">
-      <Filter>GUI\CORE</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\gui\gui_translate.c">
       <Filter>GUI\CORE</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\fonts\Arial_Bold_AA.c">
@@ -166,9 +148,6 @@
     <ClCompile Include="..\..\..\src\widget\gui_widget_api.c">
       <Filter>GUI\WIDGET</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\gui\gui_buff.c">
-      <Filter>GUI\CORE</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\examples_demo\demo_led.c">
       <Filter>DEMO</Filter>
     </ClCompile>
@@ -196,11 +175,38 @@
     <ClCompile Include="..\..\..\examples_demo\demo_text_view.c">
       <Filter>DEMO</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\gui\gui_text.c">
-      <Filter>GUI\CORE</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\examples_demo\demo_debugbox.c">
       <Filter>DEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_buff.c">
+      <Filter>GUI\UTILS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_linkedlist.c">
+      <Filter>GUI\UTILS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_math.c">
+      <Filter>GUI\UTILS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_mem.c">
+      <Filter>GUI\UTILS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_string.c">
+      <Filter>GUI\UTILS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_text.c">
+      <Filter>GUI\UTILS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_timer.c">
+      <Filter>GUI\UTILS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_translate.c">
+      <Filter>GUI\UTILS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_keyboard.c">
+      <Filter>GUI\INPUT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gui\gui_input.c">
+      <Filter>GUI\INPUT</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
