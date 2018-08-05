@@ -138,34 +138,47 @@ extern "C" {
 #define GUI_DRAW_CIRCLE_BR              0x04/*!< Draw bottom left part of circle */
 #define GUI_DRAW_CIRCLE_BL              0x08/*!< Draw bottom right part of circle */
     
-#define GUI_HALIGN_LEFT                 0x01/*!< Horizontal align is left */ 
-#define GUI_HALIGN_CENTER               0x02/*!< Horizontal align is center */
-#define GUI_HALIGN_RIGHT                0x04/*!< Horizontal align is right */
-#define GUI_VALIGN_TOP                  0x08/*!< Vertical align is top */
-#define GUI_VALIGN_CENTER               0x10/*!< Vertical align is center */
-#define GUI_VALIGN_BOTTOM               0x20/*!< Vertical align is bottom */         
+/**
+ * \name            GUI_FLAG_ALIGN Alignment flags
+ * \anchor          GUI_FLAG_ALIGN
+ * \{
+ */
+
+#define GUI_HALIGN_MASK                 0x03
+#define GUI_HALIGN_LEFT                 0x00/*!< Horizontal align is left */ 
+#define GUI_HALIGN_CENTER               0x01/*!< Horizontal align is center */
+#define GUI_HALIGN_RIGHT                0x02/*!< Horizontal align is right */
+
+#define GUI_VALIGN_MASK                 (0x03 << 2)
+#define GUI_VALIGN_TOP                  (0x00 << 2) /*!< Vertical align is top */
+#define GUI_VALIGN_CENTER               (0x01 << 2) /*!< Vertical align is center */
+#define GUI_VALIGN_BOTTOM               (0x02 << 2) /*!< Vertical align is bottom */         
+
+/**
+ * \}
+ */
 
 /**
  * \brief           Structure for drawing strings on widgets
- * \sa              gui_draw_font_init
+ * \sa              gui_draw_text_init
  */
 typedef struct {
     gui_dim_t x;                            /*!< Top left X position for rectangle */
     gui_dim_t y;                            /*!< Top left Y position for rectangle */
     gui_dim_t width;                        /*!< Rectangle width for string draw */
     gui_dim_t height;                       /*!< Rectangle height for string draw */
-    uint8_t align;                          /*!< alignment parameters */
+    uint8_t align;                          /*!< Text alignment. Check \ref GUI_FLAG_ALIGN */
     gui_dim_t lineheight;                   /*!< Line height, only when multiline mode is enabled */
-    uint8_t flags;                          /*!< flags for future use */
+    uint8_t flags;                          /*!< Flags for future use */
     gui_dim_t color1width;                  /*!< Width for color 1 */
     gui_color_t color1;                     /*!< Color 1 */
     gui_color_t color2;                     /*!< Color 2 */
     uint32_t scrolly;                       /*!< Scroll in vertical direction */
-} gui_draw_font_t;
+} gui_draw_text_t;
 
-#define GUI_DRAW_FLAG_GRAD_VER              0x01
-#define GUI_DRAW_FLAG_GRAD_HOR              0x02
-#define GUI_DRAW_FLAG_FILLED                0x04
+#define GUI_FLAG_DRAW_GRAD_VER              0x01
+#define GUI_FLAG_DRAW_GRAD_HOR              0x02
+#define GUI_FLAG_DRAW_FILLED                0x04
 
 /**
  * \brief           Extended rectangle structure
@@ -221,7 +234,7 @@ typedef struct {
     gui_dim_t y;                           /*!< Poly point Y location */
 } gui_draw_poly_t;
 
-void        gui_draw_font_init(gui_draw_font_t* f);
+void        gui_draw_text_init(gui_draw_text_t* f);
 void        gui_draw_fillscreen(const gui_display_t* disp, gui_color_t color);
 void        gui_draw_setpixel(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_color_t color);
 gui_color_t gui_draw_getpixel(const gui_display_t* disp, gui_dim_t x, gui_dim_t y);
@@ -240,7 +253,7 @@ void        gui_draw_filledcirclecorner(const gui_display_t* disp, gui_dim_t x0,
 void        gui_draw_triangle(const gui_display_t* disp, gui_dim_t x1, gui_dim_t y1,  gui_dim_t x2, gui_dim_t y2, gui_dim_t x3, gui_dim_t y3, gui_color_t color);
 void        gui_draw_filledtriangle(const gui_display_t* disp, gui_dim_t x1, gui_dim_t y1, gui_dim_t x2, gui_dim_t y2, gui_dim_t x3, gui_dim_t y3, gui_color_t color);
 void        gui_draw_image(gui_display_t* disp, gui_dim_t x, gui_dim_t y, const gui_image_desc_t* img);
-void        gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_char* str, gui_draw_font_t* draw);
+void        gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_char* str, gui_draw_text_t* draw);
 void        gui_draw_rectangle3d(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_draw_3d_state_t state);
 void        gui_draw_poly(const gui_display_t* disp, const gui_draw_poly_t* points, size_t len, gui_color_t color);
 void        gui_draw_scrollbar_init(gui_draw_sb_t* sb);

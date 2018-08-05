@@ -433,9 +433,9 @@ typedef struct {
 } gui_font_t;
 
 #define GUI_FLAG_FONT_AA                ((uint8_t)0x01) /*!< Indicates anti-alliasing on font */
-#define GUI_FLAG_FONT_RIGHTALIGN        ((uint8_t)0x02) /*!< Indicates right align text if string length is too wide for rectangle */
-#define GUI_FLAG_FONT_MULTILINE         ((uint8_t)0x04) /*!< Indicates multi line support on widget */
-#define GUI_FLAG_FONT_EDITMODE          ((uint8_t)0x08) /*!< Edit mode is enabled on text */
+#define GUI_FLAG_TEXT_RIGHTALIGN        ((uint8_t)0x02) /*!< Indicates right align text if string length is too wide for rectangle */
+#define GUI_FLAG_TEXT_MULTILINE         ((uint8_t)0x04) /*!< Indicates multi line support on widget */
+#define GUI_FLAG_TEXT_EDITMODE          ((uint8_t)0x08) /*!< Edit mode is enabled on text */
 
 #if defined(GUI_INTERNAL) || __DOXYGEN__
 /**

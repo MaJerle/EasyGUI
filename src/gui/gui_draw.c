@@ -43,7 +43,7 @@ typedef struct {
     size_t ReadTotal;                               /*!< Total number of characters to read */
     size_t ReadDraw;                                /*!< Total number of characters to actually draw after read */
 
-    gui_draw_font_t* StringDraw;                    /*!< Pointer to object to draw string */
+    gui_draw_text_t* StringDraw;                    /*!< Pointer to object to draw string */
     const gui_font_t* Font;                         /*!< Pointer to used font */
 } gui_stringrect_t;
 
@@ -57,12 +57,14 @@ typedef struct {
     size_t spacecount;                              /*!< Number of spaces in last sequence */
     gui_dim_t spacewidth;                           /*!< Width of last space sequence */
     const gui_char* spaceptr;                       /*!< Pointer to space start sequence */
+
     size_t charsindex;                              /*!< Index number of non-space sequence start */
     size_t charscount;                              /*!< Number of non-space characters in sequence */
     gui_dim_t charswidth;                           /*!< Width of characters after last space detected */
     const gui_char* charsptr;                       /*!< Pointer to chars start sequence */
-    uint8_t IsLineFeed;                             /*!< Status indicating character is line feed */
-    uint8_t Final;                                  /*!< Status indicating we should do line check and finish */
+
+    uint8_t islinefeed;                             /*!< Status indicating character is line feed */
+    uint8_t isfinal;                                /*!< Status indicating we should do line check and finish */
 } gui_stringrectvars_t;
 
 #define CH_CR           GUI_KEY_CR
@@ -92,7 +94,7 @@ process_string_rectangle_before_return(gui_stringrectvars_t* var, gui_stringrect
      */
     rect->ReadDraw = rect->ReadTotal = var->cnt;    /* Set number of total and drawing characters */
     if (rect->IsEditMode) {                         /* Do not optimize strings if we are in edit mode */
-        if (var->IsLineFeed) {                      /* Line feed forced new line */
+        if (var->islinefeed) {                      /* Line feed forced new line */
             rect->ReadDraw--;                       /* Don't draw this character at all */
         }
 
@@ -165,7 +167,7 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
     memcpy(&tmpStr, str, sizeof(*str));             /* Copy memory */
 
     tH = 0;
-    if (rect->StringDraw->flags & GUI_FLAG_FONT_MULTILINE) {    /* We want to know exact rectangle for drawing multi line texts including new lines and carriage return */
+    if (rect->StringDraw->flags & GUI_FLAG_TEXT_MULTILINE) {    /* We want to know exact rectangle for drawing multi line texts including new lines and carriage return */
         while (1) {                                 /* Unlimited execution */
             lastS = var.s.str;                      /* Save current string pointer */
             if (gui_string_getch(&var.s, &var.ch, &i)) {/* Get next character from string */
@@ -175,9 +177,9 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
                 }
 
                 /* Check for LF character */
-                var.IsLineFeed = 0;
+                var.islinefeed = 0;
                 if (CH_LF == var.ch) {              /* LF is for new line */
-                    var.IsLineFeed = 1;             /* Character is line feed */
+                    var.islinefeed = 1;             /* Character is line feed */
                     var.ch = CH_WS;                 /* Set it as space */
                 }
 
@@ -192,7 +194,7 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
 
                     if (var.spaceindex == 0) {      /* If we are on beginning of line */
                         if (!rect->IsEditMode) {    /* Do not ignore front spaces when in edit mode = show plain text as is */
-                            if (!var.IsLineFeed) {  /* Do not increase pointer if line feed was detected = force new line */
+                            if (!var.islinefeed) {  /* Do not increase pointer if line feed was detected = force new line */
                                 if (onlyToNextLine) {   /* Increase input pointer only in single line mode */
                                     str->str += 1;  /* Increase input pointer where it points to */
                                 }                   /* Otherwise just ignore character and don't touch input pointer */
@@ -210,8 +212,8 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
                 }
 
                 /* Check if line feed or normal character */
-                if (var.IsLineFeed) {               /* Check for line feed */
-                    var.Final = 1;                  /* Stop execution at this point */
+                if (var.islinefeed) {               /* Check for line feed */
+                    var.isfinal = 1;                /* Stop execution at this point */
                     var.cnt++;                      /* Increase number of elements manually */
                     var.spacecount++;               /* Increase number of spaces on last element */
                 } else {                            /* Try to get character size */
@@ -227,12 +229,12 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
                             var.charswidth += w;    /* Increase width of characters in a row */
                         }
                     } else {
-                        var.Final = 1;              /* No more characters available in line, stop execution */
+                        var.isfinal = 1;            /* No more characters available in line, stop execution */
                     }
                 }
 
                 /* Check if line should be "closed" */
-                if (var.Final) {                    /* Is this final for this line? */
+                if (var.isfinal) {                  /* Is this final for this line? */
                     process_string_rectangle_before_return(&var, rect, 0);
 
                     if (mW < var.cW) {              /* Check for width value */
@@ -266,7 +268,7 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
         var.cW = 0;
         while (gui_string_getch(&var.s, &var.ch, &i)) { /* Get next character from string */
             gui_text_getcharsize(rect->Font, var.ch, &w, &h);   /* Get character width and height */
-            if (!(rect->StringDraw->flags & GUI_FLAG_FONT_RIGHTALIGN) && (var.cW + w) > rect->StringDraw->width) {  /* Check if end now */
+            if (!(rect->StringDraw->flags & GUI_FLAG_TEXT_RIGHTALIGN) && (var.cW + w) > rect->StringDraw->width) {  /* Check if end now */
                 break;
             }
             if (CH_CR != var.ch && CH_LF != var.ch) {
@@ -285,7 +287,7 @@ string_rectangle(gui_stringrect_t* rect, gui_string_t* str, uint8_t onlyToNextLi
 /* Draw character to screen */
 /* X and Y coordinates are TOP LEFT coordinates for character */
 static void
-draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_font_t* draw, gui_dim_t x, gui_dim_t y, const gui_font_char_t* c) {
+draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_text_t* draw, gui_dim_t x, gui_dim_t y, const gui_font_char_t* c) {
     uint8_t i, b, k, columns;
     gui_dim_t x1;
     
@@ -439,7 +441,7 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_font
 
 /* Get string pointer start address for specific width of rectangle */
 static const gui_char *
-string_get_pointer_for_width(const gui_font_t* font, gui_string_t* str, gui_draw_font_t* draw) {
+string_get_pointer_for_width(const gui_font_t* font, gui_string_t* str, gui_draw_text_t* draw) {
     gui_dim_t tot = 0, w, h;
     uint8_t i;
     uint32_t ch;
@@ -498,11 +500,11 @@ gui_draw_fill(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t wid
 }
 
 /**
- * \brief           Initialize \ref gui_draw_font_t structure for further usage
- * \param[in,out]   f: Pointer to empty \ref gui_draw_font_t structure 
+ * \brief           Initialize \ref gui_draw_text_t structure for further usage
+ * \param[in,out]   f: Pointer to empty \ref gui_draw_text_t structure 
  */
 void
-gui_draw_font_init(gui_draw_font_t* f) {
+gui_draw_text_init(gui_draw_text_t* f) {
     memset((void *)f, 0x00, sizeof(*f));            /* Reset structure */
 }
 
@@ -1173,10 +1175,10 @@ gui_draw_poly(const gui_display_t* disp, const gui_draw_poly_t* points, size_t l
  * \param[in,out]   disp: Pointer to \ref gui_display_t structure for display operations
  * \param[in]       font: Pointer to \ref gui_font_t structure with font to use
  * \param[in]       str: Pointer to string to draw on screen
- * \param[in]       draw: Pointer to \ref gui_draw_font_t structure with specifications about drawing style 
+ * \param[in]       draw: Pointer to \ref gui_draw_text_t structure with specifications about drawing style 
  */
 void
-gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_char* str, gui_draw_font_t* draw) {
+gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_char* str, gui_draw_text_t* draw) {
     gui_dim_t x, y;
     uint32_t ch;
     uint8_t i;
@@ -1191,12 +1193,12 @@ gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_
     
     rect.Font = font;                               /* Save font structure */
     rect.StringDraw = draw;                         /* Set drawing pointer */
-    rect.IsEditMode = (draw->flags & GUI_FLAG_FONT_EDITMODE) == GUI_FLAG_FONT_EDITMODE; /* Check if in edit mode */
+    rect.IsEditMode = (draw->flags & GUI_FLAG_TEXT_EDITMODE) == GUI_FLAG_TEXT_EDITMODE; /* Check if in edit mode */
       
     gui_string_prepare(&currStr, str);              /* Prepare string */
     string_rectangle(&rect, &currStr, 0);           /* Get string width for this box */
     if (rect.width > draw->width) {                 /* If string is wider than available rectangle */
-        if (draw->flags & GUI_FLAG_FONT_RIGHTALIGN) {   /* Check right align text */
+        if (draw->flags & GUI_FLAG_TEXT_RIGHTALIGN) {   /* Check right align text */
             gui_string_prepare(&currStr, str);      /* Prepare string */
             str = string_get_pointer_for_width(font, &currStr, draw);  /* Get string pointer */
         } else {
@@ -1207,30 +1209,30 @@ gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_
     x = draw->x;                                    /* Get start X position */
     y = draw->y;                                    /* Get start Y position */
     
-    if (draw->align & GUI_VALIGN_CENTER) {          /* Check for vertical align center */
-        y += (draw->height - rect.height) / 2;      /* align center of drawing area */
-    } else if (draw->align & GUI_VALIGN_BOTTOM) {   /* Check for vertical align bottom */
-        y += draw->height - rect.height;            /* align bottom of drawing area */
+    if ((draw->align & GUI_VALIGN_MASK) == GUI_VALIGN_CENTER) { /* Check for vertical align center */
+        y += (draw->height - rect.height) / 2;      /* Align center of drawing area */
+    } else if ((draw->align & GUI_VALIGN_MASK) == GUI_VALIGN_BOTTOM) {  /* Check for vertical align bottom */
+        y += draw->height - rect.height;            /* Align bottom of drawing area */
     }
     
-    if (y < draw->y) {                              /* Check situation first */
+    if (y < draw->y) {
         y = draw->y;
     }
     y -= draw->scrolly;                             /* Go scroll top */
     
     /* Check Y start value in case of edit mode = allow always on bottom */
-    if ((draw->flags & GUI_FLAG_FONT_MULTILINE) && rect.IsEditMode) {   /* In multi-line and edit mode */
+    if ((draw->flags & GUI_FLAG_TEXT_MULTILINE) && rect.IsEditMode) {   /* In multi-line and edit mode */
         if (rect.height > draw->height) {           /* If text is greater than visible area in edit mode, set it to bottom align */
             y = draw->y + draw->height - rect.height;
         }
-    }    
+    }
     
     gui_string_prepare(&currStr, str);              /* Prepare string again */
     while ((cnt = string_rectangle(&rect, &currStr, 1)) > 0) {
         x = draw->x;                                       
-        if (draw->align & GUI_HALIGN_CENTER) {      /* Check for horizontal align center */
+        if ((draw->align & GUI_HALIGN_MASK) == GUI_HALIGN_CENTER) { /* Check for horizontal align center */
             x += (draw->width - rect.width) / 2;    /* Align center of drawing area */
-        } else if (draw->align & GUI_HALIGN_RIGHT) {/* Check for horizontal align right */
+        } else if ((draw->align & GUI_HALIGN_MASK) == GUI_HALIGN_RIGHT) {   /* Check for horizontal align right */
             x += draw->width - rect.width;          /* Align right of drawing area */
         }
         while (cnt-- && gui_string_getch(&currStr, &ch, &i)) {  /* Read character by character */
@@ -1252,7 +1254,7 @@ gui_draw_writetext(const gui_display_t* disp, const gui_font_t* font, const gui_
             x += c->x_size + c->x_margin;           /* Increase X position */
         }
         y += draw->lineheight;                      /* Go to next line */
-        if (!(draw->flags & GUI_FLAG_FONT_MULTILINE) || y > disp->y2) { /* Not multiline or over visible Y area */
+        if (!(draw->flags & GUI_FLAG_TEXT_MULTILINE) || y > disp->y2) { /* Not multiline or over visible Y area */
             break;
         }
     }
