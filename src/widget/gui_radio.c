@@ -276,7 +276,7 @@ gui_radio_setgroup(gui_handle_p h, uint8_t groupId) {
                 handle = gui_linkedlist_widgetgetnext(NULL, handle)) {
             o_handle = GUI_VP(handle);
             /* Check if widget is radio box and group is the same as input group */
-            if (handle != h && o_handle->widget == &widget && o_handle->group_id == groupId) {  
+            if (handle != h && __GH(o_handle)->widget == &widget && o_handle->group_id == groupId) {
                 o->selected_value = o_handle->selected_value;   /* Set selected value for widget */
                 break;          
             }
