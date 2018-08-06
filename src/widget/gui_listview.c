@@ -440,8 +440,10 @@ gui_listview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
         case GUI_EVT_TOUCHSTART: {
             guii_touch_data_t* ts = GUI_EVT_PARAMTYPE_TOUCH(param);  /* Get touch data */
             tx = ts->x_rel[0];                      /* Save X position */
-            ty = ts->y_rel[0];                      /* Save X position */
+            ty = ts->y_rel[0];                      /* Save Y position */
             
+            /* \todo Check if press was on header are to change width of columns */
+
             GUI_EVT_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
         }

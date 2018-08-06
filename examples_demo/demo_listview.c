@@ -8,6 +8,34 @@ strings[][3] = {
     { _GT("Natasha"),   _GT("Grim"),    _GT("natasha@grim") },
     { _GT("John"),      _GT("Doe"),     _GT("john@doe.com") },
     { _GT("Jane"),      _GT("Doe"),     _GT("jane@doe.com") },
+    { _GT("Meggan"),    _GT("Klann"),   _GT("megan@klann") },
+    { _GT("Natasha"),   _GT("Grim"),    _GT("natasha@grim") },
+    { _GT("John"),      _GT("Doe"),     _GT("john@doe.com") },
+    { _GT("Jane"),      _GT("Doe"),     _GT("jane@doe.com") },
+    { _GT("Meggan"),    _GT("Klann"),   _GT("megan@klann") },
+    { _GT("Natasha"),   _GT("Grim"),    _GT("natasha@grim") },
+    { _GT("John"),      _GT("Doe"),     _GT("john@doe.com") },
+    { _GT("Jane"),      _GT("Doe"),     _GT("jane@doe.com") },
+    { _GT("Meggan"),    _GT("Klann"),   _GT("megan@klann") },
+    { _GT("Natasha"),   _GT("Grim"),    _GT("natasha@grim") },
+    { _GT("John"),      _GT("Doe"),     _GT("john@doe.com") },
+    { _GT("Jane"),      _GT("Doe"),     _GT("jane@doe.com") },
+    { _GT("Meggan"),    _GT("Klann"),   _GT("megan@klann") },
+    { _GT("Natasha"),   _GT("Grim"),    _GT("natasha@grim") },
+    { _GT("John"),      _GT("Doe"),     _GT("john@doe.com") },
+    { _GT("Jane"),      _GT("Doe"),     _GT("jane@doe.com") },
+    { _GT("Meggan"),    _GT("Klann"),   _GT("megan@klann") },
+    { _GT("Natasha"),   _GT("Grim"),    _GT("natasha@grim") },
+    { _GT("John"),      _GT("Doe"),     _GT("john@doe.com") },
+    { _GT("Jane"),      _GT("Doe"),     _GT("jane@doe.com") },
+    { _GT("Meggan"),    _GT("Klann"),   _GT("megan@klann") },
+    { _GT("Natasha"),   _GT("Grim"),    _GT("natasha@grim") },
+    { _GT("John"),      _GT("Doe"),     _GT("john@doe.com") },
+    { _GT("Jane"),      _GT("Doe"),     _GT("jane@doe.com") },
+    { _GT("Meggan"),    _GT("Klann"),   _GT("megan@klann") },
+    { _GT("Natasha"),   _GT("Grim"),    _GT("natasha@grim") },
+    { _GT("John"),      _GT("Doe"),     _GT("john@doe.com") },
+    { _GT("Jane"),      _GT("Doe"),     _GT("jane@doe.com") },
 };
 
 /**
@@ -26,7 +54,6 @@ demo_create_feature_listview(gui_handle_p parent, uint8_t protect) {
     h = gui_listview_create(0, 0, 0, 1, 1, parent, listview_callback, GUI_FLAG_WIDGET_CREATE_IGNORE_INVALIDATE);
     gui_widget_setpositionpercent(h, 2, 2);
     gui_widget_setsizepercent(h, 96, 96);
-    gui_widget_setignoreinvalidate(h, 0, 1);
     
     /* Add columns */
     gui_listview_addcolumn(h, _GT("FName"), 120);
@@ -42,7 +69,8 @@ demo_create_feature_listview(gui_handle_p parent, uint8_t protect) {
         gui_listview_setitemstring(h, row, 1, strings[i][1]);
         gui_listview_setitemstring(h, row, 2, strings[i][2]);
     }
-    
+
+    gui_widget_setignoreinvalidate(h, 0, 1);
     gui_unprotect(protect);
 }
 
