@@ -39,7 +39,7 @@
  * \brief           Dialog object structure
  */
 typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                                   /*!< GUI handle object, must always be first on list */
 } gui_dialog_t;
 
 /**

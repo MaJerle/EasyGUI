@@ -41,8 +41,8 @@
  * \{
  */
 
-#define GUI_FLAG_LISTBOX_SLIDER_ON      0x01/*!< Slider is currently active */
-#define GUI_FLAG_LISTBOX_SLIDER_AUTO    0x02/*!< Show right slider automatically when required, otherwise, manual mode is used */
+#define GUI_FLAG_LISTBOX_SLIDER_ON          0x01    /*!< Slider is currently active */
+#define GUI_FLAG_LISTBOX_SLIDER_AUTO        0x02    /*!< Show right slider automatically when required, otherwise, manual mode is used */
 
 /**
  * \}
@@ -53,8 +53,8 @@
  * \brief           Listbox string item object
  */
 typedef struct {
-    gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
-    gui_char* text;                         /*!< Text entry */
+    gui_linkedlist_t list;                          /*!< Linked list entry, must be first on list */
+    gui_char* text;                                 /*!< Text entry */
 } gui_listbox_item_t;
     
 /**
@@ -62,16 +62,16 @@ typedef struct {
  * \brief           Listbox object structure
  */
 typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                                   /*!< GUI handle object, must always be first on list */
     
-    int16_t count;                          /*!< Current number of strings attached to this widget */
-    int16_t selected;                       /*!< selected text index */
-    int16_t visiblestartindex;              /*!< Index in array of string on top of visible area of widget */
+    int16_t count;                                  /*!< Current number of strings attached to this widget */
+    int16_t selected;                               /*!< selected text index */
+    int16_t visiblestartindex;                      /*!< Index in array of string on top of visible area of widget */
     
-    gui_linkedlistroot_t root;              /*!< Root of linked list entries */
+    gui_linkedlistroot_t root;                      /*!< Root of linked list entries */
     
-    gui_dim_t sliderwidth;                  /*!< Slider width in units of pixels */
-    uint8_t flags;                          /*!< Widget flags \ref GUI_LISTBOX_FLAGS */
+    gui_dim_t sliderwidth;                          /*!< Slider width in units of pixels */
+    uint8_t flags;                                  /*!< Widget flags \ref GUI_LISTBOX_FLAGS */
 } gui_listbox_t;
 
 static uint8_t gui_listbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
@@ -243,7 +243,7 @@ delete_item(gui_handle_p h, uint16_t index) {
         gui_linkedlist_remove_gen(&o->root, &item->list);
         GUI_MEMFREE(item);
         item = NULL;
-        o->count--;                           /* Decrease count */
+        o->count--;                                 /* Decrease count */
         
         if (o->selected == index) {
             set_selection(h, -1);

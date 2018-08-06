@@ -53,9 +53,9 @@
  * \brief           Checkbox object structure
  */
 typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                                   /*!< GUI handle object, must always be first on list */
     
-    uint8_t flags;                          /*!< Checkbox flags \ref GUI_CHECKBOX_FLAGS */
+    uint8_t flags;                                  /*!< Checkbox flags \ref GUI_CHECKBOX_FLAGS */
 } gui_checkbox_t;
 
 #define CFG_CHECK           0x01
@@ -132,7 +132,7 @@ static uint8_t
 gui_checkbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
     gui_checkbox_t* o = GUI_VP(h);
     switch (ctrl) {
-        case GUI_EVT_SETPARAM: {                     /* Set parameter for widget */
+        case GUI_EVT_SETPARAM: {                    /* Set parameter for widget */
             gui_widget_param* p = GUI_EVT_PARAMTYPE_WIDGETPARAM(param);
             switch (p->type) {
                 case CFG_CHECK:                     /* Set current progress value */
@@ -143,7 +143,7 @@ gui_checkbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                     break;
                 default: break;
             }
-            GUI_EVT_RESULTTYPE_U8(result) = 1;   /* Save result */
+            GUI_EVT_RESULTTYPE_U8(result) = 1;      /* Save result */
             return 1;
         }
         case GUI_EVT_DRAW: {

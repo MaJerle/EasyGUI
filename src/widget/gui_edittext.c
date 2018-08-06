@@ -46,7 +46,7 @@
  * \{
  */
 
-#define GUI_EDITTEXT_FLAG_MULTILINE         0x01/*!< Defines widget as multi-line edit */
+#define GUI_EDITTEXT_FLAG_MULTILINE             0x01    /*!< Defines widget as multi-line edit */
     
 /**
  * \}
@@ -57,11 +57,11 @@
  * \brief           Edittext object structure
  */
 typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                                   /*!< GUI handle object, must always be first on list */
     
-    uint8_t flags;                          /*!< List of widget flags */
-    gui_edittext_valign_t valign;           /*!< Vertical align setup */
-    gui_edittext_halign_t halign;           /*!< Horizontal align setup */
+    uint8_t flags;                                  /*!< List of widget flags */
+    gui_edittext_valign_t valign;                   /*!< Vertical align setup */
+    gui_edittext_halign_t halign;                   /*!< Horizontal align setup */
 } gui_edittext_t;
 
 #define CFG_MULTILINE       0x01

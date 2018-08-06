@@ -39,7 +39,7 @@
  * \brief           Window object structure
  */
 typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                                   /*!< GUI handle object, must always be first on list */
 } gui_window_t;
 
 static uint8_t gui_window_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);

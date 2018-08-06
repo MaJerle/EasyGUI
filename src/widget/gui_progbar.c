@@ -41,8 +41,8 @@
  * \{
  */
 
-#define GUI_FLAG_PROGBAR_PERCENT        0x01    /*!< Flag indicating percentages are enabled on view */
-#define GUI_FLAG_PROGBAR_ANIMATE        0x02    /*!< Animation for progress bar changes */
+#define GUI_FLAG_PROGBAR_PERCENT            0x01    /*!< Flag indicating percentages are enabled on view */
+#define GUI_FLAG_PROGBAR_ANIMATE            0x02    /*!< Animation for progress bar changes */
     
 /**
  * \}
@@ -53,13 +53,13 @@
  * \brief           Progress bar object structure
  */
 typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                                   /*!< GUI handle object, must always be first on list */
     
-    int32_t min;                            /*!< Low value for progress bar */
-    int32_t max;                            /*!< High value for progress bar */
-    int32_t currentvalue;                   /*!< Current value for progress bar */
-    int32_t desiredvalue;                   /*!< Desired value, set by used */
-    uint8_t flags;                          /*!< flags variable */
+    int32_t min;                                    /*!< Low value for progress bar */
+    int32_t max;                                    /*!< High value for progress bar */
+    int32_t currentvalue;                           /*!< Current value for progress bar */
+    int32_t desiredvalue;                           /*!< Desired value, set by used */
+    uint8_t flags;                                  /*!< flags variable */
 } gui_progbar_t;
 
 #define CFG_VALUE           0x01
@@ -205,7 +205,7 @@ gui_progbar_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_
                     break;
                 default: break;
             }
-            GUI_EVT_RESULTTYPE_U8(result) = 1;   /* Save result */
+            GUI_EVT_RESULTTYPE_U8(result) = 1;      /* Save result */
             return 1;
         }
         case GUI_EVT_DRAW: {

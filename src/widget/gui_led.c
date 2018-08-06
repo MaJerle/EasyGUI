@@ -41,7 +41,7 @@
  * \{
  */
 
-#define GUI_LED_FLAG_ON             0x01    /*!< Indicates LED is on */
+#define GUI_LED_FLAG_ON                     0x01    /*!< Indicates LED is on */
 
 /**
  * \}
@@ -52,10 +52,10 @@
  * \brief           LED object structure
  */
 typedef struct {
-    gui_handle C;                           /*!< Global widget object */
+    gui_handle C;                                   /*!< Global widget object */
     
-    gui_led_type_t type;                    /*!< Led shape type */
-    uint8_t flags;                          /*!< flags management for LED */
+    gui_led_type_t type;                            /*!< Led shape type */
+    uint8_t flags;                                  /*!< flags management for LED */
 } gui_led_t;
 
 #define CFG_TOGGLE          0x01
@@ -119,7 +119,7 @@ gui_led_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_
                     break;
                 default: break;
             }
-            GUI_EVT_RESULTTYPE_U8(result) = 1;   /* Save result */
+            GUI_EVT_RESULTTYPE_U8(result) = 1;      /* Save result */
             return 1;
         }
         case GUI_EVT_DRAW: {

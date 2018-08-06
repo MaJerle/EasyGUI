@@ -399,7 +399,7 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, gui_touch_data_t* old, uin
                     ) {
                     PT_EXIT(&ts->pt);               /* Exit thread, invalid coordinate for touch click or double click */
                 }
-                    
+                
                 if (!i) {                           /* On first call, this is click event */
                     *result = GUI_EVT_CLICK;        /* Click event occurred */
 

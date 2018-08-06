@@ -1384,7 +1384,7 @@ gui_widget_alloctextmemory(gui_handle_p h, uint32_t size) {
     h->text = NULL;                                 /* Reset pointer */
 
     h->textmemsize = sizeof(gui_char) * (size + 1); /* Allocate text memory */
-    h->text = GUI_MEMALLOC(__GH(h)->textmemsize);
+    h->text = GUI_MEMALLOC(h->textmemsize);
     if (h->text != NULL) {                          /* Check if allocated */
         guii_widget_setflag(h, GUI_FLAG_DYNAMICTEXTALLOC); /* Dynamically allocated */
     } else {

@@ -53,13 +53,13 @@
  * \brief           Radio object structure
  */
 typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                                   /*!< GUI handle object, must always be first on list */
     
-    uint8_t group_id;                       /*!< Group ID for radio box */
-    uint32_t value;                         /*!< Single radio value when selected */
-    uint32_t selected_value;                /*!< Currently selected value in radio group. 
-                                                    \note       All widgets in the same group share the same value in this field all the time */
-    uint8_t flags;                          /*!< flags for checkbox */
+    uint8_t group_id;                               /*!< Group ID for radio box */
+    uint32_t value;                                 /*!< Single radio value when selected */
+    uint32_t selected_value;                        /*!< Currently selected value in radio group. 
+                                                        \note       All widgets in the same group share the same value in this field all the time */
+    uint8_t flags;                                  /*!< flags for radio */
 } gui_radio_t;
 
 static uint8_t gui_radio_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
@@ -118,11 +118,11 @@ set_active(gui_handle_p h) {
         }
     }
     
-    if (!(o->flags & GUI_FLAG_RADIO_CHECKED)) {   /* Invalidate only if not checked already */
+    if (!(o->flags & GUI_FLAG_RADIO_CHECKED)) {     /* Invalidate only if not checked already */
         gui_widget_invalidate(h);                   /* Invalidate widget */
     }
-    o->flags |= GUI_FLAG_RADIO_CHECKED;       /* Set active flag */
-    o->selected_value = o->value;       /* Set selected value of this radio */
+    o->flags |= GUI_FLAG_RADIO_CHECKED;             /* Set active flag */
+    o->selected_value = o->value;                   /* Set selected value of this radio */
     guii_widget_callback(h, GUI_EVT_SELECTIONCHANGED, NULL, NULL);  /* Call user function */
     
     return 1;
@@ -276,7 +276,7 @@ gui_radio_setgroup(gui_handle_p h, uint8_t groupId) {
                 handle = gui_linkedlist_widgetgetnext(NULL, handle)) {
             o_handle = GUI_VP(handle);
             /* Check if widget is radio box and group is the same as input group */
-            if (handle != h && __GH(handle)->widget == &widget && o_handle->group_id == groupId) {  
+            if (handle != h && o_handle->widget == &widget && o_handle->group_id == groupId) {  
                 o->selected_value = o_handle->selected_value;   /* Set selected value for widget */
                 break;          
             }

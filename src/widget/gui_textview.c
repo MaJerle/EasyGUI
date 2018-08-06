@@ -39,11 +39,11 @@
  * \brief           Textview object structure
  */
 typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                                   /*!< GUI handle object, must always be first on list */
 
-    gui_textalign_valign_t valign;           /*!< Vertical text align */
-    gui_textalign_halign_t halign;           /*!< Horizontal text align */
-    uint8_t flags;                          /*!< Widget flags */
+    gui_textalign_valign_t valign;                  /*!< Vertical text align */
+    gui_textalign_halign_t halign;                  /*!< Horizontal text align */
+    uint8_t flags;                                  /*!< Widget flags */
 } gui_textview_t;
 
 #define CFG_VALIGN          0x01

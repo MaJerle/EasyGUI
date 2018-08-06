@@ -39,10 +39,10 @@
  * \brief           Button object structure
  */
 typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                                   /*!< GUI handle object, must always be first on list */
     
-    gui_dim_t borderwidth;                  /*!< Border width */
-    gui_dim_t borderradius;                 /*!< Border radius */
+    gui_dim_t borderwidth;                          /*!< Border width */
+    gui_dim_t borderradius;                         /*!< Border radius */
 } gui_button_t;
 
 #define CFG_BORDER_RADIUS   0x01

@@ -41,10 +41,10 @@
  * \{
  */
 
-#define GUI_FLAG_DROPDOWN_OPENED        0x01/*!< Dropdown is opened */
-#define GUI_FLAG_DROPDOWN_SLIDER_ON     0x02/*!< Slider is currently active */
-#define GUI_FLAG_DROPDOWN_SLIDER_AUTO   0x04/*!< Show right slider automatically when required, otherwise, manual mode is used */
-#define GUI_FLAG_DROPDOWN_OPEN_UP       0x08/*!< Open dropdown in top direction instead of bottom */
+#define GUI_FLAG_DROPDOWN_OPENED            0x01    /*!< Dropdown is opened */
+#define GUI_FLAG_DROPDOWN_SLIDER_ON         0x02    /*!< Slider is currently active */
+#define GUI_FLAG_DROPDOWN_SLIDER_AUTO       0x04    /*!< Show right slider automatically when required, otherwise, manual mode is used */
+#define GUI_FLAG_DROPDOWN_OPEN_UP           0x08    /*!< Open dropdown in top direction instead of bottom */
 
 /**
  * \}
@@ -55,8 +55,8 @@
  * \brief           Dropdown string item object structure
  */
 typedef struct {
-    gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
-    gui_char* text;                         /*!< Text entry */
+    gui_linkedlist_t list;                          /*!< Linked list entry, must be first on list */
+    gui_char* text;                                 /*!< Text entry */
 } gui_dropdown_item_t;
     
 /**
@@ -64,16 +64,16 @@ typedef struct {
  * \brief           Dropdown object structure
  */
 typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                                   /*!< GUI handle object, must always be first on list */
     
-    int16_t count;                          /*!< Current number of strings attached to this widget */
-    int16_t selected;                       /*!< selected text index */
-    int16_t visiblestartindex;              /*!< Index in array of string on top of visible area of widget */
+    int16_t count;                                  /*!< Current number of strings attached to this widget */
+    int16_t selected;                               /*!< selected text index */
+    int16_t visiblestartindex;                      /*!< Index in array of string on top of visible area of widget */
     
-    gui_linkedlistroot_t root;              /*!< Root of linked list entries */
+    gui_linkedlistroot_t root;                      /*!< Root of linked list entries */
     
-    gui_dim_t sliderwidth;                  /*!< Slider width in units of pixels */
-    uint8_t flags;                          /*!< Widget flags \ref GUI_DROPDOWN_FLAGS */
+    gui_dim_t sliderwidth;                          /*!< Slider width in units of pixels */
+    uint8_t flags;                                  /*!< Widget flags \ref GUI_DROPDOWN_FLAGS */
 } gui_dropdown_t;
 
 static uint8_t gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);

@@ -39,11 +39,11 @@
  * \brief           List container object structure
  */
 typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                                   /*!< GUI handle object, must always be first on list */
     
-    gui_listcontainer_mode_t mode;          /*!< List container type */
-    gui_dim_t maxscrollx;                   /*!< Maximal scroll on X axis */
-    gui_dim_t maxscrolly;                   /*!< Maximal scroll on Y axis */
+    gui_listcontainer_mode_t mode;                  /*!< List container type */
+    gui_dim_t maxscrollx;                           /*!< Maximal scroll on X axis */
+    gui_dim_t maxscrolly;                           /*!< Maximal scroll on Y axis */
 } gui_listcontainer_t;
 
 #define CFG_MODE            0x01

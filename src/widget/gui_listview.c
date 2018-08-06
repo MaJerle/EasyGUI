@@ -41,8 +41,8 @@
  * \{
  */
 
-#define GUI_FLAG_LISTVIEW_SLIDER_ON     0x01/*!< Slider is currently active */
-#define GUI_FLAG_LISTVIEW_SLIDER_AUTO   0x02/*!< Show right slider automatically when required, otherwise, manual mode is used */
+#define GUI_FLAG_LISTVIEW_SLIDER_ON         0x01    /*!< Slider is currently active */
+#define GUI_FLAG_LISTVIEW_SLIDER_AUTO       0x02    /*!< Show right slider automatically when required, otherwise, manual mode is used */
 
 /**
  * \}
@@ -53,8 +53,8 @@
  * \brief           Listview main row item
  */
 typedef struct gui_listview_row {
-    gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
-    gui_linkedlistroot_t root;              /*!< Linked list root entry for \ref gui_listview_item_t column data entries */
+    gui_linkedlist_t list;                          /*!< Linked list entry, must be first on list */
+    gui_linkedlistroot_t root;                      /*!< Linked list root entry for \ref gui_listview_item_t column data entries */
 } gui_listview_row_t;
 
 /**
@@ -62,9 +62,9 @@ typedef struct gui_listview_row {
  * \brief           Listview column item
  */
 typedef struct gui_listview_col {
-    gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
-    gui_dim_t width;                       /*!< Column width in units of pixels */
-    gui_char* text;                         /*!< Header column text size */
+    gui_linkedlist_t list;                          /*!< Linked list entry, must be first on list */
+    gui_dim_t width;                                /*!< Column width in units of pixels */
+    gui_char* text;                                 /*!< Header column text size */
 } gui_listview_col_t;
 
 /**
@@ -72,8 +72,8 @@ typedef struct gui_listview_col {
  * \brief           Listview string item object
  */
 typedef struct gui_listview_item {
-    gui_linkedlist_t list;                  /*!< Linked list entry, must be first on list */
-    gui_char* text;                         /*!< Text entry */
+    gui_linkedlist_t list;                          /*!< Linked list entry, must be first on list */
+    gui_char* text;                                 /*!< Text entry */
 } gui_listview_item_t;
     
 /**
@@ -81,21 +81,21 @@ typedef struct gui_listview_item {
  * \brief           Listview object structure
  */
 typedef struct {
-    gui_handle C;                           /*!< GUI handle object, must always be first on list */
+    gui_handle C;                                   /*!< GUI handle object, must always be first on list */
     
     /* Use colums as pointer to array for faster data access */
-    gui_listview_col_t** cols;              /*!< Pointer to pointers of column elements */
-    uint16_t col_count;                     /*!< Number of columns in listview package */
+    gui_listview_col_t** cols;                      /*!< Pointer to pointers of column elements */
+    uint16_t col_count;                             /*!< Number of columns in listview package */
     
     /* Use linked list for rows */
-    gui_linkedlistroot_t root;              /*!< Linked list root entry for \ref gui_listview_row_t for rows */
+    gui_linkedlistroot_t root;                      /*!< Linked list root entry for \ref gui_listview_row_t for rows */
     
-    int16_t count;                          /*!< Current number of strings attached to this widget */
-    int16_t selected;                       /*!< selected text index */
-    int16_t visiblestartindex;              /*!< Index in array of string on top of visible area of widget */
+    int16_t count;                                  /*!< Current number of strings attached to this widget */
+    int16_t selected;                               /*!< selected text index */
+    int16_t visiblestartindex;                      /*!< Index in array of string on top of visible area of widget */
     
-    gui_dim_t sliderwidth;                  /*!< Slider width in units of pixels */
-    uint8_t flags;                          /*!< Widget flags */
+    gui_dim_t sliderwidth;                          /*!< Slider width in units of pixels */
+    uint8_t flags;                                  /*!< Widget flags */
 } gui_listview_t;
 
 static uint8_t gui_listview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
@@ -304,7 +304,8 @@ static uint8_t
 gui_listview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
     gui_listview_t* o = GUI_VP(h);
 #if GUI_CFG_USE_TOUCH
-    static gui_dim_t tx, ty;
+    static gui_dim_t ty;
+    static gui_listview_col_t* column_slide;
 #endif /* GUI_CFG_USE_TOUCH */
     
     switch (ctrl) {
@@ -438,47 +439,70 @@ gui_listview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
         }
 #if GUI_CFG_USE_TOUCH
         case GUI_EVT_TOUCHSTART: {
+            size_t i;
             guii_touch_data_t* ts = GUI_EVT_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            tx = ts->x_rel[0];                      /* Save X position */
+            gui_dim_t height = item_height(h, NULL);    /* Get element height */
+            
             ty = ts->y_rel[0];                      /* Save Y position */
             
-            /* \todo Check if press was on header are to change width of columns */
+            /* Check column slide */
+            column_slide = NULL;
+            if (ts->y_rel[0] < height) {            /* Try to find column to slide */
+                gui_dim_t sum = 0;
+                for (i = 0; i < o->col_count; i++) {
+                    sum += o->cols[i]->width;
+                    if (GUI_ABS(ts->x_rel[0] - sum) < 10) {
+                        column_slide = o->cols[i];
+                        break;
+                    }
+                }
+            }
 
             GUI_EVT_RESULTTYPE_TOUCH(result) = touchHANDLED;
             return 1;
         }
         case GUI_EVT_TOUCHMOVE: {
+            gui_dim_t diff;
+            size_t i;
             guii_touch_data_t* ts = GUI_EVT_PARAMTYPE_TOUCH(param);  /* Get touch data */
-            if (h->font != NULL) {
-                gui_dim_t diff;
-                gui_dim_t height = item_height(h, NULL);   /* Get element height */
-                
-                diff = ty - ts->y_rel[0];
-                if (GUI_ABS(diff) > height) {       /* Difference must be greater than 1 height entry */
-                    slide(h, diff > 0 ? 1 : -1);    /* Slide widget */
-                    ty = ts->y_rel[0];
+            gui_dim_t height = item_height(h, NULL);   /* Get element height */
+            
+            /* Horizontal slide */
+            if (column_slide != NULL) {
+                /* Check if column slide exists in this widget! */
+                for (i = 0; i < o->col_count; i++) {
+                    if (o->cols[i] == column_slide) {
+                        break;
+                    }
                 }
-                
-                if (ts->y_rel[0] < height) {        /* Check if we are in top region part */
-                    uint16_t i;
-                    gui_dim_t sum = 0;
-                    
-                    diff = -ts->x_diff[0];
-                    for (i = 0; i < o->col_count; i++) {/* Check X position for column first */
-                        sum += o->cols[i]->width;   /* Check width */
-                        if (GUI_ABS(tx - sum) < 10) {
-                            break;
-                        }
+                /* Check matches */
+                if (i == o->col_count) {
+                    column_slide = NULL;
+                } else {
+                    column_slide->width += ts->x_diff[0];
+                    if (column_slide->width < 0) {
+                        column_slide->width = 0;
                     }
-                    if (i != o->col_count) {
-                        if (o->cols[i]->width - diff >= 4) {
-                            o->cols[i]->width -= diff;  /* Set new width for difference */
-                        }
-                        tx = ts->x_rel[0];          /* Set new start X position for relative calculation */
-                        gui_widget_invalidate(h);
-                    }
+                    gui_widget_invalidate(h);
                 }
             }
+            
+            /* Possible vertical slide? */
+            if (column_slide == NULL) {
+                /*
+                 * Check slide vertical difference
+                 * and save current relative value in case of slide event
+                 */
+                diff = ty - ts->y_rel[0];
+                if (GUI_ABS(diff) > height) {
+                    slide(h, diff > 0 ? 1 : -1);
+                    ty = ts->y_rel[0];
+                }
+            }
+            return 1;
+        }
+        case GUI_EVT_TOUCHEND: {
+            column_slide = NULL;
             return 1;
         }
 #endif /* GUI_CFG_USE_TOUCH */
@@ -520,7 +544,6 @@ gui_listview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                     if (ts->x_rel[0] > sum && ts->x_rel[0] < (sum + o->cols[i]->width)) {
                         break;
                     }
-                        
                     sum += o->cols[i]->width;       /* Increase sum value */
                 }
                 if (i != o->col_count) {            /* We have value */
