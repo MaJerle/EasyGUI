@@ -391,6 +391,7 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, gui_touch_data_t* old, uin
                 if (i && (GUI_ABS(x[0] - x[1]) > 30 || GUI_ABS(y[0] - y[1]) > 30)) {
                     i = 0;
                 }
+                set_relative_coordinate(ts, old, GUI.active_widget);
                 if (
                     x[0] < 0 || x[0] > ts->widget_width ||
                     y[0] < 0 || y[0] > ts->widget_height ||
@@ -399,7 +400,6 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, gui_touch_data_t* old, uin
                     ) {
                     PT_EXIT(&ts->pt);               /* Exit thread, invalid coordinate for touch click or double click */
                 }
-                
                 if (!i) {                           /* On first call, this is click event */
                     *result = GUI_EVT_CLICK;        /* Click event occurred */
 
