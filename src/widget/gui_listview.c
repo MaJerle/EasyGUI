@@ -33,6 +33,7 @@
 #define GUI_INTERNAL
 #include "gui/gui_private.h"
 #include "widget/gui_listview.h"
+#include "widget/gui_widget_list.h"
     
 /**
  * \ingroup         GUI_LISTVIEW
@@ -72,7 +73,7 @@ typedef struct gui_listview_col {
  * \brief           Listview string item object
  */
 typedef struct gui_listview_item {
-    gui_linkedlist_t list;                          /*!< Linked list entry, must be first on list */
+    gui_linkedlist_t list;                          /*!< Linked list entry, must always be first on list */
     gui_char* text;                                 /*!< Text entry */
 } gui_listview_item_t;
     
@@ -91,8 +92,9 @@ typedef struct {
     gui_linkedlistroot_t root;                      /*!< Linked list root entry for \ref gui_listview_row_t for rows */
     
     int16_t count;                                  /*!< Current number of strings attached to this widget */
-    int16_t selected;                               /*!< selected text index */
     int16_t visiblestartindex;                      /*!< Index in array of string on top of visible area of widget */
+    
+    int16_t selected;                               /*!< selected text index */
     
     gui_dim_t sliderwidth;                          /*!< Slider width in units of pixels */
     uint8_t flags;                                  /*!< Widget flags */
@@ -129,38 +131,49 @@ gui_widget_t widget = {
 
 /* Get item from listview entry */
 static gui_listview_row_t*
-get_row(gui_handle_p h, uint16_t r) {
-    gui_listview_row_t* row = NULL;
+get_row(gui_handle_p h, uint16_t index) {
     gui_listview_t* o = GUI_VP(h);
+    void* ret;
     
-    if (r >= o->count) {                            /* Check if valid index */
-        return 0;
+    if (index >= o->count) {
+        return NULL;
     }
     
-    if (r == 0) {                                   /* Check for first element */
-        row = (gui_listview_row_t *)gui_linkedlist_getnext_gen(&o->root, 0);/* Get first element */
-    } else if (r == o->count - 1) {
-        row = (gui_listview_row_t *)gui_linkedlist_getprev_gen(&o->root, 0);/* Get last element */
+    if (index == 0) {
+        ret = gui_linkedlist_getnext_gen(&o->root, NULL);
+    } else if (index == o->count - 1) {
+        ret = gui_linkedlist_getprev_gen(&o->root, NULL);
     } else {
-        row = (gui_listview_row_t *)gui_linkedlist_getnext_byindex_gen(&o->root, r);/* Get row by index */
+        ret = gui_linkedlist_getnext_byindex_gen(&o->root, index);
     }
-    return row;
+    return ret;
 }
 
 /* Get item pointer from row pointer and column index */
 static gui_listview_item_t *
 get_item_for_row(gui_handle_p h, gui_listview_row_t* row, uint16_t c) {
-    if (row == NULL) {                              /* Check input value if exists */
+    gui_listview_t* o = GUI_VP(h);
+    
+    if (row == NULL || c >= o->col_count) {
         return NULL;
     }
     
-    return (gui_listview_item_t *)gui_linkedlist_getnext_byindex_gen(&row->root, c);/* Get item by index value = column number */
+    /* Get item by index value = column number */
+    return (void *)gui_linkedlist_getnext_byindex_gen(&row->root, c);
 }
 
-/* Get item height in LISTVIEW */
+/**
+ * \brief           Get size of entry in units of pixels
+ * \param[in]       h: Widget handle
+ * \param[out]      offset: Offset in units of pixels for text Y position in single item
+ * \return          Item height in units of pixels
+ */
 static gui_dim_t
-item_height(gui_handle_p h, gui_dim_t* offset) {
-    gui_dim_t size = GUI_DIM((float)h->font->size * 1.3f);
+item_height(gui_handle_p h, uint16_t* offset) {
+    gui_dim_t size = 0;
+    if (h->font != NULL) {
+        size = GUI_DIM((float)h->font->size * 1.3f);
+    }
     if (offset != NULL) {                           /* Calculate top offset */
         *offset = (size - h->font->size) >> 1;
     }
