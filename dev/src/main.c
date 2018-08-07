@@ -53,7 +53,6 @@ main(void) {
 	}
 }
 
-
 /**
  * \brief           Initialization thread for system
  */
