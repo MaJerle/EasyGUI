@@ -58,6 +58,13 @@ extern "C" {
  * \{
  */
 
+/**
+ * \name            GUI_FLAGS_WIDGET Widget flags
+ * \anchor          GUI_FLAGS_WIDGET
+ * \brief           Widget flags
+ * \{
+ */
+
 #define GUI_FLAG_REDRAW                     ((uint32_t)0x00000001)  /*!< Indicates widget should be redrawn */
 #define GUI_FLAG_CHILD                      ((uint32_t)0x00000002)  /*!< Indicates widget is child (window) */
 #define GUI_FLAG_DYNAMICTEXTALLOC           ((uint32_t)0x00000004)  /*!< Indicates memory for text has been dynamically allocated */
@@ -77,8 +84,13 @@ extern "C" {
 #define GUI_FLAG_TOUCH_MOVE                 ((uint32_t)0x00010000)  /*!< Indicates widget callback has processed touch move event. This parameter works in conjunction with \ref GUI_FLAG_ACTIVE flag */
 
 /**
- * \defgroup        GUI_WIDGETS_CORE_FLAGS Widget type flags
- * \brief           flags used for widget type description
+ * \}
+ */
+
+/**
+ * \name            GUI_FLAGS_WIDGET_CORE Widget base flags
+ * \anchor          GUI_FLAGS_WIDGET_CORE
+ * \brief           Widget description flags
  * \{
  */
 
@@ -93,11 +105,32 @@ extern "C" {
 #define GUI_FLAG_LCD_WAIT_LAYER_CONFIRM     ((uint32_t)0x00000001)  /*!< Indicates waiting for layer change confirmation */
 
 /**
+ * \name            GUI_FLAG_ALIGN Alignment flags
+ * \anchor          GUI_FLAG_ALIGN
+ * \brief           Alignment flags used for drawing
+ * \{
+ */
+
+#define GUI_HALIGN_MASK                 0x03
+#define GUI_HALIGN_LEFT                 0x00/*!< Horizontal align is left */ 
+#define GUI_HALIGN_CENTER               0x01/*!< Horizontal align is center */
+#define GUI_HALIGN_RIGHT                0x02/*!< Horizontal align is right */
+
+#define GUI_VALIGN_MASK                 (0x03 << 2)
+#define GUI_VALIGN_TOP                  (0x00 << 2) /*!< Vertical align is top */
+#define GUI_VALIGN_CENTER               (0x01 << 2) /*!< Vertical align is center */
+#define GUI_VALIGN_BOTTOM               (0x02 << 2) /*!< Vertical align is bottom */         
+
+/**
  * \}
  */
 
 /**
- * \defgroup        GUI_Keys List of special keys
+ * \}
+ */
+
+/**
+ * \defgroup        GUI_KEYS List of special keys
  * \brief           List of used special keys for keyboard emulation
  * \{
  *
@@ -197,15 +230,26 @@ typedef uint8_t     gui_char;               /*!< GUI char data type for all stri
  */
 #define             gui_containerof(ptr, type, memb)      (type *)((char *)(ptr) - (char *)offsetof(type, memb))
 
-#define GUI_U8(x)                           ((uint8_t)(x))
-#define GUI_I8(x)                           ((int8_t)(x))
-#define GUI_U16(x)                          ((uint16_t)(x))
-#define GUI_I16(x)                          ((int16_t)(x))
-#define GUI_U32(x)                          ((uint32_t)(x))
-#define GUI_I32(x)                          ((int32_t)(x))
-#define GUI_VP(x)                           ((void *)(x))
-#define GUI_FLOAT(x)                        ((float)(x))
-#define GUI_DIM(x)                          ((gui_dim_t)(x))
+/**
+ * \name            GUI_CAST Casting macros
+ * \anchor          GUI_CAST
+ * \brief           Helpers to cast result to different type
+ * \{
+ */
+
+#define GUI_U8(x)                           ((uint8_t)(x))      /*!< Result casted to `uint8_t` */
+#define GUI_I8(x)                           ((int8_t)(x))       /*!< Result casted to `int8_t` */
+#define GUI_U16(x)                          ((uint16_t)(x))     /*!< Result casted to `uint16_t` */
+#define GUI_I16(x)                          ((int16_t)(x))      /*!< Result casted to `int16_t` */
+#define GUI_U32(x)                          ((uint32_t)(x))     /*!< Result casted to `uint32_t` */
+#define GUI_I32(x)                          ((int32_t)(x        /*!< Result casted to `int32_t` */
+#define GUI_VP(x)                           ((void *)(x))       /*!< Result casted to `void *` */
+#define GUI_FLOAT(x)                        ((float)(x))        /*!< Result casted to `float` */
+#define GUI_DIM(x)                          ((gui_dim_t)(x))    /*!< Result casted to `gui_dim_t` */
+
+/**
+ * \}
+ */
 
 /**
  * \brief           Basic widget structure
@@ -241,7 +285,7 @@ typedef enum {
 /**
  * \brief           Touch internal processing enumeration
  */
-typedef enum guii_touch_status_t {
+typedef enum {
     touchHANDLED = 0x00,                    /*!< Touch has been handled */
     touchHANDLEDNOFOCUS,                    /*!< Touch has been handled but widget is not in focus state (used for widget who don't have touch events) */
     touchCONTINUE                           /*!< Touch has not been handled and further checking can be done */
@@ -250,7 +294,7 @@ typedef enum guii_touch_status_t {
 /**
  * \brief           Single touch data structure
  */
-typedef struct gui_touch_data_t {
+typedef struct {
     uint8_t count;                          /*!< Number of touches detected */
     gui_dim_t x[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Touch X coordinate */
     gui_dim_t y[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Touch Y coordinate */
@@ -262,22 +306,22 @@ typedef struct gui_touch_data_t {
  * \brief           Internal touch structure used for widget callbacks
  */
 typedef struct {
-    gui_touch_data_t ts;                    /*!< Touch structure from outside */
+    gui_touch_data_t ts;                    /*!< Touch data structure, used to read from buffer */
 
-    gui_dim_t x_old[GUI_CFG_TOUCH_MAX_PRESSES];
-    gui_dim_t y_old[GUI_CFG_TOUCH_MAX_PRESSES];
-    gui_dim_t x_rel[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Relative X position to current widget */
-    gui_dim_t y_rel[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Relative Y position to current widget */
-    gui_dim_t x_diff[GUI_CFG_TOUCH_MAX_PRESSES];/*!< X difference between old and new touch position */
-    gui_dim_t y_diff[GUI_CFG_TOUCH_MAX_PRESSES];/*!< Y difference between old and new touch position */
+    gui_dim_t x_old[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Old absolute `X` position */
+    gui_dim_t y_old[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Old absolute `Y` position */
+    gui_dim_t x_rel[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Relative `X` position to current widget */
+    gui_dim_t y_rel[GUI_CFG_TOUCH_MAX_PRESSES]; /*!< Relative `Y` position to current widget */
+    gui_dim_t x_diff[GUI_CFG_TOUCH_MAX_PRESSES];/*!< `X` difference between old and new touch position */
+    gui_dim_t y_diff[GUI_CFG_TOUCH_MAX_PRESSES];/*!< `Y` difference between old and new touch position */
 
-    gui_dim_t widget_x;                     /*!< Widget X position */
-    gui_dim_t widget_y;                     /*!< Widget Y position */
-    gui_dim_t widget_width;                 /*!< Save widget width value */
-    gui_dim_t widget_height;                /*!< Save widget height value */
+    gui_dim_t widget_x;                     /*!< Widget absolute `X` position */
+    gui_dim_t widget_y;                     /*!< Widget absolute `Y` position */
+    gui_dim_t widget_width;                 /*!< Widget width */
+    gui_dim_t widget_height;                /*!< Widget height */
 #if GUI_CFG_TOUCH_MAX_PRESSES > 1 || __DOXYGEN__
-    float distance;                         /*!< Distance between 2 points when 2 touch elements are detected */
-    float distance_old;                     /*!< Old distance between 2 points */
+    float distance_old;                     /*!< Old distance between `2` points */
+    float distance;                         /*!< Distance between `2` points when `2` touch elements are detected */
 #endif /* GUI_CFG_TOUCH_MAX_PRESSES > 1 || __DOXYGEN__ */
     struct pt pt;                           /*!< Protothread structure */
 } guii_touch_data_t;

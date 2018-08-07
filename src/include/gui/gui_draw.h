@@ -137,26 +137,6 @@ extern "C" {
 #define GUI_DRAW_CIRCLE_TR              0x02/*!< Draw top right part of circle */
 #define GUI_DRAW_CIRCLE_BR              0x04/*!< Draw bottom left part of circle */
 #define GUI_DRAW_CIRCLE_BL              0x08/*!< Draw bottom right part of circle */
-    
-/**
- * \name            GUI_FLAG_ALIGN Alignment flags
- * \anchor          GUI_FLAG_ALIGN
- * \{
- */
-
-#define GUI_HALIGN_MASK                 0x03
-#define GUI_HALIGN_LEFT                 0x00/*!< Horizontal align is left */ 
-#define GUI_HALIGN_CENTER               0x01/*!< Horizontal align is center */
-#define GUI_HALIGN_RIGHT                0x02/*!< Horizontal align is right */
-
-#define GUI_VALIGN_MASK                 (0x03 << 2)
-#define GUI_VALIGN_TOP                  (0x00 << 2) /*!< Vertical align is top */
-#define GUI_VALIGN_CENTER               (0x01 << 2) /*!< Vertical align is center */
-#define GUI_VALIGN_BOTTOM               (0x02 << 2) /*!< Vertical align is bottom */         
-
-/**
- * \}
- */
 
 /**
  * \brief           Structure for drawing strings on widgets
