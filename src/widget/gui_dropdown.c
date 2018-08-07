@@ -33,6 +33,7 @@
 #define GUI_INTERNAL
 #include "gui/gui_private.h"
 #include "widget/gui_dropdown.h"
+#include "widget/gui_widget_list.h"
 
 /**
  * \ingroup         GUI_DROPDOWN
@@ -55,7 +56,7 @@
  * \brief           Dropdown string item object structure
  */
 typedef struct {
-    gui_linkedlist_t list;                          /*!< Linked list entry, must be first on list */
+    gui_linkedlist_t list;                          /*!< Linked list entry, must always be first on list */
     gui_char* text;                                 /*!< Text entry */
 } gui_dropdown_item_t;
     
@@ -66,11 +67,8 @@ typedef struct {
 typedef struct {
     gui_handle C;                                   /*!< GUI handle object, must always be first on list */
     
-    int16_t count;                                  /*!< Current number of strings attached to this widget */
-    int16_t selected;                               /*!< selected text index */
-    int16_t visiblestartindex;                      /*!< Index in array of string on top of visible area of widget */
-    
-    gui_linkedlistroot_t root;                      /*!< Root of linked list entries */
+    gui_widget_listdata_t ld;                       /*!< List data handle */
+    int16_t selected;                               /*!< Selected text index */
     
     gui_dim_t sliderwidth;                          /*!< Slider width in units of pixels */
     uint8_t flags;                                  /*!< Widget flags \ref GUI_DROPDOWN_FLAGS */
@@ -126,17 +124,29 @@ get_opened_positions(gui_handle_p h, gui_dim_t* y, gui_dim_t* height, gui_dim_t*
     *height -= *height1;                            /* Height of opened part */
 }
 
-/* Get item height in dropdown list */
-static uint16_t
+/**
+ * \brief           Get size of entry in units of pixels
+ * \param[in]       h: Widget handle
+ * \param[out]      offset: Offset in units of pixels for text Y position in single item
+ * \return          Item height in units of pixels
+ */
+static gui_dim_t
 item_height(gui_handle_p h, uint16_t* offset) {
-    uint16_t size = GUI_U16((float)h->font->size * 1.3f);
+    gui_dim_t size = 0;
+    if (h->font != NULL) {
+        size = GUI_DIM((float)h->font->size * 1.3f);
+    }
     if (offset != NULL) {                           /* Calculate top offset */
         *offset = (size - h->font->size) >> 1;
     }
     return size;                                    /* Return height for element */
 }
 
-/* Get number of entries maximal on one page */
+/**
+ * \brief           Maximal number of entries per page callback
+ * \param[in]       h: Widget handle
+ * \return          Number of entries per page
+ */
 static int16_t
 nr_entries_pp(gui_handle_p h) {
     int16_t res = 0;
@@ -152,7 +162,12 @@ nr_entries_pp(gui_handle_p h) {
     return res;
 }
 
-/* Open or close dropdown widget */
+/**
+ * \brief           Open/Close widget state
+ * \param[in]       h: Widget handle
+ * \param[in]       state: State to open or close
+ * \return          `1` on success, `0` otherwise
+ */
 static uint8_t
 open_close(gui_handle_p h, uint8_t state) {
     gui_dropdown_t* o = GUI_VP(h);
@@ -185,16 +200,14 @@ open_close(gui_handle_p h, uint8_t state) {
             );
         }
 
-        if (o->selected == -1) {                    /* Go to top selection */
-            o->visiblestartindex = 0;               /* Start from top again */
-        } else {                                    /* We have one selection */
+        /* Set visible display when opened */
+        if (o->selected == -1) {
+            o->ld.visiblestartindex = 0;
+        } else {
             int16_t perPage = nr_entries_pp(h);
-            o->visiblestartindex = o->selected;
-            if ((o->visiblestartindex + perPage) >= o->count) {
-                o->visiblestartindex = o->count - perPage;
-                if (o->visiblestartindex < 0) {
-                    o->visiblestartindex = 0;
-                }
+            o->ld.visiblestartindex = o->selected;
+            if ((o->ld.visiblestartindex + perPage) >= gui_widget_list_get_count(h, &o->ld)) {
+                o->ld.visiblestartindex = gui_widget_list_get_count(h, &o->ld) - perPage;
             }
         }
         return 1;
@@ -202,151 +215,71 @@ open_close(gui_handle_p h, uint8_t state) {
     return 0;
 }
 
-/* Slide up or slide down widget elements */
-static void
-slide(gui_handle_p h, int16_t dir) {
-    gui_dropdown_t* o = GUI_VP(h);
-    int16_t mPP = nr_entries_pp(h);
-    if (dir < 0) {                                  /* Slide elements up */
-        if ((o->visiblestartindex + dir) < 0) {
-            o->visiblestartindex = 0;
-        } else {
-            o->visiblestartindex += dir;
-        }
-        gui_widget_invalidate(h);                   /* Invalidate widget */
-    } else if (dir > 0) {
-        if ((o->visiblestartindex + dir) > (o->count - mPP - 1)) {  /* Slide elements down */
-            o->visiblestartindex = o->count - mPP;
-        } else {
-            o->visiblestartindex += dir;
-        }
-        gui_widget_invalidate(h);                   /* Invalidate widget */
-    }
-}
-
-/* Set selection for widget */
-static void
-set_selection(gui_handle_p h, int16_t selected) {
-    gui_dropdown_t* o = GUI_VP(h);
-    if (o->selected != selected) {
-        o->selected = selected;
-        guii_widget_callback(h, GUI_EVT_SELECTIONCHANGED, NULL, NULL);  /* Notify about selection changed */
-    }                         
-}
-
-/* Get item from listbox entry */
-static gui_dropdown_item_t*
-get_item(gui_handle_p h, uint16_t index) {
-    uint16_t i = 0;
-    gui_dropdown_item_t* item = 0;
-    gui_dropdown_t* o = GUI_VP(h);
-    
-    if (index >= o->count) {                        /* Check if valid index */
-        return 0;
-    }
-    
-    if (index == 0) {                               /* Check for first element */
-        return (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->root, NULL);   /* Return first element */
-    } else if (index == o->count - 1) {
-        return (gui_dropdown_item_t *)gui_linkedlist_getprev_gen(&o->root, NULL);   /* Return last element */
-    }
-    
-    item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->root, NULL);
-    while (i++ < index) {
-        item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(NULL, &item->list);
-    }
-    return item;
-}
-
 /**
- * \brief           Check new values of widget.
- *
- *                  Scans new selected items, count, checks if valid selected item exists, etc
- * 
+ * \brief           Check new values callback
  * \param[in]       h: Widget handle
+ * \return          `1` on success, `0` otherwise
  */
-static void
+static uint8_t
 check_values(gui_handle_p h) {
     gui_dropdown_t* o = GUI_VP(h);
-    int16_t mPP = nr_entries_pp(h);                 /* Get number of lines visible in widget at a time */
-   
-    if (o->selected >= 0) {                         /* Check for selected value range */
-        if (o->selected >= o->count) {
-            set_selection(h, o->count - 1);
-        }
-    }
-    if (o->visiblestartindex < 0) {                 /* Check visible start index position */
-        o->visiblestartindex = 0;
-    } else if (o->visiblestartindex > 0) {
-        if (o->count > mPP) {
-            if (o->visiblestartindex + mPP >= o->count) {
-                o->visiblestartindex = o->count - mPP;
-            }
-        }
-    }
     
     if (o->flags & GUI_FLAG_DROPDOWN_SLIDER_AUTO) { /* Check slider mode */
-        if (o->count > mPP) {
+        if (gui_widget_list_get_count(h, &o->ld) > nr_entries_pp(h)) {
             o->flags |= GUI_FLAG_DROPDOWN_SLIDER_ON;
         } else {
             o->flags &= ~GUI_FLAG_DROPDOWN_SLIDER_ON;
         }
     }
+    return 1;
 }
 
-/* Increase or decrease selection */
-static void
-inc_selection(gui_handle_p h, int16_t dir) {
-    gui_dropdown_t* o = GUI_VP(h);
-    if (dir < 0) {                                  /* Slide elements up */
-        if ((o->selected + dir) < 0) {
-            set_selection(h, 0);
-        } else {
-            set_selection(h, o->selected + dir);
-        }
-        gui_widget_invalidate(h);                   /* Invalidate widget */
-    } else if (dir > 0) {
-        if ((o->selected + dir) > (o->count - 1)) { /* Slide elements down */
-            set_selection(h, o->count - 1);
-        } else {
-            set_selection(h, o->selected + dir);
-        }
-        gui_widget_invalidate(h);                   /* Invalidate widget */
-    }
-}
-
-/* Delete list item box by index */
+/**
+ * \brief           Delete item from widget and check values
+ * \param[in]       h: Widget handle
+ * \param[in]       index: Index to remove
+ * \return          `1` on success, `0` otherwise
+ */
 static uint8_t
-delete_item(gui_handle_p h, uint16_t index) {
+delete_item(gui_handle_p h, int16_t index) {
     gui_dropdown_t* o = GUI_VP(h);
-    gui_dropdown_item_t* item;
     
-    item = get_item(h, index);                      /* Get list item from handle */
-    if (item != NULL) {
-        gui_linkedlist_remove_gen(&o->root, &item->list);
-        GUI_MEMFREE(item);
-        item = NULL;
-        o->count--;
-        
+    /* Try to remove item */
+    if (gui_widget_list_remove_item_byindex(h, &o->ld, index)) {
         if (o->selected == index) {
-            set_selection(h, -1);
+            gui_widget_list_set_selection(h, &o->ld, &o->selected, -1);
         }
-        
-        check_values(h);
+        gui_widget_list_check_values(h, &o->ld);
         gui_widget_invalidate(h);
-        return 1;
     }
-    return 0;
+    return 1;
 }
 
-/* Process widget click event */
+/**
+ * \brief           Remove memory for item callback
+ * \param[in]       h: Widget handle
+ * \param[in]       item: Item handle
+ * \return          `1` on success, `0` otherwise
+ */
+static uint8_t
+remove_item_memory(gui_handle_p h, void* item) {
+    GUI_MEMFREE(item);
+    return 1;
+}
+
+/**
+ * \brief           Process click event and decide to open/close widget or choose selection
+ * \param[in]       h: Widget handle
+ * \param[in]       ts: Touch data
+ */
 static void
 process_click(gui_handle_p h, guii_touch_data_t* ts) {
     gui_dropdown_t* o = GUI_VP(h);
     gui_dim_t y, y1, height, height1;
     
-    if (!is_opened(h)) {                            /* Check if opened */
-        open_close(h, 1);                           /* Open widget on click */
+    /* Click on closed widget may only open it */
+    if (!is_opened(h)) {
+        open_close(h, 1);
         return;
     }
     
@@ -365,11 +298,11 @@ process_click(gui_handle_p h, guii_touch_data_t* ts) {
         } else {
             tmpselected = (ts->y_rel[0] - height1) / item_height(h, NULL);  /* Get temporary selected index */
         }
-        if ((o->visiblestartindex + tmpselected) < o->count) {
-            set_selection(h, o->visiblestartindex + tmpselected);
-            gui_widget_invalidate(h);              /* Choose new selection */
+        if ((o->ld.visiblestartindex + tmpselected) < o->ld.count) {
+            gui_widget_list_set_selection(h, &o->ld, &o->selected, o->ld.visiblestartindex + tmpselected);
+            gui_widget_invalidate(h);
         }
-        check_values(h);                            /* Check values */
+        gui_widget_list_check_values(h, &o->ld);    /* Check values */
     }
     open_close(h, 0);                               /* Close widget on click */
 }
@@ -394,6 +327,11 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
             o->selected = -1;                 /* Invalidate selection */
             o->sliderwidth = 30;              /* Set slider width */
             o->flags |= GUI_FLAG_DROPDOWN_SLIDER_AUTO;    /* Enable slider auto mode */
+            
+            gui_widget_list_init(h, &o->ld);
+            o->ld.check_values_cb = check_values;
+            o->ld.entries_per_page_cb = nr_entries_pp;
+            o->ld.remove_item_cb = remove_item_memory;
             return 1;
         }
         case GUI_EVT_DRAW: {
@@ -428,7 +366,7 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                 gui_dropdown_item_t* item;
                 gui_draw_text_init(&f);             /* Init structure */
                 
-                item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->root, NULL);
+                item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->ld.root, NULL);
                 for (i = 0; i < o->selected; i++) {
                     item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item);
                 }
@@ -446,7 +384,7 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
             if (is_opened(h) && o->flags & GUI_FLAG_DROPDOWN_SLIDER_ON) {
                 gui_draw_sb_t sb;
                 
-                width -= o->sliderwidth;      /* Available width is decreased */
+                width -= o->sliderwidth;            /* Available width is decreased */
                 
                 gui_draw_scrollbar_init(&sb);
                 
@@ -455,8 +393,8 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                 sb.width = o->sliderwidth;
                 sb.height = height - 2;
                 sb.dir = GUI_DRAW_SB_DIR_VERTICAL;
-                sb.entriestop = o->visiblestartindex;
-                sb.entriestotal = o->count;
+                sb.entriestop = o->ld.visiblestartindex;
+                sb.entriestotal = o->ld.count;
                 sb.entriesvisible = nr_entries_pp(h);
                 
                 gui_draw_scrollbar(disp, &sb);      /* Draw scroll bar */
@@ -464,7 +402,7 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                 width--;                            /* Go down for one for alignment on non-slider */
             }
             
-            if (is_opened(h) && h->font != NULL && gui_linkedlist_hasentries(&o->root)) {
+            if (is_opened(h) && h->font != NULL && gui_linkedlist_hasentries(&o->ld.root)) {
                 gui_draw_text_t f;
                 gui_dropdown_item_t* item;
                 uint16_t yOffset;
@@ -489,9 +427,9 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                 }
                 
                 /* Try to process all strings */
-                for (index = 0, item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->root, NULL); item != NULL && f.y <= disp->y2;
+                for (index = 0, item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->ld.root, NULL); item != NULL && f.y <= disp->y2;
                         item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
-                    if (index < o->visiblestartindex) { /* Check for start visible */
+                    if (index < o->ld.visiblestartindex) { /* Check for start visible */
                         continue;
                     }
                     if (index == o->selected) {
@@ -508,10 +446,7 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
             return 1;
         }
         case GUI_EVT_REMOVE: {
-            gui_dropdown_item_t* item;
-            while ((item = (gui_dropdown_item_t *)gui_linkedlist_remove_gen(&o->root, (gui_linkedlist_t *)gui_linkedlist_getnext_gen(&o->root, NULL))) != NULL) {
-                GUI_MEMFREE(item);
-            }
+            gui_widget_list_remove_items(h, &o->ld);
             return 1;
         }
 #if GUI_CFG_USE_TOUCH
@@ -525,12 +460,11 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
         case GUI_EVT_TOUCHMOVE: {
             guii_touch_data_t* ts = GUI_EVT_PARAMTYPE_TOUCH(param);  /* Get touch data */
             if (h->font != NULL) {
-                gui_dim_t height = item_height(h, NULL);   /* Get element height */
-                gui_dim_t diff = ty - ts->y_rel[0];
+                gui_dim_t height = item_height(h, NULL);
                 
-                if (GUI_ABS(diff) > height) {
-                    slide(h, diff > 0 ? 1 : -1);    /* Slide widget */
-                    ty = ts->y_rel[0];              /* Save pointer */
+                if (GUI_ABS(ty - ts->y_rel[0]) > height) {
+                    gui_widget_list_slide(h, &o->ld, (ty - ts->y_rel[0]) > 0 ? 1 : -1);
+                    ty = ts->y_rel[0];
                 }
             }
             return 1;
@@ -553,17 +487,17 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
         case GUI_EVT_KEYPRESS: {
             guii_keyboard_data_t* kb = GUI_EVT_PARAMTYPE_KEYBOARD(param);    /* Get keyboard data */
             if (kb->kb.keys[0] == GUI_KEY_DOWN) {   /* On pressed down */
-                inc_selection(h, 1);                /* Increase selection */
+                gui_widget_list_set_selection(h, &o->ld, &o->selected, 1);
                 GUI_EVT_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             } else if (kb->kb.keys[0] == GUI_KEY_UP) {
-                inc_selection(h, -1);               /* Decrease selection */
+                gui_widget_list_set_selection(h, &o->ld, &o->selected, -1);
                 GUI_EVT_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }
             return 1;
         }
 #endif /* GUI_CFG_USE_KEYBOARD */
         case GUI_EVT_INCSELECTION: {
-            inc_selection(h, GUI_EVT_PARAMTYPE_I16(param));  /* Increase selection */
+            gui_widget_list_set_selection(h, &o->ld, &o->selected, GUI_EVT_PARAMTYPE_I16(param));
             GUI_EVT_RESULTTYPE_U8(result) = 1;      /* Set operation result */
             return 1;
         }
@@ -572,7 +506,6 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
             return 0;                               /* Command was not processed */
     }
 }
-#undef o
 
 /**
  * \brief           Create new dropdown widget
@@ -619,11 +552,9 @@ gui_dropdown_addstring(gui_handle_p h, const gui_char* text) {
 
     item = GUI_MEMALLOC(sizeof(*item));             /* Allocate memory for entry */
     if (item != NULL) {
-        item->text = (gui_char *)text;              /* Add text to entry */
-        gui_linkedlist_add_gen(&o->root, &item->list);/* Add to linked list */
-        o->count++;                           /* Increase number of strings */
+        item->text = (gui_char *)text;
+        gui_widget_list_add_item(h, &o->ld, item);  /* Add to linkedlist */
         
-        check_values(h);                            /* Check values */
         gui_widget_invalidate(h);                   /* Invalidate widget */
          
         ret = 1;
@@ -645,7 +576,8 @@ gui_dropdown_setopendirection(gui_handle_p h, gui_dropdown_opendir_t dir) {
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     
-    if (!is_opened(h)) {                            /* Must be closed */
+    /* Must be closed */
+    if (!is_opened(h)) {
         if ((o->flags & GUI_FLAG_DROPDOWN_OPEN_UP) && dir == GUI_DROPDOWN_OPENDIR_DOWN) {
             o->flags &= GUI_FLAG_DROPDOWN_OPEN_UP;
             ret = 1;
@@ -667,12 +599,13 @@ gui_dropdown_setopendirection(gui_handle_p h, gui_dropdown_opendir_t dir) {
  */
 uint8_t
 gui_dropdown_setstring(gui_handle_p h, uint16_t index, const gui_char* text) {
+    gui_dropdown_t* o = GUI_VP(h);
     gui_dropdown_item_t* item;
     uint8_t ret = 0;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
-    item = get_item(h, index);                      /* Get list item from handle */
+    item = gui_widget_list_get_item_byindex(h, &o->ld, index);  /* Get list item from handle */
     if (item != NULL) {
         item->text = (gui_char *)text;              /* Set new text */
         gui_widget_invalidate(h);                   /* Invalidate widget */
@@ -701,7 +634,7 @@ uint8_t
 gui_dropdown_deletelaststring(gui_handle_p h) {
     gui_dropdown_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    return delete_item(h, o->count - 1);
+    return delete_item(h, gui_widget_list_get_count(h, &o->ld) - 1);
 }
 
 /**
@@ -713,60 +646,7 @@ gui_dropdown_deletelaststring(gui_handle_p h) {
 uint8_t
 gui_dropdown_deletestring(gui_handle_p h, uint16_t index) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    return delete_item(h, index);
-}
-
-/**
- * \brief           Set auto mode for slider
- * \note            When auto mode enabled, slider will show only if there are more entries than widget can display
- * \param[in]       h: Widget handle
- * \param[in]       autoMode: Set to `1` for auto mode or `0` for manual mode
- * \return          `1` on success, `0` otherwise
- */
-uint8_t
-gui_dropdown_setsliderauto(gui_handle_p h, uint8_t autoMode) {
-    gui_dropdown_t* o = GUI_VP(h);
-    
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-
-    if (autoMode && !(o->flags & GUI_FLAG_DROPDOWN_SLIDER_AUTO)) {
-        o->flags |= GUI_FLAG_DROPDOWN_SLIDER_AUTO;
-        gui_widget_invalidate(h);
-    } else if (!autoMode && (o->flags & GUI_FLAG_DROPDOWN_SLIDER_AUTO)) {
-        o->flags &= ~GUI_FLAG_DROPDOWN_SLIDER_AUTO;
-        gui_widget_invalidate(h);
-    }
-
-    return 1;
-}
-
-/**
- * \brief           Set manual visibility for slider
- * \note            Slider must be in manual mode in order to get this to work
- * \param[in]       h: Widget handle
- * \param[in]       visible: Slider visible status, 1 or 0
- * \return          `1` on success, `0` otherwise
- */
-uint8_t
-gui_dropdown_setslidervisibility(gui_handle_p h, uint8_t visible) {
-    gui_dropdown_t* o = GUI_VP(h);
-    uint8_t ret = 0;
-    
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-
-    if (!(o->flags & GUI_FLAG_DROPDOWN_SLIDER_AUTO)) {
-        if (visible && !(o->flags & GUI_FLAG_DROPDOWN_SLIDER_ON)) {
-            o->flags |= GUI_FLAG_DROPDOWN_SLIDER_ON;
-            gui_widget_invalidate(h);
-            ret = 1;
-        } else if (!visible && (o->flags & GUI_FLAG_DROPDOWN_SLIDER_ON)) {
-            o->flags &= ~GUI_FLAG_DROPDOWN_SLIDER_ON;
-            gui_widget_invalidate(h);
-            ret = 1;
-        }
-    }
-
-    return ret;
+    return delete_item(h, (int16_t)index);
 }
 
 /**
@@ -778,21 +658,10 @@ gui_dropdown_setslidervisibility(gui_handle_p h, uint8_t visible) {
 uint8_t
 gui_dropdown_scroll(gui_handle_p h, int16_t step) {
     gui_dropdown_t* o = GUI_VP(h);
-    volatile int16_t start;
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
-    start = o->visiblestartindex;
-    o->visiblestartindex += step;
-        
-    check_values(h);                                /* Check widget values */
-    start = start != o->visiblestartindex;    /* Check if there was valid change */
-    
-    if (start) {
-        gui_widget_invalidate(h);
-    }
-
-    return GUI_U8(start);
+    return gui_widget_list_slide(h, &o->ld, step);
 }
 
 /**
@@ -803,11 +672,13 @@ gui_dropdown_scroll(gui_handle_p h, int16_t step) {
  */
 uint8_t
 gui_dropdown_setselection(gui_handle_p h, int16_t selection) {
+    gui_dropdown_t* o = GUI_VP(h);
+    
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
-    set_selection(h, selection);                    /* Set selection */
-    check_values(h);                                /* Check values */
-    gui_widget_invalidate(h);                       /* Invalidate widget */
+    gui_widget_list_set_selection(h, &o->ld, &o->selected, selection);
+    gui_widget_list_check_values(h, &o->ld);
+    gui_widget_invalidate(h);
 
     return 1;
 }
