@@ -69,7 +69,6 @@ typedef struct {
 
 uint8_t     gui_widget_list_init(gui_handle_p h, gui_widget_listdata_t* ld);
 uint8_t     gui_widget_list_slide(gui_handle_p h, gui_widget_listdata_t* ld, int16_t dir);
-int16_t     gui_widget_list_get_count(gui_handle_p h, gui_widget_listdata_t* ld);
 uint8_t     gui_widget_list_add_item(gui_handle_p h, gui_widget_listdata_t* ld, void* element);
 void *      gui_widget_list_get_item_byindex(gui_handle_p h, gui_widget_listdata_t* ld, int16_t index);
 uint8_t     gui_widget_list_remove_item_byindex(gui_handle_p h, gui_widget_listdata_t* ld, int16_t index);
@@ -78,6 +77,33 @@ uint8_t     gui_widget_list_check_values(gui_handle_p h, gui_widget_listdata_t* 
 
 uint8_t     gui_widget_list_inc_selection(gui_handle_p h, gui_widget_listdata_t* ld, int16_t dir, int16_t* curr_selected);
 uint8_t     gui_widget_list_set_selection(gui_handle_p h, gui_widget_listdata_t* ld, int16_t* curr_selected, int16_t new_selection);
+
+/**
+ * \brief           Get number of items visible `per page` at a time
+ * \param[in]       h: Widget handle
+ * \param[in]       ld: List data handle
+ * \return          Maximal number of elements visible per page
+ * \hideinitializer
+ */
+#define     gui_widget_list_get_count_pp(h, ld)             GUI_I16(((ld)->entries_per_page_cb != NULL) ? (ld)->entries_per_page_cb(h) : 0)
+
+/**
+ * \brief           Get index of first item visible on list
+ * \param[in]       h: Widget handle
+ * \param[in]       ld: List data handle
+ * \return          Index of first element visible on a list
+ */
+#define     gui_widget_list_get_visible_start_index(h, ld)  GUI_I16((ld)->visiblestartindex)
+uint8_t     gui_widget_list_set_visible_start_index(gui_handle_p h, gui_widget_listdata_t* ld, int16_t start);
+
+/**
+ * \brief           Get number of list elements
+ * \param[in]       h: Widget handle
+ * \param[in]       ld: List data handle
+ * \return          Total count of items on list
+ * \hideinitializer
+ */
+#define     gui_widget_list_get_count(h, ld)                GUI_I16((ld)->count)
 
 /**
  * \}

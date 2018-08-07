@@ -138,7 +138,7 @@ check_values(gui_handle_p h) {
     gui_debugbox_t* o = GUI_VP(h);
     
     if (o->flags & GUI_FLAG_DEBUGBOX_SLIDER_AUTO) {
-        if (gui_widget_list_get_count(h, &o->ld) > nr_entries_pp(h)) {
+        if (gui_widget_list_get_count(h, &o->ld) > gui_widget_list_get_count_pp(h, &o->ld)) {
             o->flags |= GUI_FLAG_DEBUGBOX_SLIDER_ON;
         } else {
             o->flags &= ~GUI_FLAG_DEBUGBOX_SLIDER_ON;
@@ -209,9 +209,9 @@ gui_debugbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                 sb.width = o->sliderwidth;
                 sb.height = height - 2;
                 sb.dir = GUI_DRAW_SB_DIR_VERTICAL;
-                sb.entriestop = o->ld.visiblestartindex;
-                sb.entriestotal = o->ld.count;
-                sb.entriesvisible = nr_entries_pp(h);
+                sb.entriestop = gui_widget_list_get_visible_start_index(h, &o->ld);
+                sb.entriestotal = gui_widget_list_get_count(h, &o->ld);
+                sb.entriesvisible = gui_widget_list_get_count_pp(h, &o->ld);
                 
                 gui_draw_scrollbar(disp, &sb);      /* Draw scroll bar */
             } else {
@@ -219,7 +219,7 @@ gui_debugbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
             }
             
             /* Draw text if possible */
-            if (h->font != NULL && gui_linkedlist_hasentries(&o->ld.root)) {
+            if (h->font != NULL && gui_widget_list_get_count(h, &o->ld)) {
                 gui_draw_text_t f;
                 gui_debugbox_item_t* item;
                 uint16_t itemheight;                /* Get item height */
@@ -242,11 +242,9 @@ gui_debugbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                     disp->y2 = y + height - 2;
                 }
                 
-                for (index = 0, item = (gui_debugbox_item_t *)gui_linkedlist_getnext_gen(&o->ld.root, NULL); item && f.y <= disp->y2;
+                for (index = gui_widget_list_get_visible_start_index(h, &o->ld), item = (gui_debugbox_item_t *)gui_linkedlist_getnext_byindex_gen(&o->ld.root, index); 
+                        item != NULL && f.y <= disp->y2;
                         item = (gui_debugbox_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
-                    if (index < o->ld.visiblestartindex) {    /* Check for start drawing index */
-                        continue;
-                    }
                     f.color1 = guii_widget_getcolor(h, GUI_DEBUGBOX_COLOR_TEXT);
                     gui_draw_writetext(disp, gui_widget_getfont(h), item->text, &f);
                     f.y += itemheight;

@@ -201,15 +201,7 @@ open_close(gui_handle_p h, uint8_t state) {
         }
 
         /* Set visible display when opened */
-        if (o->selected == -1) {
-            o->ld.visiblestartindex = 0;
-        } else {
-            int16_t perPage = nr_entries_pp(h);
-            o->ld.visiblestartindex = o->selected;
-            if ((o->ld.visiblestartindex + perPage) >= gui_widget_list_get_count(h, &o->ld)) {
-                o->ld.visiblestartindex = gui_widget_list_get_count(h, &o->ld) - perPage;
-            }
-        }
+        gui_widget_list_set_visible_start_index(h, &o->ld, o->selected);
         return 1;
     }
     return 0;
@@ -225,7 +217,7 @@ check_values(gui_handle_p h) {
     gui_dropdown_t* o = GUI_VP(h);
     
     if (o->flags & GUI_FLAG_DROPDOWN_SLIDER_AUTO) { /* Check slider mode */
-        if (gui_widget_list_get_count(h, &o->ld) > nr_entries_pp(h)) {
+        if (gui_widget_list_get_count(h, &o->ld) > gui_widget_list_get_count_pp(h, &o->ld)) {
             o->flags |= GUI_FLAG_DROPDOWN_SLIDER_ON;
         } else {
             o->flags &= ~GUI_FLAG_DROPDOWN_SLIDER_ON;
@@ -298,8 +290,8 @@ process_click(gui_handle_p h, guii_touch_data_t* ts) {
         } else {
             tmpselected = (ts->y_rel[0] - height1) / item_height(h, NULL);  /* Get temporary selected index */
         }
-        if ((o->ld.visiblestartindex + tmpselected) < o->ld.count) {
-            gui_widget_list_set_selection(h, &o->ld, &o->selected, o->ld.visiblestartindex + tmpselected);
+        if ((gui_widget_list_get_visible_start_index(h, &o->ld) + tmpselected) < o->ld.count) {
+            gui_widget_list_set_selection(h, &o->ld, &o->selected, gui_widget_list_get_visible_start_index(h, &o->ld) + tmpselected);
             gui_widget_invalidate(h);
         }
         gui_widget_list_check_values(h, &o->ld);    /* Check values */
@@ -393,16 +385,16 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                 sb.width = o->sliderwidth;
                 sb.height = height - 2;
                 sb.dir = GUI_DRAW_SB_DIR_VERTICAL;
-                sb.entriestop = o->ld.visiblestartindex;
-                sb.entriestotal = o->ld.count;
-                sb.entriesvisible = nr_entries_pp(h);
+                sb.entriestop = gui_widget_list_get_visible_start_index(h, &o->ld);
+                sb.entriestotal = gui_widget_list_get_count(h, &o->ld);
+                sb.entriesvisible = gui_widget_list_get_count_pp(h, &o->ld);
                 
                 gui_draw_scrollbar(disp, &sb);      /* Draw scroll bar */
             } else {
                 width--;                            /* Go down for one for alignment on non-slider */
             }
             
-            if (is_opened(h) && h->font != NULL && gui_linkedlist_hasentries(&o->ld.root)) {
+            if (is_opened(h) && h->font != NULL && gui_widget_list_get_count(h, &o->ld)) {
                 gui_draw_text_t f;
                 gui_dropdown_item_t* item;
                 uint16_t yOffset;
@@ -427,11 +419,10 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                 }
                 
                 /* Try to process all strings */
-                for (index = 0, item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->ld.root, NULL); item != NULL && f.y <= disp->y2;
+                for (index = gui_widget_list_get_visible_start_index(h, &o->ld), item = (gui_dropdown_item_t *)gui_linkedlist_getnext_byindex_gen(&o->ld.root, index);
+                        item != NULL && f.y <= disp->y2;
                         item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
-                    if (index < o->ld.visiblestartindex) { /* Check for start visible */
-                        continue;
-                    }
+
                     if (index == o->selected) {
                         gui_draw_filledrectangle(disp, x + 2, f.y, width - 3, GUI_MIN(f.height, itemheight), guii_widget_isfocused(h) ? guii_widget_getcolor(h, GUI_DROPDOWN_COLOR_SEL_FOC_BG) : guii_widget_getcolor(h, GUI_DROPDOWN_COLOR_SEL_NOFOC_BG));
                         f.color1 = guii_widget_isfocused(h) ? guii_widget_getcolor(h, GUI_DROPDOWN_COLOR_SEL_FOC) : guii_widget_getcolor(h, GUI_DROPDOWN_COLOR_SEL_NOFOC);

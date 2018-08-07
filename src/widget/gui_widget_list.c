@@ -45,12 +45,10 @@
  */
 static void
 set_selection(gui_handle_p h, gui_widget_listdata_t* ld, int16_t* selected, int16_t new_selection) {
-    if (*selected != new_selection) {
-        if (new_selection < ld->count && new_selection >= -1) {
-            *selected = new_selection;
-            guii_widget_callback(h, GUI_EVT_SELECTIONCHANGED, NULL, NULL);
-            gui_widget_invalidate(h);
-        }
+    if (*selected != new_selection && new_selection < ld->count && new_selection >= -1) {
+        *selected = new_selection;
+        guii_widget_callback(h, GUI_EVT_SELECTIONCHANGED, NULL, NULL);
+        gui_widget_invalidate(h);
     }
 }
 
@@ -127,17 +125,6 @@ gui_widget_list_slide(gui_handle_p h, gui_widget_listdata_t* ld, int16_t dir) {
 }
 
 /**
- * \brief           Get number of elements on linked list
- * \param[in]       h: Widget handle
- * \param[in]       ld: List data handle
- * \return          Number of items on list
- */
-int16_t
-gui_widget_list_get_count(gui_handle_p h, gui_widget_listdata_t* ld) {
-    return ld->count;
-}
-
-/**
  * \brief           Add new item to list
  * \param[in]       h: Widget handle
  * \param[in]       ld: List data handle
@@ -205,7 +192,7 @@ gui_widget_list_remove_items(gui_handle_p h, gui_widget_listdata_t* ld) {
     void* item;
     
     while (ld->count) {
-        item = gui_linkedlist_getnext_byindex_gen(&ld->root, NULL);
+        item = gui_linkedlist_getnext_byindex_gen(&ld->root, 0);
         if (item != NULL) {
             item = gui_linkedlist_remove_gen(&ld->root, item);
             if (ld->remove_item_cb != NULL) {
@@ -245,7 +232,7 @@ gui_widget_list_inc_selection(gui_handle_p h, gui_widget_listdata_t* ld, int16_t
         if ((*curr_selected + dir) < 0) {
             set_selection(h, ld, curr_selected, 0);
         } else {
-            set_selection(h, ld, curr_selected, *curr_selected+ dir);
+            set_selection(h, ld, curr_selected, *curr_selected + dir);
         }
     } else if (dir > 0) {
         /* Slide elements down */
@@ -262,12 +249,31 @@ gui_widget_list_inc_selection(gui_handle_p h, gui_widget_listdata_t* ld, int16_t
  * \brief           Set new active selected item from a list
  * \param[in]       h: Widget handle
  * \param[in]       ld: List data handle
- * \param[in]       dir: Direction for selection set
  * \param[in,out]   curr_selected: Pointer to current selection which will be updated only
+ * \param[in]       new_selection: New selection value
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
 gui_widget_list_set_selection(gui_handle_p h, gui_widget_listdata_t* ld, int16_t* curr_selected, int16_t new_selection) {
     set_selection(h, ld, curr_selected, new_selection);
+    return 1;
+}
+
+/**
+ * \brief           Set top visible start list index
+ * \param[in]       h: Widget handle
+ * \param[in]       ld: List data handle
+ * \param[in]       start: New start visible index
+ * \return          `1` on success, `0` otherwise
+ */
+uint8_t
+gui_widget_list_set_visible_start_index(gui_handle_p h, gui_widget_listdata_t* ld, int16_t start) {
+    if (start < 0) {
+        start = 0;
+    }
+    ld->visiblestartindex = start;
+    if ((ld->visiblestartindex + ENTRIES_PER_PAGE(h, ld)) >= ld->count) {
+        ld->visiblestartindex = ld->count - ENTRIES_PER_PAGE(h, ld);
+    }
     return 1;
 }

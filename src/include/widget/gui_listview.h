@@ -77,7 +77,7 @@ uint8_t         gui_listview_addcolumn(gui_handle_p h, const gui_char* text, gui
 uint8_t         gui_listview_setcolumnwidth(gui_handle_p h, uint16_t index, gui_dim_t width);
 
 gui_listview_row_p gui_listview_addrow(gui_handle_p h);
-uint8_t         gui_listview_removerow(gui_handle_p h, gui_listview_row_p row);
+uint8_t         gui_listview_removerow(gui_handle_p h, int16_t index);
 uint8_t         gui_listview_removerows(gui_handle_p h);
 
 uint8_t         gui_listview_setitemstring(gui_handle_p h, gui_listview_row_p row, uint16_t col, const gui_char* text);
@@ -86,7 +86,7 @@ int16_t         gui_listview_getselection(gui_handle_p h);
 uint8_t         gui_listview_setsliderauto(gui_handle_p h, uint8_t autoMode);
 uint8_t         gui_listview_setslidervisibility(gui_handle_p h, uint8_t visible);
 uint8_t         gui_listview_scroll(gui_handle_p h, int16_t step);
-uint8_t         gui_listview_getitemvalue(gui_handle_p h, uint16_t rindex, uint16_t cindex, gui_char* dst, size_t length);
+uint8_t         gui_listview_getitemvalue(gui_handle_p h, int16_t rindex, uint16_t cindex, gui_char* dst, size_t length);
 
 /**
  * \}

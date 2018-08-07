@@ -67,12 +67,10 @@ uint8_t         gui_listbox_setcolor(gui_handle_p h, gui_listbox_color_t index, 
 uint8_t         gui_listbox_addstring(gui_handle_p h, const gui_char* text);
 uint8_t         gui_listbox_deletefirststring(gui_handle_p h);
 uint8_t         gui_listbox_deletelaststring(gui_handle_p h);
-uint8_t         gui_listbox_deletestring(gui_handle_p h, uint16_t index);
-uint8_t         gui_listbox_setstring(gui_handle_p h, uint16_t index, const gui_char* text);
+uint8_t         gui_listbox_deletestring(gui_handle_p h, int16_t index);
+uint8_t         gui_listbox_setstring(gui_handle_p h, int16_t index, const gui_char* text);
 uint8_t         gui_listbox_setselection(gui_handle_p h, int16_t selection);
 int16_t         gui_listbox_getselection(gui_handle_p h);
-uint8_t         gui_listbox_setsliderauto(gui_handle_p h, uint8_t autoMode);
-uint8_t         gui_listbox_setslidervisibility(gui_handle_p h, uint8_t visible);
 uint8_t         gui_listbox_scroll(gui_handle_p h, int16_t step);
 
 /**

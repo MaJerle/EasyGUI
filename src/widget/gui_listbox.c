@@ -143,7 +143,7 @@ check_values(gui_handle_p h) {
     
     /* Check slider mode */
     if (o->flags & GUI_FLAG_LISTBOX_SLIDER_AUTO) {
-        if (gui_widget_list_get_count(h, &o->ld) > nr_entries_pp(h)) {
+        if (gui_widget_list_get_count(h, &o->ld) > gui_widget_list_get_count_pp(h, &o->ld)) {
             o->flags |= GUI_FLAG_LISTBOX_SLIDER_ON;
         } else {
             o->flags &= ~GUI_FLAG_LISTBOX_SLIDER_ON;
@@ -236,9 +236,9 @@ gui_listbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_
                 sb.width = o->sliderwidth;
                 sb.height = height - 2;
                 sb.dir = GUI_DRAW_SB_DIR_VERTICAL;
-                sb.entriestop = o->ld.visiblestartindex;
-                sb.entriestotal = o->ld.count;
-                sb.entriesvisible = nr_entries_pp(h);
+                sb.entriestop = gui_widget_list_get_visible_start_index(h, &o->ld);
+                sb.entriestotal = gui_widget_list_get_count(h, &o->ld);
+                sb.entriesvisible = gui_widget_list_get_count_pp(h, &o->ld);
                 
                 gui_draw_scrollbar(disp, &sb);      /* Draw scroll bar */
             } else {
@@ -246,7 +246,7 @@ gui_listbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_
             }
             
             /* Draw text if possible */
-            if (h->font != NULL && gui_linkedlist_hasentries(&o->ld.root)) {    /* Is first set? */
+            if (h->font != NULL && gui_widget_list_get_count(h, &o->ld)) {  /* Is first set? */
                 gui_draw_text_t f;
                 gui_listbox_item_t* item;
                 uint16_t itemheight, index = 0;
@@ -268,11 +268,9 @@ gui_listbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_
                     disp->y2 = y + height - 2;
                 }
                 
-                for (index = 0, item = (gui_listbox_item_t *)gui_linkedlist_getnext_gen(&o->ld.root, NULL); item && f.y <= disp->y2;
+                for (index = gui_widget_list_get_visible_start_index(h, &o->ld), item = (gui_listbox_item_t *)gui_linkedlist_getnext_byindex_gen(&o->ld.root, index);
+                        item != NULL && f.y <= disp->y2;
                         item = (gui_listbox_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
-                    if (index < o->ld.visiblestartindex) { /* Check for start drawing index */
-                        continue;
-                    }
                     if (index == o->selected) {
                         gui_draw_filledrectangle(disp, x + 2, f.y, width - 3, GUI_MIN(f.height, itemheight), guii_widget_isfocused(h) ? guii_widget_getcolor(h, GUI_LISTBOX_COLOR_SEL_FOC_BG) : guii_widget_getcolor(h, GUI_LISTBOX_COLOR_SEL_NOFOC_BG));
                         f.color1 = guii_widget_isfocused(h) ? guii_widget_getcolor(h, GUI_LISTBOX_COLOR_SEL_FOC) : guii_widget_getcolor(h, GUI_LISTBOX_COLOR_SEL_NOFOC);
@@ -333,8 +331,8 @@ gui_listbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_
                 uint16_t tmpselected;
                 
                 tmpselected = ts->y_rel[0] / height; /* Get temporary selected index */
-                if ((o->ld.visiblestartindex + tmpselected) <= gui_widget_list_get_count(h, &o->ld)) {
-                    gui_widget_list_set_selection(h, &o->ld, &o->selected, o->ld.visiblestartindex + tmpselected);
+                if ((gui_widget_list_get_visible_start_index(h, &o->ld) + tmpselected) <= gui_widget_list_get_count(h, &o->ld)) {
+                    gui_widget_list_set_selection(h, &o->ld, &o->selected, gui_widget_list_get_visible_start_index(h, &o->ld) + tmpselected);
                 }
             }
             return 1;
@@ -425,7 +423,7 @@ gui_listbox_addstring(gui_handle_p h, const gui_char* text) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_listbox_setstring(gui_handle_p h, uint16_t index, const gui_char* text) {
+gui_listbox_setstring(gui_handle_p h, int16_t index, const gui_char* text) {
     gui_listbox_t* o = GUI_VP(h);
     gui_listbox_item_t* item;
     
@@ -470,7 +468,7 @@ gui_listbox_deletelaststring(gui_handle_p h) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_listbox_deletestring(gui_handle_p h, uint16_t index) {
+gui_listbox_deletestring(gui_handle_p h, int16_t index) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return delete_item(h, (int16_t)index);
 }
