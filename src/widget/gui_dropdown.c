@@ -290,7 +290,7 @@ process_click(gui_handle_p h, guii_touch_data_t* ts) {
         } else {
             tmpselected = (ts->y_rel[0] - height1) / item_height(h, NULL);  /* Get temporary selected index */
         }
-        if ((gui_widget_list_get_visible_start_index(h, &o->ld) + tmpselected) < o->ld.count) {
+        if ((gui_widget_list_get_visible_start_index(h, &o->ld) + tmpselected) < gui_widget_list_get_count(h, &o->ld)) {
             gui_widget_list_set_selection(h, &o->ld, &o->selected, gui_widget_list_get_visible_start_index(h, &o->ld) + tmpselected);
             gui_widget_invalidate(h);
         }
@@ -353,24 +353,21 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
             }
                 
             if (o->selected >= 0 && h->font != NULL) {
-                int16_t i;
                 gui_draw_text_t f;
                 gui_dropdown_item_t* item;
                 gui_draw_text_init(&f);             /* Init structure */
                 
-                item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(&o->ld.root, NULL);
-                for (i = 0; i < o->selected; i++) {
-                    item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item);
+                item = gui_widget_list_get_item_byindex(h, &o->ld, o->selected);
+                if (item != NULL) {
+                    f.x = x + 3;
+                    f.y = y1 + 3;
+                    f.width = width - 6;
+                    f.height = height1 - 6;
+                    f.align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
+                    f.color1width = f.width;
+                    f.color1 = guii_widget_getcolor(h, GUI_DROPDOWN_COLOR_TEXT);
+                    gui_draw_writetext(disp, gui_widget_getfont(h), item->text, &f);
                 }
-                
-                f.x = x + 3;
-                f.y = y1 + 3;
-                f.width = width - 6;
-                f.height = height1 - 6;
-                f.align = GUI_HALIGN_LEFT | GUI_VALIGN_CENTER;
-                f.color1width = f.width;
-                f.color1 = guii_widget_getcolor(h, GUI_DROPDOWN_COLOR_TEXT);
-                gui_draw_writetext(disp, gui_widget_getfont(h), item->text, &f);
             }
             
             if (is_opened(h) && o->flags & GUI_FLAG_DROPDOWN_SLIDER_ON) {
@@ -397,9 +394,8 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
             if (is_opened(h) && h->font != NULL && gui_widget_list_get_count(h, &o->ld)) {
                 gui_draw_text_t f;
                 gui_dropdown_item_t* item;
-                uint16_t yOffset;
-                uint16_t itemheight;                /* Get item height */
-                uint16_t index = 0;                 /* Start index */
+                uint16_t yOffset, itemheight;
+                int16_t index = 0;
                 gui_dim_t tmp;
                 
                 itemheight = item_height(h, &yOffset); /* Get item height and Y offset */
@@ -418,10 +414,9 @@ gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                     disp->y2 = y + height;
                 }
                 
-                /* Try to process all strings */
-                for (index = gui_widget_list_get_visible_start_index(h, &o->ld), item = (gui_dropdown_item_t *)gui_linkedlist_getnext_byindex_gen(&o->ld.root, index);
-                        item != NULL && f.y <= disp->y2;
-                        item = (gui_dropdown_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
+                /* Draw list items */
+                for (item = gui_widget_list_get_first_visible_item(h, &o->ld, &index); item != NULL && f.y <= disp->y2;
+                        item = gui_widget_list_get_next_item(h, &o->ld, item), index++) {
 
                     if (index == o->selected) {
                         gui_draw_filledrectangle(disp, x + 2, f.y, width - 3, GUI_MIN(f.height, itemheight), guii_widget_isfocused(h) ? guii_widget_getcolor(h, GUI_DROPDOWN_COLOR_SEL_FOC_BG) : guii_widget_getcolor(h, GUI_DROPDOWN_COLOR_SEL_NOFOC_BG));

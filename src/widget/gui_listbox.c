@@ -249,7 +249,8 @@ gui_listbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_
             if (h->font != NULL && gui_widget_list_get_count(h, &o->ld)) {  /* Is first set? */
                 gui_draw_text_t f;
                 gui_listbox_item_t* item;
-                uint16_t itemheight, index = 0;
+                uint16_t itemheight;
+                int16_t index;
                 gui_dim_t tmp;
                 
                 itemheight = item_height(h, 0);     /* Get item height and Y offset */
@@ -268,9 +269,10 @@ gui_listbox_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_
                     disp->y2 = y + height - 2;
                 }
                 
-                for (index = gui_widget_list_get_visible_start_index(h, &o->ld), item = (gui_listbox_item_t *)gui_linkedlist_getnext_byindex_gen(&o->ld.root, index);
-                        item != NULL && f.y <= disp->y2;
-                        item = (gui_listbox_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), index++) {
+                /* Draw list items */
+                for (item = gui_widget_list_get_first_visible_item(h, &o->ld, &index); item != NULL && f.y <= disp->y2;
+                        item = gui_widget_list_get_next_item(h, &o->ld, item), index++) {
+                            
                     if (index == o->selected) {
                         gui_draw_filledrectangle(disp, x + 2, f.y, width - 3, GUI_MIN(f.height, itemheight), guii_widget_isfocused(h) ? guii_widget_getcolor(h, GUI_LISTBOX_COLOR_SEL_FOC_BG) : guii_widget_getcolor(h, GUI_LISTBOX_COLOR_SEL_NOFOC_BG));
                         f.color1 = guii_widget_isfocused(h) ? guii_widget_getcolor(h, GUI_LISTBOX_COLOR_SEL_FOC) : guii_widget_getcolor(h, GUI_LISTBOX_COLOR_SEL_NOFOC);
@@ -458,7 +460,7 @@ uint8_t
 gui_listbox_deletelaststring(gui_handle_p h) {
     gui_listbox_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    return delete_item(h, (int16_t)gui_widget_list_get_count(h, &o->ld) - 1);
+    return delete_item(h, gui_widget_list_get_count(h, &o->ld) - 1);
 }
 
 /**
@@ -470,7 +472,7 @@ gui_listbox_deletelaststring(gui_handle_p h) {
 uint8_t
 gui_listbox_deletestring(gui_handle_p h, int16_t index) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    return delete_item(h, (int16_t)index);
+    return delete_item(h, index);
 }
 
 /**

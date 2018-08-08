@@ -153,7 +153,7 @@ gui_widget_list_get_item_byindex(gui_handle_p h, gui_widget_listdata_t* ld, int1
     if (index == 0) {
         return (void *)gui_linkedlist_getnext_gen(&ld->root, NULL);
     } else if (index == ld->count - 1) {
-        return (void *)gui_linkedlist_getnext_gen(&ld->root, NULL);
+        return (void *)gui_linkedlist_getprev_gen(&ld->root, NULL);
     }
     return (void *)gui_linkedlist_getnext_byindex_gen(&ld->root, index);
 }
@@ -276,4 +276,18 @@ gui_widget_list_set_visible_start_index(gui_handle_p h, gui_widget_listdata_t* l
         ld->visiblestartindex = ld->count - ENTRIES_PER_PAGE(h, ld);
     }
     return 1;
+}
+
+void *
+gui_widget_list_get_first_visible_item(gui_handle_p h, gui_widget_listdata_t* ld, int16_t* index_out) {
+    void* item = gui_linkedlist_getnext_byindex_gen(&ld->root, ld->visiblestartindex);
+    if (index_out != NULL) {
+        *index_out = ld->visiblestartindex;
+    }
+    return item;
+}
+
+void *
+gui_widget_list_get_next_item(gui_handle_p h, gui_widget_listdata_t* ld, void* curr_item) {
+    return gui_linkedlist_getnext_gen(NULL, curr_item);
 }

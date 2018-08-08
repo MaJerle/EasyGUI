@@ -105,6 +105,9 @@ uint8_t     gui_widget_list_set_visible_start_index(gui_handle_p h, gui_widget_l
  */
 #define     gui_widget_list_get_count(h, ld)                GUI_I16((ld)->count)
 
+void *      gui_widget_list_get_first_visible_item(gui_handle_p h, gui_widget_listdata_t* ld, int16_t* index_out);
+void *      gui_widget_list_get_next_item(gui_handle_p h, gui_widget_listdata_t* ld, void* curr_item);
+
 /**
  * \}
  */

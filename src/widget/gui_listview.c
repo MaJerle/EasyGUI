@@ -247,8 +247,8 @@ gui_listview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
             gui_display_t* disp = GUI_EVT_PARAMTYPE_DISP(param);
             gui_dim_t x, y, width, height, itemheight;
             uint16_t i;
-            gui_listview_row_t* row;
-            gui_listview_item_t* item;
+            gui_listview_row_t* item;
+            gui_listview_item_t* col_item;
 
             x = gui_widget_getabsolutex(h);
             y = gui_widget_getabsolutey(h);
@@ -311,7 +311,7 @@ gui_listview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                 
                 /* Draw all rows and entry elements */           
                 if (h->font != NULL && gui_widget_list_get_count(h, &o->ld)) {/* Is first set? */
-                    uint16_t index = 0;             /* Start index */
+                    int16_t index;
                     gui_dim_t tmp;
                     
                     tmp = disp->y2;                 /* Scale out drawing area */
@@ -319,10 +319,10 @@ gui_listview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                         disp->y2 = y + height - 2;
                     }
                     
-                    /* Try to process all strings */
-                    for (index = gui_widget_list_get_visible_start_index(h, &o->ld), row = (gui_listview_row_t *)gui_linkedlist_getnext_byindex_gen(&o->ld.root, index);
-                            row != NULL && f.y <= disp->y2;
-                            row = (gui_listview_row_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)row), index++) {
+                    /* Draw list items */
+                    for (item = gui_widget_list_get_first_visible_item(h, &o->ld, &index); item != NULL && f.y <= disp->y2;
+                            item = gui_widget_list_get_next_item(h, &o->ld, item), index++) {
+
                         if (index == o->selected) {
                             gui_draw_filledrectangle(disp, x + 2, f.y, width - 2, GUI_MIN(f.height, itemheight), guii_widget_isfocused(h) ? guii_widget_getcolor(h, GUI_LISTVIEW_COLOR_SEL_FOC_BG) : guii_widget_getcolor(h, GUI_LISTVIEW_COLOR_SEL_NOFOC_BG));
                             f.color1 = guii_widget_isfocused(h) ? guii_widget_getcolor(h, GUI_LISTVIEW_COLOR_SEL_FOC) : guii_widget_getcolor(h, GUI_LISTVIEW_COLOR_SEL_NOFOC);
@@ -330,13 +330,13 @@ gui_listview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
                             f.color1 = guii_widget_getcolor(h, GUI_LISTVIEW_COLOR_TEXT);
                         }
                         xTmp = x + 2;
-                        for (i = 0, item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(&row->root, NULL); item != NULL && i < o->col_count;
-                                item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)item), i++) {
-                            if (item->text != NULL) {   /* Draw if text set */
-                                f.width = o->cols[i]->width - 6;    /* Set width */
+                        for (i = 0, col_item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(&item->root, NULL); col_item != NULL && i < o->col_count;
+                                col_item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(NULL, (gui_linkedlist_t *)col_item), i++) {
+                            if (col_item->text != NULL) {   /* Draw if text set */
+                                f.width = o->cols[i]->width - 6;
                                 f.color1width = GUI.lcd.width;  /* Use the same color for entire width */
                                 f.x = xTmp + 3;     /* Set offset */
-                                gui_draw_writetext(disp, gui_widget_getfont(h), item->text, &f);
+                                gui_draw_writetext(disp, gui_widget_getfont(h), col_item->text, &f);
                             }
                             xTmp += o->cols[i]->width;  /* Increase X value */
                         }
