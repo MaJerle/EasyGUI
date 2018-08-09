@@ -58,20 +58,20 @@ extern "C" {
  */
 #define gui_linkedlist_multi_getdata(e)     (((e) != NULL) ? (e)->element : NULL)
 
-void                    gui_linkedlist_add_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
-gui_linkedlist_t*       gui_linkedlist_remove_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
-gui_linkedlist_t*       gui_linkedlist_getnext_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
-gui_linkedlist_t*       gui_linkedlist_getprev_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
-gui_linkedlist_t*       gui_linkedlist_getnext_byindex_gen(gui_linkedlistroot_t* root, uint16_t index);
-uint8_t                 gui_linkedlist_movedown_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
-uint8_t                 gui_linkedlist_moveup_gen(gui_linkedlistroot_t* root, gui_linkedlist_t* element);
-gui_linkedlistmulti_t*  gui_linkedlist_multi_add_gen(gui_linkedlistroot_t* root, void* element);
-uint8_t                 gui_linkedlist_multi_remove_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_t* element);
-gui_linkedlistmulti_t*  gui_linkedlist_multi_getnext_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_t* element);
-gui_linkedlistmulti_t*  gui_linkedlist_multi_getprev_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_t* element);
-uint8_t                 gui_linkedlist_multi_movedown_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_t* element);
-uint8_t                 gui_linkedlist_multi_moveup_gen(gui_linkedlistroot_t* root, gui_linkedlistmulti_t* element);
-uint8_t                 gui_linkedlist_multi_find_remove(gui_linkedlistroot_t* root, void* element);
+void                    gui_linkedlist_add_gen(gui_linkedlistroot_t* const root, gui_linkedlist_t* const element);
+gui_linkedlist_t*       gui_linkedlist_remove_gen(gui_linkedlistroot_t* const root, gui_linkedlist_t* const element);
+gui_linkedlist_t*       gui_linkedlist_getnext_gen(gui_linkedlistroot_t* const root, gui_linkedlist_t* const element);
+gui_linkedlist_t*       gui_linkedlist_getprev_gen(gui_linkedlistroot_t* const root, gui_linkedlist_t* const element);
+gui_linkedlist_t*       gui_linkedlist_getnext_byindex_gen(gui_linkedlistroot_t* const root, uint16_t index);
+uint8_t                 gui_linkedlist_movedown_gen(gui_linkedlistroot_t* const root, gui_linkedlist_t* const element);
+uint8_t                 gui_linkedlist_moveup_gen(gui_linkedlistroot_t* const root, gui_linkedlist_t* const element);
+gui_linkedlistmulti_t*  gui_linkedlist_multi_add_gen(gui_linkedlistroot_t* const root, void* const element);
+uint8_t                 gui_linkedlist_multi_remove_gen(gui_linkedlistroot_t* const root, gui_linkedlistmulti_t* element);
+gui_linkedlistmulti_t*  gui_linkedlist_multi_getnext_gen(gui_linkedlistroot_t* const root, gui_linkedlistmulti_t* const element);
+gui_linkedlistmulti_t*  gui_linkedlist_multi_getprev_gen(gui_linkedlistroot_t* const root, gui_linkedlistmulti_t* const element);
+uint8_t                 gui_linkedlist_multi_movedown_gen(gui_linkedlistroot_t* const root, gui_linkedlistmulti_t* const element);
+uint8_t                 gui_linkedlist_multi_moveup_gen(gui_linkedlistroot_t* const root, gui_linkedlistmulti_t* const element);
+uint8_t                 gui_linkedlist_multi_find_remove(gui_linkedlistroot_t* const root, void* const element);
     
 /**
  * \brief           Checks if linked list has any entries
