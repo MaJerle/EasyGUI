@@ -67,16 +67,16 @@ typedef struct {
     uint8_t (*remove_item_cb)(gui_handle_p h, void* item);  /* Remove item callback */
 } gui_widget_listdata_t;
 
-uint8_t     gui_widget_list_init(gui_handle_p h, gui_widget_listdata_t* ld);
-uint8_t     gui_widget_list_slide(gui_handle_p h, gui_widget_listdata_t* ld, int16_t dir);
-uint8_t     gui_widget_list_add_item(gui_handle_p h, gui_widget_listdata_t* ld, void* element);
-void *      gui_widget_list_get_item_byindex(gui_handle_p h, gui_widget_listdata_t* ld, int16_t index);
-uint8_t     gui_widget_list_remove_item_byindex(gui_handle_p h, gui_widget_listdata_t* ld, int16_t index);
-uint8_t     gui_widget_list_remove_items(gui_handle_p h, gui_widget_listdata_t* ld);
-uint8_t     gui_widget_list_check_values(gui_handle_p h, gui_widget_listdata_t* ld);
+uint8_t     gui_widget_list_init(gui_handle_p h, gui_widget_listdata_t* const ld);
+uint8_t     gui_widget_list_slide(gui_handle_p h, gui_widget_listdata_t* const ld, int16_t dir);
+uint8_t     gui_widget_list_add_item(gui_handle_p h, gui_widget_listdata_t* const ld, void* element);
+void *      gui_widget_list_get_item_byindex(gui_handle_p h, gui_widget_listdata_t* const ld, int16_t index);
+uint8_t     gui_widget_list_remove_item_byindex(gui_handle_p h, gui_widget_listdata_t* const ld, int16_t index);
+uint8_t     gui_widget_list_remove_items(gui_handle_p h, gui_widget_listdata_t* const ld);
+uint8_t     gui_widget_list_check_values(gui_handle_p h, gui_widget_listdata_t* const ld);
 
-uint8_t     gui_widget_list_inc_selection(gui_handle_p h, gui_widget_listdata_t* ld, int16_t dir, int16_t* curr_selected);
-uint8_t     gui_widget_list_set_selection(gui_handle_p h, gui_widget_listdata_t* ld, int16_t* curr_selected, int16_t new_selection);
+uint8_t     gui_widget_list_inc_selection(gui_handle_p h, gui_widget_listdata_t* const ld, int16_t* const curr_selected, int16_t dir);
+uint8_t     gui_widget_list_set_selection(gui_handle_p h, gui_widget_listdata_t* const ld, int16_t* const curr_selected, int16_t new_selection);
 
 /**
  * \brief           Get number of items visible `per page` at a time
@@ -94,7 +94,7 @@ uint8_t     gui_widget_list_set_selection(gui_handle_p h, gui_widget_listdata_t*
  * \return          Index of first element visible on a list
  */
 #define     gui_widget_list_get_visible_start_index(h, ld)  GUI_I16((ld)->visiblestartindex)
-uint8_t     gui_widget_list_set_visible_start_index(gui_handle_p h, gui_widget_listdata_t* ld, int16_t start);
+uint8_t     gui_widget_list_set_visible_start_index(gui_handle_p h, gui_widget_listdata_t* const ld, int16_t start);
 
 /**
  * \brief           Get number of list elements
@@ -105,8 +105,8 @@ uint8_t     gui_widget_list_set_visible_start_index(gui_handle_p h, gui_widget_l
  */
 #define     gui_widget_list_get_count(h, ld)                GUI_I16((ld)->count)
 
-void *      gui_widget_list_get_first_visible_item(gui_handle_p h, gui_widget_listdata_t* ld, int16_t* index_out);
-void *      gui_widget_list_get_next_item(gui_handle_p h, gui_widget_listdata_t* ld, void* curr_item);
+void *      gui_widget_list_get_first_visible_item(gui_handle_p h, gui_widget_listdata_t* const ld, int16_t* const index_out);
+void *      gui_widget_list_get_next_item(gui_handle_p h, gui_widget_listdata_t* const ld, void* const curr_item);
 
 /**
  * \}

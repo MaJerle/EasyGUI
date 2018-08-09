@@ -89,7 +89,7 @@ check_values(gui_handle_p h, gui_widget_listdata_t* ld) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_list_init(gui_handle_p h, gui_widget_listdata_t* ld) {
+gui_widget_list_init(gui_handle_p h, gui_widget_listdata_t* const ld) {
     GUI_UNUSED(h);
     GUI_UNUSED(ld);
     
@@ -104,7 +104,7 @@ gui_widget_list_init(gui_handle_p h, gui_widget_listdata_t* ld) {
  * \return          Number of items on list
  */
 uint8_t
-gui_widget_list_slide(gui_handle_p h, gui_widget_listdata_t* ld, int16_t dir) {
+gui_widget_list_slide(gui_handle_p h, gui_widget_listdata_t* const ld, int16_t dir) {
     ld->max_visible_items = ENTRIES_PER_PAGE(h, ld);
     if (dir < 0) {
         if ((ld->visiblestartindex + dir) < 0) {
@@ -132,7 +132,7 @@ gui_widget_list_slide(gui_handle_p h, gui_widget_listdata_t* ld, int16_t dir) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_list_add_item(gui_handle_p h, gui_widget_listdata_t* ld, void* element) {
+gui_widget_list_add_item(gui_handle_p h, gui_widget_listdata_t* const ld, void* const element) {
     gui_linkedlist_add_gen(&ld->root, element); /* Add to linked list */
     ld->count++;                                /* Increase number of items */
     
@@ -149,7 +149,7 @@ gui_widget_list_add_item(gui_handle_p h, gui_widget_listdata_t* ld, void* elemen
  * \return          Element at specific index or `NULL` in case of failure
  */
 void *
-gui_widget_list_get_item_byindex(gui_handle_p h, gui_widget_listdata_t* ld, int16_t index) {
+gui_widget_list_get_item_byindex(gui_handle_p h, gui_widget_listdata_t* const ld, int16_t index) {
     if (index == 0) {
         return (void *)gui_linkedlist_getnext_gen(&ld->root, NULL);
     } else if (index == ld->count - 1) {
@@ -166,7 +166,7 @@ gui_widget_list_get_item_byindex(gui_handle_p h, gui_widget_listdata_t* ld, int1
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_list_remove_item_byindex(gui_handle_p h, gui_widget_listdata_t* ld, int16_t index) {
+gui_widget_list_remove_item_byindex(gui_handle_p h, gui_widget_listdata_t* const ld, int16_t index) {
     void* item;
     
     item = gui_linkedlist_getnext_byindex_gen(&ld->root, index);
@@ -188,7 +188,7 @@ gui_widget_list_remove_item_byindex(gui_handle_p h, gui_widget_listdata_t* ld, i
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_list_remove_items(gui_handle_p h, gui_widget_listdata_t* ld) {
+gui_widget_list_remove_items(gui_handle_p h, gui_widget_listdata_t* const ld) {
     void* item;
     
     while (ld->count) {
@@ -213,7 +213,7 @@ gui_widget_list_remove_items(gui_handle_p h, gui_widget_listdata_t* ld) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_list_check_values(gui_handle_p h, gui_widget_listdata_t* ld) {
+gui_widget_list_check_values(gui_handle_p h, gui_widget_listdata_t* const ld) {
     return check_values(h, ld);
 }
 
@@ -221,12 +221,12 @@ gui_widget_list_check_values(gui_handle_p h, gui_widget_listdata_t* ld) {
  * \brief           Set new active selected item from a list
  * \param[in]       h: Widget handle
  * \param[in]       ld: List data handle
- * \param[in]       dir: Direction for selection set
  * \param[in,out]   curr_selected: Pointer to current selection which will be updated only
+ * \param[in]       dir: Direction for selection set
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_list_inc_selection(gui_handle_p h, gui_widget_listdata_t* ld, int16_t dir, int16_t* curr_selected) {
+gui_widget_list_inc_selection(gui_handle_p h, gui_widget_listdata_t* const ld, int16_t* const curr_selected, int16_t dir) {
     if (dir < 0) {
         /* Slide elements up */
         if ((*curr_selected + dir) < 0) {
@@ -254,7 +254,7 @@ gui_widget_list_inc_selection(gui_handle_p h, gui_widget_listdata_t* ld, int16_t
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_list_set_selection(gui_handle_p h, gui_widget_listdata_t* ld, int16_t* curr_selected, int16_t new_selection) {
+gui_widget_list_set_selection(gui_handle_p h, gui_widget_listdata_t* const ld, int16_t* const curr_selected, int16_t new_selection) {
     set_selection(h, ld, curr_selected, new_selection);
     return 1;
 }
@@ -267,7 +267,7 @@ gui_widget_list_set_selection(gui_handle_p h, gui_widget_listdata_t* ld, int16_t
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_list_set_visible_start_index(gui_handle_p h, gui_widget_listdata_t* ld, int16_t start) {
+gui_widget_list_set_visible_start_index(gui_handle_p h, gui_widget_listdata_t* const ld, int16_t start) {
     if (start < 0) {
         start = 0;
     }
@@ -278,8 +278,15 @@ gui_widget_list_set_visible_start_index(gui_handle_p h, gui_widget_listdata_t* l
     return 1;
 }
 
+/**
+ * \brief           Get first visible item handle
+ * \param[in]       h: Widget handle
+ * \param[in]       ld: List data handle
+ * \param[out]      index_out: Optional index output value
+ * \return          First visible item handle
+ */
 void *
-gui_widget_list_get_first_visible_item(gui_handle_p h, gui_widget_listdata_t* ld, int16_t* index_out) {
+gui_widget_list_get_first_visible_item(gui_handle_p h, gui_widget_listdata_t* const ld, int16_t* const index_out) {
     void* item = gui_linkedlist_getnext_byindex_gen(&ld->root, ld->visiblestartindex);
     if (index_out != NULL) {
         *index_out = ld->visiblestartindex;
@@ -287,7 +294,14 @@ gui_widget_list_get_first_visible_item(gui_handle_p h, gui_widget_listdata_t* ld
     return item;
 }
 
+/**
+ * \brief           Get next visible item handle of current
+ * \param[in]       h: Widget handle
+ * \param[in]       ld: List data handle
+ * \param[in]       curr_item: Current item used for next calculation
+ * \return          Next item handle of current one
+ */
 void *
-gui_widget_list_get_next_item(gui_handle_p h, gui_widget_listdata_t* ld, void* curr_item) {
+gui_widget_list_get_next_item(gui_handle_p h, gui_widget_listdata_t* const ld, void* const curr_item) {
     return gui_linkedlist_getnext_gen(NULL, curr_item);
 }

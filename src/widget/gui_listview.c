@@ -480,17 +480,17 @@ gui_listview_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui
         case GUI_EVT_KEYPRESS: {
             guii_keyboard_data_t* kb = GUI_EVT_PARAMTYPE_KEYBOARD(param);   /* Get keyboard data */
             if (kb->kb.keys[0] == GUI_KEY_DOWN) {
-                gui_widget_list_inc_selection(h, &o->ld, 1, &o->selected);  /* Increase selection */
+                gui_widget_list_inc_selection(h, &o->ld, &o->selected, 1);  /* Increase selection */
                 GUI_EVT_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             } else if (kb->kb.keys[0] == GUI_KEY_UP) {
-                gui_widget_list_inc_selection(h, &o->ld, -1, &o->selected); /* Decrease selection */
+                gui_widget_list_inc_selection(h, &o->ld, &o->selected, -1); /* Decrease selection */
                 GUI_EVT_RESULTTYPE_KEYBOARD(result) = keyHANDLED;
             }
             return 1;
         }
 #endif /* GUI_CFG_USE_KEYBOARD */
         case GUI_EVT_INCSELECTION: {
-            gui_widget_list_inc_selection(h, &o->ld, GUI_EVT_PARAMTYPE_I16(param), &o->selected);
+            gui_widget_list_inc_selection(h, &o->ld, &o->selected, GUI_EVT_PARAMTYPE_I16(param));
             GUI_EVT_RESULTTYPE_U8(result) = 1;   /* Set operation result */
             return 1;
         }
