@@ -1,7 +1,7 @@
 #include "demo.h"
 
-static uint8_t  graph_callback(gui_handle_p h, gui_we_t wc, gui_evt_param_t* param, gui_evt_result_t* result);
-static uint8_t  checkbox_callback(gui_handle_p h, gui_we_t wc, gui_evt_param_t* param, gui_evt_result_t* result);
+static uint8_t  graph_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result);
+static uint8_t  checkbox_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result);
 
 /**
  * \brief           Create and open feature widget
@@ -56,17 +56,17 @@ demo_create_feature_graph(gui_handle_p parent, uint8_t protect) {
  * \brief           Event callback
  */
 static uint8_t
-graph_callback(gui_handle_p h, gui_we_t wc, gui_evt_param_t* param, gui_evt_result_t* result) {
-    return gui_widget_processdefaultcallback(h, wc, param, result);
+graph_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
+    return gui_widget_processdefaultcallback(h, evt, param, result);
 }
 
 /**
  * \brief           Event callback
  */
 static uint8_t
-checkbox_callback(gui_handle_p h, gui_we_t wc, gui_evt_param_t* param, gui_evt_result_t* result) {
-    uint8_t ret = gui_widget_processdefaultcallback(h, wc, param, result);
-    switch (wc) {
+checkbox_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
+    uint8_t ret = gui_widget_processdefaultcallback(h, evt, param, result);
+    switch (evt) {
         case GUI_EVT_CLICK: {
             gui_handle_p graph;
 

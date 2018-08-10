@@ -1,6 +1,6 @@
 #include "demo.h"
 
-static uint8_t  edit_text_callback(gui_handle_p h, gui_we_t wc, gui_evt_param_t* param, gui_evt_result_t* result);
+static uint8_t  edit_text_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result);
 
 /**
  * \brief           Create and open feature widget
@@ -34,6 +34,6 @@ demo_create_feature_edit_text(gui_handle_p parent, uint8_t protect) {
  * \brief           Event callback
  */
 static uint8_t
-edit_text_callback(gui_handle_p h, gui_we_t wc, gui_evt_param_t* param, gui_evt_result_t* result) {
-    return gui_widget_processdefaultcallback(h, wc, param, result);
+edit_text_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
+    return gui_widget_processdefaultcallback(h, evt, param, result);
 }

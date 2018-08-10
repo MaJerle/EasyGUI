@@ -30,7 +30,7 @@ btns[] = {
     BTN_ENTRY(ID_BTN_MAINWIN_RADIO, _GT("Radiobox"), ID_WIN_RADIO, demo_create_feature_radio)
 };
 
-static uint8_t  main_win_btn_callback(gui_handle_p h, gui_we_t wc, gui_evt_param_t* param, gui_evt_result_t* result);
+static uint8_t  main_win_btn_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result);
 static void     touch_demo_thread(void * const arg);
 
 /**
@@ -81,9 +81,9 @@ demo_init(void) {
  * \brief           Callback function for main window buttons
  */
 static uint8_t
-main_win_btn_callback(gui_handle_p h, gui_we_t wc, gui_evt_param_t* param, gui_evt_result_t* result) {
-    uint8_t ret = gui_widget_processdefaultcallback(h, wc, param, result);
-    switch (wc) {
+main_win_btn_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
+    uint8_t ret = gui_widget_processdefaultcallback(h, evt, param, result);
+    switch (evt) {
         case GUI_EVT_CLICK: {
             demo_create_feature(gui_widget_getuserdata(h), 0);      /* Create feature */
             break;

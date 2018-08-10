@@ -1,6 +1,6 @@
 #include "demo.h"
 
-static uint8_t  button_callback(gui_handle_p h, gui_we_t wc, gui_evt_param_t* param, gui_evt_result_t* result);
+static uint8_t  button_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result);
 
 /**
  * \brief           Create and open feature window widget
@@ -39,9 +39,9 @@ demo_create_feature_button(gui_handle_p parent, uint8_t protect) {
  * \brief           Button event callback
  */
 static uint8_t
-button_callback(gui_handle_p h, gui_we_t wc, gui_evt_param_t* param, gui_evt_result_t* result) {
-    uint8_t ret = gui_widget_processdefaultcallback(h, wc, param, result);
-    switch (wc) {
+button_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
+    uint8_t ret = gui_widget_processdefaultcallback(h, evt, param, result);
+    switch (evt) {
         default: break;
     }
     return ret;
