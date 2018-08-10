@@ -54,16 +54,16 @@ check_disp_clipping(gui_handle_p h) {
     memcpy(&GUI.display_temp, &GUI.display, sizeof(GUI.display_temp));
     
 #if GUI_CFG_USE_POS_SIZE_CACHE
-    if (GUI.display_temp.x1 == (gui_dim_t)0x7FFF || GUI.display_temp.x1 < h->abs_visible_x1) {
+    if (GUI.display_temp.x1 == GUI_DIM_MAX || GUI.display_temp.x1 < h->abs_visible_x1) {
         GUI.display_temp.x1 = h->abs_visible_x1;
     }
-    if (GUI.display_temp.y1 == (gui_dim_t)0x7FFF || GUI.display_temp.y1 < h->abs_visible_y1) {
+    if (GUI.display_temp.y1 == GUI_DIM_MAX || GUI.display_temp.y1 < h->abs_visible_y1) {
         GUI.display_temp.y1 = h->abs_visible_y1;
     }
-    if (GUI.display_temp.x2 == (gui_dim_t)0x8000 || GUI.display_temp.x2 > h->abs_visible_x2) {
+    if (GUI.display_temp.x2 == GUI_DIM_MIN || GUI.display_temp.x2 > h->abs_visible_x2) {
         GUI.display_temp.x2 = h->abs_visible_x2;
     }
-    if (GUI.display_temp.y2 == (gui_dim_t)0x8000 || GUI.display_temp.y2 > h->abs_visible_y2) {
+    if (GUI.display_temp.y2 == GUI_DIM_MIN || GUI.display_temp.y2 > h->abs_visible_y2) {
         GUI.display_temp.y2 = h->abs_visible_y2;
     }
 #else /* GUI_CFG_USE_POS_SIZE_CACHE */
@@ -75,16 +75,16 @@ check_disp_clipping(gui_handle_p h) {
     hi = gui_widget_getheight(h);   
     
     /* Step 1: Set active clipping area only for current widget */
-    if (GUI.display_temp.x1 == GUI_DIM(0x7FFF) || GUI.display_temp.x1 < x) {
+    if (GUI.display_temp.x1 == GUI_DIM_MAX || GUI.display_temp.x1 < x) {
         GUI.display_temp.x1 = x;
     }
-    if (GUI.display_temp.y1 == GUI_DIM(0x7FFF) || GUI.display_temp.y1 < y) {
+    if (GUI.display_temp.y1 == GUI_DIM_MAX || GUI.display_temp.y1 < y) {
         GUI.display_temp.y1 = y;
     }
-    if (GUI.display_temp.x2 == GUI_DIM(0x8000) || GUI.display_temp.x2 > (x + wi)) {
+    if (GUI.display_temp.x2 == GUI_DIM_MIN || GUI.display_temp.x2 > (x + wi)) {
         GUI.display_temp.x2 = x + wi;
     }
-    if (GUI.display_temp.y2 == GUI_DIM(0x8000) || GUI.display_temp.y2 > (y + hi)) {
+    if (GUI.display_temp.y2 == GUI_DIM_MIN || GUI.display_temp.y2 > (y + hi)) {
         GUI.display_temp.y2 = y + hi;
     }
     
@@ -333,12 +333,12 @@ set_relative_coordinate(guii_touch_data_t* ts, gui_touch_data_t* old, gui_handle
  * \return          PT thread result
  */
 static
-PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, gui_touch_data_t* old, uint8_t v, gui_we_t* result)) {
+PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* const ts, gui_touch_data_t* const old, uint8_t v, gui_widget_evt_t* const result)) {
     static volatile uint32_t time;
     static uint8_t i = 0;
     static gui_dim_t x[2], y[2];
 
-    *result = (gui_we_t)0;                          /* Reset widget control variable */          
+    *result = (gui_widget_evt_t)0;                  /* Reset widget control variable */          
 
     PT_BEGIN(&ts->pt);                              /* Start thread execution */
 
@@ -358,7 +358,8 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, gui_touch_data_t* old, uin
             PT_YIELD(&ts->pt);                      /* Stop thread for now and wait next call */
 
             /* Wait for new data */
-            PT_WAIT_UNTIL(&ts->pt, v || (gui_sys_now() - time) > GUI_CFG_LONG_CLICK_TIMEOUT);   /* Wait touch with released state or timeout */
+            /* Wait touch with released state or timeout */
+            PT_WAIT_UNTIL(&ts->pt, v || (gui_sys_now() - time) > GUI_CFG_LONG_CLICK_TIMEOUT);
 
             /* We have new touch entry, but we do
                not yet if it is "pressed" or "released" */
@@ -437,7 +438,7 @@ PT_THREAD(__TouchEvents_Thread(guii_touch_data_t* ts, gui_touch_data_t* old, uin
  * \return          Member of \ref guii_touch_status_t enumeration about success
  */
 static guii_touch_status_t
-process_touch(guii_touch_data_t* touch, gui_touch_data_t* touch_old, gui_handle_p parent) {
+process_touch(guii_touch_data_t* const touch, gui_touch_data_t* const touch_old, gui_handle_p parent) {
     gui_handle_p h;
     static uint8_t deep = 0;
     static uint8_t isKeyboard = 0;
@@ -573,7 +574,7 @@ static void
 gui_process_touch(void) {
     gui_evt_param_t param = {0};
     gui_evt_result_t result = {0};
-    gui_we_t rresult;
+    gui_widget_evt_t rresult;
     
     if (guii_input_touchavailable()) {              /* Check if any touch available */
         while (guii_input_touchread(&GUI.touch.ts)) {   /* Process all touch events possible */
@@ -770,10 +771,10 @@ process_redraw(void) {
     memcpy(&GUI.lcd.active_layer->display, &GUI.display, sizeof(GUI.display));  /* Copy clipping data to region */
     
     /* Invalid clipping region(s) for next drawing process */
-    GUI.display.x1 = 0x7FFF;
-    GUI.display.y1 = 0x7FFF;
-    GUI.display.x2 = 0x8000;
-    GUI.display.y2 = 0x8000;
+    GUI.display.x1 = GUI_DIM_MAX;
+    GUI.display.y1 = GUI_DIM_MAX;
+    GUI.display.x2 = GUI_DIM_MIN;
+    GUI.display.y2 = GUI_DIM_MIN;
 }
 
 /**

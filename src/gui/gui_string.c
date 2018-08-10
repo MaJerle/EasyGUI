@@ -39,7 +39,7 @@
  * \sa              gui_string_unicode_decode, gui_string_unicode_encode
  */
 void
-gui_string_unicode_init(gui_string_unicode_t* s) {
+gui_string_unicode_init(gui_string_unicode_t* const s) {
     memset(s, 0x00, sizeof(*s));            /* Reset structure */
 }
 
@@ -51,7 +51,7 @@ gui_string_unicode_init(gui_string_unicode_t* s) {
  * \sa              gui_string_unicode_init, gui_string_unicode_encode
  */
 GUI_STRING_UNICODE_Result_t
-gui_string_unicode_decode(gui_string_unicode_t* s, const gui_char c) {    
+gui_string_unicode_decode(gui_string_unicode_t* const s, const gui_char c) {    
     if (!s->r) {                            /* First byte received */
         s->t = 0;
         if (c < 0x80) {                     /* One byte only in UTF-8 representation */
@@ -132,7 +132,7 @@ gui_string_unicode_encode(const uint32_t c, gui_char* out) {
  * \return          Number of visible characters in string
  */
 size_t
-gui_string_length(const gui_char* src) {
+gui_string_length(const gui_char* const src) {
 #if GUI_CFG_USE_UNICODE
     size_t out = 0;
     const gui_char* tmp = src;
@@ -159,7 +159,7 @@ gui_string_length(const gui_char* src) {
  * \return          Number of visible characters in string
  */
 size_t
-gui_string_lengthtotal(const gui_char* src) {
+gui_string_lengthtotal(const gui_char* const src) {
     return strlen((const char *)src);       /* Get string length */
 }
 
@@ -170,7 +170,7 @@ gui_string_lengthtotal(const gui_char* src) {
  * \return          Pointer to destination memory
  */
 gui_char *
-gui_string_copy(gui_char* dst, const gui_char* src) {
+gui_string_copy(gui_char* dst, const gui_char* const src) {
     return (gui_char *)strcpy((char *)dst, (const char *)src);  /* Copy source string to destination */
 }
 
@@ -182,7 +182,7 @@ gui_string_copy(gui_char* dst, const gui_char* src) {
  * \return          Pointer to destination memory
  */
 gui_char *
-gui_string_copyn(gui_char* dst, const gui_char* src, size_t len) {
+gui_string_copyn(gui_char* const dst, const gui_char* const src, size_t len) {
     return (gui_char *)strncpy((char *)dst, (const char *)src, len);    /* Copy source string to destination */
 }
 
@@ -193,7 +193,7 @@ gui_string_copyn(gui_char* dst, const gui_char* src, size_t len) {
  * \return          `0` if equal, non-zero otherwise
  */
 int
-gui_string_compare(const gui_char* s1, const gui_char* s2) {
+gui_string_compare(const gui_char* const s1, const gui_char* const s2) {
     return strcmp((const char *)s1, (const char *)s2);
 }
 
@@ -204,7 +204,7 @@ gui_string_compare(const gui_char* s1, const gui_char* s2) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_string_prepare(gui_string_t* s, const gui_char* str) {
+gui_string_prepare(gui_string_t* const s, const gui_char* const str) {
     s->str = str;                           /* Save string pointer */
 #if GUI_CFG_USE_UNICODE
     gui_string_unicode_init(&s->s);         /* Prepare unicode structure */
@@ -226,7 +226,7 @@ gui_string_prepare(gui_string_t* s, const gui_char* str) {
  * \sa              gui_string_getchreverse
  */
 uint8_t
-gui_string_getch(gui_string_t* s, uint32_t* out, uint8_t* len) {
+gui_string_getch(gui_string_t* const s, uint32_t* const out, uint8_t* const len) {
 #if GUI_CFG_USE_UNICODE
     GUI_STRING_UNICODE_Result_t r;
     
@@ -274,7 +274,7 @@ gui_string_getch(gui_string_t* s, uint32_t* out, uint8_t* len) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_string_getchreverse(gui_string_t* str, uint32_t* out, uint8_t* len) {
+gui_string_getchreverse(gui_string_t* const str, uint32_t* const out, uint8_t* const len) {
 #if GUI_CFG_USE_UNICODE
     const gui_char* ch = (str->str) - 3;    /* Save character pointer, start 3 bytes before current active character */
     if (ch[3] < 0x80) {                     /* Normal ASCII character */
@@ -329,7 +329,7 @@ gui_string_getchreverse(gui_string_t* str, uint32_t* out, uint8_t* len) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_string_gotoend(gui_string_t* str) {
+gui_string_gotoend(gui_string_t* const str) {
     while (*str->str) {                     /* Check characters */
         str->str++;                         /* Go to next character */
     }

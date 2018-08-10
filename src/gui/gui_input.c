@@ -54,7 +54,7 @@ static uint8_t buff_kb_data[sizeof(gui_keyboard_data_t) * GUI_CFG_KEYBOARD_BUFFE
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_input_touchadd(gui_touch_data_t* ts) {
+gui_input_touchadd(gui_touch_data_t* const ts) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(ts);
     
@@ -73,7 +73,7 @@ gui_input_touchadd(gui_touch_data_t* ts) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-guii_input_touchread(gui_touch_data_t* ts) {
+guii_input_touchread(gui_touch_data_t* const ts) {
     if (gui_buffer_getfull(&buff_ts) >= sizeof(*ts)) {
         gui_buffer_read(&buff_ts, ts, sizeof(*ts)); /* Read data from buffer */
         return 1;
@@ -100,7 +100,7 @@ guii_input_touchavailable(void) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_input_keyadd(gui_keyboard_data_t* kb) {
+gui_input_keyadd(gui_keyboard_data_t* const kb) {
     uint8_t ret;
     __GUI_ASSERTPARAMS(kb);
     kb->time = gui_sys_now();                       /* Set event time */
@@ -118,7 +118,7 @@ gui_input_keyadd(gui_keyboard_data_t* kb) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-guii_input_keyread(gui_keyboard_data_t* kb) {
+guii_input_keyread(gui_keyboard_data_t* const kb) {
     if (gui_buffer_getfull(&buff_kb) >= sizeof(*kb)) {
         gui_buffer_read(&buff_kb, kb, sizeof(*kb)); /* Read data from buffer */
         return 1;

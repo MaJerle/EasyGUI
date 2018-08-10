@@ -308,9 +308,9 @@ keyboard = {
  * \brief           Keyboard button callback function
  */
 static uint8_t
-keyboard_btn_callback(gui_handle_p h, gui_we_t cmd, gui_evt_param_t* param, gui_evt_result_t* result) {
-    switch (cmd) {                                  /* Process commands */
-        case GUI_EVT_DRAW: {                         /* Draw button */
+keyboard_btn_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
+    switch (evt) {
+        case GUI_EVT_DRAW: {                        /* Draw button */
             gui_char str[10] = {0};
             const key_btn_t* kbtn;
             
@@ -318,25 +318,25 @@ keyboard_btn_callback(gui_handle_p h, gui_we_t cmd, gui_evt_param_t* param, gui_
             
             switch (kbtn->s) {                      /* Check if there is specal key */
                 case SPECIAL_123: 
-                    strcpy((char *)str, (char *)_GT("123"));
+                    strcpy((char *)str, (const char *)_GT("123"));
                     break;
                 case SPECIAL_ABC: 
-                    strcpy((char *)str, (char *)_GT("abc"));
+                    strcpy((char *)str, (const char *)_GT("abc"));
                     break;
                 case SPECIAL_CALC:
-                    strcpy((char *)str, (char *)_GT("#+="));
+                    strcpy((char *)str, (const char *)_GT("#+="));
                     break;
                 case SPECIAL_BACKSPACE: 
-                    strcpy((char *)str, (char *)_GT("Back"));
+                    strcpy((char *)str, (const char *)_GT("Back"));
                     break;
                 case SPECIAL_ENTER: 
-                    strcpy((char *)str, (char *)_GT("Ent"));
+                    strcpy((char *)str, (const char *)_GT("Ent"));
                     break;
                 case SPECIAL_SHIFT: 
-                    strcpy((char *)str, (char *)_GT("Shift"));
+                    strcpy((char *)str, (const char *)_GT("Shift"));
                     break;
                 case SPECIAL_HIDE: 
-                    strcpy((char *)str, (char *)_GT("Hide"));
+                    strcpy((char *)str, (const char *)_GT("Hide"));
                     break;
                 default:
                     if (keyboard.is_shift && kbtn->cs) {    /* Character when shift is ON */
@@ -354,7 +354,7 @@ keyboard_btn_callback(gui_handle_p h, gui_we_t cmd, gui_evt_param_t* param, gui_
             }
             
             gui_widget_settext(h, str);             /* Temporary set text */
-            gui_widget_processdefaultcallback(h, cmd, param, result);   /* Process default callback with drawing */
+            gui_widget_processdefaultcallback(h, evt, param, result);  /* Process default callback with drawing */
             return 1;
         }
         case GUI_EVT_CLICK: {                        /* Handle pressed button */
@@ -386,19 +386,19 @@ keyboard_btn_callback(gui_handle_p h, gui_we_t cmd, gui_evt_param_t* param, gui_
                             gui_widget_hide(tmp2);
                             gui_widget_show(tmp3);
                         }
-                        SHIFT_DISABLE();            /* Clear shift mode */
+                        SHIFT_DISABLE();
                         break;
                     }
                     case SPECIAL_SHIFT: {
-                        SHIFT_TOGGLE();             /* Toggle shift mode */
+                        SHIFT_TOGGLE();
                         break;
                     }
                     case SPECIAL_BACKSPACE: {
-                        ch = GUI_KEY_BACKSPACE;     /* Fake backspace key */
+                        ch = GUI_KEY_BACKSPACE;
                         break;
                     }
-                    case SPECIAL_HIDE: {            /* Hide button pressed */
-                        gui_keyboard_hide();        /* Hide keyboard */
+                    case SPECIAL_HIDE: {
+                        gui_keyboard_hide();
                         break;
                     }
                 }
@@ -456,27 +456,27 @@ keyboard_btn_callback(gui_handle_p h, gui_we_t cmd, gui_evt_param_t* param, gui_
         }
         default:
             GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
-            return gui_widget_processdefaultcallback(h, cmd, param, result);    /* Process default callback */
+            return gui_widget_processdefaultcallback(h, evt, param, result);   /* Process default callback */
     }
 }
 
 /* Callback for keyboard base widget */
 static uint8_t
-keyboard_callback(gui_handle_p h, gui_we_t cmd, gui_evt_param_t* param, gui_evt_result_t* result) {
-    switch (cmd) {
+keyboard_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
+    switch (evt) {
         case GUI_EVT_INIT: {
             return 1;
         }
         default:                                    /* Handle default option */
             GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
-            return gui_widget_processdefaultcallback(h, cmd, param, result);    /* Process default callback */
+            return gui_widget_processdefaultcallback(h, evt, param, result);/* Process default callback */
     }
 }
 
 /* Callback function for base element of keyboard */
 static uint8_t
-keyboard_base_callback(gui_handle_p h, gui_we_t cmd, gui_evt_param_t* param, gui_evt_result_t* result) {
-    switch (cmd) {
+keyboard_base_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
+    switch (evt) {
         case GUI_EVT_PRE_INIT: {
             return 1;
         }
@@ -491,13 +491,13 @@ keyboard_base_callback(gui_handle_p h, gui_we_t cmd, gui_evt_param_t* param, gui
             /*   Configure keyboard    */
             /***************************/
             gui_widget_setignoreinvalidate(h, 1, 0);
-            gui_widget_setsizepercent(h, 100, 100); /* Set keyboard size */
-            gui_widget_setpositionpercent(h, 0, 0); /* Set position of keyboard outside visible area */
-            gui_widget_setzindex(h, GUI_WIDGET_ZINDEX_MAX);  /* Set to maximal z-index */
-            gui_widget_hide(h);                     /* Hide keyboard by default */
+            gui_widget_setsizepercent(h, 100, 100);
+            gui_widget_setpositionpercent(h, 0, 0);
+            gui_widget_setzindex(h, GUI_WIDGET_ZINDEX_MAX);
+            gui_widget_hide(h);
             gui_widget_setignoreinvalidate(h, 0, 1);
             
-            keyboard.default_font = h->font;        /* Save current font */
+            keyboard.default_font = h->font;
             
             /***************************/
             /* Create keyboard layouts */
@@ -541,7 +541,7 @@ keyboard_base_callback(gui_handle_p h, gui_we_t cmd, gui_evt_param_t* param, gui
         }
         default:                                    /* Handle default option */
             GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
-            return gui_widget_processdefaultcallback(h, cmd, param, result);/* Process default callback */
+            return gui_widget_processdefaultcallback(h, evt, param, result);/* Process default callback */
     }
 }
 

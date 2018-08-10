@@ -57,7 +57,7 @@ typedef struct {
 #endif /* GUI_CFG_OS */
 } dissmissed_dialog_list_t;
 
-static uint8_t gui_dialog_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
+static uint8_t gui_dialog_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result);
 
 /**
  * \brief           List of dismissed dialog elements not yet read
@@ -123,15 +123,15 @@ get_dialog(gui_handle_p h) {
 /**
  * \brief           Default widget callback function
  * \param[in]       h: Widget handle
- * \param[in]       ctr: Callback type
+ * \param[in]       evt: Event type
  * \param[in]       param: Input parameters for callback type
  * \param[out]      result: Result for callback type
  * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
-gui_dialog_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
+gui_dialog_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    switch (ctrl) {
+    switch (evt) {
         default:                                    /* Handle default option */
             GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */

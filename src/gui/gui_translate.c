@@ -42,7 +42,7 @@
  * \return          Pointer to translated string or source string if translate not found
  */
 const gui_char*
-gui_translate_get(const gui_char* src) {
+gui_translate_get(const gui_char* const src) {
     size_t i;
     
     /* Try to find source string in translate table */
@@ -69,7 +69,7 @@ gui_translate_get(const gui_char* src) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_translate_setactivelanguage(const gui_translate_language_t* lang) {
+gui_translate_setactivelanguage(const gui_translate_language_t* const lang) {
     GUI.translate.active = lang;                    /* Set currently active language */
     return 1;
 }
@@ -81,7 +81,7 @@ gui_translate_setactivelanguage(const gui_translate_language_t* lang) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_translate_setsourcelanguage(const gui_translate_language_t* lang) {
+gui_translate_setsourcelanguage(const gui_translate_language_t* const lang) {
     GUI.translate.source = lang;                    /* Set source language */
     return 1;
 }

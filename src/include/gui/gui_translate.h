@@ -47,9 +47,9 @@ extern "C" {
  * \{
  */
  
-const gui_char* gui_translate_get(const gui_char* src);
-uint8_t gui_translate_setactivelanguage(const gui_translate_language_t* lang);
-uint8_t gui_translate_setsourcelanguage(const gui_translate_language_t* lang); 
+const gui_char* gui_translate_get(const gui_char* const src);
+uint8_t         gui_translate_setactivelanguage(const gui_translate_language_t* const lang);
+uint8_t         gui_translate_setsourcelanguage(const gui_translate_language_t* const lang); 
     
 /**
  * \}

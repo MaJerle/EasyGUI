@@ -42,7 +42,7 @@ typedef struct {
     gui_handle C;                                   /*!< GUI handle object, must always be first on list */
 } gui_container_t;
 
-static uint8_t gui_container_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
+static uint8_t gui_container_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -68,15 +68,15 @@ gui_widget_t widget = {
 /**
  * \brief           Default widget callback function
  * \param[in]       h: Widget handle
- * \param[in]       ctr: Callback type
+ * \param[in]       evt: Event type
  * \param[in]       param: Input parameters for callback type
  * \param[out]      result: Result for callback type
  * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
-gui_container_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
+gui_container_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    switch (ctrl) {
+    switch (evt) {
         case GUI_EVT_DRAW: {
             gui_display_t* disp = GUI_EVT_PARAMTYPE_DISP(param);
             gui_dim_t x, y, wi, hi;

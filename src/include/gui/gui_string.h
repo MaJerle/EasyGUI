@@ -71,8 +71,8 @@ typedef enum {
     UNICODE_PROGRESS,                               /*!< Indicates function decoding is still in progress and it waits for new character */
 } GUI_STRING_UNICODE_Result_t;
 
-void gui_string_unicode_init(gui_string_unicode_t* s);
-GUI_STRING_UNICODE_Result_t gui_string_unicode_decode(gui_string_unicode_t* s, const gui_char c);
+void gui_string_unicode_init(gui_string_unicode_t* const s);
+GUI_STRING_UNICODE_Result_t gui_string_unicode_decode(gui_string_unicode_t* const s, const gui_char c);
 uint8_t gui_string_unicode_encode(const uint32_t c, gui_char* out);
 
 /**
@@ -89,16 +89,16 @@ typedef struct {
 #endif /* GUI_CFG_USE_UNICODE || __DOXYGEN__ */
 } gui_string_t;
 
-size_t gui_string_length(const gui_char* src);
-size_t gui_string_lengthtotal(const gui_char* src);
-gui_char* gui_string_copy(gui_char* dst, const gui_char* src);
-gui_char* gui_string_copyn(gui_char* dst, const gui_char* src, size_t len);
-int gui_string_compare(const gui_char* s1, const gui_char* s2);
+size_t gui_string_length(const gui_char* const src);
+size_t gui_string_lengthtotal(const gui_char* const src);
+gui_char* gui_string_copy(gui_char* const dst, const gui_char* const src);
+gui_char* gui_string_copyn(gui_char* const dst, const gui_char* const src, size_t len);
+int gui_string_compare(const gui_char* const s1, const gui_char* const s2);
 uint8_t gui_string_isprintable(uint32_t ch);
-uint8_t gui_string_prepare(gui_string_t* s, const gui_char* str);
-uint8_t gui_string_getch(gui_string_t* str, uint32_t* out, uint8_t* len);
-uint8_t gui_string_getchreverse(gui_string_t* str, uint32_t* out, uint8_t* len);
-uint8_t gui_string_gotoend(gui_string_t* str);
+uint8_t gui_string_prepare(gui_string_t* const s, const gui_char* const str);
+uint8_t gui_string_getch(gui_string_t* const str, uint32_t* out, uint8_t* const len);
+uint8_t gui_string_getchreverse(gui_string_t* const str, uint32_t* const out, uint8_t* const len);
+uint8_t gui_string_gotoend(gui_string_t* const str);
     
 /**
  * \}

@@ -42,7 +42,7 @@ typedef struct {
     gui_handle C;                                   /*!< GUI handle object, must always be first on list */
 } gui_window_t;
 
-static uint8_t gui_window_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
+static uint8_t gui_window_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -71,19 +71,19 @@ gui_widget_t widget = {
 /**
  * \brief           Default widget callback function
  * \param[in]       h: Widget handle
- * \param[in]       ctr: Callback type
+ * \param[in]       evt: Event type
  * \param[in]       param: Input parameters for callback type
  * \param[out]      result: Result for callback type
  * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
-gui_window_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
+gui_window_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
 #if GUI_CFG_USE_TOUCH
     static gui_dim_t ts_mode = 0;
 #endif /* GUI_CFG_USE_TOUCH */
     
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    switch (ctrl) {
+    switch (evt) {
         case GUI_EVT_PRE_INIT: {                      /* Called immediatelly after widget is created */
             gui_window_setactive(h);                /* Set active window */
             return 1;

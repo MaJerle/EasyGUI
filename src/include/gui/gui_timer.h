@@ -56,12 +56,12 @@ extern "C" {
  */
 #define guii_timer_getparams(t)        ((t)->params)
 
-gui_timer_t* guii_timer_create(uint16_t period, void (*callback)(gui_timer_t *), void* param);
-uint8_t guii_timer_remove(gui_timer_t** t);
-uint8_t guii_timer_start(gui_timer_t* t);
-uint8_t guii_timer_startperiodic(gui_timer_t* t);
-uint8_t guii_timer_stop(gui_timer_t* t);
-uint8_t guii_timer_reset(gui_timer_t* t);
+gui_timer_t* guii_timer_create(uint16_t period, void (*callback)(gui_timer_t *), void* const param);
+uint8_t guii_timer_remove(gui_timer_t** const t);
+uint8_t guii_timer_start(gui_timer_t* const t);
+uint8_t guii_timer_startperiodic(gui_timer_t* const t);
+uint8_t guii_timer_stop(gui_timer_t* const t);
+uint8_t guii_timer_reset(gui_timer_t* const t);
 
 uint32_t guii_timer_getactivecount(void);
 void guii_timer_process(void);

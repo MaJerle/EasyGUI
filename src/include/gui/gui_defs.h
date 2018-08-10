@@ -212,6 +212,9 @@ typedef int16_t     gui_dim_t;              /*!< GUI dimensions in units of pixe
 typedef uint8_t     gui_char;               /*!< GUI char data type for all string operations */
 #define _GT(x)      (gui_char *)(x)         /*!< Macro to force strings to right format for processing */
 #define gui_const   const                   /*!< Macro for constant keyword */
+    
+#define GUI_DIM_MIN                         ((gui_dim_t)0x8000)
+#define GUI_DIM_MAX                         ((gui_dim_t)0x7FFF)
 
 /**
  * \brief           Get size of statically declared array
@@ -1038,7 +1041,7 @@ typedef enum {
      * \param[out]  result: None
      */
     GUI_EVT_ONDISMISS,
-} gui_we_t;
+} gui_widget_evt_t;
 
 /**
  * \brief           Style information
@@ -1097,7 +1100,7 @@ typedef struct {
  *                      - Value change, selection change
  *                      - and more
  */
-typedef uint8_t (*gui_widget_evt_fn) (gui_handle_p h, gui_we_t cmd, gui_evt_param_t* param, gui_evt_result_t* result);
+typedef uint8_t (*gui_widget_evt_fn) (gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result);
 
 #define GUI_EVT_PARAMTYPE_DISP(x)               (x)->u.disp
 #define GUI_EVT_PARAMTYPE_TOUCH(x)              (x)->u.td

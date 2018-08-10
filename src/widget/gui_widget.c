@@ -2235,7 +2235,7 @@ gui_widget_ischildof(gui_handle_p h, gui_handle_p parent) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_setuserdata(gui_handle_p h, void* data) {
+gui_widget_setuserdata(gui_handle_p h, void* const data) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
     h->arg = data;                                  /* Set user argument */
     return 1;
@@ -2259,14 +2259,14 @@ gui_widget_getuserdata(gui_handle_p h) {
  * \note            Call this function inside custom callback widget function for unhandled events
  *                     It will automatically call required function according to input widget
  * \param[in]       h: Widget handle where callback occurred
- * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref gui_we_t enumeration
- * \param[in]       param: Pointer to optional input data for command. Check \ref gui_we_t enumeration for more informations
- * \param[out]      result: Pointer to optional result value. Check \ref gui_we_t enumeration for more informations
+ * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref gui_widget_evt_t enumeration
+ * \param[in]       param: Pointer to optional input data for command. Check \ref gui_widget_evt_t enumeration for more informations
+ * \param[out]      result: Pointer to optional result value. Check \ref gui_evt_result_t enumeration for more informations
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_widget_processdefaultcallback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
-    return h->widget->callback(h, ctrl, param, result); /* Call default callback function */
+gui_widget_processdefaultcallback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
+    return h->widget->callback(h, evt, param, result); /* Call default callback function */
 }
 
 /**
@@ -2289,16 +2289,16 @@ gui_widget_setcallback(gui_handle_p h, gui_widget_evt_fn callback) {
  *                      If called from inside widget callback, it may result in recursive calls.
  *
  * \param[in]       h: Widget handle where callback occurred
- * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref gui_we_t enumeration
- * \param[in]       param: Pointer to optional input data for command. Check \ref gui_we_t enumeration for more informations
- * \param[out]      result: Pointer to optional result value. Check \ref gui_we_t enumeration for more informations
+ * \param[in]       ctrl: Control command which happened for widget. This parameter can be a value of \ref gui_widget_evt_t enumeration
+ * \param[in]       param: Pointer to optional input data for command. Check \ref gui_widget_evt_t enumeration for more informations
+ * \param[out]      result: Pointer to optional result value. Check \ref gui_evt_result_t enumeration for more informations
  * \return          `1` on success, `0` otherwise
  * \sa              gui_widget_setcallback
  */
 uint8_t
-gui_widget_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
+gui_widget_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
     __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
-    return guii_widget_callback(h, ctrl, param, result);/* Call callback function */
+    return guii_widget_callback(h, evt, param, result);/* Call callback function */
 }
 
 /**

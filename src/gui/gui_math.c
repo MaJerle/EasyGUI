@@ -43,7 +43,7 @@
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_math_sqrt(float x, float* result) {
+gui_math_sqrt(float x, float* const result) {
     if (x > 0) {                                    /* Check valid input */
         *result = GUI_FLOAT(sqrt(x));               /* Calculate on positive number */
         return 1;
@@ -61,7 +61,7 @@ gui_math_sqrt(float x, float* result) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_math_rsqrt(float x, float* result) {
+gui_math_rsqrt(float x, float* const result) {
     int32_t i;
 	float x2, y;
 	const float th = 1.5f;
@@ -92,7 +92,7 @@ gui_math_rsqrt(float x, float* result) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_math_distancebetweenxy(float x1, float y1, float x2, float y2, float* result) {
+gui_math_distancebetweenxy(float x1, float y1, float x2, float y2, float* const result) {
     return gui_math_sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2), result);    /* Calculate distance between 2 points with X and Y value */
 }
 
@@ -112,7 +112,7 @@ gui_math_distancebetweenxy(float x1, float y1, float x2, float y2, float* result
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
-gui_math_centerofxy(float x1, float y1, float x2, float y2, float* resultx, float* resulty) {
+gui_math_centerofxy(float x1, float y1, float x2, float y2, float* const resultx, float* const resulty) {
     *resultx = (x1 + x2) / 2.0f;                    /* Calculate middle point for X position */
     *resulty = (y1 + y2) / 2.0f;                    /* Calculate middle point for Y position */
     

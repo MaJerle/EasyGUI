@@ -48,7 +48,7 @@ typedef struct {
 
 #define CFG_MODE            0x01
 
-static uint8_t gui_listcontainer_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
+static uint8_t gui_listcontainer_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -114,16 +114,16 @@ calculate_limits(gui_handle_p h) {
 /**
  * \brief           Default widget callback function
  * \param[in]       h: Widget handle
- * \param[in]       ctr: Callback type
+ * \param[in]       evt: Event type
  * \param[in]       param: Input parameters for callback type
  * \param[out]      result: Result for callback type
  * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
-gui_listcontainer_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
+gui_listcontainer_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
     gui_listcontainer_t* o = GUI_VP(h);
     __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
-    switch (ctrl) {
+    switch (evt) {
         case GUI_EVT_PRE_INIT: {
             return 1;
         }

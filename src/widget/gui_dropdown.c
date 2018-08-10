@@ -74,7 +74,7 @@ typedef struct {
     uint8_t flags;                                  /*!< Widget flags \ref GUI_DROPDOWN_FLAGS */
 } gui_dropdown_t;
 
-static uint8_t gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
+static uint8_t gui_dropdown_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result);
 
 /**
  * \brief           List of default color in the same order of widget color enumeration
@@ -302,19 +302,19 @@ process_click(gui_handle_p h, guii_touch_data_t* ts) {
 /**
  * \brief           Default widget callback function
  * \param[in]       h: Widget handle
- * \param[in]       ctr: Callback type
+ * \param[in]       evt: Event type
  * \param[in]       param: Input parameters for callback type
  * \param[out]      result: Result for callback type
  * \return          `1` if command processed, `0` otherwise
  */
 static uint8_t
-gui_dropdown_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result) {
+gui_dropdown_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
     gui_dropdown_t* o = GUI_VP(h);
 #if GUI_CFG_USE_TOUCH
     static gui_dim_t ty;
 #endif /* GUI_CFG_USE_TOUCH */
     
-    switch (ctrl) {
+    switch (evt) {
         case GUI_EVT_PRE_INIT: {
             o->selected = -1;                 /* Invalidate selection */
             o->sliderwidth = 30;              /* Set slider width */

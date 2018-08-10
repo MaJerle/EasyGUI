@@ -63,8 +63,8 @@ extern "C" {
 
 #define GUI_ID_USER                 ((gui_id_t)(0x10000))                       /*!< Start number of user based ID values for widgets */
 
-#define GUI_WIDGET_ZINDEX_MAX       (int32_t)(0x7FFFFFFF)                       /*!< Maximal allowed z-index value */
-#define GUI_WIDGET_ZINDEX_MIN       (int32_t)(0x80000000)                       /*!< Maximal allowed z-index value */
+#define GUI_WIDGET_ZINDEX_MAX       ((int32_t)(0x7FFFFFFF))                     /*!< Maximal allowed z-index value */
+#define GUI_WIDGET_ZINDEX_MIN       ((int32_t)(0x80000000))                     /*!< Maximal allowed z-index value */
     
 /**
  * \}
@@ -193,7 +193,7 @@ extern "C" {
  * \brief           Process widget callback with command, parameters and result pointers
  * \note            The function is private and can be called only when GUI protection against multiple access is activated
  * \param[in]       h: Widget handle
- * \param[in]       cmd: Callback command. This parameter can be a value of \ref gui_we_t enumeration
+ * \param[in]       cmd: Callback command. This parameter can be a value of \ref gui_widget_evt_t enumeration
  * \param[in]       param: Pointer to parameters if any for this command
  * \param[out]      result: Pointer to result pointer where calback can store result
  * \return          `1` on success, `0` otherwise
@@ -481,7 +481,7 @@ uint8_t         gui_widget_force_invalidate(gui_handle_p h);
 uint8_t         gui_widget_invalidatewithparent(gui_handle_p h);
 uint8_t         gui_widget_setignoreinvalidate(gui_handle_p h, uint8_t en, uint8_t invalidate);
 uint8_t         gui_widget_setinvalidatewithparent(gui_handle_p h, uint8_t value);
-uint8_t         gui_widget_setuserdata(gui_handle_p h, void* data);
+uint8_t         gui_widget_setuserdata(gui_handle_p h, void* const data);
 void *          gui_widget_getuserdata(gui_handle_p h);
 uint8_t         gui_widget_ischildof(gui_handle_p h, gui_handle_p parent);
 uint8_t         gui_widget_incselection(gui_handle_p h, int16_t dir);
@@ -527,9 +527,9 @@ gui_dim_t       gui_widget_getpaddingleft(gui_handle_p h);
  * \{
  */
 
-uint8_t         gui_widget_processdefaultcallback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
+uint8_t         gui_widget_processdefaultcallback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result);
 uint8_t         gui_widget_setcallback(gui_handle_p h, gui_widget_evt_fn callback);
-uint8_t         gui_widget_callback(gui_handle_p h, gui_we_t ctrl, gui_evt_param_t* param, gui_evt_result_t* result);
+uint8_t         gui_widget_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result);
 
 /**
  * \}
