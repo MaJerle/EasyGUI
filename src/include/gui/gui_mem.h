@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_MEM_H
-#define __GUI_MEM_H
+#ifndef GUI_HDR_MEM_H
+#define GUI_HDR_MEM_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -79,4 +79,4 @@ uint8_t gui_mem_assignmemory(const gui_mem_region_t* regions, size_t size);
 }
 #endif
 
-#endif /* __GUI_MEM_H */
+#endif /* GUI_HDR_MEM_H */

@@ -82,7 +82,7 @@ gui_window_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const
     static gui_dim_t ts_mode = 0;
 #endif /* GUI_CFG_USE_TOUCH */
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (evt) {
         case GUI_EVT_PRE_INIT: {                      /* Called immediatelly after widget is created */
             gui_window_setactive(h);                /* Set active window */
@@ -333,7 +333,7 @@ gui_window_setcolor(gui_handle_p h, gui_window_color_t index, gui_color_t color)
  */
 uint8_t
 gui_window_setactive(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     
     GUI.window_active = h;                          /* Set new active window */
     guii_widget_movedowntree(h);                    /* Move widget down on tree */

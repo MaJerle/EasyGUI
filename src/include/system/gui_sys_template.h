@@ -30,8 +30,8 @@
  *
  * Author:          Tilen MAJERLE <tilen@majerle.eu>
  */
-#ifndef __GUI_SYSTEM_H
-#define __GUI_SYSTEM_H
+#ifndef GUI_HDR_SYSTEM_TEMPLATE_H
+#define GUI_HDR_SYSTEM_TEMPLATE_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -127,4 +127,4 @@ typedef osPriority          gui_sys_thread_prio_t;
 };
 #endif /* __cplusplus */
 
-#endif /* __GUI_SYSTEM_H */
+#endif /* GUI_HDR_SYSTEM_TEMPLATE_H */

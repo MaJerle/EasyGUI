@@ -147,7 +147,7 @@ timer_callback(gui_timer_t* t) {
 static uint8_t
 gui_progbar_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
     gui_progbar_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (evt) {
         case GUI_EVT_PRE_INIT: {
             o->min = o->currentvalue = 0;
@@ -294,7 +294,7 @@ gui_progbar_setcolor(gui_handle_p h, gui_progbar_color_t index, gui_color_t colo
  */
 uint8_t
 gui_progbar_setvalue(gui_handle_p h, int32_t val) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_VALUE, &val, 1, 0);
 }
 
@@ -306,7 +306,7 @@ gui_progbar_setvalue(gui_handle_p h, int32_t val) {
  */
 uint8_t
 gui_progbar_setmin(gui_handle_p h, int32_t val) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_MIN, &val, 1, 0);
 }
 
@@ -318,7 +318,7 @@ gui_progbar_setmin(gui_handle_p h, int32_t val) {
  */
 uint8_t
 gui_progbar_setmax(gui_handle_p h, int32_t val) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_MAX, &val, 1, 0);
 }
 
@@ -330,7 +330,7 @@ gui_progbar_setmax(gui_handle_p h, int32_t val) {
  */
 uint8_t
 gui_progbar_setpercentmode(gui_handle_p h, uint8_t enable) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_PERCENT, &enable, 1, 0);
 }
 
@@ -342,7 +342,7 @@ gui_progbar_setpercentmode(gui_handle_p h, uint8_t enable) {
  */
 uint8_t
 gui_progbar_setanimation(gui_handle_p h, uint8_t anim) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_ANIM, &anim, 1, 0);
 }
 
@@ -354,7 +354,7 @@ gui_progbar_setanimation(gui_handle_p h, uint8_t anim) {
 int32_t
 gui_progbar_getmin(gui_handle_p h) {
     gui_progbar_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return o->min;
 }
 
@@ -366,7 +366,7 @@ gui_progbar_getmin(gui_handle_p h) {
 int32_t
 gui_progbar_getmax(gui_handle_p h) {
     gui_progbar_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return o->max;
 }
 
@@ -378,6 +378,6 @@ gui_progbar_getmax(gui_handle_p h) {
 int32_t
 gui_progbar_getvalue(gui_handle_p h) {
     gui_progbar_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return o->desiredvalue;
 }

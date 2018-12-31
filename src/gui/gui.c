@@ -288,7 +288,7 @@ set_relative_coordinate(guii_touch_data_t* ts, gui_touch_data_t* old, gui_handle
 }
 
 /*
- * How touch events works
+ * How touch events work
  *
  * When using touch, 3 events are supported on widget:
  *  - TouchStart: Triggered when touch is going from released status to pressed status (touch just pressed)
@@ -525,7 +525,7 @@ process_touch(guii_touch_data_t* const touch, gui_touch_data_t* const touch_old,
                     
                     /*
                      * Invalidate actual handle object
-                     * Already invalidated in __GUI_ACTIVE_SET function
+                     * Already invalidated in guii_widget_active_set function
                      */
                     //gui_widget_invalidate(h);   
                 } else {                            /* Touch handled with no focus */
@@ -881,11 +881,11 @@ gui_process(void) {
     
     time = gui_sys_mbox_get(&GUI.OS.mbox, (void **)&msg, tmr_cnt ? 1 : 20); /* Get value from message queue */
     
-    GUI_UNUSED(time);                               /* Unused variable */
-    GUI_UNUSED(msg);                                /* Unused variable */
+    GUI_UNUSED(time);
+    GUI_UNUSED(msg);
 #endif /* GUI_CFG_OS */
    
-    __GUI_SYS_PROTECT(1);                           /* Protect from multiple access */
+    GUI_CORE_PROTECT(1);
     guii_timer_process();                           /* Process all timers */
     guii_widget_executeremove();                    /* Delete widgets */
 #if GUI_CFG_USE_TOUCH
@@ -895,7 +895,7 @@ gui_process(void) {
     process_keyboard();                             /* Process keyboard inputs */
 #endif /* GUI_CFG_USE_KEYBOARD */
     process_redraw();                               /* Redraw widgets */
-    __GUI_SYS_UNPROTECT(1);                         /* Release protection */
+    GUI_CORE_UNPROTECT(1);
     
     return 0;                                       /* Return number of elements updated on GUI */
 }
@@ -925,7 +925,7 @@ gui_seteventcallback(gui_eventcallback_t cb) {
 uint8_t
 gui_protect(const uint8_t protect) {
     if (protect) {
-        __GUI_SYS_PROTECT(1);
+        GUI_CORE_PROTECT(1);
     }
     return 1;
 }
@@ -938,7 +938,7 @@ gui_protect(const uint8_t protect) {
 uint8_t
 gui_unprotect(const uint8_t unprotect) {
     if (unprotect) {
-        __GUI_SYS_UNPROTECT(1);
+        GUI_CORE_UNPROTECT(1);
         gui_sys_mbox_putnow(&GUI.OS.mbox, 0x00);    /* Wakeup processing thread */
     }
     return 1;

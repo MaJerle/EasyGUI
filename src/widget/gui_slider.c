@@ -192,7 +192,7 @@ timer_callback(gui_timer_t* timer) {
 static uint8_t
 gui_slider_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
     gui_slider_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (evt) {
         case GUI_EVT_PRE_INIT: {
             o->min = 0;                             /* Set default minimal value */
@@ -368,7 +368,7 @@ gui_slider_setcolor(gui_handle_p h, gui_slider_color_t index, gui_color_t color)
  */
 uint8_t
 gui_slider_setmode(gui_handle_p h, gui_slider_mode_t mode) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_MODE, &mode, 1, 0);
 }
 
@@ -380,7 +380,7 @@ gui_slider_setmode(gui_handle_p h, gui_slider_mode_t mode) {
  */
 uint8_t
 gui_slider_setvalue(gui_handle_p h, int32_t val) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_VALUE, &val, 1, 0);
 }
 
@@ -392,7 +392,7 @@ gui_slider_setvalue(gui_handle_p h, int32_t val) {
  */
 uint8_t
 gui_slider_setmin(gui_handle_p h, int32_t val) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_MIN, &val, 1, 0);
 }
 
@@ -404,7 +404,7 @@ gui_slider_setmin(gui_handle_p h, int32_t val) {
  */
 uint8_t
 gui_slider_setmax(gui_handle_p h, int32_t val) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_MAX, &val, 1, 0);
 }
 
@@ -416,7 +416,7 @@ gui_slider_setmax(gui_handle_p h, int32_t val) {
 int32_t
 gui_slider_getmin(gui_handle_p h) {
     gui_slider_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return o->min;
 }
 
@@ -428,7 +428,7 @@ gui_slider_getmin(gui_handle_p h) {
 int32_t
 gui_slider_getmax(gui_handle_p h) {
     gui_slider_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return o->max;
 }
 
@@ -440,6 +440,6 @@ gui_slider_getmax(gui_handle_p h) {
 int32_t
 gui_slider_getvalue(gui_handle_p h) {
     gui_slider_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return o->value;
 }

@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_CONFIG_DEFAULT_H
-#define __GUI_CONFIG_DEFAULT_H
+#ifndef GUI_HDR_CONFIG_DEFAULT_H
+#define GUI_HDR_CONFIG_DEFAULT_H
 
 /**
  * \defgroup        GUI_CONF Configuration
@@ -231,4 +231,4 @@ gui_widget_setignoreinvalidate(h, 0, 1, 0);
  * \}
  */
 
-#endif /* __GUI_CONFIG_DEFAULT_H */
+#endif /* GUI_HDR_CONFIG_DEFAULT_H */

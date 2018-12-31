@@ -402,7 +402,7 @@ gui_listbox_addstring(gui_handle_p h, const gui_char* text) {
     uint8_t ret = 0;
     gui_listbox_t* o = GUI_VP(h);
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     item = GUI_MEMALLOC(sizeof(*item));             /* Allocate memory for entry */
     if (item != NULL) {
@@ -429,7 +429,7 @@ gui_listbox_setstring(gui_handle_p h, int16_t index, const gui_char* text) {
     gui_listbox_t* o = GUI_VP(h);
     gui_listbox_item_t* item;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     item = gui_widget_list_get_item_byindex(h, &o->ld, index);  /* Get list item from handle */
     if (item != NULL) {
@@ -447,7 +447,7 @@ gui_listbox_setstring(gui_handle_p h, int16_t index, const gui_char* text) {
  */
 uint8_t
 gui_listbox_deletefirststring(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return delete_item(h, 0);                       /* Delete first item */
 }
 
@@ -459,7 +459,7 @@ gui_listbox_deletefirststring(gui_handle_p h) {
 uint8_t
 gui_listbox_deletelaststring(gui_handle_p h) {
     gui_listbox_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return delete_item(h, gui_widget_list_get_count(h, &o->ld) - 1);
 }
 
@@ -471,7 +471,7 @@ gui_listbox_deletelaststring(gui_handle_p h) {
  */
 uint8_t
 gui_listbox_deletestring(gui_handle_p h, int16_t index) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return delete_item(h, index);
 }
 
@@ -485,7 +485,7 @@ uint8_t
 gui_listbox_scroll(gui_handle_p h, int16_t step) {
     gui_listbox_t* o = GUI_VP(h);
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     return gui_widget_list_slide(h, &o->ld, step);
 }
@@ -500,7 +500,7 @@ uint8_t
 gui_listbox_setselection(gui_handle_p h, int16_t selection) {
     gui_listbox_t* o = GUI_VP(h);
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     
     return gui_widget_list_set_selection(h, &o->ld, &o->selected, selection);
 }
@@ -513,6 +513,6 @@ gui_listbox_setselection(gui_handle_p h, int16_t selection) {
 int16_t
 gui_listbox_getselection(gui_handle_p h) {
     gui_listbox_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return o->selected;
 }

@@ -122,7 +122,7 @@ calculate_limits(gui_handle_p h) {
 static uint8_t
 gui_listcontainer_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
     gui_listcontainer_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (evt) {
         case GUI_EVT_PRE_INIT: {
             return 1;
@@ -252,6 +252,6 @@ gui_listcontainer_setcolor(gui_handle_p h, gui_listcontainer_color_t index, gui_
  */
 uint8_t
 gui_listcontainer_setmode(gui_handle_p h, gui_listcontainer_mode_t mode) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_MODE, &mode, 1, 0);
 }

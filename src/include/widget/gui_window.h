@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_WINDOW_H
-#define __GUI_WINDOW_H
+#ifndef GUI_HDR_WINDOW_H
+#define GUI_HDR_WINDOW_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -75,4 +75,4 @@ gui_handle_p    gui_window_createdesktop(gui_id_t id, gui_widget_evt_fn evt_fn);
 }
 #endif
 
-#endif /* __GUI_WINDOW_H */
+#endif /* GUI_HDR_WINDOW_H */

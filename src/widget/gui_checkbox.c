@@ -252,7 +252,7 @@ gui_checkbox_setcolor(gui_handle_p h, gui_checkbox_color_t index, gui_color_t co
  */
 uint8_t
 gui_checkbox_setchecked(gui_handle_p h, uint8_t checked) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_CHECK, &checked, 0, 0);  /* Set parameter */
 }
 
@@ -264,7 +264,7 @@ gui_checkbox_setchecked(gui_handle_p h, uint8_t checked) {
  */
 uint8_t
 gui_checkbox_setdisabled(gui_handle_p h, uint8_t disabled) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_DISABLE, &disabled, 0, 0);   /* Set parameter */
 }
 
@@ -276,7 +276,7 @@ gui_checkbox_setdisabled(gui_handle_p h, uint8_t disabled) {
 uint8_t
 gui_checkbox_ischecked(gui_handle_p h) {
     gui_checkbox_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return (o->flags & GUI_FLAG_CHECKBOX_CHECKED) == GUI_FLAG_CHECKBOX_CHECKED;
 }
 
@@ -288,6 +288,6 @@ gui_checkbox_ischecked(gui_handle_p h) {
 uint8_t
 gui_checkbox_isdisabled(gui_handle_p h) {
     gui_checkbox_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return (o->flags & GUI_FLAG_CHECKBOX_DISABLED) == GUI_FLAG_CHECKBOX_DISABLED;
 }

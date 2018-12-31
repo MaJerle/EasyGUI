@@ -71,7 +71,7 @@ static uint8_t
 gui_image_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
     gui_image_t* o = GUI_VP(h);
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (evt) {
         case GUI_EVT_DRAW: {
             gui_display_t* disp = GUI_EVT_PARAMTYPE_DISP(param);
@@ -116,7 +116,7 @@ gui_image_create(gui_id_t id, float x, float y, float width, float height, gui_h
 uint8_t
 gui_image_setsource(gui_handle_p h, const gui_image_desc_t* img) {
     gui_image_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && img != NULL);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && img != NULL);
 
     o->image = img;                                 /* Set image */
     

@@ -170,7 +170,7 @@ gui_string_lengthtotal(const gui_char* const src) {
  * \return          Pointer to destination memory
  */
 gui_char *
-gui_string_copy(gui_char* dst, const gui_char* const src) {
+gui_string_copy(gui_char* const dst, const gui_char* const src) {
     return (gui_char *)strcpy((char *)dst, (const char *)src);  /* Copy source string to destination */
 }
 

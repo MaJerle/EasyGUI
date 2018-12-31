@@ -328,7 +328,7 @@ gui_debugbox_addstring(gui_handle_p h, const gui_char* text) {
     gui_debugbox_item_t* item;
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     item = GUI_MEMALLOC(GUI_MEM_ALIGN(sizeof(*item)) + sizeof(*text) * (gui_string_lengthtotal(text) + 1));
     if (item != NULL) {
@@ -366,7 +366,7 @@ gui_debugbox_addstring(gui_handle_p h, const gui_char* text) {
 uint8_t
 gui_debugbox_scroll(gui_handle_p h, int16_t step) {
     gui_debugbox_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return gui_widget_list_slide(h, &o->ld, step);
 }
 
@@ -379,7 +379,7 @@ gui_debugbox_scroll(gui_handle_p h, int16_t step) {
 uint8_t
 gui_debugbox_setmaxitems(gui_handle_p h, int16_t max_items) {
     gui_debugbox_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && max_items > 0);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && max_items > 0);
     o->maxcount = max_items;
     return 1;
 }

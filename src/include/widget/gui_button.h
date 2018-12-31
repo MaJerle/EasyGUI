@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_BUTTON_H
-#define __GUI_BUTTON_H
+#ifndef GUI_HDR_BUTTON_H
+#define GUI_HDR_BUTTON_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -74,4 +74,4 @@ uint8_t         gui_button_set3dstyle(gui_handle_p h, uint8_t enable);
 }
 #endif
 
-#endif /* __GUI_BUTTON_H */
+#endif /* GUI_HDR_BUTTON_H */

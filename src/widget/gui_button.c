@@ -83,7 +83,7 @@ gui_widget_t widget = {
 static uint8_t
 gui_button_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
     gui_button_t* b = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (evt) {
         case GUI_EVT_PRE_INIT: {
             guii_widget_setflag(h, GUI_FLAG_3D);    /* By default set 3D */
@@ -205,7 +205,7 @@ gui_button_setcolor(gui_handle_p h, gui_button_color_t index, gui_color_t color)
  */
 uint8_t
 gui_button_setborderradius(gui_handle_p h, gui_dim_t size) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_BORDER_RADIUS, &size, 1, 1); /* Set parameter */
 }
 
@@ -217,7 +217,7 @@ gui_button_setborderradius(gui_handle_p h, gui_dim_t size) {
  */
 uint8_t
 gui_button_set3dstyle(gui_handle_p h, uint8_t enable) {    
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     
     if (enable && !guii_widget_getflag(h, GUI_FLAG_3D)) {  /* Enable style */
         guii_widget_setflag(h, GUI_FLAG_3D);        /* Enable 3D style */

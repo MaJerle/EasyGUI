@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_CONFIG_H
-#define __GUI_CONFIG_H
+#ifndef GUI_HDR_CONFIG_H
+#define GUI_HDR_CONFIG_H
 
 /*
  * Rename this file to "gui_config.h" for your application
@@ -45,4 +45,4 @@
 /* After user configuration, call default config to merge config together */
 #include "gui/gui_config_default.h"
 
-#endif /* __GUI_CONFIG_H */
+#endif /* GUI_HDR_CONFIG_H */

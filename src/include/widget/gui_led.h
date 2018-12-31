@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_LED_H
-#define __GUI_LED_H
+#ifndef GUI_HDR_LED_H
+#define GUI_HDR_LED_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -81,4 +81,4 @@ uint8_t         gui_led_ison(gui_handle_p h);
 }
 #endif
 
-#endif /* __GUI_LED_H */
+#endif /* GUI_HDR_LED_H */

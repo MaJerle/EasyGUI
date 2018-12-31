@@ -30,8 +30,8 @@
  *
  * Author:          Tilen MAJERLE <tilen@majerle.eu>
  */
-#ifndef __GUI_SYSTEM_H
-#define __GUI_SYSTEM_H
+#ifndef GUI_HDR_SYSTEM_H
+#define GUI_HDR_SYSTEM_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -122,4 +122,4 @@ uint8_t 	gui_sys_thread_yield(void);
 };
 #endif /* __cplusplus */
 
-#endif /* __GUI_SYSTEM_H */
+#endif /* GUI_HDR_SYSTEM_H */

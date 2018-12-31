@@ -433,7 +433,7 @@ gui_linkedlist_multi_find_remove(gui_linkedlistroot_t* const root, void* const e
     gui_linkedlistmulti_t* link;
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(root);
+    GUI_ASSERTPARAMS(root);
     
     for (link = gui_linkedlist_multi_getnext_gen(root, NULL); link != NULL;
         link = gui_linkedlist_multi_getnext_gen(NULL, link)) {

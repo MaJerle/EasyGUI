@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_LL_H
-#define __GUI_LL_H
+#ifndef GUI_HDR_LL_H
+#define GUI_HDR_LL_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -60,4 +60,4 @@ uint8_t gui_ll_control(gui_lcd_t* LCD, GUI_LL_Command_t cmd, void* param, void* 
 }
 #endif
 
-#endif /* __GUI_LL_H */
+#endif /* GUI_HDR_LL_H */

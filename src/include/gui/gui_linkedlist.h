@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_LINKEDLIST_H
-#define __GUI_LINKEDLIST_H
+#ifndef GUI_HDR_LINKEDLIST_H
+#define GUI_HDR_LINKEDLIST_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -138,4 +138,4 @@ void gui_linkedlist_printlist(void);
 }
 #endif
 
-#endif /* __GUI_LINKEDLIST_H */
+#endif /* GUI_HDR_LINKEDLIST_H */

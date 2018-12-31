@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_WIDGET_LIST_H
-#define __GUI_WIDGET_LIST_H
+#ifndef GUI_HDR_WIDGET_LIST_H
+#define GUI_HDR_WIDGET_LIST_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -117,4 +117,4 @@ void *      gui_widget_list_get_next_item(gui_handle_p h, gui_widget_listdata_t*
 }
 #endif
 
-#endif /* __GUI_WIDGET_LIST_H */
+#endif /* GUI_HDR_WIDGET_LIST_H */

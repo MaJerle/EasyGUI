@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_DROPDOWN_H
-#define __GUI_DROPDOWN_H
+#ifndef GUI_HDR_DROPDOWN_H
+#define GUI_HDR_DROPDOWN_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -97,4 +97,4 @@ uint8_t         gui_dropdown_setopendirection(gui_handle_p h, gui_dropdown_opend
 }
 #endif
 
-#endif /* __GUI_DROPDOWN_H */
+#endif /* GUI_HDR_DROPDOWN_H */

@@ -107,7 +107,7 @@ gui_widget_t widget = {
 static uint8_t
 gui_edittext_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
     gui_edittext_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (evt) {
         case GUI_EVT_PRE_INIT: {
             o->valign = GUI_EDITTEXT_VALIGN_CENTER;
@@ -239,7 +239,7 @@ gui_edittext_setcolor(gui_handle_p h, gui_edittext_color_t index, gui_color_t co
  */
 uint8_t
 gui_edittext_setmultiline(gui_handle_p h, uint8_t multiline) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_MULTILINE, &multiline, 1, 0);
 }
 
@@ -251,7 +251,7 @@ gui_edittext_setmultiline(gui_handle_p h, uint8_t multiline) {
  */
 uint8_t
 gui_edittext_setvalign(gui_handle_p h, gui_edittext_valign_t align) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_VALIGN, &align, 1, 1);
 }
 
@@ -263,6 +263,6 @@ gui_edittext_setvalign(gui_handle_p h, gui_edittext_valign_t align) {
  */
 uint8_t
 gui_edittext_sethalign(gui_handle_p h, gui_edittext_halign_t align) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_HALIGN, &align, 1, 1);
 }

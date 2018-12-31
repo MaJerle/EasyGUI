@@ -534,7 +534,7 @@ gui_dropdown_addstring(gui_handle_p h, const gui_char* text) {
     gui_dropdown_item_t* item;
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     item = GUI_MEMALLOC(sizeof(*item));             /* Allocate memory for entry */
     if (item != NULL) {
@@ -560,7 +560,7 @@ gui_dropdown_setopendirection(gui_handle_p h, gui_dropdown_opendir_t dir) {
     gui_dropdown_t* o = GUI_VP(h);
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     
     /* Must be closed */
     if (!is_opened(h)) {
@@ -589,7 +589,7 @@ gui_dropdown_setstring(gui_handle_p h, uint16_t index, const gui_char* text) {
     gui_dropdown_item_t* item;
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     item = gui_widget_list_get_item_byindex(h, &o->ld, index);  /* Get list item from handle */
     if (item != NULL) {
@@ -607,7 +607,7 @@ gui_dropdown_setstring(gui_handle_p h, uint16_t index, const gui_char* text) {
  */
 uint8_t
 gui_dropdown_deletefirststring(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return delete_item(h, 0);
 }
 
@@ -619,7 +619,7 @@ gui_dropdown_deletefirststring(gui_handle_p h) {
 uint8_t
 gui_dropdown_deletelaststring(gui_handle_p h) {
     gui_dropdown_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return delete_item(h, gui_widget_list_get_count(h, &o->ld) - 1);
 }
 
@@ -631,7 +631,7 @@ gui_dropdown_deletelaststring(gui_handle_p h) {
  */
 uint8_t
 gui_dropdown_deletestring(gui_handle_p h, uint16_t index) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return delete_item(h, (int16_t)index);
 }
 
@@ -645,7 +645,7 @@ uint8_t
 gui_dropdown_scroll(gui_handle_p h, int16_t step) {
     gui_dropdown_t* o = GUI_VP(h);
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     return gui_widget_list_slide(h, &o->ld, step);
 }
@@ -660,7 +660,7 @@ uint8_t
 gui_dropdown_setselection(gui_handle_p h, int16_t selection) {
     gui_dropdown_t* o = GUI_VP(h);
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     gui_widget_list_set_selection(h, &o->ld, &o->selected, selection);
     gui_widget_list_check_values(h, &o->ld);
@@ -677,6 +677,6 @@ gui_dropdown_setselection(gui_handle_p h, int16_t selection) {
 int16_t
 gui_dropdown_getselection(gui_handle_p h) {
     gui_dropdown_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return o->selected;                       /* Read selection */
 }

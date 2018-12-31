@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_CONTAINER_H
-#define __GUI_CONTAINER_H
+#ifndef GUI_HDR_CONTAINER_H
+#define GUI_HDR_CONTAINER_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -70,4 +70,4 @@ uint8_t         gui_container_setcolor(gui_handle_p h, gui_container_color_t ind
 }
 #endif
 
-#endif /* __GUI_CONTAINER_H */
+#endif /* GUI_HDR_CONTAINER_H */

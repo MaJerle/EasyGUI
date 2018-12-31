@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_KEYBOARD_H
-#define __GUI_KEYBOARD_H
+#ifndef GUI_HDR_KEYBOARD_H
+#define GUI_HDR_KEYBOARD_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -61,4 +61,4 @@ uint8_t         gui_keyboard_show(gui_handle_p h);
 }
 #endif
 
-#endif /* __GUI_KEYBOARD_H */
+#endif /* GUI_HDR_KEYBOARD_H */

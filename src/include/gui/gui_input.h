@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_INPUT_H
-#define __GUI_INPUT_H
+#ifndef GUI_HDR_INPUT_H
+#define GUI_HDR_INPUT_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -64,4 +64,4 @@ uint8_t guii_input_keyread(gui_keyboard_data_t* const kb);
 }
 #endif
 
-#endif /* __GUI_INPUT_H */
+#endif /* GUI_HDR_INPUT_H */

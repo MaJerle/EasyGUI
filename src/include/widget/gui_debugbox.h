@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_DEBUGBOX_H
-#define __GUI_DEBUGBOX_H
+#ifndef GUI_HDR_DEBUGBOX_H
+#define GUI_HDR_DEBUGBOX_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -74,4 +74,4 @@ uint8_t         gui_debugbox_setmaxitems(gui_handle_p h, int16_t max_items);
 }
 #endif
 
-#endif /* __GUI_DEBUGBOX_H */
+#endif /* GUI_HDR_DEBUGBOX_H */

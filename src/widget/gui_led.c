@@ -99,7 +99,7 @@ gui_widget_t widget = {
 static uint8_t
 gui_led_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
     gui_led_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (evt) {
         case GUI_EVT_SETPARAM: {                     /* Set parameter for widget */
             gui_widget_param* p = GUI_EVT_PARAMTYPE_WIDGETPARAM(param);
@@ -194,7 +194,7 @@ gui_led_setcolor(gui_handle_p h, gui_led_color_t index, gui_color_t color) {
  */
 uint8_t
 gui_led_settype(gui_handle_p h, gui_led_type_t type) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_TYPE, &type, 1, 1);
 }
 
@@ -205,7 +205,7 @@ gui_led_settype(gui_handle_p h, gui_led_type_t type) {
  */
 uint8_t
 gui_led_toggle(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_TOGGLE, NULL, 1, 0);
 }
 
@@ -217,7 +217,7 @@ gui_led_toggle(gui_handle_p h) {
  */
 uint8_t
 gui_led_set(gui_handle_p h, uint8_t state) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_SET, &state, 1, 0);
 }
 
@@ -229,6 +229,6 @@ gui_led_set(gui_handle_p h, uint8_t state) {
 uint8_t
 gui_led_ison(gui_handle_p h) {
     gui_led_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return (o->flags & GUI_LED_FLAG_ON) == GUI_LED_FLAG_ON;
 }

@@ -155,7 +155,7 @@ set_disabled(gui_handle_p h, uint8_t state) {
 static uint8_t
 gui_radio_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
     gui_radio_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (evt) {
         case GUI_EVT_DRAW: {
             gui_display_t* disp = GUI_EVT_PARAMTYPE_DISP(param);
@@ -260,7 +260,7 @@ gui_radio_setcolor(gui_handle_p h, gui_radio_color_t index, gui_color_t color) {
 uint8_t
 gui_radio_setgroup(gui_handle_p h, uint8_t groupId) {
     gui_radio_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     if (o->group_id != groupId) {
         gui_handle_p handle;
@@ -297,7 +297,7 @@ gui_radio_setgroup(gui_handle_p h, uint8_t groupId) {
 uint8_t
 gui_radio_getgroup(gui_handle_p h) {
     gui_radio_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return o->group_id;
 }
 
@@ -310,7 +310,7 @@ gui_radio_getgroup(gui_handle_p h) {
 uint8_t
 gui_radio_setvalue(gui_handle_p h, uint32_t value) {
     gui_radio_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     if (o->value != value) {
         o->value = value;                           /* Set new value */
@@ -330,7 +330,7 @@ gui_radio_setvalue(gui_handle_p h, uint32_t value) {
 uint32_t
 gui_radio_getvalue(gui_handle_p h) {
     gui_radio_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return o->value;
 }
 
@@ -340,7 +340,7 @@ gui_radio_getvalue(gui_handle_p h) {
  * \return          `1` on success, `0` otherwise
  */
 uint8_t gui_radio_setselected(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return set_active(h);                           /* Set radio active */
 }
 
@@ -353,7 +353,7 @@ uint8_t gui_radio_setselected(gui_handle_p h) {
 uint32_t
 gui_radio_getselectedvalue(gui_handle_p h) {
     gui_radio_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return o->selected_value;
 }
 
@@ -365,7 +365,7 @@ gui_radio_getselectedvalue(gui_handle_p h) {
  */
 uint8_t
 gui_radio_setdisabled(gui_handle_p h, uint8_t disabled) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return set_disabled(h, disabled);
 }
 
@@ -377,6 +377,6 @@ gui_radio_setdisabled(gui_handle_p h, uint8_t disabled) {
 uint8_t
 gui_radio_isdisabled(gui_handle_p h) {
     gui_radio_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return (o->flags & GUI_FLAG_RADIO_DISABLED) == GUI_FLAG_RADIO_DISABLED;
 }

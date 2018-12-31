@@ -208,5 +208,8 @@
     <ClCompile Include="..\..\..\src\gui\gui_input.c">
       <Filter>GUI\INPUT</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\widget\gui_widget_list.c">
+      <Filter>GUI\WIDGET</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

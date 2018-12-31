@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_EDITTEXT_H
-#define __GUI_EDITTEXT_H
+#ifndef GUI_HDR_EDITTEXT_H
+#define GUI_HDR_EDITTEXT_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -89,4 +89,4 @@ uint8_t         gui_edittext_sethalign(gui_handle_p h, gui_edittext_halign_t ali
 }
 #endif
 
-#endif /* __GUI_EDITTEXT_H */
+#endif /* GUI_HDR_EDITTEXT_H */

@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_MATH_H
-#define __GUI_MATH_H
+#ifndef GUI_HDR_MATH_H
+#define GUI_HDR_MATH_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -63,4 +63,4 @@ uint8_t gui_math_centerofxy(float x1, float y1, float x2, float y2, float* const
 }
 #endif
 
-#endif /* __GUI_MATH_H */
+#endif /* GUI_HDR_MATH_H */

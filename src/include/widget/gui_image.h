@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_IMAGE_H
-#define __GUI_IMAGE_H
+#ifndef GUI_HDR_IMAGE_H
+#define GUI_HDR_IMAGE_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -59,4 +59,4 @@ uint8_t         gui_image_setsource(gui_handle_p h, const gui_image_desc_t* img)
 }
 #endif
 
-#endif /* __GUI_IMAGE_H */
+#endif /* GUI_HDR_IMAGE_H */

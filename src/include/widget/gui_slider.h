@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_SLIDER_H
-#define __GUI_SLIDER_H
+#ifndef GUI_HDR_SLIDER_H
+#define GUI_HDR_SLIDER_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -86,4 +86,4 @@ int32_t         gui_slider_getvalue(gui_handle_p h);
 }
 #endif
 
-#endif /* __GUI_SLIDER_H */
+#endif /* GUI_HDR_SLIDER_H */

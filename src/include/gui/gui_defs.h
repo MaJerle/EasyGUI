@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_DEFS_H
-#define __GUI_DEFS_H
+#ifndef GUI_HDR_DEFS_H
+#define GUI_HDR_DEFS_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -164,7 +164,7 @@ extern "C" {
 /**
  * \brief           Results enumeration
  */
-typedef enum guir_t {
+typedef enum guir {
     guiOK = 0x00,                           /*!< GUI status is OK */
     guiERROR = 0x01                         /*!< There was an error in processing */
 } guir_t;
@@ -174,7 +174,7 @@ typedef enum guir_t {
  * \note            When used with widgets, it must be first element in \ref gui_handle structure
  * \sa              gui_linkedlistroot_t
  */
-typedef struct gui_linkedlist_t {
+typedef struct gui_linkedlist {
     void* prev;                             /*!< Previous object in linked list */
     void* next;                             /*!< Next object in linked list */
 } gui_linkedlist_t;
@@ -183,7 +183,7 @@ typedef struct gui_linkedlist_t {
  * \brief           Structure used for dynamic struct allocation
  * \sa              gui_linkedlistroot_t
  */
-typedef struct gui_linkedlistmulti_t {
+typedef struct gui_linkedlistmulti {
     gui_linkedlist_t list;                  /*!< Linked list structure, must be first on structure for casting */
     void* element;                          /*!< Pointer to element in linked list */
 } gui_linkedlistmulti_t;
@@ -193,7 +193,7 @@ typedef struct gui_linkedlistmulti_t {
  * \sa              gui_linkedlist_t
  * \sa              gui_linkedlistmulti_t
  */
-typedef struct gui_linkedlistroot_t {
+typedef struct gui_linkedlistroot {
     void* first;                            /*!< First element in linked list */
     void* last;                             /*!< Last element in linked list */
 } gui_linkedlistroot_t;
@@ -201,7 +201,7 @@ typedef struct gui_linkedlistroot_t {
 /**
  * \brief           Core timer structure for GUI timers
  */
-typedef struct gui_timer_core_t {
+typedef struct gui_timer_core {
     uint32_t time;                          /*!< Last processed time */
     gui_linkedlistroot_t list;              /*!< Root linked list object */
 } gui_timer_core_t;
@@ -766,13 +766,13 @@ typedef struct {
  * \ingroup         GUI_TIMER
  * \brief           Timer structure
  */
-typedef struct gui_timer_t {
+typedef struct gui_timer {
     gui_linkedlist_t list;                  /*!< Linked list entry, must be first on the list */
     uint16_t period;                        /*!< Timer period value */
     uint16_t counter;                       /*!< Timer current counter */
     uint8_t flags;                          /*!< Timer flags */
     void* params;                           /*!< Custom parameters passed to callback function */
-    void (*callback)(struct gui_timer_t *); /*!< Timer callback function */
+    void (*callback)(struct gui_timer *);   /*!< Timer callback function */
 } gui_timer_t;
 
 /**
@@ -1138,7 +1138,7 @@ typedef struct gui_handle {
     gui_id_t id;                            /*!< Widget ID number */
     uint32_t footprint;                     /*!< Footprint indicates widget is valid */
     const gui_widget_t* widget;             /*!< Widget parameters with callback functions */
-    gui_widget_evt_fn callback;         /*!< Callback function prototype */
+    gui_widget_evt_fn callback;             /*!< Callback function prototype */
     struct gui_handle* parent;              /*!< Pointer to parent widget */
 
     float x;                                /*!< Object X position relative to parent window in units of pixel/percent */
@@ -1186,7 +1186,7 @@ typedef struct gui_handle {
 /**
  * \brief           Widget create function footprint for structures as callbacks
  */
-typedef gui_handle_p (*gui_widget_createfunc_t)(gui_id_t, float, float, float, float, gui_handle_p, gui_widget_evt_fn, uint16_t);
+typedef gui_handle_p (*gui_widget_createfunc_fn)(gui_id_t, float, float, float, float, gui_handle_p, gui_widget_evt_fn, uint16_t);
 
 /**
  * \}
@@ -1206,7 +1206,7 @@ typedef struct {
  * \ingroup         GUI_TRANSLATE
  * \brief           Basic translation structure for internal use
  */
-typedef struct gui_translate_t {
+typedef struct gui_translate {
     const gui_translate_language_t* source; /*!< Pointer to source language table */
     const gui_translate_language_t* active; /*!< Pointer to current language table */
 } gui_translate_t;
@@ -1220,4 +1220,4 @@ typedef struct gui_translate_t {
 }
 #endif
 
-#endif /* __GUI_DEFS_H */
+#endif /* GUI_HDR_DEFS_H */

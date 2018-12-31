@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_PROGBAR_H
-#define __GUI_PROGBAR_H
+#ifndef GUI_HDR_PROGBAR_H
+#define GUI_HDR_PROGBAR_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -76,4 +76,4 @@ uint8_t         gui_progbar_setpercentmode(gui_handle_p h, uint8_t enable);
 }
 #endif
 
-#endif /* __GUI_PROGBAR_H */
+#endif /* GUI_HDR_PROGBAR_H */

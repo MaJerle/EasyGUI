@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_TEXT_H
-#define __GUI_TEXT_H
+#ifndef GUI_HDR_TEXT_H
+#define GUI_HDR_TEXT_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -61,4 +61,4 @@ gui_font_charentry_t *      gui_text_createcharentry(const gui_font_t* font, con
 }
 #endif
 
-#endif /* __GUI_TEXT_H */
+#endif /* GUI_HDR_TEXT_H */

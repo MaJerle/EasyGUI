@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_PRIVATE_H
-#define __GUI_PRIVATE_H
+#ifndef GUI_HDR_PRIVATE_H
+#define GUI_HDR_PRIVATE_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -123,7 +123,7 @@ extern gui_t GUI;
  * \brief           Check if 2 rectangle objects covers each other in any way
  * \hideinitializer
  */
-#define __GUI_RECT_MATCH(h1x1, h1y1, h1x2, h1y2, h2x1, h2y1, h2x2, h2y2)    \
+#define GUI_RECT_MATCH(h1x1, h1y1, h1x2, h1y2, h2x1, h2y1, h2x2, h2y2)    \
     !(                                                      \
         (h1x1) > (h2x2) ||                                  \
         (h1y1) > (h2y2) ||                                  \
@@ -135,7 +135,7 @@ extern gui_t GUI;
  * \brief           Check if first rectangle is fully inside second rectangle
  * \hideinitializer
  */
-#define __GUI_RECT_IS_INSIDE(h1x1, h1y1, h1x2, h1y2, h2x1, h2y1, h2x2, h2y2)    (((h1x1) >= (h2x1)) && ((h1x2) <= (h2x2)) && ((h1y1) >= (h2y1)) && ((h1y2) <= (h2y2)))
+#define GUI_RECT_IS_INSIDE(h1x1, h1y1, h1x2, h1y2, h2x1, h2y1, h2x2, h2y2)    (((h1x1) >= (h2x1)) && ((h1x2) <= (h2x2)) && ((h1y1) >= (h2y1)) && ((h1y2) <= (h2y2)))
 
 /**
  * \brief           GUI Handle object from main object
@@ -148,9 +148,9 @@ extern gui_t GUI;
  * \brief           Check input parameters and return value on failure
  * \hideinitializer
  */
-#define __GUI_ASSERTPARAMS(c)       do {            \
-    if (!(c) || !(GUI.initialized)) {                                     \
-        GUI_DEBUG("Assert param failed in file %s and line %d\r\n", (const char *)__FILE__, (unsigned)__LINE__);  \
+#define GUI_ASSERTPARAMS(c)         do {            \
+    if (!(c) || !(GUI.initialized)) {               \
+        GUI_DEBUG("Assert param failed in file %s and line %d\r\n", (const char *)__FILE__, (int)__LINE__); \
         return 0;                                   \
     }                                               \
 } while (0)
@@ -159,9 +159,9 @@ extern gui_t GUI;
  * \brief           Check if window is active for widget create
  * \hideinitializer
  */
-#define __GUI_ASSERTACTIVEWIN()     do {            \
+#define GUI_ASSERTACTIVEWIN()       do {            \
     if (GUI.window_active == NULL) {                \
-        __GUI_DEBUG("There is no active window for widget in file %s on line %d\r\n", __FILE__, __LINE__);  \
+        GUI_DEBUG("There is no active window for widget in file %s on line %d\r\n", (const char *)__FILE__, (int)__LINE__); \
         return NULL;                                \
     }                                               \
 } while (0)
@@ -175,4 +175,4 @@ extern gui_t GUI;
 }
 #endif
 
-#endif /* __GUI_PRIVATE_H */
+#endif /* GUI_HDR_PRIVATE_H */

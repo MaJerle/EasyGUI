@@ -151,7 +151,7 @@ graph_zoom(gui_handle_p h, float zoom, float xpos, float ypos) {
 static uint8_t
 gui_graph_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
     gui_graph_t* g = (gui_graph_t *)h;
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (evt) {
         case GUI_EVT_PRE_INIT: {
             g->border[GUI_GRAPH_BORDER_TOP] = 5;    /* Set borders */
@@ -430,7 +430,7 @@ gui_graph_setcolor(gui_handle_p h, gui_graph_color_t index, gui_color_t color) {
  */
 uint8_t
 gui_graph_setminx(gui_handle_p h, float v) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_MIN_X, &v, 1, 0);
 }
 
@@ -442,7 +442,7 @@ gui_graph_setminx(gui_handle_p h, float v) {
  */
 uint8_t
 gui_graph_setmaxx(gui_handle_p h, float v) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_MAX_X, &v, 1, 0);
 }
 
@@ -454,7 +454,7 @@ gui_graph_setmaxx(gui_handle_p h, float v) {
  */
 uint8_t
 gui_graph_setminy(gui_handle_p h, float v) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_MIN_Y, &v, 1, 0);
 }
 
@@ -466,7 +466,7 @@ gui_graph_setminy(gui_handle_p h, float v) {
  */
 uint8_t
 gui_graph_setmaxy(gui_handle_p h, float v) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_MAX_Y, &v, 1, 0);
 }
 
@@ -478,7 +478,7 @@ gui_graph_setmaxy(gui_handle_p h, float v) {
  */
 uint8_t
 gui_graph_setaxes(gui_handle_p h, float min_x, float max_x, float min_y, float max_y) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     guii_widget_setparam(h, CFG_MIN_X, &min_x, 0, 0);
     guii_widget_setparam(h, CFG_MAX_X, &max_x, 0, 0);
@@ -495,7 +495,7 @@ gui_graph_setaxes(gui_handle_p h, float min_x, float max_x, float min_y, float m
  */
 uint8_t
 gui_graph_zoomreset(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_ZOOM_RESET, NULL, 1, 0);
 }
 
@@ -511,7 +511,7 @@ gui_graph_zoomreset(gui_handle_p h) {
  */
 uint8_t
 gui_graph_zoom(gui_handle_p h, float zoom, float x, float y) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     graph_zoom(h, zoom, x, y);
     return 1;
 }
@@ -526,7 +526,7 @@ uint8_t
 gui_graph_attachdata(gui_handle_p h, gui_graph_data_p data) {
     gui_graph_t* g = (gui_graph_t *)h;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     /* Linked list of data plots for this graph */
     gui_linkedlist_multi_add_gen(&g->root, data);
@@ -553,7 +553,7 @@ uint8_t
 gui_graph_detachdata(gui_handle_p h, gui_graph_data_p data) {
     gui_graph_t* g = (gui_graph_t *)h;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && data != NULL);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && data != NULL);
 
     /*
      * Linked list of data plots for this graph
@@ -614,7 +614,7 @@ gui_graph_data_create(gui_id_t id, gui_graph_type_t type, size_t length) {
  */
 uint8_t
 gui_graph_data_addvalue(gui_graph_data_p data, int16_t x, int16_t y) {
-    __GUI_ASSERTPARAMS(data);                
+    GUI_ASSERTPARAMS(data);                
 
     if (data->type == GUI_GRAPH_TYPE_YT) {          /* YT plot */
         data->data[data->ptr] = y;                  /* Only Y value is relevant */
@@ -641,7 +641,7 @@ gui_graph_data_addvalue(gui_graph_data_p data, int16_t x, int16_t y) {
  */
 uint8_t
 gui_graph_data_setcolor(gui_graph_data_p data, gui_color_t color) {
-    __GUI_ASSERTPARAMS(data != NULL);        
+    GUI_ASSERTPARAMS(data != NULL);        
 
     if (data->color != color) {                     /* Check color change */
         data->color = color;                        /* Set new color */
@@ -665,7 +665,7 @@ gui_graph_data_get_by_id(gui_handle_p graph_h, gui_id_t id) {
     gui_graph_data_p data = NULL;
     gui_linkedlistmulti_t* link;
     
-    __GUI_ASSERTPARAMS(graph_h != NULL && graph_h->widget == &widget);
+    GUI_ASSERTPARAMS(graph_h != NULL && graph_h->widget == &widget);
 
     /* Draw all plot attached to graph */
     for (link = gui_linkedlist_multi_getnext_gen(&g->root, NULL); link != NULL; 

@@ -148,7 +148,7 @@ uint8_t
 calculate_widget_absolute_visible_position_size(gui_handle_p h, gui_dim_t* x1, gui_dim_t* y1, gui_dim_t* x2, gui_dim_t* y2) {
     gui_dim_t x, y, wi, hi, cx, cy, cw, ch;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     cx = gui_widget_getabsolutex(h);                /* Get absolute X position */
     cy = gui_widget_getabsolutey(h);                /* Get absolute Y position */
@@ -215,7 +215,7 @@ set_widget_abs_values(gui_handle_p h) {
  */
 static uint8_t
 remove_widget(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     /*
      * Check and react on:
@@ -369,7 +369,7 @@ static uint8_t
 set_clipping_region(gui_handle_p h) {
     gui_dim_t x1, y1, x2, y2;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     /* Get visible widget part and absolute position on screen according to parent */
     get_widget_abs_visible_position_size(h, &x1, &y1, &x2, &y2);
@@ -405,7 +405,7 @@ invalidate_widget(gui_handle_p h, uint8_t setclipping) {
     gui_dim_t h1x1, h1x2, h2x1, h2x2;
     gui_dim_t h1y1, h1y2, h2y1, h2y2;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
 
     /* Check ignore flag */
     if (guii_widget_getflag(h, GUI_FLAG_IGNORE_INVALIDATE)) {
@@ -466,7 +466,7 @@ invalidate_widget(gui_handle_p h, uint8_t setclipping) {
             /* Check if next widget is on top of current one */
             if (
                 guii_widget_getflag(h2, GUI_FLAG_REDRAW) || /* Flag is already set */
-                !__GUI_RECT_MATCH(                  /* Widgets are not one over another */
+                !GUI_RECT_MATCH(                    /* Widgets are not one over another */
                     h1x1, h1y1, h1x2, h1y2,
                     h2x1, h2y1, h2x2, h2y2)
             ) {
@@ -540,7 +540,7 @@ static gui_handle_p
 get_common_parentwidget(gui_handle_p h1, gui_handle_p h2) {
     gui_handle_p tmp;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h1) && guii_widget_iswidget(h2)); /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h1) && guii_widget_iswidget(h2)); 
     
     for (; h1 != NULL; h1 = guii_widget_getparent(h1)) {/* Process all entries */
         for (tmp = h2; tmp != NULL; tmp = guii_widget_getparent(tmp)) {
@@ -564,7 +564,7 @@ get_common_parentwidget(gui_handle_p h1, gui_handle_p h2) {
  */
 static uint8_t
 set_widget_size(gui_handle_p h, float wi, float hi, uint8_t wp, uint8_t hp) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     if ( wi != h->width || hi != h->height ||       /* Check any differences */
         (wp && !guii_widget_getflag(h, GUI_FLAG_WIDTH_PERCENT)) ||  /* New width is in percent, old is not */
@@ -629,7 +629,7 @@ set_widget_size(gui_handle_p h, float wi, float hi, uint8_t wp, uint8_t hp) {
  */
 static uint8_t
 set_widget_position(gui_handle_p h, float x, float y, uint8_t xp, uint8_t yp) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
 
     if (h->x != x || h->y != y ||                   /* Check any differences */
         (xp && !guii_widget_getflag(h, GUI_FLAG_XPOS_PERCENT)) ||   /* New X position is in percent, old is not */
@@ -684,7 +684,7 @@ static uint8_t
 can_remove_widget(gui_handle_p h) {
     gui_evt_result_t result = {0};
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     /* Desktop window cannot be deleted */
     if (h == gui_window_getdesktop()) {             /* Root widget can not be deleted! */
@@ -719,13 +719,13 @@ can_remove_widget(gui_handle_p h) {
 uint8_t
 guii_widget_isinsideclippingregion(gui_handle_p h, uint8_t check_sib_cover) {
     gui_dim_t x1, y1, x2, y2;
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     /* Get widget visible section */
     get_widget_abs_visible_position_size(h, &x1, &y1, &x2, &y2);
 
     /* Check if widget is inside drawing area */
-    if (!__GUI_RECT_MATCH(
+    if (!GUI_RECT_MATCH(
         x1, y1, x2, y2,
         GUI.display.x1, GUI.display.y1, GUI.display.x2, GUI.display.y2
     )) {
@@ -753,7 +753,7 @@ guii_widget_isinsideclippingregion(gui_handle_p h, uint8_t check_sib_cover) {
             get_widget_abs_visible_position_size(tmp, &tx1, &ty1, &tx2, &ty2);
 
             /* Check if widget is inside */
-            if (__GUI_RECT_IS_INSIDE(x1, y1, x2, y2, tx1, ty1, tx2, ty2) &&
+            if (GUI_RECT_IS_INSIDE(x1, y1, x2, y2, tx1, ty1, tx2, ty2) &&
                 !guii_widget_getflag(tmp, GUI_FLAG_WIDGET_INVALIDATE_PARENT) &&
                 !guii_widget_hasalpha(tmp)          /* Must not have transparency enabled */
                 ) {
@@ -928,7 +928,7 @@ gui_dim_t
 guii_widget_getparentabsolutex(gui_handle_p h) {
     gui_dim_t out = 0;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     h = guii_widget_getparent(h);                   /* Get parent of widget */
     if (h != NULL) {                                /* Save left padding */
@@ -951,7 +951,7 @@ gui_dim_t
 guii_widget_getparentabsolutey(gui_handle_p h) {
     gui_dim_t out = 0;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     h = guii_widget_getparent(h);                   /* Get parent of widget */
     if (h != NULL) {                                /* Save left padding */
@@ -1024,7 +1024,7 @@ uint8_t
 gui_widget_invalidatewithparent(gui_handle_p h) {
     uint8_t res;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     res = invalidate_widget(h, 1);                  /* Invalidate object with clipping */
     GUI_UNUSED(res);
@@ -1044,7 +1044,7 @@ gui_widget_invalidatewithparent(gui_handle_p h) {
  */
 uint8_t
 gui_widget_setinvalidatewithparent(gui_handle_p h, uint8_t value) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     if (value) {                                    /* On positive value */
         guii_widget_setflag(h, GUI_FLAG_WIDGET_INVALIDATE_PARENT); /* Enable auto invalidation of parent widget */
@@ -1070,7 +1070,7 @@ guii_widget_setparam(gui_handle_p h, uint16_t cfg, const void* data, uint8_t inv
     gui_evt_param_t param = {0};
     gui_evt_result_t result = {0};
 
-    __GUI_ASSERTPARAMS(h != NULL && guii_widget_iswidget(h));   /* Check valid parameter */
+    GUI_ASSERTPARAMS(h != NULL && guii_widget_iswidget(h));   
     
     GUI_EVT_PARAMTYPE_WIDGETPARAM(&param) = &p;
     GUI_EVT_RESULTTYPE_U8(&result) = 1;
@@ -1106,7 +1106,7 @@ void *
 gui_widget_create(const gui_widget_t* widget, gui_id_t id, float x, float y, float width, float height, gui_handle_p parent, gui_widget_evt_fn evt_fn, uint16_t flags) {
     gui_handle_p h;
     
-    __GUI_ASSERTPARAMS(widget != NULL && widget->callback != NULL);
+    GUI_ASSERTPARAMS(widget != NULL && widget->callback != NULL);
     
     /* Allocation size check */
     if (widget->size < sizeof(gui_handle)) { 
@@ -1207,7 +1207,7 @@ uint8_t
 gui_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color) {
     uint8_t ret = 1;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
 
     if (h->colors == NULL) {                        /* Do we need to allocate color memory? */
         if (h->widget->color_count) {               /* Check if at least some colors should be used */
@@ -1241,7 +1241,7 @@ gui_widget_setcolor(gui_handle_p h, uint8_t index, gui_color_t color) {
 uint8_t
 gui_widget_remove(gui_handle_p* h) {
     uint8_t ret = 0;
-    __GUI_ASSERTPARAMS(h != NULL && guii_widget_iswidget(*h));  /* Check valid parameter */
+    GUI_ASSERTPARAMS(h != NULL && guii_widget_iswidget(*h));  
 
     if (can_remove_widget(*h)) {                    /* Check if we can delete widget */
         guii_widget_setflag(*h, GUI_FLAG_REMOVE);   /* Set flag for widget delete */
@@ -1269,7 +1269,7 @@ gui_widget_empty(gui_handle_p h) {
     gui_handle_p child;
     uint8_t ret = 1;
 
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
     
     /* Process all children widgets */
     for (child = gui_linkedlist_widgetgetnext(h, NULL); child != NULL;
@@ -1297,7 +1297,7 @@ gui_widget_empty(gui_handle_p h) {
  */
 uint8_t
 gui_widget_isfontandtextset(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     return h->text != NULL && h->font != NULL && gui_string_length(h->text);    /* Check if conditions are met for drawing string */
 }
 
@@ -1315,7 +1315,7 @@ guii_widget_processtextkey(gui_handle_p h, guii_keyboard_data_t* kb) {
     uint8_t l;
     gui_string_t currStr;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     if (!guii_widget_getflag(h, GUI_FLAG_DYNAMICTEXTALLOC)) {  /* Must be dynamically allocated memory */
         return 0;
@@ -1375,7 +1375,7 @@ guii_widget_processtextkey(gui_handle_p h, guii_keyboard_data_t* kb) {
  */
 uint32_t
 gui_widget_alloctextmemory(gui_handle_p h, uint32_t size) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && size > 1);   /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h) && size > 1);   
     
     if (guii_widget_getflag(h, GUI_FLAG_DYNAMICTEXTALLOC) && h->text != NULL) { /* Check if already allocated */
         GUI_MEMFREE(h->text);                       /* Free memory first */
@@ -1406,7 +1406,7 @@ uint8_t
 gui_widget_freetextmemory(gui_handle_p h) {
     uint8_t res = 0;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     if (guii_widget_getflag(h, GUI_FLAG_DYNAMICTEXTALLOC) && h->text != NULL) { /* Check if dynamically alocated */
         GUI_MEMFREE(h->text);                       /* Free memory first */
@@ -1432,7 +1432,7 @@ gui_widget_freetextmemory(gui_handle_p h) {
  */
 uint8_t
 gui_widget_settext(gui_handle_p h, const gui_char* text) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     if (guii_widget_getflag(h, GUI_FLAG_DYNAMICTEXTALLOC)) {   /* Memory for text is dynamically allocated */
         if (h->textmemsize) {
@@ -1471,7 +1471,7 @@ const gui_char *
 gui_widget_gettext(gui_handle_p h) {
     const gui_char* t;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
 #if GUI_CFG_USE_TRANSLATE
     /* For static texts only */
@@ -1498,7 +1498,7 @@ const gui_char*
 gui_widget_gettextcopy(gui_handle_p h, gui_char* dst, uint32_t len) {
     const gui_char* t;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     t = gui_widget_gettext(h);
     gui_string_copyn(dst, t, len);
@@ -1515,7 +1515,7 @@ gui_widget_gettextcopy(gui_handle_p h, gui_char* dst, uint32_t len) {
  */
 uint8_t
 gui_widget_setfont(gui_handle_p h, const gui_font_t* font) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     if (h->font != font) {
         h->font = font;
@@ -1533,7 +1533,7 @@ gui_widget_setfont(gui_handle_p h, const gui_font_t* font) {
  */
 const gui_font_t *
 gui_widget_getfont(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     return h->font;                                 /* Get widget font */
 }
 
@@ -1676,7 +1676,7 @@ gui_widget_setheightoriginal(gui_handle_p h, float height) {
  */
 uint8_t
 gui_widget_toggleexpanded(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     return gui_widget_setexpanded(h, !gui_widget_isexpanded(h));
 }
 
@@ -1692,7 +1692,7 @@ gui_dim_t
 gui_widget_getwidth(gui_handle_p h) {
     gui_dim_t res;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && GUI.initialized); /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h) && GUI.initialized); 
     
 #if GUI_CFG_USE_POS_SIZE_CACHE
     res = h->abs_width;                             /* Cached value */
@@ -1716,7 +1716,7 @@ gui_dim_t
 gui_widget_getheight(gui_handle_p h) {
     gui_dim_t res;
 
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && GUI.initialized); /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h) && GUI.initialized); 
 
 #if GUI_CFG_USE_POS_SIZE_CACHE
     res = h->abs_height;                            /* Cached value */
@@ -1820,7 +1820,7 @@ gui_widget_getheightoriginal(gui_handle_p h, uint8_t* is_percent) {
 uint8_t
 gui_widget_setexpanded(gui_handle_p h, uint8_t state) {
     uint8_t is_expanded;
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     is_expanded = gui_widget_isexpanded(h);
     if (!state && is_expanded) {                    /* Check current status */
@@ -1844,7 +1844,7 @@ gui_widget_setexpanded(gui_handle_p h, uint8_t state) {
  */
 uint8_t
 gui_widget_isexpanded(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     return guii_widget_getflag(h, GUI_FLAG_EXPANDED) == GUI_FLAG_EXPANDED;
 }
 
@@ -2019,7 +2019,7 @@ uint8_t
 gui_widget_invalidate(gui_handle_p h) {
     uint8_t res = 0;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */ 
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));     
     
     if (!guii_widget_getflag(h, GUI_FLAG_IGNORE_INVALIDATE)) {
         res = invalidate_widget(h, 1);              /* Invalidate widget with clipping */
@@ -2059,7 +2059,7 @@ uint8_t
 gui_widget_setignoreinvalidate(gui_handle_p h, uint8_t en, uint8_t invalidate) {
     uint8_t res = 0;
 
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
 
     if (invalidate) {                               /* Check if we need to invalidate before setting ignore */
         guii_widget_clrflag(h, GUI_FLAG_IGNORE_INVALIDATE); /* First clear flag if set already */
@@ -2082,7 +2082,7 @@ gui_widget_setignoreinvalidate(gui_handle_p h, uint8_t en, uint8_t invalidate) {
  */
 uint8_t
 gui_widget_show(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     if (guii_widget_getflag(h, GUI_FLAG_HIDDEN)) {  /* If hidden, show it */
         guii_widget_clrflag(h, GUI_FLAG_HIDDEN);
@@ -2100,7 +2100,7 @@ gui_widget_show(gui_handle_p h) {
  */
 uint8_t
 gui_widget_putonfront(gui_handle_p h, uint8_t focus) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     guii_widget_movedowntree(h);                    /* Put widget on front */
     if (focus) {
@@ -2117,7 +2117,7 @@ gui_widget_putonfront(gui_handle_p h, uint8_t focus) {
  */
 uint8_t
 gui_widget_hide(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     if (!guii_widget_getflag(h, GUI_FLAG_HIDDEN)) { /* If visible, hide it */
         /* TODO: Check if active/focused widget is maybe children of this widget */
@@ -2143,7 +2143,7 @@ uint8_t
 gui_widget_hidechildren(gui_handle_p h) {
     gui_handle_p t;
 
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
 
     /* Scan all widgets of current widget and hide them */
     GUI_LINKEDLIST_WIDGETSLISTNEXT(h, t) {
@@ -2160,7 +2160,7 @@ gui_widget_hidechildren(gui_handle_p h) {
  */
 gui_id_t
 gui_widget_getid(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     return h->id;
 }
 
@@ -2171,7 +2171,7 @@ gui_widget_getid(gui_handle_p h) {
  */
 gui_handle_p
 gui_widget_getparent(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     return h->parent;
 }
 
@@ -2211,7 +2211,7 @@ uint8_t
 gui_widget_ischildof(gui_handle_p h, gui_handle_p parent) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_iswidget(parent));  /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_iswidget(parent));  
     
     if (!(guii_widget_iswidget(h) && guii_widget_iswidget(parent)) || !(GUI.initialized)) {
         ret = 0;
@@ -2236,7 +2236,7 @@ gui_widget_ischildof(gui_handle_p h, gui_handle_p parent) {
  */
 uint8_t
 gui_widget_setuserdata(gui_handle_p h, void* const data) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     h->arg = data;                                  /* Set user argument */
     return 1;
 }
@@ -2248,7 +2248,7 @@ gui_widget_setuserdata(gui_handle_p h, void* const data) {
  */
 void*
 gui_widget_getuserdata(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     return h->arg;                                  /* Get user argument */
 }
 
@@ -2277,7 +2277,7 @@ gui_widget_processdefaultcallback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_
  */
 uint8_t
 gui_widget_setcallback(gui_handle_p h, gui_widget_evt_fn callback) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     h->callback = callback;                         /* Set callback function */
     return 1;
 }
@@ -2297,7 +2297,7 @@ gui_widget_setcallback(gui_handle_p h, gui_widget_evt_fn callback) {
  */
 uint8_t
 gui_widget_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     return guii_widget_callback(h, evt, param, result);/* Call callback function */
 }
 
@@ -2312,7 +2312,7 @@ uint8_t
 gui_widget_setscrollx(gui_handle_p h, gui_dim_t scroll) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
     
     if (h->x_scroll != scroll) {
         h->x_scroll = scroll;
@@ -2334,7 +2334,7 @@ uint8_t
 gui_widget_setscrolly(gui_handle_p h, gui_dim_t scroll) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
     
     if (h->y_scroll != scroll) {
         h->y_scroll = scroll;
@@ -2357,7 +2357,7 @@ uint8_t
 gui_widget_incscrollx(gui_handle_p h, gui_dim_t scroll) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
     
     if (scroll) {
         h->x_scroll += scroll;
@@ -2380,7 +2380,7 @@ uint8_t
 gui_widget_incscrolly(gui_handle_p h, gui_dim_t scroll) {
     uint8_t ret = 0;
     
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
     
     if (scroll) {
         h->y_scroll += scroll;
@@ -2399,7 +2399,7 @@ gui_widget_incscrolly(gui_handle_p h, gui_dim_t scroll) {
  */
 gui_dim_t
 gui_widget_getscrollx(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
     return h->x_scroll;                             /* Get X scroll */
 }
 
@@ -2410,7 +2410,7 @@ gui_widget_getscrollx(gui_handle_p h) {
  */
 gui_dim_t
 gui_widget_getscrolly(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h) && guii_widget_allowchildren(h));
     return h->y_scroll;                             /* Get Y scroll */
 }
 
@@ -2421,7 +2421,7 @@ gui_widget_getscrolly(gui_handle_p h) {
  */
 uint8_t
 gui_widget_setfocus(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     guii_widget_focus_set(h);                       /* Put widget in focus */
     return 1;
 }
@@ -2433,7 +2433,7 @@ gui_widget_setfocus(gui_handle_p h) {
  */
 uint8_t
 gui_widget_setfontdefault(const gui_font_t* font) {
-    __GUI_ASSERTPARAMS(font != NULL);               /* Check valid parameter */
+    GUI_ASSERTPARAMS(font != NULL);               
     widget_default.font = font;                     /* Set default font */
     return 1;
 }
@@ -2452,7 +2452,7 @@ gui_widget_incselection(gui_handle_p h, int16_t dir) {
     
     GUI_UNUSED2(result, param);
 
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     GUI_EVT_PARAMTYPE_I16(&param) = dir;         /* Set parameter */
     return guii_widget_callback(h, GUI_EVT_INCSELECTION, &param, &result);   /* Increase selection for specific amount */
@@ -2467,7 +2467,7 @@ gui_widget_incselection(gui_handle_p h, int16_t dir) {
  */
 uint8_t
 gui_widget_setzindex(gui_handle_p h, int32_t zindex) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     if (h->zindex != zindex) {                      /* There was a change in z-index value */
         int32_t current = h->zindex;
@@ -2489,7 +2489,7 @@ gui_widget_setzindex(gui_handle_p h, int32_t zindex) {
  */
 int32_t
 gui_widget_getzindex(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     return h->zindex;                               /* Get z-index value */
 }
 
@@ -2504,7 +2504,7 @@ gui_widget_setalpha(gui_handle_p h, uint8_t alpha) {
     uint8_t ret = 0;
     
 #if GUI_CFG_USE_ALPHA
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     if (h->alpha != alpha) {                        /* Check transparency match */
         h->alpha = alpha;                           /* Set new transparency level */
         SET_WIDGET_ABS_VALUES(h);                   /* Set widget absolute values */
@@ -2530,7 +2530,7 @@ gui_widget_getalpha(gui_handle_p h) {
     uint8_t a;
     
 #if GUI_CFG_USE_ALPHA
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     a = GUI_U8(h->alpha);
 #else
     a = 0xFF;
@@ -2547,7 +2547,7 @@ gui_widget_getalpha(gui_handle_p h) {
  */
 uint8_t
 gui_widget_setpaddingtop(gui_handle_p h, gui_dim_t x) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
 
     h->padding = (uint32_t)((h->padding & 0x00FFFFFFUL) | (uint32_t)((uint8_t)x) << 24);/* Padding top */
     SET_WIDGET_ABS_VALUES(h);
@@ -2563,7 +2563,7 @@ gui_widget_setpaddingtop(gui_handle_p h, gui_dim_t x) {
  */
 uint8_t
 gui_widget_setpaddingright(gui_handle_p h, gui_dim_t x) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
 
     h->padding = (uint32_t)((h->padding & 0xFF00FFFFUL) | (uint32_t)((uint8_t)x) << 16);/* Padding right */
     SET_WIDGET_ABS_VALUES(h);
@@ -2579,7 +2579,7 @@ gui_widget_setpaddingright(gui_handle_p h, gui_dim_t x) {
  */
 uint8_t
 gui_widget_setpaddingbottom(gui_handle_p h, gui_dim_t x) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
 
     h->padding = (uint32_t)((h->padding & 0xFFFF00FFUL) | (uint32_t)((uint8_t)x) << 8); /* Padding bottom */
     SET_WIDGET_ABS_VALUES(h);
@@ -2595,7 +2595,7 @@ gui_widget_setpaddingbottom(gui_handle_p h, gui_dim_t x) {
  */
 uint8_t
 gui_widget_setpaddingleft(gui_handle_p h, gui_dim_t x) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
 
     h->padding = (uint32_t)((h->padding & 0xFFFFFF00UL) | (uint32_t)((uint8_t)x) << 0); /* Padding left */
     SET_WIDGET_ABS_VALUES(h);
@@ -2611,7 +2611,7 @@ gui_widget_setpaddingleft(gui_handle_p h, gui_dim_t x) {
  */
 uint8_t
 gui_widget_setpaddingtopbottom(gui_handle_p h, gui_dim_t x) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
 
     h->padding = (uint32_t)((h->padding & 0x00FFFFFFUL) | (uint32_t)((uint8_t)x) << 24);/* Padding top */
     h->padding = (uint32_t)((h->padding & 0xFFFF00FFUL) | (uint32_t)((uint8_t)x) << 8); /* Padding bottom */
@@ -2628,7 +2628,7 @@ gui_widget_setpaddingtopbottom(gui_handle_p h, gui_dim_t x) {
  */
 uint8_t
 gui_widget_setpaddingleftright(gui_handle_p h, gui_dim_t x) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
 
     h->padding = (uint32_t)((h->padding & 0xFF00FFFFUL) | (uint32_t)((uint8_t)x) << 16);/* Padding right */
     h->padding = (uint32_t)((h->padding & 0xFFFFFF00UL) | (uint32_t)((uint8_t)x) << 0); /* Padding left */
@@ -2645,7 +2645,7 @@ gui_widget_setpaddingleftright(gui_handle_p h, gui_dim_t x) {
  */
 uint8_t
 gui_widget_setpadding(gui_handle_p h, gui_dim_t x) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     
     h->padding = (uint32_t)((h->padding & 0x00FFFFFFUL) | (uint32_t)((uint8_t)x) << 24);/* Padding top */
     h->padding = (uint32_t)((h->padding & 0xFF00FFFFUL) | (uint32_t)((uint8_t)x) << 16);/* Padding right */
@@ -2663,7 +2663,7 @@ gui_widget_setpadding(gui_handle_p h, gui_dim_t x) {
  */
 gui_dim_t
 gui_widget_getpaddingtop(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     return GUI_DIM((h->padding >> 24) & 0xFF);
 }
 
@@ -2674,7 +2674,7 @@ gui_widget_getpaddingtop(gui_handle_p h) {
  */
 gui_dim_t
 gui_widget_getpaddingright(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     return GUI_DIM((h->padding >> 16) & 0xFF);
 }
 
@@ -2685,7 +2685,7 @@ gui_widget_getpaddingright(gui_handle_p h) {
  */
 gui_dim_t
 gui_widget_getpaddingbottom(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     return GUI_DIM((h->padding >> 8) & 0xFF);
 }
 
@@ -2696,6 +2696,6 @@ gui_widget_getpaddingbottom(gui_handle_p h) {
  */
 gui_dim_t
 gui_widget_getpaddingleft(gui_handle_p h) {
-    __GUI_ASSERTPARAMS(guii_widget_iswidget(h));    /* Check valid parameter */
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));    
     return GUI_DIM((h->padding >> 0) & 0xFF);
 }

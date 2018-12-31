@@ -295,7 +295,7 @@ draw_char(const gui_display_t* disp, const gui_font_t* font, const gui_draw_text
     
     y += c->y_pos;                                  /* Set Y position */
     
-    if (!__GUI_RECT_MATCH(
+    if (!GUI_RECT_MATCH(
         disp->x1, disp->y1, disp->x2, disp->y2,
         x, y, x + c->x_size, y + c->y_size
     )) {
@@ -468,7 +468,7 @@ string_get_pointer_for_width(const gui_font_t* font, gui_string_t* str, gui_draw
 static void
 gui_draw_fill(const gui_display_t* disp, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_color_t color) {
     if (                                            /* Check if redraw is inside area */
-        !__GUI_RECT_MATCH(x, y, x + width, y + height,
+        !GUI_RECT_MATCH(x, y, x + width, y + height,
             disp->x1, disp->y1, disp->x2, disp->y2)) {
         return;
     }
@@ -619,7 +619,7 @@ gui_draw_line(const gui_display_t* disp, gui_dim_t x1, gui_dim_t y1, gui_dim_t x
     
     /* Check if coordinates are inside drawing region */
 //    if (                                            /* Check if redraw is inside area */
-//        !__GUI_RECT_MATCH(  x1, y1, x2, y2,
+//        !GUI_RECT_MATCH(  x1, y1, x2, y2,
 //                            disp->x1, disp->y1, disp->x2, disp->y2)) {
 //        return;
 //    }
@@ -977,7 +977,7 @@ gui_draw_circlecorner(const gui_display_t* disp, gui_dim_t x0, gui_dim_t y0, gui
     gui_dim_t x = 0;
     gui_dim_t y = r;
     
-    if (!__GUI_RECT_MATCH(
+    if (!GUI_RECT_MATCH(
         x0 - r, y0 - r, x0 + r, y0 + r,
         disp->x1, disp->y1, disp->x2, disp->y2
     )) {
@@ -1038,7 +1038,7 @@ gui_draw_filledcirclecorner(const gui_display_t* disp, gui_dim_t x0, gui_dim_t y
     gui_dim_t x = 0;
     gui_dim_t y = r;
     
-    if (!__GUI_RECT_MATCH(
+    if (!GUI_RECT_MATCH(
         disp->x1, disp->y1, disp->x2, disp->y2,
         x0 - r, y0 - r, x0 + r, y0 + r
     )) {
@@ -1091,7 +1091,7 @@ gui_draw_image(gui_display_t* disp, gui_dim_t x, gui_dim_t y, const gui_image_de
     gui_dim_t width, height;
     gui_dim_t offlineSrc, offlineDst;
     
-    if (!img || !__GUI_RECT_MATCH(
+    if (!img || !GUI_RECT_MATCH(
         disp->x1, disp->y1, disp->x2, disp->y2,
         x, y, x + img->x_size, y + img->y_size
     )) {

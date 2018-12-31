@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_TIMER_H
-#define __GUI_TIMER_H
+#ifndef GUI_HDR_TIMER_H
+#define GUI_HDR_TIMER_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -75,4 +75,4 @@ void guii_timer_process(void);
 }
 #endif
 
-#endif /* __GUI_TIMER_H */
+#endif /* GUI_HDR_TIMER_H */

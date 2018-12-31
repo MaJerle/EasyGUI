@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_UTILS_H
-#define __GUI_UTILS_H
+#ifndef GUI_HDR_UTILS_H
+#define GUI_HDR_UTILS_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -55,4 +55,4 @@ extern "C" {
 }
 #endif
 
-#endif /* __GUI_UTILS_H */
+#endif /* GUI_HDR_UTILS_H */

@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_WIDGETS_H
-#define __GUI_WIDGETS_H
+#ifndef GUI_HDR_WIDGETS_H
+#define GUI_HDR_WIDGETS_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -66,4 +66,4 @@ extern "C" {
 }
 #endif
 
-#endif /* __GUI_WIDGETS_H */
+#endif /* GUI_HDR_WIDGETS_H */

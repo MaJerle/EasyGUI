@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_LISTBOX_H
-#define __GUI_LISTBOX_H
+#ifndef GUI_HDR_LISTBOX_H
+#define GUI_HDR_LISTBOX_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -86,4 +86,4 @@ uint8_t         gui_listbox_scroll(gui_handle_p h, int16_t step);
 }
 #endif
 
-#endif /* __GUI_LISTBOX_H */
+#endif /* GUI_HDR_LISTBOX_H */

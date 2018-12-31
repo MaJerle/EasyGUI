@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_WIDGET_H
-#define __GUI_WIDGET_H
+#ifndef GUI_HDR_WIDGET_H
+#define GUI_HDR_WIDGET_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -568,4 +568,4 @@ uint8_t guii_widget_executeremove(void);
 }
 #endif
 
-#endif /* __GUI_WIDGET_H */
+#endif /* GUI_HDR_WIDGET_H */

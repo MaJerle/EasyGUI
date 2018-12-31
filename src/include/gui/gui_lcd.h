@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_LCD_H
-#define __GUI_LCD_H
+#ifndef GUI_HDR_LCD_H
+#define GUI_HDR_LCD_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -60,4 +60,4 @@ void        gui_lcd_confirmactivelayer(uint8_t layer_num);
 }
 #endif
 
-#endif /* __GUI_LCD_H */
+#endif /* GUI_HDR_LCD_H */

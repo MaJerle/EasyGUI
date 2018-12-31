@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_STRING_H
-#define __GUI_STRING_H
+#ifndef GUI_HDR_STRING_H
+#define GUI_HDR_STRING_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -96,7 +96,7 @@ gui_char* gui_string_copyn(gui_char* const dst, const gui_char* const src, size_
 int gui_string_compare(const gui_char* const s1, const gui_char* const s2);
 uint8_t gui_string_isprintable(uint32_t ch);
 uint8_t gui_string_prepare(gui_string_t* const s, const gui_char* const str);
-uint8_t gui_string_getch(gui_string_t* const str, uint32_t* out, uint8_t* const len);
+uint8_t gui_string_getch(gui_string_t* const str, uint32_t* const out, uint8_t* const len);
 uint8_t gui_string_getchreverse(gui_string_t* const str, uint32_t* const out, uint8_t* const len);
 uint8_t gui_string_gotoend(gui_string_t* const str);
     
@@ -109,4 +109,4 @@ uint8_t gui_string_gotoend(gui_string_t* const str);
 }
 #endif
 
-#endif /* __GUI_STRING_H */
+#endif /* GUI_HDR_STRING_H */

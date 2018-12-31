@@ -75,7 +75,7 @@ gui_widget_t widget = {
  */
 static uint8_t
 gui_container_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (evt) {
         case GUI_EVT_DRAW: {
             gui_display_t* disp = GUI_EVT_PARAMTYPE_DISP(param);

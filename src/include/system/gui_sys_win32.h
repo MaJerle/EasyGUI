@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_SYSTEM_WIN32_H
-#define __GUI_SYSTEM_WIN32_H
+#ifndef GUI_HDR_SYSTEM_WIN32_H
+#define GUI_HDR_SYSTEM_WIN32_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -64,4 +64,4 @@ typedef int                         gui_sys_thread_prio_t;
 };
 #endif /* __cplusplus */
 
-#endif /* __GUI_SYSTEM_WIN32_H */
+#endif /* GUI_HDR_SYSTEM_WIN32_H */

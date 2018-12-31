@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_DRAW_H
-#define __GUI_DRAW_H
+#ifndef GUI_HDR_DRAW_H
+#define GUI_HDR_DRAW_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -248,4 +248,4 @@ void        gui_draw_scrollbar(const gui_display_t* disp, gui_draw_sb_t* sb);
 }
 #endif
 
-#endif /* __GUI_DRAW_H */
+#endif /* GUI_HDR_DRAW_H */

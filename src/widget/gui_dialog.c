@@ -130,7 +130,7 @@ get_dialog(gui_handle_p h) {
  */
 static uint8_t
 gui_dialog_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     switch (evt) {
         default:                                    /* Handle default option */
             GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
@@ -151,7 +151,7 @@ gui_dialog_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const
  * \return          Widget handle on success, `NULL` otherwise
  */
 gui_handle_p
-gui_dialog_create(gui_id_t id, float x, float y, float width, float height, gui_widget_createfunc_t func, gui_widget_evt_fn evt_fn, uint16_t flags) {
+gui_dialog_create(gui_id_t id, float x, float y, float width, float height, gui_widget_createfunc_fn func, gui_widget_evt_fn evt_fn, uint16_t flags) {
     gui_handle_p ptr;
     if (func == NULL) {                             /* Check create function */
         return NULL;
@@ -185,11 +185,11 @@ gui_dialog_create(gui_id_t id, float x, float y, float width, float height, gui_
  * \return          Value passed to \ref gui_dialog_dismiss when dialog is dismissed on success, `-1` otherwise
  */
 int
-gui_dialog_createblocking(gui_id_t id, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_widget_createfunc_t func, gui_widget_evt_fn evt_fn, uint16_t flags) {
+gui_dialog_createblocking(gui_id_t id, gui_dim_t x, gui_dim_t y, gui_dim_t width, gui_dim_t height, gui_widget_createfunc_fn func, gui_widget_evt_fn evt_fn, uint16_t flags) {
     gui_handle_p ptr;
     int resp = -1;                                  /* Dialog not created error */
     
-    __GUI_SYS_PROTECT(1);                           /* Disable protection while waiting for semaphore */
+    GUI_CORE_PROTECT(1);
     ptr = gui_dialog_create(id, x, y, width, height, func, evt_fn, flags);  /* Create dialog first */
     if (ptr != NULL) {                              /* Widget created */
         dissmissed_dialog_list_t* l;
@@ -198,9 +198,9 @@ gui_dialog_createblocking(gui_id_t id, gui_dim_t x, gui_dim_t y, gui_dim_t width
         if (l != NULL) {                            /* Check if successfully added widget to active dialogs */
             l->ib = 1;                              /* Blocking entry */
             if (gui_sys_sem_create(&l->sem, 0)) {   /* Create semaphore and lock it immediatelly */
-                __GUI_SYS_UNPROTECT(1);             /* Disable protection while waiting for semaphore */
+                GUI_CORE_UNPROTECT(1);
                 gui_sys_sem_wait(&l->sem, 0);       /* Wait for semaphore again, should be released from dismiss function */
-                __GUI_SYS_PROTECT(1);               /* Protect back before continuing */
+                GUI_CORE_PROTECT(1);
                 gui_sys_sem_delete(&l->sem);        /* Delete system semaphore */
                 resp = l->status;                   /* Get new status */
                 remove_from_active_dialogs(l);      /* Remove from active dialogs */
@@ -211,7 +211,7 @@ gui_dialog_createblocking(gui_id_t id, gui_dim_t x, gui_dim_t y, gui_dim_t width
             gui_widget_remove(&ptr);
         }
     }
-    __GUI_SYS_UNPROTECT(1);                         /* Disable protection while waiting for semaphore */
+    GUI_CORE_UNPROTECT(1);
     
     return resp;
 }
@@ -221,7 +221,7 @@ gui_dialog_createblocking(gui_id_t id, gui_dim_t x, gui_dim_t y, gui_dim_t width
 /**
  * \brief           Dismiss (close) dialog with status
  * \param[in]       h: Widget handle
- * \param[in]       status: Dismiss status. Do not use value -1 as it is reserved for error detection
+ * \param[in]       status: Dismiss status. Do not use value `-1` as it is reserved for error detection
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -231,7 +231,7 @@ gui_dialog_dismiss(gui_handle_p h, int status) {
     gui_evt_param_t param = {0};
     
     /* Do not check widget type as it is not dialog type but create function widget type */
-    __GUI_ASSERTPARAMS(h);                   
+    GUI_ASSERTPARAMS(h);                   
 
     l = get_dialog(h);                              /* Get entry from list */
     if (l != NULL) {

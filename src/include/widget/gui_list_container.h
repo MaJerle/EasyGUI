@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_LISTCONTAINER_H
-#define __GUI_LISTCONTAINER_H
+#ifndef GUI_HDR_LISTCONTAINER_H
+#define GUI_HDR_LISTCONTAINER_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -81,4 +81,4 @@ uint8_t         gui_listcontainer_setmode(gui_handle_p h, gui_listcontainer_mode
 }
 #endif
 
-#endif /* __GUI_LIST_CONTAINER_H */
+#endif /* GUI_HDR_LISTCONTAINER_H */

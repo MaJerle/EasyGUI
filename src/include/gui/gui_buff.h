@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_BUFF_H
-#define __GUI_BUFF_H
+#ifndef GUI_HDR_BUFF_H
+#define GUI_HDR_BUFF_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -82,4 +82,4 @@ void gui_buffer_reset(gui_buff_t* buff);
 }
 #endif
 
-#endif /* __GUI_BUFF_H */
+#endif /* GUI_HDR_BUFF_H */

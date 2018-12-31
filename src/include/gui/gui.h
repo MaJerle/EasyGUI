@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_H
-#define __GUI_H
+#ifndef GUI_HDR_H
+#define GUI_HDR_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -74,11 +74,11 @@ extern "C" {
  */
 
 #if GUI_CFG_OS
-#define __GUI_SYS_PROTECT(p)        if (p) gui_sys_protect()
-#define __GUI_SYS_UNPROTECT(p)      if (p) gui_sys_unprotect()
+#define GUI_CORE_PROTECT(p)         if (p) gui_sys_protect()
+#define GUI_CORE_UNPROTECT(p)       if (p) gui_sys_unprotect()
 #else /* GUI_CFG_OS */
-#define __GUI_SYS_PROTECT(p)        GUI_UNUSED(p)
-#define __GUI_SYS_UNPROTECT(p)      GUI_UNUSED(p)
+#define GUI_CORE_PROTECT(p)         GUI_UNUSED(p)
+#define GUI_CORE_UNPROTECT(p)       GUI_UNUSED(p)
 #endif /* !GUI_CFG_OS */
 
 /**
@@ -212,4 +212,4 @@ uint8_t     gui_delay(const uint32_t ms);
 }
 #endif
 
-#endif /* __GUI_H */
+#endif /* GUI_HDR_H */

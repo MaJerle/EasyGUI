@@ -544,7 +544,7 @@ gui_listview_addcolumn(gui_handle_p h, const gui_char* text, gui_dim_t width) {
     gui_listview_col_t** cols;
     gui_listview_t* o = GUI_VP(h);
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     cols = GUI_MEMREALLOC(o->cols, sizeof(*o->cols) * (o->col_count + 2));    /* Allocate new memory block for new pointers of columns */
     if (cols != NULL) {
@@ -575,7 +575,7 @@ gui_listview_setcolumnwidth(gui_handle_p h, uint16_t index, gui_dim_t width) {
     uint8_t ret = 0;
     gui_listview_t* o = GUI_VP(h);
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     if (index < o->col_count) {
         o->cols[index]->width = width > 4 ? width : 4;
@@ -596,7 +596,7 @@ gui_listview_addrow(gui_handle_p h) {
     gui_listview_row_t* row;
     gui_listview_t* o = GUI_VP(h);
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     row = GUI_MEMALLOC(sizeof(*row));               /* Allocate memory for new row(s) */
     if (row != NULL) {
@@ -616,7 +616,7 @@ uint8_t
 gui_listview_removerow(gui_handle_p h, int16_t index) {
     gui_listview_t* o = GUI_VP(h);
     
-    __GUI_ASSERTPARAMS(h != NULL && index >= 0 && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && index >= 0 && h->widget == &widget);
     
     return gui_widget_list_remove_item_byindex(h, &o->ld, index);
 }
@@ -629,7 +629,7 @@ gui_listview_removerow(gui_handle_p h, int16_t index) {
 uint8_t
 gui_listview_removerows(gui_handle_p h) {
     gui_listview_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     return gui_widget_list_remove_items(h, &o->ld);
 }
@@ -647,7 +647,7 @@ gui_listview_setitemstring(gui_handle_p h, gui_listview_row_p row, uint16_t col,
     uint8_t ret = 0;
     gui_listview_item_t* item = 0;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && row != NULL);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && row != NULL);
 
     item = (gui_listview_item_t *)gui_linkedlist_getnext_gen(&((gui_listview_row_t *)row)->root, NULL); /* Get first in linked list */
     col++;
@@ -681,7 +681,7 @@ uint8_t
 gui_listview_scroll(gui_handle_p h, int16_t step) {
     gui_listview_t* o = GUI_VP(h);
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     return gui_widget_list_slide(h, &o->ld, step);
 }
@@ -696,7 +696,7 @@ uint8_t
 gui_listview_setselection(gui_handle_p h, int16_t selection) {
     gui_listview_t* o = GUI_VP(h);
 
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
 
     return gui_widget_list_set_selection(h, &o->ld, &o->selected, selection);
 }
@@ -709,7 +709,7 @@ gui_listview_setselection(gui_handle_p h, int16_t selection) {
 int16_t
 gui_listview_getselection(gui_handle_p h) {
     gui_listview_t* o = GUI_VP(h);
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return o->selected;
 }
 
@@ -728,7 +728,7 @@ gui_listview_getitemvalue(gui_handle_p h, int16_t rindex, uint16_t cindex, gui_c
     int16_t ret = 0;
     gui_listview_row_t* row;
     
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && dst != NULL && length > 1);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget && dst != NULL && length > 1);
     
     *dst = 0;
     row = gui_widget_list_get_item_byindex(h, &o->ld, rindex);

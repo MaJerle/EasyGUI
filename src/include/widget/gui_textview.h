@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_TEXTVIEW_H
-#define __GUI_TEXTVIEW_H
+#ifndef GUI_HDR_TEXTVIEW_H
+#define GUI_HDR_TEXTVIEW_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -87,4 +87,4 @@ uint8_t         gui_textview_sethalign(gui_handle_p h, gui_textalign_halign_t al
 }
 #endif
 
-#endif /* __GUI_TEXTVIEW_H */
+#endif /* GUI_HDR_TEXTVIEW_H */

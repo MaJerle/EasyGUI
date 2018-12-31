@@ -199,7 +199,7 @@ gui_textview_setcolor(gui_handle_p h, gui_textview_color_t index, gui_color_t co
  */
 uint8_t
 gui_textview_setvalign(gui_handle_p h, gui_textalign_valign_t align) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_VALIGN, &align, 1, 1);   /* Set parameter */
 }
 
@@ -211,6 +211,6 @@ gui_textview_setvalign(gui_handle_p h, gui_textalign_valign_t align) {
  */
 uint8_t
 gui_textview_sethalign(gui_handle_p h, gui_textalign_halign_t align) {
-    __GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
+    GUI_ASSERTPARAMS(h != NULL && h->widget == &widget);
     return guii_widget_setparam(h, CFG_HALIGN, &align, 1, 1);   /* Set parameter */
 }

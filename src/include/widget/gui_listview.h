@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_LISTVIEW_H
-#define __GUI_LISTVIEW_H
+#ifndef GUI_HDR_LISTVIEW_H
+#define GUI_HDR_LISTVIEW_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -101,4 +101,4 @@ uint8_t         gui_listview_getitemvalue(gui_handle_p h, int16_t rindex, uint16
 }
 #endif
 
-#endif /* __GUI_LISTVIEW_H */
+#endif /* GUI_HDR_LISTVIEW_H */

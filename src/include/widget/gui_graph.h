@@ -30,8 +30,8 @@
  *
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
-#ifndef __GUI_GRAPH_H
-#define __GUI_GRAPH_H
+#ifndef GUI_HDR_GRAPH_H
+#define GUI_HDR_GRAPH_H
 
 /* C++ detection */
 #ifdef __cplusplus
@@ -107,4 +107,4 @@ gui_graph_data_p    gui_graph_data_get_by_id(gui_handle_p graph_h, gui_id_t id);
 }
 #endif
 
-#endif /* __GUI_GRAPH_H */
+#endif /* GUI_HDR_GRAPH_H */
