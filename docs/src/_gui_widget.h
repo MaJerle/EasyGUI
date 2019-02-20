@@ -1,7 +1,7 @@
 /**
  * \addtogroup      GUI_WIDGETS
  * \{
- * 
+ *
  * \section         sect_widgets Widget organization
  *
  * Widgets are organized in multi depth linked list of parent widgets where each widget has reference to:
