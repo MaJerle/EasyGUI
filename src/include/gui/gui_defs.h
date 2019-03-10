@@ -59,8 +59,8 @@ extern "C" {
  */
 
 /**
- * \name            GUI_FLAGS_WIDGET Widget flags
  * \anchor          GUI_FLAGS_WIDGET
+ * \name            Widget flags
  * \brief           Widget flags
  * \{
  */
@@ -88,8 +88,8 @@ extern "C" {
  */
 
 /**
- * \name            GUI_FLAGS_WIDGET_CORE Widget base flags
  * \anchor          GUI_FLAGS_WIDGET_CORE
+ * \name            Widget base flags
  * \brief           Widget description flags
  * \{
  */
@@ -105,8 +105,8 @@ extern "C" {
 #define GUI_FLAG_LCD_WAIT_LAYER_CONFIRM     ((uint32_t)0x00000001)  /*!< Indicates waiting for layer change confirmation */
 
 /**
- * \name            GUI_FLAG_ALIGN Alignment flags
  * \anchor          GUI_FLAG_ALIGN
+ * \name            Alignment flags
  * \brief           Alignment flags used for drawing
  * \{
  */
@@ -234,8 +234,8 @@ typedef uint8_t     gui_char;               /*!< GUI char data type for all stri
 #define             gui_containerof(ptr, type, memb)      (type *)((char *)(ptr) - (char *)offsetof(type, memb))
 
 /**
- * \name            GUI_CAST Casting macros
  * \anchor          GUI_CAST
+ * \name            Casting macros
  * \brief           Helpers to cast result to different type
  * \{
  */
