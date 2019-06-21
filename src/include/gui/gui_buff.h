@@ -46,7 +46,7 @@ extern "C" {
  */
  
 #include "gui_utils.h"
-#include "stdlib.h"
+#include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
 
