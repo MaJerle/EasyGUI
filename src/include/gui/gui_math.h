@@ -39,8 +39,8 @@ extern "C" {
 #endif
 
 #include "gui_utils.h"
-#include "math.h"
-#include "errno.h"
+#include <math.h>
+#include <errno.h>
 
 /**
  * \ingroup         GUI_UTILS

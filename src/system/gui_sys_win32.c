@@ -31,7 +31,7 @@
  * Author:          Tilen Majerle <tilen@majerle.eu>
  */
 #include "system/gui_sys.h"
-#include "string.h"
+#include <string.h>
 #include "stdlib.h"
 #include "windows.h"
 

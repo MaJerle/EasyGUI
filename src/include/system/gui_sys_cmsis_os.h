@@ -37,7 +37,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include "stdint.h"
+#include <stdint.h>
 #include "stdlib.h"
 
 #include "gui_config.h"
