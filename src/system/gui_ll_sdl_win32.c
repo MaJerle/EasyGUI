@@ -50,9 +50,9 @@ static SDL_Renderer* renderer;
 static SDL_Texture* texture;
 static SDL_Event evt;
 
-volatile uint8_t sdl_initialized = 0;
-volatile uint8_t sdl_refresh = 0;
-volatile uint8_t sdl_quit = 0;
+volatile static uint8_t sdl_initialized = 0;
+volatile static uint8_t sdl_refresh = 0;
+volatile static uint8_t sdl_quit = 0;
 
 static int sdl_thread(void * param);
 static int sdl_event_filter(void *userdata, SDL_Event * event);
@@ -64,7 +64,7 @@ static int my_mouse_evt(void);
 uint8_t
 lcd_init(gui_lcd_t* lcd) {
     SDL_CreateThread(sdl_thread, "SDL Thread", NULL);
-    while (!sdl_initialized);
+    while (!sdl_initialized) {}
     return 1;
 }
 
@@ -152,6 +152,10 @@ my_mouse_evt(void) {
                 ts.y[0] = evt.button.y;
                 gui_input_touchadd(&ts);
             }
+            break;
+        }
+        case SDL_FINGERDOWN: {
+            printf("Finger count: \r\n");
             break;
         }
     }

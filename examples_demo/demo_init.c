@@ -223,11 +223,10 @@ touch_demo_thread(void * const arg) {
         /* Process animations */
         if (entry->anim_time) {
             float x1_d, y1_d, x2_d, y2_d;
-            size_t steps, i;
-            uint32_t step_time = 30;
+            uint32_t steps, i, step_time = 30;
             
             /* Get number of loops to execute */
-            steps = entry->anim_time / (size_t)step_time;
+            steps = entry->anim_time / step_time;
             
             /* Calculate difference and divide by steps */
             x1_d = (float)(entry->x1_e - entry->x1_s) / (float)steps;

@@ -233,7 +233,7 @@ gui_graph_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const 
                 float yStep = (float)(height - bt - bb) / (float)ySize; /* calculate Y step */
                 gui_dim_t yBottom = y + height - bb - 1;    /* Bottom Y value */
                 gui_dim_t xLeft = x + bl;                   /* Left X position */
-                uint32_t read, write;
+                size_t read, write;
                 
                 memcpy(&display, disp, sizeof(gui_display_t));  /* Save GUI display data */
                 

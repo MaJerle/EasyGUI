@@ -2266,6 +2266,7 @@ gui_widget_getuserdata(gui_handle_p h) {
  */
 uint8_t
 gui_widget_processdefaultcallback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* const param, gui_evt_result_t* const result) {
+    GUI_ASSERTPARAMS(guii_widget_iswidget(h));
     return h->widget->callback(h, evt, param, result); /* Call default callback function */
 }
 
