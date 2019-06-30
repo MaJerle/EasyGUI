@@ -383,137 +383,137 @@
             <File>
               <FileName>stm32f7xx_hal.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_cortex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_cortex.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_cortex.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dma.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dma.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_dma_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dma_ex.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dma_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_dma2d.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dma2d.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dma2d.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_dsi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dsi.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dsi.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_flash.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_flash.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_flash_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_flash_ex.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_flash_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_gpio.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_gpio.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_i2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_i2c.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_i2c.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_i2c_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_i2c_ex.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_i2c_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_ltdc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_ltdc.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_ltdc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_ltdc_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_ltdc_ex.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_ltdc_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_pwr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_pwr.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_pwr.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_pwr_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_pwr_ex.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_pwr_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_rcc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_rcc.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_rcc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_rcc_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_rcc_ex.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_rcc_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_sdram.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_sdram.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_sdram.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_spi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_spi.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_spi.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_uart.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_uart.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_ll_fmc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_fmc.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_fmc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_ll_dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_dma.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_dma.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_ll_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_gpio.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_gpio.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_ll_rcc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_rcc.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_rcc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_ll_usart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_usart.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_usart.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_adc.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_adc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_adc_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_adc_ex.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_adc_ex.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -523,52 +523,52 @@
             <File>
               <FileName>tm_stm32_buffer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_buffer.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_buffer.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_delay.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_delay.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_delay.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_disco.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_disco.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_disco.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_dma.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_dma.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_general.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_general.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_general.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_gpio.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_gpio.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_i2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_i2c.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_i2c.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_rcc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_rcc.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_rcc.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_usart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_usart.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_usart.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_usart_dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_usart_dma.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_usart_dma.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -593,52 +593,52 @@
             <File>
               <FileName>croutine.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\croutine.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\croutine.c</FilePath>
             </File>
             <File>
               <FileName>event_groups.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\event_groups.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\event_groups.c</FilePath>
             </File>
             <File>
               <FileName>list.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\list.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\list.c</FilePath>
             </File>
             <File>
               <FileName>queue.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\queue.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\queue.c</FilePath>
             </File>
             <File>
               <FileName>tasks.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\tasks.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\tasks.c</FilePath>
             </File>
             <File>
               <FileName>timers.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\timers.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\timers.c</FilePath>
             </File>
             <File>
               <FileName>port_cm4.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\portable\RVDS\ARM_CM4F\port_cm4.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\portable\RVDS\ARM_CM4F\port_cm4.c</FilePath>
             </File>
             <File>
               <FileName>heap_4.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\portable\MemMang\heap_4.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\portable\MemMang\heap_4.c</FilePath>
             </File>
             <File>
               <FileName>cmsis_os.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\CMSIS_RTOS\cmsis_os.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\CMSIS_RTOS\cmsis_os.c</FilePath>
             </File>
             <File>
               <FileName>cpu_utils.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\CMSIS_RTOS\cpu_utils.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\CMSIS_RTOS\cpu_utils.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -648,17 +648,17 @@
             <File>
               <FileName>tm_stm32_exti.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_exti.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_exti.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_sdram.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_sdram.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_sdram.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_touch.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_touch.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_touch.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -673,7 +673,7 @@
             <File>
               <FileName>tm_stm32_touch_ft5336.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_touch_ft5336.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_touch_ft5336.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -761,7 +761,7 @@
             <File>
               <FileName>tm_stm32_touch_ft6206.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_touch_ft6206.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_touch_ft6206.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1496,7 +1496,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F769xx,USE_HAL_DRIVER,USE_FULL_LL_DRIVER,ARM_MATH_CM7,__FPU_PRESENT=1,STM32F7XX,STM32F769_DISCOVERY,HSE_VALUE=25000000,RCC_OSCILLATORTYPE=RCC_OSCILLATORTYPE_HSE,RCC_PLLSOURCE=RCC_PLLSOURCE_HSE,RCC_PLLM=25,RCC_PLLN=400,RCC_PLLP=2,RCC_PLLQ=7,RCC_PLLR=6</Define>
               <Undefine></Undefine>
-              <IncludePath>..\include;..\..\src\include;..\..\libs;..\..\libs\st_hal\CMSIS\Include;..\..\libs\st_hal\CMSIS\Device\ST\STM32F7xx\Include;..\..\libs\st_hal\STM32F7xx_HAL_Driver\Inc;..\..\libs\FreeRTOS\include;..\..\libs\FreeRTOS\CMSIS_RTOS;..\..\libs\FreeRTOS\portable\RVDS\ARM_CM4F;..\..\examples_demo\include</IncludePath>
+              <IncludePath>..\include;..\..\src\include;..\..\libs;..\..\third_party\Embedded_Libs\st_hal\CMSIS\Include;..\..\third_party\Embedded_Libs\st_hal\CMSIS\Device\ST\STM32F7xx\Include;..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Inc;..\..\third_party\Embedded_Libs\FreeRTOS\include;..\..\third_party\Embedded_Libs\FreeRTOS\CMSIS_RTOS;..\..\third_party\Embedded_Libs\FreeRTOS\portable\RVDS\ARM_CM4F;..\..\examples_demo\include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1543,137 +1543,137 @@
             <File>
               <FileName>stm32f7xx_hal.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_cortex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_cortex.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_cortex.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dma.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dma.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_dma_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dma_ex.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dma_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_dma2d.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dma2d.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dma2d.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_dsi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dsi.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dsi.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_flash.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_flash.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_flash_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_flash_ex.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_flash_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_gpio.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_gpio.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_i2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_i2c.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_i2c.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_i2c_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_i2c_ex.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_i2c_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_ltdc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_ltdc.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_ltdc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_ltdc_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_ltdc_ex.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_ltdc_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_pwr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_pwr.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_pwr.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_pwr_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_pwr_ex.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_pwr_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_rcc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_rcc.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_rcc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_rcc_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_rcc_ex.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_rcc_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_sdram.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_sdram.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_sdram.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_spi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_spi.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_spi.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_uart.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_uart.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_ll_fmc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_fmc.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_fmc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_ll_dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_dma.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_dma.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_ll_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_gpio.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_gpio.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_ll_rcc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_rcc.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_rcc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_ll_usart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_usart.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_usart.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_adc.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_adc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f7xx_hal_adc_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_adc_ex.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\st_hal\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_adc_ex.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1683,52 +1683,52 @@
             <File>
               <FileName>tm_stm32_buffer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_buffer.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_buffer.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_delay.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_delay.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_delay.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_disco.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_disco.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_disco.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_dma.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_dma.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_general.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_general.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_general.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_gpio.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_gpio.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_i2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_i2c.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_i2c.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_rcc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_rcc.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_rcc.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_usart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_usart.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_usart.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_usart_dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_usart_dma.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_usart_dma.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1753,52 +1753,52 @@
             <File>
               <FileName>croutine.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\croutine.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\croutine.c</FilePath>
             </File>
             <File>
               <FileName>event_groups.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\event_groups.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\event_groups.c</FilePath>
             </File>
             <File>
               <FileName>list.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\list.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\list.c</FilePath>
             </File>
             <File>
               <FileName>queue.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\queue.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\queue.c</FilePath>
             </File>
             <File>
               <FileName>tasks.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\tasks.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\tasks.c</FilePath>
             </File>
             <File>
               <FileName>timers.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\timers.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\timers.c</FilePath>
             </File>
             <File>
               <FileName>port_cm4.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\portable\RVDS\ARM_CM4F\port_cm4.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\portable\RVDS\ARM_CM4F\port_cm4.c</FilePath>
             </File>
             <File>
               <FileName>heap_4.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\portable\MemMang\heap_4.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\portable\MemMang\heap_4.c</FilePath>
             </File>
             <File>
               <FileName>cmsis_os.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\CMSIS_RTOS\cmsis_os.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\CMSIS_RTOS\cmsis_os.c</FilePath>
             </File>
             <File>
               <FileName>cpu_utils.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\FreeRTOS\CMSIS_RTOS\cpu_utils.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\FreeRTOS\CMSIS_RTOS\cpu_utils.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1808,17 +1808,17 @@
             <File>
               <FileName>tm_stm32_exti.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_exti.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_exti.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_sdram.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_sdram.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_sdram.c</FilePath>
             </File>
             <File>
               <FileName>tm_stm32_touch.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_touch.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_touch.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1901,7 +1901,7 @@
             <File>
               <FileName>tm_stm32_touch_ft5336.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_touch_ft5336.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_touch_ft5336.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1921,7 +1921,7 @@
             <File>
               <FileName>tm_stm32_touch_ft6206.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\libs\tm_stm32_touch_ft6206.c</FilePath>
+              <FilePath>..\..\third_party\Embedded_Libs\tm_stm32_touch_ft6206.c</FilePath>
             </File>
           </Files>
         </Group>
