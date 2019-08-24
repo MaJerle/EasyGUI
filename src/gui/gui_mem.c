@@ -4,7 +4,7 @@
  */
  
 /*
- * Copyright (c) 2017 Tilen Majerle
+ * Copyright (c) 2019 Tilen MAJERLE
  *  
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -361,7 +361,8 @@ mem_getminfree(void) {
 /**
  * \brief           Allocate memory of specific size
  * \note            This function is private and may be called only when OS protection is active
- * \param[in]       size: Number of bytes to allocate * \return          Allocated memory on success, `NULL` otherwise
+ * \param[in]       size: Number of bytes to allocate
+ * \return          Allocated memory on success, `NULL` otherwise
  */
 void*
 gui_mem_alloc(uint32_t size) {
@@ -380,7 +381,8 @@ gui_mem_alloc(uint32_t size) {
  * \brief           Allocate memory of specific size
  * \note            After new memory is allocated, content of old one is copied to new memory
  * \param[in]       ptr: Pointer to current allocated memory to resize, returned using \ref gui_mem_alloc, \ref gui_mem_calloc or \ref gui_mem_realloc functions
- * \param[in]       size: Number of bytes to allocate on new memory * \return          Allocated memory on success, `NULL` otherwise
+ * \param[in]       size: Number of bytes to allocate on new memory
+ * \return          Allocated memory on success, `NULL` otherwise
  */
 void*
 gui_mem_realloc(void* ptr, size_t size) {
