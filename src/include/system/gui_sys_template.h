@@ -29,6 +29,7 @@
  * This file is part of EasyGUI.
  *
  * Author:          Tilen MAJERLE <tilen@majerle.eu>
+ * Version:         $_version_$
  */
 #ifndef GUI_HDR_SYSTEM_TEMPLATE_H
 #define GUI_HDR_SYSTEM_TEMPLATE_H

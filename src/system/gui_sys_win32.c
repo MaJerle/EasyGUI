@@ -28,7 +28,8 @@
  *
  * This file is part of EasyGUI library.
  *
- * Author:          Tilen Majerle <tilen@majerle.eu>
+ * Author:          Tilen MAJERLE <tilen@majerle.eu>
+ * Version:         $_version_$
  */
 #include "system/gui_sys.h"
 #include <string.h>

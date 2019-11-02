@@ -29,6 +29,7 @@
  * This file is part of ESP-AT.
  *
  * Author:          Tilen MAJERLE <tilen@majerle.eu>
+ * Version:         $_version_$
  */
 #ifndef __ESP_CONFIG_H
 #define __ESP_CONFIG_H  100

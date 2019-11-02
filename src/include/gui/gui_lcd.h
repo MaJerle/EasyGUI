@@ -28,7 +28,8 @@
  *
  * This file is part of EasyGUI library.
  *
- * Author:          Tilen Majerle <tilen@majerle.eu>
+ * Author:          Tilen MAJERLE <tilen@majerle.eu>
+ * Version:         $_version_$
  */
 #ifndef GUI_HDR_LCD_H
 #define GUI_HDR_LCD_H

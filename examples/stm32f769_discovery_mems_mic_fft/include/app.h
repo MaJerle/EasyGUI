@@ -27,6 +27,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  *
  * Author:          Tilen MAJERLE <tilen@majerle.eu>
+ * Version:         $_version_$
  */
 #ifndef __APP_H
 #define __APP_H

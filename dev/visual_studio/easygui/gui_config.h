@@ -27,6 +27,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  *
  * Author:          Tilen MAJERLE <tilen@majerle.eu>
+ * Version:         $_version_$
  */
 #ifndef __GUI_CONFIG_H
 #define __GUI_CONFIG_H
