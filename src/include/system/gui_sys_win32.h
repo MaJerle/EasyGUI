@@ -62,7 +62,7 @@ typedef int                         gui_sys_thread_prio_t;
 #endif /* GUI_CFG_OS && !__DOXYGEN__ */
 
 #ifdef __cplusplus
-};
+}
 #endif /* __cplusplus */
 
 #endif /* GUI_HDR_SYSTEM_WIN32_H */

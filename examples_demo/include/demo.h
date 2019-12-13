@@ -87,7 +87,7 @@ void    demo_create_feature_dropdown(gui_handle_p parent, uint8_t protect);
 void    demo_create_feature_debugbox(gui_handle_p parent, uint8_t protect);
 
 #ifdef __cplusplus
-};
+}
 #endif
 
 #endif /* __DEMO_H */

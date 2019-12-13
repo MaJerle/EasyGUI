@@ -120,7 +120,7 @@ uint8_t 	gui_sys_thread_yield(void);
  */
 
 #ifdef __cplusplus
-};
+}
 #endif /* __cplusplus */
 
 #endif /* GUI_HDR_SYSTEM_H */

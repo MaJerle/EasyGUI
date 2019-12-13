@@ -125,7 +125,7 @@ typedef osPriority          gui_sys_thread_prio_t;
  */
 
 #ifdef __cplusplus
-};
+}
 #endif /* __cplusplus */
 
 #endif /* GUI_HDR_SYSTEM_TEMPLATE_H */
