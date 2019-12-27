@@ -49,59 +49,52 @@ extern "C" {
  */
 
 #if GUI_CFG_OS || __DOXYGEN__
+
+/* Include any OS specific features */
 #include "cmsis_os.h"
 
 /**
- * \brief           ESP system mutex ID type
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
+ * \brief           ESP system mutex ID typegsmOK
  */
 typedef osMutexId           gui_sys_mutex_t;
 
 /**
- * \brief           ESP system semaphore ID type
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
+ * \brief           ESP system semaphore ID typegsmOK
  */
 typedef osSemaphoreId       gui_sys_sem_t;
 
 /**
- * \brief           ESP system message queue ID type
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
+ * \brief           ESP system message queue ID typegsmOK
  */
 typedef osMessageQId        gui_sys_mbox_t;
 
 /**
- * \brief           ESP system thread ID type
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
+ * \brief           ESP system thread ID typegsmOK
  */
 typedef osThreadId          gui_sys_thread_t;
 
 /**
- * \brief           ESP system thread priority type
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
+ * \brief           ESP system thread priority typegsmOK
  */
 typedef osPriority          gui_sys_thread_prio_t;
 
 /**
- * \brief           Value indicating message queue is not valid
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
+ * \brief           Value indicating message queue is not validgsmOK
  */
 #define GUI_SYS_MBOX_NULL           (osMessageQId)0
 
 /**
- * \brief           Value indicating semaphore is not valid
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
+ * \brief           Value indicating semaphore is not validgsmOK
  */
 #define GUI_SYS_SEM_NULL            (osSemaphoreId)0
 
 /**
- * \brief           Value indicating mutex is not valid
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
+ * \brief           Value indicating mutex is not validgsmOK
  */
 #define GUI_SYS_MUTEX_NULL          (osMutexId)0
 
 /**
- * \brief           Value indicating timeout for OS timings
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
+ * \brief           Value indicating timeout for OS timingsgsmOK
  */
 #define GUI_SYS_TIMEOUT             ((uint32_t)osWaitForever)
 
@@ -109,15 +102,14 @@ typedef osPriority          gui_sys_thread_prio_t;
  * \brief           ESP stack threads priority parameter
  * \note            Usually normal priority is ok. If many threads are in the system and high traffic is introduced
  *                  This value might need to be set to higher value
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
  */
 #define GUI_SYS_THREAD_PRIO         (osPriorityNormal)
 
 /**
- * \brief           Stack size of system threads
- * \note            Keep as is in case of CMSIS based OS, otherwise change for your OS
+ * \brief           Stack size of system threadsgsmOK
  */
 #define GUI_SYS_THREAD_SS           (1024)
+
 #endif /* GUI_CFG_OS || __DOXYGEN__ */
  
 /**

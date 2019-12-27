@@ -37,7 +37,6 @@ gui_sys_now(void) {
 
 /**
  * \brief           Unprotect stack core
- * \note            This function is required with OS
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -47,7 +46,6 @@ gui_sys_protect(void) {
 
 /**
  * \brief           Unprotect stack core
- * \note            This function is required with OS
  * \return          `1` on success, `0` otherwise
  */
 uint8_t
@@ -57,7 +55,6 @@ gui_sys_unprotect(void) {
 
 /**
  * \brief           Create a new mutex and pass it to input pointer
- * \note            This function is required with OS
  * \note            Recursive mutex must be created as it may be locked multiple times before unlocked
  * \param[out]      p: Pointer to mutex structure to save result to
  * \return          `1` on success, `0` otherwise
@@ -70,7 +67,6 @@ gui_sys_mutex_create(gui_sys_mutex_t* p) {
 
 /**
  * \brief           Delete mutex from OS
- * \note            This function is required with OS
  * \param[in]       p: Pointer to mutex structure
  * \return          `1` on success, `0` otherwise
  */
@@ -81,7 +77,6 @@ gui_sys_mutex_delete(gui_sys_mutex_t* p) {
   
 /**
  * \brief           Wait forever to lock the mutex
- * \note            This function is required with OS
  * \param[in]       p: Pointer to mutex structure
  * \return          `1` on success, `0` otherwise
  */
@@ -92,7 +87,6 @@ gui_sys_mutex_lock(gui_sys_mutex_t* p) {
   
 /**
  * \brief           Unlock mutex
- * \note            This function is required with OS
  * \param[in]       p: Pointer to mutex structure
  * \return          `1` on success, `0` otherwise
  */
@@ -103,7 +97,6 @@ gui_sys_mutex_unlock(gui_sys_mutex_t* p) {
 
 /**
  * \brief           Check if mutex structure is valid OS entry
- * \note            This function is required with OS
  * \param[in]       p: Pointer to mutex structure
  * \return          `1` on success, `0` otherwise
  */
@@ -114,7 +107,6 @@ gui_sys_mutex_isvalid(gui_sys_mutex_t* p) {
 
 /**
  * \brief           Set mutex structure as invalid
- * \note            This function is required with OS
  * \param[in]       p: Pointer to mutex structure
  * \return          `1` on success, `0` otherwise
  */
@@ -127,7 +119,6 @@ gui_sys_mutex_invalid(gui_sys_mutex_t* p) {
 /**
  * \brief           Create a new binary semaphore and set initial state
  * \note            Semaphore may only have 1 token available
- * \note            This function is required with OS
  * \param[out]      p: Pointer to semaphore structure to fill with result
  * \param[in]       cnt: Count indicating default semaphore state:
  *                     `0`: Lock it immediteally
@@ -147,7 +138,6 @@ gui_sys_sem_create(gui_sys_sem_t* p, uint8_t cnt) {
 
 /**
  * \brief           Delete binary semaphore
- * \note            This function is required with OS
  * \param[in]       p: Pointer to semaphore structure
  * \return          `1` on success, `0` otherwise
  */
@@ -158,7 +148,6 @@ gui_sys_sem_delete(gui_sys_sem_t* p) {
 
 /**
  * \brief           Wait for semaphore to be available
- * \note            This function is required with OS
  * \param[in]       p: Pointer to semaphore structure
  * \param[in]       timeout: Timeout to wait in milliseconds. When `0` is applied, wait forever
  * \return          Number of milliseconds waited for semaphore to become available
@@ -175,7 +164,6 @@ gui_sys_sem_wait(gui_sys_sem_t* p, uint32_t timeout) {
 
 /**
  * \brief           Release semaphore
- * \note            This function is required with OS
  * \param[in]       p: Pointer to semaphore structure
  * \return          `1` on success, `0` otherwise
  */
@@ -186,7 +174,6 @@ gui_sys_sem_release(gui_sys_sem_t* p) {
 
 /**
  * \brief           Check if semaphore is valid
- * \note            This function is required with OS
  * \param[in]       p: Pointer to semaphore structure
  * \return          `1` on success, `0` otherwise
  */
@@ -197,7 +184,6 @@ gui_sys_sem_isvalid(gui_sys_sem_t* p) {
 
 /**
  * \brief           Invalid semaphore
- * \note            This function is required with OS
  * \param[in]       p: Pointer to semaphore structure
  * \return          `1` on success, `0` otherwise
  */
@@ -209,7 +195,6 @@ gui_sys_sem_invalid(gui_sys_sem_t* p) {
     
 /**
  * \brief           Create a new message queue with entry type of `void *`
- * \note            This function is required with OS
  * \param[out]      b: Pointer to message queue structure
  * \param[in]       size: Number of entries for message queue to hold
  * \return          `1` on success, `0` otherwise
@@ -222,7 +207,6 @@ gui_sys_mbox_create(gui_sys_mbox_t* b, size_t size) {
 
 /**
  * \brief           Delete message queue
- * \note            This function is required with OS
  * \param[in]       b: Pointer to message queue structure
  * \return          `1` on success, `0` otherwise
  */
@@ -236,7 +220,6 @@ gui_sys_mbox_delete(gui_sys_mbox_t* b) {
 
 /**
  * \brief           Put a new entry to message queue and wait until memory available
- * \note            This function is required with OS
  * \param[in]       b: Pointer to message queue structure
  * \param[in]       m: Pointer to entry to insert to message queue
  * \return          Time in units of milliseconds needed to put a message to queue
@@ -249,7 +232,6 @@ gui_sys_mbox_put(gui_sys_mbox_t* b, void* m) {
 
 /**
  * \brief           Get a new entry from message queue with timeout
- * \note            This function is required with OS
  * \param[in]       b: Pointer to message queue structure
  * \param[in]       m: Pointer to pointer to result to save value from message queue to
  * \param[in]       timeout: Maximal timeout to wait for new message. When `0` is applied, wait for unlimited time
@@ -270,7 +252,6 @@ gui_sys_mbox_get(gui_sys_mbox_t* b, void** m, uint32_t timeout) {
 
 /**
  * \brief           Put a new entry to message queue without timeout (now or fail)
- * \note            This function is required with OS
  * \param[in]       b: Pointer to message queue structure
  * \param[in]       m: Pointer to message to save to queue
  * \return          `1` on success, `0` otherwise
@@ -282,7 +263,6 @@ gui_sys_mbox_putnow(gui_sys_mbox_t* b, void* m) {
 
 /**
  * \brief           Get an entry from message queue immediatelly
- * \note            This function is required with OS
  * \param[in]       b: Pointer to message queue structure
  * \param[in]       m: Pointer to pointer to result to save value from message queue to
  * \return          `1` on success, `0` otherwise
@@ -301,7 +281,6 @@ gui_sys_mbox_getnow(gui_sys_mbox_t* b, void** m) {
 
 /**
  * \brief           Check if message queue is valid
- * \note            This function is required with OS
  * \param[in]       b: Pointer to message queue structure
  * \return          `1` on success, `0` otherwise
  */
@@ -312,7 +291,6 @@ gui_sys_mbox_isvalid(gui_sys_mbox_t* b) {
 
 /**
  * \brief           Invalid message queue
- * \note            This function is required with OS
  * \param[in]       b: Pointer to message queue structure
  * \return          `1` on success, `0` otherwise
  */
@@ -324,7 +302,6 @@ gui_sys_mbox_invalid(gui_sys_mbox_t* b) {
 
 /**
  * \brief           Create a new thread
- * \note            This function is required with OS
  * \param[out]      t: Pointer to thread identifier if create was successful
  * \param[in]       name: Name of a new thread
  * \param[in]       thread_func: Thread function to use as thread body
