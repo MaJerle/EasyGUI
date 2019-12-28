@@ -32,7 +32,7 @@
  *
  * Some functions have suffix `original` which applies to set or get original widget size.
  *
- * Each widget may have size independant between each other,
+ * Each widget may have size independent between each other,
  * meaning that width may be in percents while height is in fixed value or opposite.
  *
  * Original size will simply set/get actual register value for current widget. Consider example below:

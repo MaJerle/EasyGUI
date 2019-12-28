@@ -4,7 +4,7 @@
  *
  * This is an official website with documentation about EasyGUI graphical user interface.
  *
- * EasyGUI is in general platform independant, highly optimized for STM32 Chrom-ART DMA2D peripheral, GUI for embedded systems or PC applications. 
+ * EasyGUI is in general platform independent, highly optimized for STM32 Chrom-ART DMA2D peripheral, GUI for embedded systems or PC applications. 
  *
  * \section important Important info
  *
