@@ -100,7 +100,7 @@ gui_widget_t widget = {
 static uint8_t
 set_value(gui_handle_p h, int32_t val) {
     gui_progbar_t* o = GUI_VP(h);
-    if (o->desiredvalue != val && val >= o->min && val <= o->max) { /* Value has changed */
+    if (o->desiredvalue != val) {                   /* Value has changed */
         o->desiredvalue = val;                      /* Set value */
         if (o->currentvalue < o->min) {
             o->currentvalue = o->min;
@@ -207,7 +207,7 @@ gui_progbar_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* cons
                 default: break;
             }
             GUI_EVT_RESULTTYPE_U8(result) = 1;      /* Save result */
-            return 1;
+            break;
         }
         case GUI_EVT_DRAW: {
             gui_dim_t x, y, w, width, height;
@@ -251,11 +251,13 @@ gui_progbar_callback(gui_handle_p h, gui_widget_evt_t evt, gui_evt_param_t* cons
                     gui_draw_writetext(disp, gui_widget_getfont(h), text, &f);
                 }
             }
+            break;
         }
         default:                                    /* Handle default option */
             GUI_UNUSED3(h, param, result);          /* Unused elements to prevent compiler warnings */
             return 0;                               /* Command was not processed */
     }
+    return 1;
 }
 
 /**
